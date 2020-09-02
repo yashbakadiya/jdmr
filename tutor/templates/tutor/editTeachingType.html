@@ -1,0 +1,356 @@
+{% extends 'tutor/dashboard.html' %}
+{% load static %}
+{% block css %}
+<style media="screen">
+@import url('https://fonts.googleapis.com/css?family=Numans');
+
+.container1{
+height: 100%;
+align-content: center;
+}
+
+.card{
+margin-top: auto;
+margin-bottom: auto;
+width: 800px;
+background-color: white;
+}
+
+.social_icon span{
+font-size: 60px;
+margin-left: 10px;
+color: #FFC312;
+}
+
+.social_icon span:hover{
+color: white;
+cursor: pointer;
+}
+
+.card-header h3{
+color: white;
+}
+
+.social_icon{
+position: absolute;
+right: 20px;
+top: -45px;
+}
+
+.input-group-prepend span{
+width: 50px;
+background-color: #FFC312;
+color: black;
+border:0 !important;
+}
+
+input:focus{
+outline: 0 0 0 0  !important;
+box-shadow: 0 0 0 0 !important;
+
+}
+
+.remember{
+color: white;
+}
+
+.login_btn{
+color: black;
+background-color: #FFC312;
+width: 100px;
+}
+
+.login_btn:hover{
+  background-color: #2a2b3d;
+  color:white;
+}
+
+.links{
+color: white;
+}
+
+.links a{
+margin-left: 4px;
+}
+.control-label {
+  color: rgb(66, 8, 8);
+  font-size: 20px;
+  }
+
+
+  .container {
+	overflow-x: hidden;
+	color: white;
+	font-size: 1.15rem;
+	width: 100%;
+	display: flex;
+	flex-direction: column;
+	background: white;
+	box-shadow: 0 1px 4px rgba(0, 0, 0, 0.3);
+  }
+
+  .activeTab-indicator {
+	display: inline-block;
+	height: 2px;
+	width: 33.3%;
+	background-color:#C0C0C0;
+	transition: transform 0.4s ease-out;
+  }
+
+  .tabHeader-container {
+	display: flex;
+	justify-content: space-between;
+	background-color: white;
+  }
+
+  .tabContent-container {
+	display: flex;
+	transition: transform 0.4s ease-out;
+  }
+
+  .tabHeader {
+	cursor: pointer;
+	color: #DCDCDC;
+	transition: color 0.4s ease;
+	padding: 15px 20px;
+	flex-grow: 1;
+	text-align: center;
+  }
+
+  .tabContent {
+	width: 100%;
+	flex-shrink: 0;
+	padding: 15px 20px;
+	box-sizing: border-box;
+	background: white;
+  }
+
+  .tabContent h1 {
+	margin: 0;
+  }
+
+  .radioInput:nth-of-type(1):checked ~ .tabContent-container {
+	transform: translateX(0);
+  }
+
+  .radioInput:nth-of-type(1):checked ~ .tabHeader-container .tabHeader:nth-of-type(1) {
+	color: rgb(66, 8, 8);
+  }
+
+  .radioInput:nth-of-type(1):checked ~ .activeTab-indicator {
+	transform: translateX(0);
+  }
+
+  .radioInput:nth-of-type(2):checked ~ .tabContent-container {
+	transform: translateX(-100%);
+  }
+
+  .radioInput:nth-of-type(2):checked ~ .tabHeader-container .tabHeader:nth-of-type(2) {
+	color: rgb(66, 8, 8);
+  }
+
+  .radioInput:nth-of-type(2):checked ~ .activeTab-indicator {
+	transform: translateX(100%);
+  }
+
+  .radioInput:nth-of-type(3):checked ~ .tabContent-container {
+	transform: translateX(-200%);
+  }
+
+  .radioInput:nth-of-type(3):checked ~ .tabHeader-container .tabHeader:nth-of-type(3) {
+	color: rgb(66, 8, 8);
+  }
+
+  .radioInput:nth-of-type(3):checked ~ .activeTab-indicator {
+	transform: translateX(200%);
+  }
+  @media screen and (max-width: 768px){
+      .hideforphone{
+          display:none;
+      }
+  }
+  .multiselect-container > li > a > label{
+        height:auto;
+    }
+    .multiselect-container{
+        height:10rem;
+        overflow-y:scroll;
+        width:max-content;
+    }
+</style>
+{% endblock %}
+{% block body %}
+<div class="container1">
+	<div class="d-flex justify-content-center h-100">
+		<div class="card">
+			<div class="card-header">
+				<h2 style="color: rgb(66, 8, 8);">Add Courses Teaching Type</h2>
+			</div>
+			<div class="card-body">
+				<form action="" method="post">{% csrf_token %}
+					<select class="form-control" id="courseName" name="courseName" required>
+            <option selected="selected" disabled>Choose Course</option>
+						{% for i in courses %}
+							<option value="{{ i.courseName }}">{{ i.courseName }}</option>
+						{% endfor %}
+					</select>
+					<br>
+					<div class="">
+					  <label class="control-label col-sm-4">Select Class<span class="text-danger">*</span></label>
+						<select class="multiselect multiple-checkboxes" id="forclass" name='forclass' multiple="multiple" required>
+						  <option>Choose Course</option>
+						</select>
+					</div>
+					<br>
+
+
+
+					<div class="container">
+					  <input type="radio" name="radio" class="radioInput" id="tab1" checked hidden/>
+					  <input type="radio" name="radio" class="radioInput" id="tab2" hidden/>
+					  <input type="radio" name="radio" class="radioInput" id="tab3" hidden/>
+                      <select id="check" name='check' multiple="multiple" hidden>
+                        <option class="online" value="Online">Online</option>
+                        <option class="hometutor" value="Home Tutors">Home Tutors</option>
+                        <option class="classroom" value="Classroom">Classroom</option>
+                      </select>
+
+					  <div class="row hideforphone">
+  						<div class="col-md-4">
+  						</div>
+  						<div class="col-md-4">
+  							 <div class="form-group">
+  								  <label class="control-label">Course Duration<span class="text-danger">*</span></label>
+  							  </div>
+  						  </div>
+  						  <div class="col-md-4">
+  								<div class="input-group form-group">
+  									  <label class="control-label">How many hours/weeks/months?<span class="text-danger">*</span></label>
+  								</div>
+  						  </div>
+  					  </div>
+
+					  <div class="row remember">
+						  <div class="col-md-4">
+							  <label style="color: rgb(66, 8, 8);">Online </label>
+						  </div>
+						  <div class="col-md-4">
+							   <div class="form-group">
+									<div style="display: inline-block;">
+										<select id="DDL" name="duration" class="form-control col-sm-12">
+											<option value="" selected Disabled>Course Duration</option>
+											<option>Hourly</option>
+											<option>Weekly</option>
+											<option>Monthly</option>
+										</select>
+									</div>
+								</div>
+							</div>
+							<div class="col-md-4">
+								  <div class="input-group form-group">
+										<input type="text" class="form-control" id="time" name='time' placeholder="No. of Hours/Weeks/Months">
+								  </div>
+						  	</div>
+					  	</div>
+
+						<div class="row remember">
+  						  <div class="col-md-4">
+  							  <label style="color: rgb(66, 8, 8);">Home Tutors </label>
+  						  </div>
+  						  <div class="col-md-4">
+  							   <div class="form-group">
+  									<div style="display: inline-block;">
+  										<select id="DDL1" name="duration" class="form-control col-sm-12">
+  											<option value="" selected Disabled>Course Duration</option>
+  											<option>Hourly</option>
+  											<option>Weekly</option>
+  											<option>Monthly</option>
+  										</select>
+  									</div>
+  								</div>
+  							</div>
+  							<div class="col-md-4">
+  								  <div class="input-group form-group">
+  										<input type="text" class="form-control" id="time1" name='time' placeholder="No. of Hours/Weeks/Months">
+  								  </div>
+  						  	</div>
+  					  	</div>
+
+						<div class="row remember">
+  						  <div class="col-md-4">
+  							  <label style="color: rgb(66, 8, 8);">Classroom </label>
+  						  </div>
+  						  <div class="col-md-4">
+  							   <div class="form-group">
+  									<div style="display: inline-block;">
+  										<select id="DDL2" name="duration" class="form-control col-sm-12">
+  											<option value="" selected Disabled>Course Duration</option>
+  											<option>Hourly</option>
+  											<option>Weekly</option>
+  											<option>Monthly</option>
+  										</select>
+  									</div>
+  								</div>
+  							</div>
+  							<div class="col-md-4">
+  								  <div class="input-group form-group">
+  										<input type="text" class="form-control" id="time2" name='time' placeholder="No. of Hours/Weeks/Months">
+  								  </div>
+  						  	</div>
+  					  	</div>
+
+		  			</div>
+
+					<br>
+				  <div class="form-group">
+					<input type="submit" value="Add" class="btn float-right login_btn">
+				  </div>
+		</form>
+		<br>
+			</div>
+		</div>
+	</div>
+</div>
+<script>
+  $(document).ready(function() {
+    	$("#courseName").on("change",function(){
+            var options = {{json|safe}};
+            console.log(options)
+            var currentops = options[this.value];
+            $("#forclass").empty();
+            for(i=0;i<currentops.length;i++){
+                $("#forclass").append(`<option value="${currentops[i]}">
+                    ${currentops[i]}
+                </option>`);
+            }
+            $("#forclass").multiselect('rebuild');
+        });
+
+      //prefills
+      var prefils = {{teach|safe}};
+      console.log(prefils);
+      $("#courseName").val(prefils["courseName"]).trigger('change');
+      $("#forclass").multiselect("select",prefils['forclass']);
+      string_to_num = {"Online":"","Home Tutors":"1","Classroom":"2"};
+      for(i=0;i<prefils['teachType'].length;i++){
+          num = string_to_num[prefils['teachType'][i]];
+          $("#DDL"+num).val(prefils['duration'][i]).trigger('change');
+          $("#time"+num).val(prefils['timePeriod'][i]).trigger('change');
+      }
+
+
+    });
+      $("#forclass").multiselect();
+
+
+$(document).on("change",'#DDL, #time',function(){
+    $(".online")[0].selected = true;
+});
+$(document).on("change",'#DDL1, #time1',function(){
+    $(".hometutor")[0].selected = true;
+});
+$(document).on("change",'#DDL2, #time2',function(){
+    $(".classroom")[0].selected = true;
+});
+</script>
+{% endblock %}

@@ -1,0 +1,278 @@
+{% extends 'tutor/dashboardStudent.html' %}
+{% load static %}
+{% block css %}
+<style>
+@import url('https://fonts.googleapis.com/css?family=Numans');
+
+.container{
+align-content: center;
+}
+
+.card{
+margin-top: auto;
+margin-bottom: auto;
+width: 90%;
+background-color: white;
+}
+
+.card-header h3{
+color: white;
+}
+
+input:focus{
+outline: 0 0 0 0  !important;
+box-shadow: 0 0 0 0 !important;
+
+}
+
+.remember{
+color: white;
+}
+
+.remember input
+{
+width: 19px;
+height: 19px;
+margin-left: 15px;
+margin-right: 5px;
+}
+
+.links{
+color: white;
+}
+
+.links a{
+margin-left: 4px;
+}
+
+.control-label {
+color: rgb(66, 8, 8);
+font-size: 20px;
+}
+
+.social_icon span{
+font-size: 60px;
+margin-left: 10px;
+color: #FFC312;
+}
+
+.social_icon span:hover{
+color: white;
+cursor: pointer;
+}
+
+.card-header h3{
+color: white;
+}
+
+.social_icon{
+position: absolute;
+right: 20px;
+top: -45px;
+}
+
+.input-group-prepend span{
+width: 50px;
+background-color: #FFC312;
+color: black;
+border:0 !important;
+}
+
+input:focus{
+outline: 0 0 0 0  !important;
+box-shadow: 0 0 0 0 !important;
+
+}
+
+.remember{
+color: white;
+}
+
+.remember input
+{
+width: 20px;
+height: 20px;
+margin-left: 15px;
+margin-right: 5px;
+}
+
+.links{
+color: white;
+}
+
+.links a{
+margin-left: 4px;
+}
+
+.control-label {
+    color: rgb(66, 8, 8);
+    font-size: 20px;
+}
+.input-group{
+    margin-bottom: 2rem;
+}
+</style>
+{% endblock %}
+{% block body %}
+<div class="container">
+    {% if errors %}
+    <div class="alert alert-danger" role="alert">
+        <div id='errorsBox'>
+            <div>
+                <h5 style="color: red;text-shadow:-0.5px -0.5px 0 #000,0.5px -0.5px 0 #000,-0.5px 0.5px 0 #000,0.5px 0.5px 0 #000;">Error !</h5>
+                <ul>
+                    {% for x in errors %}
+                    <li>{{ x }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    </div>
+        {% endif %}
+    <div class="d-flex justify-content-center h-100">
+        <div class="card">
+            <div class="card-header">
+                <div class="row">
+                    <div class="col-sm-10"><h2 style="color: rgb(66, 8, 8);">Add Tuition</h2></div>
+                        
+                </div>
+            </div>
+            <div class="card-body container">
+        <form id='submitForm' method='post' action=''>{% csrf_token %}
+                    <div class="input-group form-group">
+                        <label class="control-label col-sm-4">Course<span class="text-danger">*</span></label>
+                        <div class="input-group-prepend">
+                            <span class="input-group-text"><i class="fas fa-book"></i></span>
+                        </div>
+                        <select id="ctn" name="ctn" class="custom-select form-control" required="required" onchange="addoptions(this);">
+                              <option disabled selected value>Select an option</option>
+                              {% for x in data %}
+                              <option value="{{ x.courseName }}">{{ x.courseName }}</option>
+                              {% endfor %}
+                        </select>
+                    </div>
+                    <div class="input-group form-group">
+                        <label class="control-label col-sm-4">Class<span class="text-danger">*</span></label>
+                        <div class="input-group-prepend">
+                            <span class="input-group-text"><i class="fas fa-user-graduate"></i></span>
+                        </div>
+                        <select id="cn" name="cn" class="custom-select form-control" required="required">
+                              <option disabled selected value>Select an option</option>
+                              {% for x in data %}
+                              <option value="{{ x.className }}">{{ x.className }}</option>
+                              {% endfor %}
+                        </select>
+                    </div>
+                    <div class="input-group form-group">
+                        <label class="control-label col-sm-4">Teaching Mode<span class="text-danger">*</span></label>
+                        <div class="input-group-prepend">
+                            <span class="input-group-text"><i class="far fa-sticky-note"></i></span>
+                        </div>
+                        <select id="tm" name="tm" class="custom-select form-control" required="required">
+                              <option disabled selected value>Select an option</option>
+                              {% for x in data %}
+                              <option value="{{ x.teachingMode }}">{{ x.teachingMode }}</option>
+                              {% endfor %}
+                        </select>
+                    </div>
+                    <div class="input-group form-group">
+                        <label class="control-label col-sm-4">Gender Preferance<span class="text-danger">*</span></label>
+                        <div class="input-group-prepend">
+                            <span class="input-group-text"><i class="far fa-sticky-note"></i></span>
+                        </div>
+                        <select id="gp" name="gp" class="custom-select form-control" required="required">
+                              <option disabled selected value>Select an option</option>
+                              <option value="Male">Male</option>
+                              <option value="Female">Female</option>
+                              <option value="Any">Any</option>
+                        </select>
+                    </div>
+                    <div class="input-group form-group">
+                        <label class="control-label col-sm-4">Starting Date<span class="text-danger">*</span></label>
+                        <div class="input-group-prepend">
+                            <span class="input-group-text"><i class="far fa-sticky-note"></i></span>
+                        </div>
+                        <input type="date" class="form-control" id="sd" name="sd" required>
+                    </div>
+
+                    <div class="input-group form-group">
+                        <label class="control-label col-sm-4">Description</label>
+                        <div class="input-group-prepend">
+                            <span class="input-group-text"><i class="far fa-sticky-note"></i></span>
+                        </div>
+                        <textarea class="form-control" name='description' placeholder="Description of Work" type="number" ></textarea>
+                    </div>
+                    <div class="input-group form-group">
+                        <label class="control-label col-sm-4">Budget<span class="text-danger">*</span></label>
+                        <div class="input-group-prepend">
+                            <span class="input-group-text"><i class="fas fa-money-check-alt"></i></span>
+                        </div>
+                        <div class="form-inline col-sm-7" style="padding-left: 0px;">
+                        <input type="number" step="0.01" class="form-control col-sm-5 mr-sm-4" id="budgetvalue" name="budgetvalue" required>
+                        <select id="budget" name="budget" class="custom-select form-control col-sm-6" required>
+                              <option disabled selected>Select an option</option>
+                              <option value="monthly">Monthly</option>
+                              <option value="hourly">Hourly</option>
+                        </select>
+                        
+                        </div>
+                    </div>
+                    <div class="input-group form-group">
+                        <label class="control-label col-sm-4">Number of Sessions</label>
+                        <div class="input-group-prepend">
+                            <span class="input-group-text"><i class="far fa-sticky-note"></i></span>
+                        </div>
+                        <input type="number" class="form-control col-sm-3" id="monthlydigit"  name="monthlydigit" disabled>
+                    </div>
+
+          <div class="row container d-flex justify-content-end">
+            <div class="col-sm-2 sm-ml-1">
+              <button id='submitBtn' name="submit" type="submit" class="btn btn-warning">Post</button>
+
+            </div>
+          </div>
+
+        </form>
+      </div>
+        </div>
+    </div>
+</div>
+<script>
+    function clear_all(){
+    var x = document.getElementsByClassName("form-control");
+    for(var i=0;i<x.length;i++){
+      x[i].value='';
+    }
+  }
+  alldata = JSON.parse("{{jsdata|escapejs}}");
+
+  
+
+
+  $("#budget").on("change",function(){
+        if($("#budget").val()=="hourly"){
+            $("#monthlydigit").removeAttr("required");
+            $("#monthlydigit").attr("disabled","disabled");
+        }else{
+            $("#monthlydigit").removeAttr("disabled");
+            $("#monthlydigit").attr("required","required");
+        }
+
+  });
+
+  function addoptions(el){
+        course = el.value;
+        html1 = "";
+        for(i=0;i<alldata[course][0].length;i++){
+            html1+= "<option value=\""+alldata[course][0][i]+"\">"+alldata[course][0][i]+"</option> ";
+        }
+        $("#cn").html(html1);
+
+        html2 = "";
+        for(i=0;i<alldata[course][1].length;i++){
+            html2+= "<option value=\""+alldata[course][1][i]+"\">"+alldata[course][1][i]+"</option> ";
+        }
+        $("#tm").html(html2);
+  }
+</script>
+{% endblock %}

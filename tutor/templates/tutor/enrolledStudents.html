@@ -1,0 +1,482 @@
+{% extends 'tutor/dashboardTutor.html' %}
+{% load static %}
+{% block css %}
+<style>
+@import url('https://fonts.googleapis.com/css?family=Numans');
+
+.container{
+align-content: center;
+}
+
+.btn{
+  font-size: small;
+}
+
+.card-width{
+width:100%;
+margin-top: auto;
+margin-bottom: auto;
+background-color: white;
+}
+
+.card-header h3{
+color: white;
+}
+
+input:focus{
+outline: 0 0 0 0  !important;
+box-shadow: 0 0 0 0 !important;
+
+}
+
+.remember{
+color: white;
+}
+
+.remember input
+{
+width: 19px;
+height: 19px;
+margin-left: 15px;
+margin-right: 5px;
+}
+
+.links{
+color: white;
+}
+
+.links a{
+margin-left: 4px;
+}
+
+.control-label {
+color: rgb(66, 8, 8);
+font-size: 20px;
+}
+
+.social_icon span{
+font-size: 60px;
+margin-left: 10px;
+color: #FFC312;
+}
+
+.social_icon span:hover{
+color: white;
+cursor: pointer;
+}
+
+.card-header h3{
+color: white;
+}
+
+.social_icon{
+position: absolute;
+right: 20px;
+top: -45px;
+}
+
+.input-group-prepend span{
+width: 50px;
+background-color: #FFC312;
+color: black;
+border:0 !important;
+}
+
+input:focus{
+outline: 0 0 0 0  !important;
+box-shadow: 0 0 0 0 !important;
+
+}
+
+.remember{
+color: white;
+}
+
+.remember input
+{
+width: 20px;
+height: 20px;
+margin-left: 15px;
+margin-right: 5px;
+}
+
+.signup_btn{
+color: black;
+background-color: #FFC312;
+width: 300px;
+}
+
+.signup_btn:hover{
+background-color: #2a2b3d;
+color:white;
+}
+
+.links{
+color: white;
+}
+
+.links a{
+margin-left: 4px;
+}
+
+.control-label {
+    color: rgb(66, 8, 8);
+    font-size: 20px;
+}
+.avatar {
+  border: 0.3rem solid rgba(#fff, 0.3);
+  margin-bottom: 1rem;
+  max-width: 9rem;
+}
+.profile-cards .card{
+    margin-bottom: 5rem;
+}
+.profile-container{
+  margin-top: 5rem;
+  color:black;
+}
+.btn-group{
+  width:100%;
+}
+.multiselect{
+  width:100%;
+}
+.avatar{
+  margin-top: -5rem;
+}
+.card{
+    height: auto;
+  }
+      #map {
+        height: 100%;
+      }
+
+      #infowindow-content {
+        display: none;
+      }
+
+      #map #infowindow-content {
+        display: inline;
+      }
+
+      .pac-card {
+        margin: 10px 10px 0 0;
+        border-radius: 2px 0 0 2px;
+        box-sizing: border-box;
+        -moz-box-sizing: border-box;
+        outline: none;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+        background-color: #fff;
+      }
+
+      #pac-container {
+        padding-bottom: 12px;
+        margin-right: 12px;
+      }
+
+      .pac-controls {
+        display: inline-block;
+        padding: 5px 11px;
+      }
+
+      .pac-controls label {
+        font-weight: 300;
+      }
+
+      #pac-input {
+        text-overflow: ellipsis;
+        font-size: small;
+      }
+
+      #pac-input:focus {
+        border-color: #4d90fe;
+      }
+      .pac-container {
+        z-index: 1100 !important;
+      }
+      body{
+        font-size: small;
+      }
+      .form-control{
+        font-size: small;
+      }
+      .multiselect-container > li > a > label{
+      	height:auto;
+      }
+      .multiselect-container{
+      	height:10rem;
+      	overflow-y:scroll;
+      	width:max-content;
+      }
+</style>
+{% endblock %}
+{% block body %}
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCBJybI10-Xa43-F5GSad1i0Y9W3yqlW6Q&libraries=places&v=3" async defer></script>
+<div class="container">
+    {% if errors %}
+    <div class="alert alert-danger" role="alert">
+        <div id='errorsBox'>
+            <div>
+                <h5 style="color: red;text-shadow:-0.5px -0.5px 0 #000,0.5px -0.5px 0 #000,-0.5px 0.5px 0 #000,0.5px 0.5px 0 #000;">Error !</h5>
+                <ul>
+                    {% for x in errors %}
+                    <li>{{ x }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    </div>
+        {% endif %}
+    <div class="d-flex justify-content-center h-100 row">
+        <div class="card card-width col-sm-12">
+            <div class="card-header">
+                <div class="row">
+                    <div class="col-sm-12 d-flex justify-content-center"><h2 style="color: rgb(66, 8, 8);">Search Students</h2></div>
+                </div>
+            </div>
+            <form method="post">{% csrf_token %}
+            <div class="card-body container">
+                <div class="row d-flex justify-content-end">
+                    <div class="col-sm-3 input-group form-group justify-content-center d-flex">
+                       <input id="pac-input" type="text" class="controls form-control" name='loc' placeholder="Search Location">
+                       <input type="hidden" id="cityLat" name="cityLat" />
+                       <input type="hidden" id="cityLng" name="cityLng" />
+                    </div>
+                    <div class="col-sm-2 input-group form-group justify-content-center d-flex">
+                        <select id="className" name="className" class="custom-select form-control">
+                            <option disabled selected>Class</option>
+                        </select>
+                    </div>
+                    <div class="col-sm-3 input-group form-group justify-content-center d-flex">
+                        <select id="courseName" name="courseName" class="custom-select form-control multiselect1" multiple>
+                            <option disabled selected>Courses</option>
+                        </select>
+                    </div>
+                    <div class="col-sm-3 input-group form-group justify-content-center d-flex">
+                        <select id="courseName" name="courseName" class="custom-select form-control multiselect3" multiple>
+                            <option value="Online Tutor">Online Tutor</option>
+                            <option value="Institute">Institute</option>
+                            <option value="Home Tutor">Home Tutor</option>
+                            <option value="Assignment Solutions">Assignment Solutions</option>
+                        </select>
+                    </div>
+                    <div class="col-sm-1">
+                    <button type="submit" class="btn btn-warning btn-md">Submit</button>
+                    </div>
+                </div>
+            </div>
+        </form>
+
+        </div>
+        <!-- <br>
+        <br> -->
+        <!-- <div class="card card-width col-sm-12" style="padding-top:1rem;padding-bottom:2rem;">
+            <h4>Filters</h4>
+
+            <div class="card-body container filters">
+                <div class="row d-flex justify-content-end">
+                    <!-- <div class="col-sm-2 input-group form-group justify-content-center d-flex">
+                        <label class="control-label">Distance &nbsp;</label>
+                        <input type="number" class="form-control filterInputs" id="filterDistance" value="10*4">
+                    </div>
+                    <div class="col-sm-2 input-group form-group justify-content-center d-flex">
+                        <label class="control-label">Experience </label>
+                         <input type="number" class="form-control filterInputs" id="filterExperience" value="0">
+                    </div>
+                    <div class="col-sm-3 input-group form-group justify-content-center d-flex">
+                        <label class="control-label"> Demo Availaible Only : &nbsp;</label>
+                         <input class="form-control filterInputs" type="checkbox" id="filterDemo" checked>
+                    </div>
+                    <div class="col-sm-4 input-group form-group justify-content-center d-flex">
+                        <label class="control-label"> Budget  &nbsp;</label>
+                        <input type="range" min="1" max="100000" step="0.01" class="form-control filterInputs" id="filterBudget" value="10*5">
+                    </div>
+                    <div class="col-sm-1 input-group form-group justify-content-center d-flex">
+                        <span id="sliderval">100000</span>
+                    </div> -->
+                    <!-- <div class="col-sm-2 input-group form-group justify-content-center d-flex">
+                        <label class="control-label">Distance &nbsp;</label>
+                        <input type="number" class="form-control filterInputs" id="filterDistance" value="10*4">
+                    </div> -->
+                <!-- </div>
+            </div>
+          </div> -->
+                    <div class="container col-sm-12 profile-container">
+                      <div class="row profile-cards">
+            {% if allData %}
+                {% for i in allData %}
+
+                        <div class="col-12 col-sm-6 col-md-4 col-lg-3 cardWrapper" data-distance="{{i.distance}}" data-experience="{{i.experience}}" data-demo="{{i.freeDemo}}" data-budget="{{i.fees}}">
+                          <div class="card">
+                            <div class="card-body text-center">
+                            {% if i.photo %}
+                                <img class="avatar rounded-circle" src="{{i.photo.url}}" alt="Not Found"/>
+                            {% else %}
+                            <img class="avatar rounded-circle" src="{% static 'default-student.png' %}" alt="Default Not Found"/>
+                            {% endif %}
+
+                              <h5 class="card-title">{{i.firstName}} {{i.lastName}}</h5>
+                              <h6 class="card-subtitle mb-2 text-muted">{{i.courseName}}</h6>
+                              <hr>
+                            {% if i.email %}
+                              <div class="card-text row"><div class="col-sm-6"> Email :</div><div class="col-sm-6"> {{i.email}}</div></div>
+                            {% endif %}
+                            {% if i.phone %}
+                              <div class="card-text row"><div class="col-sm-6">Phone :</div><div class="col-sm-6"> {{i.phone}}</div></div>
+                            {% endif %}
+                            {% if i.schoolName %}
+                              <div class="card-text row"><div class="col-sm-6">School Name :</div><div class="col-sm-6"> {{i.schoolName}}</div></div>
+                            {% endif %}
+                              <br>
+                              <!-- <button type="button" data-toggle="modal" data-target="#tutorModal{{i.snum}}" class="btn btn-info">View</</button> -->
+                              <!-- <a href="#" class="btn btn-outline-info">Message</a> -->
+                            </div>
+                          </div>
+                        </div>
+
+<!-- modal -->
+<!-- <div class="modal fade" id="tutorModal{{i.snum}}" tabindex="-1" role="dialog" aria-labelledby="{{i.snum}}" aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title d-flex justify-content-center col-sm-10" style="color: rgb(66, 8, 8); text-align: center;" id="{{i.snum}}">{{i.firstName}} {{i.lastName}}</h5>
+      </div>
+
+      <div class="modal-body">
+
+          <div class="row">
+              <div class="col-sm-10">
+                  <div class="row" style="color:brown;">
+                      <div class="col-sm-6 d-flex justify-content-center headi">
+                          Email: {{i.email}}
+                      </div>
+                      <div class="col-sm-6 d-flex justify-content-center headi" style="">
+                          Phone: {{i.phone}}
+                      </div>
+                  </div>
+                  <br>
+                  <br>
+                  <div class="row">
+                      <div class="col-sm-2 text-center headi">Distance : </div><div class="col-sm-2">{{i.distance}}</div>
+                      <div class="col-sm-2 text-center headi">Qualification: </div><div class="col-sm-2">{{i.qualification}}</div>
+                      <div class="col-sm-2 text-center headi">Fees : </div><div class="col-sm-2">{{i.fees}}</div>
+
+                  </div>
+                  <br><br>
+                  <hr>
+
+              </div>
+              <div class="col-sm-2 imageBlock">
+                <div class="row d-flex justify-content-center ">
+                  {% if i.photo %}
+                      <img class="avatar rounded-circle" src="{{MEDIA_URL}}{{i.photo.url}}" alt="Not Found"/>
+                  {% else %}
+                      {% if i.gender == "Male" %}
+                  <img class="avatar rounded-circle" src="{% static 'default-male.jpg' %}" alt="Default Not Found"/>
+                      {% else %}
+                  <img class="avatar rounded-circle" src="{% static 'default-female.jpg' %}" alt="Default Not Found"/>
+                      {% endif %}
+                  {% endif %}
+                 </div>
+                 <div class="d-flex justify-content-center row">
+                     <p>
+                     {% if i.availability == True %}
+                         <td align="center" style="font-size: 1.5rem"><i class="fas fa-check"></i></td>
+                         {% else %}
+                         <td align="center" style="font-size: 1.5rem"><i class="fas fa-times"></i></td>
+                         {% endif %}
+                     </p>
+                 </div>
+              </div>
+          </div>
+      <br>
+      </div>
+    </div>
+  </div>
+</div> -->
+
+                {% endfor %}
+            {% else %}
+                <h6 style="color:White;">No Data Found</h6>
+            {% endif %}
+
+</div>
+
+<script>
+
+    document.addEventListener("DOMContentLoaded", function(){
+
+        var docs = {{jsonLocalData|safe}}
+        classes = Object.keys(docs);
+        for(i=0;i<classes.length;i++){
+            $('#className').append(`<option value="${classes[i]}">
+                                       ${classes[i]}
+                                   </option>`);
+        }
+        $(".multiselect1").multiselect();
+        $("#className").on("change",function(){
+            $("#courseName").empty();
+            courses = docs[this.value];
+            for(i=0;i<courses.length;i++){
+                $('#courseName').append(`<option value="${courses[i]}">
+                                       ${courses[i]}
+                                   </option>`);
+                               }
+            $(".multiselect1").multiselect('rebuild');
+
+        });
+
+          showAsideBtn = $('.show-side-btn');
+          setTimeout(function(){
+            showAsideBtn.click();
+          }, 0);
+
+          function initialize() {
+               var input = document.getElementById('pac-input');
+               var autocomplete = new google.maps.places.Autocomplete(input);
+ 			  google.maps.event.addListener(autocomplete, 'place_changed', function () {
+ 		            var place = autocomplete.getPlace();
+ 		            document.getElementById('cityLat').value = place.geometry.location.lat();
+ 		            document.getElementById('cityLng').value = place.geometry.location.lng();
+ 				});
+             }
+
+          initialize();
+          // $(".modal").modal();
+          $(".filterInputs").on("change",function(){
+              distance = $("#filterDistance").val();
+              experience = $("#filterExperience").val();
+              demo = $("#filterDemo")[0].checked;
+              budget = $("#filterBudget").val();
+              $("#sliderval").text(budget);
+              alldata = $(".cardWrapper");
+              alldata.show();
+
+              for(i=0;i<alldata.length;i++){
+                  if (alldata[i].dataset["distance"]>distance){
+                      $(alldata[i]).hide();
+                  }else{
+                      if (demo){
+                          if (alldata[i].dataset["demo"] == 0 ){
+                              $(alldata[i]).hide();
+                          }
+                      }
+                      if (alldata[i].dataset["budget"]>budget){
+                              $(alldata[i]).hide();
+                          }else{
+
+                          }
+                      }
+                  }
+
+          });
+
+});
+
+    $(".multiselect1").multiselect();
+    $(".multiselect2").multiselect();
+    $(".multiselect3").multiselect();
+
+
+</script>
+{% endblock %}

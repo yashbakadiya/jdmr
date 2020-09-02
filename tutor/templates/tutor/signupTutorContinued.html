@@ -1,0 +1,648 @@
+{% extends 'tutor/dashboardTutor.html' %}
+{% load static %}
+{% block css %}
+<style>
+@import url('https://fonts.googleapis.com/css?family=Numans');
+
+.container{
+align-content: center;
+}
+
+.card{
+width:90%;
+margin-top: auto;
+margin-bottom: auto;
+background-color: white;
+}
+
+.card-header h3{
+color: white;
+}
+
+input:focus{
+outline: 0 0 0 0  !important;
+box-shadow: 0 0 0 0 !important;
+
+}
+
+.remember{
+color: white;
+}
+
+.remember input
+{
+width: 19px;
+height: 19px;
+margin-left: 15px;
+margin-right: 5px;
+}
+
+.links{
+color: white;
+}
+
+.links a{
+margin-left: 4px;
+}
+
+.control-label {
+color: rgb(66, 8, 8);
+font-size: 20px;
+}
+
+.social_icon span{
+font-size: 60px;
+margin-left: 10px;
+color: #FFC312;
+}
+
+.social_icon span:hover{
+color: white;
+cursor: pointer;
+}
+
+.card-header h3{
+color: white;
+}
+
+.social_icon{
+position: absolute;
+right: 20px;
+top: -45px;
+}
+
+.input-group-prepend span{
+width: 50px;
+background-color: #FFC312;
+color: black;
+border:0 !important;
+}
+
+input:focus{
+outline: 0 0 0 0  !important;
+box-shadow: 0 0 0 0 !important;
+
+}
+
+.remember{
+color: white;
+}
+
+.remember input
+{
+width: 20px;
+height: 20px;
+margin-left: 15px;
+margin-right: 5px;
+}
+
+.signup_btn{
+color: black;
+background-color: #FFC312;
+width: 300px;
+}
+
+.signup_btn:hover{
+background-color: #2a2b3d;
+color:white;
+}
+
+.links{
+color: white;
+}
+
+.links a{
+margin-left: 4px;
+}
+
+.control-label {
+    color: rgb(66, 8, 8);
+    font-size: 20px;
+}
+
+#mainform{
+    padding-top: 2rem;
+    padding-bottom: 2rem;
+}
+#imgpreview{
+    max-width: 25%;
+}
+#page2{
+    display: none;
+}
+#submitForm{
+    min-width: 100%;
+}
+.multiselect{
+  width:100%;
+}
+.btn-group{
+  width:90%;
+}
+.side-nav{
+  z-index: 999 !important;
+}
+.formdata{
+  width:94%;
+}
+.sIm{
+  width: 100%;
+}
+.imgb{
+  padding: 5px;
+  margin: 0px;
+}
+img{
+ 	max-width:19rem;
+	max-height:19rem;
+}
+.multiselect-container > li > a > label{
+	height:auto;
+}
+.multiselect-container{
+	height:10rem;
+	overflow-y:scroll;
+	width:max-content;
+}
+</style>
+{% endblock %}
+{% block body %}
+<link rel="stylesheet" href="{% static 'css/croppie.css' %}" />
+<script src="{% static 'js/croppie.min.js' %}"></script>
+<div class="container">
+    {% if errors %}
+    <div class="alert alert-danger" role="alert">
+        <div id='errorsBox'>
+            <div>
+                <h5 style="color: red;text-shadow:-0.5px -0.5px 0 #000,0.5px -0.5px 0 #000,-0.5px 0.5px 0 #000,0.5px 0.5px 0 #000;">Error !</h5>
+                <ul>
+                    {% for x in errors %}
+                    <li>{{ x }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    </div>
+        {% endif %}
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" style="color: rgb(66, 8, 8); text-align: center;" id="exampleModalLabel">Add Info</h5>
+
+      </div>
+
+      <div class="modal-body">
+      <br>
+            <form id='submitForm' class="d-flex justify-content-center" method='post' action='' enctype='multipart/form-data'>{% csrf_token %}
+
+            <div class="formdata" id="page1">
+                <div class="">
+                        <div class="input-group form-group">
+                            <label class="control-label col-sm-4">Availability<span class="text-danger">*</span>
+                            </label>
+                            <div class="col-sm-8">
+                                <select name="availability" class="custom-select form-control multiselect1" required multiple>
+                                   <option disabled value>Select an option</option>
+                                   <option value="Online Tutor">Online Tutor</option>
+                                   <option value="Institute">Institute</option>
+                                   <option value="Home Tutor">Home Tutor</option>
+                                   <option value="Assignment Solutions">Assignment Solutions</option>
+                                </select>
+                            </div>
+                        </div>
+                        <br>
+
+                        <div class="input-group form-group">
+                            <label class="control-label col-sm-4">Qualification<span class="text-danger">*</span></label>
+                            <div class="input-group-prepend">
+                                <span class="input-group-text"><i class="fas fa-user"></i></span>
+                            </div>
+                            <input type="text" class="form-control" id="Qualification" name='qualification' placeholder="Qualification" required>
+                        </div>
+                        <div class="input-group form-group">
+                            <label class="control-label col-sm-4">Experience</label>
+                            <div class="input-group-prepend">
+                                <span class="input-group-text"><i class="fas fa-envelope"></i></span>
+                            </div>
+                            <input type="number" class="form-control" id="Experience" name='experience' placeholder="Experience">
+                        </div>
+
+                        <div class="input-group form-group">
+                            <label class="control-label col-sm-4">Description<span class="text-danger">*</span></label>
+                            <div class="input-group-prepend">
+                                <span class="input-group-text"><i class="fa fa-map-marker"></i></span>
+                            </div>
+                            <textarea class="form-control" id="Description" name='description' placeholder="About Yourself" required></textarea>
+                        </div>
+                        <div class="input-group form-group">
+                            <label class="control-label col-sm-4">Free Demo Available<span class="text-danger">*</span></label>
+                            <!-- <div class="input-group-prepend">
+                                <span class="input-group-text"><i class="fa fa-map-marker"></i></span>
+                            </div> -->
+                            <input type="checkbox" name="fda" value=1 style="width: 2em;height: 2em">
+                        </div>
+
+                      <div id='mainForm' class="container">
+                          <div id='entry1' class="row">
+                            <div class="col-sm-5">
+                              <div class="form-group">
+                                <label class="control-label" for="ctn">Course</label>
+                                <div>
+                                  <select id="ctn" name="ctn" class="custom-select form-control" required="required" onclick="addvals(this)">
+                                    <option disabled selected value>Select an option</option>
+                                    {% for x in data %}
+                                    <option value="{{ x.courseName }}">{{ x.courseName }}</option>
+                                    {% endfor %}
+                                  </select>
+                                </div>
+                              </div>
+                            </div>
+                            <div class="col-sm-5">
+                              <div class="form-group">
+                                <label class="control-label" for="cn">Class Name</label>
+                                <div>
+                                  <select id="cn" name="cn" class="custom-select form-control multiselect2" required="required" multiple onchange="cnCombine(this)">
+                                    <option disabled value>Select an option</option>
+                                  </select>
+                                </div>
+                              </div>
+                            </div>
+                            <input type="hidden" name="ctn_combined">
+                            <input type="hidden" name="cn_combined">
+                            <div class="col-sm-2 form-inline" style="display: flex;align-items: center;">
+                              <div class="form-group">
+                                <button class="btn btn-warning btn-md float-right" type="button" onclick="duplicate(this)">Add New</button>
+                              </div>
+                            </div>
+                          </div>
+                      </div>
+
+              <hr>
+
+
+              <div class="row container d-flex justify-content-end">
+                <div class="col-sm-2 sm-ml-1">
+                  <button id='nextBtn' name="submit" type="button" class="btn btn-warning">Next</button>
+
+                </div>
+              </div>
+
+              </div>
+            </div>
+
+            <div class="formdata" id="page2">
+                <div class="card-body container">
+                        <div class="input-group form-group">
+                            <label class="control-label col-sm-4">Profile Image
+                            </label>
+                            <div class="col-sm-8">
+                                <img src="{% static 'default-profile.png' %}" id="preview">
+                                <input id="uploadImage" type="file" value="">
+								<input id="ImageToServer" type="hidden" name="photo">
+								<button type="button" class="btn-primary btn-sm" name="button" data-toggle="modal" data-target="#profile_images" style="border:1px solid black">Choose&nbsp;&nbsp;Avatar</button>
+                            </div>
+                        </div>
+                        <div class="input-group form-group">
+                            <label class="control-label col-sm-4">Gender<span class="text-danger">*</span></label>
+                            <div class="input-group-prepend">
+                                <span class="input-group-text"><i class="fas fa-user"></i></span>
+                            </div>
+                            <div class="col-sm-3" style="padding-left: 0px;">
+                                <select id="gender" name="gender" class="custom-select form-control" required>
+                                      <option disabled selected>Select an option</option>
+                                      <option value="Male">Male</option>
+                                      <option value="Female">Female</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="input-group form-group">
+                            <label class="control-label col-sm-4">Fees<span class="text-danger">*</span></label>
+                            <div class="input-group-prepend">
+                                <span class="input-group-text"><i class="fas fa-user"></i></span>
+                            </div>
+                            <div class="col-sm-3" style="padding-left: 0px;">
+                                <input type="number" step="0.01" class="form-control" id="fees" name="fees">
+                            </div>
+                        </div>
+                        <br>
+                        <br>
+                        <br>
+                        <hr>
+                        <div class="row container d-flex">
+                            <div class="col-sm-10 sm-ml-1">
+                                <button id='backBtn' type="button" class="btn btn-warning">Back</button>
+
+                            </div>
+                            <div class="col-sm-2 sm-ml-1">
+                                <button id='submitBtn' name="submit" type="submit" class="btn btn-warning">Submit</button>
+
+                            </div>
+                        </div>
+                </div>
+            </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+    <div class="h-100">
+
+
+    </div>
+</div>
+
+<!-- cropping modal starts -->
+	<div class="modal fade" id="imageCropperModal" tabindex="-1" role="dialog" aria-labelledby="imageCropperModal" aria-hidden="true">
+	  <div class="modal-dialog modal-lg" role="document">
+	    <div class="modal-content">
+	      	<div class="modal-body" style="text-align: center;">
+				<div id="upload_cropper">
+				</div>
+	      	</div>
+		  	<div class="modal-footer">
+				<button type="button" data-target="#imageCropperModal" data-toggle="modal" class="btn btn-danger" name="button">Cancel</button>
+		  		<button id="saveCroppedImage" class="btn btn-warning" type="button" name="button">Save</button>
+	  		</div>
+	    </div>
+	  </div>
+	</div>
+<!-- modal ends -->
+
+<!-- modal here -->
+
+<div class="modal fade" id="profile_images" tabindex="-1" role="dialog" aria-labelledby="profile_images" aria-hidden="true" style="margin-top: 2%;left:75%">
+  <div class="modal-dialog modal-sm" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title d-flex justify-content-center col-sm-12" style="color: rgb(66, 8, 8); text-align: center;">Avatars</h5>
+      </div>
+
+      <div class="modal-body" style="text-align: center;">
+      	<div class="row">
+        	<div class="col-sm-4 imgb">
+        		<img id='img1' src="{% static 'avatars/1.jpg' %}" class="sIm" onclick="imgSel(this)">
+        	</div>
+        	<div class="col-sm-4 imgb">
+        		<img id='img2' src="{% static 'avatars/2.jpg' %}" class="sIm" onclick="imgSel(this)">
+        	</div>
+        	<div class="col-sm-4 imgb">
+        		<img id='img3' src="{% static 'avatars/3.jpg' %}" class="sIm" onclick="imgSel(this)">
+        	</div>
+        </div>
+        <div class="row">
+        	<div class="col-sm-4 imgb">
+        		<img id='img4' src="{% static 'avatars/4.jpg' %}" class="sIm" onclick="imgSel(this)">
+        	</div>
+        	<div class="col-sm-4 imgb">
+        		<img id='img5' src="{% static 'avatars/5.jpg' %}" class="sIm" onclick="imgSel(this)">
+        	</div>
+        	<div class="col-sm-4 imgb">
+        		<img id='img6' src="{% static 'avatars/6.jpg' %}" class="sIm" onclick="imgSel(this)">
+        	</div>
+        </div>
+        <div class="row">
+        	<div class="col-sm-4 imgb">
+        		<img id='img7' src="{% static 'avatars/7.jpg' %}" class="sIm" onclick="imgSel(this)">
+        	</div>
+        	<div class="col-sm-4 imgb">
+        		<img id='img8' src="{% static 'avatars/8.jpg' %}" class="sIm" onclick="imgSel(this)">
+        	</div>
+        	<div class="col-sm-4 imgb">
+        		<img id='img9' src="{% static 'avatars/9.jpg' %}" class="sIm" onclick="imgSel(this)">
+        	</div>
+        </div>
+        <div class="row">
+        	<div class="col-sm-4 imgb">
+        		<img id='img10' src="{% static 'avatars/10.jpg' %}" class="sIm" onclick="imgSel(this)">
+        	</div>
+        	<div class="col-sm-4 imgb">
+        		<img id='img11' src="{% static 'avatars/11.jpg' %}" class="sIm" onclick="imgSel(this)">
+        	</div>
+        	<div class="col-sm-4 imgb">
+        		<img id='img12' src="{% static 'avatars/12.jpg' %}" class="sIm" onclick="imgSel(this)">
+        	</div>
+        </div>
+        <button type="button" class="btn btn-danger" data-dismiss="modal" style="margin-top: 10%">Close</button>
+
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- modal ends -->
+<script>
+    function clear_all(){
+    var x = document.getElementsByClassName("form-control");
+    for(var i=0;i<x.length;i++){
+      x[i].value='';
+    }
+  }
+
+
+
+  var counter=1;
+  var Dclone = document.querySelector('#entry1').cloneNode(true);
+  function emptyit(ele){
+    while (ele.length > 0) {
+      ele.remove(0);
+    }
+  }
+  function duplicate(data){
+    var disParent = data.parentElement.parentElement.parentElement;
+    var ctn = disParent.children[0].children[0].children[1].children[0];
+    var cn = disParent.children[1].children[0].children[1].children[0];
+
+    if(! ctn.checkValidity()){
+      ctn.reportValidity();
+    }
+    else if(! cn.checkValidity()){
+      cn.reportValidity();
+    }
+    else{
+
+      ctn.disabled = true;
+      cn.disabled = true;
+      var removeCTN = document.getElementsByName("ctn");
+      var removeOptions = [];
+      for(var x=0;x<removeCTN.length;x++){
+        removeOptions.push(removeCTN[x].value);
+      }
+      var clone = Dclone.cloneNode(true);
+      counter+=1;
+      clone.setAttribute('id','entry'+counter);
+      var ctnNode = clone.children[0].children[0].children[1].children[0];
+      var cnNode = clone.children[1].children[0].children[1].children[0];
+
+      $(cn).multiselect('disable');
+      $(cnNode).multiselect();
+      var oldData = [];
+      for(var x=1;x<ctnNode.length;x++){
+        oldData.push(ctnNode[x].value)
+      }
+      emptyit(ctnNode);
+      for(var x in oldData){
+        if(! removeOptions.includes(oldData[x])){
+          addoption(ctnNode,oldData[x]);
+        }
+      }
+      document.querySelector('#mainForm').appendChild(clone);
+  }
+}
+  function addoption(ele,val){
+    var opt = document.createElement('option');
+    opt.value = val;
+    opt.innerHTML = val;
+    ele.appendChild(opt);
+  }
+  function addoptions(ele,ar){
+    for(var x in ar){
+      addoption(ele,ar[x]);
+    }
+  }
+  function addvals(data){
+    var mainParentNode = data.parentElement.parentElement.parentElement.parentElement;
+    var cn = mainParentNode.children[1].children[0].children[1].children[0];
+    var currentval = data.value;
+    var alldata = JSON.parse("{{jsdata|escapejs}}");
+    emptyit(cn);
+    addoptions(cn,alldata[currentval][0])
+        // htm0 = "";
+        // htm1 = "";
+        // for(i=0;i<alldata[currentval][0].length;i++){
+        //  htm0 += "<option value='" + alldata[currentval][0][i] + "'>"+alldata[currentval][0][i]+"</option>";
+        //  htm1 += "<option value='" + alldata[currentval][1][i] + "'>"+alldata[currentval][1][i]+"</option>";
+        //  $("#cn").append(htm0);
+        //  $("#ttn").append(htm1);
+        //  console.log(i);
+        // }
+        $(cn).multiselect("rebuild");
+
+    var saveVal = mainParentNode.children[2]
+    saveVal.value = data.value;
+    console.log(saveVal.value)
+  }
+  function cnCombine(data){
+    var mainParentNode = data.parentElement.parentElement.parentElement.parentElement;
+    var cn = mainParentNode.children[3];
+    var result = [];
+    var options = data && data.options;
+    var opt;
+    for (var i=0, iLen=options.length; i<iLen; i++) {
+      opt = options[i];
+      if(opt.selected) {
+        result.push(opt.value || opt.text);
+      }
+    }
+    cn.value = result.join(', ');
+  }
+
+
+$("#nextBtn").on("click",function(){
+    var f = document.getElementById('submitForm');
+    $("#gender").removeAttr("required");
+    if(! f.checkValidity()){
+      f.reportValidity();
+    }
+    else{
+      $("#gender").attr("required","required");
+      $("#page1").hide();
+      $("#page2").show();
+
+    }
+
+});
+
+$("#backBtn").on("click",function(){
+    $("#gender").removeAttr("required");
+    $("#page2").hide();
+    $("#page1").show();
+
+});
+$(".multiselect1").multiselect();
+$(".multiselect2").multiselect();
+
+$('.modal').on('hidden.bs.modal', function () {
+  if($(".modal").hasClass('show')){
+             $('body').addClass('modal-open');
+         }
+});
+
+$("#exampleModal").modal({backdrop: 'static', keyboard: false});
+function imgSel(data){
+    var bStyle = '5px solid rgb(0, 222, 255)';
+    var valueObj = document.getElementById('ImageToServer');
+    var uns = 0
+    if(data.style.border==bStyle){
+        uns = 1;
+    }
+    // var imageIds = ['img1','img2','img3','img4','img5','img6'];
+    for(x=1;x<13;x++){
+        document.getElementById("img"+String(x)).style.border = 'none';
+    }
+    if(uns){
+        data.style.border = 'none';
+        valueObj.value = "";
+        $("#preview")[0].src = "";
+    }
+    else{
+        data.style.border = bStyle;
+        valueObj.value = data.id[3];
+        $("#preview")[0].src = data.src;
+    }
+}
+
+		var cropper = $("#upload_cropper").croppie({
+			viewport: {
+						width: 300,
+						height: 300,
+						type: 'square'
+			},
+			boundary: {
+				width: 400,
+				height: 400
+			},
+			mouseWheelZoom: 'ctrl',
+		});
+
+	function previewImage(){
+		var preview = $("#preview")[0];
+		var file = $("#uploadImage")[0].files[0];
+		var reader  = new FileReader();
+
+		reader.onloadend = function () {
+
+		  $('#imageCropperModal').on('shown.bs.modal', function (e) {
+			  cropper.croppie('bind', {
+				  url: reader.result,
+				  points: [0,0,300,300],
+				  zoom: 0.5,
+			  });
+			});
+		$("#imageCropperModal").modal("show");
+		}
+
+		if (file) {
+		  reader.readAsDataURL(file);
+		} else {
+		}
+	}
+	$("#uploadImage").on('change', previewImage);
+
+	$("#saveCroppedImage").on("click",function(){
+		cropper.croppie("result",'base64').then(function(imageurl) {
+			preview.src = imageurl;
+			$("#ImageToServer").val(imageurl);
+		});
+        $("#imageCropperModal").modal("hide");
+    });
+
+
+</script>
+{% endblock %}
