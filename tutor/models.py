@@ -226,6 +226,10 @@ class SignupStudent(models.Model):
             self.avatar = 20
         super(SignupStudent, self).save(*args, **kwargs)
 
+    @property
+    def Full_name(self):
+        return f"{self.firstName} {self.lastName}"
+
 class AddStudentInst(models.Model):
     snum = models.AutoField(primary_key=True)
     username = models.CharField(max_length=100,default="")
@@ -447,6 +451,7 @@ class TutorialTutors(models.Model):
             first = TutorialTutorsPlaylist.objects.filter(tutorial=TutorialTutors.objects.get(id=self.id)).first()
             return first.Video.url
     
+
 class TutorialTutorsPlaylist(models.Model):
     tutorial = models.ForeignKey(TutorialTutors,related_name='tutorplaylist',on_delete=models.CASCADE)
     Title = models.CharField(max_length = 1000)
@@ -465,3 +470,18 @@ class OTP(models.Model):
     user = models.CharField(max_length = 100)
     type = models.CharField(max_length = 100)
     createdAt   = models.DateTimeField(auto_now_add=True)
+
+
+class ReviewsTutor(models.Model):
+    Tutor = models.ForeignKey(TutorialTutors,related_name="Tutorreviews",on_delete=models.CASCADE)
+    Student = models.ForeignKey(SignupStudent,related_name="tutorreview",on_delete=models.CASCADE)
+    Posted_On = models.DateField(auto_now_add=True)
+    Review = models.CharField(max_length=2000)
+    Rating = models.PositiveIntegerField()
+
+class ReviewsInstitute(models.Model):
+    Institute = models.ForeignKey(TutorialInstitute,related_name="Institutereviews",on_delete=models.CASCADE)
+    Student = models.ForeignKey(SignupStudent,related_name="institutereview",on_delete=models.CASCADE)
+    Posted_On = models.DateField(auto_now_add=True)
+    Review = models.CharField(max_length=2000)
+    Rating = models.PositiveIntegerField()

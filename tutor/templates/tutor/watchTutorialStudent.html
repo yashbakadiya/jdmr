@@ -10,6 +10,142 @@
         width: 100%;
         padding-right:15px;
     }
+    body{
+background:#dcdcdc;    
+}
+.total-like-user-main a {
+    display: inline-block;
+    margin: 0 -17px 0 0;
+}
+.total-like {
+    border: 1px solid;
+    border-radius: 50px;
+    display: inline-block;
+    font-weight: 500;
+    height: 34px;
+    line-height: 33px;
+    padding: 0 13px;
+    vertical-align: top;
+}
+.restaurant-detailed-ratings-and-reviews hr {
+    margin: 0 -24px;
+}
+.graph-star-rating-header .star-rating {
+    font-size: 17px;
+}
+
+.restaurant-slider-pics {
+    bottom: 0;
+    font-size: 12px;
+    left: 0;
+    z-index: 999;
+    padding: 0 10px;
+}
+.restaurant-slider-view-all {
+    bottom: 15px;
+    right: 15px;
+    z-index: 999;
+}
+.offer-dedicated-nav .nav-link.active,
+.offer-dedicated-nav .nav-link:hover,
+.offer-dedicated-nav .nav-link:focus {
+    border-color: #3868fb;
+    color: #3868fb;
+}
+.offer-dedicated-nav .nav-link {
+    border-bottom: 2px solid #fff;
+    color: #000000;
+    padding: 16px 0;
+    font-weight: 600;
+}
+.offer-dedicated-nav .nav-item {
+    margin: 0 37px 0 0;
+}
+.restaurant-detailed-action-btn {
+    margin-top: 12px;
+}
+.restaurant-detailed-header-right .btn-success {
+    border-radius: 3px;
+    height: 45px;
+    margin: -18px 0 18px;
+    min-width: 130px;
+    padding: 7px;
+}
+.text-black {
+    color: #000000;
+}
+.icon-overlap {
+    bottom: -23px;
+    font-size: 74px;
+    opacity: 0.23;
+    position: absolute;
+    right: -32px;
+}
+
+.restaurant-detailed-header-left img {
+    width: 88px;
+    height: 88px;
+    border-radius: 3px;
+    object-fit: cover;
+    box-shadow: 0 .125rem .25rem rgba(0, 0, 0, .075)!important;
+}
+.reviews-members .media .mr-3 {
+    width: 56px;
+    height: 56px;
+    object-fit: cover;
+}
+.rounded-pill {
+    border-radius: 50rem!important;
+}
+.total-like-user {
+    border: 2px solid #fff;
+    height: 34px;
+    box-shadow: 0 .125rem .25rem rgba(0, 0, 0, .075)!important;
+    width: 34px;
+}
+.total-like-user-main a {
+    display: inline-block;
+    margin: 0 -17px 0 0;
+}
+.total-like {
+    border: 1px solid;
+    border-radius: 50px;
+    display: inline-block;
+    font-weight: 500;
+    height: 34px;
+    line-height: 33px;
+    padding: 0 13px;
+    vertical-align: top;
+}
+.restaurant-detailed-ratings-and-reviews hr {
+    margin: 0 -24px;
+}
+.graph-star-rating-header .star-rating {
+    font-size: 17px;
+}
+
+.rating-list {
+    display: inline-flex;
+    margin-bottom: 15px;
+    width: 100%;
+}
+.rating-list-left {
+    height: 16px;
+    line-height: 29px;
+    width: 10%;
+}
+.rating-list-center {
+    width: 80%;
+}
+.rating-list-right {
+    line-height: 29px;
+    text-align: right;
+    width: 10%;
+}
+
+
+
+
 </style>
 {% endblock %}
 {% block body %}
@@ -48,11 +184,64 @@
   {% endfor %}
 </div>
           </div>
-                    <div class="col-8">
+            <div class="col-8">
               <div class="jumbotron text-dark">
                 <h2 class="text-dark">Course Content</h2>
-                <p>{{tutorial.playlist.all.count}} lectures • {{total_length}}</p>
+                <p>{{tutorial.tutorplaylist.all.count}} lectures • {{total_length}}</p>
                   {{tutorial.Description}}
+              </div>
+              {% if tutorial.Tutorreviews.all %}
+              <div class="jumbotron">
+                <h5 class="mb-2 text-dark">All Ratings and Reviews</h5>
+                {% for review in tutorial.Tutorreviews.all%}
+                <div class="bg-white rounded shadow-sm p-2 mb-2 restaurant-detailed-ratings-and-reviews">
+                    <div class="reviews-members pt-2 pb-2">
+                           <div class="media">
+                          {% if review.Student.photo %}
+                              <img alt="Generic placeholder image" src="{{review.Student.photo}}" class="mr-3 rounded-pill">
+                              {% else %}
+                              <img alt="Generic placeholder image" src="http://bootdey.com/img/Content/avatar/avatar1.png" class="mr-3 rounded-pill">
+                              {% endif %}
+                          
+                            <div class="media-body">
+                                <div class="reviews-members-header">
+                                    <span class="star-rating float-right">
+                                          <a href="#"><i class="icofont-ui-rating active"></i></a>
+                                          <a href="#"><i class="icofont-ui-rating active"></i></a>
+                                          <a href="#"><i class="icofont-ui-rating active"></i></a>
+                                          <a href="#"><i class="icofont-ui-rating active"></i></a>
+                                          <a href="#"><i class="icofont-ui-rating"></i></a>
+                                          </span>
+
+                                    <h6 class="mb-1 text-dark">{{review.Student.Full_name}}</h6>
+                                    <p class="mb-1" style="font-size: 12px;">{{review.Posted_On}}</p>
+                                </div>
+                                <div class="reviews-members-body mt-0 text-black">
+                                    <p class="text-dark">{{review.Review}}</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+              </div>
+              {% endfor %}
+            </div>
+              {% endif %}
+                <div class="jumbotron m-0">
+                  <form method="post" action="{% url 'tutorreview' tutorial.id %}">
+                    {% csrf_token %}  
+                    <div class="form-group m-0">
+                  <h3 for="exampleFormControlTextarea1" class="text-dark m-0">Enter Review</h3>
+                  <textarea class="form-control mt-2" id="exampleFormControlTextarea1" rows="3" placeholder="Enter Your Review" required="This Field Cannot be Empty" name="comment"></textarea>
+                </div>
+                  <select id="inputState" class="form-control mt-2" style="float: left;width:30%;" name="rating">
+                  <option value="5">Five Stars</option>
+                  <option value="4">Four Stars</option>
+                  <option value="3">Three Stars</option>
+                  <option value="2">Two Stars</option>
+                  <option value="1">One Stars</option>
+                </select>
+                <button  class="btn btn-primary mt-2" style="float: right;">Post Review</button>
+                </form>
               </div>
           </div>
     </div>
@@ -82,11 +271,65 @@
   {% endfor %}
 </div>
           </div>
-                    <div class="col-8">
+            <div class="col-8">
               <div class="jumbotron text-dark">
                 <h2 class="text-dark">Course Content</h2>
                 <p>{{tutorial.playlist.all.count}} lectures • {{total_length}}</p>
                   {{tutorial.Description}}
+              </div>
+              {% if tutorial.Institutereviews.all %}
+              <div class="jumbotron">
+                <h5 class="mb-2 text-dark">All Ratings and Reviews</h5>
+                {% for review in tutorial.Institutereviews.all%}
+                <div class="bg-white rounded shadow-sm p-2 mb-2 restaurant-detailed-ratings-and-reviews">
+                    <div class="reviews-members pt-2 pb-2">
+                        <div class="media">
+                          {% if review.Student.photo %}
+                              <img alt="Generic placeholder image" src="{{review.Student.photo}}" class="mr-3 rounded-pill">
+                              {% else %}
+                              <img alt="Generic placeholder image" src="http://bootdey.com/img/Content/avatar/avatar1.png" class="mr-3 rounded-pill">
+                              {% endif %}
+                          
+                            <div class="media-body">
+                                <div class="reviews-members-header">
+                                    <span class="star-rating float-right">
+                                          <a href="#"><i class="icofont-ui-rating active"></i></a>
+                                          <a href="#"><i class="icofont-ui-rating active"></i></a>
+                                          <a href="#"><i class="icofont-ui-rating active"></i></a>
+                                          <a href="#"><i class="icofont-ui-rating active"></i></a>
+                                          <a href="#"><i class="icofont-ui-rating"></i></a>
+                                          </span>
+
+                                    <h6 class="mb-1 text-dark">{{review.Student.Full_name}}</h6>
+                                    <p class="mb-1" style="font-size: 12px;">{{review.Posted_On}}</p>
+                                </div>
+                                <div class="reviews-members-body mt-0 text-black">
+                                    <p class="text-dark">{{review.Review}}</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+              </div>
+              {% endfor %}
+            </div>
+              {% endif %}
+               <div class="jumbotron m-0">
+                  <form method="post" action="{% url 'institutereview' tutorial.id %}">
+                    {% csrf_token %}
+                    <div class="form-group m-0">
+                    
+                  <h3 for="exampleFormControlTextarea1" class="text-dark m-0">Enter Review</h3>
+                  <textarea class="form-control mt-2" id="exampleFormControlTextarea1" rows="3" placeholder="Enter Your Review" required="This Field Cannot be Empty" name="comment"></textarea>
+                </div>
+                  <select id="inputState" class="form-control mt-2" style="float: left;width:30%;" name="rating">
+                  <option value="5">Five Stars</option>
+                  <option value="4">Four Stars</option>
+                  <option value="3">Three Stars</option>
+                  <option value="2">Two Stars</option>
+                  <option value="1">One Stars</option>
+                </select>
+                <button  class="btn btn-primary mt-2" style="float: right;">Post Review</button>
+                </form>
               </div>
           </div>
     </div>

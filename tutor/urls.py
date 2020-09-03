@@ -121,7 +121,9 @@ urlpatterns = [
     path('tutorials/Tutor/delete/<course_id>',views.DeleteTutorialsTutor,name="deletetutorialstutor"),
     path('forgotpass',views.forgotpass,name="forgotpass"),
     path('tutorial/search',views.SearchBar,name="searchtutorial"),
-    path("getOTP/",views.getOTP,name="getOTP")
+    path("getOTP/",views.getOTP,name="getOTP"),
+    path("tutorials/Student/Review/Tutor/<Course_id>",views.PostReviewTutor,name="tutorreview"),
+    path("tutorials/Student/Review/Instutute/<Course_id>",views.PostReviewInstitute,name="institutereview"),
     ]
 urlpatterns += static(settings.MEDIA_URL,document_root=settings.MEDIA_ROOT)
 # urlpatterns += [path('<path:dump>/',views.pageNotFound)]

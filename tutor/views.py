@@ -27,7 +27,8 @@ from google.oauth2 import id_token
 from google.auth.transport import requests
 from django.core.mail import EmailMessage
 
-CLIENT_ID = "1016598982512-u656rprh5a0f0j1jl0h00eq454kl1sla.apps.googleusercontent.com"
+CLIENT_ID = "450313289420-0sa8vg90n37pdek5nj49eufeia1j4918.apps.googleusercontent.com"
+#CLIENT_ID = "1016598982512-u656rprh5a0f0j1jl0h00eq454kl1sla.apps.googleusercontent.com"
 
 geolocator = Nominatim(user_agent="TutorSearch")
 
@@ -3769,3 +3770,40 @@ def getOTP(request):
 			return JsonResponse({'status':1})
 		else:
 			return JsonResponse({'status':0})
+
+
+def PostReviewTutor(request,Course_id):
+	cid = request.session['Student']
+	student = SignupStudent.objects.get(snum=cid)
+	tutorial = TutorialTutors.objects.get(id=Course_id)
+	if request.method == "POST":
+		rating =request.POST.get("rating","")
+		comment = request.POST.get("comment","")
+		print(rating,comment)
+		data = ReviewsTutor(
+			Tutor = tutorial,
+			Student = student,
+			Review=comment,
+			Rating = rating,
+			)
+		data.save()
+		return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
+	return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
+
+def PostReviewInstitute(request,Course_id):
+	cid = request.session['Student']
+	student = SignupStudent.objects.get(snum=cid)
+	tutorial = TutorialInstitute.objects.get(id=Course_id)
+	if request.method == "POST":
+		rating =request.POST.get("rating","")
+		comment = request.POST.get("comment","")
+		print(rating,comment)
+		data = ReviewsInstitute(
+			Institute = tutorial,
+			Review=comment,
+			Student = student,
+			Rating = rating,
+			)
+		data.save()
+		return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
+	return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
