@@ -13,6 +13,9 @@
     body{
 background:#dcdcdc;    
 }
+.checked {
+  color: orange;
+}
 .total-like-user-main a {
     display: inline-block;
     margin: 0 -17px 0 0;
@@ -200,20 +203,15 @@ background:#dcdcdc;
                           {% if review.Student.photo %}
                               <img alt="Generic placeholder image" src="{{review.Student.photo}}" class="mr-3 rounded-pill">
                               {% else %}
-                              <img alt="Generic placeholder image" src="http://bootdey.com/img/Content/avatar/avatar1.png" class="mr-3 rounded-pill">
+                              <img alt="Generic placeholder image" src="https://i.stack.imgur.com/l60Hf.png" class="mr-3 rounded-pill">
                               {% endif %}
                           
                             <div class="media-body">
                                 <div class="reviews-members-header">
-                                    <span class="star-rating float-right">
-                                          <a href="#"><i class="icofont-ui-rating active"></i></a>
-                                          <a href="#"><i class="icofont-ui-rating active"></i></a>
-                                          <a href="#"><i class="icofont-ui-rating active"></i></a>
-                                          <a href="#"><i class="icofont-ui-rating active"></i></a>
-                                          <a href="#"><i class="icofont-ui-rating"></i></a>
-                                          </span>
-
                                     <h6 class="mb-1 text-dark">{{review.Student.Full_name}}</h6>
+                                    {% for i in review.Range %}
+                                    <span class="fa fa-star checked"></span>
+                                    {% endfor %}
                                     <p class="mb-1" style="font-size: 12px;">{{review.Posted_On}}</p>
                                 </div>
                                 <div class="reviews-members-body mt-0 text-black">
@@ -287,20 +285,15 @@ background:#dcdcdc;
                           {% if review.Student.photo %}
                               <img alt="Generic placeholder image" src="{{review.Student.photo}}" class="mr-3 rounded-pill">
                               {% else %}
-                              <img alt="Generic placeholder image" src="http://bootdey.com/img/Content/avatar/avatar1.png" class="mr-3 rounded-pill">
+                              <img alt="Generic placeholder image" src="https://i.stack.imgur.com/l60Hf.png" class="mr-3 rounded-pill">
                               {% endif %}
                           
                             <div class="media-body">
                                 <div class="reviews-members-header">
-                                    <span class="star-rating float-right">
-                                          <a href="#"><i class="icofont-ui-rating active"></i></a>
-                                          <a href="#"><i class="icofont-ui-rating active"></i></a>
-                                          <a href="#"><i class="icofont-ui-rating active"></i></a>
-                                          <a href="#"><i class="icofont-ui-rating active"></i></a>
-                                          <a href="#"><i class="icofont-ui-rating"></i></a>
-                                          </span>
-
                                     <h6 class="mb-1 text-dark">{{review.Student.Full_name}}</h6>
+                                    {% for i in review.Range %}
+                                    <span class="fa fa-star checked"></span>
+                                    {% endfor %}
                                     <p class="mb-1" style="font-size: 12px;">{{review.Posted_On}}</p>
                                 </div>
                                 <div class="reviews-members-body mt-0 text-black">

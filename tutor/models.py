@@ -478,6 +478,13 @@ class ReviewsTutor(models.Model):
     Posted_On = models.DateField(auto_now_add=True)
     Review = models.CharField(max_length=2000)
     Rating = models.PositiveIntegerField()
+    
+    @property
+    def Range(self):
+        return list(range(self.Rating))
+
+    class Meta:
+        ordering = ['-Posted_On']
 
 class ReviewsInstitute(models.Model):
     Institute = models.ForeignKey(TutorialInstitute,related_name="Institutereviews",on_delete=models.CASCADE)
@@ -485,3 +492,10 @@ class ReviewsInstitute(models.Model):
     Posted_On = models.DateField(auto_now_add=True)
     Review = models.CharField(max_length=2000)
     Rating = models.PositiveIntegerField()
+
+    @property
+    def Range(self):
+        return list(range(self.Rating))
+
+    class Meta:
+        ordering = ['-Posted_On']
