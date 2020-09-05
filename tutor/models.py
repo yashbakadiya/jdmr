@@ -7,6 +7,7 @@ from secrets import token_urlsafe
 import json
 from django.utils.timezone import now
 from moviepy.editor import *
+from django.db.models import Avg
 
 # Create your models here.
 class LoginCoachingCentre(models.Model):
@@ -37,6 +38,14 @@ class SignupCoachingCentre(models.Model):
         if(not self.photo and self.avatar==0):
             self.avatar = 21
         super(SignupCoachingCentre, self).save(*args, **kwargs)
+
+    @property
+    def Rating(self):
+        if InstituteRatings.objects.filter(Institute=SignupCoachingCentre.objects.get(s_no=self.s_no)).exists():
+            institute = InstituteRatings.objects.filter(Institute=SignupCoachingCentre.objects.get(s_no=self.s_no))
+            rating = institute.aggregate(Avg('Rating'))
+            result = int(rating['Rating__avg'])
+            return list(range(result))
 
 class AddCourses(models.Model):
     s_num = models.AutoField(primary_key=True)
@@ -84,6 +93,17 @@ class SignupTutor(models.Model):
     longitude = models.CharField(max_length=20,default="0")
     emailValidated = models.BooleanField(default=False)
 
+    @property
+    def Rating(self):
+        if TutorRatings.objects.filter(Tutor=SignupTutor.objects.get(sno=self.sno)).exists():
+            tutor = TutorRatings.objects.filter(Tutor=SignupTutor.objects.get(sno=self.sno))
+            rating = tutor.aggregate(Avg('Rating'))
+            result = int(rating['Rating__avg'])
+            return list(range(result))
+
+    @property
+    def Full_name(self):
+        return f"{self.firstName} {self.lastName}"
 
 def userImagePath(instance,filename):
     ext = filename.split('.')[-1]
@@ -491,6 +511,36 @@ class ReviewsInstitute(models.Model):
     Student = models.ForeignKey(SignupStudent,related_name="institutereview",on_delete=models.CASCADE)
     Posted_On = models.DateField(auto_now_add=True)
     Review = models.CharField(max_length=2000)
+    Rating = models.PositiveIntegerField()
+
+    @property
+    def Range(self):
+        return list(range(self.Rating))
+
+    class Meta:
+        ordering = ['-Posted_On']
+
+
+class InstituteRatings(models.Model):
+    Institute = models.ForeignKey(SignupCoachingCentre,related_name="Coachingreviews",on_delete=models.CASCADE)
+    Student = models.ForeignKey(SignupStudent,related_name="studentenrolledinstitute",on_delete=models.CASCADE)
+    Posted_On = models.DateField(auto_now_add=True)
+    Review = models.TextField()
+    Rating = models.PositiveIntegerField()
+
+    @property
+    def Range(self):
+        return list(range(self.Rating))
+
+    class Meta:
+        ordering = ['-Posted_On']
+
+
+class TutorRatings(models.Model):
+    Tutor = models.ForeignKey(SignupTutor,related_name="tutorreviews",on_delete=models.CASCADE)
+    Student = models.ForeignKey(SignupStudent,related_name="studentenrolledtutor",on_delete=models.CASCADE)
+    Posted_On = models.DateField(auto_now_add=True)
+    Review = models.TextField()
     Rating = models.PositiveIntegerField()
 
     @property

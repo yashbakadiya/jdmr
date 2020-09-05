@@ -4,6 +4,9 @@
 {% block css %}
 
 <style>
+    .checked {
+  color: orange;
+}
     .darken-grey-text {
         color: #2E2E2E;
     }
@@ -291,7 +294,7 @@
     <div class="card card-width col-sm-12">
         <div class="card-header">
             <div class="row">
-                <div class="col-sm-12 d-flex justify-content-center"><h2 style="color: rgb(66, 8, 8);">Search Tutors</h2></div>
+                <div class="col-sm-12 d-flex justify-content-center"><h2 style="color: rgb(66, 8, 8);">Search Coaching Centers</h2></div>
             </div>
         </div>
         <div class="card-body container">
@@ -326,6 +329,10 @@
                 <h4 class="card-title col-sm-8">{{i.instituteName}}</h4>
                 <span class="col-sm-4" style="margin-left: auto;">Phone : {{i.phone}}</span>
                 <span class="col-sm-12">{{i.location}}</span>
+                <h6 class="ml-3 mt-1 mr-2">Avg Rating : </h6>
+                {% for i in i.Rating %}
+                 <span class="fa fa-star checked mt-1"></span>
+                {% endfor %}
             </div>
             <div class="card-body row">
                 <div class="col-sm-10">
@@ -342,9 +349,7 @@
                                 <ul style="height:100%">
                                 {% for course in i.AddCourses.all %}
                                     <li>
-                                        <div class="col-sm-10">
-                                            {{course.courseName}} &nbsp;:&nbsp; {{course.forclass}}
-                                        </div>
+                    <div class="col-sm-10">{{course.courseName}} &nbsp;:&nbsp; {{course.forclass}}</div>
                                         <div class="col-sm-6">
                                             {% for fee in course.AddFeesC.all %}
                                                 <br>
@@ -377,6 +382,7 @@
                     </div>
                     <br>
                     <br>
+                    <a href="{% url 'reviewinstitute' i.s_no %}" class="btn btn-danger ml-4 mt-5 pl-3">View Review</a>
                 </div>
                 <br>
                 <br>

@@ -147,7 +147,9 @@ background:#dcdcdc;
 }
 
 
-
+.review{
+  display: none;
+}
 
 </style>
 {% endblock %}
@@ -197,7 +199,7 @@ background:#dcdcdc;
               <div class="jumbotron">
                 <h5 class="mb-2 text-dark">All Ratings and Reviews</h5>
                 {% for review in tutorial.Tutorreviews.all%}
-                <div class="bg-white rounded shadow-sm p-2 mb-2 restaurant-detailed-ratings-and-reviews">
+                <div class="bg-white rounded shadow-sm p-2 mb-2 restaurant-detailed-ratings-and-reviews review">
                     <div class="reviews-members pt-2 pb-2">
                            <div class="media">
                           {% if review.Student.photo %}
@@ -222,6 +224,9 @@ background:#dcdcdc;
                     </div>
               </div>
               {% endfor %}
+                <div>
+                <button class="btn btn-primary load-more" style="align-items: center;">Load More</button>
+              </div>
             </div>
               {% endif %}
                 <div class="jumbotron m-0">
@@ -279,7 +284,7 @@ background:#dcdcdc;
               <div class="jumbotron">
                 <h5 class="mb-2 text-dark">All Ratings and Reviews</h5>
                 {% for review in tutorial.Institutereviews.all%}
-                <div class="bg-white rounded shadow-sm p-2 mb-2 restaurant-detailed-ratings-and-reviews">
+                <div class="bg-white rounded shadow-sm p-2 mb-2 restaurant-detailed-ratings-and-reviews review">
                     <div class="reviews-members pt-2 pb-2">
                         <div class="media">
                           {% if review.Student.photo %}
@@ -304,6 +309,9 @@ background:#dcdcdc;
                     </div>
               </div>
               {% endfor %}
+              <div>
+                <button class="btn btn-primary load-more" style="align-items: center;">Load More</button>
+              </div>
             </div>
               {% endif %}
                <div class="jumbotron m-0">
@@ -337,5 +345,12 @@ background:#dcdcdc;
             play.src = data;
             video.load();
          }
+         $(".review").slice(0,2).show();
+         $(".load-more").on("click",function(){
+          $(".review:hidden").slice(0,10).show();
+          if($(".review:hidden").length == 0){
+            $(".load-more").fadeOut();
+          }
+         });
   </script>
     {% endblock %}

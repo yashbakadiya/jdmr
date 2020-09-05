@@ -3807,3 +3807,68 @@ def PostReviewInstitute(request,Course_id):
 		data.save()
 		return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
 	return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
+
+
+def ReviewInstitutes(request):
+	cid = request.session['Student']
+	if AddStudentInst.objects.filter(conector= SignupStudent.objects.get(snum=cid)).exists():
+		institutes = AddStudentInst.objects.filter(conector= SignupStudent.objects.get(snum=cid))
+		context= {
+		'institutes':institutes
+		}
+		return render(request,'tutor/ReviewInstituteStudent.html',context)
+	else:
+		return render(request,'tutor/ReviewInstituteStudent.html')
+
+def ReviewTutors(request):
+	cid = request.session['Student']
+	if MakeAppointment.objects.filter(student= SignupStudent.objects.get(snum=cid)).exists():
+		Tutor = MakeAppointment.objects.filter(student= SignupStudent.objects.get(snum=cid))
+		context= {
+		'Tutor':Tutor
+		}
+		return render(request,'tutor/ReviewTutorStudent.html',context)
+	else:
+		return render(request,'tutor/ReviewTutorStudent.html')
+
+def ReviewInstitute(request,inst_id):
+	institute = SignupCoachingCentre.objects.get(s_no=inst_id)
+	reviews = InstituteRatings.objects.filter(Institute=institute)
+	context = {
+	'i':institute,
+	'reviews':reviews
+	}
+	cid = request.session['Student']
+	student = SignupStudent.objects.get(snum=cid)
+	if request.method == "POST":
+		rating =request.POST.get("rating","")
+		comment = request.POST.get("comment","")
+		print(rating,comment)
+		data = InstituteRatings(
+			Institute=institute,
+			Student=student,
+			Review=comment,
+			Rating =rating)
+		data.save()
+	return render(request,'tutor/Reviewsinstitute.html',context)
+
+def ReviewTutors(request,tutor_id):
+	cid = request.session['Student']
+	student = SignupStudent.objects.get(snum=cid)
+	tutor = SignupTutor.objects.get(sno=tutor_id)
+	reviews = TutorRatings.objects.filter(Tutor=tutor)
+	context = {
+	'i':tutor,
+	'reviews':reviews
+	}
+	if request.method == "POST":
+		rating =request.POST.get("rating","")
+		comment = request.POST.get("comment","")
+		print(rating,comment)
+		data = TutorRatings(
+			Tutor = tutor,
+			Student=student,
+			Review=comment,
+			Rating = rating)
+		data.save()
+	return render(request,'tutor/Reviewstutor.html',context)
