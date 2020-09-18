@@ -1,0 +1,9 @@
+@font-face {
+    	font-family: 'Sazanami Gothic';
+    	font-style:normal;
+      	
+	src: url("sazanami-gothic.e1d99d780d7d.eot");
+  	src: local('?'),
+         url("sazanami-gothic.59dd788264c2.woff") format('woff'), url("sazanami-gothic.9074cf965621.ttf") format('truetype'), url("sazanami-gothic.4b3ec60e660a.svg") format('svg'); 
+}
+

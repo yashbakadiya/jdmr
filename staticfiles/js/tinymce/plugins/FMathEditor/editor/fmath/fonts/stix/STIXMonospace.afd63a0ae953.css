@@ -1,0 +1,9 @@
+@font-face {
+    	font-family: 'STIXMonospace';
+    	font-style:normal;
+      	
+	src: url("STIXMonospace.63ea8d313aae.eot");
+  	src: local('?'),
+         url("STIXMonospace.f773dc8ff836.woff") format('woff'), url("STIXMonospace.9081f3193f1b.ttf") format('truetype'), url("STIXMonospace.6236ad5fb4fb.svg") format('svg'); 
+}
+

@@ -1,0 +1,9 @@
+@font-face {
+    	font-family: 'STIXGeneralUnicodeBold';
+    	font-style:normal;
+      	
+	src: url("STIXGeneral-Bold-Unicode.a0cba192dff0.eot");
+  	src: local('?'),
+         url("STIXGeneral-Bold-Unicode.69cadc700827.woff") format('woff'), url("STIXGeneral-Bold-Unicode.4c4403cd6425.ttf") format('truetype'), url("STIXGeneral-Bold-Unicode.78246dfab6f6.svg") format('svg'); 
+}
+

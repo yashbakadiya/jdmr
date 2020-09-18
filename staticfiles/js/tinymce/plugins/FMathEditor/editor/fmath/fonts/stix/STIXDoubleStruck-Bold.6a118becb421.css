@@ -1,0 +1,9 @@
+@font-face {
+    	font-family: 'STIXDoubleStruckBold';
+    	font-style:normal;
+      	
+	src: url("STIXDoubleStruck-Bold.1c2b2ad8c44f.eot");
+  	src: local('?'),
+         url("STIXDoubleStruck-Bold.959fb487fc01.woff") format('woff'), url("STIXDoubleStruck-Bold.9f1b9961e338.ttf") format('truetype'), url("STIXDoubleStruck-Bold.2e93132611c2.svg") format('svg'); 
+}
+

@@ -1,0 +1,9 @@
+@font-face {
+    	font-family: 'STIXScriptBold';
+    	font-style:normal;
+      	
+	src: url("STIXScript-Bold.67dc11bdf0de.eot");
+  	src: local('?'),
+         url("STIXScript-Bold.e766bc4c5eee.woff") format('woff'), url("STIXScript-Bold.7ca0580df922.ttf") format('truetype'), url("STIXScript-Bold.8d879ed41125.svg") format('svg'); 
+}
+

@@ -131,6 +131,22 @@
                     </li>
                 </ul>
             </li>
+            <li><i class="fa fa-users fa-fw"></i><a class="drop-down" href="#">Exams</a>
+                <ul class="side-nav-dropdown">
+                    <li><a href="{% url 'addexam' %}">Add Exam</a>
+                    </li>
+                    <li><a href="{% url 'viewexams' %}">View /Delete /Update Exam</a>
+                    </li>
+                </ul>
+            </li>
+            <li><i class="fa fa-users fa-fw"></i><a class="drop-down" href="#">Questions</a>
+                <ul class="side-nav-dropdown">
+                    <li><a href="{% url 'questionsection' %}">Add Exam Questions</a>
+                    </li>
+                    <li><a href="{% url 'editexamquestions' %}">View /Delete /Update Exam</a>
+                    </li>
+                </ul>
+            </li>
 
         </ul>
     </aside>

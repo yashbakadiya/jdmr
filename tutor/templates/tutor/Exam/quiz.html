@@ -1,0 +1,1069 @@
+{% extends 'tutor/Exam/base.html' %}
+{% load static %}
+<!--  -->
+{% block content%}
+<script src="{% static 'js/timer.js' %}"></script>
+<link rel="stylesheet" href="{% static 'css/quiz/quiz.css' %}" />
+<script>
+  let distance;
+  let countDownDate;
+
+  // From Backend
+  var exam_duration = "{{exam_duration}}";
+  console.log(exam_duration);
+
+  $.getJSON("{% static 'currentsession.json' %}", (data) => {
+    console.log(Object.keys(data).length);
+    if (Object.keys(data).length !== 0) {
+      countDownDate = new Date().getTime() + parseInt(data.timer);
+    } else {
+      countDownDate = new Date().getTime() + exam_duration * 60 * 1000;
+    }
+  });
+</script>
+
+<script>
+  let count;
+  let answers = [];
+  let time = [];
+  let extra_time = [];
+  let obj;
+  $.getJSON("{% static 'questions.json' %}", (data) => {
+    obj = data.questions;
+    console.log(obj);
+    count = data.questions.length;
+    for (let i = 0; i < count; i++) {
+      answers.push(undefined);
+      time.push(0);
+      extra_time.push(0);
+    }
+  });
+
+  $.getJSON("{% static 'currentsession.json' %}", (data) => {
+    if (Object.keys(data).length !== 0) {
+      for (let i = 0; i < count; i++) {
+        if (data.ans[i] !== "" && data.ans[i] !== undefined) {
+          answers[i] = data.ans[i];
+        }
+        if (data.time !== 0) {
+          time[i] = data.time[i];
+        }
+        if (data.extra_time !== 0) {
+          extra_time[i] = data.extra_time[i];
+        }
+      }
+    }
+    console.log(answers);
+  });
+</script>
+<!-- rish script-->
+<script>
+  if ($(window).width() > 550) {
+    $(document).ready(() => {
+      $(".tohide").remove();
+    });
+  }
+</script>
+
+<!-- rish header -->
+<header class="border-bottom mb-2">
+  <span style="font-size: 30px; cursor: pointer;" class="open_btn" onclick="openNav()">&#9776;</span>
+  <div id="mySidenav" class="sidenav">
+    <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+    <div class="pl-3">
+      <header style="position: absolute; top: 1%;" class="mt-3 mb-3">
+        <h6 style="font-size: 1.4em;">{{student.firstName}} {{student.lastName}}</h6>
+        <h6 class="pb-5 mr-4 pl-1"><b>{{exam.Name}}</b></h6>
+      </header>
+      <div>
+        <div class="mt-3" style="font-size: 1.2em;">QUESTION PALLETE</div>
+        <div class="tohide" id="myqs">
+          <section>
+            <div class="row container mt-1" style="background-color: rgb(231, 240, 248);">
+              <div class="col-lg-12">
+                <div>SECTION A</div>
+              </div>
+            </div>
+            <div class="" id="myqsA"></div>
+            <!-- Section B -->
+            <div class="row container mt-1" style="background-color: rgb(231, 240, 248);">
+              <div class="col-lg-12">
+                <div>SECTION B</div>
+              </div>
+            </div>
+            <div class="" id="myqsB"></div>
+            <!-- Section C -->
+            <div class="row container mt-1" style="background-color: rgb(231, 240, 248);">
+              <div class="col-lg-12">
+                <div>SECTION C</div>
+              </div>
+            </div>
+            <div class="" id="myqsC"></div>
+            <!-- Section D -->
+            <div class="row container mt-1" style="background-color: rgb(231, 240, 248);">
+              <div class="col-lg-12">
+                <div>SECTION D</div>
+              </div>
+            </div>
+            <div class="" id="myqsD"></div>
+          </section>
+        </div>
+      </div>
+
+      <footer class="ftr">
+        <div class="userguide row container sideusrguid" style="font-size: 80%; height: 10vh;">
+          <div class="col-sm-6">
+            <div align="" class="">
+              <div id="flagdesc">
+                <span class="icon-stack" id="flagdemo" style="font-size: 65%;">
+                  <i class="icon-circle icon-stack-base"></i>
+                  <i class="icon-flag icon-light"></i>
+                </span>
+                <span>: Marked For Review</span>
+              </div>
+              <div id="ansdemo" class="pl-1">
+                <i class="icon-circle answered"></i>
+                <span class="pl-1">: Answered</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-sm-6">
+            <div align="" class="">
+              <div id="unansdemo">
+                <i class="icon-circle unanswered"></i>
+                <span>: Not Answered </span>
+              </div>
+              <div id="notvisiteddemo">
+                <i class="icon-circle notvisited" style="color: papayawhip;"></i>
+                <span>: Not Visited </span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <a href="{% url 'instruction' pk=exam.id %}">
+            <button class="ins btn btn-outline-primary btn-sm" id="ibtn">
+              Instructions
+            </button>
+          </a>
+          <a href="#" target="_blank">
+            <button class="allquz btn btn-outline-primary btn-sm">Quiz</button>
+          </a>
+          <br />
+          {% if calc %}
+          <a class="mt-2" onclick="window.open('{% url 'calc' %}', 
+            'newwindow', 
+            'width=500,height=400'); 
+ return false;"><button class="mt-2 btn btn-outline-primary btn-block" id="redtocalc">
+              Calculator
+            </button></a>
+          {% endif %}
+          <a href="{}" id="submitbtn">
+            <button class="mt-2 btn btn-primary btn-block btn-sm">
+              Submit the Quiz
+            </button>
+          </a>
+        </div>
+      </footer>
+    </div>
+  </div>
+
+  <b class="sub_nm mr-5 pl-2">{{exam.Name}}</b>
+  <b class="time" id="mytimer" style="font-size: large;"></b>
+  <button class="btn btn-sm btn-outline-secondary flscr" id="fullscreen__btn">
+    FullScreen
+  </button>
+  <select name="" id="" class="btn btn-sm lang" style="border: 1px solid grey; justify-self: right;">
+    <option value="">English</option>
+    <option value="">Hindi</option>
+  </select>
+</header>
+<!-- ########################## header end #################-->
+<!-- main div -->
+<div class="pl-3 pr-4">
+  <div class="row">
+    <div class="col-lg-9">
+      <main>
+        <div class="sec">
+          <span id="qpalette">Section <span id="sectiontag">A</span> </span>
+        </div>
+
+        <div class="que_num">
+          <div class="">
+            <div>
+              <div class="qbar d-inline" id="questionno">
+                <b>
+                  Question <span id="qno">1</span>/<span id="totalques"></span>
+                  :
+                </b>
+                <div class="text-muted d-inline small">
+                  Single Correct
+                </div>
+                <div class="text-muted d-inline small">
+                  Marks:
+                  <span>+1</span>,
+                  <span>-0.25</span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="marks_value d-inline"></div>
+        </div>
+        <section class="quiz_ans">
+          <div class="quiz">
+            <div class="questionscroll pl-2">
+              <div id="currquestion" style="font-size: 25px;"></div>
+              <br />
+              <div id="ansframe"></div>
+            </div>
+          </div>
+        </section>
+      </main>
+      <footer>
+        <div class="userbtns col-lg-6">
+          <button class="btn btn-outline-warning fbtn" id="markforreview">
+            Mark For Review
+          </button>
+          <button class="btn btn-outline-info fbtn" id="clearresponse">
+            Clear Response
+          </button>
+          <div class="rbtn col-lg-6 text-right right_btn">
+            <button class="btn btn-primary fbtn" id="previous">Previous</button>
+            <button class="btn btn-primary fbtn" id="next">Save & Next</button>
+          </div>
+        </div>
+      </footer>
+    </div>
+    <!-- secod column -->
+    <div class="col-lg-3 sec_col border-left" style="height: 100%;overflow: scroll;">
+      <!-- Question palette  -->
+      <div>
+        <div class="row container pt-1">
+          <div class="col-lg-12">
+            <h6>{{student.firstName}} {{student.lastName}}</h6>
+          </div>
+        </div>
+        <div class="row container">
+          <div class="col-lg-12">
+            <div>QUESION PALLETE</div>
+          </div>
+        </div>
+        <!-- Section A -->
+        <div class="row container mt-1" style="background-color: rgb(231, 240, 248);">
+          <div class="col-lg-12">
+            <div>SECTION A</div>
+          </div>
+        </div>
+        <div class="" id="myqsA"></div>
+        <!-- Section B -->
+        <div class="row container mt-1" style="background-color: rgb(231, 240, 248);">
+          <div class="col-lg-12">
+            <div>SECTION B</div>
+          </div>
+        </div>
+        <div class="" id="myqsB"></div>
+        <!-- Section C -->
+        <div class="row container mt-1" style="background-color: rgb(231, 240, 248);">
+          <div class="col-lg-12">
+            <div>SECTION C</div>
+          </div>
+        </div>
+        <div class="" id="myqsC"></div>
+        <!-- Section D -->
+        <div class="row container mt-1" style="background-color: rgb(231, 240, 248);">
+          <div class="col-lg-12">
+            <div>SECTION D</div>
+          </div>
+        </div>
+        <div class="" id="myqsD"></div>
+      </div>
+
+      <!-- user guide -->
+      <div class="">
+        <div class="userguide row" style="font-size: 80%; height: 10vh; justify-content: center;">
+          <div class="col-lg-6">
+            <div align="" class="">
+              <div id="flagdesc" style="padding-left: 1%;">
+                <span class="icon-stack" id="flagdemo" style="font-size: 65%;">
+                  <i class="icon-circle icon-stack-base"></i>
+                  <i class="icon-flag icon-light"></i>
+                </span>
+                <span>: Marked For Review</span>
+              </div>
+              <div id="ansdemo" class="pl-1">
+                <i class="icon-circle answered"></i>
+                <span class="pl-1">: Answered</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-lg-6">
+            <div align="" class="">
+              <div id="unansdemo">
+                <i class="icon-circle unanswered"></i>
+                <span>: Not Answered </span>
+              </div>
+              <div id="notvisiteddemo">
+                <i class="icon-circle notvisited" style="color: papayawhip;"></i>
+                <span>: Not Visited </span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <span class="iandc">
+        <a href="{% url 'instruction' pk=exam.id %}">
+          <button class="btn btn-outline-primary ins" id="ibtn">
+            Instructions
+          </button>
+        </a>
+        <a href="{% url 'view_questions' pk=exam.id %}" target="_blank" class="btn btn-outline-primary vaq">View all
+          quiz</a>
+
+        {% if calc %}
+        <a onclick="window.open('{% url 'calc' %}', 
+            'newwindow', 
+            'width=500,height=400'); 
+ return false;"><button class="mt-2 btn btn-outline-primary btn-block" id="redtocalc">
+            Calculator
+          </button></a>
+        {% endif %}
+      </span>
+
+      <div class="mt-2">
+        <a href="{% url 'submitted' %}" id="submitbtn" class="btn btn-outline-success btn-block">
+          Submit the Quiz
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ############## end main ###############-->
+<!-- 
+<div class="row">
+  <div class="col-sm-9"></div>
+  <div align="center" class="col-sm-3">
+    <h5 id="mytimer"></h5>
+  </div>
+</div>
+<br /><br /><br /><br />
+-->
+<!-- Question palette 
+<span id="qpalette" style="float: right;">Section 1</span>
+<br /><br />
+<div class="float-right" id="myqs"></div>
+-->
+<!-- Vertical line (dont't )
+<div class="vl"></div>
+ -->
+
+<!--  Question statement and answers render
+<div class="questionscroll">
+  <div id="currquestion" style="font-size: 25px;"></div>
+  <br />
+  <div id="ansframe"></div>
+</div>
+
+
+<div class="row userbtns">
+  <div class="col-sm-9">
+    <button class="btn btn-primary" id="previous">Previous</button>
+    <button class="btn btn-outline-warning" id="markforreview">
+      Mark/Unmark For Review
+    </button>
+    <button class="btn btn-outline-info" id="clearresponse">
+      Clear Response
+    </button>
+    <button class="btn btn-primary" id="next">Next</button>
+  </div>
+  <div class="col-sm-3">
+    ><a href="" id="submitbtn" class="btn btn-outline-success btn-block">
+      Submit the Quiz
+    </a>
+  </div>
+</div>
+
+
+
+<div class="userguide row">
+  <div class="col-sm-8"></div>
+  <div align="center" class="col-sm-2">
+    <div id="flagdesc">
+      <span class="icon-stack" id="flagdemo" style="font-size: 10px;">
+        <i class="icon-circle icon-stack-base"></i>
+        <i class="icon-flag icon-light"></i>
+      </span>
+      <span>: Marked For Review</span>
+    </div>
+    <div id="ansdemo">
+      <i class="icon-circle answered"></i>
+      <span>: Answered</span>
+    </div>
+  </div>
+
+  <div align="left" class="col-sm-2">
+    <div id="unansdemo">
+      <i class="icon-circle unanswered"></i>
+      <span>: Not Answered </span>
+    </div>
+    <div id="notvisiteddemo">
+      <i class="icon-circle notvisited" style="color: papayawhip;"></i>
+      <span>: Not Visited </span>
+    </div>
+  </div>
+</div>
+<span class="row iandc">
+  <a><button class="btn btn-outline-primary btn-block" id="ibtn">
+      Instructions
+    </button></a>
+  {% if calc %}
+  <a onclick="window.open('calculator.html', 
+            'newwindow', 
+            'width=500,height=400'); 
+ return false;"><button class="btn btn-outline-primary btn-block" id="redtocalc">
+      Calculator
+    </button></a>
+  {% endif %}
+</span>
+-->
+<br /><br />
+<!-- Modal -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title" id="myModalLabel">
+          Text recorded as answer!
+        </h4>
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+          &times;
+        </button>
+      </div>
+      <div class="modal-body">
+        Go back to quiz by pressing the button below.
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" data-dismiss="modal">
+          Back to Quiz
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+  $(() => {
+    //Question tracker
+    let c = 1;
+
+    // $(document).on("contextmenu",(e)=>{
+    //     return false;
+    // })
+
+    $("#" + c)
+      .parent("div")
+      .addClass("currentquestion");
+    //KINDLY PAY ATTENTION HERE: this answers array store the answers clicked by the user order wise(1-25)
+    //We can send this answers array to backend for marks evaluation
+    //at each index, option no. in the form of string are saved. In case user selects no answer, undefined is saved at that index.
+
+    //Rendering questions dynamically
+
+    $.getJSON("{% static 'questions.json' %}", (data) => {
+      console.log(Object.keys(data).length);
+      $("#totalques").append(count);
+      for (let i = 1; i <= count; i++) {
+        let myid = i.toString();
+        if (answers[i - 1] !== undefined) {
+          if (i === 1) {
+            $(`#myqs${obj[i - 1].section}`).append(
+              `<span class="question green"><a class="currentquestion" id=${myid} href="#"> ${
+              obj[i - 1].questionNo
+              }</a><i></i></span>`
+            );
+          } else if (i % 5 === 0) {
+            $(`#myqs${obj[i - 1].section}`).append(
+              `<span class="question green"><a class="" id=${myid} href="#"> ${
+              obj[i - 1].questionNo
+              }</a><i></i></span><br>`
+            );
+          } else {
+            $(`#myqs${obj[i - 1].section}`).append(
+              `<span class="question green"><a class="" id=${myid} href="#"> ${
+              obj[i - 1].questionNo
+              }</a><i></i></span>`
+            );
+          }
+        } else {
+          if (i === 1) {
+            $(`#myqs${obj[i - 1].section}`).append(
+              `<span class="question"><a class="currentquestion" id=${myid} href="#"> ${
+              obj[i - 1].questionNo
+              }</a><i></i></span>`
+            );
+          } else if (i % 5 === 0) {
+            $(`#myqs${obj[i - 1].section}`).append(
+              `<span class="question"><a class="" id=${myid} href="#"> ${
+              obj[i - 1].questionNo
+              }</a><i></i></span><br>`
+            );
+          } else {
+            $(`#myqs${obj[i - 1].section}`).append(
+              `<span class="question"><a class="" id=${myid} href="#"> ${
+              obj[i - 1].questionNo
+              }</a><i></i></span>`
+            );
+          }
+        }
+      }
+    });
+
+    //NIMIT EXTRA'S
+
+    var timer = null;
+    var initial = 0;
+
+    $(document).ready(() => {
+      timer = setInterval(function () {
+        countTime(obj[c - 1]);
+      }, 1000);
+    });
+
+    function countTime(question) {
+      initial += 1;
+      if (initial >= 2) {
+        if (answers[c - 1] === undefined) {
+          time[c - 1] += 1;
+        } else {
+          extra_time[c - 1] += 1;
+        }
+      }
+    }
+
+    //To save the current user state(answer array and timer)
+    $(window).on("beforeunload", () => {
+      $.post(
+        "{% url 'store_data' %}",
+        {
+          "ans[]": answers,
+          "time[]": time,
+          "extra_time[]": extra_time,
+          timer: distance,
+          csrfmiddlewaretoken: "{{ csrf_token }}",
+        },
+        (data) => {
+          console.log(data);
+        }
+      );
+    });
+
+    //When user selects an objective (only single correct) answer
+
+    $(document).on("change", "input[type=radio][name=q]", (e) => {
+      console.log(e.target.id);
+      let ans = e.target.id;
+      ans = ans.slice(1);
+      answers[c - 1] = ans;
+      if (
+        $("#" + c)
+          .parent()
+          .hasClass("green") === false
+      ) {
+        $("#" + c)
+          .parent()
+          .addClass("green");
+      }
+      if (
+        $("#" + c)
+          .parent()
+          .hasClass("red") === true
+      ) {
+        $("#" + c)
+          .parent()
+          .removeClass("red");
+      }
+      console.log(answers);
+
+      // NIMIT EXTRA'S
+      options = obj[c - 1].options;
+      console.log(options[`op${ans}`]);
+      correct = options[`op${ans}`];
+      var q_id = obj[c - 1].id;
+      var qtype = obj[c - 1].qmain;
+      var examid = obj[c - 1].examid;
+      if (qtype == "multiple") url = `{% url 'multiple_ans' %}`;
+      else if (qtype == "tof") url = "{% url 'tof_ans' %}";
+      console.log(time[c - 1], "tme");
+      $.post(
+        url,
+        {
+          examid: examid,
+          time: time[c - 1],
+          extra_time: extra_time[c - 1],
+          purpose: "ans",
+          q_id: q_id,
+          correct: correct,
+          csrfmiddlewaretoken: "{{ csrf_token }}",
+        },
+        () => { }
+      );
+    });
+
+    // rish toggle uplod img btn
+    $('.btn-light').hide()
+    $(document).on("click", ".ans-img-btn", () => {
+      $("#textans").toggle(() => {
+        if($('#textans').is(':hidden')){
+
+          $('.btn-light').show()
+
+            }else{
+                  $('.btn-light').hide()
+
+            }
+      })
+    });
+
+
+    //Save Text Click
+
+    $(document).on("click", "#savetextbtn", () => {
+      let input_text = $("#textans");
+      answers[c - 1] = input_text.val();
+      console.log(answers[c - 1]);
+      if (
+        $("#" + c)
+          .parent()
+          .hasClass("red") === true
+      ) {
+        $("#" + c)
+          .parent()
+          .removeClass("red");
+      }
+      $("#" + c)
+        .parent()
+        .addClass("green");
+      window.$("#myModal").modal("show");
+      console.log(answers);
+
+      // Nimit Extra's
+      // rish will add image send request
+      var q_id = obj[c - 1].id;
+      var qtype = obj[c - 1].qmain;
+      var examid = obj[c - 1].examid;
+      q_ans = input_text.val();
+      // rish image code
+      var ans_Image = $(".btn-light")[0].files[0];
+      if (qtype == "short") url = "{% url 'short_ans' %}";
+      else if (qtype == "long") url = "{% url 'long_ans' %}";
+      $.post(
+        url,
+        {
+          examid: examid,
+          time: time[c - 1],
+          extra_time: extra_time[c - 1],
+          q_id: q_id,
+          correct: q_ans,
+          ans_Image: ans_Image,
+          csrfmiddlewaretoken: "{{ csrf_token }}",
+        },
+        () => { console.log("done") }
+      );
+    });
+
+    //Clear Response
+
+    $(document).on("click", "#clearresponse", () => {
+      if (obj[c - 1].qtype === "objective") {
+        let response = answers[c - 1];
+        if (response !== undefined) {
+          $("input[type=radio][name=q]").prop("checked", false);
+          if (
+            $("#" + c)
+              .parent()
+              .hasClass("green") === true
+          ) {
+            $("#" + c)
+              .parent()
+              .removeClass("green");
+          }
+        }
+        answers[c - 1] = undefined;
+        console.log(answers);
+      } else if (obj[c - 1].qtype === "subjective") {
+        answers[c - 1] = undefined;
+        $("#textans").val("");
+        if (
+          $("#" + c)
+            .parent()
+            .hasClass("green") === true
+        ) {
+          $("#" + c)
+            .parent()
+            .removeClass("green");
+        }
+        console.log(answers);
+      }
+
+      // Nimit Extra's
+      var q_type = obj[c - 1].qmain;
+      var q_id = obj[c - 1].id;
+      if (q_type == "multiple") url = "{% url 'multiple_ans' %}";
+      else if (q_type == "short") url = "{% url 'short_ans' %}";
+      else if (q_type == "long") url = "{% url 'long_ans' %}";
+      else if (q_type == "tof") url = "{% url 'tof_ans' %}";
+      $.post(
+        url,
+        {
+          q_id: q_id,
+          correct: "Not Answered",
+          csrfmiddlewaretoken: "{{ csrf_token }}",
+        },
+        () => { }
+      );
+    });
+
+    //Change size of textbox dynamically
+    var baseH; // base scroll height
+
+    $("body")
+      .one("focus.textarea", "#textans", function (e) {
+        baseH = this.scrollHeight;
+      })
+      .on("input.textarea", "#textans", function (e) {
+        if (baseH < this.scrollHeight) {
+          $(this).height(0).height(this.scrollHeight);
+        } else {
+          $(this).height(0).height(baseH);
+        }
+      });
+
+    //Below scripts are for rendering questions as per the user selects
+
+    $.getJSON("{% static 'questions.json' %}", (data) => {
+      console.log(data.questions);
+      // let key="1";
+      let value = data.questions[c - 1];
+      let qf = $("#currquestion");
+      qf.empty();
+      qf.append('<span align="center">' + value.question + "<span>");
+      $("#ansframe").empty();
+      if (value.qtype === "objective") {
+        let options = value.options;
+        let opno = 1;
+        for (const k of Object.keys(options)) {
+          $("#ansframe").append(
+            `<input type="radio" name="q" id="o${opno}">` +
+            '<span style="font-size:20px;"> ' +
+            options[k] +
+            "</span>" +
+            "<br><br><br>"
+          );
+          if (parseInt(answers[c - 1]) === opno) {
+            $("#o" + opno).prop("checked", true);
+          }
+          opno = opno + 1;
+        }
+      } else if (value.qtype === "subjective") {
+        let textlength;
+        let rows = "1";
+        let cols = "100";
+        if (value.answerlength === "short") {
+          textlength = 150;
+        } else if (value.answerlength === "long") {
+          textlength = 1000;
+        }
+        let textbox = `<textarea id="textans" maxlength=${textlength} rows=${rows} cols=${cols}></textarea><br /><input type="file" class="btn btn-light">`;
+        if (answers[c - 1] !== undefined) {
+          textbox.val(answers[c - 1]);
+        }
+        $("#ansframe").append(textbox);
+        $("#ansframe").append("<br><br>");
+        $("#ansframe").append(`<div class="">
+                                          <div align="" class=""><button class="btn btn-outline-primary" id="savetextbtn">Save Answer </button></div>
+                                          <div class=""></div>
+                                      </div>`);
+        $("#ansframe").append(`<button class="btn btn-warning ans-img-btn">Upload Image</button>`)
+
+
+        if (answers[c - 1] !== undefined) {
+          $("#textans").val(answers[c - 1]);
+          console.log($("#textans").val());
+        }
+      }
+    });
+
+    //Mark for review
+
+    $(document).on("click", "#markforreview", (e) => {
+      let qid = c.toString();
+      let element = $("#" + c);
+      if (element.next().hasClass("icon-flag")) {
+        element.next().removeClass("icon-flag");
+      } else {
+        element.next().addClass("icon-flag");
+      }
+    });
+
+    $(document).on("click", ".question>a", (e) => {
+      let qid = $(e.target).attr("id");
+      console.log(typeof qid);
+      $("#" + c).removeClass("currentquestion");
+      if (answers[c - 1] === undefined) {
+        $("#" + c)
+          .parent("span")
+          .addClass("red");
+      }
+      c = parseInt(qid);
+      $("#" + c).addClass("currentquestion");
+      console.log(c);
+      $.getJSON("{% static 'questions.json' %}", (data) => {
+        // let key=qid;
+        let value = data.questions[c - 1];
+        let qf = $("#currquestion");
+        qf.empty();
+        qf.append('<span align="center">' + value.question + "<span><br>");
+        $("#qno").empty();
+        $("#qno").append(value.questionNo);
+        $("#sectiontag").empty();
+        $("#sectiontag").append(value.section);
+        $("#ansframe").empty();
+        //render options
+        if (value.qtype === "objective") {
+          let options = value.options;
+          console.log(options);
+          let opno = 1;
+          for (const k of Object.keys(options)) {
+            $("#ansframe").append(
+              `<input type="radio" name="q" id="o${opno}">` +
+              '<span style="font-size:20px;"> ' +
+              options[k] +
+              "</span>" +
+              "<br><br><br>"
+            );
+            if (parseInt(answers[c - 1]) === opno) {
+              $("#o" + opno).prop("checked", true);
+            }
+            opno = opno + 1;
+          }
+        } else if (value.qtype === "subjective") {
+          let textlength;
+          let rows;
+          let cols;
+          rows = "1";
+          cols = "100";
+          if (value.answerlength === "short") {
+            textlength = 150;
+          } else if (value.answerlength === "long") {
+            textlength = 1000;
+          }
+          let textbox = `<textarea id="textans" maxlength=${textlength} rows=${rows} cols=${cols}></textarea><br /><input type="file" class="btn btn-light">`;
+
+          $("#ansframe").append(textbox);
+          $("#ansframe").append("<br><br>");
+          $("#ansframe").append(`<div class="">
+                                          <div align="" class=""><button class="btn btn-outline-primary" id="savetextbtn" data-toggle="modal" data-target="#myModal">Save Answer </button></div>
+                                          <div class=""></div>
+                                      </div>`);
+          $("#ansframe").append(`<button class="btn btn-warning ans-img-btn">Upload Image</button>`)
+
+
+          if (answers[c - 1] !== undefined) {
+            $("#textans").val(answers[c - 1]);
+            console.log($("#textans").val());
+          }
+        }
+      });
+
+      // Nimit Extra's
+      clearInterval(timer);
+      initial = 0;
+      timer = setInterval(function () {
+        countTime(obj[c - 1]);
+      }, 1000);
+    });
+
+    $(document).on("click", "#previous", (e) => {
+      if (c > 1) {
+        $("#" + c).removeClass("currentquestion");
+        if (answers[c - 1] === undefined) {
+          $("#" + c)
+            .parent("span")
+            .addClass("red");
+        }
+        c = c - 1;
+        $("#" + c).addClass("currentquestion");
+        let qid = c.toString();
+        $.getJSON("{% static 'questions.json' %}", (data) => {
+          // let key=qid;
+          let value = data.questions[c - 1];
+          let qf = $("#currquestion");
+          qf.empty();
+          qf.append('<span align="center">' + value.question + "<span><br>");
+          $("#qno").empty();
+          $("#qno").append(value.questionNo);
+          $("#sectiontag").empty();
+          $("#sectiontag").append(value.section);
+          $("#ansframe").empty();
+          //render options
+          let options = value.options;
+          console.log(options);
+          let opno = 1;
+          if (value.qtype === "objective") {
+            for (const k of Object.keys(options)) {
+              $("#ansframe").append(
+                `<input type="radio" name="q" id="o${opno}">` +
+                '<span style="font-size:20px;"> ' +
+                options[k] +
+                "</span>" +
+                "<br><br><br>"
+              );
+              if (parseInt(answers[c - 1]) === opno) {
+                $("#o" + opno).prop("checked", true);
+              }
+              opno = opno + 1;
+            }
+          } else if (value.qtype === "subjective") {
+            let textlength;
+            let rows;
+            let cols;
+            rows = "1";
+            cols = "100";
+            if (value.answerlength === "short") {
+              textlength = 150;
+            } else if (value.answerlength === "long") {
+              textlength = 1000;
+            }
+            let textbox = `<textarea id="textans" maxlength=${textlength} rows=${rows} cols=${cols}></textarea><br /><input type="file" class="btn btn-light">`;
+
+            $("#ansframe").append(textbox);
+            $("#ansframe").append("<br><br>");
+            $("#ansframe").append(`<div class="">
+                                          <div align="" class=""><button class="btn btn-outline-primary" id="savetextbtn">Save Answer </button></div>
+                                          <div class=""></div>
+                                      </div>`);
+            $("#ansframe").append(`<button class="btn btn-warning ans-img-btn">Upload Image</button>`)
+
+
+            if (answers[c - 1] !== undefined) {
+              $("#textans").val(answers[c - 1]);
+              console.log($("#textans").val());
+            }
+          }
+        });
+      }
+
+      // Nimit Extra's
+      clearInterval(timer);
+      initial = 0;
+      timer = setInterval(function () {
+        countTime(obj[c - 1]);
+      }, 1000);
+    });
+
+    $(document).on("click", "#next", (e) => {
+      if (c < count) {
+        $("#" + c).removeClass("currentquestion");
+        if (answers[c - 1] === undefined) {
+          $("#" + c)
+            .parent("span")
+            .addClass("red");
+        }
+        c = c + 1;
+        $("#" + c).addClass("currentquestion");
+        let qid = c.toString();
+        $.getJSON("{% static 'questions.json' %}", (data) => {
+          // let key=qid;
+          let value = data.questions[c - 1];
+          let qf = $("#currquestion");
+          qf.empty();
+          qf.append('<span align="center">' + value.question + "<span><br>");
+          $("#qno").empty();
+          $("#qno").append(value.questionNo);
+          $("#sectiontag").empty();
+          $("#sectiontag").append(value.section);
+          $("#ansframe").empty();
+          //render options
+
+          if (value.qtype === "objective") {
+            let options = value.options;
+            console.log(options);
+            let opno = 1;
+            for (const k of Object.keys(options)) {
+              $("#ansframe").append(
+                `<input type="radio" name="q" id="o${opno}">` +
+                '<span style="font-size:20px;"> ' +
+                options[k] +
+                "</span>" +
+                "<br><br><br>"
+              );
+              if (parseInt(answers[c - 1]) === opno) {
+                $("#o" + opno).prop("checked", true);
+              }
+              opno = opno + 1;
+            }
+          } else if (value.qtype === "subjective") {
+            let textlength;
+            let rows;
+            let cols;
+            rows = "1";
+            cols = "100";
+            if (value.answerlength === "short") {
+              textlength = 150;
+            } else if (value.answerlength === "long") {
+              textlength = 1000;
+            }
+            let textbox = `<textarea id="textans" maxlength=${textlength} rows=${rows} cols=${cols}></textarea><br /><input type="file" class="btn btn-light">`;
+
+            $("#ansframe").append(textbox);
+            $("#ansframe").append("<br><br>");
+            $("#ansframe").append(`<div class="">
+                                          <div align="" class=""><button class="btn btn-outline-primary" id="savetextbtn">Save Answer </button></div>
+                                          <div class=""></div>
+                                      </div>`);
+        $("#ansframe").append(`<button class="btn btn-warning ans-img-btn">Upload Image</button>`)
+                                      
+
+            if (answers[c - 1] !== undefined) {
+              $("#textans").val(answers[c - 1]);
+              console.log($("#textans").val());
+            }
+          }
+        });
+      }
+
+      // Nimit Extra's
+      clearInterval(timer);
+      initial = 0;
+      timer = setInterval(function () {
+        countTime(obj[c - 1]);
+      }, 1000);
+    });
+  });
+</script>
+
+<script>
+    $('.btn-light').hide()
+
+  //rish codes
+  function openNav() {
+    document.getElementById("mySidenav").style.width = "90%";
+  }
+
+  function closeNav() {
+    document.getElementById("mySidenav").style.width = "0";
+  }
+</script>
+
+<script>
+  //js full screen code
+
+  $("#fullscreen__btn").on("click", () => {
+    document.documentElement.requestFullscreen();
+  });
+</script>
+
+{% endblock %}

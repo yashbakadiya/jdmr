@@ -18,7 +18,9 @@ import json
 from geopy.distance import distance as distanceBwAB
 from geopy.geocoders import Nominatim
 from datetime import datetime,timedelta
+import datetime as dt
 import pytz
+from itertools import chain
 from dateutil import parser,rrule
 from collections import deque
 from django.core.serializers.json import DjangoJSONEncoder
@@ -3872,3 +3874,929 @@ def ReviewTutors(request,tutor_id):
 			Rating = rating)
 		data.save()
 	return render(request,'tutor/Reviewstutor.html',context)
+
+# Function returns json response for ajax request
+def FindClases(request):
+	category_id = request.GET.get('course_id',"")
+	if category_id:
+		subCategories = AddCourses.objects.get(s_num=category_id)
+		sub_list = []
+		for sub in subCategories.forclass.split(","):
+			data = {}
+			data['value'] = sub
+			data['text'] = sub
+			sub_list.append(data)
+		return JsonResponse({'sub_categories': sub_list})
+
+def AddExam(request):
+	cid = request.session['CoachingCentre']
+	coaching = SignupCoachingCentre.objects.get(s_no=cid)
+	courses = AddCourses.objects.filter(coachingCentre=coaching)
+	batch = BatchTiming.objects.all()
+	context ={
+	'courses':courses,
+	'batch':batch
+	}
+	if request.method == "POST":
+		course = request.POST.get('course','')
+		course = AddCourses.objects.get(s_num=course)
+		classes = request.POST.get('class','')
+		Batch = request.POST.get('batch','')
+		name = request.POST.get('examname','')
+		date = request.POST.get('date','')
+		date = datetime.strptime(date, "%Y-%m-%d")
+		exam_time = request.POST.get('exam_time','')
+		timezone_offset = request.POST.get('timezone_offset','')
+		duration = request.POST.get('duration','')
+		pp = request.POST.get('pp','')
+		redate = request.POST.get('redate','')
+		calculator = request.POST.get('calculator','')
+		imguplod = request.POST.get('imguplod','')
+		nm = request.POST.get('nm','')
+		negative_marks = request.POST.get('negative_marks','')
+		tc = request.POST.get('tc','')
+		status = request.POST.get('status','')
+		noquestions = request.POST.get('noquestions','')
+		print(course,classes,Batch,name,date,exam_time,timezone_offset,
+			duration,pp,noquestions,status,redate,tc,calculator,nm,imguplod,negative_marks)
+		data = Exam()
+		data.center = coaching
+		data.course = course
+		data.Class = classes
+		data.Batch = Batch
+		data.Name = name
+		data.exam_date = date
+		Time = exam_time.split(':')
+		d = dt.time(int(Time[0]),int(Time[1]),00)
+		data.exam_time = d
+		data.exam_duration = duration
+		data.timezone = timezone_offset
+		data.pass_percentage = pp
+		if redate:
+			data.reexam_date = redate
+		if calculator:
+			data.calculator = True
+		if imguplod:
+			data.imgupload = True
+		if nm:
+			data.negative_marking = True
+			data.negative_marks = negative_marks
+		data.tandc = tc
+		if status==1:
+			data.status = True
+		else:
+			data.status = False
+		data.question_count = noquestions
+		data.save()
+	return render(request,'tutor/addExam.html',context)
+
+def ListExams(request):
+	cid = request.session['CoachingCentre']
+	coaching = SignupCoachingCentre.objects.get(s_no=cid)
+	context = {}
+	if Exam.objects.filter(center=coaching).exists():
+		exams = Exam.objects.filter(center=coaching)
+		context['exams']=exams
+	return render(request,'tutor/viewExams.html',context)
+
+def ToggleExam(request,exam_id):
+	exam = Exam.objects.get(id=exam_id)
+	if exam.status == True:
+		exam.status = False
+	else:
+		exam.status = True
+	exam.save()
+	return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+
+def Editexam(request,exam_id):
+	cid = request.session['CoachingCentre']
+	coaching = SignupCoachingCentre.objects.get(s_no=cid)
+	courses = AddCourses.objects.filter(coachingCentre=coaching)
+	exam = Exam.objects.get(id=exam_id)
+	batch = BatchTiming.objects.all()
+	context = {
+	'courses':courses,
+	'exam':exam,
+	'batch':batch
+	}
+	if request.method == "POST":
+		course = request.POST.get('course','')
+		classes = request.POST.get('class','')
+		Batch = request.POST.get('batch','')
+		name = request.POST.get('examname','')
+		date = request.POST.get('date','')
+		exam_time = request.POST.get('exam_time','')
+		timezone_offset = request.POST.get('timezone_offset','')
+		duration = request.POST.get('duration','')
+		pp = request.POST.get('pp','')
+		redate = request.POST.get('redate','')
+		calculator = request.POST.get('calculator','')
+		imguplod = request.POST.get('imguplod','')
+		nm = request.POST.get('nm','')
+		negative_marks = request.POST.get('negative_marks','')
+		tc = request.POST.get('tc','')
+		status = request.POST.get('status','')
+		noquestions = request.POST.get('noquestions','')
+		print(course,classes,Batch,name,date,exam_time,timezone_offset,
+			duration,pp,noquestions,status,redate,tc,calculator,nm,imguplod,negative_marks)
+		if course:
+			course = AddCourses.objects.get(s_num=course)
+			exam.course = course
+		if classes:
+			exam.Class = classes
+		if Batch:
+			exam.Batch = Batch
+		if name:
+			exam.Name = name
+		if date:
+			date = datetime.strptime(date, "%Y-%m-%d")
+			exam.exam_date = date
+		if exam_time:
+			Time = exam_time.split(':')
+			d = dt.time(int(Time[0]),int(Time[1]),00)
+			exam.exam_time = d
+		if duration:
+			exam.exam_duration = duration
+		if timezone_offset:
+			exam.timezone = timezone_offset
+		if pp:
+			exam.pass_percentage = pp
+		if redate:
+			exam.reexam_date = redate
+		if calculator:
+			exam.calculator = True
+		if imguplod:
+			exam.imgupload = True
+		if nm:
+			exam.negative_marking = True
+			exam.negative_marks = negative_marks
+		exam.tandc = tc
+		if status==1:
+			exam.status = True
+		else:
+			exam.status = False
+		exam.question_count = noquestions
+		exam.save()
+		return redirect('viewexams')
+	return render(request,'tutor/editExam.html',context)
+
+def deleteExam(request,exam_id):
+	exam = Exam.objects.get(id=exam_id)
+	exam.delete()
+	return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+
+
+
+def QuestionsSection(request):
+	cid = request.session['CoachingCentre']
+	coaching = SignupCoachingCentre.objects.get(s_no=cid)
+	context = {}
+	if Exam.objects.filter(center=coaching).exists():
+		exams = Exam.objects.filter(center=coaching)
+		context['exams']=exams
+	else:
+		context['exams']=[]
+
+	if request.method=='POST':
+		e_id = request.POST.get('exam','')
+		if  e_id:
+			return redirect('questions',e_id)
+	return render(request,'tutor/Questionsection.html',context)
+
+
+def CreateQuestions(request,exam_id):
+	errors = []
+	exam = Exam.objects.get(id=exam_id)
+	if request.method=="POST":
+		question_type = request.POST.get('question_type',"")
+		question = request.POST.get('question',"")
+		solution = request.POST.get('solution',"")
+		marks = request.POST.get('marks',"")
+		section = request.POST.get('section',"")
+		negative_marks = request.POST.get('negative_marks',"")
+		if question_type=='sq':
+			try:
+				data = ShortAnswerQuestion(
+					exam=exam,
+					question=question,
+					correct_ans=solution,
+					marks=marks,
+					section=section)
+				if negative_marks:
+					data.negative_marks=negative_marks
+				else:
+					data.negative_marks=0.0
+				data.save()
+			except:
+				errors.append('Options Cannot be Empty')
+
+		elif question_type=='lq':
+			try:
+
+				data = LongAnswerQuestion(
+					exam=exam,
+					question=question,
+					correct_ans=solution,
+					marks=marks,
+					section=section)
+				if negative_marks:
+					data.negative_marks=negative_marks
+				else:
+					data.negative_marks=0.0
+				data.save()
+			except:
+				errors.append('Options Cannot be Empty')
+		elif question_type=='mc':
+			try:
+
+				options = request.POST.getlist('options','')
+				print(options)
+				data = MultipleQuestion(
+					exam=exam,
+					question=question,
+					correct_ans=solution,
+					marks=marks,
+					section=section
+					)
+				if negative_marks:
+					data.negative_marks=negative_marks
+				else:
+					data.negative_marks=0.0
+				data.save()
+			except:
+				errors.append('Options Cannot be Empty')
+			if options:
+				for option in options:
+					answer = MultipleAnswer(
+						question = MultipleQuestion.objects.get(id=data.id),
+						option = option
+						)
+					answer.save()
+			else:
+				errors.append('Options Cannot be Empty')
+		else:
+			try:
+				options = request.POST.getlist('options','')
+				print(options)
+				bexam = BooleanQuestion(
+					exam=exam,
+					question=question,
+					option1 = options[0],
+					option2 = options[1],
+					correct_ans=solution,
+					marks=marks,
+					section=section)
+				if negative_marks:
+					bexam.negative_marks=negative_marks
+				else:
+					bexam.negative_marks=0.0
+				bexam.save()
+			except Exception as e:
+				print(e)
+				errors.append('Something Went Wrong! Try Again')
+
+	shortquestions = ShortAnswerQuestion.objects.filter(exam=exam_id)
+	booleanquestions = BooleanQuestion.objects.filter(exam=exam_id)
+	longquestions = LongAnswerQuestion.objects.filter(exam=exam_id)
+	multiplequestions = MultipleQuestion.objects.filter(exam=exam_id)
+	context = {
+	'exam':exam,
+	'SectionA':[],
+	'SectionB':[],
+	'SectionC':[],
+	'SectionD':[],
+	'errors':errors
+	}
+	x=1
+	for i in ['A','B','C','D']:
+		query1,query2,query3,query4=[],[],[],[]
+		query1 = shortquestions.filter(section=i)
+		query2 = booleanquestions.filter(section=i)
+		query3 = longquestions.filter(section=i)
+		query4 = multiplequestions.filter(section=i)
+		for item in query1:
+			item.question_no = x
+			item.save()
+			context[f'Section{i}'].append(item)
+			x+=1
+		for item in query2:
+			item.question_no = x
+			item.save()
+			context[f'Section{i}'].append(item)
+			x+=1
+		for item in query3:
+			item.question_no = x
+			item.save()
+			context[f'Section{i}'].append(item)
+			x+=1
+		for item in query4:
+			item.question_no = x
+			item.save()
+			context[f'Section{i}'].append(item)
+			x+=1
+
+	return render(request,'tutor/Questions.html',context)
+
+
+def EditExamQuestions(request):
+	cid = request.session['CoachingCentre']
+	coaching = SignupCoachingCentre.objects.get(s_no=cid)
+	context = {}
+	if Exam.objects.filter(center=coaching).exists():
+		exams = Exam.objects.filter(center=coaching)
+		context['exams']=exams
+	else:
+		context['exams']=[]
+	return render(request,'tutor/editexamquestions.html',context)
+
+def EditQuestions(request,exam_id):
+	errors =[]
+	exam = Exam.objects.get(id=exam_id)
+	shortquestions = ShortAnswerQuestion.objects.filter(exam=exam_id)
+	booleanquestions = BooleanQuestion.objects.filter(exam=exam_id)
+	longquestions = LongAnswerQuestion.objects.filter(exam=exam_id)
+	multiplequestions = MultipleQuestion.objects.filter(exam=exam_id)
+	context = {
+	'exam':exam,
+	'SectionA':[],
+	'SectionB':[],
+	'SectionC':[],
+	'SectionD':[],
+	'errors':errors
+	}
+	x=1
+	for i in ['A','B','C','D']:
+		query1,query2,query3,query4=[],[],[],[]
+		query1 = shortquestions.filter(section=i)
+		query2 = booleanquestions.filter(section=i)
+		query3 = longquestions.filter(section=i)
+		query4 = multiplequestions.filter(section=i)
+		for item in query1:
+			item.question_no = x
+			item.save()
+			context[f'Section{i}'].append(item)
+			x+=1
+		for item in query2:
+			item.question_no = x
+			item.save()
+			context[f'Section{i}'].append(item)
+			x+=1
+		for item in query3:
+			item.question_no = x
+			item.save()
+			context[f'Section{i}'].append(item)
+			x+=1
+		for item in query4:
+			item.question_no = x
+			item.save()
+			context[f'Section{i}'].append(item)
+			x+=1
+	return render(request,'tutor/editquestions.html',context)
+
+
+def EditShortQuestions(request,question_id):
+	errors =[]
+	try:
+		question = ShortAnswerQuestion.objects.get(id=question_id)
+	except:
+		errors.append('Error Processing Request!')
+	context={
+	'question':question
+	}
+	if request.method == "POST":
+		section = request.POST.get("section","")
+		marks = request.POST.get("marks","")
+		nm= request.POST.get("nm","")
+		negative_marks = request.POST.get("negative_marks","")
+		Question = request.POST.get("question","")
+		Solution = request.POST.get("solution","")
+		#print(section,marks,nm,negative_marks,question,solution)
+		if section:
+			question.section = section
+		if marks:
+			question.marks = marks
+		if nm:
+			question.negative_marks=negative_marks
+		if Question:
+			question.question=Question
+		if Solution:
+			question.correct_ans=Solution
+		try:
+			question.save()
+		except:
+			errors.append('Error Occured! Try Again')
+
+		context={
+		'question':question,
+		'errors':errors
+		}
+		return render(request,'tutor/editshortquestions.html',context)	
+	return render(request,'tutor/editshortquestions.html',context)
+
+def EditLongQuestions(request,question_id):
+	errors =[]
+	try:
+		question = LongAnswerQuestion.objects.get(id=question_id)
+	except:
+		errors.append('Error Processing Request!')
+	context={
+	'question':question
+	}
+	if request.method == "POST":
+		section = request.POST.get("section","")
+		marks = request.POST.get("marks","")
+		nm= request.POST.get("nm","")
+		negative_marks = request.POST.get("negative_marks","")
+		Question = request.POST.get("question","")
+		Solution = request.POST.get("solution","")
+		#print(section,marks,nm,negative_marks,question,solution)
+		if section:
+			question.section = section
+		if marks:
+			question.marks = marks
+		if nm:
+			question.negative_marks=negative_marks
+		if Question:
+			question.question=Question
+		if Solution:
+			question.correct_ans=Solution
+		try:
+			question.save()
+		except:
+			errors.append('Error Occured! Try Again')
+
+		context={
+		'question':question,
+		'errors':errors
+		}
+		return render(request,'tutor/editlongquestions.html',context)
+	return render(request,'tutor/editlongquestions.html',context)
+
+def EditBooleanQuestions(request,question_id):
+	errors =[]
+	try:
+		question = BooleanQuestion.objects.get(id=question_id)
+	except:
+		errors.append('Error Processing Request!')
+	context={
+	'question':question
+	}
+	if request.method == "POST":
+		section = request.POST.get("section","")
+		marks = request.POST.get("marks","")
+		nm= request.POST.get("nm","")
+		negative_marks = request.POST.get("negative_marks","")
+		Question = request.POST.get("question","")
+		Solution = request.POST.get("solution","")
+		option1 = request.POST.get("option1","")
+		option2 = request.POST.get("option2","")
+		#print(section,marks,nm,negative_marks,question,solution)
+		if section:
+			question.section = section
+		if marks:
+			question.marks = marks
+		if nm:
+			question.negative_marks=negative_marks
+		if Question:
+			question.question=Question
+		if Solution:
+			question.correct_ans=Solution
+		if option1:
+			question.option1=option1
+		if option2:
+			question.option2 = option2
+		try:
+			question.save()
+		except:
+			errors.append('Error Occured! Try Again')
+		context={
+		'question':question,
+		'errors':errors
+		}
+		return render(request,'tutor/editbooleanquestions.html',context)
+	return render(request,'tutor/editbooleanquestions.html',context)
+
+
+def EditMultipleQuestions(request,question_id):
+	errors =[]
+	try:
+		question = MultipleQuestion.objects.get(id=question_id)
+	except:
+		errors.append('Error Pr+ocessing Request!')
+	context={
+	'question':question
+	}
+	if request.method == "POST":
+		section = request.POST.get("section","")
+		marks = request.POST.get("marks","")
+		nm= request.POST.get("nm","")
+		negative_marks = request.POST.get("negative_marks","")
+		Question = request.POST.get("question","")
+		Solution = request.POST.get("solution","")
+		options = request.POST.getlist("options","")
+		print(options)
+		#print(section,marks,nm,negative_marks,question,solution)
+		if section:
+			question.section = section
+		if marks:
+			question.marks = marks
+		if nm:
+			question.negative_marks=negative_marks
+		if Question:
+			question.question=Question
+		if Solution:
+			question.correct_ans=Solution
+		if MultipleAnswer.objects.filter(question=question).exists():
+			answers = MultipleAnswer.objects.filter(question=question)
+			for i in range(len(options)):
+				if answers.filter(option=options[i]).exists():
+					answer = answers.get(option=options[i])
+					answer.option = options[i]
+				else:
+					data = MultipleAnswer(
+						question=question,
+						option = options[i]
+						).save()
+
+		# try:
+		# 	question.save()
+		# except:
+		# 	errors.append('Error Occured! Try Again')
+		
+		context={
+		'question':question,
+		'errors':errors
+		}
+	return render(request,'tutor/editmultiplequestions.html',context)
+
+
+def DeleteShortQuestions(request,question_id):
+	errors =[]
+	try:
+		question = ShortAnswerQuestion.objects.get(id=question_id)
+		question.delete()
+	except:
+		errors.append('Error Processing Request!')
+	return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+
+def DeleteLongQuestions(request,question_id):
+	errors =[]
+	try:
+		question = LongAnswerQuestion.objects.get(id=question_id)
+		question.delete()
+	except:
+		errors.append('Error Processing Request!')
+	return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+
+def DeleteBooleanQuestions(request,question_id):
+	errors =[]
+	try:
+		question = BooleanQuestion.objects.get(id=question_id)
+		question.delete()
+	except:
+		errors.append('Error Processing Request!')
+	return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+
+
+def DeleteMultipleQuestions(request,question_id):
+	errors =[]
+	try:
+		question = MultipleQuestion.objects.get(id=question_id)
+		question.delete()
+	except:
+		errors.append('Error Processing Request!')
+	return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+
+
+def StudentExamsAll(request):
+	cid = request.session['Student']
+	student = SignupStudent.objects.get(snum=cid)
+	statuses = []
+	if AddStudentInst.objects.filter(conector=student).exists():
+		institutestudent = AddStudentInst.objects.get(conector=student)
+		institute = SignupCoachingCentre.objects.filter(Q(instituteCode=institutestudent.instituteCode)&Q(instituteName=institutestudent.instituteName))
+		if institute:
+			exams = Exam.objects.filter(center=institute[0])
+			for exam in exams:
+				s = StudentMapping.objects.get(student=student, exam=exam)
+				if StudentExamResult.objects.filter(student=s,exam=exam).exists():
+					statuses.append("submitted")
+				else:
+					statuses.append("")
+			print(statuses)
+			exams=zip(exams,statuses)
+			context={
+			'exams':exams,
+			}
+		return render(request,'tutor/studentExamsAll.html',context)
+	return render(request,'tutor/studentExamsAll.html')
+
+def displayQuestionList(exam):
+    mq = MultipleQuestion.objects.filter(
+        exam=exam).values("question", "id", "marks", "negative_marks", 'section', 'correct_ans', 'question_no')
+    lq = LongAnswerQuestion.objects.filter(
+        exam=exam).values("question", "id", "marks", "negative_marks", 'section', 'correct_ans', 'question_no')
+    sq = ShortAnswerQuestion.objects.filter(
+        exam=exam).values("question", "id", "marks", "negative_marks", 'section', 'correct_ans', 'question_no')
+    tof = BooleanQuestion.objects.filter(
+        exam=exam).values("question", "id", "marks", "negative_marks", 'correct_ans', "option1", "option2", 'section', 'question_no')
+    opts = {}
+    for m in mq:
+        m["examid"] = exam.id
+        m["qtype"] = "objective"
+        m["qmain"] = "multiple"
+        m['time'] = 0
+        m["extra_time"] = 0
+        options = MultipleAnswer.objects.filter(
+            question_id=m["id"]).values("option")
+        i = 0
+
+        for option in options:
+            i += 1
+            opts[f"op{i}"] = option["option"]
+        m["options"] = opts
+        opts = {}
+    for l in lq:
+        l["examid"] = exam.id
+        l["qmain"] = "long"
+        l['time'] = 0
+        l["extra_time"] = 0
+        l["qtype"] = "subjective"
+        l["answerlength"] = "long"
+    for s in sq:
+        s['time'] = 0
+        s["extra_time"] = 0
+        s["examid"] = exam.id
+        s["qmain"] = "short"
+        s["qtype"] = "subjective"
+        s["answerlength"] = "short"
+    for t in tof:
+        t['time'] = 0
+        t["extra_time"] = 0
+        t["examid"] = exam.id
+        t["qmain"] = "tof"
+        t["qtype"] = "objective"
+        opts["op1"] = t["option1"]
+        opts["op2"] = t["option2"]
+        t["options"] = opts
+        t.pop("option1")
+        t.pop("option2")
+
+    test = chain(mq, sq, lq, tof)
+    result = list(chain(mq, sq, lq, tof))
+    result = sorted(result, key=lambda i: i['question_no'])
+    sectionA = 0
+    sectionB = 0
+    sectionC = 0
+    sectionD = 0
+    for q in result:
+        if q['section'] == 'A':
+            sectionA += 1
+            q['questionNo'] = sectionA
+        elif q['section'] == 'B':
+            sectionB += 1
+            q['questionNo'] = sectionB
+        elif q['section'] == 'C':
+            sectionC += 1
+            q['questionNo'] = sectionC
+        elif q['section'] == 'D':
+            sectionD += 1
+            q['questionNo'] = sectionD
+    print(result)
+    section = {}
+    section['SectionA'] = sectionA
+    section['SectionB'] = sectionB
+    section['SectionC'] = sectionC
+    section['SectionD'] = sectionD
+
+    return result, section
+
+def calculator(request):
+    return render(request, 'tutor/Exam/calculator.html')
+
+def instruction(request, pk):
+	exam = Exam.objects.get(id=pk)
+	request.session['exam_id'] = exam.id
+	print(displayQuestionList(exam))
+	if 'main' in request.GET:
+		instructions = exam.tandc
+		return render(request, 'tutor/Exam/Instruction2.html', {'exam': exam, 'instructions': instructions})
+	return render(request, 'tutor/Exam/Instruction1.html', {'exam': exam})
+
+
+def start_exam(request, pk):
+    exam_mapping = Exam.objects.get(id=pk)
+    exam_duration = str(exam_mapping.exam_duration)
+    calc = exam_mapping.calculator
+    (result, section_count) = displayQuestionList(exam_mapping)
+    data = {}
+    data["questions"] = list(result)
+    BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    exam_status = request.session.get('exam_status', 'start')
+    cid = request.session['Student']
+    student = SignupStudent.objects.get(snum=cid)
+    s = StudentMapping.objects.get_or_create(
+        student=student, course=exam_mapping.course,exam=exam_mapping)
+    exam_duration = int(exam_duration)
+
+    if exam_status == 'start':
+        currentsession = {}
+        for q in result:
+            new = StudentAnswer()
+            new.student = s[0]
+            new.exam = exam_mapping
+            new.question = q['question']
+            new.marks = q['marks']
+            new.correct_ans = q['correct_ans']
+            new.negative_marks = q['negative_marks']
+            new.qtype = q['qmain']
+            new.save()
+
+        with open(os.path.join(BASE_DIR, 'tutor/static/currentsession.json'), 'w') as out:
+            json.dump(currentsession, out)
+
+    request.session['exam_status'] = f'in exam of {pk}'
+
+    with open(os.path.join(BASE_DIR, 'tutor/static/questions.json'), 'w') as out:
+        json.dump(data, out)
+    print(data)
+    return render(request, 'tutor/Exam/quiz.html', {'data': data, 'student': student, 'exam': exam_mapping, 'exam_duration': exam_duration, 'calc': calc, 'section_count': section_count})
+
+
+
+def view_questions(request, pk):
+    exam_mapping = Exam.objects.get(id=pk)
+    (result, section_count) = displayQuestionList(exam_mapping)
+    sectionA = 0
+    sectionB = 0
+    sectionC = 0
+    sectionD = 0
+
+    for q in result:
+        if q['section'] == 'A':
+            sectionA += 1
+            q['questionNo'] = sectionA
+        elif q['section'] == 'B':
+            sectionB += 1
+            q['questionNo'] = sectionB
+        elif q['section'] == 'C':
+            sectionC += 1
+            q['questionNo'] = sectionC
+        elif q['section'] == 'D':
+            sectionD += 1
+            q['questionNo'] = sectionD
+    return render(request, 'tutor/Exam/view_questions.html', {'questions': result, 'exam': exam_mapping})
+
+def store_data(request):
+    data = {}
+    data['ans'] = request.POST.getlist('ans[]')
+    data['timer'] = request.POST.get('timer')
+    data['time'] = request.POST.getlist('time[]')
+    data['extra_time'] = request.POST.getlist('extra_time[]')
+    BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    with open(os.path.join(BASE_DIR, 'login/static/login/json/currentsession.json'), 'w') as out:
+        json.dump(data, out)
+    return JsonResponse({'hell': 'dd'})
+
+def submitted(request):
+	exam_status = request.session['exam_status']
+	exam_id = request.session.get('exam_id', 'kk')
+	cid = request.session['Student']
+	student = SignupStudent.objects.get(snum=cid)
+	exam = Exam.objects.get(id=exam_id)
+	s = StudentMapping.objects.get(student=student, exam=exam)
+	student_answers = StudentAnswer.objects.filter(student=s,exam=exam)
+	print(student_answers)
+	for ans in student_answers:
+		if ans.qtype == 'multiple' or ans.qtype == 'tof':
+			if ans.input_ans != 'Not Answered':
+				if ans.input_ans == ans.correct_ans:
+					ans.marks_given = ans.marks
+					ans.check = 'correct'
+				else:
+					ans.marks_given = -abs(ans.negative_marks)
+					ans.check = 'incorrect'
+				ans.save()
+	new = StudentExamResult(exam=exam, attempted=True)
+	new.student = s
+	new.save()
+	del request.session['exam_status']
+	return render(request, 'tutor/Exam/submitted.html')
+
+def multiple_ans(request):
+    q_id = request.POST.get('q_id')
+    input_ans = request.POST.get('correct')
+    examid = int(request.POST.get('examid'))
+    #time = round(int(request.POST.get('time')) / 60, 2)
+    #extra_time = round(int(request.POST.get('extra_time')) / 60, 2)
+
+    exam = Exam.objects.get(id=examid)
+    question = MultipleQuestion.objects.get(id=q_id)
+    cid = request.session['Student']
+    student = SignupStudent.objects.get(snum=cid)
+    s = StudentMapping.objects.get(student=student, exam=exam)
+    exist = StudentAnswer.objects.get_or_create(
+        qtype='short', question=question.question, student=s,exam=exam,marks=0,negative_marks=0.0)
+    print(exist)
+    if len(exist)>1:
+    	exist = exist[0]
+    exist.input_ans = input_ans
+    exist.correct_ans = question.correct_ans
+    exist.time = 0.0#time
+    exist.extra_time = 0.0#extra_time
+    exist.save()
+
+    return JsonResponse({'done': 'done'})
+
+
+def short_ans(request):
+    q_id = request.POST.get('q_id')
+    input_ans = request.POST.get('correct')
+    #time = round(int(request.POST.get('time')) / 60, 2)
+    #extra_time = round(int(request.POST.get('extra_time')) / 60, 2)
+    examid = int(request.POST.get('examid'))
+    #rish 
+    if request.FILES.get('ans_Image'):
+        ans_Image = request.FILES.get('ans_Image')
+    else:
+        ans_Image = False
+    cid = request.session['Student']
+    student = SignupStudent.objects.get(snum=cid)
+    question = ShortAnswerQuestion.objects.get(id=q_id)
+    exam = Exam.objects.get(id=examid)
+    s = StudentMapping.objects.get(student=student, exam=exam)
+    exist = StudentAnswer.objects.get_or_create(
+        qtype='short', question=question.question, student=s,exam=exam,marks=0,negative_marks=0.0)
+    print(exist)
+    if len(exist)>1:
+    	exist = exist[0]
+    exist.input_ans = input_ans
+    # rish ans image handle
+    if ans_Image:
+        exist.input_ans_Image = ans_Image
+
+    exist.time = 0.0#time
+    exist.extra_time = 0.0#extra_time
+    exist.save()
+    print('saved')
+    return JsonResponse({'done': 'done'})
+
+
+def long_ans(request):
+    q_id = request.POST.get('q_id')
+    input_ans = request.POST.get('correct')
+    #time = round(int(request.POST.get('time')) / 60, 2)
+    #extra_time = round(int(request.POST.get('extra_time')) / 60, 2)
+    examid = int(request.POST.get('examid'))
+#rish 
+    if request.FILES.get('ans_Image'):
+        ans_Image = request.FILES.get('ans_Image')
+    else:
+        ans_Image = False
+    cid = request.session['Student']
+    student = SignupStudent.objects.get(snum=cid)
+    question = LongAnswerQuestion.objects.get(id=q_id)
+    exam = Exam.objects.get(id=examid)
+    s = StudentMapping.objects.get(student=student, exam=exam)
+    exist = StudentAnswer.objects.get_or_create(
+        qtype='short', question=question.question, student=s,exam=exam,marks=0,negative_marks=0.0)
+    print(exist)
+    if len(exist)>1:
+    	exist = exist[0]
+    exist.input_ans = input_ans
+    # rish ans image handle
+    if ans_Image:
+        exist.input_ans_Image = ans_Image
+
+    exist.time = 0.0#time
+    exist.extra_time = 0.0#extra_time
+    exist.save()
+    print('saved')
+    return JsonResponse({'done': 'done'})
+
+@csrf_exempt
+def tof_ans(request):
+    q_id = request.POST.get('q_id')
+    input_ans = request.POST.get('correct')
+    #time = round(int(request.POST.get('time')) / 60, 2)
+    #extra_time = round(int(request.POST.get('extra_time')) / 60, 2)
+    examid = int(request.POST.get('examid'))
+    question = BooleanQuestion.objects.get(id=q_id)
+    cid = request.session['Student']
+    student = SignupStudent.objects.get(snum=cid)
+    # student = Student.objects.get(Email=request.user.email)
+    exam = Exam.objects.get(id=examid)
+    s = StudentMapping.objects.get(student=student, exam=exam)
+    exist = StudentAnswer.objects.get_or_create(
+        qtype='short', question=question.question, student=s,exam=exam,marks=0,negative_marks=0.0)
+    print(exist)
+    if len(exist)>1:
+    	exist = exist[0]
+    # exist = StudentAnswer.objects.get(
+    #     qtype='tof', question=question.question, student=s)
+    exist.input_ans = input_ans
+    exist.time = 0.0#time
+    exist.extra_time = 0.0#extra_time
+    exist.save()
+    print('saved')
+    return JsonResponse({'done': 'done'})
