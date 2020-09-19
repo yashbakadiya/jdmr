@@ -689,6 +689,12 @@ class StudentMapping(models.Model):
 
     def __str__(self):
         return str(self.student)
+    
+    @property
+    def Status(self):
+        mapping = StudentMapping.objects.get(id=self.id)
+        statues = StudentExamResult.objects.filter(student=mapping,exam = self.exam).first()
+        return statues
 
 class StudentExamResult(models.Model):
     student = models.ForeignKey(
@@ -703,7 +709,7 @@ class StudentExamResult(models.Model):
     time_taken = models.CharField(max_length=100, default=0)
 
     def __str__(self):
-        return self.exam
+        return self.exam.Name
 
 class StudentAnswer(models.Model):
     student = models.ForeignKey(
@@ -725,4 +731,4 @@ class StudentAnswer(models.Model):
     negative_marks = models.FloatField()
 
     def __str__(self):
-        return self.student.student.username
+        return self.question

@@ -157,6 +157,16 @@ urlpatterns = [
     path('short_ans/', views.short_ans, name='short_ans'),
     path('long_ans/', views.long_ans, name='long_ans'),
     path('tof_ans/', views.tof_ans, name='tof_ans'),
+# Student Result Section
+    path('Student/Exams/Result/All',views.ViewExamsResult,name="studentexamresults"),
+    path('Student/Exam/Result/Detailed/Report/<int:pk>',views.detailed_result,name="detailed_report"),
+#Center Result Section
+    path('Center/Exams/Result/All',views.CoachingResultStudent,name="centerexamresults"),
+    path('Center/Exams/Result/Exam/<exam_id>',views.GetExamResults,name="getexamresults"),
+    path('Center/Exam/Result/Student/<student_id>/<exam_id>',views.GetStudentResults,name="studentresult"),
+    path('Center/Result/Review/Answer/<question_id>',views.Review_Answer,name="check_answer"),
+    path('Center/Result/Anotate/<id>/<pk>',views.webViewerAnnotate,name="anotatePdfViewer"),
+    path('Center/Result/Anotate/pdf/<id>/<pk>',views.annotateAnswers,name="anotate")
     ]
 urlpatterns += static(settings.MEDIA_URL,document_root=settings.MEDIA_ROOT)
 # urlpatterns += [path('<path:dump>/',views.pageNotFound)]
