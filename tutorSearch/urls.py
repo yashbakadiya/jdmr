@@ -20,4 +20,5 @@ from tutor import views
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('tutor.urls')),
+    path('api/',include('api.urls')),
 ]

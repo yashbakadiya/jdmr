@@ -13,6 +13,12 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/2.0.2/anime.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.3.1.js" integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60=" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js" integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut" crossorigin="anonymous"></script>
+      <link
+      rel="stylesheet"
+      type="text/css"
+      href="https://hinkhoj.com/common/css/keyboard.css"
+    />
+    <script src="https://hinkhoj.com/common/js/keyboard.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous"></script>
     <script src="https://kit.fontawesome.com/d24f94013c.js" crossorigin="anonymous"></script>
 
@@ -69,6 +75,20 @@
                     <li><a href="{% url 'viewtutorialstutor' %}">View/ Delete/ Update Tutorials</a>
                     </li>
                     <li><a href="{% url 'archivetutorialstutor' %}">Archive Tutorials</a>
+                    </li>
+                </ul>
+            </li>
+            <li><i class="fa fa-credit-card fa-fw" aria-hidden="true"></i><a href="{% url 'addbatchtutor' %}">Batch Timings</a>
+            </li>
+            <li><i class="fa fa-users fa-fw"></i><a class="drop-down" href="#"> Exam</a>
+                <ul class="side-nav-dropdown">
+                    <li><a href="{% url 'examtutor' %}">Add Exam</a>
+                    </li>
+                    <li><a href="{% url 'viewexamstutor' %}">View/ Delete/ Update Exams</a>
+                    </li>
+                    <li><a href="{% url 'addquestionstutor' %}">Add Questions</a>
+                    </li>
+                    <li><a href="{% url 'questionalltutor' %}">View/ Delete/Update Questions</a>
                     </li>
                 </ul>
             </li>

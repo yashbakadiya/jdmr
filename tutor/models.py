@@ -602,6 +602,10 @@ class MultipleQuestion(models.Model):
     def Edit_url(self):
         return reverse('multipleansedit', args=(self.id,))
 
+    @property
+    def Edit_Tutor(self):
+        return reverse('multipleansedittutor', args=(self.id,))
+
 class MultipleAnswer(models.Model):
     question = models.ForeignKey(
         MultipleQuestion, on_delete=models.CASCADE, related_name='options')
@@ -633,6 +637,10 @@ class LongAnswerQuestion(models.Model):
     def Edit_url(self):
         return reverse('longansedit', args=(self.id,))
 
+    @property
+    def Edit_Tutor(self):
+        return reverse('longansedittutor', args=(self.id,))
+
 class BooleanQuestion(models.Model):
     exam = models.ForeignKey(
         Exam, related_name='boolean_question', on_delete=models.CASCADE)
@@ -657,6 +665,10 @@ class BooleanQuestion(models.Model):
     def Edit_url(self):
         return reverse('booleanansedit', args=(self.id,))
 
+    @property
+    def Edit_Tutor(self):
+        return reverse('booleanansedittutor', args=(self.id,))
+
 class ShortAnswerQuestion(models.Model):
     exam = models.ForeignKey(
         Exam, related_name='oneline_question', on_delete=models.CASCADE)
@@ -678,6 +690,10 @@ class ShortAnswerQuestion(models.Model):
     @property
     def Edit_url(self):
         return reverse('shortansedit', args=(self.id,))
+
+    @property
+    def Edit_Tutor(self):
+        return reverse('shortansedittutor', args=(self.id,))
 
 
 class StudentMapping(models.Model):
@@ -732,3 +748,16 @@ class StudentAnswer(models.Model):
 
     def __str__(self):
         return self.question
+
+class BatchTimingTutor(models.Model):
+    sno             = models.AutoField(primary_key=True)
+    batchName       = models.CharField(max_length=255,default="")
+    days            = models.CharField(max_length=255,default="",help_text="Comma seperated")
+    startTime       = models.CharField(max_length=255,default="")
+    endTime         = models.CharField(max_length=255,default="")
+    original24time  = models.CharField(max_length=255,default="",help_text="Comma seperated")
+    createdAt       = models.DateTimeField(auto_now_add=True)
+    updatedAt       = models.DateTimeField(auto_now=True)
+    StartDate       = models.DateTimeField()
+    EndDate       = models.DateTimeField()
+    Tutor           = models.ForeignKey(SignupTutor,on_delete=models.SET_NULL,null=True,related_name='BatchTutor')

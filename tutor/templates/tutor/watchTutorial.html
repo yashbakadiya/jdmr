@@ -25,7 +25,8 @@
     {% if tutorial.playlist.all %}
     <div class="row mt-3 ">
           <div class="col-4">
-              <div id="accordion">
+              <div id="accordion" style="height: 100%;overflow: scroll;">
+
                 {% for item  in tutorial.playlist.all %}
   <div class="card">
     <div class="card-header" id="heading">

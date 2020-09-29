@@ -1,3 +1,4 @@
+import calendar
 from django.shortcuts import render
 from django.http import HttpResponse,JsonResponse,HttpResponseRedirect
 from django.contrib import messages
@@ -77,7 +78,40 @@ def dashboardTutor(request):
 	return render(request, 'tutor/dashboardTutor.html')
 
 def dashboard(request):
-	return render(request, 'tutor/calendarCoaching.html')
+	cid = request.session['CoachingCentre']
+	coaching = SignupCoachingCentre.objects.get(s_no=cid)
+	enrolledcourses = AddCourses.objects.filter(coachingCentre=coaching)
+	enrolledstudents = AddStudentInst.objects.filter(instituteName=coaching.instituteName)
+	now = datetime.now()
+	upcomingexams = Exam.objects.filter(Q(center=coaching) & Q(exam_date__gt = now))
+	activeexams = Exam.objects.filter(Q(center=coaching) & Q(status=True))
+	tutorsenrolled = AddTutorsInst.objects.filter(cid=coaching)
+	Batches = BatchTiming.objects.filter(coachingCenter=coaching)
+	notices = []
+	for batch in Batches:
+		if Notice.objects.filter(batch=batch).exists():
+			for data in Notice.objects.filter(batch=batch):
+				notices.append(data)
+	days = list(range(1,calendar.monthrange(now.year, now.month)[1]+1))
+	year,month = datetime.today().strftime("%Y-%m").split('-')
+	fees = []
+	for i in days:
+		date = datetime(int(year),int(month),i)
+		objects = SubmitFees.objects.filter(createdAt=date).count()
+		fees.append(objects)
+	# print(fees)
+	# print(days)
+	context={
+		'enrolledcourses':enrolledcourses.count(),
+		'enrolledstudents':enrolledstudents.count(),
+		'upcomingexams':upcomingexams,
+		'activeexams':activeexams,
+		'tutorsenrolled':tutorsenrolled.count(),
+		'notices':notices,
+		'days':days,
+		'fees':fees
+	}
+	return render(request, 'tutor/calendarCoaching.html',context)
 
 def mainPage(request):
 	return render(request, 'tutor/mainPage.html')
@@ -4263,7 +4297,7 @@ def EditShortQuestions(request,question_id):
 	except:
 		errors.append('Error Processing Request!')
 	context={
-	'question':question
+	'question':question,
 	}
 	if request.method == "POST":
 		section = request.POST.get("section","")
@@ -4924,6 +4958,8 @@ def calculate(answers):
     result = StudentExamResult.objects.get(
         student=student.student, exam=student.exam)
 
+
+
     # Correct Question
     print(result)
     correct_questions = answers.filter(check='correct')
@@ -5174,3 +5210,642 @@ def Review_Answer(request,question_id):
 		answer.marks_given = marks
 		answer.save()
 	return render(request,'tutor/Results/Review_Answer.html',context)
+
+
+def BatchTutor(request):
+	errors=[]
+	format_str = '%Y-%m-%d'
+	cid = request.session['Tutor']
+	tutor = SignupTutor.objects.get(sno=cid)
+	context = {}
+	if request.method == "POST":
+		name = request.POST.get("batchName","")
+		starttime = request.POST.get("startTime","")
+		endtime = request.POST.get("endTime","")
+		startdate = request.POST.get("startdate","")
+		enddate = request.POST.get("enddate","")
+		forday = request.POST.getlist("forday","")
+		days= ",".join(forday)
+		startdate = datetime.strptime(startdate, format_str)
+		enddate = datetime.strptime(enddate, format_str)
+		print(name,starttime,endtime,startdate,enddate,forday,days)
+		try:
+			data = BatchTimingTutor(
+				Tutor=tutor,
+				batchName=name,
+				days=days,
+				startTime=starttime,
+				endTime=endtime,
+				StartDate=startdate,
+				EndDate=enddate)
+			data.save()
+		except:
+			errors.append("Error Occurred While processing")
+	context['errors'] = errors
+	if BatchTimingTutor.objects.filter(Tutor=tutor).exists():
+		context['data'] = BatchTimingTutor.objects.filter(Tutor=tutor)
+	else:
+		context['data'] = []
+	return render(request,'tutor/addBatchTutor.html',context)
+
+def editBatchTutor(request,batch_id):
+	format_str = '%Y-%m-%d'
+	try:
+		data = BatchTimingTutor.objects.get(sno=batch_id)
+	except:
+		data = []
+	if request.method == "POST":
+		name = request.POST.get("batchName","")
+		starttime = request.POST.get("startTime","")
+		endtime = request.POST.get("endTime","")
+		startdate = request.POST.get("startdate","")
+		enddate = request.POST.get("enddate","")
+		forday = request.POST.getlist("forday","")
+		days= ",".join(forday)
+		startdate = datetime.strptime(startdate, format_str)
+		enddate = datetime.strptime(enddate, format_str)
+		print(name,starttime,endtime,startdate,enddate,forday,days)
+		if name:
+			data.batchName = name
+		if starttime:
+			data.startTime = starttime
+		if endtime:
+			data.endTime = endtime
+		if startdate:
+			data.StartDate = startdate
+		if enddate:
+			data.EndDate = enddate
+		if forday:
+			data.days = days
+		data.save()
+		return redirect('addbatchtutor')
+	context = {
+	'data':data
+	}
+	return render(request,'tutor/editBatchTutor.html',context)
+
+def deleteBatchTutor(request,batch_id):
+	errors=[]
+	try:
+		data = BatchTimingTutor.objects.get(sno=batch_id)
+		data.delete()
+		return redirect('addbatchtutor')
+	except:
+		errors.append('Error Occured')
+	context={
+	'errors':errors
+	}
+	return render(request,'tutor/addBatchTutor.html',context)
+
+def ExamTutor(request):
+	cid = request.session['Tutor']
+	tutor = SignupTutor.objects.get(sno=cid)
+	if enrollTutors.objects.filter(signUp=tutor).exists():
+		tutors = enrollTutors.objects.filter(signUp=tutor)
+		institute = AddTutorsInst.objects.get(username=tutors.first())
+		print(institute.cid)
+		courses = AddCourses.objects.filter(coachingCentre=institute.cid)
+		batch = BatchTiming.objects.all()
+	context = {
+	'courses':courses,
+	'batch':batch
+	}
+	if request.method == "POST":
+		course = request.POST.get('course','')
+		course = AddCourses.objects.get(s_num=course)
+		classes = request.POST.get('class','')
+		Batch = request.POST.get('batch','')
+		name = request.POST.get('examname','')
+		date = request.POST.get('date','')
+		date = datetime.strptime(date, "%Y-%m-%d")
+		exam_time = request.POST.get('exam_time','')
+		timezone_offset = request.POST.get('timezone_offset','')
+		duration = request.POST.get('duration','')
+		pp = request.POST.get('pp','')
+		redate = request.POST.get('redate','')
+		calculator = request.POST.get('calculator','')
+		imguplod = request.POST.get('imguplod','')
+		nm = request.POST.get('nm','')
+		negative_marks = request.POST.get('negative_marks','')
+		tc = request.POST.get('tc','')
+		status = request.POST.get('status','')
+		noquestions = request.POST.get('noquestions','')
+		print(course,classes,Batch,name,date,exam_time,timezone_offset,
+			duration,pp,noquestions,status,redate,tc,calculator,nm,imguplod,negative_marks)
+		data = Exam()
+		data.center = institute.cid
+		data.course = course
+		data.Class = classes
+		data.Batch = Batch
+		data.Name = name
+		data.exam_date = date
+		Time = exam_time.split(':')
+		d = dt.time(int(Time[0]),int(Time[1]),00)
+		data.exam_time = d
+		data.exam_duration = duration
+		data.timezone = timezone_offset
+		data.pass_percentage = pp
+		if redate:
+			data.reexam_date = redate
+		if calculator:
+			data.calculator = True
+		if imguplod:
+			data.imgupload = True
+		if nm:
+			data.negative_marking = True
+			data.negative_marks = negative_marks
+		data.tandc = tc
+		if status==1:
+			data.status = True
+		else:
+			data.status = False
+		data.question_count = noquestions
+		data.save()
+	return render(request,'tutor/addExamTutor.html',context)
+
+def ViewExamTutor(request):
+	cid = request.session['Tutor']
+	tutor = SignupTutor.objects.get(sno=cid)
+	try:
+		if enrollTutors.objects.filter(signUp=tutor).exists():
+			tutors = enrollTutors.objects.filter(signUp=tutor)
+			institute = AddTutorsInst.objects.get(username=tutors.first())
+			print(institute.cid)
+			exams = Exam.objects.filter(center=institute.cid)
+	except:
+		exams=[]
+	context = {
+	'exams':exams,
+	}
+	return render(request,'tutor/viewExamsTutor.html',context)
+
+def EditExamTutor(request,exam_id):
+	cid = request.session['Tutor']
+	tutor = SignupTutor.objects.get(sno=cid)
+	try:
+		if enrollTutors.objects.filter(signUp=tutor).exists():
+			tutors = enrollTutors.objects.filter(signUp=tutor)
+			institute = AddTutorsInst.objects.get(username=tutors.first())
+			print(institute.cid)
+			courses = AddCourses.objects.filter(coachingCentre=institute.cid)
+			batch = BatchTiming.objects.all()
+	except:
+		exams=[]
+	exam = Exam.objects.get(id=exam_id)
+	context={
+	'exam':exam,
+	'courses':courses,
+	"batch":batch
+	}
+	if request.method == "POST":
+		course = request.POST.get('course','')
+		classes = request.POST.get('class','')
+		Batch = request.POST.get('batch','')
+		name = request.POST.get('examname','')
+		date = request.POST.get('date','')
+		exam_time = request.POST.get('exam_time','')
+		timezone_offset = request.POST.get('timezone_offset','')
+		duration = request.POST.get('duration','')
+		pp = request.POST.get('pp','')
+		redate = request.POST.get('redate','')
+		calculator = request.POST.get('calculator','')
+		imguplod = request.POST.get('imguplod','')
+		nm = request.POST.get('nm','')
+		negative_marks = request.POST.get('negative_marks','')
+		tc = request.POST.get('tc','')
+		status = request.POST.get('status','')
+		noquestions = request.POST.get('noquestions','')
+		print(course,classes,Batch,name,date,exam_time,timezone_offset,
+			duration,pp,noquestions,status,redate,tc,calculator,nm,imguplod,negative_marks)
+		if course:
+			course = AddCourses.objects.get(s_num=course)
+			exam.course = course
+		if classes:
+			exam.Class = classes
+		if Batch:
+			exam.Batch = Batch
+		if name:
+			exam.Name = name
+		if date:
+			date = datetime.strptime(date, "%Y-%m-%d")
+			exam.exam_date = date
+		if exam_time:
+			Time = exam_time.split(':')
+			d = dt.time(int(Time[0]),int(Time[1]),00)
+			exam.exam_time = d
+		if duration:
+			exam.exam_duration = duration
+		if timezone_offset:
+			exam.timezone = timezone_offset
+		if pp:
+			exam.pass_percentage = pp
+		if redate:
+			exam.reexam_date = redate
+		if calculator:
+			exam.calculator = True
+		if imguplod:
+			exam.imgupload = True
+		if nm:
+			exam.negative_marking = True
+			exam.negative_marks = negative_marks
+		exam.tandc = tc
+		if status==1:
+			exam.status = True
+		else:
+			exam.status = False
+		exam.question_count = noquestions
+		exam.save()
+		return redirect('viewexamstutor')
+	return render(request,'tutor/editExamTutor.html',context)
+
+def addQuestionsTutor(request):
+	cid = request.session['Tutor']
+	tutor = SignupTutor.objects.get(sno=cid)
+	try:
+		if enrollTutors.objects.filter(signUp=tutor).exists():
+			tutors = enrollTutors.objects.filter(signUp=tutor)
+			institute = AddTutorsInst.objects.get(username=tutors.first())
+			print(institute.cid)
+			exams = Exam.objects.filter(center=institute.cid)
+	except:
+		exams=[]
+	context = {
+	'exams':exams,
+	}
+	if request.method=="POST":
+		q_id = request.POST.get("exam","")
+		print(q_id)
+		if q_id:
+			return redirect('createquestionstutor',q_id)
+	return render(request,'tutor/addQuestionsTutor.html',context)
+
+def CreateQuestionsTutor(request,exam_id):
+	errors = []
+	exam = Exam.objects.get(id=exam_id)
+	if request.method=="POST":
+		question_type = request.POST.get('question_type',"")
+		question = request.POST.get('question',"")
+		solution = request.POST.get('solution',"")
+		marks = request.POST.get('marks',"")
+		section = request.POST.get('section',"")
+		negative_marks = request.POST.get('negative_marks',"")
+		hindi = request.POST.get("hinditext","")
+		if hindi:
+			question=hindi
+		if question_type=='sq':
+			try:
+				data = ShortAnswerQuestion(
+					exam=exam,
+					question=question,
+					correct_ans=solution,
+					marks=marks,
+					section=section)
+				if negative_marks:
+					data.negative_marks=negative_marks
+				else:
+					data.negative_marks=0.0
+				data.save()
+			except:
+				errors.append('Options Cannot be Empty')
+
+		elif question_type=='lq':
+			try:
+
+				data = LongAnswerQuestion(
+					exam=exam,
+					question=question,
+					correct_ans=solution,
+					marks=marks,
+					section=section)
+				if negative_marks:
+					data.negative_marks=negative_marks
+				else:
+					data.negative_marks=0.0
+				data.save()
+			except:
+				errors.append('Options Cannot be Empty')
+		elif question_type=='mc':
+			try:
+
+				options = request.POST.getlist('options','')
+				print(options)
+				data = MultipleQuestion(
+					exam=exam,
+					question=question,
+					correct_ans=solution,
+					marks=marks,
+					section=section
+					)
+				if negative_marks:
+					data.negative_marks=negative_marks
+				else:
+					data.negative_marks=0.0
+				data.save()
+			except:
+				errors.append('Options Cannot be Empty')
+			if options:
+				for option in options:
+					answer = MultipleAnswer(
+						question = MultipleQuestion.objects.get(id=data.id),
+						option = option
+						)
+					answer.save()
+			else:
+				errors.append('Options Cannot be Empty')
+		else:
+			try:
+				options = request.POST.getlist('options','')
+				print(options)
+				bexam = BooleanQuestion(
+					exam=exam,
+					question=question,
+					option1 = options[0],
+					option2 = options[1],
+					correct_ans=solution,
+					marks=marks,
+					section=section)
+				if negative_marks:
+					bexam.negative_marks=negative_marks
+				else:
+					bexam.negative_marks=0.0
+				bexam.save()
+			except Exception as e:
+				print(e)
+				errors.append('Something Went Wrong! Try Again')
+
+	shortquestions = ShortAnswerQuestion.objects.filter(exam=exam_id)
+	booleanquestions = BooleanQuestion.objects.filter(exam=exam_id)
+	longquestions = LongAnswerQuestion.objects.filter(exam=exam_id)
+	multiplequestions = MultipleQuestion.objects.filter(exam=exam_id)
+	context = {
+	'exam':exam,
+	'SectionA':[],
+	'SectionB':[],
+	'SectionC':[],
+	'SectionD':[],
+	'errors':errors
+	}
+	x=1
+	for i in ['A','B','C','D']:
+		query1,query2,query3,query4=[],[],[],[]
+		query1 = shortquestions.filter(section=i)
+		query2 = booleanquestions.filter(section=i)
+		query3 = longquestions.filter(section=i)
+		query4 = multiplequestions.filter(section=i)
+		for item in query1:
+			item.question_no = x
+			item.save()
+			context[f'Section{i}'].append(item)
+			x+=1
+		for item in query2:
+			item.question_no = x
+			item.save()
+			context[f'Section{i}'].append(item)
+			x+=1
+		for item in query3:
+			item.question_no = x
+			item.save()
+			context[f'Section{i}'].append(item)
+			x+=1
+		for item in query4:
+			item.question_no = x
+			item.save()
+			context[f'Section{i}'].append(item)
+			x+=1
+	return render(request,'tutor/QuestionsTutor.html',context)
+
+def EditExamQuestionsTutor(request):
+	cid = request.session['Tutor']
+	tutor = SignupTutor.objects.get(sno=cid)
+	try:
+		if enrollTutors.objects.filter(signUp=tutor).exists():
+			tutors = enrollTutors.objects.filter(signUp=tutor)
+			institute = AddTutorsInst.objects.get(username=tutors.first())
+			print(institute.cid)
+			exams = Exam.objects.filter(center=institute.cid)
+	except:
+		exams=[]
+	context ={
+	"exams":exams
+	}
+	return render(request,'tutor/editexamquestionsTutor.html',context)
+
+
+def EditQuestionsTutor(request,exam_id):
+	errors =[]
+	exam = Exam.objects.get(id=exam_id)
+	shortquestions = ShortAnswerQuestion.objects.filter(exam=exam_id)
+	booleanquestions = BooleanQuestion.objects.filter(exam=exam_id)
+	longquestions = LongAnswerQuestion.objects.filter(exam=exam_id)
+	multiplequestions = MultipleQuestion.objects.filter(exam=exam_id)
+	context = {
+	'exam':exam,
+	'SectionA':[],
+	'SectionB':[],
+	'SectionC':[],
+	'SectionD':[],
+	'errors':errors
+	}
+	x=1
+	for i in ['A','B','C','D']:
+		query1,query2,query3,query4=[],[],[],[]
+		query1 = shortquestions.filter(section=i)
+		query2 = booleanquestions.filter(section=i)
+		query3 = longquestions.filter(section=i)
+		query4 = multiplequestions.filter(section=i)
+		for item in query1:
+			item.question_no = x
+			item.save()
+			context[f'Section{i}'].append(item)
+			x+=1
+		for item in query2:
+			item.question_no = x
+			item.save()
+			context[f'Section{i}'].append(item)
+			x+=1
+		for item in query3:
+			item.question_no = x
+			item.save()
+			context[f'Section{i}'].append(item)
+			x+=1
+		for item in query4:
+			item.question_no = x
+			item.save()
+			context[f'Section{i}'].append(item)
+			x+=1
+	return render(request,'tutor/editQuestionsTutor.html',context)
+
+
+def EditShortQuestionsTutor(request,question_id):
+	errors =[]
+	try:
+		question = ShortAnswerQuestion.objects.get(id=question_id)
+	except:
+		errors.append('Error Processing Request!')
+	context={
+	'question':question,
+	}
+	if request.method == "POST":
+		section = request.POST.get("section","")
+		marks = request.POST.get("marks","")
+		nm= request.POST.get("nm","")
+		negative_marks = request.POST.get("negative_marks","")
+		Question = request.POST.get("question","")
+		Solution = request.POST.get("solution","")
+		#print(section,marks,nm,negative_marks,question,solution)
+		if section:
+			question.section = section
+		if marks:
+			question.marks = marks
+		if nm:
+			question.negative_marks=negative_marks
+		if Question:
+			question.question=Question
+		if Solution:
+			question.correct_ans=Solution
+		try:
+			question.save()
+		except:
+			errors.append('Error Occured! Try Again')
+
+		context={
+		'question':question,
+		'errors':errors
+		}
+		return render(request,'tutor/editshortquestionstutor.html',context)	
+	return render(request,'tutor/editshortquestionstutor.html',context)
+
+def EditLongQuestionsTutor(request,question_id):
+	errors =[]
+	try:
+		question = LongAnswerQuestion.objects.get(id=question_id)
+	except:
+		errors.append('Error Processing Request!')
+	context={
+	'question':question
+	}
+	if request.method == "POST":
+		section = request.POST.get("section","")
+		marks = request.POST.get("marks","")
+		nm= request.POST.get("nm","")
+		negative_marks = request.POST.get("negative_marks","")
+		Question = request.POST.get("question","")
+		Solution = request.POST.get("solution","")
+		#print(section,marks,nm,negative_marks,question,solution)
+		if section:
+			question.section = section
+		if marks:
+			question.marks = marks
+		if nm:
+			question.negative_marks=negative_marks
+		if Question:
+			question.question=Question
+		if Solution:
+			question.correct_ans=Solution
+		try:
+			question.save()
+		except:
+			errors.append('Error Occured! Try Again')
+
+		context={
+		'question':question,
+		'errors':errors
+		}
+		return render(request,'tutor/editlongquestionstutor.html',context)
+	return render(request,'tutor/editlongquestionstutor.html',context)
+
+def EditBooleanQuestionsTutor(request,question_id):
+	errors =[]
+	try:
+		question = BooleanQuestion.objects.get(id=question_id)
+	except:
+		errors.append('Error Processing Request!')
+	context={
+	'question':question
+	}
+	if request.method == "POST":
+		section = request.POST.get("section","")
+		marks = request.POST.get("marks","")
+		nm= request.POST.get("nm","")
+		negative_marks = request.POST.get("negative_marks","")
+		Question = request.POST.get("question","")
+		Solution = request.POST.get("solution","")
+		option1 = request.POST.get("option1","")
+		option2 = request.POST.get("option2","")
+		#print(section,marks,nm,negative_marks,question,solution)
+		if section:
+			question.section = section
+		if marks:
+			question.marks = marks
+		if nm:
+			question.negative_marks=negative_marks
+		if Question:
+			question.question=Question
+		if Solution:
+			question.correct_ans=Solution
+		if option1:
+			question.option1=option1
+		if option2:
+			question.option2 = option2
+		try:
+			question.save()
+		except:
+			errors.append('Error Occured! Try Again')
+		context={
+		'question':question,
+		'errors':errors
+		}
+		return render(request,'tutor/editbooleanquestionstutor.html',context)
+	return render(request,'tutor/editbooleanquestionstutor.html',context)
+
+def EditMultipleQuestionsTutor(request,question_id):
+	errors =[]
+	try:
+		question = MultipleQuestion.objects.get(id=question_id)
+	except:
+		errors.append('Error Processing Request!')
+	context={
+	'question':question
+	}
+	if request.method == "POST":
+		section = request.POST.get("section","")
+		marks = request.POST.get("marks","")
+		nm= request.POST.get("nm","")
+		negative_marks = request.POST.get("negative_marks","")
+		Question = request.POST.get("question","")
+		Solution = request.POST.get("solution","")
+		options = request.POST.getlist("options","")
+		print(options)
+		#print(section,marks,nm,negative_marks,question,solution)
+		if section:
+			question.section = section
+		if marks:
+			question.marks = marks
+		if nm:
+			question.negative_marks=negative_marks
+		if Question:
+			question.question=Question
+		if Solution:
+			question.correct_ans=Solution
+		if MultipleAnswer.objects.filter(question=question).exists():
+			answers = MultipleAnswer.objects.filter(question=question)
+			for i in range(len(options)):
+				if answers.filter(option=options[i]).exists():
+					answer = answers.get(option=options[i])
+					answer.option = options[i]
+				else:
+					data = MultipleAnswer(
+						question=question,
+						option = options[i]
+						).save()
+
+		# try:
+		# 	question.save()
+		# except:
+		# 	errors.append('Error Occured! Try Again')
+		
+		context={
+		'question':question,
+		'errors':errors
+		}
+	return render(request,'tutor/editmultiplequestionstutor.html',context)

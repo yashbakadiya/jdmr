@@ -1,15 +1,7 @@
-{% extends 'tutor/dashboard.html' %}
+{% extends 'tutor/dashboardTutor.html' %}
 {% load static %}
 {% block css %}
 <style media="screen">
-    .custom-select{
-         min-height:10px; 
-    overflow-y :auto; 
-    overflow-x:hidden; 
-    position:absolute;
-    width:300px;
-    display: contents;
-    }
     .darken-grey-text {
         color: #2E2E2E;
     }
@@ -253,6 +245,7 @@
                                 <th>Pass Percentage</th>
                                 <th>Exam status</th>
                                 <th colspan="2">Action</th>
+                                
                             </tr>
                         </thead>
                         <!--Table head-->
@@ -273,7 +266,7 @@
                                 <td><a href="{% url 'toggle' i.id %}" class="btn btn-primary p-1">Activate</a></td>
                                 {% endif %}
                                 <td>
-                                    <a href="{% url 'editquestions' i.id %}"><i class="fas fa-edit"></i></a>
+                                    <a href="{% url 'edittutorexams' i.id %}"><i class="fas fa-edit"></i></a>
                                 </td>
                                 <td>
                                     <a href="{% url 'deleteexam' i.id %}"><i class="fas fa-trash"></i></a>

@@ -1,4 +1,4 @@
-{% extends 'tutor/dashboard.html' %}
+{% extends 'tutor/dashboardTutor.html' %}
 {% load static %}
 {% block css %}
 {% endblock %}
@@ -35,8 +35,8 @@
       <div class="row">
         <div class="col">
       <label for="validationCustom01"><strong>Select Course<span class="red">*</span></strong></label>
-          <select id="select_course" name="course" style="width: 100%" class="js-example-basic-single">
-              <option class="form-control form-control-lg" selected disabled value="" name="category">Select Course</option>
+          <select id="select_course" name="course" style="width: 100%" class="js-example-basic-single" value="{{exam.course.courseName}}">
+              <option class="form-control form-control-lg" selected disabled value="{{exam.course.courseName}}" name="category">Select Course</option>
               {% for cat in courses %}
               <option class="form-control form-control-lg" value="{{cat.s_num}}" name="category">{{cat.courseName}} </option>
               {% endfor %}
@@ -44,14 +44,14 @@
         </div>
         <div class="col">
       <label for="validationCustom01"><strong>Select Class <span class="red">*</span></strong></label>
-          <select id="class_select" name="class" style="width: 100%;" class="js-example-basic-single">
+          <select id="class_select" name="class" style="width: 100%;" class="js-example-basic-single" value="{{exam.Class}}">
               <option class="form-control" selected disabled value="">Select Class</option>
             </select>
         </div>
         <div class="col">
       <label for="validationCustom01"><strong>Select Batch <span class="red">*</span></strong></label>
-          <select id="batch_select" name="batch" style="width: 100%;" class="js-example-basic-single">
-              <option class="form-control" selected disabled value="">Select Batch</option>
+          <select id="batch_select" name="batch" style="width: 100%;" class="js-example-basic-single" value="{{exam.Batch}}">
+              <option class="form-control" selected disabled value="{{exam.Batch}}">Select Batch</option>
               {% for cat in batch %}
               <option class="form-control" value="{{cat.startTime}}">{{cat.startTime}}</option>
               {% endfor %}
@@ -62,18 +62,18 @@
            <div class="col">
           <label for="validationCustom01"><strong>Exam Name <span class="red">*</span></strong></label>
 
-      <input type="text" class="form-control" placeholder="Exam name" name="examname">
+      <input type="text" class="form-control" placeholder="Exam name" name="examname" value="{{exam.Name}}">
     </div>
     <div class="col">
-      <label for="validationCustom01"><strong>Exam Date <span class="red">*</span></strong></label>
-      <input class="form-control" type="date" placeholder="" name="date" required /><br />
+      <label for="validationCustom01"><strong>Exam Date <span class="red"></span></strong></label>
+      <input class="form-control" type="date" placeholder="" name="date" value="{{exam.exam_date}}"/><br />
       <div class="invalid-feedback">
               Select a valid Date!
       </div>
     </div>
               <div class="col">
-            <label for="validationCustom01"><strong>Exam Time <span class="red">*</span></strong></label>
-            <input class="form-control" type="time" placeholder="" name="exam_time" required /><br />
+            <label for="validationCustom01"><strong>Exam Time <span class="red"></span></strong></label>
+            <input class="form-control" type="time" placeholder="" name="exam_time" value="{{exam.exam_time}}"/><br />
             <div class="invalid-feedback">
               Select a valid Time!
             </div>
@@ -81,19 +81,19 @@
       </div>
       <div class="row">
           <div class="col">
-            <label for="validationCustom01"><strong>Time Zone<span class="red">*</span></strong></label>
+            <label for="validationCustom01"><strong>Time Zone<span class="red"></span></strong></label>
             {% include 'tutor/timezones.html' %}
           </div>
                    <div class="col-md-4 mb-3">
-            <label for="validationCustom01"><strong>Exam Duration(In Minute) <span class="red">*</span></strong></label>
-            <input class="form-control" type="number" min="0" placeholder="00" name="duration" required />
+            <label for="validationCustom01"><strong>Exam Duration(In Minute) <span class="red"></span></strong></label>
+            <input class="form-control" type="number" placeholder="00" name="duration" value="{{exam.exam_duration}}"/>
             <div class="invalid-feedback">
               Enter a valid value!
             </div>
           </div>
           <div class="col-md-4 mb-3 ">
-            <label for="validationCustom01"><strong>Passing Percentage <span class="red">*</span></strong></label>
-            <input class="form-control" type="number" min="0" placeholder="00" name="pp" required />
+            <label for="validationCustom01"><strong>Passing Percentage <span class="red"></span></strong></label>
+            <input class="form-control" type="number" placeholder="00" name="pp" value="{{exam.pass_percentage}}"/>
             <div class="invalid-feedback">
               Enter a valid value!
             </div>
@@ -101,22 +101,22 @@
       </div>
             <div class="row">
           <div class="col-md-4 mb-3 ">
-            <label for="validationCustom01"><strong>No of Questions <span class="red">*</span></strong></label>
-            <input class="form-control" type="number" min="0" placeholder="0" name="noquestions" required />
+            <label for="validationCustom01"><strong>No of Questions <span class="red"></span></strong></label>
+            <input class="form-control" type="number" placeholder="0" name="noquestions" value="{{exam.question_count}}"/>
             <div class="invalid-feedback">
               Enter a valid value!
             </div>
           </div>
      <div class="col-md-4">
-      <label for="validationCustom01"><strong>Exam Status <span class="red">*</span></strong></label>
+      <label for="validationCustom01"><strong>Exam Status <span class="red"></span></strong></label>
          <select class="form-control" id="exampleFormControlSelect1" name="status">
       <option value="1">Activate</option>
       <option value="0">Deactivate</option>
     </select>
     </div>
          <div class="col-md-4">
-      <label for="validationCustom01"><strong>Exam Validity <span class="red">*</span></strong></label>
-      <input class="form-control" type="date" placeholder="" name="redate" required /><br />
+      <label for="validationCustom01"><strong>Re-Exam Date <span class="red"></span></strong></label>
+      <input class="form-control" type="date" placeholder="" name="redate" /><br />
       <div class="invalid-feedback">
               Select a valid Date!
       </div>
@@ -124,8 +124,8 @@
       </div>
       <div class="row">
         <div class="col-lg-12 mb-3 ">
-            <label for="validationCustom01"><strong>Terms & Condition <span class="red">*</span></strong></label>
-            <textarea class="form-control" rows="4" name="tc" required></textarea>
+            <label for="validationCustom01"><strong>Terms & Condition <span class="red"></span></strong></label>
+            <textarea class="form-control" rows="4" name="tc">{{exam.tandc}}</textarea>
             <div class="invalid-feedback">
               Terms & Condition cannot be empty!
             </div>
@@ -134,7 +134,7 @@
       <div class="row">
                   <div class="col-lg-12 mb-3 ">
             <div class="custom-checkbox custom-control">
-              <input class="form-check-input" type="checkbox" id="defaultCheck1" name="calculator" />
+              <input class="form-check-input" type="checkbox" id="defaultCheck1" name="calculator" value="{{exam.calculator}}" />
               <label class="form-check-label" for="defaultCheck1">
                 Make Calculator Available
               </label>
@@ -142,7 +142,7 @@
           </div>
           <div class="col-lg-2 col-sm-2 mb-3">
             <div class="custom-checkbox custom-control">
-              <input class="form-check-input" type="checkbox" onchange="checkbox()" id="negativecheck" name="nm" />
+              <input class="form-check-input" type="checkbox" onchange="checkbox()" id="negativecheck" name="nm" value="{{exam.negative_marking}}" />
               <label class="form-check-label" for="defaultCheck1">
                 Negative Marks
               </label>
@@ -154,7 +154,7 @@
           </div>
           <div class="col-lg-2 col-sm-2 mb-3">
             <div class="custom-checkbox custom-control">
-              <input class="form-check-input" type="checkbox" onchange="" id="uploadimages" name="imguplod" />
+              <input class="form-check-input" type="checkbox" onchange="" id="uploadimages" name="imguplod" value="{{exam.imgupload}}" />
               <label class="form-check-label" for="defaultCheck1">
                 Upload images
               </label>

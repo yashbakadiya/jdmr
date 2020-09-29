@@ -13,7 +13,12 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js" integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous"></script>
     <script src="https://kit.fontawesome.com/d24f94013c.js" crossorigin="anonymous"></script>
-
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="https://hinkhoj.com/common/css/keyboard.css"
+    />
+    <script src="https://hinkhoj.com/common/js/keyboard.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-multiselect/0.9.13/js/bootstrap-multiselect.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-multiselect/0.9.13/css/bootstrap-multiselect.css">
 
@@ -140,10 +145,6 @@
                     </li>
                     <li><a href="{% url 'viewexams' %}">View /Delete /Update Exam</a>
                     </li>
-                </ul>
-            </li>
-            <li><i class="fa fa-users fa-fw"></i><a class="drop-down" href="#">Questions</a>
-                <ul class="side-nav-dropdown">
                     <li><a href="{% url 'questionsection' %}">Add Exam Questions</a>
                     </li>
                     <li><a href="{% url 'editexamquestions' %}">View /Delete /Update Exam</a>
@@ -158,9 +159,9 @@
     <section id="contents">
         <nav class="navbar navbar-default navbar-expand-md">
             <button type="button" class="navbar-toggler collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false"> <i class="fa fa-align-right"></i></button>
-            <ul class="nav navbar-nav ml-auto"><li class="nav-item mx-1"><a href="#" class="nav-link"><i data-show="show-side-navigation1" class="fa fa-bars show-side-btn"></i></a>
+            <ul class="nav navbar-nav ml-auto "><li class="nav-item mx-1"><a href="#" class="nav-link"><i data-show="show-side-navigation1" class="fa fa-bars show-side-btn"></i></a>
             </li></ul>
-            <a class="navbar-brand" href="#">institute<span class="main-color">Dashboard</span></a>
+            <a class="navbar-brand" href="{% url 'dashboard' %}">institute<span class="main-color">Dashboard</span></a>
             <div class="collapse navbar-collapse ml-auto" id="bs-example-navbar-collapse-1">
                 <ul class="nav navbar-nav ml-auto">
 
@@ -232,7 +233,6 @@
     else{
         $("#sideNavImage")[0].src = "/media/"+photo.slice(1,-1);
     }
-
     </script>
 </body>
 </html>

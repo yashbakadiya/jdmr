@@ -166,7 +166,23 @@ urlpatterns = [
     path('Center/Exam/Result/Student/<student_id>/<exam_id>',views.GetStudentResults,name="studentresult"),
     path('Center/Result/Review/Answer/<question_id>',views.Review_Answer,name="check_answer"),
     path('Center/Result/Anotate/<id>/<pk>',views.webViewerAnnotate,name="anotatePdfViewer"),
-    path('Center/Result/Anotate/pdf/<id>/<pk>',views.annotateAnswers,name="anotate")
+    path('Center/Result/Anotate/pdf/<id>/<pk>',views.annotateAnswers,name="anotate"),
+# Batch Tutor Timings
+    path('Tutor/Batch/add/all',views.BatchTutor,name="addbatchtutor"),
+    path('Tutor/Batch/batch/edit/<batch_id>',views.editBatchTutor,name="editbatchtutor"),
+    path('Tutor/Batch/batch/delete/<batch_id>',views.deleteBatchTutor,name="deletebatchtutor"),
+# Exam Section Tutor
+    path('Tutor/Exam/Add/All',views.ExamTutor,name="examtutor"),
+    path('Tutor/Exams/View/all',views.ViewExamTutor,name="viewexamstutor"),
+    path('Tutor/Exam/Edit/<exam_id>',views.EditExamTutor,name="edittutorexams"),
+    path('Tutor/add/Question/Exam/all',views.addQuestionsTutor,name="addquestionstutor"),
+    path('Tutor/Question/<exam_id>',views.CreateQuestionsTutor,name="createquestionstutor"),
+    path('Tutor/Questions/Edit/all',views.EditExamQuestionsTutor,name="questionalltutor"),
+    path('Tutor/Question/edit/<exam_id>',views.EditQuestionsTutor,name="editquestionstutor"),
+    path('Tutor/Exam/Questions/shortquestions/edit/<question_id>',views.EditShortQuestionsTutor,name='shortansedittutor'),
+    path('Tutor/Exam/Questions/longquestions/edit/<question_id>',views.EditLongQuestionsTutor,name='longansedittutor'),
+    path('Tutor/Exam/Questions/booleanquestions/edit/<question_id>',views.EditBooleanQuestionsTutor,name='booleanansedittutor'),
+    path('Tutor/Exam/Questions/multiplequestions/edit/<question_id>',views.EditMultipleQuestionsTutor,name='multipleansedittutor'),
     ]
 urlpatterns += static(settings.MEDIA_URL,document_root=settings.MEDIA_ROOT)
 # urlpatterns += [path('<path:dump>/',views.pageNotFound)]

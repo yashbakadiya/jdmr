@@ -1,4 +1,4 @@
-{% extends 'tutor/dashboard.html' %}
+{% extends 'tutor/dashboardTutor.html' %}
 {% load static %}
 {% block css %}
 {% endblock %}
@@ -35,25 +35,24 @@
     </div>
         {% endif %}
     <div class="container" id="card">
-      <div class="row">
-        <div class="col border ml-2 mt-0" style="overflow: scroll;height: 1100px;">
+        <div class="col ml-2 mt-0">
           <div class="row">
             <div class="col">
-            <h4 class="text-center mt-2">{{exam.Name}}</h4> 
+            <h4 class="text-center font-weight-bold text-uppercase" style="font-size:30px;">{{exam.Name}}</h4> 
             </div>
           </div>
           <div class="row">
             <div class="col">
-            <p class="text-left mt-2 text-dark">Time : {{exam.exam_duration}}</p> 
+            <p class="text-left mt-2 text-dark font-weight-bold">Time : {{exam.exam_duration}}</p> 
             </div>
             <div class="col">
-            <p class="text-right mt-2 text-dark">MM : 100</p> 
+            <p class="text-right mt-2 text-dark font-weight-bold">MM : 100</p> 
             </div>
           </div>
           {% if SectionA %}
           <div class="row">
             <div class="col">
-              <p class="text-center text-dark">Section A</p>
+              <p class="text-center text-dark font-weight-bold">Section A</p>
             </div>
           </div>
           {% for i in SectionA%}
@@ -62,7 +61,9 @@
             <div class="col p-0 m-0 pl-2">
             {{i.question|safe}} 
             </div>
-            <p class="text-right text-dark ml-0 pr-1">{{i.marks}}</p>
+            <a href="{{i.Edit_Tutor}}" class="text-right text-dark ml-0 pr-1"><i class="fas fa-edit"></i></a>
+            &nbsp;&nbsp;&nbsp;
+            <a href="{{i.Delete_url}}" class="text-right text-dark ml-0 pr-1 mr-2"><i class="far fa-trash-alt"></i></a>
           </div>
           {% if i.options.all %}
           {% for option in i.options.all %}
@@ -88,7 +89,7 @@
           {% if SectionB %}
           <div class="row">
             <div class="col">
-              <p class="text-center text-dark">Section B</p>
+              <p class="text-center text-dark font-weight-bold">Section B</p>
             </div>
           </div>
           {% for i in SectionB %}
@@ -97,7 +98,9 @@
             <div class="col p-0 m-0 pl-2">
             {{i.question|safe}} 
             </div>
-            <p class="text-right text-dark ml-0 pr-1">{{i.marks}}</p>
+            <a href="{{i.Edit_Tutor}}" class="text-right text-dark ml-0 pr-1"><i class="fas fa-edit"></i></a>
+            &nbsp;&nbsp;&nbsp;
+            <a href="{{i.Delete_url}}" class="text-right text-dark ml-0 pr-1 mr-2"><i class="far fa-trash-alt"></i></a>
           </div>
           {% if i.options.all %}
           {% for option in i.options.all %}
@@ -124,7 +127,7 @@
           {% if SectionC %}
           <div class="row">
             <div class="col">
-              <p class="text-center text-dark">Section C</p>
+              <p class="text-center text-dark font-weight-bold">Section C</p>
             </div>
           </div>
           {% for i in SectionC %}
@@ -133,7 +136,9 @@
             <div class="col p-0 m-0 pl-2">
             {{i.question|safe}} 
             </div>
-            <p class="text-right text-dark ml-0 pr-1">{{i.marks}}</p>
+            <a href="{{i.Edit_Tutor}}" class="text-right text-dark ml-0 pr-1"><i class="fas fa-edit"></i></a>
+            &nbsp;&nbsp;&nbsp;
+            <a href="{{i.Delete_url}}" class="text-right text-dark ml-0 pr-1 mr-2"><i class="far fa-trash-alt"></i></a>
           </div>
           {% if i.options.all %}
           {% for option in i.options.all %}
@@ -159,7 +164,7 @@
           {% if SectionD %}
           <div class="row">
             <div class="col">
-              <p class="text-center text-dark">Section D</p>
+              <p class="text-center text-dark font-weight-bold">Section D</p>
             </div>
           </div>
           {% for i in SectionD %}
@@ -168,7 +173,9 @@
             <div class="col p-0 m-0 pl-2">
             {{i.question|safe}} 
             </div>
-            <p class="text-right text-dark ml-0 pr-1">{{i.marks}}</p>
+            <a href="{{i.Edit_Tutor}}" class="text-right text-dark ml-0 pr-1"><i class="fas fa-edit"></i></a>
+            &nbsp;&nbsp;&nbsp;
+            <a href="{{i.Delete_url}}" class="text-right text-dark ml-0 pr-1 mr-2"><i class="far fa-trash-alt"></i></a>
           </div>
           {% if i.options.all %}
           {% for option in i.options.all %}
@@ -192,108 +199,8 @@
           {% endfor %}
           {% endif %}
         </div>
-  <div class="col">
-  <form method="post">{% csrf_token %}
-  <div class="row">
-    <div class="col">
-        <div class="form-group">
-    <label for="exampleFormControlSelect1">Section</label>
-    <select class="form-control" id="exampleFormControlSelect1" name="section">
-      <option value="A">Section A</option>
-      <option value="B">Section B</option>
-      <option value="C">Section C</option>
-      <option value="D">Section D</option>
-    </select>
-  </div>
-    </div>
-    <div class="col">
-        <div class="form-group">
-    <label for="exampleFormControlSelect1">Question Type</label>
-    <select class="form-control" id="question_type_select" name="question_type">
-      <option value="sq">Short Type Questions</option>
-      <option value="lq">Long Type Questions</option>
-      <option value="mc">Multiple Choice Questions</option>
-      <option value="tf">True or False</option>
-    </select>
-  </div>
-    </div>
-  </div>
-  <div class="row">
-         <div class="col mb-3">
-            <div class="custom-checkbox custom-control">
-              <input class="form-check-input" type="checkbox" onchange="checkbox()" id="negativecheck" name="nm" />
-              <label class="form-check-label" for="defaultCheck1">
-                Negative Marks
-              </label>
-              <div id="negative"></div>
-            </div>
-            <div class="invalid-feedback">
-              Choose a value
-            </div>
-          </div>
-  </div>
-  <div class="row">
-    <div class="col" id="solutionbox">
-  <div class="form-group">
-    <label for="exampleFormControlSelect1">Enter Marks</label>
-<input type="number" class="form-control" placeholder="Enter Marks" name="marks" required>
-  </div>
-    </div>
-  </div>
-    <div class="row">
-    <div class="col">
-  <div class="form-group">
-    <a onclick="HindiTextareaHide()" class="btn btn-outline-success ebtn" id="englishbtn">English Editor</a>
-  </div>
-    </div>
-     <div class="col">
-  <div class="form-group">
-    <a onclick="HindiTextarea()" class="btn btn-outline-success ebtn" id="hindibtn">Hindi Editor</a>
-  </div>
-    </div>
-  </div>
-  <div class="row" id="buttons">
-      <div class="col">
-       <div class="form-group" id="textarea1">
-        <label for="exampleFormControlTextarea1" style="font-size: 20px;"> Question (Hindi)</label>
-   <script language="javascript">
-    CreateCustomHindiTextArea("hinditext", "", false);
-  $('#hinditext').addClass('form-control');
-  </script>
-  </div>
-    </div>
-  </div>
-      <div class="row mt-2" id="englisharea">
-    <div class="col">
-       <div class="form-group" id="textarea1">
-    <label for="exampleFormControlTextarea1" style="font-size: 20px;">Question</label>
-    <textarea class="form-control" id="exampleFormControlTextarea1" rows="7" name="question" required>
-    </textarea>
-  </div>
-
-    </div>
-    </div>
-          <div class="row">
-    <div class="col">
-       <div class="form-group" id="textarea2">
-    <label for="exampleFormControlTextarea1" style="font-size: 20px;">Solution</label>
-    <textarea class="form-control" id="exampleFormControlTextarea2" rows="7" name="solution" required>
-    </textarea>
-  </div>
-    </div>
-    </div>
-    <div class="row">
-      <div class="col">
-        <button type="submit" class="btn btn-primary">Save</button>
-      </div>
-    </div>
-</form>
-        </div>
-      </div>
-    </div>
-</div>
     <script>
-function addtext(){
+  function addtext(){
   var tags = '<div class="row mb-3" id="multipleinput">'
       tags += '<div class="col-9 pr-4 mr-3">'
       tags += '<input type="text" class="form-control" placeholder="Enter Value" name="options" required>'
@@ -321,26 +228,7 @@ tinymce.init({
           toolbar2:
             "print preview media | forecolor backcolor emoticons | codesample | FMathEditor",
         });
-tinymce.init({
-          selector: "#hinditext",
-          height: 200,
-          theme: "modern",
-          setup: function (editor) {
-            editor.on("init", function (e) {
-              editor.setContent("<p></p>");
-            });
-          },
-          plugins: [
-            "advlist autolink lists link image charmap print preview hr anchor pagebreak",
-            "searchreplace wordcount visualblocks visualchars code fullscreen",
-            "insertdatetime media nonbreaking save table contextmenu directionality",
-            "emoticons template paste textcolor colorpicker textpattern imagetools codesample toc FMathEditor",
-          ],
-          toolbar1:
-            "undo redo | insert | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image",
-          toolbar2:
-            "print preview media | forecolor backcolor emoticons | codesample | FMathEditor",
-        });
+
 tinymce.init({
           selector: "#exampleFormControlTextarea2",
           height: 200,
@@ -453,18 +341,6 @@ $(document).ready(function() {
         }
     });
 });
-$(document).ready(function() {
-    $('#buttons').hide();
-});
-
-function HindiTextarea(){
-  $('#buttons').show();
-  $('#englisharea').hide();
-}
-function HindiTextareaHide(){
-  $('#buttons').hide();
-  $('#englisharea').show();
-}
 
     </script>
 
