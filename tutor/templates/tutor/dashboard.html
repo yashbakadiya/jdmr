@@ -153,6 +153,14 @@
             </li>
             <li><i class="fa fa-users fa-fw"></i><a  href="{% url 'centerexamresults' %}"> Results</a>
             </li>
+              <li><i class="fa fa-users fa-fw"></i><a class="drop-down" href="#">Notes</a>
+                <ul class="side-nav-dropdown">
+                    <li><a href="{% url 'addnotes' %}">Add Notes</a>
+                    </li>
+                    <li><a href="{% url 'viewnotes' %}">View /Delete /Update Notes</a>
+                    </li>
+                </ul>
+            </li>
 
         </ul>
     </aside>

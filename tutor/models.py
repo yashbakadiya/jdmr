@@ -761,3 +761,33 @@ class BatchTimingTutor(models.Model):
     StartDate       = models.DateTimeField()
     EndDate       = models.DateTimeField()
     Tutor           = models.ForeignKey(SignupTutor,on_delete=models.SET_NULL,null=True,related_name='BatchTutor')
+
+
+class NotesInstitute(models.Model):
+    center = models.ForeignKey(SignupCoachingCentre,related_name='centernotes',on_delete=models.CASCADE)
+    notes = models.FileField(upload_to="notes/Institute")
+    title = models.CharField(max_length=2000)
+    subject = models.CharField(max_length=3000)
+    description = models.TextField()
+        
+    def __str__(self):
+        return f"notes"
+    
+    @property
+    def View_pdf(self):
+        return reverse('viewpdfinstitute', args=(self.id,))
+   
+
+class NotesTutor(models.Model):
+    tutor = models.ForeignKey(SignupTutor,related_name='tutornotes',on_delete=models.CASCADE)
+    notes = models.FileField(upload_to="notes/Institute")
+    title = models.CharField(max_length=2000)
+    subject = models.CharField(max_length=3000)
+    description = models.TextField()
+        
+    def __str__(self):
+        return f"notes"
+
+    @property
+    def View_pdf(self):
+        return reverse('viewpdftutor', args=(self.id,))

@@ -1,0 +1,37 @@
+{% extends 'tutor/dashboardTutor.html' %}
+{% load static %}
+{% block css %}
+{% endblock %}
+{% block body %}
+<!-- Import WebViewer as a script tag -->
+<script src='{% static "WebViewer/lib/webviewer.min.js" %}'></script>
+
+  <div id='viewer' style='height: 100vh;'></div>
+  <script>
+    WebViewer({
+      path: '{% static "WebViewer/lib" %}', // path to the PDFTron 'lib' folder on your server
+      licenseKey: 'Insert commercial license key here after purchase',
+     // initialDoc: '{% static "login/samples/60004180064_A3.pdf" %}',
+      initialDoc: '{{note.notes.url}}',
+      // initialDoc: '/path/to/my/file.pdf',  // You can also use documents on your server
+    }, document.getElementById('viewer'))
+    .then(instance => {
+      const docViewer = instance.docViewer;
+      const annotManager = instance.annotManager;
+      // call methods from instance, docViewer and annotManager as needed
+  
+      // you can also access major namespaces from the instance as follows:
+      // const Tools = instance.Tools;
+      // const Annotations = instance.Annotations;
+  
+      docViewer.on('documentLoaded', () => {
+        // call methods relating to the loaded document
+      });
+    });
+
+
+  $('.fixed-sidebar').toggleClass('closed-sidebar');
+
+  </script>
+
+{% endblock %}

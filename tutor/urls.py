@@ -183,6 +183,22 @@ urlpatterns = [
     path('Tutor/Exam/Questions/longquestions/edit/<question_id>',views.EditLongQuestionsTutor,name='longansedittutor'),
     path('Tutor/Exam/Questions/booleanquestions/edit/<question_id>',views.EditBooleanQuestionsTutor,name='booleanansedittutor'),
     path('Tutor/Exam/Questions/multiplequestions/edit/<question_id>',views.EditMultipleQuestionsTutor,name='multipleansedittutor'),
+# Coaching Center Notes Urls    
+    path('Center/Notes/add',views.AddNotesInstitute,name="addnotes"),
+    path('Center/Notes/View/All',views.ViewNotesInstitute,name="viewnotes"),
+    path('Center/Notes/View/<note_id>',views.PdfViewNoteInstitute,name="pdfviewnoteinstitute"),
+    path('Center/Notes/Edit/<note_id>',views.EditNoteInstitute,name="editnoteinstitute"),
+    path('Center/Notes/Delete/<note_id>',views.DeleteNoteInstitute,name="deletenoteinstitute"),
+# Tutor Notes Urls    
+    path('Tutor/Notes/add',views.AddNotesTutor,name="addnotestutor"),
+    path('Tutor/Notes/View/All',views.ViewNotesTutor,name="viewnotestutor"),
+    path('Tutor/Notes/View/<note_id>',views.PdfViewNoteTutor,name="pdfviewnotetutor"),
+    path('Tutor/Notes/Edit/<note_id>',views.EditNoteTutor,name="editnotetutor"),
+    path('Tutor/Notes/Delete/<note_id>',views.DeleteNoteTutor,name="deletenotetutor"),
+# Student Notes urls
+    path('Student/Notes/All',views.AllNotesStudent,name="notesstudents"),
+    path('Student/Center/note/<note_id>',views.ViewpdfStudentInstitute,name="viewpdfinstitute"),
+    path('Student/Tutor/<note_id>',views.ViewpdfTutor,name="viewpdftutor"),
     ]
 urlpatterns += static(settings.MEDIA_URL,document_root=settings.MEDIA_ROOT)
 # urlpatterns += [path('<path:dump>/',views.pageNotFound)]

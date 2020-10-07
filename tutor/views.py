@@ -31,6 +31,7 @@ from google.oauth2 import id_token
 from google.auth.transport import requests
 from django.core.mail import EmailMessage
 from .utils import render_to_pdf
+from django.core.mail import send_mail
 
 CLIENT_ID = "450313289420-0sa8vg90n37pdek5nj49eufeia1j4918.apps.googleusercontent.com"
 #CLIENT_ID = "1016598982512-u656rprh5a0f0j1jl0h00eq454kl1sla.apps.googleusercontent.com"
@@ -574,6 +575,7 @@ def signupCoachingCentre(request):
 				longitude=longitude
 			)
 			signupCoachingCentre.save()
+			signupCoachingCentre.email
 			return redirect('/loginCoachingCentre/')
 	return render(request, 'tutor/signupCoachingCentre.html')
 
@@ -581,6 +583,29 @@ def viewteachingType(request):
 	teach = ViewTeachingType.objects.all()
 	params = {'courses':teach}
 	return render(request, 'tutor/viewteachingType.html', params)
+
+def Send_code(email):
+	code = ""
+	choices = ['1','2','3','4','5','6','7','8','9','a','b','c','d','e','f','g','h','i','j','k','l','m',
+				'n','o','p','q','r','s','t','u','v','w','x','y','z']
+	for i in range(6):
+		string = random.choice(choices)
+		code = f"{code}{string}"
+	print(code)
+	message = f"Use This code for verification {code}"
+	request.session[f'{email}-verification-code'] = code
+	if email:
+		try:
+			send_mail('Verification Code',message,'from@example.com',email)
+		except:
+			print("error")
+
+def checkcode(email,code):
+	otp = request.session[f'{email}-verification-code']
+	if code == otp:
+		return True
+	return False
+
 
 def loginTutor(request):
 	if request.method=="POST":
@@ -4514,11 +4539,12 @@ def StudentExamsAll(request):
 		if institute:
 			exams = Exam.objects.filter(center=institute[0])
 			for exam in exams:
-				s = StudentMapping.objects.get(student=student, exam=exam)
-				if StudentExamResult.objects.filter(student=s,exam=exam).exists():
-					statuses.append("submitted")
-				else:
-					statuses.append("")
+				if StudentMapping.objects.filter(student=student, exam=exam).exists():
+					s = StudentMapping.objects.get(student=student, exam=exam)
+					if StudentExamResult.objects.filter(student=s,exam=exam).exists():
+						statuses.append("submitted")
+					else:
+						statuses.append("")
 			print(statuses)
 			exams=zip(exams,statuses)
 			context={
@@ -5849,3 +5875,216 @@ def EditMultipleQuestionsTutor(request,question_id):
 		'errors':errors
 		}
 	return render(request,'tutor/editmultiplequestionstutor.html',context)
+
+
+def AddNotesInstitute(request):
+	errors = []
+	cid = request.session['CoachingCentre']
+	coaching = SignupCoachingCentre.objects.get(s_no=cid)
+	courses = AddCourses.objects.filter(coachingCentre=coaching)
+	context = {
+	'courses':courses
+	}
+	if request.method == "POST":
+		note = request.FILES.get("note","")
+		title = request.POST.get("title","")
+		description = request.POST.get("description","")
+		course = request.POST.get("course","")
+		print(note,title,description,course)
+		if (note and title and description and course):
+			data = NotesInstitute(
+				center = coaching,
+				notes = note,
+				title = title,
+				subject = course,
+				description = description,
+				)
+			try:
+				data.save()
+				return redirect('viewnotes')
+			except:
+				errors.append("Some error Occured! Try Again")
+				context['errors'] = errors
+	return render(request,'tutor/Notes/addNotesInstitute.html',context)
+
+def ViewNotesInstitute(request):
+	cid = request.session['CoachingCentre']
+	coaching = SignupCoachingCentre.objects.get(s_no=cid)
+	notes = NotesInstitute.objects.filter(center=coaching)
+	context = {
+	'notes':notes
+	}
+	return render(request,'tutor/Notes/viewNotesInstitute.html',context)
+
+def PdfViewNoteInstitute(request,note_id):
+	note = NotesInstitute.objects.get(id=note_id)
+	context = {
+	'note':note
+	}
+	return render(request,'tutor/Notes/PdfViewNotesInstitute.html',context)
+
+def EditNoteInstitute(request,note_id):
+	data = NotesInstitute.objects.get(id=note_id)
+	errors = []
+	cid = request.session['CoachingCentre']
+	coaching = SignupCoachingCentre.objects.get(s_no=cid)
+	courses = AddCourses.objects.filter(coachingCentre=coaching)
+	context = {
+	'courses':courses,
+	'note':data
+	}
+	if request.method == "POST":
+		note = request.FILES.get("note","")
+		title = request.POST.get("title","")
+		description = request.POST.get("description","")
+		course = request.POST.get("course","")
+		print(note,title,description,course)
+		if note:
+			data.notes = note
+		if title:
+			data.title = title
+		if description:
+			data.description = description
+		if course:
+			data.subject = course
+		try:
+			data.save()
+			return redirect('viewnotes')
+		except:
+			errors.append('Error Occured! Try Again')
+			context['errors'] = errors
+	return render(request,'tutor/Notes/editNoteInstitute.html',context)
+
+def DeleteNoteInstitute(request,note_id):
+	note = NotesInstitute.objects.get(id=note_id)
+	note.delete()
+	return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+
+
+def AddNotesTutor(request):
+	errors = []
+	cid = request.session['Tutor']
+	tutor = SignupTutor.objects.get(sno=cid)
+	if enrollTutors.objects.filter(signUp=tutor).exists():
+		tutors = enrollTutors.objects.filter(signUp=tutor)
+		institute = AddTutorsInst.objects.get(username=tutors.first())
+		print(institute.cid)
+		courses = AddCourses.objects.filter(coachingCentre=institute.cid)
+		batch = BatchTiming.objects.all()
+	context = {
+	'courses':courses,
+	}
+	if request.method == "POST":
+		note = request.FILES.get("note","")
+		title = request.POST.get("title","")
+		description = request.POST.get("description","")
+		course = request.POST.get("course","")
+		print(note,title,description,course)
+		if (note and title and description and course):
+			data = NotesTutor(
+				tutor = tutor,
+				notes = note,
+				title = title,
+				subject = course,
+				description = description,
+				)
+			try:
+				data.save()
+				return redirect('viewnotestutor')
+			except:
+				errors.append("Some error Occured! Try Again")
+				context['errors'] = errors
+	return render(request,'tutor/Notes/addNotesTutor.html',context)
+
+def ViewNotesTutor(request):
+	cid = request.session['Tutor']
+	tutor = SignupTutor.objects.get(sno=cid)
+	notes = NotesTutor.objects.filter(tutor=tutor)
+	context = {
+	'notes':notes
+	}
+	return render(request,'tutor/Notes/viewNotesTutor.html',context)
+
+def PdfViewNoteTutor(request,note_id):
+	note = NotesTutor.objects.get(id=note_id)
+	context = {
+	'note':note
+	}
+	return render(request,'tutor/Notes/PdfViewNotesTutor.html',context)
+
+def EditNoteTutor(request,note_id):
+	data = NotesTutor.objects.get(id=note_id)
+	cid = request.session['Tutor']
+	tutor = SignupTutor.objects.get(sno=cid)
+	if enrollTutors.objects.filter(signUp=tutor).exists():
+		tutors = enrollTutors.objects.filter(signUp=tutor)
+		institute = AddTutorsInst.objects.get(username=tutors.first())
+		print(institute.cid)
+		courses = AddCourses.objects.filter(coachingCentre=institute.cid)
+	context = {
+	'courses':courses,
+	'note':data
+	}
+	if request.method == "POST":
+		note = request.FILES.get("note","")
+		title = request.POST.get("title","")
+		description = request.POST.get("description","")
+		course = request.POST.get("course","")
+		print(note,title,description,course)
+		if note:
+			data.notes = note
+		if title:
+			data.title = title
+		if description:
+			data.description = description
+		if course:
+			data.subject = course
+		try:
+			data.save()
+			return redirect('viewnotestutor')
+		except:
+			errors.append('Error Occured! Try Again')
+			context['errors'] = errors
+	return render(request,'tutor/Notes/editNotesTutor.html',context)
+
+def DeleteNoteTutor(request,note_id):
+	note = NotesTutor.objects.get(id=note_id)
+	note.delete()
+	return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+
+def Combine_two_models(one,two):
+	return chain(one,two)
+
+def AllNotesStudent(request):
+	institute = NotesInstitute.objects.all()
+	tutor = NotesTutor.objects.all()
+	if tutor:
+		all = Combine_two_models(institute,tutor)
+	else:
+		all  = institute
+	print(all)
+	context = {
+	'notes':all
+	}
+	return render(request,'tutor/Notes/allnotes.html',context)
+
+
+def ViewpdfStudentInstitute(request,note_id):
+	try:
+		note = NotesInstitute.objects.get(id=note_id)
+	except:
+		note = []
+	context = {
+	'note':note
+	}
+	return render(request,'tutor/Notes/viewpdfstudent.html',context)
+
+def ViewpdfTutor(request,note_id):
+	try:
+		note = NotesTutor.objects.get(id=note_id)
+	except:
+		note = []
+	context = {
+	'note':note
+	}
+	return render(request,'tutor/Notes/viewpdfstudent.html',context)
