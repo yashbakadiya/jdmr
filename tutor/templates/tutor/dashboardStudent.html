@@ -138,7 +138,13 @@
                     <div class="col-lg-12">
                         <div class="content">
                             <h2>Welcome to Dashboard</h2>
-                            {% block body %}{% endblock %}
+                            {% block body %}
+        {% if validated %}
+        {% else %}
+        <div class="alert alert-success pb-0" role="alert">
+  <p class="text-dark">Your Email Is not Validated. <a href="{% url 'studentprofile' %}" class="p-1">Click Here</a> to Validate.<p>
+</div>
+        {% endif %}{% endblock %}
                         </div>
                     </div>
                 </div>

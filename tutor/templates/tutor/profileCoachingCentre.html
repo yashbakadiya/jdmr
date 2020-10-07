@@ -247,8 +247,9 @@ color: white;
 								<div class="input-group-prepend">
 									<span class="input-group-text"><i class="fas fa-envelope"></i></span>
 								</div>
-								<input type="email" value="{{centre.email}}" class="form-control" id="email" name='email' placeholder="Email Address" disabled>
-								{% if not centre.emailValidated %}<button class="btn btn-info btn-sm" id="getOTP" type="button" name="getOTP">Get OTP</button>{% endif %}
+						<input type="email" value="{{centre.email}}" class="form-control" id="email" name='email' placeholder="Email Address" disabled>
+								{% if not centre.emailValidated %}
+								<a class="btn btn-info btn-sm" id="getOTP" type="button" name="getOTP">Get OTP</a>{% endif %}
 							</div>
 						</div>
 
@@ -480,7 +481,11 @@ color: white;
 				$("#imageCropperModal").modal("hide");
 			});
 
-			$("#getOTP").on("click",function(){
+	});
+
+</script>
+<script type="text/javascript">
+				$("#getOTP").on("click",function(e){
 				//send ajax to backend send otp
 				$("#otpModal").modal("show");
 				$.ajax({
@@ -488,7 +493,8 @@ color: white;
 			            url: "/getOTP/",
 			            data: {
 							'email':"{{centre.email}}",
-			                'getotp':true
+			                'getotp':true,
+			                'csrfmiddlewaretoken': '{{ csrf_token }}',
 			            },
 			            success: function (response) {
 			                if (response.status == 'success') {
@@ -499,9 +505,5 @@ color: white;
 			            }
 			        });
 			});
-
-
-	});
-
 </script>
 {% endblock %}

@@ -73,10 +73,20 @@ def delCookie(responce,var):
 	return responce
 
 def dashboardStudent(request):
-	return render(request, 'tutor/dashboardStudent.html')
+	cid = request.session['Student']
+	student = SignupStudent.objects.get(snum=cid)
+	context = {
+	'validated':student.emailValidated
+	}
+	return render(request, 'tutor/dashboardStudent.html',context)
 
 def dashboardTutor(request):
-	return render(request, 'tutor/dashboardTutor.html')
+	cid = request.session['Tutor']
+	tutor = SignupTutor.objects.get(sno=cid)
+	context = {
+	'validated':tutor.emailValidated
+	}
+	return render(request, 'tutor/dashboardTutor.html',context)
 
 def dashboard(request):
 	cid = request.session['CoachingCentre']
@@ -103,6 +113,7 @@ def dashboard(request):
 	# print(fees)
 	# print(days)
 	context={
+		'validated':coaching.emailValidated,
 		'enrolledcourses':enrolledcourses.count(),
 		'enrolledstudents':enrolledstudents.count(),
 		'upcomingexams':upcomingexams,
@@ -110,7 +121,8 @@ def dashboard(request):
 		'tutorsenrolled':tutorsenrolled.count(),
 		'notices':notices,
 		'days':days,
-		'fees':fees
+		'fees':fees,
+		'email':coaching.email,
 	}
 	return render(request, 'tutor/calendarCoaching.html',context)
 
@@ -583,28 +595,6 @@ def viewteachingType(request):
 	teach = ViewTeachingType.objects.all()
 	params = {'courses':teach}
 	return render(request, 'tutor/viewteachingType.html', params)
-
-def Send_code(email):
-	code = ""
-	choices = ['1','2','3','4','5','6','7','8','9','a','b','c','d','e','f','g','h','i','j','k','l','m',
-				'n','o','p','q','r','s','t','u','v','w','x','y','z']
-	for i in range(6):
-		string = random.choice(choices)
-		code = f"{code}{string}"
-	print(code)
-	message = f"Use This code for verification {code}"
-	request.session[f'{email}-verification-code'] = code
-	if email:
-		try:
-			send_mail('Verification Code',message,'from@example.com',email)
-		except:
-			print("error")
-
-def checkcode(email,code):
-	otp = request.session[f'{email}-verification-code']
-	if code == otp:
-		return True
-	return False
 
 
 def loginTutor(request):
@@ -1336,7 +1326,6 @@ def undoArchiveTutor(request):
 	return redirect('/archiveTutorList')
 
 
-
 def loginStudent(request):
 	if request.method=="POST":
 		print(request.POST)
@@ -1362,7 +1351,6 @@ def loginStudent(request):
 		if token:
 			try:
 				max_age = 60*60*24*365*10
-
 				idinfo = id_token.verify_oauth2_token(token, requests.Request(), CLIENT_ID)
 				userid = idinfo['sub']
 				print(idinfo.values())
@@ -3821,9 +3809,10 @@ def getOTP(request):
 			for i in range(8) :
 				otp_code += digits[math.floor(random.random() * 10)]
 			#send OTP EMAIL
-			msg = EmailMessage('Validate Email',"Your OTP for validating Email is "+str(otp_code), to=[email])
+			email = 'from@example.com'
+			msg = EmailMessage('Validate Email',"Your OTP for validating Email is "+str(otp_code),email, to=[email])
 			msg.send()
-
+			print(otp_code)
 			type= 'any'
 			otp = OTP(
 				otp = otp_code,
@@ -6088,3 +6077,5 @@ def ViewpdfTutor(request,note_id):
 	'note':note
 	}
 	return render(request,'tutor/Notes/viewpdfstudent.html',context)
+
+	
