@@ -868,7 +868,7 @@ def addTutors(request):
 					return redirect("/addTutors")
 			return HttpResponse("""
 					<script>
-						alert('Student Added Sucessfully');
+						alert('Tutor Added Sucessfully');
 						window.location.href = "/addTutors";
 					</script>
 				""")
@@ -1642,6 +1642,16 @@ def viewStudents(request):
 	students = AddStudentInst.objects.filter(Q(instituteName=inst.instituteName))
 	# sending variable
 	params = {'students':students}
+	detials = []
+	try:
+		for student in students:
+			if AddStudentDetail.objects.filter(username=student).exists():
+				detials.extend(AddStudentDetail.objects.filter(username=student))
+			else:
+				detials.append("")
+	except:
+		detials =[]
+	print(detials)
 	return render(request, 'tutor/viewStudents.html', params)
 
 def searchStudent(request):
@@ -1938,14 +1948,17 @@ Use addfeesC instead
 def viewFees(request):
 	cookieVAL = request.session.get('CoachingCentre',None)
 	if(not cookieVAL):
-		return HttpResponse("You are not logged in!")
+		return redirect('landing')
 	centre = SignupCoachingCentre.objects.get(s_no=cookieVAL)
 	courses = centre.AddCourses.all()
-	fees = [course.AddFeesC.all() for course in courses]
-	print(fees)
-
-	fees = AddFeesC.objects.all()
-
+	print(courses)
+	fees = []
+	try:
+		for course in courses:
+			if AddFeesC.objects.filter(course=course).exists():
+				fees.extend(AddFeesC.objects.filter(course=course))
+	except:
+		fees=[]
 	params = {'fees':fees,'centre':centre}
 	return render(request, 'tutor/viewFees.html', params)
 
@@ -3292,10 +3305,13 @@ def ViewTutorials(request):
 	coaching = SignupCoachingCentre.objects.get(s_no=cid)
 	courses = AddCourses.objects.filter(coachingCentre = coaching)
 	tutorials = []
-	for i in courses:
-		if TutorialInstitute.objects.filter(Course=i).exists():
-			print(TutorialInstitute.objects.filter(Q(Course=i) & Q(Archived=False)))
-			tutorials.extend(TutorialInstitute.objects.filter(Q(Course=i) & Q(Archived=False)))
+	try:
+		for i in courses:
+			if TutorialInstitute.objects.filter(Course=i).exists():
+				print(TutorialInstitute.objects.filter(Q(Course=i) & Q(Archived=False)))
+				tutorials.extend(TutorialInstitute.objects.filter(Q(Course=i) & Q(Archived=False)))
+	except:
+		tutorials=[]
 
 	context = {
 	'tutorials':tutorials

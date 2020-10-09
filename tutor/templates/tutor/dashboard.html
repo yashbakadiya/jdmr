@@ -122,13 +122,6 @@
                     </li>
                 </ul>
             </li>
-            <li><i class="fa fa-users fa-fw"></i><a class="drop-down" href="#"> Courses</a>
-                <ul class="side-nav-dropdown">
-
-                    <li><a href="/viewStudents/">View/ Delete/ Update Course</a>
-                    </li>
-                </ul>
-            </li>
             <li><i class="fa fa-users fa-fw"></i><a class="drop-down" href="#"> Tutorials</a>
                 <ul class="side-nav-dropdown">
                     <li><a href="{% url 'addtutorials' %}">Add Tutorials</a>
@@ -151,8 +144,6 @@
                     </li>
                 </ul>
             </li>
-            <li><i class="fa fa-users fa-fw"></i><a  href="{% url 'centerexamresults' %}"> Results</a>
-            </li>
               <li><i class="fa fa-users fa-fw"></i><a class="drop-down" href="#">Notes</a>
                 <ul class="side-nav-dropdown">
                     <li><a href="{% url 'addnotes' %}">Add Notes</a>
@@ -161,7 +152,8 @@
                     </li>
                 </ul>
             </li>
-
+            <li><i class="fa fa-users fa-fw"></i><a  href="{% url 'centerexamresults' %}"> Results</a>
+            </li>
         </ul>
     </aside>
     <section id="contents">
