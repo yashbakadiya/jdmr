@@ -2885,11 +2885,13 @@ def enrolledStudents(request):
 	initialQuery &= Q(forclass__in=classNameList)
 	initialQuery &= Q(budget__lte=tutorContiObj.fees)
 	initialData = PostTution.objects.filter(initialQuery)
+	la1 = 0.0
 	try:
 		la1 = float(tutorObj.latitude)
 	except Exception as e:
 		print(la1,2176,e)
 		la1=1
+	lo1 = 0.0
 	try:
 		lo1 = float(tutorObj.longitude)
 	except Exception as e:
@@ -2897,6 +2899,8 @@ def enrolledStudents(request):
 		lo1=1
 	print('initialData',initialData)
 	finalData = []
+	la2 = 0.0
+	lo2 = 0.0
 	for x in initialData:
 		la2 = float(x.connector.latitude)
 		lo2 = float(x.connector.longitude)
