@@ -2513,6 +2513,9 @@ def batchTimingEdit(request,sno):
 def tutorCalendar(request):
 	return render(request,"tutor/tutorCalendar.html",{})
 
+def StudentCalendar(request):
+	return render(request,"tutor/studentcalendar.html",{})
+
 def profileCoachingCentre(request):
 	schools = School.objects.all()
 	school_list = list(map(str,schools))
@@ -2826,7 +2829,7 @@ def viewAssignmentTutor(request):
 		if(float(tutorObj.distance)<=float(distance)):
 			finalData.append(x)
 	print('res',initialData)
-	if(request.method=='POST'):
+	if request.method=='POST':
 		searchQuery = Q(budget__gte=-1000)
 		className = request.POST.get('className')
 		courceName = request.POST.get('courseName')
@@ -2914,6 +2917,9 @@ def enrolledStudents(request):
 		className = request.POST.get('className')
 		courceName = request.POST.get('courseName')
 		budgetVal = request.POST.get('budget')
+		print(request.POST.get('cityLat'))
+		print(request.POST.get('cityLng'))
+		print(PostTution.objects.all())
 		la1 = float(request.POST.get('cityLat'))
 		lo1 = float(request.POST.get('cityLng'))
 		if(courceName):

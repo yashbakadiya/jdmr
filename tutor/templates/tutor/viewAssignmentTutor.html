@@ -235,6 +235,8 @@ margin-left: 4px;
                 </div>
             </div>
             <div class="card-body container">
+              <form method="post">
+                {% csrf_token %}
                 <div class="row d-flex justify-content-end">
                     <div class="col-sm-3 input-group form-group justify-content-center d-flex">
                        <input id="pac-input" type="text" class="controls form-control" name='loc' placeholder="Search Location">
@@ -255,9 +257,10 @@ margin-left: 4px;
                         <input type="number" step="0.01" class="form-control" name='budget' placeholder="Budget">
                     </div>
                     <div class="col-sm-1">
-                    <button class="btn btn-warning btn-md">Submit</button>
+                    <button type="submit" class="btn btn-warning btn-md">Submit</button>
                     </div>
                 </div>
+                </form>
             </div>
         </div>
 
@@ -300,67 +303,6 @@ margin-left: 4px;
                           </div>
                         </div>
 
-<!-- modal -->
-<!-- <div class="modal fade" id="tutorModal{{i.snum}}" tabindex="-1" role="dialog" aria-labelledby="{{i.snum}}" aria-hidden="true">
-  <div class="modal-dialog modal-lg" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title d-flex justify-content-center col-sm-10" style="color: rgb(66, 8, 8); text-align: center;" id="{{i.snum}}">{{i.firstName}} {{i.lastName}}</h5>
-      </div>
-
-      <div class="modal-body">
-
-          <div class="row">
-              <div class="col-sm-10">
-                  <div class="row" style="color:brown;">
-                      <div class="col-sm-6 d-flex justify-content-center headi">
-                          Email: {{i.email}}
-                      </div>
-                      <div class="col-sm-6 d-flex justify-content-center headi" style="">
-                          Phone: {{i.phone}}
-                      </div>
-                  </div>
-                  <br>
-                  <br>
-                  <div class="row">
-                      <div class="col-sm-2 text-center headi">Distance : </div><div class="col-sm-2">{{i.distance}}</div>
-                      <div class="col-sm-2 text-center headi">Qualification: </div><div class="col-sm-2">{{i.qualification}}</div>
-                      <div class="col-sm-2 text-center headi">Fees : </div><div class="col-sm-2">{{i.fees}}</div>
-
-                  </div>
-                  <br><br>
-                  <hr>
-
-              </div>
-              <div class="col-sm-2 imageBlock">
-                <div class="row d-flex justify-content-center ">
-                  {% if i.photo %}
-                      <img class="avatar rounded-circle" src="{{MEDIA_URL}}{{i.photo.url}}" alt="Not Found"/>
-                  {% else %}
-                      {% if i.gender == "Male" %}
-                  <img class="avatar rounded-circle" src="{% static 'default-male.jpg' %}" alt="Default Not Found"/>
-                      {% else %}
-                  <img class="avatar rounded-circle" src="{% static 'default-female.jpg' %}" alt="Default Not Found"/>
-                      {% endif %}
-                  {% endif %}
-                 </div>
-                 <div class="d-flex justify-content-center row">
-                     <p>
-                     {% if i.availability == True %}
-                         <td align="center" style="font-size: 1.5rem"><i class="fas fa-check"></i></td>
-                         {% else %}
-                         <td align="center" style="font-size: 1.5rem"><i class="fas fa-times"></i></td>
-                         {% endif %}
-                     </p>
-                 </div>
-              </div>
-          </div>
-      <br>
-      </div>
-    </div>
-  </div>
-</div> -->
-
                 {% endfor %}
 
 </div>
@@ -395,42 +337,6 @@ margin-left: 4px;
             showAsideBtn.click();
           }, 0);
 
-
-          function initialize() {
-               var input = document.getElementById('pac-input');
-               new google.maps.places.Autocomplete(input);
-             }
-
-          initialize();
-          // // $(".modal").modal();
-          // $(".filterInputs").on("change",function(){
-          //     distance = $("#filterDistance").val();
-          //     experience = $("#filterExperience").val();
-          //     demo = $("#filterDemo")[0].checked;
-          //     budget = $("#filterBudget").val();
-          //     $("#sliderval").text(budget);
-          //     alldata = $(".cardWrapper");
-          //     alldata.show();
-          //
-          //     for(i=0;i<alldata.length;i++){
-          //         if (alldata[i].dataset["distance"]>distance){
-          //             $(alldata[i]).hide();
-          //         }else{
-          //             if (demo){
-          //                 if (alldata[i].dataset["demo"] == 0 ){
-          //                     $(alldata[i]).hide();
-          //                 }
-          //             }
-          //             if (alldata[i].dataset["budget"]>budget){
-          //                     $(alldata[i]).hide();
-          //                 }else{
-          //
-          //                 }
-          //             }
-          //         }
-          //
-          // });
-
 });
 
     $(".multiselect1").multiselect();
@@ -438,5 +344,48 @@ margin-left: 4px;
     $(".multiselect3").multiselect();
 
 
+</script>
+<script type="text/javascript">
+  $(document).on("DOMContentLoaded",function(){
+    function showPosition(position) {
+        document.getElementById('pac-input').value = "processing...";
+         document.getElementById('cityLat').value = position.coords.latitude;
+         document.getElementById('cityLng').value = position.coords.longitude;
+
+ $.ajax({
+         type: "POST",
+         url: "/ajaxLocation/",
+         data: {
+             'cityLat': position.coords.latitude,
+             'cityLng': position.coords.longitude,
+             'ajax': 1
+         },
+         success: function (response) {
+             if (response.status == 'success') {
+       document.getElementById('pac-input').value = response.result;
+             }
+             else {
+                 document.getElementById('pac-input').value = response.error;
+             }
+         },
+         error: function () {
+             document.getElementById('pac-input').value = "";
+         }
+     });
+
+      }
+
+    function initialize() {
+       var input = document.getElementById('pac-input');
+       var autocomplete = new google.maps.places.Autocomplete(input);
+google.maps.event.addListener(autocomplete, 'place_changed', function () {
+        var place = autocomplete.getPlace();
+        document.getElementById('cityLat').value = place.geometry.location.lat();
+        document.getElementById('cityLng').value = place.geometry.location.lng();
+});
+     }
+     initialize();
+
+  });
 </script>
 {% endblock %}

@@ -81,6 +81,7 @@ urlpatterns = [
     path('enrolledInstututesTutor/', views.enrolledInstututesTutor, name='enrolledInstututesTutor'),
     path('enrolledInstututesStudent/', views.enrolledInstututesStudent, name='enrolledInstututesStudent'),
     path("tutorCalendar/", views.tutorCalendar),
+    path("StudentCalendar/", views.StudentCalendar,name="calendar"),
     path('viewAssignmentTutor/', views.viewAssignmentTutor, name='viewAssignmentTutor'),
     path('ajaxLocation/', views.ajaxLocation, name='ajaxLocation'),
     path('makeAppointment/', views.makeAppointment, name='makeAppointment'),
