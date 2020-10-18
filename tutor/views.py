@@ -2820,16 +2820,21 @@ def viewAssignmentTutor(request):
 	initialQuery &= Q(forclass__in=classNameList)
 	initialQuery &= Q(budget__lte=tutorContiObj.fees)
 	initialData = PostAssignment.objects.filter(initialQuery)
-	la1 = float(tutorObj.latitude)
-	lo1 = float(tutorObj.longitude)
+	la1 = tutorObj.latitude
+	lo1 = tutorObj.longitude
 	finalData = []
-	for x in initialData:
-		la2 = float(x.connector.latitude)
-		lo2 = float(x.connector.longitude)
-		distance = (((la1-la2)**2) + (lo1-lo2)**2)**0.5
-		if(float(tutorObj.distance)<=float(distance)):
-			finalData.append(x)
+	if la1 and lo1:
+		for x in initialData:
+			la2 = float(x.connector.latitude)
+			lo2 = float(x.connector.longitude)
+			distance = (((float(la1)-la2)**2) + (float(lo1)-lo2)**2)**0.5
+			if(float(tutorObj.distance)<=float(distance)):
+				finalData.append(x)
+	else:
+		finalData = initialData
 	print('res',initialData)
+
+
 	if request.method=='POST':
 		searchQuery = Q(budget__gte=0)
 		className = request.POST.get('className')
