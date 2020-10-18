@@ -211,7 +211,6 @@ margin-left: 4px;
 </style>
 {% endblock %}
 {% block body %}
-<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCBJybI10-Xa43-F5GSad1i0Y9W3yqlW6Q&libraries=places&v=3" async defer></script>
 <div class="container">
     {% if errors %}
     <div class="alert alert-danger" role="alert">
@@ -306,12 +305,8 @@ margin-left: 4px;
                 {% endfor %}
 
 </div>
-
 <script>
-
     document.addEventListener("DOMContentLoaded", function(){
-
-
                 var docs = {{jsonLocalData|safe}}
                 classes = Object.keys(docs);
                 for(i=0;i<classes.length;i++){
@@ -338,54 +333,18 @@ margin-left: 4px;
           }, 0);
 
 });
-
-    $(".multiselect1").multiselect();
-    $(".multiselect2").multiselect();
-    $(".multiselect3").multiselect();
-
-
 </script>
 <script type="text/javascript">
-  $(document).on("DOMContentLoaded",function(){
-    function showPosition(position) {
-        document.getElementById('pac-input').value = "processing...";
-         document.getElementById('cityLat').value = position.coords.latitude;
-         document.getElementById('cityLng').value = position.coords.longitude;
+  
+           $("#pac-input").on("input",function(){
+            var input = document.getElementById('pac-input');
+            var autocomplete = new google.maps.places.Autocomplete(input);
+            google.maps.event.addListener(autocomplete, 'place_changed', function () {
+                var place = autocomplete.getPlace();
+                document.getElementById('cityLat').value = place.geometry.location.lat();
+                document.getElementById('cityLng').value = place.geometry.location.lng();
+            });
+        });
 
- $.ajax({
-         type: "POST",
-         url: "/ajaxLocation/",
-         data: {
-             'cityLat': position.coords.latitude,
-             'cityLng': position.coords.longitude,
-             'ajax': 1
-         },
-         success: function (response) {
-             if (response.status == 'success') {
-       document.getElementById('pac-input').value = response.result;
-             }
-             else {
-                 document.getElementById('pac-input').value = response.error;
-             }
-         },
-         error: function () {
-             document.getElementById('pac-input').value = "";
-         }
-     });
-
-      }
-
-    function initialize() {
-       var input = document.getElementById('pac-input');
-       var autocomplete = new google.maps.places.Autocomplete(input);
-google.maps.event.addListener(autocomplete, 'place_changed', function () {
-        var place = autocomplete.getPlace();
-        document.getElementById('cityLat').value = place.geometry.location.lat();
-        document.getElementById('cityLng').value = place.geometry.location.lng();
-});
-     }
-     initialize();
-
-  });
 </script>
 {% endblock %}

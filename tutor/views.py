@@ -2249,26 +2249,27 @@ def enrolledTutorsObjectToDict(obj):
 def enrolledTutors(request):
 	jsonLocalData = loads(open('cc.txt','r').read())
 	if(request.method=='POST'):
-		searchQuery = Q(budget__gte=-1000)
-		className = request.POST.get('className')
-		courceName = request.POST.get('courseName')
-		budgetVal = request.POST.get('budget')
-		la1 = float(request.POST.get('cityLat'))
-		lo1 = float(request.POST.get('cityLng'))
+		searchQuery = SignupTutor.objects.all()
+		className = request.POST.get('className',"")
+		courceName = request.POST.get('courseName',"")
+		budgetVal = request.POST.get('budget',"")
+		la1 = request.POST.get('cityLat',"")
+		lo1 = request.POST.get('cityLng',"")
 		if(courceName):
-			searchQuery &= Q(courseName=courceName)
+			searchQuery = searchQuery.filter(signupTutorContinued__courseName=courceName)
 		if(className):
-			searchQuery &= Q(forclass=className)
-		if(budgetVal):
-			searchQuery &= Q(budget__lte=budgetVal)
-		allData = SignupTutor.objects.filter(searchQuery)
+			searchQuery = searchQuery.filter(signupTutorContinued__forclass=className)
+		allData = searchQuery
 		finalData = []
-		for x in allData:
-			la2 = float(x.connector.latitude)
-			lo2 = float(x.connector.longitude)
-			distance = distanceBwAB((la1,lo1),(la2,lo2)).km
-			if(float(tutorObj.distance)<=float(distance)):
-				finalData.append(x)
+		if la1 and lo1:
+			for x in allData:
+				la2 = float(x.latitude)
+				lo2 = float(x.longitude)
+				distance = distanceBwAB((float(la1),float(lo1)),(la2,lo2)).km
+				if(float(x.distance)<=float(distance)):
+					finalData.append(x)
+		else:
+			finalData = allData
 		jsonData = []
 		for x in finalData:
 			jsonData.append(enrolledTutorsObjectToDict(x))
@@ -2830,12 +2831,13 @@ def viewAssignmentTutor(request):
 			finalData.append(x)
 	print('res',initialData)
 	if request.method=='POST':
-		searchQuery = Q(budget__gte=-1000)
+		searchQuery = Q(budget__gte=0)
 		className = request.POST.get('className')
 		courceName = request.POST.get('courseName')
 		budgetVal = request.POST.get('budget')
-		la1 = float(request.POST.get('cityLat'))
-		lo1 = float(request.POST.get('cityLng'))
+		la1 = request.POST.get('cityLat',"")
+		lo1 = request.POST.get('cityLng',"")
+		print(la1,lo1)
 		if(courceName):
 			searchQuery &= Q(courseName=courceName)
 		if(className):
@@ -2843,13 +2845,16 @@ def viewAssignmentTutor(request):
 		if(budgetVal):
 			searchQuery &= Q(budget__lte=budgetVal)
 		initialData = PostAssignment.objects.filter(searchQuery)
-		finalData = []
-		for x in initialData:
-			la2 = float(x.connector.latitude)
-			lo2 = float(x.connector.longitude)
-			distance = distanceBwAB((la1,lo1),(la2,lo2)).km
-			if(float(tutorObj.distance)<=float(distance)):
-				finalData.append(x)
+		if la1 and lo1:
+			finalData = []
+			for x in initialData:
+				la2 = float(x.connector.latitude)
+				lo2 = float(x.connector.longitude)
+				distance = distanceBwAB((float(la1),float(lo1)),(la2,lo2)).km
+				if(float(tutorObj.distance)<=float(distance)):
+					finalData.append(x)
+		else:
+			finalData = initialData
 	jsonLocalData = loads(open('cc.txt','r').read())
 	return render(request, "tutor/viewAssignmentTutor.html",{'allData':finalData,'jsonLocalData':jsonLocalData})
 

@@ -24,7 +24,10 @@
     .card-header h3{
         color: white;
     }
-
+    .inputDemo{
+          width:5vw;
+    height:5vh;
+    }
     input:focus{
         outline: 0 0 0 0  !important;
         box-shadow: 0 0 0 0 !important;
@@ -297,28 +300,28 @@
         </div>
         <br>
         <br>
-        <div class="card card-width col-sm-12" style="padding-top:1rem;padding-bottom:2rem;">
-            <h4>Filters</h4>
+        <div class="card card-width" style="padding-top:1rem;padding-bottom:2rem;">
+            <h4 class="text-dark ml-2">Filters</h4>
 
             <div class="card-body container filters">
                 <div class="row d-flex justify-content-end">
                     <div class="col-sm-2 input-group form-group justify-content-center d-flex">
-                        <label class="control-label">Distance &nbsp;</label>
-                        <input type="number" class="form-control filterInputs" id="filterDistance" value="10*4">
-                    </div>
-                    <div class="col-sm-2 input-group form-group justify-content-center d-flex">
-                        <label class="control-label">Experience </label>
-                        <input type="number" class="form-control filterInputs" id="filterExperience" value="0">
+                        <label class="control-label" style="font-size: 18px;">Distance &nbsp;</label>
+                        <input type="number" class="form-control filterInputs inputDemo" id="filterDistance" value="10*4">
                     </div>
                     <div class="col-sm-3 input-group form-group justify-content-center d-flex">
-                        <label class="control-label"> Demo Availaible Only : &nbsp;</label>
-                        <input class="form-control filterInputs" type="checkbox" id="filterDemo" checked>
+                        <label class="control-label" style="font-size: 18px;">Experience&nbsp;</label>
+                        <input type="number" class="form-control filterInputs w-25" id="filterExperience" value="0" >
                     </div>
-                    <div class="col-sm-4 input-group form-group justify-content-center d-flex">
+                    <div class="col-sm-3 input-group form-group justify-content-center d-flex">
+                        <label class="control-label" style="font-size: 18px;"> Demo Availaible Only :</label>
+                        <input class="form-md-control mt-2 pt-2 ml-1" type="checkbox" id="filterDemo" checked>
+                    </div>
+                    <div class="col-sm-3 input-group form-group justify-content-center d-flex">
                         <label class="control-label"> Budget  &nbsp;</label>
-                        <input type="range" min="1" max="100000" step="0.01" class="form-control filterInputs" id="filterBudget" value="10*5">
+                        <input type="range" min="1" max="100000" step="0.01" class="form-control filterInputs" id="filterBudget" name="budget" value="10*5">
                     </div>
-                    <div class="col-sm-1 input-group form-group justify-content-center d-flex">
+                    <div class="col-sm-1 input-group form-group justify-content-center d-flex mt-2">
                         <span id="sliderval">100000</span>
                     </div>
                 </div>
@@ -1252,17 +1255,7 @@
             showAsideBtn.click();
         }, 0);
 
-        function initialize() {
-            var input = document.getElementById('pac-input');
-            var autocomplete = new google.maps.places.Autocomplete(input);
-            google.maps.event.addListener(autocomplete, 'place_changed', function () {
-                var place = autocomplete.getPlace();
-                document.getElementById('cityLat').value = place.geometry.location.lat();
-                document.getElementById('cityLng').value = place.geometry.location.lng();
-            });
-        }
 
-        initialize();
         // $(".modal").modal();
         $(".filterInputs").on("change",function(){
             distance = $("#filterDistance").val();
@@ -1326,28 +1319,6 @@
             $(".reccWeek").multiselect();
         });
 
-        // $(".endingRadio").on("click",function(){
-        //     gotcha =  $(".endingRadio:checked").val();
-        //     if (gotcha=="endOnDate"){
-        //         $("#endAfterMeetings").attr("disabled","disabled");
-        //         $("#endAfterMeetings").removeAttr("required");
-        //         $("#endingDate").removeAttr("disabled");
-        //         $("#endingDate").attr("required","required");
-        //
-        //     }else if(gotcha=="endAfterMeeting"){
-        //         $("#endAfterMeetings").attr("required","required");
-        //         $("#endAfterMeetings").removeAttr("disabled");
-        //         $("#endingDate").removeAttr("required");
-        //         $("#endingDate").attr("disabled","disabled");
-        //
-        //     }else if(gotcha=="noEnd"){
-        //         $("#endAfterMeetings").attr("disabled","disabled");
-        //         $("#endAfterMeetings").removeAttr("required");
-        //         $("#endingDate").removeAttr("required");
-        //         $("#endingDate").attr("disabled","disabled");
-        //     }
-        // });
-        //csrf config starts
         var csrftoken = "{{csrf_token}}";
         function csrfSafeMethod(method) {
             // these HTTP methods do not require CSRF protection
@@ -1401,7 +1372,17 @@
     $(".multiselect2").multiselect();
     $(".multiselect3").multiselect();
     $(".multiselect4").multiselect();
-
+</script>
+<script type="text/javascript">
+       $("#pac-input").on("change",function(){
+            var input = document.getElementById('pac-input');
+            var autocomplete = new google.maps.places.Autocomplete(input);
+            google.maps.event.addListener(autocomplete, 'place_changed', function () {
+                var place = autocomplete.getPlace();
+                document.getElementById('cityLat').value = place.geometry.location.lat();
+                document.getElementById('cityLng').value = place.geometry.location.lng();
+            });
+        });
 
 </script>
 {% endblock %}
