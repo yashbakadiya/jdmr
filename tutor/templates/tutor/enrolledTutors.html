@@ -235,7 +235,7 @@
     	height:auto;
     }
     .multiselect-container{
-    	height:10rem;
+    	height:1rem;
     	overflow-y:scroll;
     	width:max-content;
     }
@@ -278,13 +278,13 @@
                                 <option disabled selected>Class</option>
                             </select>
                         </div>
+                    <div class="col-sm-3 input-group form-group justify-content-center d-flex">
+                        <select id="courseName" name="courseName" class="custom-select form-control multiselect1" multiple>
+                            <option disabled selected>Courses</option>
+                        </select>
+                    </div>
                         <div class="col-sm-3 input-group form-group justify-content-center d-flex">
-                            <select id="courseName" name="courseName" class="custom-select form-control multiselect1" multiple>
-                                <option disabled selected>Courses</option>
-                            </select>
-                        </div>
-                        <div class="col-sm-3 input-group form-group justify-content-center d-flex">
-                            <select id="courseName" name="courseName" class="custom-select form-control multiselect3" multiple>
+                            <select name="tutortype" class="custom-select form-control" multiple>
                                 <option value="Online Tutor">Online Tutor</option>
                                 <option value="Institute">Institute</option>
                                 <option value="Home Tutor">Home Tutor</option>
@@ -468,9 +468,9 @@
                 {% endfor %}
                 {% else %}
 
-                <h6 style="color:White;">No Data Found</h6>
-
-
+               <div class="card container h-25 m-0">
+              <h5 class="mt-2 mb-2 p-2">No Data Found</h5>
+            </div>
                 {% endif %}
                 <!-- appointment modal -->
                 <div class="modal fade" id="appointmentModal" tabindex="-1" role="dialog" aria-labelledby="appointmentModal" aria-hidden="true">
@@ -1241,6 +1241,7 @@
         $("#className").on("change",function(){
             $("#courseName").empty();
             courses = docs[this.value];
+            alert(courses);
             for(i=0;i<courses.length;i++){
                 $('#courseName').append(`<option value="${courses[i]}">
                     ${courses[i]}
@@ -1249,12 +1250,6 @@
             $(".multiselect1").multiselect('rebuild');
 
         });
-
-        showAsideBtn = $('.show-side-btn');
-        setTimeout(function(){
-            showAsideBtn.click();
-        }, 0);
-
 
         // $(".modal").modal();
         $(".filterInputs").on("change",function(){
@@ -1369,12 +1364,30 @@
     });
 
     $(".multiselect1").multiselect();
-    $(".multiselect2").multiselect();
-    $(".multiselect3").multiselect();
-    $(".multiselect4").multiselect();
 </script>
 <script type="text/javascript">
-       $("#pac-input").on("change",function(){
+    $('#className').on("change",function(){
+        var name = $(this).val();
+    $.ajax({
+      url: "{% url 'subjects' %}",
+      data: {
+        "class": name,
+      },
+      success: function (data) {
+        categories = data.categories;
+        $("#courseName").empty().trigger("change");
+        for (i = 0; i < categories.length; i++) {
+          var newOption = new Option(
+            categories[i],
+          );
+          $("#courseName").append(newOption).trigger("change");
+        }
+      },
+    });
+    });
+</script>
+<script type="text/javascript">
+       $("#pac-input").on("input",function(){
             var input = document.getElementById('pac-input');
             var autocomplete = new google.maps.places.Autocomplete(input);
             google.maps.event.addListener(autocomplete, 'place_changed', function () {

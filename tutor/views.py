@@ -2261,6 +2261,7 @@ def enrolledTutors(request):
 			searchQuery = searchQuery.filter(signupTutorContinued__forclass=className)
 		allData = searchQuery
 		finalData = []
+		print(la1,lo1)
 		if la1 and lo1:
 			for x in allData:
 				la2 = float(x.latitude)
@@ -6115,3 +6116,12 @@ def ViewpdfTutor(request,note_id):
 	return render(request,'tutor/Notes/viewpdfstudent.html',context)
 
 	
+def subjects(request):
+	data = {}
+	if request.is_ajax:
+		classname = request.GET.get("class","")
+		jsonLocalData = loads(open('cc.txt','r').read())
+		if classname:
+			courses = jsonLocalData[classname]
+			data["categories"] = courses
+	return JsonResponse(data,safe=False)

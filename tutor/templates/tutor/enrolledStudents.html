@@ -211,7 +211,6 @@ margin-left: 4px;
 </style>
 {% endblock %}
 {% block body %}
-<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCBJybI10-Xa43-F5GSad1i0Y9W3yqlW6Q&libraries=places&v=3" defer></script>
 <div class="container">
     {% if errors %}
     <div class="alert alert-danger" role="alert">
@@ -295,8 +294,6 @@ margin-left: 4px;
                               <div class="card-text row"><div class="col-sm-6">School Name :</div><div class="col-sm-6"> {{i.schoolName}}</div></div>
                             {% endif %}
                               <br>
-                              <!-- <button type="button" data-toggle="modal" data-target="#tutorModal{{i.snum}}" class="btn btn-info">View</</button> -->
-                              <!-- <a href="#" class="btn btn-outline-info">Message</a> -->
                             </div>
                           </div>
                         </div>
@@ -370,9 +367,6 @@ margin-left: 4px;
 });
 
     $(".multiselect1").multiselect();
-    $(".multiselect2").multiselect();
-    $(".multiselect3").multiselect();
-
 
 </script>
 <script type="text/javascript">
@@ -402,7 +396,6 @@ margin-left: 4px;
              document.getElementById('pac-input').value = "";
          }
      });
-
       }
     function getLocation() {
         if (navigator.geolocation) {
@@ -413,17 +406,18 @@ margin-left: 4px;
       }
     $("#getUserLocation").on("click", getLocation);
 
-    function initialize() {
-       var input = document.getElementById('pac-input');
-       var autocomplete = new google.maps.places.Autocomplete(input);
-google.maps.event.addListener(autocomplete, 'place_changed', function () {
-        var place = autocomplete.getPlace();
-        document.getElementById('cityLat').value = place.geometry.location.lat();
-        document.getElementById('cityLng').value = place.geometry.location.lng();
-});
-     }
-     initialize();
-
   });
+</script>
+<script type="text/javascript">
+           $("#pac-input").on("input",function(){
+            var input = document.getElementById('pac-input');
+            var autocomplete = new google.maps.places.Autocomplete(input);
+            google.maps.event.addListener(autocomplete, 'place_changed', function () {
+                var place = autocomplete.getPlace();
+                document.getElementById('cityLat').value = place.geometry.location.lat();
+                document.getElementById('cityLng').value = place.geometry.location.lng();
+            });
+        });
+
 </script>
 {% endblock %}

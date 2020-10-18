@@ -268,7 +268,7 @@ margin-left: 4px;
 
                     <div class="container col-sm-12 profile-container">
                       <div class="row profile-cards">
-
+{% if allData %}
                 {% for i in allData %}
 
                         <div class="col-12 col-sm-6 col-md-4 col-lg-3 cardWrapper" data-distance="{{i.distance}}" data-experience="{{i.experience}}" data-demo="{{i.freeDemo}}" data-budget="{{i.fees}}">
@@ -303,7 +303,11 @@ margin-left: 4px;
                         </div>
 
                 {% endfor %}
-
+            {% else %}
+            <div class="card container h-25 m-0">
+              <h5 class="mt-2 mb-2 p-2">No Data Found</h5>
+            </div>
+            {% endif %}
 </div>
 <script>
     document.addEventListener("DOMContentLoaded", function(){

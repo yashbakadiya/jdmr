@@ -200,6 +200,7 @@ urlpatterns = [
     path('Student/Notes/All',views.AllNotesStudent,name="notesstudents"),
     path('Student/Center/note/<note_id>',views.ViewpdfStudentInstitute,name="viewpdfinstitute"),
     path('Student/Tutor/<note_id>',views.ViewpdfTutor,name="viewpdftutor"),
+    path('getsubjects',views.subjects,name="subjects")
     ]
 urlpatterns += static(settings.MEDIA_URL,document_root=settings.MEDIA_ROOT)
 # urlpatterns += [path('<path:dump>/',views.pageNotFound)]
