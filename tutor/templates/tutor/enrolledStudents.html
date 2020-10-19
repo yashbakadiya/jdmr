@@ -237,7 +237,8 @@ margin-left: 4px;
             <div class="card-body container">
                 <div class="row d-flex justify-content-end">
                     <div class="col-sm-3 input-group form-group justify-content-center d-flex">
-                      <input id="pac-input" type="text" class="controls form-control" name='loc' placeholder="Search Your Location or Get Location" required><button class="btn btn-info btn-sm" id="getUserLocation" type="button" name="getUserLocation">Get</button>
+                      <input id="pac-input" type="text" class="controls form-control" name='loc' placeholder="Search Your Location or Get Location" required>
+                      <button class="btn btn-info btn-sm" id="getUserLocation" type="button" name="getUserLocation" style="height: 40px;">Get</button>
                       <input type="hidden" id="cityLat" name="cityLat" />
                       <input type="hidden" id="cityLng" name="cityLng" />
                     </div>
@@ -367,6 +368,8 @@ margin-left: 4px;
 });
 
     $(".multiselect1").multiselect();
+    $(".multiselect2").multiselect();
+    $(".multiselect3").multiselect();
 
 </script>
 <script type="text/javascript">
