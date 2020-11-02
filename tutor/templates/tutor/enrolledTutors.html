@@ -364,7 +364,6 @@
                             <br>
                             <button type="button" data-toggle="modal" data-target="#tutorModal{{i.tutorCode}}" class="btn btn-info">View</button>
                             <a href="{% url 'reviewtutor' i.sno %}" class="btn btn-primary">Reviews</a>
-                            <!-- <a href="#" class="btn btn-outline-info">Message</a> -->
                         </div>
                     </div>
                 </div>
@@ -457,7 +456,7 @@
                                             <a href="{% url 'chattutor' i.sno %}" class="btn btn-info p-1">Chat</a>
                                         </div>
                                         <div class="d-flex justify-content-center row mt-2">
-                                            <button id="{{i.sno}}" type="button" class="btn btn-sm btn-info createAppointment" name="button" style="font-size:smaller;">Create Appointment</button>
+                                            <button value="{{i.sno}}" id="appointmenttutor" type="button" class="btn btn-sm btn-info createAppointment" data-toggle="modal" data-target="#appointmentModal" aria-hidden="true" name="button" style="font-size:smaller;">Create Appointment</button>
                                         </div>
                                     </div>
                                 </div>
@@ -466,8 +465,6 @@
                         </div>
                     </div>
                 </div>
-
-
                 {% endfor %}
                 {% else %}
 
@@ -494,7 +491,7 @@
                                                     Date
                                                 </div>
                                                 <div class="col-sm-3">
-                                                    <input style="width: 100%;" class="form-control" type="date" name="date" value="" required>
+                                                    <input style="width: 100%;" class="form-control" type="date" name="date" value="" required id="appointmentdate">
                                                 </div>
                                                 <div class="col-sm-1">
 
@@ -503,7 +500,7 @@
                                                     Time
                                                 </div>
                                                 <div class="col-sm-4">
-                                                    <input style="width: 100%;" class="form-control" type="time" name="time" value="" required>
+                                                    <input style="width: 100%;" class="form-control" type="time" name="time" value="" required id="appointmenttime">
                                                 </div>
                                             </div>
                                             <br>
@@ -513,7 +510,7 @@
                                                         Timezone
                                                     </div>
                                                     <div class="col-sm-3">
-                                                        <select class="form-control col-sm-12" name="timezone" value="" required>
+                                                        <select class="form-control col-sm-12" name="timezone" value="" required id="appointmentzone">
                                                             <option selected disabled>Timezone</option>
                                                             <option value="Africa/Abidjan">Africa/Abidjan</option>
                                                             <option value="Africa/Accra">Africa/Accra</option>
@@ -1098,7 +1095,7 @@
                                                         Duration
                                                     </div>
                                                     <div class="col-sm-4">
-                                                        <select class="form-control" name="durationHour" required>
+                                                        <select class="form-control" name="durationHour" required id="appointmenthour">
                                                             <option disabled selected>Hours</option>
                                                             <option value="0">0</option>
                                                             <option value="1">1</option>
@@ -1126,7 +1123,7 @@
                                                             <option value="23">23</option>
                                                             <option value="24">24</option>
                                                         </select>
-                                                        <select class="form-control" name="durationMinute" required>
+                                                        <select class="form-control" name="durationMinute" required id="appointmentminute">
                                                             <option selected disabled>Minutes</option>
                                                             <option value="5">5</option>
                                                             <option value="10">10</option>
@@ -1149,7 +1146,7 @@
                                                     Recurrence :
                                                 </div>
                                                 <div class="col-sm-1">
-                                                    <input id="recurrenceCheck" class="form-check" type="checkbox" name="recc">
+                                                    <input id="recurrenceCheck" class="form-check" type="checkbox" name="recc" id="appointmentrecc">
                                                 </div>
                                             </div>
                                             <br>
@@ -1283,39 +1280,6 @@
 
         });
 
-        $(".createAppointment").on("click",function(){
-            $("#tutorId").val(this.id);
-            $(".modal").modal("hide");
-            $("#ErrorList").html("")
-            $("#appointmentModal").modal("show");
-        });
-
-        $("#recurrenceCheck").on("change",function(){
-            if(this.checked){
-                $(".reccBox .reccEntry").removeAttr("disabled");
-                $(".reccBox .reccEntry").attr("required","required");
-                $(".reccBox").show();
-            }else{
-                $(".reccBox .reccEntry").attr("disabled","disabled");
-                $(".reccBox .reccEntry").removeAttr("required");
-                $(".reccBox").hide();
-            }
-            $(".reccWeek").multiselect('destroy');
-            $(".reccWeek").multiselect();
-        });
-        $(".reccPattern").on("change",function(){
-            if(this.value=="D"){
-                $(".reccWeek").attr("disabled","disabled");
-                $(".reccWeek").removeAttr("required");
-                $(".reccWeek").hide();
-            }else{
-                $(".reccWeek").removeAttr("disabled");
-                $(".reccWeek").attr("required","required");
-                $(".reccWeek").show();
-            }
-            $(".reccWeek").multiselect('destroy');
-            $(".reccWeek").multiselect();
-        });
 
         var csrftoken = "{{csrf_token}}";
         function csrfSafeMethod(method) {
@@ -1331,38 +1295,6 @@
                     xhr.setRequestHeader("X-CSRFToken", csrftoken);
                 }
             }
-        });
-        //ajax config ends
-
-        $("#submitAppointment").on("click",function(){
-            form = $('#createAppointmentForm')[0];
-            if(! form.checkValidity()) {
-                console.log("form error")
-                form.reportValidity();
-                return 0;
-            }
-            $.ajax({
-                url: '/makeAppointment/',
-                type: 'POST',
-                data: $(form).serialize(),
-                success: function(response) {
-                    if(response.status==1){
-                        console.log(response.msg)
-                        alert("Appointment Created Successfully !!");
-                        window.location.href("/enrolledTutors/");
-                    }else{
-                        options = "";
-                        for(i=0;i<response.errors.length;i++){
-                            options+="<li>"+response.errors[i]+"</li>";
-                        }
-                        console.log(options);
-                        $("#ErrorList").html(options);
-                    }
-
-                },
-                error: function(response) {}
-            });
-
         });
     });
 
@@ -1400,5 +1332,71 @@
             });
         });
 
+      $('#appointmenttutor').on('click',function(){
+        var tutorid = $(this).val();
+        document.getElementById('tutorId').value = tutorid;
+      });
+
+      //ajax config ends
+
+        $("#submitAppointment").on("click",function(){
+            form = $('#createAppointmentForm')[0];
+            if(! form.checkValidity()) {
+                console.log("form error")
+                form.reportValidity();
+                return 0;
+            }
+            var values = $(form).serialize();
+            values.tutorId = $('#appointmenttutor').val();
+            $.ajax({
+                url: '/makeAppointment/',
+                type: 'POST',
+                data: values,
+                success: function(response) {
+                    if(response.status==1){
+                        console.log(response.msg)
+                        alert("Appointment Created Successfully !!");
+                        window.location.href("/enrolledTutors/");
+                    }else{
+                        options = "";
+                        for(i=0;i<response.errors.length;i++){
+                            options+="<li>"+response.errors[i]+"</li>";
+                        }
+                        console.log(options);
+                        $("#ErrorList").html(options);
+                    }
+
+                },
+                error: function(response) {}
+            });
+
+        });
+
+    $("#recurrenceCheck").on("change",function(){
+            if(this.checked){
+                $(".reccBox .reccEntry").removeAttr("disabled");
+                $(".reccBox .reccEntry").attr("required","required");
+                $(".reccBox").show();
+            }else{
+                $(".reccBox .reccEntry").attr("disabled","disabled");
+                $(".reccBox .reccEntry").removeAttr("required");
+                $(".reccBox").hide();
+            }
+            $(".reccWeek").multiselect('destroy');
+            $(".reccWeek").multiselect();
+        });
+        $(".reccPattern").on("change",function(){
+            if(this.value=="D"){
+                $(".reccWeek").attr("disabled","disabled");
+                $(".reccWeek").removeAttr("required");
+                $(".reccWeek").hide();
+            }else{
+                $(".reccWeek").removeAttr("disabled");
+                $(".reccWeek").attr("required","required");
+                $(".reccWeek").show();
+            }
+            $(".reccWeek").multiselect('destroy');
+            $(".reccWeek").multiselect();
+        });
 </script>
 {% endblock %}

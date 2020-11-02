@@ -379,12 +379,9 @@ class MakeAppointment(models.Model):
     uid             = models.CharField(max_length=50,default="")
 
     def save(self, *args, **kwargs):
-        self.uid = token_urlsafe(50)
-        if(isinstance(self.days,list)):
-            self.days = json.dumps(self.days)
-            super(MakeAppointment, self).save(*args, **kwargs)
-        else:
-            raise TypeError(f'Days should a list but is {type(self.days)} - {self.days}')
+        self.uid = token_urlsafe(50)[:50]
+        print(self.uid)
+        super(MakeAppointment, self).save(*args, **kwargs)
 
 class temp(models.Model):
     recc            = models.BooleanField()
