@@ -6126,4 +6126,15 @@ def subjects(request):
 			data["categories"] = courses
 	return JsonResponse(data,safe=False)
 
-
+def ChatTutor(request,tutor_id):
+	try:
+		tutor = SignupTutor.objects.get(sno=tutor_id)
+		cid = request.session['Student']
+		student = SignupStudent.objects.get(snum=cid)
+	except:
+		return redirect('enrolledTutors')
+	context = {
+	'tutor':tutor,
+	'student':student
+	}
+	return render(request,'tutor/ChatTutor.html',context)
