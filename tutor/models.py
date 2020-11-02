@@ -710,7 +710,28 @@ class StudentMapping(models.Model):
     def Status(self):
         mapping = StudentMapping.objects.get(id=self.id)
         statues = StudentExamResult.objects.filter(student=mapping,exam = self.exam).first()
-        return statues
+        return statues.attempted
+    
+    @property
+    def ExamName(self):
+        return self.exam.Name
+    
+    @property
+    def ExamCourse(self):
+        return self.exam.course.courseName
+
+    @property
+    def ExamDate(self):
+        return self.exam.exam_date
+
+    @property
+    def ExamDuration(self):
+        return self.exam.exam_duration
+
+    @property
+    def total_questions(self):
+        return self.exam.question_count
+
 
 class StudentExamResult(models.Model):
     student = models.ForeignKey(
@@ -726,6 +747,18 @@ class StudentExamResult(models.Model):
 
     def __str__(self):
         return self.exam.Name
+
+    @property
+    def ExamName(self):
+        return self.exam.Name
+    
+    @property
+    def ExamCourse(self):
+        return self.exam.course.courseName
+
+    @property
+    def ExamDate(self):
+        return self.exam.exam_date
 
 class StudentAnswer(models.Model):
     student = models.ForeignKey(

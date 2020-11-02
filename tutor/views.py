@@ -2256,7 +2256,9 @@ def enrolledTutors(request):
 		la1 = request.POST.get('cityLat',"")
 		lo1 = request.POST.get('cityLng',"")
 		if(courceName):
+			print(courceName)
 			searchQuery = searchQuery.filter(signupTutorContinued__courseName=courceName)
+			print(searchQuery)
 		if(className):
 			searchQuery = searchQuery.filter(signupTutorContinued__forclass=className)
 		allData = searchQuery
@@ -2933,7 +2935,9 @@ def enrolledStudents(request):
 		print(PostTution.objects.all())
 		la1 = float(request.POST.get('cityLat'))
 		lo1 = float(request.POST.get('cityLng'))
+		print(budgetVal)
 		if(courceName):
+			print(courceName)
 			searchQuery &= Q(courseName=courceName)
 		if(className):
 			searchQuery &= Q(forclass=className)
@@ -3197,7 +3201,6 @@ def loginAll(request):
 
 def searchCoachingCenter(request):
 	centers = SignupCoachingCentre.objects.all()
-
 	if request.method == "POST":
 		feeVisible = request.POST.get('feeVisible')
 		filDistance = request.POST.get('distance')
@@ -3209,13 +3212,12 @@ def searchCoachingCenter(request):
 		allData = SignupCoachingCentre.objects.filter(searchQuery)
 		finalData = []
 		for x in allData:
-			la2 = float(x.latitude)
-			lo2 = float(x.longitude)
+			la2 = x.latitude
+			lo2 = x.longitude
 			distance = distanceBwAB((la1,lo1),(la2,lo2)).km
 			if(float(filDistance)>=float(distance)):
 				finalData.append(x)
 		return render(request, 'tutor/searchCoachingCenter.html',{'centers':finalData})
-
 	return render(request, 'tutor/searchCoachingCenter.html',{'centers':centers})
 
 def postNotice(request):
@@ -5010,8 +5012,6 @@ def calculate(answers):
     result = StudentExamResult.objects.get(
         student=student.student, exam=student.exam)
 
-
-
     # Correct Question
     print(result)
     correct_questions = answers.filter(check='correct')
@@ -6125,3 +6125,5 @@ def subjects(request):
 			courses = jsonLocalData[classname]
 			data["categories"] = courses
 	return JsonResponse(data,safe=False)
+
+
