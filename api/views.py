@@ -3066,3 +3066,139 @@ def ReviewTutors(request,tutor_id):
 		data.save()
 		data["success"] = 'Review Posted Successfully'
 		return Response(data)
+
+
+
+@api_view(["POST",])
+def multiple_ans(request):
+	data = {}
+    q_id = request.data.get('q_id')
+    input_ans = request.data.get('correct')
+    examid = int(request.data.get('examid'))
+    time = round(int(request.data.get('time')) / 60, 2)
+    extra_time = round(int(request.data.get('extra_time')) / 60, 2)
+    exam = Exam.objects.get(id=examid)
+    question = MultipleQuestion.objects.get(id=q_id)
+    cid = request.session['Student']
+    student = SignupStudent.objects.get(snum=cid)
+    s = StudentMapping.objects.get(student=student, exam=exam)
+    exist = StudentAnswer.objects.get_or_create(
+        qtype='short', question=question.question, student=s,exam=exam,marks=0,negative_marks=0.0)
+    print(exist)
+    if len(exist)>1:
+    	exist = exist[0]
+    exist.input_ans = input_ans
+    exist.correct_ans = question.correct_ans
+    exist.time = time
+    exist.extra_time = extra_time
+    exist.save()
+    data["success"] = "Question Saved Successfully"
+    return Response(data)
+
+@api_view(["POST",])
+def short_ans(request):
+	data = {}
+    q_id = request.data.get('q_id')
+    input_ans = request.data.get('correct')
+	time = round(int(request.data.get('time')) / 60, 2)
+    extra_time = round(int(request.data.get('extra_time')) / 60, 2)
+    examid = int(request.data.get('examid')) 
+    if request.FILES.get('ans_Image'):
+        ans_Image = request.FILES.get('ans_Image')
+    else:
+        ans_Image = False
+    cid = request.session['Student']
+    student = SignupStudent.objects.get(snum=cid)
+    question = ShortAnswerQuestion.objects.get(id=q_id)
+    exam = Exam.objects.get(id=examid)
+    s = StudentMapping.objects.get(student=student, exam=exam)
+    exist = StudentAnswer.objects.get_or_create(
+        qtype='short', question=question.question, student=s,exam=exam,marks=0,negative_marks=0.0)
+    print(exist)
+    if len(exist)>1:
+    	exist = exist[0]
+    exist.input_ans = input_ans
+    if ans_Image:
+        exist.input_ans_Image = ans_Image
+
+    exist.time = time
+    exist.extra_time = extra_time
+    exist.save()
+    data["success"] = "Question Saved Successfully"
+    return Response(data)
+
+@api_view(["POST",])
+def long_ans(request):
+	data = {}
+    q_id = request.data.get('q_id')
+    input_ans = request.data.get('correct')
+    time = round(int(request.data.get('time')) / 60, 2)
+    extra_time = round(int(request.data.get('extra_time')) / 60, 2)
+    examid = int(request.data.get('examid'))
+    if request.FILES.get('ans_Image'):
+        ans_Image = request.FILES.get('ans_Image')
+    else:
+        ans_Image = False
+    cid = request.session['Student']
+    student = SignupStudent.objects.get(snum=cid)
+    question = LongAnswerQuestion.objects.get(id=q_id)
+    exam = Exam.objects.get(id=examid)
+    s = StudentMapping.objects.get(student=student, exam=exam)
+    exist = StudentAnswer.objects.get_or_create(
+        qtype='short', question=question.question, student=s,exam=exam,marks=0,negative_marks=0.0)
+    print(exist)
+    if len(exist)>1:
+    	exist = exist[0]
+    exist.input_ans = input_ans
+    if ans_Image:
+        exist.input_ans_Image = ans_Image
+
+    exist.time = time
+    exist.extra_time = extra_time
+    exist.save()
+    data["success"] = "Question Saved Successfully"
+    return Response(data)
+
+@api_view(["POST",])
+def tof_ans(request):
+	data = {}
+    q_id = request.data.get('q_id')
+    input_ans = request.data.get('correct')
+    time = round(int(request.data.get('time')) / 60, 2)
+    extra_time = round(int(request.data.get('extra_time')) / 60, 2)
+    examid = int(request.data.get('examid'))
+    question = BooleanQuestion.objects.get(id=q_id)
+    cid = request.session['Student']
+    student = SignupStudent.objects.get(snum=cid)
+    exam = Exam.objects.get(id=examid)
+    s = StudentMapping.objects.get(student=student, exam=exam)
+    exist = StudentAnswer.objects.get_or_create(
+        qtype='short', question=question.question, student=s,exam=exam,marks=0,negative_marks=0.0)
+    print(exist)
+    if len(exist)>1:
+    	exist = exist[0]
+    exist.input_ans = input_ans
+    exist.time = time
+    exist.extra_time = extra_time
+    exist.save()
+    data["success"] = "Question Saved Successfully"
+    return Response(data)
+
+
+@api_view(["GET"])
+def StudentAnswersAll(request,exam_id):
+	data = {}
+	studentLoggedin = request.session.get('Student')
+	if not studentLoggedin:
+		data["error"] = 'Student Not Logged In'
+		return Response(data)
+	student = SignupStudent.objects.get(snum=studentLoggedin)
+	try:
+		exam = Exam.objects.get(id=exam_id)
+	except:
+		data["error"] = 'Not A valid Exam ID'
+		return Response(data)
+	if request.method == "GET":
+		answers = StudentAnswer.objects.filter(Q(student=student)&Q(exam=exam))
+		serializer = SignupStudentAnswersAllSerializer(answers,many=True)
+		return Response(serializer.data)

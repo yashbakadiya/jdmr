@@ -96,6 +96,11 @@ urlpatterns = [
 	path('Exam/Questions/Boolean/Edit/<question_id>',EditBooleanQuestionsTutor,name="editbooleanquestions"),
 	path('Exam/Questions/Multiple/Edit/<question_id>',EditMultipleQuestionsTutor,name="editmultiplequestions"),
 	path('Exam/Questions/Long/Edit/<question_id>',EditLongQuestionsTutor,name="editlongquestions"),
+	path('Exam/Answers/Multiple/Ans/Save',multiple_ans,name="savemultipleansapi"),
+	path('Exam/Answers/Short/Ans/Save',short_ans,name="saveshortansapi"),
+	path('Exam/Answers/Long/Ans/Save',long_ans,name="savelongansapi"),
+	path('Exam/Answers/Boolean/Ans/Save',tof_ans,name="savebooleanansapi"),
+	path('Student/Answers/All/<exam_id>',StudentAnswersAll,name="studentanswersall"),
 
 ######################################## Student Apis ##########################################################
 	path('Student/Login/All',loginStudent,name="loginstudentapi"),

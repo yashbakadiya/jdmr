@@ -195,3 +195,8 @@ class CenterReviewsSerializer(serializers.ModelSerializer):
     class Meta:
         model = InstituteRatings
         fields = "__all__"
+
+class SignupStudentAnswersAllSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = StudentAnswer
+        fields = "__all__"

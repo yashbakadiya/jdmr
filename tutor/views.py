@@ -5891,10 +5891,10 @@ def EditMultipleQuestionsTutor(request,question_id):
 						option = options[i]
 						).save()
 
-		# try:
-		# 	question.save()
-		# except:
-		# 	errors.append('Error Occured! Try Again')
+		try:
+			question.save()
+		except:
+			errors.append('Error Occured! Try Again')
 		
 		context={
 		'question':question,
