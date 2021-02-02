@@ -1,0 +1,422 @@
+{% extends 'dashboard/institute-dashboard.html' %}
+{% load static %}
+{% block head-title %}
+Institute Dashboard
+{% endblock head-title %}
+
+
+{% block extra-stylesheets %}
+
+<link rel="stylesheet" type="text/css" href="{% static 'plugins/bootstrap-select/bootstrap-select.min.css' %}">
+
+<link href="{% static 'assets/css/ui-kit/custom-pagination.css' %}" rel="stylesheet" type="text/css" />
+
+
+<link href="{% static 'plugins/jquery-ui/jquery-ui.min.css' %}" rel="stylesheet" type="text/css" />
+<link href="{% static 'assets/css/components/searchbox/search-multiple.css' %}" rel="stylesheet" type="text/css" />
+
+<link href="{% static 'plugins/animate/animate.css' %}" rel="stylesheet" type="text/css" />
+<link href="{% static 'assets/css/modals/component.css' %}" rel="stylesheet" type="text/css" />
+
+<link href="{% static 'assets/css/ui-kit/custom-modal.css' %}" rel="stylesheet" type="text/css" />
+
+<link href="{% static 'assets/css/design-css/design.css' %}" rel="stylesheet" type="text/css" />
+<link href="{% static 'plugins/date_time_pickers/bootstrap_date_range_picker/daterangepicker.css' %}" rel="stylesheet" type="text/css">
+<link href="{% static 'plugins/date_time_pickers/bootstrap-datetimepicker/bootstrap-datetimepicker.min.css' %}" rel="stylesheet" type="text/css">
+<link href="{% static 'plugins/timepicker/jquery.timepicker.css' %}" rel="stylesheet" type="text/css">
+<link href="{% static 'plugins/date_time_pickers/custom_datetimepicker_style/custom_datetimepicker.css' %}" rel="stylesheet" type="text/css">
+
+<link rel="stylesheet" type="text/css" href="{% static 'assets/css/components/custom-page_style_datetime.css' %}">
+{% endblock extra-stylesheets %}
+
+
+{% block extra-style %}
+<style>
+  .special {
+    font-weight: bold !important;
+    color: #fff !important;
+    background: #e7515a !important;
+    text-transform: uppercase;
+  }
+
+  .bootstrap-select.btn-group .dropdown-menu a.dropdown-item span.dropdown-item-inner {
+    color: #171820;
+  }
+
+  .dropdown-item:active {
+    background-color: #f1f3f9;
+  }
+
+  .dropdown-menu.select-dropdown .dropdown-item:focus,
+  .dropdown-menu.select-dropdown .dropdown-item:hover {
+    background-color: #e6e3fe;
+  }
+
+  .dropdown-item.active {
+    background-color: #f1f3f0;
+  }
+
+  .row [class*="col-"] .widget .widget-header h4 {
+    color: #6156ce;
+  }
+
+  .btn-group.bootstrap-select.dropup:focus {
+    outline: none;
+  }
+</style>
+{% endblock extra-style %}
+
+{% block notifications %}
+{% if messages %}
+{% for k in messages%}
+<div class="dropdown-item">
+  <a href="">
+    <div class="media">
+      <div class="media-body">
+        <span>
+          <div class="alert alert-{{k.tags}} alert-dismissible fade show" role="alert">
+            <b>{{ k }} !</b>
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+        </span>
+      </div>
+    </div>
+  </a>
+</div>
+{% endfor %}
+{% else %}
+<div class="dropdown-item">
+  <a href="">
+    <div class="media">
+      <div class="media-body">
+        <span>No Notifications</span>
+      </div>
+    </div>
+  </a>
+</div>
+{% endif %}
+{% endblock notifications %}
+
+
+{% block main-content %}
+
+
+
+
+<div class="container-fluid">
+
+  <br>
+  <br>
+  <div class="row layout-spacing ">
+    <div class="col-lg-4 h-100">
+      <div class="card">
+        <div class="card-header">
+          <h2 style="color: rgb(66, 8, 8);">Add Batch Timing</h2>
+        </div>
+        <br>
+        <div class="card-body">
+          <form action="." method="post">{% csrf_token %}
+            <div class="input-group form-group">
+              <div class="input-group-prepend">
+                <span class="input-group-text"><i class="fas fa-user"></i>Course Name</span>
+              </div>
+              <select class="form-control" id="courseName" name="courseName" required>
+                <option selected="selected" disabled>Not Selected</option>
+                {% for i in courses %}
+                <option value="{{ i.id }}">{{ i.courseName }}</option>
+                {% endfor %}
+              </select>
+            </div>
+            <br>
+            <div class="input-group form-group">
+              <div class="input-group-prepend">
+                <span class="input-group-text"><i class="fas fa-user"></i>Select Class<span class="text-danger">*</span></span>
+              </div>
+              <select class="selectpicker multiselect multiple-checkboxes" data-actions-box="true" id="forclass"
+                name='forclass' multiple="multiple" required>
+                <option>Choose Course</option>
+              </select>
+            </div>
+            <br>
+            <div class="input-group form-group">
+              <div class="input-group-prepend">
+                <span class="input-group-text"><i class="fas fa-user"></i>Batch Name</span>
+              </div>
+              <input type="text" class="form-control" id="batchName" name='batchName' placeholder="Batch Name"
+                required>
+            </div>
+            <br>
+            <div class="input-group form-group">
+              <div class="input-group-prepend">
+                <span class="input-group-text"><i class="fas fa-user"></i>Start Time</span>
+              </div>
+              <input type="text" name="startTime" class="form-control timepicker mb-0">
+            </div>
+            <br>
+            <div class="input-group form-group">
+              <div class="input-group-prepend">
+                <span class="input-group-text"><i class="fas fa-user"></i>End Time</span>
+              </div>
+              <input type="text" name="endTime" class="form-control timepicker mb-0">
+            </div>
+            <br>
+            <div class="input-group form-group">
+              <div class="input-group-prepend">
+                <span class="input-group-text"><i class="fas fa-user"></i>Select Days<span class="text-danger">*</span></span>
+              </div>
+              <select class="selectpicker multiselect multiple-checkboxes" data-actions-box="true" id="forclass"
+                name='forclass' multiple="multiple" required>
+                <option value="Sunday">Sunday</option>
+                <option value="Monday">Monday</option>
+                <option value="Tuesday">Tuesday</option>
+                <option value="Wednesday">Wednesday</option>
+                <option value="Thursday">Thursday</option>
+                <option value="Friday">Friday</option>
+                <option value="Saturday">Saturday</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <input type="submit" value="Add" class="btn btn-success float-right login_btn">
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-lg-8 h-100">
+      <div class="col-lg-12 col-md-12 layout-spacing">
+        <div class="statbox widget box box-shadow">
+          <div class="widget-header">
+            <div class="row">
+              <div class="col-lg-3 col-md-6 col-sm-12 col-12">
+                <h4>View Courses</h4>
+              </div>
+              <div class="col-lg-5 col-md-6 col-sm-12 filtered-list-search mx-auto">
+                <form class="form-inline my-2 my-lg-0 justify-content-center">
+                  <div class="w-100">
+                    <input type="text" class="w-100 form-control product-search br-30 mb-4" id="input-search"
+                      placeholder="Search...">
+                    <button class="btn btn-primary" type="submit"><i class="flaticon-search"></i></button>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+          <div class="widget-content widget-content-area">
+            <div class="table-responsive">
+              <table class="table table-bordered table-hover table-striped table-checkable table-highlight-head mb-4">
+                  <thead>
+                      <tr>
+                          <th class="">#</th>
+                          <th class="">COURSE NAME</th>
+                          <th class="">CLASS</th>
+                          <th class="text-center">Actions</th>
+                      </tr>
+                  </thead>
+                  <tbody>
+                    
+                    {% for i in course %}
+                    <tr id="{{ i.pk }}">
+                      <td>{{ forloop.counter }}</td>
+                      <td>{{i.courseName}}</td>
+                      <td>{{i.forclass}}</td>
+                      <td class="text-center">
+                        <ul class="table-controls">
+                            <li>
+                              <a class = "popup-with-form" data-toggle="modal" data-target="#archive-{{i.pk}}"  href="#archive-{{i.pk}}" title="Archive"><i class="flaticon-download  bg-primary p-1 text-white br-6 mb-1"></i></a> 
+                            </li>
+                            <li>
+                              <a class = "popup-with-form" data-toggle="modal" data-target="#edit-{{i.pk}}" href="#edit-{{i.pk}}"  title="Edit"><i class="flaticon-edit  bg-success p-1 text-white br-6 mb-1"></i></a>
+                            </li>
+                            <li>
+                              <a class = "popup-with-form" data-toggle="modal" data-target="#delete-{{i.pk}}" href="#delete-{{i.pk}}" title="Delete"><i class="flaticon-delete  bg-danger p-1 text-white br-6 mb-1"></i></a>
+                            </li>
+                        </ul>
+                    </td>
+                  </tr>
+
+                  <div class="modal fade" id="archive-{{i.pk}}" tabindex="-1" role="dialog" aria-labelledby="archive-{{i.pk}}=Title" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="archive-{{i.pk}}-Title">Archive Course</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <h4 class="modal-heading mb-4 mt-2">ARCHIVE COURSE</h4>
+                                    <p class="modal-text mb-4">
+                                      Do you really want to archive this course?
+                                    </p>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-warning btn-rounded mb-3 mt-3">Archive</button>
+                                    <button type="button" class="btn btn-dark btn-rounded mb-3 mt-3" data-dismiss="modal">Close</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                  <div class="modal fade" id="delete-{{i.pk}}" tabindex="-1" role="dialog" aria-labelledby="delete-{{i.pk}}=Title" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="delete-{{i.pk}}-Title">Delete Course</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <h4 class="modal-heading mb-4 mt-2">DELETE COURSE</h4>
+                                    <p class="modal-text mb-4">
+                                      Do you really want to delete this course?
+                                    </p>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-danger btn-rounded mb-3 mt-3">Delete</button>
+                                    <button type="button" class="btn btn-dark btn-rounded mb-3 mt-3" data-dismiss="modal">Close</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                  
+                  <div class="modal fade" id="edit-{{i.pk}}" tabindex="-1" role="dialog" aria-labelledby="edit-{{i.pk}}-Label" aria-hidden="true">
+                    <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+                      <div class="modal-content">
+
+                        <div class="modal-header" id="edit-{{i.pk}}-Label">
+                          <h4 class="modal-title">Edit Course</h4>
+                        </div>
+                        <div class="modal-body text-center">
+
+                          <form class="mt-0"  action="#"  method="post">{% csrf_token %}
+                            <div class="input-group form-group">
+                              <div class="input-group-prepend">
+                                <span class="input-group-text"><i class="fas fa-user"></i>Course Name</span>
+                              </div>
+                              <input type="text" class="form-control" name='courseName' placeholder="Course Name" value="{{ i.courseName }}"
+                                required>
+                            </div>
+                            <br>
+                            <div class="input-group form-group">
+                              <div class="input-group-prepend">
+                                <span class="input-group-text">Select Class</span>
+                              </div>
+                              <select name="forclass" class="selectpicker" multiple data-actions-box="true">
+                                <option {% if "Nursery" in i.forclass %}
+                                    selected
+                                  {% endif %}
+                                >Nursery</option>
+                                <option {% if "I" in i.forclass %}
+                                selected
+                              {% endif %}>I </option>
+                                <option {% if "II" in i.forclass %}
+                                selected
+                              {% endif %}>II</option>
+                                <option{% if "III" in i.forclass %}
+                                selected
+                              {% endif %}>III</option>
+                                <option{% if "IV" in i.forclass %}
+                                selected
+                              {% endif %}>IV</option>
+                                <option{% if "V" in i.forclass %}
+                                selected
+                              {% endif %}>V</option>
+                                <option{% if "VI" in i.forclass %}
+                                selected
+                              {% endif %}>VI</option>
+                                <option{% if "VII" in i.forclass %}
+                                selected
+                              {% endif %}>VII</option>
+                                <option{% if "VIII" in i.forclass %}
+                                selected
+                              {% endif %}>VIII</option>
+                                <option{% if "IX" in i.forclass %}
+                                selected
+                              {% endif %}>IX</option>
+                                <option{% if "X" in i.forclass %}
+                                selected
+                              {% endif %}>X</option>
+                                <option{% if "XI" in i.forclass %}
+                                selected
+                              {% endif %}>XI</option>
+                                <option{% if "XII" in i.forclass %}
+                                selected
+                              {% endif %}>XII</option>
+                              </select>
+                            </div>
+                            <br>
+                            <div class="form-group">
+                              <input type="submit" value="Update" class="btn btn-warning float-right login_btn">
+                            </div>
+                          </form>
+
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  
+                
+                    {% endfor %}
+                  </tbody>
+              </table>
+              <div class="widget-content widget-content-area text-center">
+                <ul class="pagination pagination-style-1 justify-content-center mb-5">
+                  {% if course.has_previous %}
+                  <li><a href="?page={{ course.previous_page_number }}">&laquo;</a></li>
+                  {% else %}
+                  {% endif %}
+                  {% for i in course.paginator.page_range %}
+                  {% if course.number == i %}
+                  <li><a href="javascript:void(0);" class="active">{{ i }}</a></li>
+                  {% else %}
+                  <li><a href="?page={{ i }}">{{ i }}</a></li>
+                  {% endif %}
+                  {% endfor %}
+                  {% if course.has_next %}
+                  <li><a href="?page={{ course.next_page_number }}">&raquo;</a></li>
+                  {% else %}
+                  {% endif %}
+                </ul>
+              </div>
+          </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+<script>
+  $(document).ready(function () {
+    $('#multiple-checkboxes').multiselect({
+      includeSelectAllOption: true,
+    });
+  });
+</script>
+{% endblock main-content %}
+
+
+{% block extra-script %}
+
+<script src="{% static 'plugins/bootstrap-select/bootstrap-select.min.js' %}"></script>
+
+
+<script src="{% static 'assets/js/components/search/autocomplete.js' %}"></script>
+<script src="{% static 'assets/js/components/custom-search-multiple.js' %}"></script>
+
+<script src="{% static 'assets/js/modal/classie.js' %}"></script>
+<script src="{% static 'assets/js/modal/modalEffects.js' %}"></script>
+
+
+<script src="{% static 'assets/js/design-js/design.js' %}"></script>
+<script src="{% static 'plugins/date_time_pickers/bootstrap_date_range_picker/moment.min.js' %}"></script>
+<script src="{% static 'plugins/date_time_pickers/bootstrap_date_range_picker/daterangepicker.js' %}"></script>
+<script src="{% static 'plugins/timepicker/jquery.timepicker.js' %}"></script>
+<script src="{% static 'plugins/date_time_pickers/bootstrap-datetimepicker/bootstrap-datetimepicker.min.js' %}"></script>
+<script src="{% static 'plugins/date_time_pickers/bootstrap_date_range_picker/daterangepicker_examples.js' %}"></script>
+<script src="{% static 'plugins/timepicker/custom-timepicker.js' %}"></script>
+{% endblock extra-script %}

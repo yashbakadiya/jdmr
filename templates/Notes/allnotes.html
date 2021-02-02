@@ -1,0 +1,82 @@
+{% extends 'dashboard/student-dashboard.html' %}
+{% load static %}
+
+{% block main-content %}
+    <main class="mt-5">
+        <div class="col-xl-12 col-md-12 col-12 mt-5">
+            <div class="statbox widget box box-shadow">
+                <div class="widget-header">
+                    <div class="row">
+                        <div class="col-xl-12 col-md-12 col-12">
+                            <h4 class="p-2" style="color:black;"><b>Notes</b></h4>
+                        </div>
+                    </div>
+                </div>
+                {% if notes %}
+                <div class="widget-content widget-content-area">
+                    <div class="table-responsive">
+                        <table id="htmlgrid" class="testgrid table table-striped table-bordered table-hover mb-4">
+                            <tr>
+                                <th>#</th>
+                                <th>Note Title</th>
+                                <th>Subject</th>
+                                <th>Description</th>
+                                <th class="text-center">View</th>  
+                            </tr>
+                            {% for i in notes %}
+                            <tr>
+                                <td>{{forloop.counter}}</td>
+                                <td><p style="color: black;font-size: 14px;">{{i.title}}</p></td>
+                                <td><p style="color: black;font-size: 14px;">{{i.subject}}</p></td>
+                                <td>{{i.description}}</td>
+                                <td style="text-align: center;">
+                                   <a class="btn btn-primary" href="{{i.notes.url}}" target="_blank">View Note</a>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </table>
+                    </div>
+                </div>
+                {% else %}
+                <div class="widget-header">
+                    <div class="row">
+                        <div class="col-xl-12 col-md-12 col-12">
+                            <h4 class="p-2"><b>No Notes to show</b></h4>
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </main>
+    <script type="text/javascript">
+        trlist = $("tbody>tr");
+        $("body").on('input',"#searchbox",function(){
+            trlist.hide();
+            search = this.value.toLowerCase();
+            len = search.length;
+            for(i=0;i<trlist.length;i++){
+                if(trlist[i].children[0].textContent==""){
+                    cont = cont;
+                }
+                else{
+                    cont = trlist[i].children[0].textContent.toLowerCase();
+                }
+                if(cont.search(search)!=-1){
+                    $(trlist[i]).show();
+                }
+                if(trlist[i].children[1].textContent==""){
+                    cont2 = cont2;
+                }
+                else{
+                    cont2 = trlist[i].children[1].textContent.toLowerCase();
+                }
+                if(cont2.search(search)!=-1){
+                    $(trlist[i]).show();
+                }
+            }
+
+        });
+
+    </script>
+    {% endblock main-content %}

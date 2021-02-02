@@ -1,0 +1,162 @@
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link href="https://fonts.googleapis.com/css?family=Droid+Sans" rel="stylesheet">
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src='https://kit.fontawesome.com/a076d05399.js'></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/2.0.2/anime.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.3.1.js"
+        integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60=" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js"
+        integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut" crossorigin="anonymous">
+    </script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js"
+        integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous">
+    </script>
+    <script src="https://kit.fontawesome.com/d24f94013c.js" crossorigin="anonymous"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-multiselect/0.9.13/js/bootstrap-multiselect.js">
+    </script>
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-multiselect/0.9.13/css/bootstrap-multiselect.css">
+
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.9/dist/js/bootstrap-select.min.js"></script>
+
+    <!-- (Optional) Latest compiled and minified JavaScript translation files -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.9/dist/js/i18n/defaults-*.min.js"></script>
+
+    <!--Bootsrap 4 CDN-->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
+        integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+    <!--Fontawesome CDN-->
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css"
+        integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.3.2/jspdf.min.js"></script>
+
+    <!-- Chart Js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.5.3/jspdf.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/0.4.1/html2canvas.js"></script>
+
+
+    <title>Dashboard</title>
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.22/css/dataTables.bootstrap4.min.css">
+
+    <!-- Data Table Js -->
+    <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+    <script src="https://cdn.datatables.net/1.10.22/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.10.22/js/dataTables.bootstrap4.min.js"></script>
+    <style>
+        {% block css %}
+        {% endblock %}
+    </style>
+
+    <!--Custom styles-->
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/dashboard.css' %}" type="text/css">
+</head>
+<style media="screen">
+    .navbar-default .navbar-nav>li>a {
+        line-height: normal !important;
+    }
+
+    #notices>li {
+        white-space: normal;
+        width: 25rem;
+    }
+</style>
+
+<body>
+    <aside class="side-nav" id="show-side-navigation1"> 
+        <div class="heading">
+            <img id="sideNavImage"
+                src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png" alt="">
+            <div class="info">
+                <h3><a href="#">Student</a></h3>
+                <p class="StudentNameHere">{{request.session.user}}</p>
+            </div>
+        </div>
+        <ul class="categories">
+            <li><i class="fa fa-book fa-fw" aria-hidden="true"></i><a href="{% url 'EndrolledInstitute' %}"> Institute enrolled</a>
+            </li>
+            <li><i class="fa fa-users fa-fw" aria-hidden="true"></i><a href="{% url 'searchCoachingCenter' %}"> Search coaching
+                    Center</a>
+            </li>
+            <li><i class="fa fa-users fa-fw" aria-hidden="true"></i><a href="{% url 'enrolledTutors' %}"> Search tutor</a>
+            </li>
+            <li><i class="fa fa-credit-card fa-fw" aria-hidden="true"></i><a href="{% url 'StudentCalendar' %}"> Ongoing Class</a>
+            </li>
+            <li><i class="fa fa-credit-card fa-fw" aria-hidden="true"></i><a href="{% url 'postAssignment' %}"> Post
+                    Assignment</a>
+            </li>
+            <li><i class="fa fa-credit-card fa-fw" aria-hidden="true"></i><a href="{% url 'postTution' %}"> Post Tutor
+                    Requirement</a>
+            </li>
+            <li><i class="fa fa-credit-card fa-fw" aria-hidden="true"></i><a class="drop-down" href="#"> View Post</a>
+                <ul class="side-nav-dropdown">
+                    <li><a href="{% url 'viewAssignment' %}"> Assignment</a>
+                    </li>
+                    <li><a href="{% url 'viewTution' %}"> Tuition</a>
+                    </li>
+                </ul>
+            </li>
+            <li><i class="fa fa-credit-card fa-fw" aria-hidden="true"></i><a href="{% url 'StudentChat' %}">Chat</a>
+            </li>
+            <li><i class="fa fa-credit-card fa-fw" aria-hidden="true"></i><a href="{% url 'searchcourses' %}">Search Tutorials</a>
+            </li>
+            <li><i class="fa fa-credit-card fa-fw" aria-hidden="true"></i><a href="{% url 'studentexams' %}">Exams</a>
+            </li>
+            <li><i class="fa fa-credit-card fa-fw" aria-hidden="true"></i><a href="{% url 'studentexamresults' %}">Results</a>
+            </li>
+            <li><i class="fa fa-credit-card fa-fw" aria-hidden="true"></i><a href="{% url 'notesstudents' %}">Notes</a>
+            </li>
+        </ul>
+    </aside>
+    <section id="contents">
+        <nav class="navbar navbar-default navbar-expand-md">
+            <button type="button" class="navbar-toggler collapsed" data-toggle="collapse"
+                data-target="#bs-example-navbar-collapse-1" aria-expanded="false"> <i
+                    class="fa fa-align-right"></i></button>
+
+            <a class="navbar-brand" href="{% url 'dashboard' %}">Student<span class="main-color">Dashboard</span></a>
+            <ul class="nav navbar-nav">
+                <li class="nav-item"><a href="#" class="nav-link"><i data-show="show-side-navigation1"
+                            class="fa fa-bars show-side-btn"></i></a>
+                </li>
+            </ul>
+            <div class="collapse navbar-collapse ml-auto" id="bs-example-navbar-collapse-1">
+                <ul class="nav navbar-nav ml-auto">
+
+                    <li class="dropdown nav-item"> <a href="#" class="dropdown-toggle nav-link" data-toggle="dropdown"
+                            role="button" aria-haspopup="true" aria-expanded="false">PROFILE <span
+                                class="caret"></span></a>
+                        <ul class="dropdown-menu dropdown-menu-right">
+                            <li class="dropdown-item"><a href="/profileCoachingCentre/"><i class="fa fa-user-o fw"></i>
+                                    My account</a>
+                            </li>
+                            <li class="dropdown-item"><a href=""><i class="fa fa-envelope-o fw"></i> My inbox</a>
+                            </li>
+                            <li class="dropdown-item"><a href="/profileCoachingCentre#oldpassword"><i
+                                        class="fa fa-envelope-o fw"></i> Change Password</a>
+                            </li>
+                            <li class="dropdown-item"><a href=""><i class="fa fa-question-circle-o fw"></i> Help</a>
+                            </li>
+                            <hr>
+                            <li class="dropdown-item"><a href="{% url 'Logout' %}"><i class="fa fa-sign-out"></i>
+                                    Log out</a>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+        <div class="container-fluid mt-3">
+            {% block body %}{% endblock %}
+        </div>
+    </section>
+    <script type="text/javascript" src="{% static 'js/dashboard.js' %}"></script>
+</body>
+</html>

@@ -1,0 +1,65 @@
+{% extends 'dashboard/Tutor-dashboard.html' %}
+{% load static %}
+
+{% block main-content %}
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCBJybI10-Xa43-F5GSad1i0Y9W3yqlW6Q&libraries=places&v=3" defer></script>
+
+<div class="container">
+    <div class="col-lg-12 col-md-12 col-sm-12 col-12" style="color:black;">
+        <div class="card">
+            <div class="card-header">
+                <h2><b>Add Videos</b></h2>
+            </div>
+        <div class="card-body container">
+            <form id='submitForm' method='post' action="" enctype= multipart/form-data onsubmit="valid()">{% csrf_token %}
+                <div id='mainForm' class="table-responsive">
+                    <div id='entry1'>
+                        <table id="htmlgrid" class="testgrid table table-striped table-bordered table-hover mb-4" style="color:black;">
+                            <thead>
+                                <th style="color:black;">Add Video*</th>
+                                <th style="color:black;">Video Title*</th>
+                                <th style="color:black;">Video Description</th>
+                                <th></th>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                <td>
+                                    <input class="rounded" type="file" name="video" required>
+                                </td>
+                                <td>
+                                    <input type="text" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" name="title" placeholder="Enter Video Title" required>
+                                </td>
+                                <td>
+                                    <textarea type="text" rows="1" class="form-control" id="exampleInputEmail1" name="description" aria-describedby="emailHelp" placeholder="Enter Video Description" required></textarea>
+                                </td>
+                                <td>
+                                    <a id='add' class="btn btn-primary">Add Video</a>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <hr>
+                <div class="col-sm-12 col-12 d-flex justify-content-end">
+                    <button name="submit" type="submit" class="btn btn-warning">Add Videos</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+</div>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script type="text/javascript">
+    $(document).ready(function(){
+        $("#add").click(function(){
+            var AddVideo = "<tr>"
+            AddVideo += "<td><input class='rounded' type='file' name='video'></td>"
+            AddVideo += "<td><input type='text' name='title' class='form-control' id='exampleInputEmail1' aria-describedby='emailHelp' placeholder='Enter Video Title'></td>"
+            AddVideo += "<td><textarea type='text' rows='1' name='description' class='form-control' id='exampleInputEmail1' aria-describedby='emailHelp' placeholder='Enter Video Description'></textarea></td>"
+            AddVideo +=  "</tr>";
+                    $("table tbody").append(AddVideo);
+        })
+    })
+</script>
+{% endblock main-content %}

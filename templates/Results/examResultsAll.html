@@ -1,0 +1,82 @@
+{% extends 'dashboard/student-dashboard.html' %}
+{% load static %}
+{% block main-content %}
+<main>
+    <div class="container mt-4">
+        <div class="statbox widget box box-shadow">
+                <div class="widget-header">
+                    <div class="row">
+                        <div class="col-xl-12 col-md-12 col-12">
+                            <h4 class="p-2" style="color:black;"><b>List of Results</b></h4>
+                        </div>
+                    </div>
+                </div>
+                {% if results %}
+                <form action="" method="post">{% csrf_token %}
+                <div class="widget-content widget-content-area">
+                    <div class="table-responsive">
+                        <table id="htmlgrid" class="testgrid table table-striped table-bordered table-hover mb-4">
+                            <tr>
+                                <th>#</th>
+                                <th>Exam Name</th>
+                                <th>Course</th>
+                                <th>Exam Date</th>
+                                <th>Total Questions</th>
+                                <th>Percentage</th>
+                                <th>Status</th>
+                                <th>Report</th>
+                            </tr>
+                            {% for i in results %}
+                            {% if i.attempted %}
+                            <tr>
+                                <td>{{forloop.counter}}</td>
+                                <td><p style="color: black;font-size: 14px;">{{i.exam.Name}}</p></td>
+                                <td><p style="color: black;font-size: 14px;">{{i.exam.course.courseName}}</p></td>
+                                <td>{{i.exam.exam_date}}</td>
+                                <td>{{i.exam.question_count}}</td>
+                                <td>{{i.percentage}}</td>
+                                {% if i.pass_status %}
+                                <td><a class="btn btn-success">Pass</a></td>
+                                {% else %}
+                                <td><a class="btn btn-danger" style="color: white;">Fail</a></td>
+                                {% endif %}
+                                <td><a href="{% url 'detailed_report' i.id %}" class="btn btn-success">Report</a></td>                     
+                            </tr>
+                            {% endif %}
+                            {% endfor %}
+                        </table>
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+    </main>
+    <script type="text/javascript">
+        trlist = $("tbody>tr");
+        $("body").on('input',"#searchbox",function(){
+            trlist.hide();
+            search = this.value.toLowerCase();
+            len = search.length;
+            for(i=0;i<trlist.length;i++){
+                if(trlist[i].children[0].textContent==""){
+                    cont = cont;
+                }
+                else{
+                    cont = trlist[i].children[0].textContent.toLowerCase();
+                }
+                if(cont.search(search)!=-1){
+                    $(trlist[i]).show();
+                }
+                if(trlist[i].children[1].textContent==""){
+                    cont2 = cont2;
+                }
+                else{
+                    cont2 = trlist[i].children[1].textContent.toLowerCase();
+                }
+                if(cont2.search(search)!=-1){
+                    $(trlist[i]).show();
+                }
+            }
+        });
+
+    </script>
+    {% endblock main-content %}

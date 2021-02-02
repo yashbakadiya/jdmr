@@ -1,0 +1,8 @@
+{% extends 'Exam/base.html' %} {% block content%}
+<div class="container">
+  <div class="alert alert-success">
+    You have successfully submitted the Exam
+  </div>
+  <a class="btn btn-info" href="{% url 'studentexams' %}">Return</a>
+</div>
+{% endblock %}

@@ -1,0 +1,125 @@
+{% extends "dashboard/base.html" %}
+{% load static %}
+{% block head-title %}
+Institute Dashboard
+{% endblock head-title %}
+
+
+{% block extra-stylesheets %}
+
+{% endblock extra-stylesheets %}
+
+
+{% block extra-style %}
+
+{% endblock extra-style %}
+
+{% block notifications %}
+{% if messages %}
+{% for k in messages%}
+<div class="dropdown-item">
+  <a href="">
+    <div class="media">
+      <div class="media-body">
+        <span>
+          <div class="alert alert-{{k.tags}} alert-dismissible fade show" role="alert">
+            <b>{{ k }} !</b>
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+        </span>
+      </div>
+    </div>
+  </a>
+</div>
+{% endfor %}
+{% else %}
+<div class="dropdown-item">
+  <a href="">
+    <div class="media">
+      <div class="user-profile">
+        <img src="{% static 'assets/img/90x90.jpg' %}" alt="admin-profile" class="img-fluid">
+      </div>
+      <div class="media-body">
+        <span>Irene Collins</span>
+      </div>
+    </div>
+  </a>
+</div>
+{% endif %}
+{% endblock notifications %}
+
+{% block main-content %}
+<div class="page-header">
+  <div class="page-title">
+    <h3>Institute Dashboard</h3>
+  </div>
+</div>
+
+<div class="row layout-spacing ">
+
+  <div class="col-xl-4 mb-xl-0 col-lg-6 mb-4 col-md-6 col-sm-12">
+    <div class="widget-content-area  data-widgets br-4">
+      <div class="widget  t-sales-widget">
+        <div class="media">
+          <div class="icon ml-2">
+            <i class="">
+
+              <img src="{% static 'assets/img/teaching-type.png' %}" style="width: 30px; height: 30px;" alt="">
+            </i>
+          </div>
+          <div class="media-body text-right">
+            <p class="widget-text mb-0">Courses Count</p>
+            <p class="widget-numeric-value">98,225</p>
+          </div>
+        </div>
+        <p class="widget-total-stats mt-2">94% New Enrollments</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-xl-4 mb-xl-0 col-lg-6 mb-4 col-md-6 col-sm-12">
+    <div class="widget-content-area  data-widgets br-4">
+      <div class="widget  t-order-widget">
+        <div class="media">
+          <div class="icon ml-2">
+            <i class="">
+              <img src="{% static 'assets/img/student.png' %}" style="width: 30px; height: 30px;" alt="">
+            </i>
+          </div>
+          <div class="media-body text-right">
+            <p class="widget-text mb-0">Active Students</p>
+            <p class="widget-numeric-value">24,017</p>
+          </div>
+        </div>
+        <p class="widget-total-stats mt-2">552 New Students</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-xl-4 col-lg-6 col-md-6 col-sm-12 mb-sm-0 mb-4">
+    <div class="widget-content-area  data-widgets br-4">
+      <div class="widget  t-customer-widget">
+        <div class="media">
+          <div class="icon ml-2">
+            <i class="">
+              <img src="{% static 'assets/img/tutorials.png' %}" style="width: 30px; height: 30px;" alt=""></i>
+          </div>
+          <div class="media-body text-right">
+            <p class="widget-text mb-0">Tutors Count</p>
+            <p class="widget-numeric-value">92,251</p>
+          </div>
+        </div>
+        <p class="widget-total-stats mt-2">390 New Tutors</p>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+{% endblock main-content %}
+
+{% block extra-script %}
+
+{% endblock extra-script %}

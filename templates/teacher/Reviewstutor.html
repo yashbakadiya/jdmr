@@ -1,0 +1,296 @@
+{% extends 'dashboard/student-dashboard.html' %}
+{% load static %}
+{% block main-content %}
+<main class="row mt-5">
+    <div class="col-12">
+        <div class="card">
+            <div class="row" style="color:black;">
+                <div class="col-sm-3">
+                    <br>
+                    <div class="row d-flex justify-content-center ">
+                        {% if i.photo %}
+                        <img class="avatar rounded-circle" src="{{i.photo.url}}" alt="Not Found"
+                            style="height:10rem; width:10rem;" />
+                        {% else %}
+                        <img id="preview" src="{% static 'default-profile.png' %}" alt="Default Not Found"
+                            style="height:2rem; width:2rem;">
+                        {% endif %}
+                    </div>
+                </div>
+                <div class="col-sm-9">
+                    <div class="col-12  ml-2 mt-3">
+                        <h5 class="">{{i.user.first_name}} {{i.user.last_name}}</h5>
+                    </div>
+                    <div class="col-12  ml-2 mt-1">
+                        <h5 class="">
+                            {% for i in avgRating %}
+                                <span class="flaticon-star-fill mt-2" style="color:yellow;"></span>
+                            {% endfor %}
+                        </h5>
+                    </div>
+                    <div class="col-12 ml-2 mt-3">
+                        <h5 class="">
+                            <svg width="20" height="20" viewBox="0 0 20 20" fill="none"
+                                xmlns="http://www.w3.org/2000/svg">
+                                <path
+                                    d="M20 14.92V17.92C20.0011 18.1985 19.9441 18.4742 19.8325 18.7293C19.7209 18.9845 19.5573 19.2136 19.3521 19.4019C19.1469 19.5901 18.9046 19.7335 18.6407 19.8227C18.3769 19.9119 18.0974 19.9451 17.82 19.92C14.7428 19.5856 11.787 18.5341 9.19 16.85C6.77383 15.3147 4.72534 13.2662 3.19 10.85C1.49998 8.2412 0.448243 5.27099 0.12 2.18C0.0950104 1.90347 0.127875 1.62476 0.2165 1.36162C0.305126 1.09849 0.447571 0.856689 0.634766 0.651621C0.821961 0.446553 1.0498 0.282709 1.30379 0.170522C1.55778 0.0583346 1.83234 0.000261514 2.11 3.51938e-08H5.11C5.59531 -0.00477641 6.06579 0.167079 6.43376 0.483533C6.80173 0.799987 7.04208 1.23945 7.11 1.72C7.23662 2.68007 7.47145 3.62273 7.81 4.53C7.94454 4.88792 7.97366 5.27691 7.89391 5.65088C7.81415 6.02485 7.62886 6.36811 7.36 6.64L6.09 7.91C7.51356 10.4135 9.58645 12.4864 12.09 13.91L13.36 12.64C13.6319 12.3711 13.9752 12.1858 14.3491 12.1061C14.7231 12.0263 15.1121 12.0555 15.47 12.19C16.3773 12.5286 17.3199 12.7634 18.28 12.89C18.7658 12.9585 19.2094 13.2032 19.5265 13.5775C19.8437 13.9518 20.0122 14.4296 20 14.92Z"
+                                    fill="#00D3D3" />
+                            </svg>
+                            &nbsp;&nbsp;{{i.phone}}</h5>
+                    </div>
+                    <div class="col-12 ml-2 mt-3">
+                        <h5 class="">
+                            <svg width="22" height="18" viewBox="0 0 22 18" fill="none"
+                                xmlns="http://www.w3.org/2000/svg">
+                                <path
+                                    d="M18.875 0.75H3.125C2.42904 0.750744 1.76179 1.02755 1.26967 1.51967C0.777545 2.01179 0.500744 2.67904 0.5 3.375V14.625C0.500744 15.321 0.777545 15.9882 1.26967 16.4803C1.76179 16.9725 2.42904 17.2493 3.125 17.25H18.875C19.571 17.2493 20.2382 16.9725 20.7303 16.4803C21.2225 15.9882 21.4993 15.321 21.5 14.625V3.375C21.4993 2.67904 21.2225 2.01179 20.7303 1.51967C20.2382 1.02755 19.571 0.750744 18.875 0.75ZM18.2103 5.09203L11.4603 10.342C11.3287 10.4444 11.1667 10.4999 11 10.4999C10.8333 10.4999 10.6713 10.4444 10.5397 10.342L3.78969 5.09203C3.71038 5.03214 3.64377 4.95709 3.59372 4.87123C3.54367 4.78537 3.51118 4.69042 3.49815 4.5919C3.48511 4.49338 3.49179 4.39325 3.51778 4.29733C3.54378 4.20142 3.58858 4.11162 3.64958 4.03316C3.71058 3.95471 3.78656 3.88916 3.87312 3.84032C3.95967 3.79149 4.05506 3.76034 4.15376 3.74869C4.25245 3.73704 4.35248 3.74513 4.44802 3.77247C4.54357 3.79981 4.63272 3.84587 4.71031 3.90797L11 8.79984L17.2897 3.90797C17.447 3.7892 17.6447 3.73711 17.84 3.76296C18.0354 3.78881 18.2128 3.89053 18.3338 4.04612C18.4547 4.20171 18.5096 4.39866 18.4865 4.59439C18.4634 4.79011 18.3642 4.96888 18.2103 5.09203Z"
+                                    fill="#FF7918" />
+                            </svg>
+                            &nbsp;&nbsp;{{i.user.email}} </h5>
+                    </div>
+                    <div class="row mt-3 ml-2">
+                        <div class="col-md-9 col-12">
+                            <h6 class="">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
+                                    xmlns="http://www.w3.org/2000/svg">
+                                    <path
+                                        d="M21 10C21 17 12 23 12 23C12 23 3 17 3 10C3 7.61305 3.94821 5.32387 5.63604 3.63604C7.32387 1.94821 9.61305 1 12 1C14.3869 1 16.6761 1.94821 18.364 3.63604C20.0518 5.32387 21 7.61305 21 10Z"
+                                        fill="#FFA800" stroke="#FFA800" stroke-width="2" stroke-linecap="round"
+                                        stroke-linejoin="round" />
+                                    <path
+                                        d="M12 13C13.6569 13 15 11.6569 15 10C15 8.34315 13.6569 7 12 7C10.3431 7 9 8.34315 9 10C9 11.6569 10.3431 13 12 13Z"
+                                        stroke="white" stroke-width="2" stroke-linecap="round"
+                                        stroke-linejoin="round" />
+                                </svg>
+                                &nbsp;&nbsp;{{i.address}} </h6>
+                        </div>
+                        <div class="col-md-3 col-12">
+                            <button value="{{i.id}}" id="appointmenttutor" type="button"
+                                class="btn btn-sm btn-info mb-3" data-toggle="modal" data-target="#appointmentModal"
+                                aria-hidden="true" name="button" style="font-size:smaller; float:left;">Schedule
+                                Class</button>
+                        </div>
+                    </div>
+                    <br>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-12 my-4" style="color:black;">
+        <div class="card">
+            <div class="card-body">
+                {% if reviews %}
+                <h5 class="mb-2">All Ratings and Reviews</h5>
+                {% for review in reviews %}
+                <div class="bg-white rounded shadow-sm p-2 mb-2" >
+                    <div class="reviews-members pt-2 pb-2">
+                        <div class="media">
+                            {% if review.student.photo %}
+                            <img alt="Generic placeholder image" src="{{review.student.photo.url}}"
+                                class="mr-3 rounded-pill" style="height:2.5rem; width:2.5rem;">
+                            {% else %}
+                            <img alt="Generic placeholder image" src="https://i.stack.imgur.com/l60Hf.png"
+                                class="mr-3 rounded-pill" style="height:2.5rem; width:2.5rem;">
+                            {% endif %}
+                            <div class="media-body">
+                                <div class="reviews-members-header">
+                                    <h6 class="mb-1">{{review.Student.user.username}}</h6>
+                                    {% for i in review.Range %}
+                                    <span class="flaticon-star-fill mt-2" style="color:yellow;"></span>
+                                    {% endfor %}
+                                    <p class="mb-1" style="font-size: 12px;">{{review.Posted_On}}</p>
+                                </div>
+                                <div class="reviews-members-body mt-0 text-black">
+                                    <p>{{review.Review}}</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                {% endfor %}
+                <div>
+                    <button class="btn btn-info load-more" style="align-items: center;">Load More</button>
+                </div>
+                {% endif %}
+                {% if  currentStudent %}
+                <form method="post" id="myForm">
+                    {% csrf_token %}
+                    <div class="form-group m-0">
+                        <h3 for="exampleFormControlTextarea1" class="text-dark m-0 mt-5">Write A Review</h3>
+                        <textarea class="form-control mt-2" id="exampleFormControlTextarea1" rows="3"
+                            placeholder="Write Your Review" required="This Field Cannot be Empty"
+                            name="comment"></textarea>
+                    </div>
+                    <select id="inputState" class="custom-select form-control w-100 mt-2" style="float: left;width:30%;"
+                        name="rating">
+                        <option value="5">Five Stars</option>
+                        <option value="4">Four Stars</option>
+                        <option value="3">Three Stars</option>
+                        <option value="2">Two Stars</option>
+                        <option value="1">One Stars</option>
+                    </select>
+                    <button class="btn btn-info mt-2" style="float: right;">Post Review</button>
+                </form>{% endif %}
+            </div>
+        </div>
+        <div class="modal fade" id="appointmentModal" tabindex="-1" role="dialog" aria-labelledby="appointmentModal"
+            aria-hidden="true">
+            <div class="modal-dialog modal-lg" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="col-sm-12 col-12 text-center">Schedule Class</h5>
+                    </div>
+                    <form id="createAppointmentForm" action="" method="post">{% csrf_token %}
+                        <div class="modal-body">
+                            <div class="row">
+                                <div class="col-sm-10">
+                                    <div class="row form-inline">
+                                        <div class="col-sm-2 bold">
+                                            Date
+                                        </div>
+                                        <div class="col-sm-4">
+                                            <input style="width: 100%;" class="form-control" type="date" name="date"
+                                                value="" required id="appointmentdate">
+                                        </div>
+
+                                        <div class="col-sm-2 bold">
+                                            Time
+                                        </div>
+                                        <div class="col-sm-4">
+                                            <input style="width: 100%;" class="form-control" type="time" name="time"
+                                                value="" required id="appointmenttime">
+                                        </div>
+                                    </div>
+                                    <br>
+                                    <div class="row">
+                                        <div class="form-inline">
+                                            <div class="col-sm-2 bold">
+                                                Timezone
+                                            </div>
+                                            <div class="col-sm-4">
+                                                <select class="custom-select form-control w-100 col-sm-12"
+                                                    name="timezone" value="" required id="appointmentzone">
+                                                    <option selected disabled>Timezone</option>
+                                                    {% include "teacher/timezoneArea.html" %}
+                                                </select>
+                                            </div>
+                                            <div class="col-sm-2 bold">
+                                                Duration
+                                            </div>
+                                            <div class="col-sm-4">
+                                                <select class="custom-select form-control w-100" name="durationHour"
+                                                    required id="appointmenthour">
+                                                    <option disabled selected>Hours</option>
+                                                    <option value="0">0</option>
+                                                    <option value="1">1</option>
+                                                    <option value="2">2</option>
+                                                    <option value="3">3</option>
+                                                    <option value="4">4</option>
+                                                    <option value="5">5</option>
+                                                    <option value="6">6</option>
+                                                    <option value="7">7</option>
+                                                    <option value="8">8</option>
+                                                    <option value="9">9</option>
+                                                    <option value="10">10</option>
+                                                    <option value="11">11</option>
+                                                    <option value="12">12</option>
+                                                    <option value="13">13</option>
+                                                    <option value="14">14</option>
+                                                    <option value="15">15</option>
+                                                    <option value="16">16</option>
+                                                    <option value="17">17</option>
+                                                    <option value="18">18</option>
+                                                    <option value="19">19</option>
+                                                    <option value="20">20</option>
+                                                    <option value="21">21</option>
+                                                    <option value="22">22</option>
+                                                    <option value="23">23</option>
+                                                    <option value="24">24</option>
+                                                </select>
+                                                <select class="custom-select form-control w-100 mt-1"
+                                                    name="durationMinute" required id="appointmentminute">
+                                                    <option selected disabled>Minutes</option>
+                                                    <option value="5">5</option>
+                                                    <option value="10">10</option>
+                                                    <option value="15">15</option>
+                                                    <option value="20">20</option>
+                                                    <option value="25">25</option>
+                                                    <option value="30">30</option>
+                                                    <option value="35">35</option>
+                                                    <option value="40">40</option>
+                                                    <option value="45">45</option>
+                                                    <option value="50">50</option>
+                                                    <option value="55">55</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <br>
+                                    <div class="row form-inline">
+                                        <div class="col-sm-3 bold">
+                                            Recurrence :
+                                        </div>
+                                        <div class="col-sm-1">
+                                            <input id="recurrenceCheck" class="form-check" type="checkbox" name="recc"
+                                                id="appointmentrecc">
+                                        </div>
+                                    </div>
+                                    <br>
+                                    <div>
+                                        <div class="row form-inline">
+                                            <div class="col-sm-2 bold">
+                                                Recurrence Pattern
+                                            </div>
+                                            <div class="col-sm-4">
+                                                <select class="custom-select form-control w-100" name="reccPattern"
+                                                    required>
+                                                    <option value="D">Daily</option>
+                                                    <option value="W">Weekly</option>
+                                                </select>
+                                            </div>
+                                            <div class="weekSelect col-sm-6 form-inline">
+                                                <div class="col-sm-5 bold">
+                                                    Select WeekDays
+                                                </div>
+                                                <div class="col-sm-7">
+                                                    <select class="custom-select form-control w-100 multiselect4"
+                                                        name="reccWeek" required>
+                                                        <option value="Sun">Sun</option>
+                                                        <option value="Mon">Mon</option>
+                                                        <option value="Tue">Tue</option>
+                                                        <option value="Wed">Wed</option>
+                                                        <option value="Thu">Thu</option>
+                                                        <option value="Fri">Fri</option>
+                                                        <option value="Sat">Sat</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <br>
+                                        <div class="row bold">
+                                            <div class="col-sm-12 bold form-inline spacing">
+                                                <div class="col-sm-2">
+                                                    End After
+                                                </div>
+                                                <input class="form-control col-sm-4" type="date" id="endingDate"
+                                                    name="endingDate" value="">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <br>
+                        </div>
+                        <div class="modal-footer" id="changeAfterCreation">
+                            <input id="tutorId" type="hidden" name="tutorId" value="{{i.id}}">
+                            <button id="submitAppointment" class="btn btn-info" type="button"
+                                name="button">Create</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+{% endblock main-content %}

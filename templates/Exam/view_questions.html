@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      rel="stylesheet"
+      href="{% static 'login/css/quiz/instruction2.css' %}"
+    />
+    <!-- CSS only -->
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
+      integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk"
+      crossorigin="anonymous"
+    />
+
+    <!-- JS, Popper.js, and jQuery -->
+    <script
+      src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+      integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+      integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"
+      integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI"
+      crossorigin="anonymous"
+    ></script>
+    <title>all quiz</title>
+  </head>
+  <body>
+    <header>
+      <div class="row">
+        <div class="col-lg-9 mt-2">
+          <span class="ml-2" id="sub__name">
+            Data Structure and programming
+          </span>
+        </div>
+
+        <div id="right__header" class="col-lg-3 ml-auto">
+          <button
+            class="btn btn-outline-secondary btn-sm mr-3"
+            id="fullscreen__btn"
+            onclick="full()"
+          >
+            Enter Fullscreen
+          </button>
+          <span>View In:</span>
+          <select
+            name="lang"
+            id="lang"
+            class="btn btn-outline-secondary btn-sm ml-1"
+          >
+            <option value="English">English</option>
+            <option value="Hindi">Hindi</option>
+          </select>
+        </div>
+      </div>
+    </header>
+    <hr />
+
+    <main class="ml-3">
+      <!-- Section A -->
+      <h3 class="lead">Section A</h3>
+      {% for question in questions %} {% if question.section == 'A' %}
+      <section style="display: inline;">
+        <span>{{question.questionNo}}</span>
+        <section style="position: relative; top: -24px; margin-left: 60px;">
+          <pre>{{question.question | safe }} </pre>
+        </section>
+      </section>
+      {% endif %} {% endfor %}
+
+      <hr />
+      <!-- Section B -->
+      <h3 class="lead">Section B</h3>
+      {% for question in questions %} {% if question.section == 'B' %}
+      <section style="display: inline;">
+        <span>{{question.questionNo}}</span>
+        <section style="position: relative; top: -24px; margin-left: 60px;">
+          <pre>{{question.question |safe}} </pre>
+        </section>
+      </section>
+      {% endif %} {% endfor %}
+
+      <hr />
+      <!-- Section C -->
+      <h3 class="lead">Section C</h3>
+      {% for question in questions %} {% if question.section == 'C' %}
+      <section style="display: inline;">
+        <span>{{question.questionNo}}</span>
+        <section style="position: relative; top: -24px; margin-left: 60px;">
+          <pre>{{question.question | safe}} </pre>
+        </section>
+      </section>
+      {% endif %} {% endfor %}
+
+      <hr />
+      <!-- Section D -->
+      <h3 class="lead">Section D</h3>
+      {% for question in questions %} {% if question.section == 'D' %}
+      <section style="display: inline;">
+        <span>{{question.questionNo}}</span>
+        <section style="position: relative; top: -24px; margin-left: 60px;">
+          <pre>{{question.question | safe}} </pre>
+        </section>
+      </section>
+      {% endif %} {% endfor %}
+
+      <hr />
+    </main>
+
+    <footer class="text-center">
+      <div style="width: 100%; background-color: white;">
+        <a
+          href="{% url 'start_exam' pk=exam.id %}"
+          class="btn btn-outline-secondary btn-sm"
+          style="position: fixed; bottom: 0; width: 10%; height: 5%;"
+          >Back</a
+        >
+      </div>
+    </footer>
+
+    <script>
+      function full() {
+        document.documentElement.requestFullscreen();
+      }
+    </script>
+  </body>
+</html>

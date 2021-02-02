@@ -1,0 +1,219 @@
+{% extends 'dashboard/Tutor-dashboard.html' %}
+{% load static %}
+{% block css %}
+{% endblock %}
+{% block main-content %}
+<style>
+  #card {
+    background-color: white;
+    padding-bottom: 3rem;
+    padding-top: 3rem;
+    color: black;
+  }
+</style>
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/css/select2.min.css" rel="stylesheet" />
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/js/select2.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
+<div class="container">
+  {% if messages %}
+  {% for k in messages%}
+  <div class="alert alert-{{k.tags}} alert-dismissible fade show" role="alert">
+    <b>{{ k }} !</b>
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  {% endfor %}
+  {% endif %}
+  <div class="container" id="card">
+    <h3 style="align-items: center;text-align: center;">Add Exam</h3>
+    <hr>
+    <form method="post">{% csrf_token %}
+      <div class="row">
+        <div class="col">
+          <label for="validationCustom01"><strong>Select Course<span class="red">*</span></strong></label>
+          <select id="select_course" name="course" style="width: 100%" class="js-example-basic-single">
+            <option class="form-control form-control-lg" selected disabled value="{{exam.course.courseName}}"
+              name="category" value="{{exam.course.id}}">{{exam.course.courseName}}</option>
+            {% for cat in courses %}
+            <option class="form-control form-control-lg" value="{{cat.id}}" name="category">{{cat.courseName}} </option>
+            {% endfor %}
+          </select>
+        </div>
+        <div class="col">
+          <label for="validationCustom01"><strong>Select Class <span class="red">*</span></strong></label>
+          <select id="class_select" name="class" style="width: 100%;" class="js-example-basic-single"
+            value="{{exam.Class}}">
+            <option class="form-control" selected disabled>{{exam.Class}}</option>
+          </select>
+        </div>
+        <div class="col">
+          <label for="validationCustom01"><strong>Price<span class="red">*</span></strong></label>
+          <input type="number" class="form-control" value="{{exam.price}}" name="price">
+        </div>
+      </div>
+      <div class="row mt-4">
+        <div class="col">
+          <label for="validationCustom01"><strong>Exam Name <span class="red">*</span></strong></label>
+
+          <input type="text" class="form-control" placeholder="Exam name" name="examname" value="{{exam.Name}}">
+        </div>
+        <div class="col">
+          <label for="validationCustom01"><strong>Exam Date <span class="red"></span></strong></label>
+          <input class="form-control" type="date" placeholder="" name="date" value="{{exam.exam_date}}" /><br />
+          <div class="invalid-feedback">
+            Select a valid Date!
+          </div>
+        </div>
+        <div class="col">
+          <label for="validationCustom01"><strong>Exam Time <span class="red"></span></strong></label>
+          <input class="form-control" type="time" placeholder="" name="exam_time" value="{{exam.exam_time}}" /><br />
+          <div class="invalid-feedback">
+            Select a valid Time!
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col">
+          <label for="validationCustom01"><strong>Time Zone<span class="red"></span></strong></label>
+          {% include 'tutor/timezones.html' %}
+        </div>
+        <div class="col-md-4 mb-3">
+          <label for="validationCustom01"><strong>Exam Duration(In Minute) <span class="red"></span></strong></label>
+          <input class="form-control" type="number" placeholder="00" name="duration" value="{{exam.exam_duration}}" />
+          <div class="invalid-feedback">
+            Enter a valid value!
+          </div>
+        </div>
+        <div class="col-md-4 mb-3 ">
+          <label for="validationCustom01"><strong>Passing Percentage <span class="red"></span></strong></label>
+          <input class="form-control" type="number" placeholder="00" name="pp" value="{{exam.pass_percentage}}" />
+          <div class="invalid-feedback">
+            Enter a valid value!
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-4 mb-3 ">
+          <label for="validationCustom01"><strong>No of Questions <span class="red"></span></strong></label>
+          <input class="form-control" type="number" placeholder="0" name="noquestions"
+            value="{{exam.question_count}}" />
+          <div class="invalid-feedback">
+            Enter a valid value!
+          </div>
+        </div>
+        <div class="col-md-4">
+          <label for="validationCustom01"><strong>Exam Status <span class="red"></span></strong></label>
+          <select class="form-control" id="exampleFormControlSelect1" name="status">
+            <option value="1">Activate</option>
+            <option value="0">Deactivate</option>
+          </select>
+        </div>
+        <div class="col-md-4">
+          <label for="validationCustom01"><strong>Re-Exam Date <span class="red"></span></strong></label>
+          <input class="form-control" type="date" placeholder="" name="redate" /><br />
+          <div class="invalid-feedback">
+            Select a valid Date!
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-lg-12 mb-3 ">
+          <label for="validationCustom01"><strong>Terms & Condition <span class="red"></span></strong></label>
+          <textarea class="form-control" rows="4" name="tc">{{exam.tandc}}</textarea>
+          <div class="invalid-feedback">
+            Terms & Condition cannot be empty!
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-lg-12 mb-3 ">
+          <div class="custom-checkbox custom-control">
+            <input class="form-check-input" type="checkbox" id="defaultCheck1" name="calculator"
+              value="{{exam.calculator}}" />
+            <label class="form-check-label" for="defaultCheck1">
+              Make Calculator Available
+            </label>
+          </div>
+        </div>
+        <div class="col-lg-2 col-sm-2 mb-3">
+          <div class="custom-checkbox custom-control">
+            <input class="form-check-input" type="checkbox" onchange="checkbox()" id="negativecheck" name="nm"
+              value="{{exam.negative_marking}}" />
+            <label class="form-check-label" for="defaultCheck1">
+              Negative Marks
+            </label>
+            <div id="negative"></div>
+          </div>
+          <div class="invalid-feedback">
+            Choose a value
+          </div>
+        </div>
+        <div class="col-lg-2 col-sm-2 mb-3">
+          <div class="custom-checkbox custom-control">
+            <input class="form-check-input" type="checkbox" onchange="" id="uploadimages" name="imguplod"
+              value="{{exam.imgupload}}" />
+            <label class="form-check-label" for="defaultCheck1">
+              Upload images
+            </label>
+          </div>
+        </div>
+      </div>
+      <button type="submit" class="btn btn-primary"> Save </button>
+    </form>
+  </div>
+
+  <script>
+    function checkbox() {
+      var value = $("#negativecheck").is(":checked");
+      negative = document.getElementById("negative");
+      var output;
+      if (value) {
+        output = `<input
+      type="number"
+      class="mt-2 form-control"
+      placeholder="Enter Negative Marks"
+      name="negative_marks"
+      value="0"
+      required
+    />
+    <div class="invalid-feedback">
+      Enter a valid No.
+    </div>`;
+      } else {
+        output = "";
+      }
+      negative.innerHTML = output;
+    }
+    // In your Javascript (external .js resource or <script> tag)
+    $(document).ready(function () {
+      $('.js-example-basic-single').select2();
+    });
+
+    $("#select_course").change(function () {
+      var selected = $(this).val();
+      $.ajax({
+        url: "{% url 'classes' %}",
+        data: {
+          course_id: selected,
+        },
+        success: function (data) {
+          categories = data.sub_categories;
+          $("#class_select").empty().trigger("change");
+          for (i = 0; i < categories.length; i++) {
+            var newOption = new Option(
+              categories[i].text,
+              categories[i].value,
+              false,
+              false
+            );
+            $("#class_select").append(newOption).trigger("change");
+          }
+        },
+      });
+    });
+  </script>
+
+</div>
+{% endblock main-content %}

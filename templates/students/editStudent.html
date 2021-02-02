@@ -1,0 +1,790 @@
+{% extends 'dashboard/base.html' %}
+{% load static %}
+{% block css %}
+<style>
+  @import url('https://fonts.googleapis.com/css?family=Numans');
+
+  .container {
+    height: 100%;
+    align-content: center;
+  }
+
+  .card {
+    margin-top: auto;
+    margin-bottom: auto;
+    background-color: white;
+  }
+
+  .social_icon span {
+    font-size: 60px;
+    margin-left: 10px;
+    color: #FFC312;
+  }
+
+  .social_icon span:hover {
+    color: white;
+    cursor: pointer;
+  }
+
+  .card-header h3 {
+    color: white;
+  }
+
+  .social_icon {
+    position: absolute;
+    right: 20px;
+    top: -45px;
+  }
+
+  .input-group-prepend span {
+    width: 50px;
+    background-color: #FFC312;
+    color: black;
+    border: 0 !important;
+  }
+
+  input:focus {
+    outline: 0 0 0 0 !important;
+    box-shadow: 0 0 0 0 !important;
+
+  }
+
+  .remember {
+    color: white;
+  }
+
+  .remember input {
+    width: 20px;
+    height: 20px;
+    margin-left: 20px;
+    margin-right: 10px;
+  }
+
+  .login_btn {
+    color: black;
+    background-color: #FFC312;
+    width: 100px;
+  }
+
+  .login_btn:hover {
+    background-color: #2a2b3d;
+    color: white;
+  }
+
+  .links {
+    color: white;
+  }
+
+  .links a {
+    margin-left: 4px;
+  }
+
+  .bigcheckbox {
+    width: 20px;
+    height: 20px;
+  }
+
+  .color-pattern-3 {
+    text-align: center;
+  }
+
+  /* General button style (reset) */
+  .button {
+    border: none;
+    font-family: inherit;
+    font-size: inherit;
+    color: inherit;
+    background: none;
+    cursor: pointer;
+    width: 350px;
+    padding: 25px 50px;
+    display: inline-block;
+    margin: 4px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-weight: 700;
+    outline: none;
+    position: relative;
+    -webkit-transition: all 0.3s;
+    -moz-transition: all 0.3s;
+    transition: all 0.3s;
+  }
+
+  .button:after {
+    content: '';
+    position: absolute;
+    z-index: -1;
+    -webkit-transition: all 0.3s;
+    -moz-transition: all 0.3s;
+    transition: all 0.3s;
+  }
+
+  /* Button 3 */
+  .button-3 {
+    background: #fcad26;
+    color: #fff;
+  }
+
+  .button-3:hover {
+    background: #f29e0d;
+  }
+
+  .button-3:active {
+    background: #f58500;
+    top: 2px;
+  }
+
+  .button-3>.fa {
+    position: absolute;
+    height: 100%;
+    left: 0;
+    top: 0;
+    font-size: 140%;
+    width: 60px;
+  }
+
+  .button-3>.fa:before {
+    position: absolute;
+    width: 25px;
+    height: 25px;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    margin: auto;
+  }
+
+  /* Button 3a */
+  .button-3a {
+    padding: 25px 60px 25px 120px;
+  }
+
+  .button-3a>.fa {
+    background: rgba(0, 0, 0, 0.05);
+  }
+
+  /* Button 3b */
+  .button-3b {
+    padding: 25px 60px 25px 120px;
+    border-radius: 10px;
+  }
+
+  .button-3b>.fa {
+    border-right: 2px solid rgba(255, 255, 255, 0.75);
+  }
+
+  /* Button 3c */
+  .button-3c {
+    padding: 80px 20px 20px 20px;
+    border-radius: 10px;
+    box-shadow: 0 3px #da9622;
+  }
+
+  .button-3c>.fa:before {
+    position: static;
+  }
+
+  .button-3c:active {
+    box-shadow: 0 3px #dc7801;
+  }
+
+  .button-3c>.fa {
+    height: 60px;
+    width: 100%;
+    line-height: 60px;
+    background: #fff;
+    color: #f29e0d;
+    border-radius: 10px 10px 0 0;
+  }
+
+  .button-3c:active:before {
+    color: #f58500;
+  }
+
+  /* Button 3d */
+  .button-3d {
+    padding: 25px 60px 25px 120px;
+    border-radius: 10px;
+  }
+
+  .button-3d>.fa {
+    background: #fff;
+    color: #fcad26;
+    z-index: 2;
+    border-radius: 10px 0 0 10px;
+  }
+
+  .button-3d:after {
+    width: 20px;
+    height: 20px;
+    background: #fff;
+    z-index: 1;
+    left: 55px;
+    top: 50%;
+    margin: -10px 0 0 -10px;
+    -webkit-transform: rotate(45deg);
+    -moz-transform: rotate(45deg);
+    -ms-transform: rotate(45deg);
+    transform: rotate(45deg);
+  }
+
+  .button-3d:active:before {
+    color: #f58500;
+  }
+
+  .button-3d:active {
+    top: 0;
+  }
+
+  .button-3d:active:after {
+    left: 60px;
+  }
+
+  /* Button 3e */
+  .button-3e {
+    padding: 25px 120px 25px 60px;
+    overflow: hidden;
+  }
+
+  .button-3e>.fa {
+    left: auto;
+    right: 10px;
+    z-index: 2;
+  }
+
+  .button-3e:after {
+    width: 30%;
+    height: 200%;
+    background: rgba(255, 255, 255, 0.1);
+    z-index: 1;
+    right: 0;
+    top: 0;
+    margin: -5px 0 0 -5px;
+    -webkit-transform-origin: 0 0;
+    -webkit-transform: rotate(-20deg);
+    -moz-transform-origin: 0 0;
+    -moz-transform: rotate(-20deg);
+    -ms-transform-origin: 0 0;
+    -ms-transform: rotate(-20deg);
+    transform-origin: 0 0;
+    transform: rotate(-20deg);
+  }
+
+  .button-3e:hover:after {
+    width: 35%;
+  }
+
+  .control-label {
+    color: white;
+    font-size: 20px;
+  }
+
+  [type="checkbox"] {
+    vertical-align: middle;
+  }
+
+  [type="radio"] {
+    vertical-align: middle;
+  }
+
+  .autocomplete-items {
+    position: absolute;
+    border: 1px solid #d4d4d4;
+    border-bottom: none;
+    border-top: none;
+    z-index: 99;
+    top: 100%;
+    left: 0;
+    right: 0;
+  }
+
+  .autocomplete-items div {
+    padding: 10px;
+    cursor: pointer;
+    background-color: #fff;
+    border-bottom: 1px solid #d4d4d4;
+  }
+
+  .autocomplete-items div:hover {
+    background-color: #e9e9e9;
+  }
+
+  .autocomplete-active {
+    background-color: DodgerBlue !important;
+    color: #ffffff;
+  }
+
+  .school {
+    margin-left: 0;
+    color: black;
+  }
+
+  .school-input {
+    padding-left: 0;
+    padding-right: 0;
+  }
+
+  .pac-card {
+    margin: 10px 10px 0 0;
+    border-radius: 2px 0 0 2px;
+    box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    outline: none;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+    background-color: #fff;
+  }
+
+  #pac-container {
+    padding-bottom: 12px;
+    margin-right: 12px;
+  }
+
+  .pac-controls {
+    display: inline-block;
+    padding: 5px 11px;
+  }
+
+  .pac-controls label {
+    font-weight: 300;
+  }
+
+  #pac-input {
+    text-overflow: ellipsis;
+  }
+
+  #pac-input:focus {
+    border-color: #4d90fe;
+  }
+
+  .pac-container {
+    z-index: 1100 !important;
+  }
+</style>
+{% endblock %}
+{% block body %}
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCBJybI10-Xa43-F5GSad1i0Y9W3yqlW6Q&libraries=places&v=3"
+  defer></script>
+
+<div class="container">
+  {% if messages %}
+  {% for k in messages%}
+  <div class="alert alert-{{k.tags}} alert-dismissible fade show" role="alert">
+    <b>{{ k }} !</b>
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  {% endfor %}
+  {% endif %}
+  <div class="d-flex justify-content-center h-100">
+    <div class="card">
+      <div class="card-header">
+        <div class="row">
+          <div class="col-sm">
+            <h2 style="color: rgb(66, 8, 8);">Add Student</h2>
+          </div>
+          <div class="col-sm-8 form-inline justify-content-end">
+            <button class="btn btn-warning btn-md" role="button">Already Exists &raquo;</button>
+            <form method="POST" action="{% url 'searchUserStudent' %}">{% csrf_token %}
+              <input id="searchbox" type="text" class="form-control" name='srh' placeholder="Search Student" required>
+              <button type="submit" class="btn btn-danger btn-md">Submit</button>
+            </form>
+          </div>
+        </div>
+      </div>
+      <div class="card-body">
+        <form id="submitForm" action="" method="post">{% csrf_token %}
+          <div class="input-group form-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text"><i class="fas fa-user"></i></span>
+                        </div>
+                        <input type="text" class="form-control" id="firstName" name='firstName' placeholder="First Name"
+                            value="{{stfname}}" readonly>
+                    </div>
+                    <div class="input-group form-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text"><i class="fas fa-user"></i></span>
+                        </div>
+                        <input type="text" class="form-control" id="lastName" name='lastName' placeholder="Last Name"
+                            value="{{stlname}}" readonly>
+                    </div>
+                    <div class="input-group form-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text"><i class="fa fa-envelope"></i></span>
+                        </div>
+                        <input type="email" class="form-control" id="email" name='email' placeholder="Email Address"
+                            value="{{stemail}}" readonly>
+                    </div>
+                    <div class="input-group form-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text"><i class="fa fa-phone"></i></span>
+                        </div>
+                        <input type="tel" pattern="[0-9]{10}" class="form-control" id="phone" name='phone'
+                            placeholder="Phone Number (10 Digits)" value="{{stphone}}" required>
+                    </div>
+                    <div class="input-group form-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text"><i class="fa fa-map-marker"></i></span>
+                        </div>
+                        <input id="pac-input" type="text" class="controls form-control" name='loc'
+                            placeholder="Search Address" value="{{address}}" required>
+                        <input type="hidden" id="cityLat" name="cityLat" value="{{qry.conector.latitude}}" />
+                        <input type="hidden" id="cityLng" name="cityLng" value="{{qry.conector.longitude}}" />
+                    </div>
+                    <div class="input-group form-group row school">
+                        <div class="input-group-prepend col-sm-12 school-input">
+                            <span class="input-group-text"><i class="fas fa-school"></i></span>
+                            <input type="text" class="form-control" id="schoolName" name='school'
+                                placeholder="School Name" value="{{schoolName}}" required>
+                        </div>
+                    </div>
+                    <br>
+
+          <!-- detail start -->
+          <div id='mainForm' class="container">
+            <div id='entry1' class="row" style="border-bottom: 1px solid #dadada; margin-bottom: 5%;padding-bottom: 2%">
+              <div class="col-sm-2">
+                <div class="form-group">
+                  <label for="ctn">Course</label>
+                  <div>
+                    <select id="ctn" name="ctn" class="custom-select form-control" required="required"
+                      onclick="addvals(this)">
+                      <option disabled selected>Course</option>
+                      {% for x in data %}
+                      <option value="{{ x.courseID }}">{{ x.course.courseName }}</option>
+                      {% endfor %}
+                    </select>
+                  </div>
+                </div>
+              </div>
+              <div class="col-sm-2">
+                <div class="form-group">
+                  <label for="cn">Class Name</label>
+                  <div>
+                    <select id="cn" name="cn" class="custom-select form-control" required="required"
+                      oninput="cnCombine(this)">
+                      <option disabled selected>Class</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+              <div class="col-sm-2">
+                <div class="form-group">
+                  <label for="ttn">Teaching Type</label>
+                  <div>
+                    <select id="ttn" name="ttn" class="custom-select form-control" required="required"
+                      oninput="ttnCombine(this)">
+                      <option selected disabled>Teaching Type</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+              <div class="col-sm-2">
+                <div class="form-group">
+                  <label for="noi">Installments</label>
+                  <div>
+                    <select id="no_of_installment" class="form-control" name="noi" id="noi" oninput="noichange(this)"
+                      required>
+                      <option selected disabled>Installments</option>
+                      <option value="1">1</option>
+                      <option value="2">2</option>
+                      <option value="3">3</option>
+                      <option value="4">4</option>
+                      <option value="5">5</option>
+                      <option value="6">6</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+              <input type="hidden" name="cn_combined">
+              <input type="hidden" name="ttn_combined">
+              <input type="hidden" name="ctn_combined">
+              <div class="col-sm-2">
+                <div class="form-group">
+                  <label for="batchN">Batch Name</label>
+                  <div>
+                    <select id="batch" class="form-control" name="batchN" id="batchN" oninput="bnchange(this)" required>
+                      <option selected disabled>Batch Name</option>
+                      {% for i in batch %}
+                      <option value="{{i.id}}">{{i.batchName}}</option>
+                      {% endfor %}
+                    </select>
+                  </div>
+                </div>
+              </div>
+              <div class="col-sm-2">
+                <div class="form-group">
+                  <label for="feedis">Fee Discount</label>
+                  <div>
+                    <input type="number" class="custom-text form-control" name="feedis" value="{{qry.feeDisc}}" id="feedis"
+                      oninput="fdchange(this)">
+                  </div>
+                </div>
+              </div>
+              <input type="hidden" name="noi_combined">
+              <input type="hidden" name="batchN_combined">
+              <input type="hidden" name="feedis_combined">
+              <div class="col-sm-1 form-inline" style="display: flex;align-items: center;">
+                <div class="form-group">
+                  <button class="btn btn-warning btn-md float-right" type="button" onclick="duplicate(this)">Add
+                    New</button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row container d-flex justify-content-end">
+            <div class="col-sm-2 sm-ml-1">
+              <button id='submitBtn' name="submit" type="submit" class="btn btn-warning">Submit</button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  //first part
+  var school_list = {{school_list|safe}};
+  $(document).on("DOMContentLoaded", function () {
+    function initialize() {
+      var input = document.getElementById('pac-input');
+      var autocomplete = new google.maps.places.Autocomplete(input);
+      google.maps.event.addListener(autocomplete, 'place_changed', function () {
+        var place = autocomplete.getPlace();
+        document.getElementById('cityLat').value = place.geometry.location.lat();
+        document.getElementById('cityLng').value = place.geometry.location.lng();
+      });
+    }
+    initialize();
+  });
+
+  function autocomplete(inp, arr) {
+    var currentFocus;
+    inp.addEventListener("input", function (e) {
+      var a, b, i, val = this.value;
+      closeAllLists();
+      if (!val) {
+        return false;
+      }
+      currentFocus = -1;
+      a = document.createElement("DIV");
+      a.setAttribute("id", this.id + "autocomplete-list");
+      a.setAttribute("class", "autocomplete-items");
+      this.parentNode.appendChild(a);
+      for (i = 0; i < arr.length; i++) {
+        if (arr[i].substr(0, val.length).toUpperCase() == val.toUpperCase()) {
+          b = document.createElement("DIV");
+          b.innerHTML = "<strong>" + arr[i].substr(0, val.length) + "</strong>";
+          b.innerHTML += arr[i].substr(val.length);
+          b.innerHTML += "<input type='hidden' value='" + arr[i] + "'>";
+          b.addEventListener("click", function (e) {
+            inp.value = this.getElementsByTagName("input")[0].value;
+            closeAllLists();
+          });
+          a.appendChild(b);
+        }
+      }
+    });
+    inp.addEventListener("keydown", function (e) {
+      var x = document.getElementById(this.id + "autocomplete-list");
+      if (x) x = x.getElementsByTagName("div");
+      if (e.keyCode == 40) {
+        currentFocus++;
+        addActive(x);
+      } else if (e.keyCode == 38) { //up
+        currentFocus--;
+        addActive(x);
+      } else if (e.keyCode == 13) {
+        e.preventDefault();
+        if (currentFocus > -1) {
+          if (x) x[currentFocus].click();
+        }
+      }
+    });
+
+    function addActive(x) {
+      if (!x) return false;
+      removeActive(x);
+      if (currentFocus >= x.length) currentFocus = 0;
+      if (currentFocus < 0) currentFocus = (x.length - 1);
+      x[currentFocus].classList.add("autocomplete-active");
+    }
+
+    function removeActive(x) {
+      for (var i = 0; i < x.length; i++) {
+        x[i].classList.remove("autocomplete-active");
+      }
+    }
+
+    function closeAllLists(elmnt) {
+      var x = document.getElementsByClassName("autocomplete-items");
+      for (var i = 0; i < x.length; i++) {
+        if (elmnt != x[i] && elmnt != inp) {
+          x[i].parentNode.removeChild(x[i]);
+        }
+      }
+    }
+    document.addEventListener("click", function (e) {
+      closeAllLists(e.target);
+    });
+  }
+
+  window.addEventListener('DOMContentLoaded', function () {
+    autocomplete(document.getElementById("schoolName"), school_list);
+  });
+
+
+  //next part
+
+  var counter = 1;
+  var Dclone = document.querySelector('#entry1').cloneNode(true);
+
+  function emptyit(ele) {
+    while (ele.length > 0) {
+      ele.remove(0);
+    }
+  }
+
+  function duplicate(data) {
+    var f = document.getElementById('submitForm');
+    if (!f.checkValidity()) {
+      f.reportValidity();
+    } else {
+      var disParent = data.parentElement.parentElement.parentElement;
+      var ctn = disParent.children[0].children[0].children[1].children[0];
+      var cn = disParent.children[1].children[0].children[1].children[0];
+      var ttn = disParent.children[2].children[0].children[1].children[0];
+      ctn.disabled = true;
+      cn.disabled = true;
+      ttn.disabled = true;
+      data.disabled = true;
+      var removeCTN = document.getElementsByName("ctn")
+      var removeOptions = [];
+      for (var x = 0; x < removeCTN.length; x++) {
+        removeOptions.push(removeCTN[x].value);
+      }
+      var clone = Dclone.cloneNode(true);
+      counter += 1;
+      clone.setAttribute('id', 'entry' + counter);
+      var ctnNode = clone.children[0].children[0].children[1].children[0];
+      var cnNode = clone.children[1].children[0].children[1].children[0];
+      var ttnNode = clone.children[2].children[0].children[1].children[0];
+
+      var oldData = [];
+      for (var x = 1; x < ctnNode.length; x++) {
+        oldData.push({value:ctnNode[x].value,txt:ctnNode[x].innerText})
+      }
+      emptyit(ctnNode);
+      for (var x in oldData) {
+        if (!removeOptions.includes(oldData[x]['value'])) {
+          addoption2(ctnNode, oldData[x]);
+        }
+      }
+      console.log(disParent);
+      var numinstallment = disParent.children[3].children[0].children[1].children[0]
+      var batchName = disParent.children[7].children[0].children[1].children[0];
+      var feeDisc = disParent.children[8].children[0].children[1].children[0];
+      var numinstallmentHid = disParent.children[9]
+      var batchNameHid = disParent.children[10];
+      var feeDiscHid = disParent.children[11];
+      numinstallmentHid = numinstallment.value;
+      numinstallment.disabled = true;
+      batchNameHid.value = batchName.value;
+      batchName.disabled = true;
+      feeDiscHid.value = feeDisc.value;
+      feeDisc.disabled = true;
+      document.querySelector('#mainForm').appendChild(clone);
+    }
+  }
+   function addoption2(ele, val) {
+    var opt = document.createElement('option');
+    opt.value = val['value'];
+    opt.innerHTML = val['txt'];
+    ele.appendChild(opt);
+  }
+  function addoption(ele, val) {
+    var opt = document.createElement('option');
+    opt.value = val;
+    opt.innerHTML = val;
+    ele.appendChild(opt);
+  }
+
+  function addoptions(ele, ar) {
+    for (var x in ar) {
+      addoption(ele, ar[x]);
+    }
+  }
+
+  function addvals(data) {
+    var mainParentNode = data.parentElement.parentElement.parentElement.parentElement;
+    var cn = mainParentNode.children[1].children[0].children[1].children[0];
+    var ttn = mainParentNode.children[2].children[0].children[1].children[0];
+    var currentval = data.value;
+    var alldata = JSON.parse("{{jsdata|escapejs}}");
+    emptyit(cn);
+    emptyit(ttn);
+    $(cn).append("<option disabled selected>Select an option</option>");
+    $(ttn).append("<option disabled selected>Select an option</option>");
+    addoptions(cn, alldata[currentval][0]);
+    addoptions(ttn, alldata[currentval][1]);
+
+
+    var saveVal = mainParentNode.children[6];
+    saveVal.value = data.value;
+    console.log(saveVal.value);
+  }
+
+  function cnCombine(data) {
+    console.log("cnChange run")
+    var mainParentNode = data.parentElement.parentElement.parentElement.parentElement;
+    var cn = mainParentNode.children[4];
+    var result = [];
+    var options = data && data.options;
+    var opt;
+    for (var i = 0, iLen = options.length; i < iLen; i++) {
+      opt = options[i];
+      if (opt.selected) {
+        result.push(opt.value || opt.text);
+      }
+    }
+    cn.value = result.join(', ');
+  }
+
+  function ttnCombine(data) {
+    console.log("ttnchange run")
+    var mainParentNode = data.parentElement.parentElement.parentElement.parentElement;
+    var ttn = mainParentNode.children[5];
+    var result = [];
+    var options = data && data.options;
+    var opt;
+    for (var i = 0, iLen = options.length; i < iLen; i++) {
+      opt = options[i];
+      if (opt.selected) {
+        result.push(opt.value || opt.text);
+      }
+    }
+    ttn.value = result.join('\n');
+  }
+
+  function noichange(data) {
+    var mainParentNode = data.parentElement.parentElement.parentElement.parentElement;
+    var noi = mainParentNode.children[9];
+    noi.value = data.value;
+  }
+
+  function bnchange(data) {
+    var mainParentNode = data.parentElement.parentElement.parentElement.parentElement;
+    var bn = mainParentNode.children[10];
+    bn.value = data.value;
+  }
+
+  function fdchange(data) {
+    var mainParentNode = data.parentElement.parentElement.parentElement.parentElement;
+    var fd = mainParentNode.children[11];
+    fd.value = data.value;
+    console.log(fd.value);
+  }
+</script>
+
+{% endblock %}

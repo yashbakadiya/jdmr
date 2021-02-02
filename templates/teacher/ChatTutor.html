@@ -1,0 +1,437 @@
+{% extends 'dashboard/dashboardStudent.html' %} {% load static %} {% load
+semicolontohtml %} {% block css %}
+
+<style>
+  @import url("https://fonts.googleapis.com/css?family=Numans");
+
+  .my-border{
+    border-width: 1rem;
+  }
+
+  .container {
+    align-content: center;
+  }
+
+  .btn {
+    font-size: small;
+  }
+
+  .card-width {
+    width: 100%;
+    margin-top: auto;
+    margin-bottom: auto;
+    background-color: white;
+  }
+
+  .card-header h3 {
+    color: white;
+  }
+
+  .inputDemo {
+    width: 5vw;
+    height: 5vh;
+  }
+
+  input:focus {
+    outline: 0 0 0 0 !important;
+    box-shadow: 0 0 0 0 !important;
+  }
+
+  .remember {
+    color: white;
+  }
+
+  .remember input {
+    width: 19px;
+    height: 19px;
+    margin-left: 15px;
+    margin-right: 5px;
+  }
+
+  .links {
+    color: white;
+  }
+
+  .links a {
+    margin-left: 4px;
+  }
+
+  .control-label {
+    color: rgb(66, 8, 8);
+    font-size: 20px;
+  }
+
+  .social_icon span {
+    font-size: 60px;
+    margin-left: 10px;
+    color: #ffc312;
+  }
+
+  .social_icon span:hover {
+    color: white;
+    cursor: pointer;
+  }
+
+  .card-header h3 {
+    color: white;
+  }
+
+  .social_icon {
+    position: absolute;
+    right: 20px;
+    top: -45px;
+  }
+
+  .input-group-prepend span {
+    width: 50px;
+    background-color: #ffc312;
+    color: black;
+    border: 0 !important;
+  }
+
+  input:focus {
+    outline: 0 0 0 0 !important;
+    box-shadow: 0 0 0 0 !important;
+  }
+
+  .remember {
+    color: white;
+  }
+
+  .remember input {
+    width: 20px;
+    height: 20px;
+    margin-left: 15px;
+    margin-right: 5px;
+  }
+
+  .signup_btn {
+    color: black;
+    background-color: #ffc312;
+    width: 300px;
+  }
+
+  .signup_btn:hover {
+    background-color: #2a2b3d;
+    color: white;
+  }
+
+  .links {
+    color: white;
+  }
+
+  .links a {
+    margin-left: 4px;
+  }
+
+  .control-label {
+    color: rgb(66, 8, 8);
+    font-size: 20px;
+  }
+
+  .avatar {
+    border: 0.3rem solid rgba(#fff, 0.3);
+    margin-bottom: 1rem;
+    max-width: 9rem;
+    max-height: 9rem;
+  }
+
+  .profile-cards .card {
+    margin-bottom: 5rem;
+  }
+
+  .profile-container {
+    margin-top: 5rem;
+    color: black;
+  }
+
+  .btn-group {
+    width: 100%;
+  }
+
+  .multiselect {
+    width: 100%;
+  }
+
+  .avatar {
+    margin-top: -5rem;
+  }
+
+  .card {
+    height: auto;
+  }
+
+  #map {
+    height: 100%;
+  }
+
+  #infowindow-content {
+    display: none;
+  }
+
+  #map #infowindow-content {
+    display: inline;
+  }
+
+  .pac-card {
+    margin: 10px 10px 0 0;
+    border-radius: 2px 0 0 2px;
+    box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    outline: none;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+    background-color: #fff;
+  }
+
+  #pac-container {
+    padding-bottom: 12px;
+    margin-right: 12px;
+  }
+
+  .pac-controls {
+    display: inline-block;
+    padding: 5px 11px;
+  }
+
+  .pac-controls label {
+    font-weight: 300;
+  }
+
+  #pac-input {
+    text-overflow: ellipsis;
+    font-size: small;
+  }
+
+  #pac-input:focus {
+    border-color: #4d90fe;
+  }
+
+  .pac-container {
+    z-index: 1100 !important;
+  }
+
+  body {
+    font-size: small;
+  }
+
+  .form-control {
+    font-size: small;
+  }
+
+  .imageBlock {
+    border-left: 1px #8080804a solid;
+  }
+
+  .imageBlock .avatar {
+    margin-top: 0px;
+  }
+
+  .headi {
+    font-weight: bold;
+  }
+
+  .filters {
+    color: black;
+  }
+
+  .bold {
+    font-weight: bold;
+  }
+
+  .reccBox {
+    background-color: #e9f4f4ad;
+    display: none;
+  }
+
+  .spacing {
+    margin-top: 1rem;
+  }
+
+  .dropdown-menu > li > a {
+    padding-right: 0px !important;
+  }
+
+  .multiselect-container > li > a > label {
+    height: auto;
+  }
+
+  .multiselect-container {
+    height: 1rem;
+    overflow-y: scroll;
+    width: max-content;
+  }
+
+  .nav-pills .nav-link.active,
+  .nav-pills .show > .nav-link {
+    background-color: grey;
+    color: white !important;
+  }
+</style>
+{% endblock %} {% block body %}
+<div class="container">
+  {% if errors %}
+  <div class="alert alert-danger" role="alert">
+    <div id="errorsBox">
+      <div>
+        <h5
+          style="
+            color: red;
+            text-shadow: -0.5px -0.5px 0 #000, 0.5px -0.5px 0 #000,
+              -0.5px 0.5px 0 #000, 0.5px 0.5px 0 #000;
+          "
+        >
+          Error !
+        </h5>
+        <ul>
+          {% for x in errors %}
+          <li>{{ x }}</li>
+          {% endfor %}
+        </ul>
+      </div>
+    </div>
+  </div>
+  {% endif %}
+  <div class="row shadow bg-white p-3 " style="min-height: 70vh;">
+    <div class="col-3 rounded border shadow py-2" id="tutor-list">
+      <div class="nav flex-column nav-pills nav-fill" id="v-pills-tab" role="tablist" aria-orientation="vertical">
+        <a class="nav-link border-bottom my-border" style="border-bottom-width: 5px !important;" id="v-pills-settings-tab"
+          data-toggle="tab" data-id="{{tutor.user.id}}" href="#{{tutor.user.first_name}}{{tutor.user.last_name}}{{tutor.user.id}}"
+          role="tab" aria-controls="v-pills-settings" aria-selected="false">{{tutor.user.first_name}} {{tutor.user.last_name}}</a>
+      </div>
+    </div>
+    <div class="col-9 d-flex flex-column">
+      <div class="tab-content flex-fill border rounded mb-2 shadow" id="chat-column" style="max-height: 58vh; overflow: scroll;">
+        <div class="tab-pane fade d-flex flex-column" id="{{tutor.user.first_name}}{{tutor.user.last_name}}{{tutor.user.id}}"
+        role="tabpanel" aria-labelledby="v-pills-home-tab"></div>
+      </div>
+      <div class="d-flex">
+        <input type="text" id="message" class="form-control w-75" placeholder="Type a message..." required/>
+        <button class="flex-fill ml-2 btn btn-primary disabled" disabled id="send_message">
+          Send
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.3.0/socket.io.js"></script>
+  <script>
+    $(() => {
+      // make connection
+
+      // Change url to server url at production
+      // var socket = io("https://chatapplicationjdmr.herokuapp.com");
+      var socket = io('http://localhost:8080/')
+
+      var room;
+      // var myusername = 'akash'
+      var studentFirstname = "{{ student.user.first_name }}"
+      var studentLastname = "{{ student.user.last_name }}"
+      var myusername = studentFirstname + " " + studentLastname
+      var id = {{ student.user.id }}
+      var tutorId = {{ tutor.user.id }}
+      var tutorUsername = "{{tutor.user.first_name}}{{tutor.user.last_name}}"
+      console.log("{{tutor.user.first_name}}{{tutor.user.last_name}}")
+
+      //buttons and inputs
+      var message = $("#message");
+      var send_message = $("#send_message");
+
+      socket.on("connect", () => {
+        console.log("Connected");
+        // Added for temporary transfer of data
+        socket.emit("join", {
+          // In production id of user
+          name: myusername,
+          id,
+        });
+        $("div#tutor-list").on("click", function (event) {
+          room = event.target.getAttribute("data-id");
+          name = event.target.innerHTML.replace(/ /g, '')
+          send_message.removeClass('disabled').removeAttr('disabled')
+          if (!$(`#${name}${room}`).children().length) {
+
+            socket.emit(
+              "get_past_chats",
+              {
+                // fromDate: Date.now() ,
+                id: room,
+                name
+              },
+              );
+            }
+        });
+        socket.on('past_chats', function ({ chats, id, name }) {
+          console.log(chats, id, name)
+          $(`#${name}${id}`).append(chats.map(chat => {
+            var tmp = null;
+            if (chat.from_Id !== parseInt(id)) {
+              tmp =
+              '<div class="card bg-primary rounded p-1 my-1 ml-auto"><div class="card-body p-2">' +
+                chat.text +
+                "</div>"
+            }
+            else {
+              tmp =  '<div class="card bg-primary rounded my-1  p-1 mr-auto"><div class="card-body p-2">' +
+                chat.text +
+                "</div>"
+            }
+            return tmp
+          }))
+        })
+        socket.emit('get_friends_list',)
+        socket.on('friend_list', function (friendsList) {
+
+
+          const aTag = friendsList.filter(friend => {
+            return $('#v-pills-settings-tab').text() !== friend.name
+          }).map(friend => {
+            return $('<a class="nav-link border-bottom " style="border-bottom-width: 5px !important;" id="v-pills-settings-tab" data-toggle="tab" role="tab" aria-controls="v-pills-settings" aria-selected="false"></a>').attr({ href: '#' + friend.name.replace(/ /g, '') + friend._id, 'data-id': friend._id }).text(friend.name)
+          })
+          const dTag = friendsList.map(friend => $('<div class="tab-pane fade  d-flex flex-column" role="tabpanel" aria-labelledby="v-pills-home-tab"></div>').attr('id', friend.name.replace(/ /g, '') + friend._id))
+          $('#chat-column').append(dTag)
+          $('#v-pills-tab').append(aTag
+          )
+
+        })
+      });
+
+      socket.on("disconnect", reason => {
+        console.log("Disconnected");
+        if (reason === "io server disconnect") {
+          // the disconnection was initiated by the server, you need to reconnect manually
+          socket.connect();
+        }
+        // else the socket will automatically try to reconnect
+      });
+
+      //emit new msg
+      send_message.on("click", () => {
+        console.log("send message");
+        socket.emit("new_message", {
+          message: message.val(),
+          to_Id: room,
+          to: $("a[data-id=" + room + "]").text(),
+        });
+
+        $("#" + $("a[data-id=" + room + "]").text().replace(/ /g, '') + room).append(
+          '<div class="card bg-primary rounded p-1 my-1  ml-auto"><div class="card-body p-2">' +
+          message.val() +
+          "</div>"
+        );
+      });
+
+      //listen on new message
+      socket.on("new_message", message => {
+        console.log(message);
+        console.log("recevie message");
+        console.log('#' + message.from.replace(/ /g, '') + message.from_Id)
+        $("#" + message.from.replace(/ /g, '') + message.from_Id).append(
+          '<div class="card bg-primary rounded p-1 my-1  mr-auto"><div class="card-body p-2">' +
+          message.text +
+          "</div>"
+        );
+      });
+    });
+  </script>
+  {% endblock %}
+</div>

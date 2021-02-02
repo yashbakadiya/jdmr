@@ -25,7 +25,7 @@ SECRET_KEY = '1zqb-ml)1hbr6+5+jpm89c_hwi(qx(+m8*$xn+)8)_klm1^eiw'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['jdmrischool.herokuapp.com','localhost']
+ALLOWED_HOSTS = ['jdmrischool.herokuapp.com', 'localhost']
 
 
 # Application definition
@@ -38,8 +38,23 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.humanize',
     'rest_framework',
+    'rest_framework_api_key',
     'api.apps.ApiConfig',
+    'teacher',
+    'students',
+    'institute',
+    'accounts',
+    'dashboard',
+    'courses',
+    'batches',
+    'fees',
+    'tutorials',
+    'results',
+    'exams',
+    'notes',
+    'django_cleanup',
 ]
 
 MIDDLEWARE = [
@@ -57,7 +72,7 @@ ROOT_URLCONF = 'tutorSearch.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': ['templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -78,16 +93,9 @@ WSGI_APPLICATION = 'tutorSearch.wsgi.application'
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
 
 DATABASES = {
-        'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'project8',
-        'USER': 'root',
-        'PASSWORD': "",
-        'HOST': "localhost",
-        'PORT': "3306",
-        'OPTIONS': {
-            'init_command': "SET sql_mode='STRICT_TRANS_TABLES'"
-        }
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
     }
 }
 
@@ -135,13 +143,13 @@ STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'static')
 ]
 
-STATIC_ROOT = os.path.join(BASE_DIR, 'static_root')
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
-#Authentication backends
+# Authentication backends
 AUTHENTICATION_BACKENDS = (
-        'django.contrib.auth.backends.ModelBackend',
-    )
+    'django.contrib.auth.backends.ModelBackend',
+)
 
 # Activate Django-Heroku.
 django_heroku.settings(locals())
@@ -153,13 +161,36 @@ django_heroku.settings(locals())
 #         # 'rest_framework.authentication.SessionAuthentication',
 #         'knox.auth.TokenAuthentication',
 #     ]
-# }   
+# }
 
+REST_FRAMEWORK = {
+    "DEFAULT_PERMISSION_CLASSES": [
+        "rest_framework_api_key.permissions.HasAPIKey",
+    ],
+}
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = 'smtp.yourserver.com'
-EMAIL_PORT = '<your-server-port>'
-EMAIL_HOST_USER = 'your@djangoapp.com'
-EMAIL_HOST_PASSWORD = 'your-email account-password'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_HOST_USER = 'gkdevtest777@gmail.com'
+EMAIL_MAIL_SUBJECT = "COACHING OTP"
+EMAIL_HOST_PASSWORD = ''
+EMAIL_PAGE_DOMAIN = 'localhost'
 EMAIL_USE_TLS = True
 EMAIL_USE_SSL = False
+EMAIL_MODEL_ADMIN = False
+
+
+# LOGIN_REDIRECT_URL="index"
+# EMAIL_BACKEND='django.core.mail.backends.smtp.EmailBackend'
+# EMAIL_HOST='smtp.gmail.com'
+# EMAIL_PORT=587
+# EMAIL_USE_TLS=True
+# EMAIL_HOST_USER='gk32239@gmail.com'
+# EMAIL_HOST_PASSWORD='--------'
+# EMAIL_MAIL_SUBJECT = 'gk32239@gmail.com'
+# EMAIL_MAIL_HTML = 'mail_body.html'
+# EMAIL_MAIL_PLAIN = 'mail_body.txt'
+# EMAIL_PAGE_TEMPLATE = 'confirm_template.html'
+# EMAIL_PAGE_DOMAIN = 'http://my-edumark.herokuapp.com/'
+# EMAIL_MODEL_ADMIN = False # the default value is False

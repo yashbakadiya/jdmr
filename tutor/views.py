@@ -551,6 +551,7 @@ def archiveCourseList(request):
 
 def signupCoachingCentre(request):
 	print('testing',request.method)
+	prefil = {}
 	if request.method=="POST":
 		instituteName = request.POST.get('instituteName', '')
 		count= SignupCoachingCentre.objects.all().count()
@@ -566,6 +567,14 @@ def signupCoachingCentre(request):
 		latitude = request.POST.get('cityLat')
 		longitude = request.POST.get('cityLng')
 		confpassword = request.POST.get('confpassword')
+		prefil = {
+			"instituteName":instituteName,
+			"email":email,
+			"password":password,
+			"confpassword":confpassword,
+			"loc":loaction,
+			"phone":phone,
+		}
 		if password != confpassword:
 			messages.error(request, "Passwords do not match")
 			return redirect('/signupCoachingCentre/')
@@ -589,7 +598,7 @@ def signupCoachingCentre(request):
 			signupCoachingCentre.save()
 			signupCoachingCentre.email
 			return redirect('/loginCoachingCentre/')
-	return render(request, 'tutor/signupCoachingCentre.html')
+	return render(request, 'tutor/signupCoachingCentre.html',prefil)
 
 def viewteachingType(request):
 	teach = ViewTeachingType.objects.all()
@@ -678,10 +687,10 @@ def signupTutor(request):
 		phone = request.POST.get('phone', '')
 		location = request.POST.get('loc', '')
 		prefil = {
-			"username":username,
 			"firstName":firstName,
 			"lastName":lastName,
 			"email":email,
+			"password":password,
 			"distance":distance,
 			"phone":phone,
 		}
@@ -697,21 +706,26 @@ def signupTutor(request):
 		if(errors):
 			return render(request, 'tutor/signupTutor.html',{"errors":errors,"prefil":prefil})
 		else:
-			signupTutor = SignupTutor(
-				username=username,
-				firstName=firstName,
-				tutorCode=tutorCode,
-				lastName=lastName,
-				email=email,
-				password=password,
-				distance=distance,
-				phone=phone,
-				location=location,
-				latitude=latitude,
-				longitude=longitude
-			)
-			signupTutor.save()
-		return redirect('/loginTutor/')
+			try:
+				tutor = SignupTutor.objects.get(username=username)
+				errors.append("Username/Email Already Exist")
+				return render(request, 'tutor/signupTutor.html',{"errors":errors,"prefil":prefil})
+			except:
+				signupTutor = SignupTutor(
+					username=username,
+					firstName=firstName,
+					tutorCode=tutorCode,
+					lastName=lastName,
+					email=email,
+					password=password,
+					distance=distance,
+					phone=phone,
+					location=location,
+					latitude=latitude,
+					longitude=longitude
+				)
+				signupTutor.save()
+				return redirect('/loginTutor/')
 	return render(request, 'tutor/signupTutor.html')
 def signupTutorContinued(request,sno):
 	if(request.method=='POST'):
@@ -1368,6 +1382,7 @@ def loginStudent(request):
 	# return render(request, 'tutor/loginStudent.html')
 
 def signupStudent(request):
+	prefil = {}
 	schools = School.objects.all()
 	school_list = list(map(str,schools))
 	if request.method=="POST":
@@ -1386,6 +1401,15 @@ def signupStudent(request):
 		password = request.POST.get('password', '')
 		phone = request.POST.get('phone', '')
 		location = request.POST.get('loc')
+		prefil = {
+			"firstName":firstName,
+			"lastName":lastName,
+			"email":email,
+			"password":password,
+			"distance":distance,
+			"phone":phone,
+		}
+
 		if firstName.isalpha() == False | lastName.isalpha() == False :
 			messages.error(request, "Name must be alphabetical")
 			return redirect('/signupStudent/')
@@ -1410,7 +1434,7 @@ def signupStudent(request):
 			)
 			signupStudent.save()
 		return redirect('/loginStudent/')
-	return render(request, 'tutor/signupStudent.html',{"school_list":school_list})
+	return render(request, 'tutor/signupStudent.html',{"school_list":school_list,"prefil":prefil})
 
 def addStudents(request):
 	if request.method=="POST":
@@ -3402,7 +3426,7 @@ def DeleteTutorialsInstitute(request,course_id):
 
 def ArchiveTutorials(request):
 	cid = request.session['CoachingCentre']
-	#print(cid)
+	
 	coaching = SignupCoachingCentre.objects.get(s_no=cid)
 	courses = AddCourses.objects.filter(coachingCentre = coaching)
 	tutorials = []
@@ -3755,11 +3779,12 @@ def forgotpass(request):
 	if request.method=="POST":
 		if "first" in request.POST:
 			email = request.POST.get('username')
-			type = request.POST.get('type')
+			print('email---',email)
+			u_type = request.POST.get('type')
 
-			if type=="Coaching":
+			if u_type=="Coaching":
 				user = SignupCoachingCentre.objects.get(email=email).s_no
-			elif type=="Tutor":
+			elif u_type=="Tutor":
 				user = SignupTutor.objects.get(email=email).sno
 			else:
 				user = SignupStudent.objects.get(email=email).snum
@@ -3776,10 +3801,10 @@ def forgotpass(request):
 				otp = OTP(
 					otp = otp_code,
 					user = user,
-					type = type
+					type = u_type
 					)
 
-				return render(request,'tutor/forgotpassCoaching.html',{'trial':"1",'user':user,'type':type})
+				return render(request,'tutor/forgotpassCoaching.html',{'trial':"1",'user':user,'type':u_type})
 			else:
 				return render(request,'tutor/forgotpassCoaching.html',{"trial":"0"})
 

@@ -1,0 +1,115 @@
+{% extends 'dashboard/student-dashboard.html' %}
+{% load static %}
+{% load splitspace %}
+{% block main-content %}
+<main>
+    <div class="container mt-5">
+        <div class="card col-sm-12" >
+            <div class="card-body container">
+                <form method="post" action="">{% csrf_token %}
+                    <div class="row d-flex justify-content-end">
+                        <div class="col-sm-10 col-12 justify-content-center d-flex">
+                            <input type="text" class="controls form-control" name='course' placeholder="Search Course">
+                        </div>
+                        <div class="col-sm-1 col-12 my-1 d-flex justify-content-end">
+                            <button class="btn btn-warning btn-md">Search</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        
+            <form method="post">{% csrf_token %}
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-5 col-sm-6 col-12 mt-2 row">
+                            <label class="control-label text-center mt-2 col-md-6 col-sm-6 col-6" style="color:black;">Duration&nbsp;&nbsp;</label>
+                            <select class="custom-select form-control w-100 col-md-6 col-sm-6 col-6" name="duration"
+                                id="duration">
+                                <option selected disabled>Duration</option>
+                                <option value="1">1 Month</option>
+                                <option value="2">2 Months</option>
+                                <option value="3">3 Months</option>
+                                <option value="4">4 Months</option>
+                                <option value="5">5 Months</option>
+                                <option value="6">6 Months</option>
+                            </select>
+                        </div>
+                        <div class="col-md-5 col-sm-6 col-12 mt-2 row">
+                            <label class="control-label d-flex justify-content-end mt-2 col-md-6 col-sm-6 col-6" style="color:black;"> Fees &nbsp;</label>
+                            <select class="custom-select form-control w-100 col-md-6 col-sm-6 col-6" name="fees">
+                                <option selected disabled>Fees in Rs.</option>
+                                <option value="0-1000">less than 1000</option>
+                                <option value="1000-2000">1000-2000</option>
+                                <option value="2000-5000">2000-5000</option>
+                                <option value="5000-7000">5000-70000</option>
+                                <option value="7000-50000">7000 and above</option>
+                            </select>
+                        </div>
+                        <div class="col-md-2 col-sm-6 col-12 mt-2 d-flex justify-content-end">
+                            <button type="submit" class="ml-3 btn btn-info">Filter</button>
+                        </div>  
+                    </div>
+                </div>
+            </form>
+        </div>
+        {% if alltutorials %}
+        <div class="row mt-4" style="color:black;">
+            {% for tutorial in alltutorials%}
+            <div class="col-md-4 col-12 layout-spacing">
+                <div class="widget-content widget-content-area h-100">
+                    <div class="top-seller-container">
+                        <div class="top-seller-header h-100">
+                            <div class="row">
+                                <div class="col-md-12 col-sm-12 col-12">
+                                    <video class="col-md-12 col-12" playsinline style="pointer-events: none;" controls="">
+                                        <source src="{{tutorial.First}}">
+                                    </video>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="top-seller-body mt-2">
+                        <div class="row mt-2">
+                            <div class="col-md-6 col-6">
+                                <b>{{tutorial.Title}}</b>
+                            </div>
+                            <div class="col-md-6 col-6 row">
+                                <b class="col-md-4 col-4">Fees</b>
+                                {% if tutorial.Discount_Validity %}
+                                <p class="col-md-8 col-8">{{tutorial.Discounted_price}}&nbsp;<del>{{tutorial.Fees}}</del></p>
+                                {% else %}
+                                <p class="col-md-8 col-8">{{tutorial.Fees}}</p>
+                                {% endif %}
+                            </div>
+                            
+                            <div class="col-md-6 col-6 row">
+                                <b class="col-md-8 col-8">Duration</b>
+                                <p class="col-md-4 col-4">{{tutorial.Duration}}</p>
+                            </div>
+                            <div class="col-md-6 col-12">
+                                <a href="{% url 'watchTutorcourse' tutorial.id %}" class="ml-4 btn btn-info">Watch</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+    </div>
+</main>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#duration').change(function () {
+            var selected = $('#duration').val();
+            var i;
+            var cards = document.getElementByClassName('card');
+            var items = document.getElementsByClassName('course-duration');
+            var i, text = "";
+            for (i = 0; i < items.length; i++) {
+                if (items[i] == selected) {}
+            }
+        });
+    });
+</script>
+{% endblock main-content %}

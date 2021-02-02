@@ -1,0 +1,256 @@
+{% extends my_template %}
+{% load static %}
+{% block main-content %}
+<link rel="stylesheet" href="{% static 'css/croppie.css' %}" />
+<script src="{% static 'js/croppie.min.js' %}"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCBJybI10-Xa43-F5GSad1i0Y9W3yqlW6Q&libraries=places&v=3"
+	defer></script>
+<div class="container">
+	{% if messages %}
+        {% for k in messages%}
+        <div class="alert alert-{{k.tags}} alert-dismissible fade show" role="alert">
+            <b>{{ k }} !</b>
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        {% endfor %}
+        {% endif %}
+	<div class="row layout-spacing mt-5">
+    <div class="col-lg-12">
+        <div class="statbox widget box box-shadow">
+            <div class="widget-header border-bottom border-default">
+                <div class="row">
+                    <div class="col-xl-12 col-md-12 col-sm-12 col-12">
+                        <h4 style="color:black;"><b>{{centre.user.first_name}} {{centre.user.last_name}} Profile</b></h4>
+                    </div>
+					<div class="col-xl-12 col-md-12 col-sm-12 col-12 d-flex justify-content-center">
+                        {% if centre.photo %}
+							<img class="circle" id="preview" src="{{centre.photo.url}}" alt="Not Found" style="height:10rem;width:10rem;">
+						{% else %}
+							<img class="circle" id="preview" src="{% static 'default-profile.png' %}" alt="Default Not Found" style="height:10rem;width:10rem;">
+						{% endif %}
+                    </div>
+                </div>
+            </div>
+            <div class="widget-content widget-content-area">
+                        <form enctype="multipart/form-data" method="post">{% csrf_token %}
+                            {% csrf_token %}
+							<div class="row">
+							<div class="col-lg-6 col-md-6 col-12 mt-2 row">
+                                <label class="control-label col-sm-3 col-md-4 col-5 text-center mt-3" style="color:black;">Username</label>
+                                <input type="text" class="form-control mt-2 w-100 col-sm-9 col-md-8 col-7"
+                                    name='loc' required disabled value="{{centre.user.username}}">
+                                
+                            </div>
+							<div class="col-lg-6 col-md-6 col-12 mt-2 row">
+                                <label class="control-label col-sm-3 col-md-4 col-5 text-center mt-3" style="color:black;">Email</label>
+                                <input type="email" class="form-control mt-2 w-100 col-sm-9 col-md-8 col-7"
+                                    name='email' required value="{{centre.user.email}}">
+                            </div>
+							<div class="col-lg-6 col-md-6 col-12 mt-2 row">
+                                <label class="control-label col-sm-3 col-md-4 col-5 text-center mt-3" style="color:black;">Phone</label>
+                                <input type="tel" class="form-control mt-2 w-100 col-sm-9 col-md-8 col-7"
+                                    name='phone' required value="{{centre.phone}}">
+                            </div>
+							<div class="col-lg-6 col-md-6 col-12 mt-2 row">
+                                <label class="control-label col-sm-3 col-md-4 col-5 text-center mt-3" style="color:black;">Old Password</label>
+                                <input type="password" class="form-control mt-2 w-100 col-sm-9 col-md-8 col-7"
+                                    name='oldPassword' required>
+                            </div>
+							<div class="col-lg-6 col-md-6 col-12 mt-2 row">
+                                <label class="control-label col-sm-3 col-md-4 col-5 text-center mt-3" style="color:black;">New Password</label>
+                                <input type="password" class="form-control mt-2 w-100 col-sm-9 col-md-8 col-7"
+                                    name='newPassword' required>
+                            </div>
+							<div class="col-lg-6 col-md-6 col-12 mt-2 row">
+                                <label class="control-label col-sm-3 col-md-4 col-5 text-center mt-3" style="color:black;">Confirm Password</label>
+                                <input type="password" class="form-control mt-2 w-100 col-sm-9 col-md-8 col-7"
+                                    name='confirmPassword' required>
+                            </div>
+                            <div class="col-lg-6 col-md-6 col-12 mt-2 row">
+                                <label class="control-label col-sm-3 col-md-4 col-5 mt-3 text-center" style="color:black;"> Location</label>
+                                <input type="text" class="form-control mt-2 w-100 col-sm-9 col-md-8 col-7" id="pac-input" name='loc' required value="{{centre.address}}">
+                                <input type="hidden" id="cityLat" value="0" name="cityLat" />
+                                <input type="hidden" id="cityLng" value="0" name="cityLng" />
+                            </div>
+                            <div class="col-lg-6 col-md-6 col-12 mt-2 row">
+                                <label class="control-label col-sm-3 col-md-4 col-5 mt-3 text-center" style="color:black;">Change Img</label>
+                                <input class="form-control my-2 w-100 col-sm-9 col-md-8 col-7" type="file" value="{{centre.photo}}" name="photo">
+                            </div>
+							{% if request.session.type == "Teacher" %}
+                            <div class="col-lg-6 col-md-6 col-12 mt-2 row">
+                                <label class="control-label col-sm-3 col-md-4 col-5 mt-3 text-center" style="color:black;">Experience</label>
+                                <input type="number" class="form-control mt-2 w-100 col-sm-9 col-md-8 col-7"
+                                    style="-moz-appearance: textfield;" min="0" name="experience"
+                                    placeholder="Experience" value="{{centre.experiance}}">
+                            </div>
+							<div class="col-lg-6 col-md-6 col-12 mt-2 row">
+                                <label class="control-label col-sm-3 col-md-4 col-5 mt-3 text-center" style="color:black;">Qualification</label>
+                                <input type="text" class="form-control mt-2 w-100 col-sm-9 col-md-8 col-7" name="qualification"
+                                    placeholder="Qualification" value="{{centre.qualification}}">
+                            </div>
+                            {% endif %}
+							{% if request.session.type == "Student" %}
+							<div class="col-lg-6 col-md-6 col-12 mt-2 row">
+                                <label class="control-label col-sm-3 col-md-4 col-5 mt-3 text-center" style="color:black;">School-Name</label>
+                                <input type="text" class="form-control mt-2 w-100 col-sm-9 col-md-8 col-7" name="schoolName"
+                                    placeholder="Qualification" value="{{centre.schoolName}}">
+                            </div>
+                            {% endif %}
+                            <div class="col-lg-12 col-md-12  col-12 d-flex justify-content-center mt-5">
+                                <button type="submit" class="btn btn-info">Update</button>
+                            </div>
+							</div>
+                        </form>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+<script>
+	$(document).on("DOMContentLoaded", function () {
+
+		function showPosition(position) {
+			document.getElementById('pac-input').value = "processing...";
+			document.getElementById('cityLat').value = position.coords.latitude;
+			document.getElementById('cityLng').value = position.coords.longitude;
+
+			$.ajax({
+				type: "POST",
+				url: "/ajaxLocation/",
+				data: {
+					'cityLat': position.coords.latitude,
+					'cityLng': position.coords.longitude,
+					'ajax': 1
+				},
+				success: function (response) {
+					if (response.status == 'success') {
+						document.getElementById('pac-input').value = response.result;
+					} else {
+						document.getElementById('pac-input').value = response.error;
+					}
+				},
+				error: function () {
+					document.getElementById('pac-input').value = "";
+				}
+			});
+
+		}
+
+		function getLocation() {
+			if (navigator.geolocation) {
+				navigator.geolocation.getCurrentPosition(showPosition);
+			} else {
+				//  "Geolocation is not supported by this browser.";
+			}
+		}
+		$("#getUserLocation").on("click", getLocation);
+
+		function initialize() {
+			var input = document.getElementById('pac-input');
+			var autocomplete = new google.maps.places.Autocomplete(input);
+			google.maps.event.addListener(autocomplete, 'place_changed', function () {
+				var place = autocomplete.getPlace();
+				document.getElementById('cityLat').value = place.geometry.location.lat();
+				document.getElementById('cityLng').value = place.geometry.location.lng();
+			});
+		}
+
+		initialize();
+
+
+		var cropper = $("#upload_cropper").croppie({
+			viewport: {
+				width: 300,
+				height: 300,
+				type: 'square'
+			},
+			boundary: {
+				width: 400,
+				height: 400
+			},
+			mouseWheelZoom: 'ctrl',
+		});
+
+		function previewImage() {
+			var preview = $("#preview")[0];
+			var file = $("#uploadImage")[0].files[0];
+			var reader = new FileReader();
+
+			reader.onloadend = function () {
+
+				$('#imageCropperModal').on('shown.bs.modal', function (e) {
+					cropper.croppie('bind', {
+						url: reader.result,
+						points: [0, 0, 300, 300],
+						zoom: 0.5,
+					});
+				});
+				$("#imageCropperModal").modal("show");
+			}
+
+			if (file) {
+				reader.readAsDataURL(file);
+			} else {}
+		}
+		$("#uploadImage").on('change', previewImage);
+
+		$("#saveCroppedImage").on("click", function () {
+			cropper.croppie("result", 'base64').then(function (imageurl) {
+				preview.src = imageurl;
+				$("#ImageToServer").val(imageurl);
+			});
+			$("#imageCropperModal").modal("hide");
+		});
+
+	});
+</script>
+<script type="text/javascript">
+	$("#getOTP").on("click", function (e) {
+		//send ajax to backend send otp
+		$("#otpModal").modal("show");
+		$.ajax({
+			type: "POST",
+			url: "{% url 'getOTP' %}",
+			data: {
+				'email': "{{centre.email}}",
+				'getotp': true,
+				'csrfmiddlewaretoken': '{{ csrf_token }}',
+			},
+			success: function (response) {
+				if (response.status == 'success') {
+
+				}
+			},
+			error: function () {}
+		});
+	});
+	$(".reveal").on('click', function () {
+			var $pwd = $(".pwd");
+			if ($pwd.attr('type') === 'password') {
+				$pwd.attr('type', 'text');
+			} else {
+				$pwd.attr('type', 'password');
+			}
+		});
+		$(".reveal1").on('click', function () {
+			var $pwd = $(".pwd1");
+			if ($pwd.attr('type') === 'password') {
+				$pwd.attr('type', 'text');
+			} else {
+				$pwd.attr('type', 'password');
+			}
+		});
+		$(".reveal2").on('click', function () {
+			var $pwd = $(".pwd2");
+			if ($pwd.attr('type') === 'password') {
+				$pwd.attr('type', 'text');
+			} else {
+				$pwd.attr('type', 'password');
+			}
+		});
+</script>
+{% endblock main-content %}

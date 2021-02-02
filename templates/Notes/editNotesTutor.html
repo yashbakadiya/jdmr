@@ -1,0 +1,66 @@
+{% extends 'dashboard/Tutor-dashboard.html' %}
+{% load static %}
+{% block main-content %}
+<div>
+    {% if messages %}
+    <div class="alert alert-warning" role="alert">
+        <ul class="messages">
+            {% for k in messages %}
+            <li style="color: darkred;">{{ k }}</li>
+            {% endfor %}
+        </ul>
+    </div>
+    {% endif %}
+</div>
+<div class="container">
+    <div class="col-md-12 col-12">
+        <div class="card">
+            <div class="card-header">
+                <div class="row">
+                    <div class="col-sm-10">
+                        <h2 style="color: black;">Edit Notes</h2>
+                    </div>
+
+                </div>
+            </div>
+            <div class="card-body container">
+                <form method='post' action='' enctype='multipart/form-data'>{% csrf_token %}
+                    <div class="row">
+
+                        <div class="col-md-12 col-lg-12 col-12 input-group form-group">
+                            <label class="control-label col-sm-2 col-md-2 col-5 mt-2 text-center"
+                                style="color: black;">Title</label>
+                            <input type="text" step="0.01" class="form-control w-100 col-sm-10 col-md-10 col-7"
+                                id="title" name="title" placeholder="Enter Note Title" required value="{{note.title}}">
+                        </div>
+
+                        <div class="col-md-6 col-lg-6 col-12 input-group form-group">
+                            <label class="control-label col-sm-3 col-md-4 col-5 mt-2 text-center"
+                                style="color: black;">Course</label>
+                            <select id="course" name="course"
+                                class="custom-select form-control w-100 col-md-8 col-sm-9 col-7" required>
+                                <option disabled selected>{{note.subject}}</option>
+                                {% for course in courses %}
+                                <option value="{{course.courseName}}">{{course.courseName}}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+
+                        <div class="col-md-6 col-lg-6 col-12 input-group form-group">
+                            <input type="file" class="ml-4 mt-2 form-control-file" id="file" name="note">
+                        </div>
+
+                        <div class="col-md-12 col-lg-12 col-12 input-group form-group">
+                            <textarea class="form-control my-2 w-100" name='description'
+                                placeholder="Note Description">{{note.description}}</textarea>
+                        </div>
+
+                        <div class="col-lg-12 col-md-12 col-12 text-center">
+                            <button id='submitBtn' name="submit" type="submit" class="btn btn-info">Add Note</button>
+                        </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock main-content %}

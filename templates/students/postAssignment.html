@@ -1,0 +1,151 @@
+{% extends 'dashboard/student-dashboard.html' %}
+{% load static %}
+{% block main-content %}
+<div class="container mt-5">
+    {% if errors %}
+    <div class="alert alert-danger" role="alert">
+        <div id='errorsBox'>
+            <div>
+                <h5
+                    style="color: red;text-shadow:-0.5px -0.5px 0 #000,0.5px -0.5px 0 #000,-0.5px 0.5px 0 #000,0.5px 0.5px 0 #000;">
+                    Error !</h5>
+                <ul>
+                    {% for x in errors %}
+                    <li>{{ x }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+    <div class="col-md-12 col-12">
+        <div class="card">
+            <div class="card-header">
+                <div class="row">
+                    <div class="col-sm-10">
+                        <h2 style="color: black;">Add Assignment</h2>
+                    </div>
+
+                </div>
+            </div>
+            <div class="card-body container">
+                <form id='submitForm' method='post' action='' enctype='multipart/form-data'>{% csrf_token %}
+                    <div class="row">
+                    
+                        <div class="col-md-6 col-lg-6 col-12 input-group form-group">
+                            <label class="control-label col-sm-3 col-md-4 col-5 mt-2 text-center"
+                                style="color: black;">Course</label>
+                            <select id="ctn" name="ctn" class="custom-select form-control w-100 col-md-8 col-sm-9 col-7"
+                                required="required" onclick="addvals(this)" onchange="addoptions(this);">
+                                <option disabled selected value>Course</option>
+                                {% for x in data %}
+                                <option value="{{ x.id }}">{{ x.courseName }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="col-md-6 col-lg-6 col-12 input-group form-group">
+                            <label class="control-label col-sm-3 col-md-4 col-5 mt-2 text-center"
+                                style="color: black;">Class</label>
+                            <select id="cn" name="cn" class="custom-select form-control w-100 col-md-8 col-sm-9 col-7"
+                                required="required" onclick="addvals(this)">
+                                <option disabled selected>Class</option>
+                            </select>
+                        </div>
+
+                        <div class="col-lg-4 col-12 col-md-6 input-group form-group">
+                            <label class="control-label col-sm-4 col-5 mt-2 text-center"
+                                style="color: black;">Budget</label>
+                            <input type="number" step="0.01" style="-moz-appearance: textfield;" min="0"
+                                class="form-control w-100 col-sm-8 col-7" id="budget" name="budget" placeholder="Budget"
+                                required>
+                        </div>
+                        <div class="col-lg-4 col-md-6 col-12 input-group form-group">
+                            <label class="control-label col-md-6 col-sm-5 col-8 mt-2 text-center"
+                                style="color: black;">Requirement</label>
+                            <input type="number" step="0.01" style="-moz-appearance: textfield;" min="0"
+                                class="form-control w-100 col-sm-7 col-md-6 col-4" id="requirement" name="requirement"
+                                placeholder="Requirement" required>
+                        </div>
+
+                        <div class="col-lg-4 col-md-6 col-12 input-group form-group">
+                            <input type="file" class="ml-4 mt-2 form-control-file" id="file" name="file" required>
+                        </div>
+
+                        <div class="col-md-12 col-lg-12 col-12 input-group form-group">
+                            <textarea class="form-control my-2 w-100" name='description'
+                                placeholder="Description"></textarea>
+                        </div>
+
+                        <div class="col-lg-12 col-md-12 col-12 text-center">
+                            <button id='submitBtn' name="submit" type="submit" class="btn btn-info">Post</button>
+                        </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="col-xl-12 col-md-12 col-12 mt-5">
+        <div class="statbox widget box box-shadow">
+            <div class="widget-header">
+                <div class="row">
+                    <div class="col-xl-12 col-md-12 col-12">
+                        <h4 class="p-2" style="color:black;"><b>Assignments</b></h4>
+                    </div>
+                </div>
+            </div>
+            {% if student.PostAssignment.all %}
+            <div class="widget-content widget-content-area">
+                <div class="table-responsive">
+                    <table id="htmlgrid" class="testgrid table table-striped table-bordered table-hover mb-4">
+                        <tr>
+                            <th>#</th>
+                            <th>Course</th>
+                            <th>Class</th>
+                            <th>Requirement</th>
+                            <th>Created</th>
+                            <th>Budget</th>
+                            <th>Assigned</th>
+                            <th>Action</th>
+                        </tr>
+                        {% for assing in student.PostAssignment.all reversed %}
+                        <tr>
+                            <td>{{forloop.counter}}</td>
+                            <td>{{assing.courseName}}</td>
+                            <td>{{assing.forclass}}</td>
+                            <td>{{assing.requirement}}</td>
+                            <td>{{assing.timestamp}}</td>
+                            <td>{{assing.budget}}</td>
+                            {% if i.assigned == True %}
+                            <td><i class="flaticon-user-check"></i></td>
+                            {% else %}
+                            <td class="text-center"><i class="btn btn-info flaticon-time-1"></i></td>
+                            {% endif %}
+                            <td class="text-center"><a href="{% url 'Delete_Assignment' assing.sno %}"><span
+                                        class="btn btn-danger flaticon-delete-4"></span></a></td>
+                        </tr>
+                        {% endfor %}
+                    </table>
+                </div>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+<script>
+    function clear_all() {
+        var x = document.getElementsByClassName("form-control");
+        for (var i = 0; i < x.length; i++) {
+            x[i].value = '';
+        }
+    }
+    alldata = JSON.parse("{{jsdata|escapejs}}");
+
+    function addoptions(el) {
+        course = el.value;
+        html1 = "";
+        for (i = 0; i < alldata[course][0].length; i++) {
+            html1 += "<option value=\"" + alldata[course][0][i] + "\">" + alldata[course][0][i] + "</option> ";
+        }
+        $("#cn").html(html1);
+    }
+</script>
+{% endblock main-content %}

@@ -1,0 +1,126 @@
+{% extends 'dashboard/student-dashboard.html' %}
+{% load static %}
+{% block main-content %}
+<main>
+  <div class="container mt-4">
+    <div class="card">
+      <div class="card-body">
+      <div class="row">
+        <div class="col-lg-9 col-md-9 col-12 mt-2">
+          <video id="my-video" controls>
+            <source id="nowplaying" src="{{start}}" />
+          </video>
+        </div>
+        {% if tutorial.tutorplaylist.all %}
+          <div class="col-lg-3 col-md-3 col-12 mt-2">
+            <div id="accordion">
+              {% for item  in tutorial.tutorplaylist.all %}
+              <div class="card">
+                <div class="card-header" id="heading">
+                  <h5 class="mb-0">
+                    <button class="btn btn-info" data-toggle="collapse" data-target="#collapse{{item.id}}"
+                      aria-expanded="true" aria-controls="collapseOne">
+                      {{ item.Title}}
+                    </button>
+                  </h5>
+                </div>
+                <div id="collapse{{item.id}}" class="collapse show" aria-labelledby="headingOne"
+                  data-parent="#accordion">
+                  <div class="card-body">
+                    {{item.Description}}
+                    <div class="container p-0">
+                      <button class="btn btn-warning mr-5" onclick="myFunction('{{item.Video.url}}')"><i
+                          class="flaticon-youtube-play-fill" style="size:2rem;"></i></button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              {% endfor %}
+            </div>
+          </div>
+          <div class="col-lg-12 col-md-12 card col-12 mt-2">
+            <h2 class="text-dark">Course Content</h2>
+            <p>{{tutorial.tutorplaylist.all.count}} lectures • {{total_length}}</p>
+            {{tutorial.Description}}
+          </div>
+        </div>
+      </div>
+      {% else %}
+      <div class="card mt-4">
+        <div class="card-body">
+          <h4>Something went wrong</h4>
+        </div>
+      </div>
+      {% endif %}
+    </div>
+    <div class="card mt-4">
+      <div class="card-body">
+        {% if tutorial.Tutorreviews.all %}
+        <div class="col-md-12 col-12">
+          <h5 class="mb-2 text-dark">All Ratings and Reviews</h5>
+          {% for review in tutorial.Tutorreviews.all%}
+          <div class="bg-white rounded shadow-sm p-2 mb-2 restaurant-detailed-ratings-and-reviews review">
+            <div class="reviews-members pt-2 pb-2">
+              <div class="media">
+                {% if review.Student.photo %}
+                <img alt="Generic placeholder image" src="{{review.Student.photo}}" class="mr-3 rounded-pill">
+                {% else %}
+                <img alt="Generic placeholder image" src="https://i.stack.imgur.com/l60Hf.png"
+                  class="mr-3 rounded-pill">
+                {% endif %}
+                <div class="media-body">
+                  <div class="reviews-members-header">
+                    <h6 class="mb-1 text-dark">{{review.Student.Full_name}}</h6>
+                    {% for i in review.Range %}
+                    <span class="fa fa-star checked"></span>
+                    {% endfor %}
+                    <p class="mb-1" style="font-size: 12px;">{{review.Posted_On}}</p>
+                  </div>
+                  <div class="reviews-members-body mt-0 text-black">
+                    <p class="text-dark">{{review.Review}}</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          {% endfor %}
+          <div>
+            <button class="btn btn-primary load-more" style="align-items: center;">Load More</button>
+          </div>
+        </div>
+        {% endif %}
+        <div class="col-sm-12 col-12">
+          <form method="post" action="#">
+            {% csrf_token %}
+            <textarea class="form-control mt-2" id="exampleFormControlTextarea1" rows="3"
+              placeholder="Enter Your Review" required="This Field Cannot be Empty" name="comment"></textarea>
+            <select id="inputState" class="custom-select form-control w-100 mt-2" style="float: left;width:30%;"
+              name="rating">
+              <option value="5">Five Stars</option>
+              <option value="4">Four Stars</option>
+              <option value="3">Three Stars</option>
+              <option value="2">Two Stars</option>
+              <option value="1">One Stars</option>
+            </select>
+            <button class="btn btn-info mt-2" style="float: right;">Post Review</button>
+          </form>
+        </div>
+      </div>
+    </div>
+</main>
+<script>
+  function myFunction(data) {
+    var video = document.getElementsByTagName('video')[0];
+    var play = document.getElementsByTagName('source')[0];
+    play.src = data;
+    video.load();
+  }
+  $(".review").slice(0, 2).show();
+  $(".load-more").on("click", function () {
+    $(".review:hidden").slice(0, 10).show();
+    if ($(".review:hidden").length == 0) {
+      $(".load-more").fadeOut();
+    }
+  });
+</script>
+{% endblock main-content%}

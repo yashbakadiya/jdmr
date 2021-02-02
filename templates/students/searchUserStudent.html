@@ -1,0 +1,95 @@
+{% extends 'dashboard/base.html' %}
+{% load static %}
+{% block css %}
+.table-bordered.red-border, .table-bordered.red-border th, .table-bordered.red-border td {
+    border: 1px solid #ff3547!important;
+}
+.table.table-bordered th {
+    text-align: center;
+}
+.darken-grey-text {
+    color: #2E2E2E;
+}
+.input-group.md-form.form-sm.form-2 input {
+    border: 1px solid #bdbdbd;
+    border-top-left-radius: 0.25rem;
+    border-bottom-left-radius: 0.25rem;
+}
+.input-group.md-form.form-sm.form-2 input.purple-border {
+    border: 1px solid #9e9e9e;
+}
+.input-group.md-form.form-sm.form-2 input[type=text]:focus:not([readonly]).purple-border {
+    border: 1px solid #ba68c8;
+    box-shadow: none;
+}
+.form-2 .input-group-addon {
+    border: 1px solid #ba68c8;
+}
+.danger-text {
+    color: #ff3547; 
+}
+.success-text {
+    color: #00C851; 
+}
+{% endblock %}
+{% block body %}
+        <div class="container mt-4">
+        {% if messages %}
+        {% for k in messages%}
+        <div class="alert alert-{{k.tags}} alert-dismissible fade show" role="alert">
+            <b>{{ k }} !</b>
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        {% endfor %}
+        {% endif %}
+            <div class="card mb-4">
+                <div class="card-body">
+                    <div>
+                        <h2 style="color: rgb(66, 8, 8);">Results Are for your search</h2>
+                        <br>
+                            {% if sr %}
+                                    <table class="table table-striped">
+                                        <!--Table head-->
+                                        <thead>
+                                            <tr>
+                                                <th>Username</th>
+                                                <th>First Name</th>
+                                                <th>Last Name</th>
+                                                <th>Email Address</th>
+                                                <th>Pin Code</th>
+                                                <th>Phone Number</th>
+                                                <th>School Name</th>
+                                                <th></th>
+                                            </tr>
+                                        </thead>
+                                        <!--Table head-->
+                                        <!--Table body-->
+                                        {% for i in sr %}
+                                            <tbody>
+                                                <tr>
+                                                    <td>{{i.user.username}}</td>
+                                                    <td>{{i.user.first_name}}</td>
+                                                    <td>{{i.user.last_name}}</td>
+                                                    <td>{{i.user.email}}</td>
+                                                    <td>{{i.pincode}}</td>
+                                                    <td>{{i.phone}}</td>
+                                                    <td>{{i.schoolName}}</td>
+                                                    <td>
+                                                        <a href="{% url 'AddalreadyExistsStudent' i.id %}" class="btn btn-danger">Add</a>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        {% endfor %}
+                                        <!--Table body-->
+                                    </table>
+                                    <!--Table-->
+                                    <hr>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+{% endblock %}

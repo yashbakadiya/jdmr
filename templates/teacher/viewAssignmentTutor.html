@@ -1,0 +1,134 @@
+{% extends 'dashboard/Tutor-dashboard.html' %}
+{% load static %}
+{% load humanize %}
+{% block extra-stylesheets %}
+
+<!-- CDN for google maps Place API -->
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCBJybI10-Xa43-F5GSad1i0Y9W3yqlW6Q&libraries=places&v=3"
+  defer></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
+{% endblock extra-stylesheets %}
+{% block main-content %}
+<div class="container mt-2">
+  <div class="col-lg-12">
+    <div class="statbox widget box box-shadow">
+      <div class="widget-header border-bottom border-default">
+        <div class="row">
+          <div class="col-xl-12 col-md-12 col-sm-12 col-12">
+            <h4 style="color:black;"><b>Search Assignments</b></h4>
+          </div>
+        </div>
+      </div>
+      <div class="widget-content widget-content-area">
+        <div class="row">
+          <div class="col-lg-12 col-md-12 cms-search">
+            <form class="form-inline mt-2 mb-5" method="POST">
+              {% csrf_token %}
+              <div class="col-lg-6 col-md-6 col-12 mt-2 row">
+                <label class="control-label col-sm-3 col-md-4 col-5 mt-2" style="color:black;">Location</label>
+                <input type="text" class="form-control my-2 w-100 col-sm-9 col-md-8 col-7" id="pac-input" name='loc'
+                  placeholder="Enter Location" required value="{{prefill.address}}">
+                <input type="hidden" id="cityLat" value="0" name="cityLat" />
+                <input type="hidden" id="cityLng" value="0" name="cityLng" />
+              </div>
+              <div class="col-lg-6 col-md-6 col-12 mt-2 row">
+                <label class="control-label col-sm-3 col-md-4 col-5 mt-2" style="color:black;">Budget</label>
+                <input type="number" class="form-control my-2 w-100 col-md-8 col-sm-9 col-7"
+                  style="-moz-appearance: textfield;" min="0" name="budget" placeholder="Budget">
+              </div>
+              <div class="col-lg-4 col-md-6  col-12 mt-2 row">
+                <label class="control-label col-sm-3 col-md-5 col-5 mt-2" style="color:black;">Class</label>
+                <select id="className" name="className" class="custom-select form-control w-100 col-sm-9 col-md-7 col-7"
+                  onchange="subjects()">
+                  <option disabled selected>{{prefill.class}}</option>
+                </select>
+              </div>
+              <div class="col-lg-4 col-md-6  col-12 mt-2 row">
+                <label class="control-label col-sm-3 col-md-5 mt-2 col-5" style="color:black;">Subject</label>
+                <select id="subject" name="subject" class="custom-select form-control w-100 col-md-7 col-sm-9 col-7"
+                  placeholder="Subject">
+                  <option disabled selected>{{prefill.subject}}</option>
+                </select>
+              </div>
+              <div class="col-lg-4 col-md-6  col-12 text-center">
+                <button class="my-2 ml-2 btn btn-info">Search</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% if allData %}
+<div class="widget-content widget-content-area mt-4">
+  <div class="table-responsive">
+    <table id="htmlgrid" class="testgrid table table-striped table-bordered table-hover mb-4">
+      <tr>
+        <th>##</th>
+        <th>Student</th>
+        <th>Course</th>
+        <th>Class</th>
+        <th>Requirement</th>
+        <th>Phone</th>
+        <th>Created</th>
+        <th>Budget</th>
+        <th></th>
+      </tr>
+      {% for assing in allData reversed %}
+      <tr>
+        <td>{{forloop.counter}}</td>
+        <td>{{assing.student.user.first_name}} {{assing.student.user.last_name}}</td>
+        <td>{{assing.courseName}}</td>
+        <td>{{assing.forclass}}</td>
+        <td>{{assing.requirement}}</td>
+        <td>{{assing.student.phone}}</td>td>
+        <td>{{assing.timestamp|naturaltime}}</td>
+        <td>{{assing.budget}}</td>
+        <td class="text-center">
+          <a href="{{assing.descriptionFile.url}}" class="btn btn-info" target="_blank">View</a>
+        </td>
+      </tr>
+      {% endfor %}
+    </table>
+  </div>
+</div>
+{% endif %}
+</div>
+<script>
+  console.log("this is js")
+  var className = document.getElementById("className")
+  var jsondata = {{jsonLocalData|safe}}
+  const keys = Object.keys(jsondata);
+  var classes = "<option disabled selected>Class</option>"
+  for (let index = 0; index < keys.length; index++) {
+    const element = keys[index];
+    classes += `<option value="${element}">${element}</option>`
+  }
+  className.innerHTML = classes
+
+  function subjects() {
+    var className = document.getElementById("className").value
+    var subject = document.getElementById("subject")
+    html = "<option disabled selected>Subject</option>"
+    class_subjects = jsondata[`${className}`]
+    for (let index = 0; index < class_subjects.length; index++) {
+      const element = class_subjects[index];
+      html += `<option value="${element}">${element}</option>`
+    }
+    subject.innerHTML = html
+  }
+</script>
+<script type="text/javascript">
+  $("#pac-input").on("input", function () {
+    var input = document.getElementById('pac-input');
+    var autocomplete = new google.maps.places.Autocomplete(input);
+    google.maps.event.addListener(autocomplete, 'place_changed', function () {
+      var place = autocomplete.getPlace();
+      document.getElementById('cityLat').value = place.geometry.location.lat();
+      document.getElementById('cityLng').value = place.geometry.location.lng();
+    });
+  });
+</script>
+{% endblock main-content %}

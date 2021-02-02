@@ -1,0 +1,199 @@
+{% extends 'dashboard/student-dashboard.html' %}
+{% load static %}
+
+{% block main-content %}
+<div class="container mt-5">
+    {% if errors %}
+    <div class="alert alert-danger" role="alert">
+        <div id='errorsBox'>
+            <div>
+                <h5
+                    style="color: red;text-shadow:-0.5px -0.5px 0 #000,0.5px -0.5px 0 #000,-0.5px 0.5px 0 #000,0.5px 0.5px 0 #000;">
+                    Error !</h5>
+                <ul>
+                    {% for x in errors %}
+                    <li>{{ x }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+    <div class="col-md-12 col-12">
+        <div class="card">
+            <div class="card-header">
+                <div class="row">
+                    <div class="col-sm-10">
+                        <h2 style="color:black;">Add Required Tutors</h2>
+                    </div>
+                </div>
+            </div>
+            <div class="card-body container">
+                <form id='submitForm' method='post' action=''>{% csrf_token %}
+                    <div class="row">
+                        <div class="col-lg-4 col-md-4 col-sm-6 col-12 row mt-4">
+                            <label class="control-label col-sm-6 col-md-5 col-5 mt-2 text-center" style="color:black;">Class</label>
+                            <select id="className" name="className" class="col-sm-7 col-md-6 col-7 custom-select form-control w-100"
+                                onchange="subjects()">
+                                <option disabled selected>Class</option>
+                            </select>
+                        </div>
+                        <div class="col-lg-4 col-md-6 col-sm-6 col-12 row mt-4">
+                            <label class="control-label col-sm-5 col-5 col-md-6 mt-2 text-center" style="color:black;">Course</label>
+                            <select id="subject" name="subject" class="col-sm-7 col-md-6 col-7 custom-select form-control w-100">
+                                <option disabled selected>Subject</option>
+                            </select>
+                        </div>
+                        <div class="col-lg-4 col-md-6 col-sm-6 col-12 row mt-4">
+                            <label class="control-label col-sm-4 col-7 col-md-6 mt-2 text-center" style="color:black;">Teaching Mode</label>
+                            <select name="tm" class="col-sm-8 col-5 col-md-6 custom-select form-control w-100" required="required">
+                                <option disabled selected value>Teaching Mode</option>
+                                <option value="Online Tutor">Online Tutor</option>
+                                <option value="Institute">Institute</option>
+                                <option value="Home Tutor">Home Tutor</option>
+                            </select>
+                        </div>
+                        <div class="col-lg-4 col-md-6 col-sm-6 col-12 row mt-4">
+                            <label class="control-label col-sm-5 col-5 col-md-6 text-center mt-3" style="color:black;">Start Date</label>
+                            <input type="date" class="col-sm-7 col-7 col-md-6 form-control my-2 w-100" id="sd" name="sd" placeholder="Starting Date" required>
+                        </div>
+                        <div class="col-lg-4 col-md-6 col-sm-6 col-12 row mt-4">
+                            <label class="control-label col-md-6 col-sm-5 col-5 text-center mt-3" style="color:black;">Budget</label>
+                            <input type="number" step="0.01" class="col-md-6 col-sm-7 col-7 form-control my-2 w-100" style="-moz-appearance: textfield;" min="0" id="budgetvalue"
+                                name="budgetvalue" placeholder="Budget" required>
+                        </div>
+                        <div class="col-lg-4 col-md-6 col-sm-6 col-12 row mt-4">
+                            <label class="control-label col-sm-4 col-md-6 col-7 text-center mt-3" style="color:black;">No. of Sessions</label>
+                            <input type="number" class="col-sm-8 col-5 col-md-6 form-control my-2 w-100" id="monthlydigit" style="-moz-appearance: textfield;" min="0" name="monthlydigit" placeholder="No. of sessions">
+                        </div>  
+                        
+                        <div class="col-lg-6 col-md-6 col-sm-6 col-12 row mt-4">
+                            <label class="control-label col-sm-4 col-7 text-center mt-2" style="color:black;">Payment Type</label>
+                            <select id="budget" name="budget" class="col-sm-7 col-5 custom-select form-control w-100" required>
+                                <option disabled selected>Payment Type</option>
+                                <option value="monthly">Monthly</option>
+                                <option value="hourly">Hourly</option>
+                            </select>
+                        </div>
+                        
+                        <div class="col-lg-6 col-md-6 col-sm-6 col-12 row mt-4">
+                            <label class="control-label col-sm-4 col-6 mt-2 text-center" style="color:black;">Prefered Gender</label>
+                            <select id="gp" name="gp" class="col-sm-7 col-6 custom-select form-control w-100" required="required">
+                                <option disabled selected value>Prefered Gender</option>
+                                <option value="Male">Male</option>
+                                <option value="Female">Female</option>
+                                <option value="Any">Any</option>
+                            </select>
+                        </div>
+
+                        <div class="col-lg-12 col-md-12 col-12 mt-4">
+                            <textarea class="form-control my-2 w-100" rows="2" maxlength="250" name='description' placeholder="Description"
+                                type="number"></textarea>
+                        </div>
+                        <div class="col-lg-12 col-md-12 col-12 d-flex justify-content-center">     
+                            <button id='submitBtn' name="submit" type="submit" class="btn btn-info">Post</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+        <div class="col-xl-12 col-md-12 col-12 mt-5">
+            <div class="statbox widget box box-shadow">
+                <div class="widget-header">
+                    <div class="row">
+                        <div class="col-xl-12 col-md-12 col-12">
+                            <h4 class="p-2" style="color:black;"><b>Required Tutors</b></h4>
+                        </div>
+                    </div>
+                </div>
+                {% if tutions %}
+                <div class="widget-content widget-content-area">
+                    <div class="table-responsive">
+                        <table id="htmlgrid" class="testgrid table table-striped table-bordered table-hover mb-4">
+                            <tr>
+                                <th>#</th>
+                                <th>Subject</th>
+                                <th>Class</th>
+                                <th>Teach Type</th>
+                                <th>Gender</th>
+                                <th>Start Date</th>
+                                <th>Budget</th>
+                                <th>Duration</th>
+                                <th>Action</th>
+                            </tr>
+                            {% for tution in tutions reversed %}
+                            <tr>
+                                <td>{{forloop.counter}}</td>
+                                <td>{{tution.subject}}</td>
+                                <td>{{tution.forclass}}</td>
+                                <td>{{tution.teachingMode}}</td>
+                                <td>{{tution.genderPreference}}</td>
+                                <td>{{tution.whenToStart}}</td>
+                                <td>{{tution.budgetVal}}</td>
+                                <td>{{tution.numberOfSessions}}</td>
+                                <td class="text-center">
+                                    <a class="btn btn-danger"href="{% url 'Delete_Tution' tution.sno %}">
+                                        <span class="flaticon-delete-4">
+                                        </span>
+                                    </a>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </table>
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+</div>
+<script>
+    var className = document.getElementById("className")
+    var jsondata = {{jsonLocalData|safe}}
+    const keys = Object.keys(jsondata);
+    var classes = "<option disabled selected>Class</option>"
+    for (let index = 0; index < keys.length; index++) {
+        const element = keys[index];
+        classes += `<option value="${element}">${element}</option>`
+    }
+    className.innerHTML = classes
+
+    function subjects() {
+        var className = document.getElementById("className").value
+        var subject = document.getElementById("subject")
+        html = "<option disabled selected>Subject</option>"
+        class_subjects = jsondata[`${className}`]
+        for (let index = 0; index < class_subjects.length; index++) {
+            const element = class_subjects[index];
+            html += `<option value="${element}">${element}</option>`
+        }
+        subject.innerHTML = html
+    }
+    function clear_all(){
+    var x = document.getElementsByClassName("form-control");
+    for(var i=0;i<x.length;i++){
+      x[i].value='';
+    }
+  }
+  alldata = JSON.parse("{{jsdata|escapejs}}");
+
+  $("#budget").on("change",function(){
+        if($("#budget").val()=="hourly"){
+            $("#monthlydigit").removeAttr("required");
+            $("#monthlydigit").attr("disabled","disabled");
+        }else{
+            $("#monthlydigit").removeAttr("disabled");
+            $("#monthlydigit").attr("required","required");
+        }
+
+  });
+  function addoptions(el){
+        course = el.value;
+        html1 = "";
+        for(i=0;i<alldata[course][0].length;i++){
+            html1+= "<option value=\""+alldata[course][0][i]+"\">"+alldata[course][0][i]+"</option> ";
+        }
+        $("#cn").html(html1);
+  }
+</script>
+{% endblock main-content %}

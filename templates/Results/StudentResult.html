@@ -1,0 +1,76 @@
+{% extends 'tutor/dashboard.html' %}
+{% load static %}
+{% block body%}
+
+<style>
+  h6{
+    font-size: .99em;
+  }
+</style>
+
+<div class="mb-3 card">
+  <br /><br />
+  <h3 class="m-2 text-dark">
+    <b>
+     <center><u>
+      {{name}} Results
+     </u>
+     </center>
+    </b>
+  </h3>
+
+  <div class="card-body">
+    <div class="mb-3 text-right">
+      {% if status %}
+      <form method="POST" class="d-inline">
+        {% csrf_token %}
+        <button class="btn btn-success btn-sm">Update Results</button>
+      </form>
+      <a
+        class="btn btn-secondary btn-sm"
+        href="{% url 'anotatePdfViewer' exam.id mapping.id %}"
+        >View Report</a
+      >
+    </div>
+
+    <!-- added table -->
+    <div class="table-responsive">
+      <table class="mb-0 table align-middle table-striped table-hover">
+        <tbody>
+          {% for question in student_results %}
+          <tr>
+            <td>
+              <div>
+                <div class="float-right text-dark">
+                  Marks: +{{question.marks}},
+
+                  <span>{{question.negative_marks}}</span>
+                </div>
+                <h5>{{question.question | safe}}</h5>
+                <div style="text-indent: 1em;">
+                  <h6>Answer: {{question.input_ans | safe}}</h6>
+                  <h6>Correct Answer: {{question.correct_ans |safe}}</h6>
+                  <h6>Marks: {{question.marks_given}}</h6>
+                  <h6>Time Taken: {{question.time}}</h6>
+                  <h6>Extra Time Taken: {{question.extra_time}}</h6>
+                </div>
+
+                {% if question.qtype == 'short' or question.qtype == 'long' %}
+                <a
+                  href="{% url 'check_answer' question.id %}"
+                  class="btn btn-info btn-sm"
+                  >Check</a
+                >
+                {% endif %}
+              </div>
+            </td>
+          </tr>
+          {% endfor %} {% else %}
+          <h2 class="lead">Student Has Not Appereard For the Exam</h2>
+          {% endif %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+{% endblock %}
