@@ -31,7 +31,6 @@ ALLOWED_HOSTS = ['jdmrischool.herokuapp.com', 'localhost']
 # Application definition
 
 INSTALLED_APPS = [
-    'tutor.apps.TutorConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -41,7 +40,6 @@ INSTALLED_APPS = [
     'django.contrib.humanize',
     'rest_framework',
     'rest_framework_api_key',
-    'api.apps.ApiConfig',
     'teacher',
     'students',
     'institute',
@@ -181,16 +179,3 @@ EMAIL_USE_SSL = False
 EMAIL_MODEL_ADMIN = False
 
 
-# LOGIN_REDIRECT_URL="index"
-# EMAIL_BACKEND='django.core.mail.backends.smtp.EmailBackend'
-# EMAIL_HOST='smtp.gmail.com'
-# EMAIL_PORT=587
-# EMAIL_USE_TLS=True
-# EMAIL_HOST_USER='gk32239@gmail.com'
-# EMAIL_HOST_PASSWORD='--------'
-# EMAIL_MAIL_SUBJECT = 'gk32239@gmail.com'
-# EMAIL_MAIL_HTML = 'mail_body.html'
-# EMAIL_MAIL_PLAIN = 'mail_body.txt'
-# EMAIL_PAGE_TEMPLATE = 'confirm_template.html'
-# EMAIL_PAGE_DOMAIN = 'http://my-edumark.herokuapp.com/'
-# EMAIL_MODEL_ADMIN = False # the default value is False
