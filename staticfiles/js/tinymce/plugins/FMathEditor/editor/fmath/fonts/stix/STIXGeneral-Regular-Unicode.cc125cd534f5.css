@@ -1,9 +1,0 @@
-@font-face {
-    	font-family: 'STIXGeneralUnicodeRegular';
-    	font-style:normal;
-      	
-	src: url("STIXGeneral-Regular-Unicode.f67a8a06c3ca.eot");
-  	src: local('?'),
-         url("STIXGeneral-Regular-Unicode.eb5b9e109cf3.woff") format('woff'), url("STIXGeneral-Regular-Unicode.dd15866c9389.ttf") format('truetype'), url("STIXGeneral-Regular-Unicode.c45066d33c5a.svg") format('svg'); 
-}
-
