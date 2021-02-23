@@ -1,4 +1,4 @@
-{% extends 'dashboard/dashboard.html' %}
+{% extends 'dashboard/base.html' %}
 {% load static %}
 {% block css %}
 <style>
@@ -176,7 +176,7 @@
     }
 </style>
 {% endblock %}
-{% block body %}
+{% block main-content %}
 <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCBJybI10-Xa43-F5GSad1i0Y9W3yqlW6Q&libraries=places&v=3" defer></script>
 
 <div class="container">

@@ -155,9 +155,8 @@ class ShortAnswerQuestion(models.Model):
 class TutorExam(models.Model):
     tutor = models.ForeignKey(
         Teacher, related_name='teacher', on_delete=models.CASCADE)
-    course = models.ForeignKey(
-        Courses, related_name="tutorexams", on_delete=models.CASCADE)
-    Class = models.CharField(max_length=20)
+    courseName = models.CharField(max_length=100,default="")
+    forclass = models.CharField(max_length=255,default="")
     Name = models.CharField(max_length=200)
     price = models.IntegerField()
     exam_date = models.DateField()

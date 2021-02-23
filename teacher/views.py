@@ -15,8 +15,9 @@ import datetime as dt
 from django.http import JsonResponse
 from django.core.serializers.json import DjangoJSONEncoder
 import json
+from geopy.geocoders import Nominatim 
+from math import radians, sin, cos, asin, sqrt
 # Create your views here.
-
 
 allTimezones = pytz.all_timezones
 
@@ -99,8 +100,9 @@ def viewTutors(request):
         courselist = []
         for course in courses:
             for tutor in tutors:
-                if int(tutor.courseName)==course.id:
-                    courselist.append(course.courseName)
+                if tutor.courseName:
+                    if int(tutor.courseName)==course.id:
+                        courselist.append(course.courseName)
         tutors = zip(tutors,courselist)
         params = {'tutors':tutors}
         if request.method=="POST":
@@ -290,36 +292,76 @@ def enrolledTutorsObjectToDict(obj):
     data['courseName']=courses
     return data
 
+def haversine(lon1, lat1, lon2, lat2):
+   
+    # convert decimal degrees to radians 
+    lon1, lat1, lon2, lat2 = map(radians, [lon1, lat1, lon2, lat2])
+
+    # haversine formula 
+    dlon = lon2 - lon1 
+    dlat = lat2 - lat1 
+    a = sin(dlat/2)**2 + cos(lat1) * cos(lat2) * sin(dlon/2)**2
+    c = 2 * asin(sqrt(a)) 
+    r = 6371.8 # Radius of earth in kilometers. Use 3956 for miles
+    return c * r
+
 @login_required(login_url="Login")
 def enrolledTutors(request):
     jsonLocalData = loads(open('cc.txt','r').read())
     prefill = {}
     if request.method == "POST":
         className = request.POST.get('className','')
+        loc = request.POST.get('loc','')
+        distance = request.POST.get('distance','')
+        subject = request.POST.get('subject','')
+        experience = request.POST.get('experience','')
+        prefill = {
+            "address":loc,
+            "class":className,
+            "subject":subject,
+            "experience":experience,
+            "distance":distance
+        }
         classlist = ['I','II','III','IV','V','VI','VII','VIII','IX','X','XI','XII','Others','Nursery']
         try:
             if int(className):
                 className = classlist[int(className)-1]
         except:
-            className = classlist[0]
-        loc = request.POST.get('loc','')
-        subject = request.POST.get('subject','')
-        experience = request.POST.get('experience','')
+            className = className
         if experience=="":
             experience=1
-        searchQuery = Teacher.objects.filter(Q(forclass__icontains=className) or Q(address__icontains=loc) or Q(course__icontains=subject) or Q(experiance=int(experience)))
-        allData = searchQuery
+
+        if distance=="":
+            distance=0
+        
+        distance = float(distance)
+
+        geolocator = Nominatim(user_agent="geoapiExercises")
+        city = geolocator.geocode(loc, timeout = None)
+        if city:
+            cityLat = city.latitude
+            cityLng = city.longitude
+
+        else:
+            cityLat = request.POST.get('cityLat','')
+            cityLng = request.POST.get('cityLng','')
+
+        searchQuery = Teacher.objects.filter(Q(course__icontains=subject) or Q(experiance=int(experience) or Q(forclass__icontains=className)))
+            
+        allData = []
+        
+        for x in searchQuery:
+            location = geolocator.geocode(x.address, timeout=None)
+            if location:
+                if haversine(location.longitude,location.latitude,cityLng,cityLat) <= distance:
+                    allData.append(x)
+
         jsonData = []
         for x in allData:
             jsonData.append(enrolledTutorsObjectToDict(x))
-        prefill = {
-            "address":loc,
-            "class":className,
-            "subject":subject,
-            "experience":experience
-        }
+            
         return render(request, "teacher/enrolledTutors.html",{'allData':allData,'jsonData':jsonData,'jsonLocalData':jsonLocalData,"prefill":prefill})
-    allData = Teacher.objects.all()
+    allData = []
     jsonData = []
     for x in allData:
         jsonData.append(enrolledTutorsObjectToDict(x))
@@ -617,18 +659,36 @@ def makeAppointment(request):
 
 @login_required(login_url="Login")
 def viewAssignmentTutor(request):
-    currentS = PostAssignment.objects.all()
+    currentS = {}
+    prefill={}
     if request.method == "POST":
-        className = request.POST.get('className'," ")
-        courseName = request.POST.get('courseName'," ")
+        className = request.POST.get('className',"")
+        courseName = request.POST.get('subject',"")
+        address = request.POST.get('loc')
+        budgetVal = request.POST.get('budget')
+
+        prefill = {
+            "address":address,
+            "budget":budgetVal,
+            "class":className,
+            "subject":courseName,
+        }
+
         classlist = ['I','II','III','IV','V','VI','VII','VIII','IX','X','XI','XII','Others','Nursery']
         try:
             if int(className):
                 className = classlist[int(className)-1]
         except:
-            className = classlist[0]
-        address = request.POST.get('loc')
-        budgetVal = float(request.POST.get('budget','100.00'))
-        currentS = PostAssignment.objects.filter(Q(courseName__icontains=courseName) or Q(forclass__icontains=className) or Q(student__address__icontains=address) or Q(budget__lte=float(budgetVal)))
+            className = className
+
+        if budgetVal:
+            budgetVal = float(budgetVal)
+        else:
+            budgetVal = 100.0
+        currentS = PostAssignment.objects.filter(Q(student__address__icontains=address) or Q(budget__gte=float(budgetVal)))
+        if className:
+            currentS = currentS.filter(Q(forclass__icontains=className))
+        if courseName:
+            currentS = currentS.filter(Q(courseName__icontains=courseName))
     jsonLocalData = loads(open('cc.txt','r').read())
-    return render(request,'teacher/viewAssignmentTutor.html',{'allData':currentS,'jsonLocalData':jsonLocalData})
+    return render(request,'teacher/viewAssignmentTutor.html',{'allData':currentS,'jsonLocalData':jsonLocalData, 'prefill':prefill})

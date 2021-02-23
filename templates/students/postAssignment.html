@@ -1,7 +1,7 @@
 {% extends 'dashboard/student-dashboard.html' %}
 {% load static %}
 {% block main-content %}
-<div class="container mt-5">
+<div class="w-100 mt-5">
     {% if errors %}
     <div class="alert alert-danger" role="alert">
         <div id='errorsBox'>
@@ -31,44 +31,42 @@
             <div class="card-body container">
                 <form id='submitForm' method='post' action='' enctype='multipart/form-data'>{% csrf_token %}
                     <div class="row">
-                    
-                        <div class="col-md-6 col-lg-6 col-12 input-group form-group">
-                            <label class="control-label col-sm-3 col-md-4 col-5 mt-2 text-center"
-                                style="color: black;">Course</label>
+
+                        <div class="col-md-6 col-lg-5 col-12 input-group form-group">
+                            <label class="control-label col-sm-3 col-md-4 col-5 mt-2"
+                                style="color: black;">Class</label>
                             <select id="ctn" name="ctn" class="custom-select form-control w-100 col-md-8 col-sm-9 col-7"
-                                required="required" onclick="addvals(this)" onchange="addoptions(this);">
-                                <option disabled selected value>Course</option>
-                                {% for x in data %}
-                                <option value="{{ x.id }}">{{ x.courseName }}</option>
+                                required="required" onchange="addoptions(this)">
+                                <option disabled selected>Class</option>
+                                {% for x,y in data.items %}
+                                <option value="{{ x }}">{{ x }}</option>
                                 {% endfor %}
                             </select>
                         </div>
-                        <div class="col-md-6 col-lg-6 col-12 input-group form-group">
-                            <label class="control-label col-sm-3 col-md-4 col-5 mt-2 text-center"
-                                style="color: black;">Class</label>
+                        <div class="col-md-6 col-lg-5 col-12 input-group form-group">
+                            <label class="control-label col-sm- col-md-4 col-5 mt-2"
+                                style="color: black;">Course</label>
                             <select id="cn" name="cn" class="custom-select form-control w-100 col-md-8 col-sm-9 col-7"
-                                required="required" onclick="addvals(this)">
-                                <option disabled selected>Class</option>
+                                required="required">
+                                <option disabled selected>Course</option>
                             </select>
                         </div>
 
-                        <div class="col-lg-4 col-12 col-md-6 input-group form-group">
-                            <label class="control-label col-sm-4 col-5 mt-2 text-center"
-                                style="color: black;">Budget</label>
+                        <div class="col-lg-5 col-12 col-md-6 input-group form-group">
+                            <label class="control-label col-sm-4 col-5 mt-2" style="color: black;">Budget</label>
                             <input type="number" step="0.01" style="-moz-appearance: textfield;" min="0"
                                 class="form-control w-100 col-sm-8 col-7" id="budget" name="budget" placeholder="Budget"
                                 required>
                         </div>
-                        <div class="col-lg-4 col-md-6 col-12 input-group form-group">
-                            <label class="control-label col-md-6 col-sm-5 col-8 mt-2 text-center"
-                                style="color: black;">Requirement</label>
+                        <div class="col-lg-5 col-12 col-md-6 input-group form-group">
+                            <label class="control-label col-sm-4 col-5 mt-2" style="color: black;">Requirement</label>
                             <input type="number" step="0.01" style="-moz-appearance: textfield;" min="0"
-                                class="form-control w-100 col-sm-7 col-md-6 col-4" id="requirement" name="requirement"
+                                class="form-control w-100 col-sm-8 col-7" id="requirement" name="requirement"
                                 placeholder="Requirement" required>
                         </div>
 
-                        <div class="col-lg-4 col-md-6 col-12 input-group form-group">
-                            <input type="file" class="ml-4 mt-2 form-control-file" id="file" name="file" required>
+                        <div class="col-lg-3 col-md-6 col-12 input-group form-group">
+                            <input type="file" class="ml-3 mt-2 form-control-file" id="file" name="file" required>
                         </div>
 
                         <div class="col-md-12 col-lg-12 col-12 input-group form-group">
@@ -105,6 +103,7 @@
                             <th>Budget</th>
                             <th>Assigned</th>
                             <th>Action</th>
+                            <th></th>
                         </tr>
                         {% for assing in student.PostAssignment.all reversed %}
                         <tr>
@@ -117,11 +116,57 @@
                             {% if i.assigned == True %}
                             <td><i class="flaticon-user-check"></i></td>
                             {% else %}
-                            <td class="text-center"><i class="btn btn-info flaticon-time-1"></i></td>
+                            <td><i class="btn btn-info flaticon-time-1"></i></td>
                             {% endif %}
-                            <td class="text-center"><a href="{% url 'Delete_Assignment' assing.sno %}"><span
+                            <td><a href="{% url 'Delete_Assignment' assing.sno %}"><span
                                         class="btn btn-danger flaticon-delete-4"></span></a></td>
+                            <td><button type="button" data-toggle="modal" data-target="#tutorModal{{assing.sno}}"
+                                    class="btn btn-info">View</button></td>
                         </tr>
+
+                        <!-- view box -->
+                        <div class="modal fade" id="tutorModal{{assing.sno}}" tabindex="-1" role="dialog"
+                            aria-labelledby="{{assing.sno}}" aria-hidden="true" style="top:30%; color: black;">
+                            <div class="modal-dialog modal-lg align-item-center" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="col-sm-12 text-center" id="{{assing.sno}}">
+                                            {{assing.courseName}} Assignment</h5>
+                                    </div>
+                                    <div class="modal-body">
+                                        <div class="col-md-12">
+                                            <div class="row">
+                                                <div class="col-md-6 col-sm-6 col-12 mt-2">
+                                                    <b>Course:</b>
+                                                    <span class="ml-1">{{assing.courseName}}
+                                                    </span>
+                                                </div>
+                                                <div class="col-md-6 col-sm-6 col-12 mt-2">
+                                                    <b>Class:</b>
+                                                    <span class="ml-1">{{assing.forclass}}</span>
+                                                </div>
+                                                <div class="col-md-6 col-sm-6 col-12 mt-2">
+                                                    <b>Requirement:</b>
+                                                    <span class="ml-1">{{assing.requirement}}</span>
+                                                </div>
+                                                <div class="col-md-6 col-sm-6 col-12 mt-2">
+                                                    <b>Timestamp:</b>
+                                                    <span class="ml-1">{{assing.timestamp}}</span>
+                                                </div>
+                                                <div class="col-md-6 col-sm-6 col-12 mt-2">
+                                                    <b>Budget:</b>
+                                                    <span class="ml-1">
+                                                        {{assing.budget}}
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <br>
+                            </div>
+                        </div>
+                        <!-- view box -->
                         {% endfor %}
                     </table>
                 </div>
@@ -130,22 +175,26 @@
         </div>
     </div>
 </div>
+
+
+</div>
+</div>
 <script>
     function clear_all() {
         var x = document.getElementsByClassName("form-control");
         for (var i = 0; i < x.length; i++) {
             x[i].value = '';
         }
-    }
-    alldata = JSON.parse("{{jsdata|escapejs}}");
+    };
 
     function addoptions(el) {
-        course = el.value;
+        var data = JSON.parse("{{ data|escapejs }}".replaceAll("'", "\""));
+        var items = data[el.value];
         html1 = "";
-        for (i = 0; i < alldata[course][0].length; i++) {
-            html1 += "<option value=\"" + alldata[course][0][i] + "\">" + alldata[course][0][i] + "</option> ";
+        for (i = 0; i < items.length; i++) {
+            html1 += "<option value=\"" + items[i] + "\">" + items[i] + "</option> ";
         }
         $("#cn").html(html1);
-    }
+    };
 </script>
 {% endblock main-content %}

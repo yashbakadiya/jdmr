@@ -7,6 +7,9 @@ from django.db.models import Q
 from django.contrib.auth.models import User
 from .models import *
 from datetime import datetime,timedelta
+import json
+from operator import or_
+from functools import reduce
 # Create your views here.
 
 @login_required(login_url="Login")
@@ -336,12 +339,17 @@ def WatchTutorialsTutor(request,course_id):
         if TutorialTutorsPlaylist.objects.filter(tutorial=tutorial).exists():
             for item in TutorialTutorsPlaylist.objects.filter(tutorial=tutorial):
                 total_length += item.Clip_Duration()
+
         total_length = f"{total_length}min"
         context = {
         'tutorial':tutorial,
-        'start':start,
         'total_length':total_length
         }
+        
+        try:
+            context['start'] = start
+        except:
+            pass
         return render(request,'tutorials/watchTutorialTutor.html',context)
     return HttpResponse("You Are not Authenticated User for this Page")
 
@@ -456,78 +464,102 @@ def ArchiveTutorialsTutor(request):
 
 @login_required(login_url="Login")
 def SearchCourses(request):
-	tutorials = TutorialTutors.objects.all()
-	extra  = TutorialInstitute.objects.all()
-	courses = Courses.objects.all()
-	if request.method=='POST':
-		coursetype = request.POST.get('type','')
-		duration = request.POST.get('duration','')
-		fees = request.POST.get('fees','')
-		if coursetype:
-			extra = TutorialInstitute.objects.all().filter(Q(Course=AddCourses.objects.get(s_num=coursetype)))
-			course = Courses.objects.get(s_num=coursetype).courseName
-			tutorials = TutorialTutors.objects.all().filter(Title__icontains=course)
+    courses = Courses.objects.all()
+    tutorials={}
+    extra={}
+    prefill = {}
+    if request.method=='POST':
+        duration = request.POST.get('duration','')
+        fees = request.POST.get('fees','')
+        courseName = request.POST.get('cn'),
+        forclass = request.POST.get('ctn')
+        tutorials = TutorialTutors.objects.all()
+        extra  = TutorialInstitute.objects.all()
 
-		if duration:
-			if extra.exists():
-				extra = extra.filter(Duration=duration)
-			if tutorials.exists():
-				tutorials = tutorials.filter(Duration=duration)
-		if fees:
-			fees = fees.split('-')
-			if extra.exists():
-				extra = extra.filter(Q(Fees__gte=fees[0]) & Q(Fees__lte=fees[1]))
-			if tutorials.exists():
-				tutorials = tutorials.filter(Q(Fees__gte=fees[0]) & Q(Fees__lte=fees[1]))
+        prefill = {
+            "duration":duration,
+            "fees":fees,
+            "course":courseName[0],
+            "class":forclass
+        }
 
-		if tutorials and extra:
-			tutorials = tutorials.union(extra)
-		elif extra:
-			tutorials=extra
-		else:
-			tutorials=tutorials
-		context = {
-		'alltutorials':tutorials,
-		'courses':courses
-		}
-		return render(request,'tutorials/SearchCourses.html',context)
-	alltutorials = tutorials.union(extra).order_by('Title')
-	context = {
-    'alltutorials':alltutorials,
-	'courses':courses
-	}
-	return render(request,'tutorials/SearchCourses.html',context)
+        if duration:
+            duration = duration[0]
+            if extra.exists():
+                extra = extra.filter(Duration=duration)
+            if tutorials.exists():
+                tutorials = tutorials.filter(Duration=duration)
+        if fees:
+            if fees[0]=="l":
+                fees = "0-1000"
+            
+            elif fees[0]=="7":
+                fees = "7000-50000"
+
+            fees = fees.split('-')
+            if extra.exists():
+                extra = extra.filter(Q(Fees__gte=fees[0]) & Q(Fees__lte=fees[1]))
+            if tutorials.exists():
+                tutorials = tutorials.filter(Q(Fees__gte=fees[0]) & Q(Fees__lte=fees[1]))
+
+        if courseName[0]:
+            if extra.exists():
+                extra =extra.filter(Q(Title__icontains = courseName[0]) or Q(Description__icontains = courseName[0]))
+            if tutorials.exists():
+                tutorials = tutorials.filter(Q(Title__icontains = courseName[0]) or Q(Description__icontains = courseName[0]))          
+
+        if forclass:
+            if extra.exists():
+                    extra = extra.filter(Q(Description__icontains = forclass) or Q(Title__icontains = forclass))
+            if tutorials.exists():
+                tutorials = tutorials.filter(Q(Description__icontains = forclass) or Q(Title__icontains = forclass))
+
+        tutorials = tutorials.order_by('Title')
+        extra = extra.order_by('Title')
+            
+
+    with open('cc.txt', 'r') as f:
+        data = json.loads(f.read())
+
+    context = {
+    'tutor':tutorials,
+    'institute':extra,
+    'courses':courses,
+    "data":data,
+    "prefill":prefill
+    }
+    return render(request,'tutorials/SearchCourses.html',context)
 
 
 @login_required(login_url="Login")
 def WatchTutorTutorials(request,course_id):
-	tutorial =TutorialTutors.objects.get(id=course_id)
-	total_length = 0
-	if TutorialTutorsPlaylist.objects.filter(tutorial=tutorial).exists():
-		for item in TutorialTutorsPlaylist.objects.filter(tutorial=tutorial):
-			total_length += item.Clip_Duration()
-	total_length = f"{total_length}min"
-	start = TutorialTutorsPlaylist.objects.filter(tutorial=tutorial).first().Video.url
-	context = {
-	'tutorial':tutorial,
-	'start':start,
-	'total_length':total_length
-	}
-	return render(request,'tutorials/watchTutorialStudent.html',context)
+    tutorial =TutorialTutors.objects.get(id=course_id)
+    total_length = 0
+    if TutorialTutorsPlaylist.objects.filter(tutorial=tutorial).exists():
+        for item in TutorialTutorsPlaylist.objects.filter(tutorial=tutorial):
+            total_length += item.Clip_Duration()
+    total_length = f"{total_length}min"
+    start = TutorialTutorsPlaylist.objects.filter(tutorial=tutorial).first().Video.url
+    context = {
+    'tutorial':tutorial,
+    'start':start,
+    'total_length':total_length
+    }
+    return render(request,'tutorials/watchTutorialStudent.html',context)
 
 
 @login_required(login_url="Login")
 def WatchInstituteTutorials(request,course_id):
-	tutorial =TutorialInstitute.objects.get(id=course_id)
-	total_length = 0
-	if TutorialInstitutePlaylist.objects.filter(tutorial=tutorial).exists():
-		for item in TutorialInstitutePlaylist.objects.filter(tutorial=tutorial):
-			total_length += item.Clip_Duration()
-	total_length = f"{total_length}min"
-	start = TutorialInstitutePlaylist.objects.filter(tutorial=tutorial).first().Video.url
-	context = {
-	'tutorial':tutorial,
-	'start':start,
-	'total_length':total_length
-	}
-	return render(request,'tutorials/watchTutorialStudent.html',context)
+    tutorial =TutorialInstitute.objects.get(id=course_id)
+    total_length = 0
+    if TutorialInstitutePlaylist.objects.filter(tutorial=tutorial).exists():
+        for item in TutorialInstitutePlaylist.objects.filter(tutorial=tutorial):
+            total_length += item.Clip_Duration()
+    total_length = f"{total_length}min"
+    start = TutorialInstitutePlaylist.objects.filter(tutorial=tutorial).first().Video.url
+    context = {
+    'tutorial':tutorial,
+    'start':start,
+    'total_length':total_length
+    }
+    return render(request,'tutorials/watchTutorialStudent.html',context)

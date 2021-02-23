@@ -32,43 +32,40 @@
     <form method="post">{% csrf_token %}
       <div class="row">
         <div class="col">
-          <label for="validationCustom01"><strong>Select Course<span class="red">*</span></strong></label>
-          <select id="select_course" name="course" style="width: 100%" class="js-example-basic-single">
-            <option class="form-control form-control-lg" selected disabled value="{{exam.course.courseName}}"
-              name="category" value="{{exam.course.id}}">{{exam.course.courseName}}</option>
-            {% for cat in courses %}
-            <option class="form-control form-control-lg" value="{{cat.id}}" name="category">{{cat.courseName}} </option>
+          <label for="validationCustom01"><strong>Select Class <span class="red">*</span></strong></label>
+          <select id="class_select" name="class" style="width: 100%;" class="js-example-basic-single form-control"onchange="addoptions(this)">
+            <option class="form-control" selected disabled value="{{exam.forclass}}">{{exam.forclass}}</option>
+            {% for x,y in data.items %}
+            <option value="{{ x }}">{{ x }}</option>
             {% endfor %}
           </select>
         </div>
         <div class="col">
-          <label for="validationCustom01"><strong>Select Class <span class="red">*</span></strong></label>
-          <select id="class_select" name="class" style="width: 100%;" class="js-example-basic-single"
-            value="{{exam.Class}}">
-            <option class="form-control" selected disabled>{{exam.Class}}</option>
+          <label for="validationCustom01"><strong>Select Course<span class="red">*</span></strong></label>
+          <select id="cn" name="course" style="width: 100%" class="js-example-basic-single form-control">
+            <option class="form-control" selected disabled value="{{exam.courseName}}">{{exam.courseName}}</option>
           </select>
         </div>
         <div class="col">
-          <label for="validationCustom01"><strong>Price<span class="red">*</span></strong></label>
-          <input type="number" class="form-control" value="{{exam.price}}" name="price">
+         <label for="validationCustom01"><strong>Price<span class="red">*</span></strong></label>
+          <input type="number" class="form-control" placeholder="Exam Price" value="{{exam.price}}" name="price" required>
         </div>
       </div>
       <div class="row mt-4">
         <div class="col">
           <label for="validationCustom01"><strong>Exam Name <span class="red">*</span></strong></label>
-
           <input type="text" class="form-control" placeholder="Exam name" name="examname" value="{{exam.Name}}">
         </div>
         <div class="col">
           <label for="validationCustom01"><strong>Exam Date <span class="red"></span></strong></label>
-          <input class="form-control" type="date" placeholder="" name="date" value="{{exam.exam_date}}" /><br />
+          <input class="form-control" type="date" placeholder="" name="date" value="{{exam.exam_date|date:'Y-m-d'}}" /><br />
           <div class="invalid-feedback">
             Select a valid Date!
           </div>
         </div>
         <div class="col">
           <label for="validationCustom01"><strong>Exam Time <span class="red"></span></strong></label>
-          <input class="form-control" type="time" placeholder="" name="exam_time" value="{{exam.exam_time}}" /><br />
+          <input class="form-control" type="time" placeholder="" name="exam_time" value="{{exam.exam_time|date:'H:i'}}" /><br />
           <div class="invalid-feedback">
             Select a valid Time!
           </div>
@@ -106,13 +103,13 @@
         <div class="col-md-4">
           <label for="validationCustom01"><strong>Exam Status <span class="red"></span></strong></label>
           <select class="form-control" id="exampleFormControlSelect1" name="status">
-            <option value="1">Activate</option>
-            <option value="0">Deactivate</option>
+            <option {% if exam.status == True %} selected {% endif %} value="1">Activate</option>
+            <option {% if exam.status == False %} selected {% endif %} value="0">Deactivate</option>
           </select>
         </div>
         <div class="col-md-4">
           <label for="validationCustom01"><strong>Re-Exam Date <span class="red"></span></strong></label>
-          <input class="form-control" type="date" placeholder="" name="redate" /><br />
+          <input class="form-control" type="date" placeholder="" value="{{exam.reexam_date|date:'Y-m-d'}}" name="redate" /><br />
           <div class="invalid-feedback">
             Select a valid Date!
           </div>
@@ -130,8 +127,8 @@
       <div class="row">
         <div class="col-lg-12 mb-3 ">
           <div class="custom-checkbox custom-control">
-            <input class="form-check-input" type="checkbox" id="defaultCheck1" name="calculator"
-              value="{{exam.calculator}}" />
+            <input class="form-check-input" type="checkbox" id="defaultCheck1" {% if exam.calculator %} checked {% endif %} name="calculator"
+              value='{{exam.calculator|yesno:"1,0"}}' />
             <label class="form-check-label" for="defaultCheck1">
               Make Calculator Available
             </label>
@@ -139,8 +136,8 @@
         </div>
         <div class="col-lg-2 col-sm-2 mb-3">
           <div class="custom-checkbox custom-control">
-            <input class="form-check-input" type="checkbox" onchange="checkbox()" id="negativecheck" name="nm"
-              value="{{exam.negative_marking}}" />
+            <input class="form-check-input" type="checkbox" onchange="checkbox()" id="negativecheck" name="nm" {% if exam.negative_marking %} checked {% endif %}
+              value='{{exam.negative_marking|yesno:"1,0" }}' />
             <label class="form-check-label" for="defaultCheck1">
               Negative Marks
             </label>
@@ -152,8 +149,8 @@
         </div>
         <div class="col-lg-2 col-sm-2 mb-3">
           <div class="custom-checkbox custom-control">
-            <input class="form-check-input" type="checkbox" onchange="" id="uploadimages" name="imguplod"
-              value="{{exam.imgupload}}" />
+            <input class="form-check-input" type="checkbox" onchange="" id="uploadimages" {% if exam.imgupload %} checked {% endif %} name="imguplod"
+              value='{{exam.imgupload|yesno:"1,0"}}' />
             <label class="form-check-label" for="defaultCheck1">
               Upload images
             </label>
@@ -165,6 +162,16 @@
   </div>
 
   <script>
+    function addoptions(el) {
+      var data = JSON.parse("{{ data|escapejs }}".replaceAll("'", "\""));
+        var items = data[el.value];
+        html1 = "";
+        for (i = 0; i < items.length; i++) {
+            html1 += "<option value=\"" + items[i] + "\">" + items[i] + "</option> ";
+        }
+        $("#cn").html(html1);
+    };
+
     function checkbox() {
       var value = $("#negativecheck").is(":checked");
       negative = document.getElementById("negative");
@@ -175,7 +182,11 @@
       class="mt-2 form-control"
       placeholder="Enter Negative Marks"
       name="negative_marks"
+      {% if exam.negative_marks %}
+      value="{{exam.negative_marks|floatformat}}"
+      {% else %}
       value="0"
+      {% endif %}
       required
     />
     <div class="invalid-feedback">
@@ -188,6 +199,7 @@
     }
     // In your Javascript (external .js resource or <script> tag)
     $(document).ready(function () {
+      checkbox();
       $('.js-example-basic-single').select2();
     });
 

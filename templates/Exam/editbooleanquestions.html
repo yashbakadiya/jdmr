@@ -2,7 +2,7 @@
 {% load static %}
 {% block main-content %}
 <script src="{% static 'js/tinymce/tinymce.min.js' %}"></script>
-<div class="container">
+<div class="mt-5">
     {% if errors %}
     <div class="alert alert-danger" role="alert">
         <div id='errorsBox'>
@@ -17,14 +17,14 @@
         </div>
     </div>
         {% endif %}
-    <div class="container mt-5 card">
+    <div class="mt-5 card">
       <div class="row mb-2">
         <div class="col">
           <h2 class="text-center">True / False Question Type</h2>
         </div>
       </div>
       <hr>
-      <div class="row mt-2">
+      <div class="mx-2 row mt-2">
   <div class="col">
   <form method="post">{% csrf_token %}
   <div class="row mt-2">
@@ -32,18 +32,18 @@
         <div class="form-group">
     <label for="exampleFormControlSelect1">Section</label>
     <select class="form-control" id="exampleFormControlSelect1" name="section">
-      <option value="A">None Selected (Default A)</option>
-      <option value="A">Section A</option>
-      <option value="B">Section B</option>
-      <option value="C">Section C</option>
-      <option value="D">Section D</option>
+      <option value="A">None Selected</option>
+      <option {% if question.section == "A" %} selected {% endif %} value="A">Section A</option>
+      <option {% if question.section == "B" %} selected {% endif %} value="B">Section B</option>
+      <option {% if question.section == "C" %} selected {% endif %} value="C">Section C</option>
+      <option {% if question.section == "D" %} selected {% endif %} value="D">Section D</option>
     </select>
   </div>
     </div>
         <div class="col" id="solutionbox">
   <div class="form-group">
     <label for="exampleFormControlSelect1">Enter Marks</label>
-<input type="number" class="form-control" placeholder="Enter Marks" name="marks" required value={{question.marks}}>
+<input type="number" class="form-control" placeholder="Enter Marks" name="marks" required value={{question.marks|floatformat}}>
   </div>
     </div>
   </div>
@@ -64,7 +64,7 @@
   <div class="row">
          <div class="col mb-3">
             <div class="custom-checkbox custom-control">
-              <input class="form-check-input" type="checkbox" onchange="checkbox()" id="negativecheck" name="nm" />
+              <input class="form-check-input" type="checkbox" onchange="checkbox()" id="negativecheck" name="nm" {% if question.negative_marks %} checked {% endif %}/>
               <label class="form-check-label" for="defaultCheck1">
                 Negative Marks
               </label>
@@ -94,7 +94,7 @@
   </div>
     </div>
     </div>
-    <div class="row">
+    <div class="text-center mb-2">
       <div class="col">
         <button type="submit" class="btn btn-primary">Save</button>
       </div>
@@ -111,7 +111,7 @@ tinymce.init({
           theme: "modern",
           setup: function (editor) {
             editor.on("init", function (e) {
-              editor.setContent("<p>{{question.question|safe}}</p>");
+              editor.setContent(`<p>{{question.question|safe}}</p>`);
             });
           },
           plugins: [
@@ -132,7 +132,7 @@ tinymce.init({
           theme: "modern",
           setup: function (editor) {
             editor.on("init", function (e) {
-              editor.setContent("<p>{{question.correct_ans|safe}}</p>");
+              editor.setContent(`<p>{{question.correct_ans|safe}}</p>`);
             });
           },
           plugins: [
@@ -157,7 +157,11 @@ tinymce.init({
       class="mt-2 form-control"
       placeholder="Enter Negative Marks"
       name="negative_marks"
-      value="0"
+      {% if question.negative_marks %}
+  value="{{question.negative_marks|floatformat}}"
+  {% else %}
+  value="0"
+  {% endif %}
       required
     />
     <div class="invalid-feedback">

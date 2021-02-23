@@ -14,7 +14,7 @@ $(() => {
     if (distance < 0) {
       clearInterval(x);
       document.getElementById("mytimer").innerHTML = "EXPIRED";
-      window.location.href = "/OnlineExam/login/submitted/";
+      window.location.replace("/exams/student/Exam/Submitted");
     }
   }, 1000);
 });

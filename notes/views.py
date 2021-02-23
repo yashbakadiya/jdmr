@@ -54,7 +54,7 @@ def ViewNotesInstitute(request):
         'notes':notes
         }
         
-        return render(request,'Notes/viewNotesInstitute.html',context)
+        return render(request,'Notes/allnotes.html',context)
     return HttpResponse("You are Not Authenticated for this page")
     
 
@@ -156,7 +156,7 @@ def AddNotesTutor(request):
             description = request.POST.get("description","")
             course = request.POST.get("course","")
             print(note,title,description,course)
-            if (note and title and description and course):
+            if note:
                 data = NotesTutor(
                     tutor = tutor,
                     notes = note,
@@ -185,7 +185,7 @@ def ViewNotesTutor(request):
         context = {
         'notes':notes
         }
-        return render(request,'Notes/viewNotesTutor.html',context)
+        return render(request,'Notes/allnotes.html',context)
     return HttpResponse("You are not Authenticated for this Page")
 
 
@@ -276,18 +276,17 @@ def AllNotesStudent(request):
     if request.session['type']=="Student":
         user = User.objects.get(username=request.session['user'])
         student = Student.objects.get(user=user)
+        context = {}
         if AddStudentInst.objects.filter(student=student).exists():
             INSTstudent = AddStudentInst.objects.get(student=student)
             institute = NotesInstitute.objects.filter(institute=INSTstudent.institute)
-        tutor = NotesTutor.objects.all()
-        if tutor:
-            all = Combine_two_models(institute,tutor)
-        else:
-            all  = institute
-        print(all)
-        context = {
-        'notes':all
-        }
+            tutor = NotesTutor.objects.all()
+            if tutor:
+                all = Combine_two_models(institute,tutor)
+            else:
+                all  = institute
+            print(all)
+            context['notes'] = all
         return render(request,'Notes/allnotes.html',context)
     return HttpResponse('You are not Authenticated for this page')
 

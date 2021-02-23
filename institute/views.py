@@ -11,6 +11,8 @@ from django.db.models import Q
 from batches.models import BatchTiming
 from json import loads
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from math import radians, sin, cos, asin, sqrt
+from geopy.geocoders import Nominatim
 # Create your views here.
 @login_required(login_url="Login")
 def instituteTutor(request):
@@ -22,8 +24,9 @@ def instituteTutor(request):
                 INST = enrollTutors.objects.filter(teacher=tutor)
                 courses = []
                 for ins in INST:
-                    course = Courses.objects.get(id= int(ins.courseName))
-                    courses.append(course)
+                    if ins.courseName:
+                        course = Courses.objects.get(id= int(ins.courseName))
+                        courses.append(course)
                 batches = zip(INST,courses)
                 return render(request,"Institute/institute.html",{"INST":INST[0],"batches":batches,"template":"dashboard/Tutor-dashboard.html"})
             else:
@@ -36,15 +39,27 @@ def instituteTutor(request):
                 INST = AddStudentInst.objects.filter(student=student)
                 batches = []
                 for ins in INST:
-                    batch = BatchTiming.objects.get(id= int(ins.batch))
-                    batches.append(batch)
-                print('stuent fees-',student.fees.all)
+                    if ins.batch:
+                        batch = BatchTiming.objects.get(id= int(ins.batch))
+                        batches.append(batch)
                 return render(request,"Institute/institute.html",{"batches":batches,'student':student,"INST":INST[0],"template":"dashboard/student-dashboard.html"})
             else:
                 messages.warning(request,"Not Found")
                 return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
     return HttpResponse("You are not Authenticated for this Page")
 
+def haversine(lon1, lat1, lon2, lat2):
+   
+    # convert decimal degrees to radians 
+    lon1, lat1, lon2, lat2 = map(radians, [lon1, lat1, lon2, lat2])
+
+    # haversine formula 
+    dlon = lon2 - lon1 
+    dlat = lat2 - lat1 
+    a = sin(dlat/2)**2 + cos(lat1) * cos(lat2) * sin(dlon/2)**2
+    c = 2 * asin(sqrt(a)) 
+    r = 6371.8 # Radius of earth in kilometers. Use 3956 for miles
+    return c * r
 
 
 @login_required(login_url="Login")
@@ -56,25 +71,55 @@ def searchCoachingCenter(request):
         if request.method == "POST":
             address = request.POST.get('loc','')
             distance = request.POST.get('distance','')
-            cityLat = request.POST.get('cityLat','')
-            cityLng = request.POST.get('cityLng','')
             Class = request.POST.get('className','')
             course = request.POST.get('subject','')
-            centers = Institute.objects.filter(Q(address__icontains=address) or Q(latitude=cityLat) or Q(longitude=cityLng))
-            courses = Courses.objects.filter(Q(forclass=Class) or Q(courseName__icontains=course))
-            centers2 = []
+
             prefill = {
                     "address":address,
                     "distance":distance,
                     "class":Class,
                     "course":course
             }
+
+            if distance=="":
+                distance=0
+            
+            distance = float(distance)
+
+            geolocator = Nominatim(user_agent="inst")
+
+            city = geolocator.geocode(address, timeout=None)
+            if city:
+                cityLat = city.latitude
+                cityLng = city.longitude
+
+            else:
+                cityLat = float(request.POST.get('cityLat',''))
+                cityLng = float(request.POST.get('cityLng',''))
+            
+            courses = Courses.objects.all()
+
+            if(course):
+                courses = courses.filter(Q(courseName__icontains=course))
+            if(Class):
+                courses = courses.filter(Q(forclass=Class))
+
             for cou in courses:
                 inst = cou.intitute
-                if inst not in centers2 and inst not in centers:
-                    centers2.append(inst)
+                location = geolocator.geocode(inst.address, timeout=None)
+                if location:
+                    Lat = location.latitude
+                    Lng = location.longitude
+
+                else:
+                    Lat = float(inst.latitude)
+                    Lng = float(inst.longitude)
+
+                if haversine(Lng,Lat,cityLng,cityLat) <=distance:
+                    if inst not in centers:
+                        centers.append(inst)
             # centers = zip(courses,centers2)
-            return render(request, 'Institute/searchCoachingCenter.html',{'centers2':centers2,'centers':centers,'courses':Courses.objects.all(),'classes':classlist,"prefill":prefill})
+            return render(request, 'Institute/searchCoachingCenter.html',{'centers':centers,'courses':Courses.objects.all(),'classes':classlist,"prefill":prefill})
         return render(request, 'Institute/searchCoachingCenter.html',{'centers':centers,'courses':Courses.objects.all(),'classes':classlist,"prefill":prefill})
 
 
@@ -121,7 +166,10 @@ def ReviewInstitute(request,inst_id):
     for i in INST:
         add = i.Rating
         sumRating+=add
-    avgRating = sumRating/count
+    try:
+        avgRating = sumRating/count
+    except:
+        avgRating = 0
     reviews = InstituteRatings.objects.filter(institute=institute)
     context = {
         'reviews':reviews,

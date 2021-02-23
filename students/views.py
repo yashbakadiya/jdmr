@@ -12,6 +12,9 @@ from django.forms.models import model_to_dict
 import json
 from django.db.models import Q
 from json import dumps,loads 
+import os
+from math import radians, sin, cos, asin, sqrt
+from geopy.geocoders import Nominatim
 # Create your views here.
 
 @login_required(login_url="Login")
@@ -322,29 +325,33 @@ def postAssignment(request):
         user = User.objects.get(username=request.session['user'])
         student = Student.objects.get(user=user)
         if(request.method=='POST'):
-            courseID = request.POST.get('ctn')
-            course  = Courses.objects.get(id = int(courseID))
             # saving data
+            classlist = ['I','II','III','IV','V','VI','VII','VIII','IX','X','XI','XII','Others','Nursery']
+            forclass = request.POST.get('ctn')
+            try:
+                if int(forclass):
+                    forclass = classlist[int(forclass)-1]
+            except:
+                forclass = forclass
             postAssigObj = PostAssignment(
                     student = student,
-                    courseName = course.courseName,
-                    forclass = request.POST.get('cn'),
+                    courseName = request.POST.get('cn'),
+                    forclass = forclass,
                     description = request.POST.get('description'),
                     descriptionFile = request.FILES.get('file'),
                     requirement = request.POST.get('requirement'),
                     budget = request.POST.get('budget'),
                 )
             postAssigObj.save()
-        data = Courses.objects.values_list('id','forclass','courseName')
-        processed_data = {}
-        for x in data:
-            processed_data[x[0]] = [x[1].split(", "),x[2].split("\n")]
+
+        with open('cc.txt', 'r') as f:
+            data = json.loads(f.read())
+
         return render(
             request,
             'students/postAssignment.html',
             {
-                "data":Courses.objects.all(),
-                "jsdata":dumps(processed_data),
+                "data":data,
                 'student':student
             }
         )
@@ -359,10 +366,17 @@ def postTution(request):
             print(request.POST)
             user = User.objects.get(username=request.session['user'])
             student = Student.objects.get(user=user)
+            classlist = ['I','II','III','IV','V','VI','VII','VIII','IX','X','XI','XII','Others','Nursery']
+            forclass = request.POST.get('className')
+            try:
+                if int(forclass):
+                    forclass = classlist[int(forclass)-1]
+            except:
+                forclass = forclass
             postTutionObj = PostTution(
                     student = student,
                     subject = request.POST.get('subject'),
-                    forclass = request.POST.get('className'),
+                    forclass = forclass,
                     teachingMode = request.POST.get('tm'),
                     genderPreference = request.POST.get('gp'),
                     whenToStart = request.POST.get('sd'),
@@ -420,28 +434,82 @@ def delete_Tution(request,sno):
             return HttpResponse("Tutions Does Not exist")
     return HttpResponse("You are not Authenticated fr this Action")
 
+def haversine(lon1, lat1, lon2, lat2):
+   
+    # convert decimal degrees to radians 
+    lon1, lat1, lon2, lat2 = map(radians, [lon1, lat1, lon2, lat2])
+
+    # haversine formula 
+    dlon = lon2 - lon1 
+    dlat = lat2 - lat1 
+    a = sin(dlat/2)**2 + cos(lat1) * cos(lat2) * sin(dlon/2)**2
+    c = 2 * asin(sqrt(a)) 
+    r = 6371.8 # Radius of earth in kilometers. Use 3956 for miles
+    return c * r
 
 @login_required(login_url="Login")
 def enrolledStudents(request):
+    prefill={}
     if request.session['type']=="Teacher":
-        currentS = PostTution.objects.all()
+        currentS = []
         if(request.method=='POST'):
-            print(request.POST)
-            className = request.POST.get('className')
+            className = request.POST.get('className','')
+            subject = request.POST.get('subject','')
+            distance = request.POST.get('distance','')
+            address = request.POST.get('loc')
+            teachtype = request.POST.get('teachtype','')
             classlist = ['I','II','III','IV','V','VI','VII','VIII','IX','X','XI','XII','Others','Nursery']
+
+            prefill = {
+                    "address":address,
+                    "distance":distance,
+                    "class":className,
+                    "subject":subject,
+                    "type":teachtype
+            }
+
             try:
                 if int(className):
                     className = classlist[int(className)-1]
             except:
-                className = classlist[0]
-            address = request.POST.get('loc')
-            currentS = PostTution.objects.filter(Q(forclass__icontains=className) or Q(student__address__icontains=address))
-            courses = []
-            for cou in currentS:
-                course = Courses.objects.get(id = cou.courseID)
-                courses.append(course)
+                className = className
+
+            if distance=="":
+                distance=0
+            
+            distance = float(distance)
+
+            geolocator = Nominatim(user_agent="inst")
+
+            city = geolocator.geocode(address, timeout=None)
+            if city:
+                cityLat = city.latitude
+                cityLng = city.longitude
+
+            else:
+                cityLat = float(request.POST.get('cityLat',''))
+                cityLng = float(request.POST.get('cityLng',''))
+            
+            tutions = PostTution.objects.all()
+
+            if(subject):
+                tutions = tutions.filter(Q(subject=subject))
+            if(className):
+                tutions = tutions.filter(Q(forclass=className))
+            if(teachtype):
+                tutions = tutions.filter(Q(teachingMode=teachtype))
+
+            for tut in tutions:
+                std = tut.student
+                location = geolocator.geocode(std.address, timeout=None)
+                if location:
+                    Lat = location.latitude
+                    Lng = location.longitude
+                    if haversine(Lng,Lat,cityLng,cityLat) <=distance:
+                        if tut not in currentS:
+                            currentS.append(tut)
         jsonLocalData = loads(open('cc.txt','r').read())
-        return render(request, "students/enrolledStudents.html",{'allData':currentS,'jsonLocalData':jsonLocalData})
+        return render(request, "students/enrolledStudents.html",{'allData':currentS,'jsonLocalData':jsonLocalData,'prefill':prefill})
     return HttpResponse("You are not Authenticated for this Page")
 
 

@@ -51,8 +51,6 @@ def AddExam(request):
                 tc = request.POST.get('tc','')
                 status = request.POST.get('status','')
                 noquestions = request.POST.get('noquestions','')
-                print(course,classes,Batch,name,date,exam_time,timezone_offset,
-                    duration,pp,noquestions,status,redate,tc,calculator,nm,imguplod,negative_marks)
                 data = Exam()
                 data.institute = inst
                 data.course = course
@@ -121,9 +119,7 @@ def QuestionsSection(request):
                 context['exams']=[]
             if request.method=='POST':
                 e_id = request.POST.get('exam','')
-                print(request.POST)
                 if  e_id:
-                    print('e_id---',e_id)
                     return redirect('questions',e_id)
             return render(request,'Exam/Questionsection.html',context)
         return HttpResponse("You Are not Authenticated User for this Page")
@@ -152,7 +148,6 @@ def EditExamQuestions(request):
 
 def FindClases(request):
     cid = request.GET.get('course_id')
-    print('cid---',cid)
     if cid:
         subCategories = Courses.objects.get(id=cid)
         sub_list = []
@@ -160,9 +155,7 @@ def FindClases(request):
             data = {}
             data['value'] = sub
             data['text'] = sub
-            print('data---',data)
             sub_list.append(data)
-            print('sub_list---',sub_list)
         return JsonResponse({'sub_categories':sub_list})
 
 
@@ -275,8 +268,6 @@ def Editexam(request,exam_id):
                 tc = request.POST.get('tc','')
                 status = request.POST.get('status','')
                 noquestions = request.POST.get('noquestions','')
-                print(course,classes,Batch,name,date,exam_time,timezone_offset,
-                    duration,pp,noquestions,status,redate,tc,calculator,nm,imguplod,negative_marks)
                 if course:
                     course = Courses.objects.get(id=course)
                     exam.course = course
@@ -309,7 +300,7 @@ def Editexam(request,exam_id):
                     exam.negative_marking = True
                     exam.negative_marks = negative_marks
                 exam.tandc = tc
-                if status==1:
+                if status=="1":
                     exam.status = True
                 else:
                     exam.status = False
@@ -362,26 +353,19 @@ def ToggleExam(request,exam_id):
                         courses.append(course)
                     except:
                         pass
-                if exam.status == True:
                     if instTutor.institute == exam.institute:
                         if exam.course in courses:
-                            exam.status = False
+                            if exam.status:
+                                exam.status = False
+                                messages.warning(request,"Exam Deactivated Successfully")
+                            else:
+                                exam.status = True
+                                messages.success(request,"Exam Activated Successfully")
+                            exam.save()
                         else:
                             return HttpResponse("You Are not Authenticated User for this Action")
                     else:
                         return HttpResponse("You Are not Authenticated User for this Action")
-                    messages.success(request,"Exam Activated Successfully")
-                else:
-                    if instTutor.institute == exam.institute:
-                        if exam.course in courses:
-                            exam.status = True
-                        else:
-                            return HttpResponse("You Are not Authenticated User for this Action")
-                    else:
-                        return HttpResponse("You Are not Authenticated User for this Action")
-                    messages.warning(request,"Exam Deactivated Successfully")
-                    exam.save()
-                    print("exam status--",exam.status)
                 return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
             else:
                 return HttpResponse("You Are not an Authenticated Teacher")
@@ -452,7 +436,6 @@ def CreateQuestions(request,exam_id):
                     try:
 
                         options = request.POST.getlist('options','')
-                        print(options)
                         data = MultipleQuestion(
                             exam=exam,
                             question=question,
@@ -479,7 +462,6 @@ def CreateQuestions(request,exam_id):
                 else:
                     try:
                         options = request.POST.getlist('options','')
-                        print(options)
                         bexam = BooleanQuestion(
                             exam=exam,
                             question=question,
@@ -538,7 +520,6 @@ def CreateQuestions(request,exam_id):
                     try:
 
                         options = request.POST.getlist('options','')
-                        print(options)
                         data = MultipleQuestion(
                             exam=exam,
                             question=question,
@@ -565,7 +546,6 @@ def CreateQuestions(request,exam_id):
                 else:
                     try:
                         options = request.POST.getlist('options','')
-                        print(options)
                         bexam = BooleanQuestion(
                             exam=exam,
                             question=question,
@@ -775,7 +755,6 @@ def EditShortQuestions(request,question_id):
             negative_marks = request.POST.get("negative_marks","")
             Question = request.POST.get("question","")
             Solution = request.POST.get("solution","")
-            #print(section,marks,nm,negative_marks,question,solution)
             if section:
                 question.section = section
             if marks:
@@ -873,7 +852,6 @@ def EditLongQuestions(request,question_id):
             negative_marks = request.POST.get("negative_marks","")
             Question = request.POST.get("question","")
             Solution = request.POST.get("solution","")
-            #print(section,marks,nm,negative_marks,question,solution)
             if section:
                 question.section = section
             if marks:
@@ -938,7 +916,6 @@ def EditBooleanQuestions(request,question_id):
             Solution = request.POST.get("solution","")
             option1 = request.POST.get("option1","")
             option2 = request.POST.get("option2","")
-            #print(section,marks,nm,negative_marks,question,solution)
             if section:
                 question.section = section
             if marks:
@@ -1007,8 +984,7 @@ def EditMultipleQuestions(request,question_id):
             Question = request.POST.get("question","")
             Solution = request.POST.get("solution","")
             options = request.POST.getlist("options","")
-            print(options)
-            #print(section,marks,nm,negative_marks,question,solution)
+            
             if section:
                 question.section = section
             if marks:
@@ -1029,6 +1005,10 @@ def EditMultipleQuestions(request,question_id):
                         data = MultipleAnswer(
                             question=question,
                             option = options[i]).save()
+            try:
+                question.save()
+            except:
+                errors.append('Error Occured! Try Again')
             context={
             'question':question,
             'errors':errors
@@ -1107,7 +1087,7 @@ def DeleteBooleanQuestions(request,question_id):
 
 @login_required(login_url="Login")
 def DeleteMultipleQuestions(request,question_id):
-    if request.session['type']=="Institute":
+    if request.session['type']=="Institute" or request.session['type']=="Teacher":
         errors =[]
         try:
             question = MultipleQuestion.objects.get(id=question_id)
@@ -1226,7 +1206,6 @@ def displayQuestionList(exam):
         elif q['section'] == 'D':
             sectionD += 1
             q['questionNo'] = sectionD
-    print(result)
     section = {}
     section['SectionA'] = sectionA
     section['SectionB'] = sectionB
@@ -1245,7 +1224,6 @@ def calculator(request):
 def instruction(request, pk):
 	exam = Exam.objects.get(id=pk)
 	request.session['exam_id'] = exam.id
-	print(displayQuestionList(exam))
 	if 'main' in request.GET:
 		instructions = exam.tandc
 		return render(request, 'Exam/Instruction2.html', {'exam': exam, 'instructions': instructions})
@@ -1263,6 +1241,7 @@ def start_exam(request, pk):
         data["questions"] = list(result)
         BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
         exam_status = request.session.get('exam_status', 'start')
+        print(exam_status)
         user = User.objects.get(username=request.session['user'])
         student = Student.objects.get(user=user)
         s = StudentMapping.objects.get_or_create(
@@ -1324,7 +1303,7 @@ def store_data(request):
     data['time'] = request.POST.getlist('time[]')
     data['extra_time'] = request.POST.getlist('extra_time[]')
     BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-    with open(os.path.join(BASE_DIR, '/static/currentsession.json'), 'w') as out:
+    with open(os.path.join(BASE_DIR, 'static/currentsession.json'), 'w') as out:
         json.dump(data, out)
     return JsonResponse({'hell': 'dd'})
 
@@ -1338,7 +1317,6 @@ def submitted(request):
 	exam = Exam.objects.get(id=exam_id)
 	s = StudentMapping.objects.get(student=student, exam=exam)
 	student_answers = StudentAnswer.objects.filter(student=s,exam=exam)
-	print(student_answers)
 	for ans in student_answers:
 		if ans.qtype == 'multiple' or ans.qtype == 'tof':
 			if ans.input_ans != 'Not Answered':
@@ -1360,32 +1338,38 @@ def submitted(request):
 def multiple_ans(request):
     q_id = request.POST.get('q_id')
     input_ans = request.POST.get('correct')
+    check = request.POST.get('check')
     examid = int(request.POST.get('examid'))
+    time = request.POST.get('time')
+    extra_time = request.POST.get('extra_time')
     exam = Exam.objects.get(id=examid)
     question = MultipleQuestion.objects.get(id=q_id)
     user = User.objects.get(username=request.session['user'])
     student = Student.objects.get(user=user)
     s = StudentMapping.objects.get(student=student, exam=exam)
-    exist = StudentAnswer.objects.get_or_create(
-        qtype='short', question=question.question, student=s,exam=exam,marks=0,negative_marks=0.0)
-    print(exist)
-    if len(exist)>1:
-    	exist = exist[0]
+    exist = StudentAnswer.objects.filter(
+        qtype='multiple', question=question.question, student=s,exam=exam, marks = question.marks, negative_marks = question.negative_marks)[0]
+    if not exist:
+    	exist = StudentAnswer.objects.create(
+        qtype='multiple', question=question.question, student=s,exam=exam, marks = question.marks, negative_marks = question.negative_marks)
     exist.input_ans = input_ans
     exist.correct_ans = question.correct_ans
-    exist.time = 0.0#time
-    exist.extra_time = 0.0#extra_time
+    exist.check = check
+    exist.time = time
+    exist.extra_time = extra_time
     exist.save()
     return JsonResponse({'done': 'done'})
-
-
 
 @login_required(login_url="Login")
 def short_ans(request):
     q_id = request.POST.get('q_id')
     input_ans = request.POST.get('correct')
+    check = request.POST.get('check')
     examid = int(request.POST.get('examid'))
-    #rish 
+    time = request.POST.get('time')
+    extra_time = request.POST.get('extra_time')
+    (request.FILES.get('ans_Image'))
+
     if request.FILES.get('ans_Image'):
         ans_Image = request.FILES.get('ans_Image')
     else:
@@ -1395,20 +1379,20 @@ def short_ans(request):
     question = ShortAnswerQuestion.objects.get(id=q_id)
     exam = Exam.objects.get(id=examid)
     s = StudentMapping.objects.get(student=student, exam=exam)
-    exist = StudentAnswer.objects.get_or_create(
-        qtype='short', question=question.question, student=s,exam=exam,marks=0,negative_marks=0.0)
-    print(exist)
-    if len(exist)>1:
-    	exist = exist[0]
+    exist = StudentAnswer.objects.filter(
+        qtype='short', question=question.question, student=s,exam=exam, marks = question.marks, negative_marks = question.negative_marks)[0]
+    if not exist:
+    	exist = StudentAnswer.objects.create(
+        qtype='short', question=question.question, student=s,exam=exam, marks = question.marks, negative_marks = question.negative_marks)
+    exist.check = check
     exist.input_ans = input_ans
-    # rish ans image handle
+    exist.correct_ans = question.correct_ans
     if ans_Image:
         exist.input_ans_Image = ans_Image
 
-    exist.time = 0.0#time
-    exist.extra_time = 0.0#extra_time
+    exist.time = time
+    exist.extra_time = extra_time
     exist.save()
-    print('saved')
     return JsonResponse({'done': 'done'})
 
 
@@ -1416,8 +1400,11 @@ def short_ans(request):
 def long_ans(request):
     q_id = request.POST.get('q_id')
     input_ans = request.POST.get('correct')
+    check = request.POST.get('check')
     examid = int(request.POST.get('examid'))
-#rish 
+    time = request.POST.get('time')
+    extra_time = request.POST.get('extra_time')
+
     if request.FILES.get('ans_Image'):
         ans_Image = request.FILES.get('ans_Image')
     else:
@@ -1427,20 +1414,20 @@ def long_ans(request):
     question = LongAnswerQuestion.objects.get(id=q_id)
     exam = Exam.objects.get(id=examid)
     s = StudentMapping.objects.get(student=student, exam=exam)
-    exist = StudentAnswer.objects.get_or_create(
-        qtype='short', question=question.question, student=s,exam=exam,marks=0,negative_marks=0.0)
-    print(exist)
-    if len(exist)>1:
-    	exist = exist[0]
+    exist = StudentAnswer.objects.filter(
+        qtype='long', question=question.question, student=s,exam=exam, marks = question.marks, negative_marks = question.negative_marks)[0]
+    if not exist:
+    	exist = StudentAnswer.objects.create(
+        qtype='long', question=question.question, student=s,exam=exam, marks = question.marks, negative_marks = question.negative_marks)
+    exist.check = check
     exist.input_ans = input_ans
-    # rish ans image handle
+    exist.correct_ans = question.correct_ans
     if ans_Image:
         exist.input_ans_Image = ans_Image
 
-    exist.time = 0.0#time
-    exist.extra_time = 0.0#extra_time
+    exist.time = time
+    exist.extra_time = extra_time
     exist.save()
-    print('saved')
     return JsonResponse({'done': 'done'})
 
 
@@ -1449,29 +1436,35 @@ def long_ans(request):
 def tof_ans(request):
     q_id = request.POST.get('q_id')
     input_ans = request.POST.get('correct')
+    check = request.POST.get('check')
     examid = int(request.POST.get('examid'))
+    time = request.POST.get('time')
+    extra_time = request.POST.get('extra_time')
     question = BooleanQuestion.objects.get(id=q_id)
     user = User.objects.get(username=request.session['user'])
     student = Student.objects.get(user=user)
     exam = Exam.objects.get(id=examid)
     s = StudentMapping.objects.get(student=student, exam=exam)
-    exist = StudentAnswer.objects.get_or_create(
-        qtype='short', question=question.question, student=s,exam=exam,marks=0,negative_marks=0.0)
-    print(exist)
-    if len(exist)>1:
+    exist = StudentAnswer.objects.filter(
+        qtype='tof', question=question.question, student=s,exam=exam, marks = question.marks, negative_marks = question.negative_marks)[0]
+    if not exist:
+    	exist = StudentAnswer.objects.create(
+        qtype='tof', question=question.question, student=s,exam=exam, marks = question.marks, negative_marks = question.negative_marks)
     	exist = exist[0]
+    exist.check = check
     exist.input_ans = input_ans
-    exist.time = 0.0#time
-    exist.extra_time = 0.0#extra_time
+    exist.correct_ans = question.correct_ans
+    exist.time = time
+    exist.extra_time = extra_time
     exist.save()
-    print('saved')
     return JsonResponse({'done': 'done'})
 
 
 
 @login_required(login_url="Login")
 def ExamTutor(request):
-    if request.session['type']=="Teacher":
+    classlist = ['I','II','III','IV','V','VI','VII','VIII','IX','X','XI','XII','Others','Nursery']
+    if request.session['type']=="Teacher":    
         user = User.objects.get(username=request.session['user'])
         tutor = Teacher.objects.get(user=user)
         courses = []
@@ -1505,10 +1498,8 @@ def ExamTutor(request):
         'batch':batch,
         }
         if request.method == "POST":
-            print(request.POST)
             course = request.POST.get('course','')
             check = request.POST.get('check','')
-            course = Courses.objects.get(id=int(course))
             Class = request.POST.get('class','')
             name = request.POST.get('examname','')
             date = request.POST.get('date','')
@@ -1521,11 +1512,12 @@ def ExamTutor(request):
             calculator = request.POST.get('calculator','')
             imguplod = request.POST.get('imguplod','')
             nm = request.POST.get('nm','')
-            negative_marks = request.POST.get('negative_marks','')
+            negative_marks = request.POST.get('negative_marks',0)
             tc = request.POST.get('tc','')
             status = request.POST.get('status','')
             noquestions = request.POST.get('noquestions','')
             if enrollTutors.objects.filter(teacher=tutor).exists() and check=='on':
+                course = Courses.objects.get(id=int(course))
                 Batch = request.POST.get('batch','')
                 INSTtutor = enrollTutors.objects.get(teacher=tutor)
                 data = Exam()
@@ -1549,21 +1541,26 @@ def ExamTutor(request):
                     data.negative_marking = True
                     data.negative_marks = negative_marks
                 data.tandc = tc
-                if status==1:
+                if status=="1":
                     data.status = True
                 else:
                     data.status = False
-                data.question_count = noquestions
+                if noquestions:
+                    data.question_count = noquestions
                 data.save()
-                print('data----',data)
                 messages.success(request,"Exam Added Successfully")
                 return redirect('viewexamstutor')
             else:
-                price = request.POST.get('price')
+                price = request.POST.get('price',0)
+                try:
+                    if int(Class):
+                        Class = classlist[int(Class)-1]
+                except:
+                    Class = Class
                 data = TutorExam()
                 data.tutor = tutor
-                data.course = course
-                data.Class = Class
+                data.courseName = course
+                data.forclass = Class
                 data.price = price
                 data.Name = name
                 data.exam_date = date
@@ -1581,23 +1578,22 @@ def ExamTutor(request):
                     data.negative_marking = True
                     data.negative_marks = negative_marks
                 data.tandc = tc
-                if status==1:
+                if status=="1":
                     data.status = True
                 else:
                     data.status = False
-                data.question_count = noquestions
+                if noquestions:
+                    data.question_count = noquestions
                 data.save()
-                print('data----',data)
                 messages.success(request,"Exam Added Successfully")
-                return redirect('viewexamstutor')
-                
+                return redirect("viewexamstutor")
+        context['data'] = json.loads(open('cc.txt','r').read())        
         return render(request,'Exam/addExamTutor.html',context)
     return HttpResponse("You are not Authenticate for this Page")
 
 
 @login_required(login_url="Login")
 def ViewExamTutor(request):
-    try:
         if request.session['type']=="Teacher":
             user = User.objects.get(username=request.session['user'])
             tutor = Teacher.objects.get(user=user)
@@ -1611,18 +1607,18 @@ def ViewExamTutor(request):
                     course = Courses.objects.get(id=int(i))
                     exam = Exam.objects.filter(Q(institute=INSTtutor.institute) & Q(course=course))
                     exams.append(exam)
+                context = {
+                'INSTtutor':INSTtutor,
+                'exams':exams,
+                'tutorexams':tutorexams
+                }
             tutorexams = TutorExam.objects.filter(tutor=tutor)
             context = {
-            'INSTtutor':INSTtutor,
             'exams':exams,
             'tutorexams':tutorexams
             }
             return render(request,'Exam/viewExamsTutor.html',context)
         return HttpResponse("You are not Authenticate for this Page")
-    except:
-        return HttpResponse("You are not Authenticate for this Page")
-
-
 
 @login_required(login_url="Login")
 def ToggleTutorExam(request,exam_id):
@@ -1635,10 +1631,10 @@ def ToggleTutorExam(request,exam_id):
             except:
                 return HttpResponse("Unable to toggle")
             if exam.tutor==tutor:
-                if exam.status==False:
-                    exam.status=True
-                else:
+                if exam.status:
                     exam.status=False
+                else:
+                    exam.status=True
                 exam.save()
                 return redirect('viewexamstutor')
             else:
@@ -1673,6 +1669,7 @@ def DeleteTutorExam(request,exam_id):
 
 @login_required(login_url="Login")
 def EditExamTutor(request,exam_id):
+    classlist = ['I','II','III','IV','V','VI','VII','VIII','IX','X','XI','XII','Others','Nursery']
     if request.session['type']=="Teacher":
         try:
             exam = TutorExam.objects.get(id=exam_id)
@@ -1690,12 +1687,13 @@ def EditExamTutor(request,exam_id):
             except:
                 pass
         context = {
+                'data':json.loads(open('cc.txt','r').read()),    
                 'courses':courses,
                 'exam':exam
                   }    
         if request.method == "POST":
             course = request.POST.get('course','')
-            classes = request.POST.get('class','')
+            Class = request.POST.get('class','')
             price = request.POST.get('price','')
             name = request.POST.get('examname','')
             date = request.POST.get('date','')
@@ -1712,10 +1710,15 @@ def EditExamTutor(request,exam_id):
             status = request.POST.get('status','')
             noquestions = request.POST.get('noquestions','')
             if course:
-                course = Courses.objects.get(id=course)
+                exam.courseName = course
                 exam.course = course
-            if classes:
-                exam.Class = classes
+            if Class:
+                try:
+                    if int(Class):
+                        Class = classlist[int(Class)-1]
+                except:
+                    Class = Class
+                exam.forclass = Class
             if price:
                 exam.price = price
             if name:
@@ -1743,7 +1746,7 @@ def EditExamTutor(request,exam_id):
                 exam.negative_marking = True
                 exam.negative_marks = negative_marks
             exam.tandc = tc
-            if status==1:
+            if status=="1":
                 exam.status = True
             else:
                 exam.status = False
@@ -1799,7 +1802,6 @@ def CreateQuestionsTutor(request,exam_id):
         tutor = Teacher.objects.get(user=user)
         if exam.tutor == tutor:
             if request.method=="POST":
-                print(request.POST)
                 question_type = request.POST.get('question_type',"")
                 question = request.POST.get('question',"")
                 solution = request.POST.get('solution',"")
@@ -1840,7 +1842,6 @@ def CreateQuestionsTutor(request,exam_id):
                     try:
 
                         options = request.POST.getlist('options','')
-                        print(options)
                         data = TutorMultipleQuestion(
                             exam=exam,
                             question=question,
@@ -1867,7 +1868,6 @@ def CreateQuestionsTutor(request,exam_id):
                 else:
                     try:
                         options = request.POST.getlist('options','')
-                        print(options)
                         bexam = TutorBooleanQuestion(
                             exam=exam,
                             question=question,
@@ -2078,7 +2078,6 @@ def EditLongQuestionsTutor(request,question_id):
             negative_marks = request.POST.get("negative_marks","")
             Question = request.POST.get("question","")
             Solution = request.POST.get("solution","")
-            #print(section,marks,nm,negative_marks,question,solution)
             if section:
                 question.section = section
             if marks:
@@ -2171,7 +2170,6 @@ def EditMultipleQuestionsTutor(request,question_id):
             Question = request.POST.get("question","")
             Solution = request.POST.get("solution","")
             options = request.POST.getlist("options","")
-            print(options)
             if section:
                 question.section = section
             if marks:
@@ -2298,7 +2296,6 @@ def displayQuestionList(exam):
         elif q['section'] == 'D':
             sectionD += 1
             q['questionNo'] = sectionD
-    print(result)
     section = {}
     section['SectionA'] = sectionA
     section['SectionB'] = sectionB

@@ -1,4 +1,4 @@
-{% extends 'dashboard/dashboard.html' %}
+{% extends 'dashboard/base.html' %}
 {% load static %}
 {% block css %}
 @import url('https://fonts.googleapis.com/css?family=Numans');
@@ -261,7 +261,7 @@ input:focus{
 
    
 {% endblock %}
-{% block body %}
+{% block main-content %}
 <div class="container">
     {% if messages %}
     {% for k in messages%}

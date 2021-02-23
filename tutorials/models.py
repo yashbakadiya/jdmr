@@ -29,6 +29,12 @@ class TutorialInstitute(models.Model):
     def Off(self):
         return int(self.Discount * 100)
 
+    @property
+    def First(self):
+        if TutorialInstitutePlaylist.objects.filter(tutorial=TutorialInstitute.objects.get(id=self.id)).exists():
+            first = TutorialInstitutePlaylist.objects.filter(tutorial=TutorialInstitute.objects.get(id=self.id)).first()
+            return first.Video.url
+
 
 class TutorialInstitutePlaylist(models.Model):
     tutorial = models.ForeignKey(TutorialInstitute,related_name='playlist',on_delete=models.CASCADE)

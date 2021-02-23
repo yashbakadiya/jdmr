@@ -1,4 +1,4 @@
-{% extends 'dashboard/dashboard.html' %}
+{% extends 'dashboard/base.html' %}
 {% load static %}
 {% block css %}
 
@@ -213,7 +213,7 @@ transform: rotate(-20deg);
 width: 35%;
 }
 {% endblock %}
-{% block body %}
+{% block main-content %}
 <main>
     <div class="container mt-4">
         {% if messages %}

@@ -8,7 +8,7 @@
                 <div class="widget-content widget-content-area product-cat6  px-0 py-0">
                     <div class="row">
                         <div class="col-12">
-                            <div class="card">
+                            <div class="card" style="padding: 11px;">
                                 <div class="wrapper">
                                     <div class="row">
                                         <div class="col-xl-12">
@@ -90,10 +90,15 @@
                                 <td>{{forloop.counter}}</td>
                                 <td>{{cou.courseName}}</td>
                                 <td>{{cou.forclass}}</td>
+                                {%if cou.AddFeesC.all %}
                                 {% for fee in cou.AddFeesC.all %}
                                 <td>{{fee.teachType}}</td>
                                 <td>{{fee.final_amount}}</td>
                                 {% endfor %}
+                                {% else %}
+                                <td></td>
+                                <td></td>
+                                {% endif %}
                             </tr>
                             {% endfor %}
                         </table>
@@ -164,11 +169,11 @@
                         </div>
                         <select id="inputState" class="custom-select form-control w-100 mt-2"
                             style="float: left;width:30%;" name="rating">
-                            <option value="5">5</option>
-                            <option value="4">4</option>
-                            <option value="3">3</option>
-                            <option value="2">2</option>
-                            <option value="1">1</option>
+                            <option value="5">Five Stars</option>
+                            <option value="4">Four Stars</option>
+                            <option value="3">Three Stars</option>
+                            <option value="2">Two Stars</option>
+                            <option value="1">One Stars</option>
                         </select>
                         <button class="btn btn-primary mt-2" style="float: right;">Post Review</button>
                     </form>

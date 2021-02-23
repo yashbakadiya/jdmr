@@ -27,11 +27,11 @@ def ViewExamsResult(request):
     if request.session['type']=="Student":
         user = User.objects.get(username=request.session['user'])
         student = Student.objects.get(user=user)
-        mapping=StudentMapping.objects.get(student=student)
-        results = StudentExamResult.objects.filter(student=mapping)
-        context = {
-        'results':results
-        }
+        context = {}
+        if StudentMapping.objects.filter(student=student).exists():
+            mapping = StudentMapping.objects.get(student=student)
+            context['results'] = StudentExamResult.objects.filter(student=mapping)
+            
         return render(request,'Results/examResultsAll.html',context)
     return HttpResponse("You Are not Authenticated for this page")
 
