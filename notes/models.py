@@ -7,6 +7,7 @@ class NotesInstitute(models.Model):
     notes = models.FileField(upload_to="notes/Institute")
     title = models.CharField(max_length=2000)
     subject = models.CharField(max_length=3000)
+    forclass = models.CharField(max_length=150, default="")
     description = models.TextField()
         
     def __str__(self):

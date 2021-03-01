@@ -26,12 +26,15 @@ def AddNotesInstitute(request):
             title = request.POST.get("title","")
             description = request.POST.get("description","")
             course = request.POST.get("course","")
+            course = Courses.objects.get(id=course).courseName
+            forclass = request.POST.get('forclass','')
             if (note and title and description and course):
                 data = NotesInstitute(
                     institute = inst,
                     notes = note,
                     title = title,
                     subject = course,
+                    forclass = forclass,
                     description = description,
                     )
                 try:
@@ -99,7 +102,8 @@ def EditNoteInstitute(request,note_id):
             title = request.POST.get("title","")
             description = request.POST.get("description","")
             course = request.POST.get("course","")
-            print(note,title,description,course)
+            course = Courses.objects.get(id=course).courseName
+            forclass = request.POST.get('forclass','')
             if note:
                 data.notes = note
             if title:
@@ -108,6 +112,8 @@ def EditNoteInstitute(request,note_id):
                 data.description = description
             if course:
                 data.subject = course
+            if forclass:
+                data.forclass = forclass
             try:
                 data.save()
                 return redirect('viewnotes')

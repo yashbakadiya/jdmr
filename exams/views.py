@@ -17,6 +17,9 @@ from itertools import chain
 from dateutil import parser,rrule
 import os
 import json
+from django.contrib.sites import requests
+import re
+import requests
 # Create your views here.
 
 @login_required(login_url="Login")
@@ -1127,8 +1130,22 @@ def StudentExamsAll(request):
         institute = institutestudent.institute
         if institute:
             exams = Exam.objects.filter(institute=institute)
+
+            # internet time
+            json_datetime=requests.get('http://worldtimeapi.org/api/ip')
+            json_datetime=json.loads(json_datetime.content)
+            match_date = re.search(r'\d{4}-\d{2}-\d{2}',json_datetime['datetime'])
+            match_time = re.search(r'\d{2}:\d{2}:\d{2}',json_datetime['datetime'])
+            datetime_obj = datetime.strptime(match_date.group()+' '+match_time.group(), '%Y-%m-%d %H:%M:%S')
+            
+            examlist = []
+
+            for i in exams:
+                if((datetime.combine(i.exam_date,i.exam_time) <= datetime_obj)):
+                    examlist.append(i)
+                
             context = {
-                'exams':exams
+                'exams':examlist
             }
         return render(request,'Exam/studentExamsAll.html',context)
     return render(request,'Exam/studentExamsAll.html')

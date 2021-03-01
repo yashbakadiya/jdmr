@@ -227,27 +227,27 @@ width: 35%;
         {% endfor %}
         {% endif %}
         <div class="card mb-4">
-            <div class="card-body">
-                <!-- Grid row -->
+            <div class="card-header">
+                <!-- Grid column -->
                 <div class="row">
-                    <!-- Grid column -->
-                    <div class="col-md-8">
-                        <h2 class="pt-3 pb-4 text-center font-bold font-up deep-purple-text"
-                            style="color: rgb(66, 8, 8);">List of Enrolled Tutors</h2>
+                    <div class="col-md-8 col-12">
+                      <h2 style="color:black;">List of Enrolled Tutors</h2>
                     </div>
-                    <div class="col-md-4">
+                    <div class="col-md-4 col-12">
                         <input id="searchbox" type="text" class="form-control" name='srh'
                             placeholder="Enter Tutor Name or Email" required>
                     </div>
-                    <!-- Grid column -->
-                </div>
+                  </div>
+                <!-- Grid column -->
+            </div>
+            <div class="card-body">
                 <!-- Grid row -->
-                <div>
-                    <form action="" method="post">{% csrf_token %}
-                        <!--Table-->
-                        <table class="table table-striped" style="font-size: small;">
+                <!-- Grid row -->
+                <form action="" method="post">{% csrf_token %}
+                    <!--Table-->
+                    <div class="table-responsive">
+                        <table class="table table-striped">
                             <!--Table head-->
-                            <thead>
                                 <tr>
                                     <th>Tutor Name</th>
                                     <th>Email Id</th>
@@ -257,16 +257,14 @@ width: 35%;
                                     <th>Class</th>
                                     <th>Availability</th>
                                     <th>Teaching Type</th>
-                                    <th>Delete</th>
-                                    <th>Update</th>
-                                    <th>Archive</th>
+                                    <th class="text-center">Delete</th>
+                                    <th class="text-center">Update</th>
+                                    <th class="text-center">Archive</th>
                                 </tr>
-                            </thead>
                             <!--Table head-->
                             <!--Table body-->
-                            <tbody>
                                 {% for tutor,course in tutors reversed %}
-                                <tr class="tr">
+                                <tr class="main-row">
                                     <td>{{tutor.teacher.user.username}}</td>
                                     <td>{{tutor.teacher.user.email}}</td>
                                     <td>{{tutor.teacher.user.password}}</td>
@@ -283,20 +281,19 @@ width: 35%;
                                     <td>None</td>
                                     {% endif %}
                                     <td>{{tutor.teachType}}</td>
-                                    <td>
+                                    <td class="text-center">
                                         <a href="{% url 'deleteTutor' tutor.id %}"
                                             class="btn btn-danger btn-sm">DELETE</a>
                                     </td>
-                                    <td>
+                                    <td class="text-center">
                                         <a href="{% url 'editTutor' tutor.id %}" class="btn btn-danger btn-sm">EDIT</a>
                                     </td>
 
-                                    <td>
+                                    <td class="text-center">
                                         <input type="checkbox" class="bigcheckbox" name="check" value="{{tutor.id}}">
                                     </td>
                                 </tr>
                                 {% endfor %}
-                            </tbody>
                             <!--Table body-->
                         </table>
                         <!--Table-->
@@ -304,13 +301,13 @@ width: 35%;
                             <input type="submit" value="Move to Archive" class="btn btn-danger float-right">
                         </div>
                         <br>
+                    </div>
                     </form>
-                </div>
             </div>
         </div>
 </main>
 <script type="text/javascript">
-    trlist = $("tbody>tr");
+    trlist = $(".main-row");
     $("body").on('input', "#searchbox", function () {
         trlist.hide();
         search = this.value.toLowerCase();

@@ -203,38 +203,38 @@
                 </div>
             </div>
         </div>
-        <div class="card-body container">
+        <div class="card-body">
             <form id='submitForm' method='post' action=''>{% csrf_token %}
                 <div class="input-group form-group">
-                    <label class="control-label mt-2 col-sm-4">First name<span class="text-danger">*</span></label>
+                    <label class="control-label mt-2 col-sm-2">First name<span class="text-danger">*</span></label>
                     <div class="input-group-prepend">
                         <span class="input-group-text"><i class="fas fa-user"></i></span>
                     </div>
                     <input type="text" class="form-control" id="firstName " name='firstName' placeholder="First name" required value = "{{ prefil.firstName }}">
                 </div>
                 <div class="input-group form-group">
-                    <label class="control-label mt-2 col-sm-4">Last name<span class="text-danger">*</span></label>
+                    <label class="control-label mt-2 col-sm-2">Last name<span class="text-danger">*</span></label>
                     <div class="input-group-prepend">
                         <span class="input-group-text"><i class="fas fa-user"></i></span>
                     </div>
                     <input type="text" class="form-control" id="lastName " name='lastName' placeholder="Last name" required value = "{{ prefil.lastName }}">
                 </div>
                 <div class="input-group form-group">
-                    <label class="control-label mt-2 col-sm-4">Email Id<span class="text-danger">*</span></label>
+                    <label class="control-label mt-2 col-sm-2">Email Id<span class="text-danger">*</span></label>
                     <div class="input-group-prepend">
                         <span class="input-group-text"><i class="fas fa-envelope"></i></span>
                     </div>
                     <input type="email" class="form-control" id="email" name='email' placeholder="Email Address" required value = "{{ prefil.email }}">
                 </div>
                 <div class="input-group form-group">
-                    <label class="control-label mt-2 col-sm-4">Address<span class="text-danger">*</span></label>
+                    <label class="control-label mt-2 col-sm-2">Address<span class="text-danger">*</span></label>
                     <div class="input-group-prepend">
                         <span class="input-group-text"><i class="fas fa-location-arrow"></i></span>
                     </div>
                     <input id="pac-input" type="text" class="controls form-control" name='loc' placeholder="Search" required>
                 </div>
                 <div class="input-group form-group">
-                    <label class="control-label mt-2 col-sm-4">Phone Number<span class="text-danger">*</span></label>
+                    <label class="control-label mt-2 col-sm-2">Phone Number<span class="text-danger">*</span></label>
                     <div class="input-group-prepend">
                         <span class="input-group-text"><i class="fas fa-phone"></i></span>
                     </div>
@@ -284,7 +284,7 @@
                             </div>
                         </div>
                     </div>
-                <div class="row container">
+                <div class="row">
                     <div class="form-group col-sm-6 sm-ml-1 control-label">
                         Availability:
                         <select id="availability" name="availability" class="custom-select form-control" required="required">
@@ -306,7 +306,7 @@
 
                 <div class="row container d-flex justify-content-end">
                     <div class="col-sm-2 sm-ml-1">
-                        <button id='submitBtn' name="submit" type="submit" class="btn btn-warning">SignUp</button>
+                        <button id='submitBtn' name="submit" type="submit" class="btn btn-warning">Register</button>
 
                     </div>
                 </div>

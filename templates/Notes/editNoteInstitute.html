@@ -319,13 +319,27 @@ input:focus{
                                 <label class="control-label">Select Course</label>        
                             </div>  
                         </div>
-                        <div class="col ml-5">
+                        <div class="col">
                                <div>
-                                <select class="form-control w-50" name="course">
-                                    <option value="">Select a Course</option>
+                                <select class="form-control" id="select_course" name="course" required onchange="selectcourse()">
                                     {% for course in courses %}
-                                    <option value="{{course.courseName}}">{{course.courseName}}</option>
+                                    <option value="{{course.id}}">{{course.courseName}}</option>
                                     {% endfor %}
+                                </select>
+                                </div>
+                        </div>                      
+                    </div>
+                    <br>
+                    <div class="row ml-1">
+                        <div class="col-3">
+                           <div class="input-group form-group">
+                                <label class="control-label">Select Class</label>        
+                            </div>  
+                        </div>
+                    <div class="col">
+                               <div>
+                                <select class="form-control" id="class_select" name="forclass" required>
+                                    <option selected disabled>Select Class</option>
                                 </select>
                                 </div>
                         </div>                      

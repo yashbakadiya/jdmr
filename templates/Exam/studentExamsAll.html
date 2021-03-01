@@ -30,8 +30,8 @@
                             {% for exam in exams reversed %}
                             <tr class="main-row">
                                 <td>{{forloop.counter}}</td>
-                                <td><p style="color: black;font-size: 14px;">{{exam.Name}}</p></td>
-                                <td><p style="color: black;font-size: 14px;">{{exam.course.courseName}}</p></td>
+                                <td>{{exam.Name}}</td>
+                                <td>{{exam.course.courseName}}</td>
                                 <td>{{exam.exam_date}}</td>
                                 <td>{{exam.exam_duration}}</td>
                                 <td>{{exam.question_count}}</td>
@@ -46,10 +46,10 @@
                     </div>
                 </div>
                 {% else %}
-                <div class="widget-header">
+                <div class="card-header">
                     <div class="row">
                         <div class="col-xl-12 col-md-12 col-12">
-                            <h4 class="p-2"><b>No Exams to show</b></h4>
+                            <h2>No Exams to show</h2>
                         </div>
                     </div>
                 </div>
