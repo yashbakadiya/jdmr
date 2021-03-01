@@ -398,7 +398,8 @@
         });
     </script>
     <script>
-        $("#submitAppointment").on("click", function () {
+        $("#submitAppointment").on("click", function (e) {
+            e.preventDefault();
             form = $('#createAppointmentForm')[0];
             if (!form.checkValidity()) {
                 console.log("form error")
@@ -416,7 +417,7 @@
                     if (response.status == 1) {
                         console.log(response.msg)
                         window.alert("Appointment Created Successfully !!");
-                        window.location.href("/enrolledTutors/");
+                        window.location.href = "/teacher/enrolledTutors/";
                     } else {
                         options = "";
                         for (i = 0; i < response.errors.length; i++) {
