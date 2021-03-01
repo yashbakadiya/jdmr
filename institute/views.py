@@ -64,7 +64,8 @@ def haversine(lon1, lat1, lon2, lat2):
 
 @login_required(login_url="Login")
 def searchCoachingCenter(request):
-    classlist = ['I','II','III','IV','V','VI','VII','VIII','IX','X','XI','XII','Not Applicable','Nursery']
+    jsonLocalData = loads(open('cc.txt','r').read())
+    classlist = ['I','II','III','IV','V','VI','VII','VIII','IX','X','XI','XII','Other','Nursery']
     prefill={}
     if request.session['type']=="Student":
         centers = []
@@ -102,7 +103,7 @@ def searchCoachingCenter(request):
             if(course):
                 courses = courses.filter(Q(courseName__icontains=course))
             if(Class):
-                courses = courses.filter(Q(forclass=Class))
+                courses = courses.filter(Q(forclass__icontains=Class))
             
             for cou in courses:
                 inst = cou.intitute
@@ -120,8 +121,7 @@ def searchCoachingCenter(request):
                         centers.append(inst)
                
             # centers = zip(courses,centers2)
-            return render(request, 'Institute/searchCoachingCenter.html',{'centers':centers,'courses':Courses.objects.all(),'classes':classlist,"prefill":prefill})
-        return render(request, 'Institute/searchCoachingCenter.html',{'centers':centers,'courses':Courses.objects.all(),'classes':classlist,"prefill":prefill})
+        return render(request, 'Institute/searchCoachingCenter.html',{'jsonLocalData':jsonLocalData,'centers':centers,"prefill":prefill})
 
 
 

@@ -42,15 +42,7 @@
                             <div class="col-md-5 col-lg-5 col-12 mt-2 row">
                                 <label class="control-label col-sm-3 col-5 mt-2" style="display:block; color:black;">Class</label>
                                 <select id="className" name="className"
-                                    class="custom-select form-control w-100 col-sm-8 col-7" placeholder="Class">
-                                    {% if prefill.class %}
-                                    <option disabled selected value="{{prefill.class}}">{{prefill.class}}</option>
-                                    {% else %}
-                                    <option disabled selected value="">Class</option>
-                                    {% endif %}
-                                    {% for class in classes %}
-                                    <option value="{{class}}">{{class}}</option>
-                                    {% endfor %}
+                                    class="custom-select form-control w-100 col-sm-8 col-7" onchange="subjects()" placeholder="Class">
                                 </select>
                             </div>
                             <div class="col-lg-5 col-md-5 col-12 mt-2 row">
@@ -62,9 +54,6 @@
                                     {% else %}
                                     <option disabled selected value="">Course</option>
                                     {% endif %}
-                                    {% for course in courses %}
-                                    <option value="{{course.courseName}}">{{course.courseName}}</option>
-                                    {% endfor %}
                                 </select>
                             </div>
                             <div class="col-lg-2 col-md-2 col-12 mt-2 d-flex justify-content-end">
@@ -148,5 +137,37 @@
         }
         initialize();
     });
+</script>
+<script>
+    var className = document.getElementById("className")
+    var jsondata = {{ jsonLocalData| safe}}
+    var prefillclass = "{{prefill.class}}"
+    const keys = Object.keys(jsondata);
+    
+    if (prefillclass)
+    {
+        var classes = `<option disabled selected value="${prefillclass}">${prefillclass}</option>`
+    }
+    else
+    {
+        var classes = `<option disabled selected value="">Class</option>`
+    }
+    for (let index = 0; index < keys.length; index++) {
+        const element = keys[index];
+        classes += `<option value="${element}">${element}</option>`
+    }
+    className.innerHTML = classes
+
+    function subjects() {
+        var className = document.getElementById("className").value
+        var subject = document.getElementById("subject")
+        var html=''
+        class_subjects = jsondata[`${className}`]
+        for (let index = 0; index < class_subjects.length; index++) {
+            const element = class_subjects[index];
+            html += `<option value="${element}">${element}</option>`
+        }
+        subject.innerHTML = html
+    }
 </script>
 {% endblock main-content %}
