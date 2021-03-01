@@ -129,7 +129,7 @@ def batchTiming(request):
         courses = Courses.objects.filter(intitute=inst, archieved=False)
         jsonCources = {}
         for x in courses:
-            jsonCources[x.id] = x.forclass.split(", ")
+            jsonCources[x.id] = x.forclass
         params = {'data': coachingCenter, 'courses': courses,
                   'json': json.dumps(jsonCources)}
         return render(request, 'batches/batchTiming.html', params)

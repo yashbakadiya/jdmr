@@ -74,7 +74,7 @@ def AddExam(request):
                     data.negative_marking = True
                     data.negative_marks = negative_marks
                 data.tandc = tc
-                if status==1:
+                if status=="1":
                     data.status = True
                 else:
                     data.status = False

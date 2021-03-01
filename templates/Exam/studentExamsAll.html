@@ -1,15 +1,15 @@
 {% extends 'dashboard/student-dashboard.html' %}
 {% load static %}
 {% block main-content %}
-<main class="mt-4">
-    <div class="col-xl-12 col-md-12 col-12 mt-5">
-            <div class="statbox widget box box-shadow">
-                <div class="widget-header">
+<main class="mt-5 row">
+    <div class="col-xl-12 col-md-12 col-12">
+            <div class="card statbox widget box box-shadow">
+                <div class="card-header">
                     <div class="row">
                         <div class="col-md-8 col-12">
-                            <h4 class="p-2" style="color:black;"><b>List Of Exams</b></h4>
+                            <h2 style="color:black;">List Of Exams</h2>
                         </div>
-                        <div class="col-md-4 col-12 mt-2">
+                        <div class="col-md-4 col-12">
                         <input id="searchbox" type="text" class="form-control p-2" name='srh' placeholder="Search Exams" required>
                     </div>
                     </div>
@@ -25,10 +25,10 @@
                                 <th>Exam Date</th>
                                 <th>Duration</th>
                                 <th>Total Questions</th>
-                                <th>status</th>  
+                                <th class="text-center">Status</th>  
                             </tr>
                             {% for exam in exams reversed %}
-                            <tr>
+                            <tr class="main-row">
                                 <td>{{forloop.counter}}</td>
                                 <td><p style="color: black;font-size: 14px;">{{exam.Name}}</p></td>
                                 <td><p style="color: black;font-size: 14px;">{{exam.course.courseName}}</p></td>
@@ -36,9 +36,9 @@
                                 <td>{{exam.exam_duration}}</td>
                                 <td>{{exam.question_count}}</td>
                                 {% if exam.active %}
-                                <td><a class="btn btn-success">Submitted</a></td>
+                                <td class="text-center"><a class="btn btn-success">Submitted</a></td>
                                 {% else %}
-                                <td><a href="{% url 'instruction' exam.id %}" class="btn btn-info">Start Exam</a></td>
+                                <td class="text-center"><a href="{% url 'instruction' exam.id %}" class="btn btn-info">Start Exam</a></td>
                                 {% endif %}                              
                             </tr>
                             {% endfor %}
@@ -58,7 +58,7 @@
         </div>  
 </main>
     <script type="text/javascript">
-        trlist = $("tbody>tr");
+        trlist = $(".main-row");
         $("body").on('input',"#searchbox",function(){
             trlist.hide();
             search = this.value.toLowerCase();

@@ -1,6 +1,7 @@
-{% extends 'dashboard/dashboard.html' %}
+{% extends 'dashboard/base.html' %}
 {% load static %}
 {% block css %}
+<style>
 @import url('https://fonts.googleapis.com/css?family=Numans');
 .container{
     height: 100%;
@@ -250,8 +251,9 @@ input:focus{
 {
     vertical-align:middle;
 }
+</style>
 {% endblock %}
-{% block body %}
+{% block main-content %}
 <div>
     {% if messages %}
     <div class="alert alert-warning" role="alert">
@@ -264,8 +266,6 @@ input:focus{
     {% endif %}
 </div>
 
-<div class="container">
-    <div class="d-flex justify-content-center h-100">
         <div class="card">
             <div class="card-header">
                 <div class="row">
@@ -374,8 +374,6 @@ input:focus{
             </div>
             <br>
         </div>
-    </div>
-</div>
 <script>
 
 $(document).ready(function() {

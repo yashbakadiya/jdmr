@@ -13,36 +13,36 @@
 
 <div class="row mt-5 layout-spacing">
     <div class="col-lg-12">
-        <div class="statbox widget box box-shadow">
-            <div class="widget-header border-bottom border-default">
+        <div class="card statbox widget box box-shadow">
+            <div class="card-header">
                 <div class="row">
-                    <div class="col-xl-12 col-md-12 col-sm-12 col-12">
-                        <h4 style="color:black;"><b>Search Institutes Near You</b></h4>
+                        <div class="col-sm-10">
+                            <h2 style="color: black;">Search Institutes Near You</h2>
+                        </div>    
                     </div>
-                </div>
             </div>
             <div class="widget-content widget-content-area">
                 <div class="row">
                     <div class="col-lg-12 col-md-12 cms-search">
-                        <form class="form-inline mt-2 mb-5" method="POST">
+                        <form id="results" class="form-inline mt-2 mb-5" method="POST">
                             {% csrf_token %}
                             <div class="col-md-6 col-lg-5 col-12 mt-2 row">
-                                <label class="control-label col-sm-3 col-5 mt-3 mx-3" style="display:block; color:black;">Location</label>
+                                <label class="control-label col-sm-3 col-5 mt-3" style="display:block; color:black;">Location</label>
                                 <input type="text" class="form-control my-2 w-100 col-sm-8 col-7" id="pac-input"
                                     name='loc' placeholder="Enter Location" value="{{prefill.address}}" required>
                                 <input type="hidden" id="cityLat" value="0" name="cityLat" />
                                 <input type="hidden" id="cityLng" value="0" name="cityLng" />
                             </div>
                             <div class="col-md-6 col-lg-5 col-12 mt-2 row">
-                                <label class="control-label col-sm-3 col-5 mt-3 mx-3" style="display:block; color:black;">Distance</label>
+                                <label class="control-label col-sm-3 col-5 mt-3" style="display:block; color:black;">Distance</label>
                                 <input type="number" class="form-control my-2 w-100 col-sm-8 col-7"
                                     style="-moz-appearance: textfield;" min="0" name="distance" id="filterDistance"
                                     placeholder="Distance in Km" value="{{prefill.distance}}">
                             </div>
                             <div class="col-md-5 col-lg-5 col-12 mt-2 row">
-                                <label class="control-label col-sm-3 col-4 mt-3 mx-3" style="display:block; color:black;">Class</label>
+                                <label class="control-label col-sm-3 col-5 mt-2" style="display:block; color:black;">Class</label>
                                 <select id="className" name="className"
-                                    class="custom-select form-control w-100 col-sm-8 col-8" placeholder="Class">
+                                    class="custom-select form-control w-100 col-sm-8 col-7" placeholder="Class">
                                     {% if prefill.class %}
                                     <option disabled selected value="{{prefill.class}}">{{prefill.class}}</option>
                                     {% else %}
@@ -54,9 +54,9 @@
                                 </select>
                             </div>
                             <div class="col-lg-5 col-md-5 col-12 mt-2 row">
-                                <label class="control-label col-sm-3 col-4 mt-3 mx-3" style="display:block; color:black;">Courses</label>
+                                <label class="control-label col-sm-3 col-5 mt-2" style="display:block; color:black;">Courses</label>
                                 <select id="subject" name="subject"
-                                    class="custom-select form-control w-100 col-sm-8 col-8">
+                                    class="custom-select form-control w-100 col-sm-8 col-7">
                                     {% if prefill.course %}
                                     <option disabled selected value="{{prefill.course}}">{{prefill.course}}</option>
                                     {% else %}
@@ -77,6 +77,7 @@
         </div>
     </div>
 </div>
+{% if prefill %}
 <div class="row">
     {% if centers %}
     {% for i in centers %}
@@ -90,20 +91,14 @@
                                 <div class="row">
                                     <div class="col-xl-12">
                                         {% if i.photo %}
-                                        <img src="{{i.photo.url}}" class="img-fluid" alt="car-1">
+                                        <img src="{{i.photo.url}}" class="img-fluid w-100 text-center" alt="car-1" style="height:15rem;">
                                         {% else %}
-                                        <img src="{% static 'default-profile.png' %}" class="img-fluid" alt="car-1">
+                                        <img src="{% static 'default-profile.png' %}" class="img-fluid w-100 text-center" alt="car-1" style="height:15rem;">
                                         {% endif %}
                                     </div>
                                     <div class="col-xl-12 text-center">
                                         <h4 class="card-title" style="color: black;">{{i.user.username}}</h4>
-                                        <p class="card-des px-2"><span class="flaticon-star-fill mt-2"
-                                                style="color:yellow;"></span>
-                                            <span class="flaticon-star-fill mt-2" style="color:yellow;"></span>
-                                            <span class="flaticon-star-fill mt-2" style="color:yellow;"></span>
-                                            <span class="flaticon-star-fill mt-2" style="color:yellow;"></span>
-                                            <span class="flaticon-star-fill mt-2" style="color:yellow;"></span></p>
-                                        <p class="card-text"><svg width="20" height="20" viewBox="0 0 20 20" fill="none"
+                                        <svg width="20" height="20" viewBox="0 0 20 20" fill="none"
                                                 xmlns="http://www.w3.org/2000/svg">
                                                 <path
                                                     d="M20 14.92V17.92C20.0011 18.1985 19.9441 18.4742 19.8325 18.7293C19.7209 18.9845 19.5573 19.2136 19.3521 19.4019C19.1469 19.5901 18.9046 19.7335 18.6407 19.8227C18.3769 19.9119 18.0974 19.9451 17.82 19.92C14.7428 19.5856 11.787 18.5341 9.19 16.85C6.77383 15.3147 4.72534 13.2662 3.19 10.85C1.49998 8.2412 0.448243 5.27099 0.12 2.18C0.0950104 1.90347 0.127875 1.62476 0.2165 1.36162C0.305126 1.09849 0.447571 0.856689 0.634766 0.651621C0.821961 0.446553 1.0498 0.282709 1.30379 0.170522C1.55778 0.0583346 1.83234 0.000261514 2.11 3.51938e-08H5.11C5.59531 -0.00477641 6.06579 0.167079 6.43376 0.483533C6.80173 0.799987 7.04208 1.23945 7.11 1.72C7.23662 2.68007 7.47145 3.62273 7.81 4.53C7.94454 4.88792 7.97366 5.27691 7.89391 5.65088C7.81415 6.02485 7.62886 6.36811 7.36 6.64L6.09 7.91C7.51356 10.4135 9.58645 12.4864 12.09 13.91L13.36 12.64C13.6319 12.3711 13.9752 12.1858 14.3491 12.1061C14.7231 12.0263 15.1121 12.0555 15.47 12.19C16.3773 12.5286 17.3199 12.7634 18.28 12.89C18.7658 12.9585 19.2094 13.2032 19.5265 13.5775C19.8437 13.9518 20.0122 14.4296 20 14.92Z"
@@ -119,7 +114,7 @@
                                             <b class="ml-1">{{i.user.email}}</b></p>
                                     </div>
                                     <div class="col-xl-12 text-center mt-2 mb-2 card-bottom-section">
-                                        <a href="{% url 'reviewinstitute' i.id %}" class="btn btn-info">View</a>
+                                        <a href="{% url 'reviewinstitute' i.id %}" class="btn btn-info">Review</a>
                                     </div>
                                 </div>
                             </div>
@@ -129,15 +124,18 @@
             </div>
         </div>
     </div>
+    
     {% endfor %}
     {% else %}
     <div class="card w-100 mx-3">
         <h5 class="mt-2 mb-2 p-2">No Data Found</h5>
     </div>
     {% endif %}
+{% endif %}
 
 <script>
     //Getting Location Autofield from google places API
+    
     $(document).on("DOMContentLoaded", function () {
         function initialize() {
             var input = document.getElementById('pac-input');
@@ -149,9 +147,6 @@
             });
         }
         initialize();
-
-
-
     });
 </script>
 {% endblock main-content %}

@@ -215,7 +215,7 @@ width: 35%;
 {% endblock %}
 {% block main-content %}
 <main>
-    <div class="container mt-4">
+    <div class="mt-5">
         {% if messages %}
         {% for k in messages%}
         <div class="alert alert-{{k.tags}} alert-dismissible fade show" role="alert">
@@ -242,7 +242,7 @@ width: 35%;
                     <!-- Grid column -->
                 </div>
                 <!-- Grid row -->
-                <div style="overflow-x:scroll;">
+                <div>
                     <form action="" method="post">{% csrf_token %}
                         <!--Table-->
                         <table class="table table-striped" style="font-size: small;">

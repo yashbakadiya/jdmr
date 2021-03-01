@@ -2,7 +2,7 @@
 {% load static %}
 
 {% block main-content %}
-<div class="mt-5">
+<div class="row mt-5">
     {% if errors %}
     <div class="alert alert-danger" role="alert">
         <div id='errorsBox'>
@@ -28,25 +28,25 @@
                     </div>
                 </div>
             </div>
-            <div class="card-body container">
+            <div class="card-body">
                 <form id='submitForm' method='post' action=''>{% csrf_token %}
-                    <div class="row">
+                    <div class="row col-lg-12">
                         <div class="col-lg-4 col-md-4 col-sm-6 col-12 row mt-4">
-                            <label class="control-label col-sm-6 col-md-5 col-5 mt-2" style="color:black;">Class</label>
-                            <select id="className" name="className" class="col-sm-7 col-md-6 col-7 custom-select form-control w-100"
+                            <label class="control-label col-sm-5 col-5 mt-2" style="color:black;">Class</label>
+                            <select id="className" name="className" class="col-sm-8 col-md-6 col-7 custom-select form-control w-100"
                                 onchange="subjects()">
                                 <option disabled selected>Class</option>
                             </select>
                         </div>
                         <div class="col-lg-4 col-md-6 col-sm-6 col-12 row mt-4">
-                            <label class="control-label col-sm-5 col-5 col-md-6 mt-2" style="color:black;">Course</label>
+                            <label class="control-label col-sm-5 col-5 mt-2" style="color:black;">Course</label>
                             <select id="subject" name="subject" class="col-sm-7 col-md-6 col-7 custom-select form-control w-100">
                                 <option disabled selected>Subject</option>
                             </select>
                         </div>
-                        <div class="mx-2 col-lg-4 col-md-6 col-sm-6 col-12 row mt-4">
-                            <label class="control-label col-sm-4 col-7 col-md-6 mt-2" style="color:black;">Teaching Mode</label>
-                            <select name="tm" class="col-sm-8 col-5 col-md-6 custom-select form-control w-100" required="required">
+                        <div class="col-lg-4 col-md-6 col-sm-6 col-12 row mt-4">
+                            <label class="control-label col-sm-5 col-5 mt-2" style="color:black;">Teaching Mode</label>
+                            <select name="tm" class="col-sm-7 col-7 col-md-6 custom-select form-control w-100" required="required">
                                 <option disabled selected value>Teaching Mode</option>
                                 <option value="Online Tutor">Online Tutor</option>
                                 <option value="Institute">Institute</option>
@@ -54,22 +54,22 @@
                             </select>
                         </div>
                         <div class="col-lg-4 col-md-6 col-sm-6 col-12 row mt-4">
-                            <label class="control-label col-sm-5 col-5 col-md-5 mt-3" style="color:black;">Start Date</label>
+                            <label class="control-label col-sm-5 col-5 mt-3" style="color:black;">Start Date</label>
                             <input type="date" class="col-sm-7 col-7 col-md-6 form-control my-2 w-100" id="sd" name="sd" placeholder="Starting Date" required>
                         </div>
                         <div class="col-lg-4 col-md-6 col-sm-6 col-12 row mt-4">
-                            <label class="control-label col-md-6 col-sm-5 col-5 mt-3" style="color:black;">Budget</label>
+                            <label class="control-label col-sm-5 col-5 mt-3" style="color:black;">Budget</label>
                             <input type="number" step="0.01" class="col-md-6 col-sm-7 col-7 form-control my-2 w-100" style="-moz-appearance: textfield;" min="0" id="budgetvalue"
                                 name="budgetvalue" placeholder="Budget" required>
                         </div>
-                        <div class="mx-2 col-lg-4 col-md-6 col-sm-6 col-12 row mt-4">
-                            <label class="control-label col-sm-4 col-md-6 col-7 mt-3" style="color:black;">No. of Sessions</label>
-                            <input type="number" class="col-sm-8 col-5 col-md-6 form-control my-2 w-100" id="monthlydigit" style="-moz-appearance: textfield;" min="0" name="monthlydigit" placeholder="No. of sessions">
+                        <div class="col-lg-4 col-md-6 col-sm-6 col-12 row mt-4">
+                            <label class="control-label col-sm-5 col-5 mt-3" style="color:black;">No. of Sessions</label>
+                            <input type="number" class="col-sm-7 col-7 col-md-6 form-control my-2 w-100" id="monthlydigit" style="-moz-appearance: textfield;" min="0" name="monthlydigit" placeholder="No. of sessions">
                         </div>  
                         
                         <div class="col-lg-4 col-md-6 col-sm-6 col-12 row mt-4">
-                            <label class="control-label col-sm-5 col-7 mt-2" style="color:black;">Payment Type</label>
-                            <select id="budget" name="budget" class="col-sm-7 col-md-6 col-5 custom-select form-control w-100" required>
+                            <label class="control-label col-sm-5 col-5 mt-2" style="color:black;">Payment Type</label>
+                            <select id="budget" name="budget" class="col-sm-7 col-md-6 col-7 custom-select form-control w-100" required>
                                 <option disabled selected>Payment Type</option>
                                 <option value="monthly">Monthly</option>
                                 <option value="hourly">Hourly</option>
@@ -77,8 +77,8 @@
                         </div>
                         
                         <div class="col-lg-4 col-md-6 col-sm-6 col-12 row mt-4">
-                            <label class="control-label col-sm-6 col-6 mt-2" style="color:black;">Prefered Gender</label>
-                            <select id="gp" name="gp" class="col-sm-7 col-md-6 col-6 custom-select form-control w-100" required="required">
+                            <label class="control-label col-sm-5 col-5 mt-2" style="color:black;">Prefered Gender</label>
+                            <select id="gp" name="gp" class="col-sm-7 col-md-6 col-7 custom-select form-control w-100" required="required">
                                 <option disabled selected value>Prefered Gender</option>
                                 <option value="Male">Male</option>
                                 <option value="Female">Female</option>
@@ -99,13 +99,14 @@
         </div>
     </div>
         <div class="col-xl-12 col-md-12 col-12 mt-5">
-            <div class="statbox widget box box-shadow">
-                <div class="widget-header">
+            <div class="card statbox widget box box-shadow">
+                <div class="card-header">
                     <div class="row">
-                        <div class="col-xl-12 col-md-12 col-12">
-                            <h4 class="p-2" style="color:black;"><b>Required Tutors</b></h4>
+                            <div class="col-sm-10">
+                                <h2 style="color: black;">Required Tutors</h2>
+                            </div>
+        
                         </div>
-                    </div>
                 </div>
                 {% if tutions %}
                 <div class="widget-content widget-content-area">
@@ -120,8 +121,8 @@
                                 <th>Start Date</th>
                                 <th>Budget</th>
                                 <th>Duration</th>
-                                <th>Action</th>
-                                <th></th>
+                                <th class="text-center">Action</th>
+                                <th class="text-center">View</th>
                             </tr>
                             {% for tution in tutions reversed %}
                             <tr>
@@ -133,13 +134,13 @@
                                 <td>{{tution.whenToStart}}</td>
                                 <td>{{tution.budgetVal}}</td>
                                 <td>{{tution.numberOfSessions}}</td>
-                                <td>
+                                <td class="text-center">
                                     <a class="btn btn-danger"href="{% url 'Delete_Tution' tution.sno %}">
                                         <span class="flaticon-delete-4">
                                         </span>
                                     </a>
                                 </td>
-                                <td><button type="button" data-toggle="modal" data-target="#tutorModal{{tution.sno}}"
+                                <td class="text-center"><button type="button" data-toggle="modal" data-target="#tutorModal{{tution.sno}}"
                                     class="btn btn-info">View</button></td>
                         </tr>
 

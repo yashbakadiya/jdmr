@@ -1,6 +1,7 @@
-{% extends 'dashboard/dashboard.html' %}
+{% extends 'dashboard/base.html' %}
 {% load static %}
 {% block css %}
+<style>
 .table-bordered.red-border, .table-bordered.red-border th, .table-bordered.red-border td {
     border: 1px solid #ff3547!important;
 }
@@ -31,9 +32,20 @@
 .success-text {
     color: #00C851; 
 }
+</style>
 {% endblock %}
-{% block body %}
-<div class="container mt-4">
+{% block main-content %}
+<div class="mt-5">
+    {% if messages %}
+    {% for k in messages%}
+    <div class="alert alert-{{k.tags}} alert-dismissible fade show" role="alert">
+        <b>{{ k }} !</b>
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    {% endfor %}
+    {% endif %}
     <div class="card mb-4">
         <div class="card-body">
             <div>

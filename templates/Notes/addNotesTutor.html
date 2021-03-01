@@ -13,7 +13,7 @@
     </div>
     {% endif %}
 </div>
-<div class="mt-5">
+<div class="mt-5 row">
     <div class="col-md-12 col-12">
         <div class="card">
             <div class="card-header">
@@ -24,22 +24,22 @@
 
                 </div>
             </div>
-            <div class="card-body container">
+            <div class="card-body">
                 <form id='submitForm' method='post' action='' enctype='multipart/form-data'>{% csrf_token %}
                     <div class="row">
 
-                        <div class="col-md-12 col-lg-6 col-12 input-group form-group">
-                            <label class="control-label col-sm-3 col-md-3 col-5 mt-2"
+                        <div class="col-lg-4 col-md-6 col-12 input-group form-group">
+                            <label class="control-label col-sm-4 col-5 mt-2"
                                 style="color: black;">Title</label>
-                            <input type="text" step="0.01" class="form-control w-100 col-sm-8 col-md-8 col-7"
+                            <input type="text" step="0.01" class="form-control w-100 col-sm-8 col-7"
                                 id="title" name="title" placeholder="Enter Note Title" required>
                         </div>
 
-                        <div class="col-md-6 col-lg-6 col-12 input-group form-group">
-                            <label class="control-label col-sm-3 col-md-3 col-5 mt-2"
+                        <div class="col-lg-4 col-md-6 col-12 input-group form-group">
+                            <label class="control-label col-sm-4 col-5 mt-2"
                                 style="color: black;">Course</label>
                             <select id="course" name="course"
-                                class="custom-select form-control w-100 col-md-8 col-sm-9 col-7" required>
+                                class="custom-select form-control w-100 col-sm-8 col-7" required>
                                 <option disabled selected value>Course</option>
                                 {% for course in courses %}
                                 <option value="{{course.courseName}}">{{course.courseName}}</option>
@@ -47,8 +47,12 @@
                             </select>
                         </div>
 
-                        <div class="col-md-6 col-lg-6 col-12 input-group form-group">
-                            <input type="file" class="ml-1 mt-2 form-control-file" id="file" name="note">
+                        <div class="col-lg-4 col-md-6 col-12 input-group form-group">
+                            <label class="control-label col-sm-4 col-5 mt-2" style="color: black;">Choose File</label>
+                            <div class="w-100 col-sm-8 col-7">
+                            <input type="file" class="custom-file-input" id="file" name="note" required>
+                            <label class="custom-file-label" >Choose file...</label>
+                            </div>
                         </div>
 
                         <div class="col-md-12 col-lg-12 col-12 input-group form-group">
@@ -64,17 +68,17 @@
         </div>
     </div>
 </div>
-<div class="mt-4">
-    <div class="col-xl-12 col-md-12 col-12 mt-5">
-        <div class="statbox widget box box-shadow">
-            <div class="widget-header">
+{% if notes %}
+<div class="mt-5 w-100">
+    <div class="col-md-12 col-12">
+        <div class="card statbox box box-shadow">
+            <div class="card-header">
                 <div class="row">
                     <div class="col-xl-12 col-md-12 col-12">
-                        <h4 class="p-2" style="color:black;"><b>Notes</b></h4>
+                        <h2 style="color:black;">Notes</h2>
                     </div>
                 </div>
             </div>
-            {% if notes %}
             <div class="widget-content widget-content-area">
                 <div class="table-responsive">
                     <table id="htmlgrid" class="testgrid table table-striped table-bordered table-hover mb-4">
@@ -104,14 +108,6 @@
                         </tr>
                         {% endfor %}
                     </table>
-                </div>
-            </div>
-            {% else %}
-            <div class="widget-header">
-                <div class="row">
-                    <div class="col-xl-12 col-md-12 col-12">
-                        <h4 class="p-2"><b>No Notes to show</b></h4>
-                    </div>
                 </div>
             </div>
             {% endif %}

@@ -51,7 +51,8 @@ def ViewNotesInstitute(request):
         inst = Institute.objects.get(user=user)    
         notes = NotesInstitute.objects.filter(institute=inst)
         context = {
-        'notes':notes
+        'notes':notes,
+        'template':'dashboard/base.html'
         }
         
         return render(request,'Notes/allnotes.html',context)
@@ -183,7 +184,8 @@ def ViewNotesTutor(request):
         tutor = Teacher.objects.get(user=user)
         notes = NotesTutor.objects.filter(tutor=tutor)
         context = {
-        'notes':notes
+        'notes':notes,
+        'template':'dashboard/Tutor-dashboard.html'
         }
         return render(request,'Notes/allnotes.html',context)
     return HttpResponse("You are not Authenticated for this Page")
@@ -287,6 +289,7 @@ def AllNotesStudent(request):
                 all  = institute
             print(all)
             context['notes'] = all
+            context['template'] = 'dashboard/student-dashboard.html'
         return render(request,'Notes/allnotes.html',context)
     return HttpResponse('You are not Authenticated for this page')
 

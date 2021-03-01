@@ -179,7 +179,7 @@
 {% block main-content %}
 <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCBJybI10-Xa43-F5GSad1i0Y9W3yqlW6Q&libraries=places&v=3" defer></script>
 
-<div class="container">
+<div class="mt-5">
     {% if messages %}
     {% for k in messages%}
     <div class="alert alert-{{k.tags}} alert-dismissible fade show" role="alert">
@@ -190,62 +190,57 @@
     </div>
     {% endfor %}
     {% endif %}
-    <div class="d-flex justify-content-center h-100">
         <div class="card">
             <div class="card-header">
                 <div class="row">
                     <div class="col-sm-4"><h2 style="color: rgb(66, 8, 8);">Add Tutor</h2></div>
                     <div class="col-sm-8 form-inline justify-content-end">
-                        <span class="buttonLikeLook">Already Exists &raquo;</span>
+                        <button class="btn btn-warning btn-md" role="button">Already Exists &raquo;</button>
                         <form method="POST" action="{% url 'searchUserTutor' %}">{% csrf_token %}
                             <input id="searchbox" type="text" class="form-control" name='srh' placeholder="Search Tutor" required>
                             <button type="submit" class="btn btn-danger btn-md">Submit</button>
                         </form>
-                        <span id="noTutor" class="errorSpan"><ul>
-                            <li>No Tutor Found</li>
-                        </ul>
-                    </span>
                 </div>
             </div>
         </div>
         <div class="card-body container">
             <form id='submitForm' method='post' action=''>{% csrf_token %}
                 <div class="input-group form-group">
-                    <label class="control-label col-sm-4">First name<span class="text-danger">*</span></label>
+                    <label class="control-label mt-2 col-sm-4">First name<span class="text-danger">*</span></label>
                     <div class="input-group-prepend">
                         <span class="input-group-text"><i class="fas fa-user"></i></span>
                     </div>
                     <input type="text" class="form-control" id="firstName " name='firstName' placeholder="First name" required value = "{{ prefil.firstName }}">
                 </div>
                 <div class="input-group form-group">
-                    <label class="control-label col-sm-4">Last name<span class="text-danger">*</span></label>
+                    <label class="control-label mt-2 col-sm-4">Last name<span class="text-danger">*</span></label>
                     <div class="input-group-prepend">
                         <span class="input-group-text"><i class="fas fa-user"></i></span>
                     </div>
                     <input type="text" class="form-control" id="lastName " name='lastName' placeholder="Last name" required value = "{{ prefil.lastName }}">
                 </div>
                 <div class="input-group form-group">
-                    <label class="control-label col-sm-4">Email Id<span class="text-danger">*</span></label>
+                    <label class="control-label mt-2 col-sm-4">Email Id<span class="text-danger">*</span></label>
                     <div class="input-group-prepend">
                         <span class="input-group-text"><i class="fas fa-envelope"></i></span>
                     </div>
                     <input type="email" class="form-control" id="email" name='email' placeholder="Email Address" required value = "{{ prefil.email }}">
                 </div>
                 <div class="input-group form-group">
-                    <label class="control-label col-sm-4">Address<span class="text-danger">*</span></label>
+                    <label class="control-label mt-2 col-sm-4">Address<span class="text-danger">*</span></label>
                     <div class="input-group-prepend">
                         <span class="input-group-text"><i class="fas fa-location-arrow"></i></span>
                     </div>
                     <input id="pac-input" type="text" class="controls form-control" name='loc' placeholder="Search" required>
                 </div>
                 <div class="input-group form-group">
-                    <label class="control-label col-sm-4">Phone Number<span class="text-danger">*</span></label>
+                    <label class="control-label mt-2 col-sm-4">Phone Number<span class="text-danger">*</span></label>
                     <div class="input-group-prepend">
                         <span class="input-group-text"><i class="fas fa-phone"></i></span>
                     </div>
                     <input  type="number" class="form-control" id="phone" name='phone' placeholder="Phone Number" required value = "{{ prefil.phone }}" type="number">
                 </div>
-                <div id='mainForm' class="container">
+                <hr>
                     <div id='entry1' class="row">
                         <div class="col-sm-3">
                             <div class="form-group">
@@ -289,7 +284,6 @@
                             </div>
                         </div>
                     </div>
-                </div>
                 <div class="row container">
                     <div class="form-group col-sm-6 sm-ml-1 control-label">
                         Availability:
@@ -319,7 +313,7 @@
 
             </form>
         </div>
-    </div>
+    
 </div>
 </div>
 <script>

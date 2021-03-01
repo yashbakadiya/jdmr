@@ -280,9 +280,10 @@ def enrolledTutorsObjectToDict(obj):
         'experience':obj.experiance,
         'gender':obj.gender,
         'fees':obj.fees,
-        'forclass':obj.forclass,
-        'photo':obj.photo.url
+        'forclass':obj.forclass
     }
+    if obj.photo:
+        data['photo']=obj.photo.url
     courseID = obj.course.replace(";",'')
     courseID = list(set(courseID))
     courses = []
@@ -346,8 +347,15 @@ def enrolledTutors(request):
             cityLat = request.POST.get('cityLat','')
             cityLng = request.POST.get('cityLng','')
 
-        searchQuery = Teacher.objects.filter(Q(course__icontains=subject) or Q(experiance=int(experience) or Q(forclass__icontains=className)))
-            
+        if subject:
+            searchQuery = Teacher.objects.filter(Q(course__icontains=subject))
+
+        if className:
+            searchQuery = Teacher.objects.filter(Q(forclass__icontains=className))            
+
+        if experience:
+            searchQuery = Teacher.objects.filter(Q(experiance__gte=int(experience)))
+
         allData = []
         
         for x in searchQuery:

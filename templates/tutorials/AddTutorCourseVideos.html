@@ -4,13 +4,13 @@
 {% block main-content %}
 <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCBJybI10-Xa43-F5GSad1i0Y9W3yqlW6Q&libraries=places&v=3" defer></script>
 
-<div class="mt-5">
+<div class="mt-5 row">
     <div class="col-lg-12 col-md-12 col-sm-12 col-12" style="color:black;">
         <div class="card">
             <div class="card-header">
-                <h2><b>Add Videos</b></h2>
+                <h2>Add Videos</h2>
             </div>
-        <div class="card-body container">
+        <div class="card-body">
             <form id='submitForm' method='post' action="" enctype= multipart/form-data onsubmit="valid()">{% csrf_token %}
                 <div id='mainForm' class="table-responsive">
                     <div id='entry1'>
@@ -24,13 +24,16 @@
                             <tbody>
                                 <tr>
                                 <td>
-                                    <input class="rounded" type="file" name="video" required>
+                                    <div class="w-100 col-12">
+                                    <input type="file" class="my-table-input custom-file-input" id="file" name="video" required>
+                                    <label class="custom-file-label" >Choose file...</label>
+                                </div>
                                 </td>
                                 <td>
-                                    <input type="text" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" name="title" placeholder="Enter Video Title" required>
+                                    <input type="text" class="my-table-input form-control" id="exampleInputEmail1" aria-describedby="emailHelp" name="title" placeholder="Enter Video Title" required>
                                 </td>
                                 <td>
-                                    <textarea type="text" rows="1" class="form-control" id="exampleInputEmail1" name="description" aria-describedby="emailHelp" placeholder="Enter Video Description" required></textarea>
+                                    <textarea type="text" rows="1" class="my-table-input form-control" id="exampleInputEmail1" name="description" aria-describedby="emailHelp" placeholder="Enter Video Description" required></textarea>
                                 </td>
                                 <td>
                                     <a id='add' class="btn btn-primary">Add Video</a>
@@ -50,16 +53,24 @@
 </div>
 </div>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
 <script type="text/javascript">
+    function addwidth(){
+        if ($(window).width() < 570) {
+          $(".my-table-input").css('width','auto');
+        }}
+
     $(document).ready(function(){
+        addwidth();
         $("#add").click(function(){
             var AddVideo = "<tr>"
-            AddVideo += "<td><input class='rounded' type='file' name='video'></td>"
-            AddVideo += "<td><input type='text' name='title' class='form-control' id='exampleInputEmail1' aria-describedby='emailHelp' placeholder='Enter Video Title'></td>"
-            AddVideo += "<td><textarea type='text' rows='1' name='description' class='form-control' id='exampleInputEmail1' aria-describedby='emailHelp' placeholder='Enter Video Description'></textarea></td>"
+            AddVideo += `<td><div class="w-100 col-12"><input type="file" class="my-table-input custom-file-input" id="file" name="video" required><label class="custom-file-label" >Choose file...</label></div></td>`
+            AddVideo += "<td><input type='text' name='title' class='my-table-input form-control' id='exampleInputEmail1' aria-describedby='emailHelp' placeholder='Enter Video Title'></td>"
+            AddVideo += "<td><textarea type='text' rows='1' name='description' class='my-table-input form-control' id='exampleInputEmail1' aria-describedby='emailHelp' placeholder='Enter Video Description'></textarea></td>"
             AddVideo +=  "</tr>";
                     $("table tbody").append(AddVideo);
-        })
+            addwidth();
+        });
     })
 </script>
 {% endblock main-content %}

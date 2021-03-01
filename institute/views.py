@@ -78,7 +78,7 @@ def searchCoachingCenter(request):
                     "address":address,
                     "distance":distance,
                     "class":Class,
-                    "course":course
+                    "course":course,
             }
 
             if distance=="":
@@ -86,7 +86,7 @@ def searchCoachingCenter(request):
             
             distance = float(distance)
 
-            geolocator = Nominatim(user_agent="inst")
+            geolocator = Nominatim(user_agent="geoapiExercises")
 
             city = geolocator.geocode(address, timeout=None)
             if city:
@@ -103,7 +103,7 @@ def searchCoachingCenter(request):
                 courses = courses.filter(Q(courseName__icontains=course))
             if(Class):
                 courses = courses.filter(Q(forclass=Class))
-
+            
             for cou in courses:
                 inst = cou.intitute
                 location = geolocator.geocode(inst.address, timeout=None)
@@ -118,6 +118,7 @@ def searchCoachingCenter(request):
                 if haversine(Lng,Lat,cityLng,cityLat) <=distance:
                     if inst not in centers:
                         centers.append(inst)
+               
             # centers = zip(courses,centers2)
             return render(request, 'Institute/searchCoachingCenter.html',{'centers':centers,'courses':Courses.objects.all(),'classes':classlist,"prefill":prefill})
         return render(request, 'Institute/searchCoachingCenter.html',{'centers':centers,'courses':Courses.objects.all(),'classes':classlist,"prefill":prefill})
@@ -129,12 +130,12 @@ def ReviewInstitute(request,inst_id):
     user = User.objects.get(username=request.session['user'])
     user_type = request.session['type']
     show = False
+    institute = Institute.objects.get(id=inst_id)
     if user_type == 'Student':
         student = Student.objects.get(user=user)
-        if request.method == "POST" and not(InstituteRatings.objects.filter(student=student).exists()):
+        if request.method == "POST" and not(InstituteRatings.objects.filter(student=student, institute=institute).exists()):
             rating =request.POST.get("rating","")
             comment = request.POST.get("comment","")
-            print(rating,comment)
             data = InstituteRatings(
                     institute=institute,
                     student=student,
@@ -142,7 +143,7 @@ def ReviewInstitute(request,inst_id):
                     Rating =rating)
             data.save()
         template = "dashboard/student-dashboard.html"
-        if not InstituteRatings.objects.filter(student=student).exists():
+        if not InstituteRatings.objects.filter(student=student,institute=institute).exists():
             show = True
     if user_type == 'Teacher':
         teacher = Teacher.objects.get(user=user)

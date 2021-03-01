@@ -41,7 +41,6 @@ def dashboard(request):
 def profileUpdate(request):
     if request.session['type'] == 'Institute' or request.session['type'] == 'Teacher' or request.session['type'] == 'Student':
         user = User.objects.get(username=request.session['user'])
-        print('password--',user.first_name)
         if request.session['type'] == "Institute":
             my_template = 'dashboard/base.html'
             obj = Institute.objects.get(user=user)
@@ -64,7 +63,6 @@ def profileUpdate(request):
                 otp_obj.delete()
                 return redirect('coachingprofile')
             else:
-                print(request.POST)
                 phone = request.POST.get('phone')
                 email = request.POST.get('email')
                 oldPassword = request.POST.get('oldPassword')
@@ -72,7 +70,6 @@ def profileUpdate(request):
                 confPassword = request.POST.get('confirmPassword')
                 address = request.POST.get('loc')
                 image = request.FILES.get('photo')
-                print('image', image)
                 # avatar = request.POST.get('avatar',0)
                 error = 0
                 if(not phone.isdigit()):
@@ -176,7 +173,6 @@ def getOTP(request):
             msg = EmailMessage(
                 'Validate Email', "Your OTP for validating Email is "+str(otp_code), email2, to=[email])
             msg.send()
-            print(otp_code)
             type = 'any'
             otp = OTP(
                 otp=otp_code,
@@ -192,7 +188,6 @@ def getOTP(request):
 def signupTutorContinued(request, id):
     if request.session['type'] == "Teacher":
         if(request.method == 'POST'):
-            print(request.POST)
             # base signup class
             teacher = Teacher.objects.get(id=id)
             # creating data object

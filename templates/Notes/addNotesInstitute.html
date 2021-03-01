@@ -1,6 +1,7 @@
 {% extends 'dashboard/base.html' %}
 {% load static %}
 {% block css %}
+<style>
 @import url('https://fonts.googleapis.com/css?family=Numans');
 .container{
     align-content: center;
@@ -255,7 +256,7 @@ input:focus{
     overflow-y:scroll;
     width:max-content;
 }
-
+</style>
    
 {% endblock %}
 {% block main-content %}
@@ -270,7 +271,7 @@ input:focus{
     </div>
     {% endif %}
 </div>
-<div class="container">
+<div class="mt-5">
     <div class="d-flex justify-content-center h-100">
         <div class="card" style="width: 100%;">
             <div class="card-header">
@@ -289,7 +290,7 @@ input:focus{
                             <label class="control-label">Add File</label>
                         </div>
                         <div class="col">
-                              <div class="custom-file ml-5" style="width: 92%;">
+                              <div class="custom-file">
                                 <input type="file" class="custom-file-input" id="validatedCustomFile" required name="note" accept="application/pdf">
                                 <label class="custom-file-label" for="validatedCustomFile">Choose file...</label>
                                 <div class="invalid-feedback">Invalid File Format ( Valid Formats are .pdf only )</div>
@@ -297,16 +298,16 @@ input:focus{
                         </div>
                     </div>
                    <div class="input-group form-group">
-                    <label class="control-label col-sm-4">Note Title<span class="text-danger">*</span></label>
-                    <div class="input-group-prepend">
+                    <label class="control-label col-sm-3">Note Title<span class="text-danger">*</span></label>
+                    <div class="input-group-prepend ml-4">
                         <span class="input-group-text"><i class="fas fa-user"></i></span>
                     </div>
                     <input type="text" class="form-control" id="firstName " name='title' placeholder="Note Title" required="">
                 </div>
                     <br>
                      <div class="input-group form-group">
-                    <label class="control-label col-sm-4">Note Description<span class="text-danger">*</span></label>
-                    <div class="input-group-prepend">
+                    <label class="control-label col-sm-3">Note Description<span class="text-danger">*</span></label>
+                    <div class="input-group-prepend ml-4">
                         <span class="input-group-text"><i class="fas fa-user"></i></span>
                     </div>
                     <textarea type="text" class="form-control" id="firstName " name='description' placeholder="Note Description" rows="1" required=""></textarea>
@@ -319,9 +320,9 @@ input:focus{
                                 <label class="control-label">Select Course</label>        
                             </div>  
                         </div>
-                        <div class="col ml-5">
+                        <div class="col">
                                <div>
-                                <select class="form-control w-50" name="course" required>
+                                <select class="form-control" name="course" required>
                                     {% for course in courses %}
                                     <option value="{{course.courseName}}">{{course.courseName}}</option>
                                     {% endfor %}

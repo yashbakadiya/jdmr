@@ -1,10 +1,8 @@
 {% extends 'dashboard/student-dashboard.html' %}
 {% load static %}
 {% block main-content %}
-<main>
-    <div class="mt-5">
-        <div class="card col-sm-12">
-            <!--     <div class="card-body container">
+<main class="mt-5">
+    <!--     <div class="card-body container">
                 <form method="post" action="">{% csrf_token %}
                     <div class="row d-flex justify-content-end">
                         <div class="col-sm-10 col-12 justify-content-center d-flex">
@@ -16,179 +14,202 @@
                     </div>
                 </form>
             </div> -->
-
-            <form method="post">{% csrf_token %}
-                <div class="card-body">
+    <div class="row layout-spacing">
+        <div class="col-lg-12">
+            <div class="card statbox widget box box-shadow">
+                <div class="card-header">
                     <div class="row">
-
-                        <div class="col-md-5 col-lg-5 col-12 mt-3 row">
-                            <label class="control-label col-sm-3 col-4 mt-3 mx-3" style="display:block; color:black;">Class</label>
-                            <select id="ctn" name="ctn" class="custom-select form-control w-100 col-sm-8 col-8"
-                                required="required" onchange="addoptions(this)">
-                                {% if prefill.class %}
-                                <option disabled selected value="{{prefill.class}}">{{prefill.class}}</option>
-                                {% else %}
-                                <option disabled selected value="">Class</option>
-                                {% endif %}
-                                {% for class in classes %}
-                                <option value="{{class}}">{{class}}</option>
-                                {% endfor %}
-                                {% for x,y in data.items %}
-                                <option value="{{ x }}">{{ x }}</option>
-                                {% endfor %}
-                            </select>
+                        <div class="col-sm-10">
+                            <h2 style="color: black;">Search Tutorials</h2>
                         </div>
 
-                        <div class="col-md-5 col-lg-5 col-12 mt-3 row">
-                            <label class="control-label col-sm-3 col-4 mt-3 mx-3" style="display:block; color:black;">Course</label>
-                            <select id="cn" name="cn" class="custom-select form-control w-100 col-sm-8 col-8"
-                                required="required">
-                                {% if prefill.course %}
-                                <option disabled selected value="{{prefill.course}}">{{prefill.course}}</option>
-                                {% else %}
-                                <option disabled selected value="">Course</option>
-                                {% endif %}
-                            </select>
-                        </div>
+                    </div>
+                </div>
+                <div class="widget-content widget-content-area">
+                    <div class="row mt-2">
+                        <div class="col-lg-12 col-md-12 cms-search">
+                            <form method="post">{% csrf_token %}
+                                <div class="row">
 
-                        <div class="col-md-5 col-lg-5 col-12 mt-3 row">
-                            <label class="control-label col-sm-3 col-4 mt-3 mx-3" style="display:block; color:black;">Duration</label>
-                            <select class="custom-select form-control w-100 col-sm-8 col-8" name="duration"
-                                id="duration">
-                                {% if prefill.duration %}
-                                <option disabled selected value="{{prefill.duration}}">{{prefill.duration}}</option>
-                                {% else %}
-                                <option disabled selected value="">Duration</option>
-                                {% endif %}
-                                <option value="1 Month">1 Month</option>
-                                <option value="2 Months">2 Months</option>
-                                <option value="3 Months">3 Months</option>
-                                <option value="4 Months">4 Months</option>
-                                <option value="5 Months">5 Months</option>
-                                <option value="6 Months">6 Months</option>
-                            </select>
-                        </div>
-                        <div class="col-md-5 col-lg-5 col-12 mt-3 row">
-                            <label class="control-label col-sm-3 col-4 mt-3 mx-3" style="display:block; color:black;">Fees</label>
-                            <select class="custom-select form-control w-100 col-sm-8 col-8" name="fees">
-                                {% if prefill.fees %}
-                                <option disabled selected value="{{prefill.fees}}">{{prefill.fees}}</option>
-                                {% else %}
-                                <option disabled selected value="">Fees in Rs.</option>
-                                {% endif %}
-                                <option value="less than 1000">less than 1000</option>
-                                <option value="1000-2000">1000-2000</option>
-                                <option value="2000-5000">2000-5000</option>
-                                <option value="5000-7000">5000-7000</option>
-                                <option value="7000 and above">7000 and above</option>
-                            </select>
-                        </div>
-                        <div class="col-lg-2 col-md-2 col-12 mt-3 d-flex justify-content-end">
-                            <button type="submit" class="ml-3 btn btn-info">Filter</button>
+                                    <div class="col-md-5 col-lg-5 col-12 mt-3 row">
+                                        <label class="control-label col-sm-3 col-4 mt-2 mx-3"
+                                            style="display:block; color:black;">Class</label>
+                                        <select id="ctn" name="ctn"
+                                            class="custom-select form-control w-100 col-sm-8 col-6" required="required"
+                                            onchange="addoptions(this)">
+                                            {% if prefill.class %}
+                                            <option disabled selected value="{{prefill.class}}">
+                                                {{prefill.class}}</option>
+                                            {% else %}
+                                            <option disabled selected value="">Class</option>
+                                            {% endif %}
+                                            {% for class in classes %}
+                                            <option value="{{class}}">{{class}}</option>
+                                            {% endfor %}
+                                            {% for x,y in data.items %}
+                                            <option value="{{ x }}">{{ x }}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+
+                                    <div class="col-md-5 col-lg-5 col-12 mt-3 row">
+                                        <label class="control-label col-sm-3 col-4 mt-2 mx-3"
+                                            style="display:block; color:black;">Course</label>
+                                        <select id="cn" name="cn"
+                                            class="custom-select form-control w-100 col-sm-8 col-6" required="required">
+                                            {% if prefill.course %}
+                                            <option disabled selected value="{{prefill.course}}">
+                                                {{prefill.course}}</option>
+                                            {% else %}
+                                            <option disabled selected value="">Course</option>
+                                            {% endif %}
+                                        </select>
+                                    </div>
+
+                                    <div class="col-md-5 col-lg-5 col-12 mt-3 row">
+                                        <label class="control-label col-sm-3 col-4 mt-2 mx-3"
+                                            style="display:block; color:black;">Duration</label>
+                                        <select class="custom-select form-control w-100 col-sm-8 col-6" name="duration"
+                                            id="duration">
+                                            {% if prefill.duration %}
+                                            <option disabled selected value="{{prefill.duration}}">
+                                                {{prefill.duration}}</option>
+                                            {% else %}
+                                            <option disabled selected value="">Duration</option>
+                                            {% endif %}
+                                            <option value="1 Month">1 Month</option>
+                                            <option value="2 Months">2 Months</option>
+                                            <option value="3 Months">3 Months</option>
+                                            <option value="4 Months">4 Months</option>
+                                            <option value="5 Months">5 Months</option>
+                                            <option value="6 Months">6 Months</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-5 col-lg-5 col-12 mt-3 row">
+                                        <label class="control-label col-sm-3 col-4 mt-2 mx-3"
+                                            style="display:block; color:black;">Fees</label>
+                                        <select class="custom-select form-control w-100 col-sm-8 col-6" name="fees">
+                                            {% if prefill.fees %}
+                                            <option disabled selected value="{{prefill.fees}}">
+                                                {{prefill.fees}}</option>
+                                            {% else %}
+                                            <option disabled selected value="">Fees in Rs.</option>
+                                            {% endif %}
+                                            <option value="less than 1000">less than 1000</option>
+                                            <option value="1000-2000">1000-2000</option>
+                                            <option value="2000-5000">2000-5000</option>
+                                            <option value="5000-7000">5000-7000</option>
+                                            <option value="7000 and above">7000 and above</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-lg-2 col-md-2 mt-3 h-100 col-12 d-flex justify-content-end">
+                                        <button type="submit" class="ml-3 btn btn-info">Filter</button>
+                                    </div>
+                                </div>
+                            </form>
                         </div>
                     </div>
                 </div>
-            </form>
+            </div>
         </div>
-        {% if tutor or institute %}
+    </div>
+    {% if prefill %}
+    <div class="row">
         {% if tutor %}
-        <div class="row mt-4" style="color:black;">
-            {% for tutorial in tutor%}
-            <div class="col-md-4 col-12 layout-spacing">
-                <div class="widget-content widget-content-area h-100">
-                    <div class="top-seller-container">
-                        <div class="top-seller-header h-100">
-                            <div class="row">
-                                <div class="col-md-12 col-sm-12 col-12">
-                                    <video class="col-md-12 col-12" playsinline style="pointer-events: none;"
-                                        controls="">
-                                        <source src="{{tutorial.First}}">
-                                    </video>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="top-seller-body mt-2">
-                        <div class="row mt-2">
-                            <div class="col-md-6 col-6">
-                                <b>{{tutorial.Title}}</b>
-                            </div>
-                            <div class="col-md-6 col-6 row">
-                                <b class="col-md-4 col-4">Fees</b>
-                                {% if tutorial.Discount_Validity %}
-                                <p class="col-md-8 col-8">
-                                    {{tutorial.Discounted_price}}&nbsp;<del>{{tutorial.Fees}}</del></p>
-                                {% else %}
-                                <p class="col-md-8 col-8">{{tutorial.Fees}}</p>
-                                {% endif %}
-                            </div>
-
-                            <div class="col-md-6 col-6 row">
-                                <b class="col-md-8 col-8">Duration</b>
-                                <p class="col-md-4 col-4">{{tutorial.Duration}}</p>
-                            </div>
-                            <div class="col-md-6 col-12">
-                                <a href="{% url 'watchTutorcourse' tutorial.id %}" class="ml-4 btn btn-info">Watch</a>
+        {% for tutorial in tutor%}
+        <div class="col-md-4 col-12 layout-spacing">
+            <div class="widget-content widget-content-area h-100">
+                <div class="top-seller-container">
+                    <div class="top-seller-header h-100">
+                        <div class="row">
+                            <div class="col-md-12 col-sm-12 col-12">
+                                <video class="col-md-12 col-12" playsinline style="pointer-events: none;" controls="">
+                                    <source src="{{tutorial.First}}">
+                                </video>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
-            {% endfor %}
-        {% endif %}
-        {% if institute %}
-        <div class="row mt-4" style="color:black;">
-            {% for tutorial in institute %}
-            <div class="col-md-4 col-12 layout-spacing">
-                <div class="widget-content widget-content-area h-100">
-                    <div class="top-seller-container">
-                        <div class="top-seller-header h-100">
-                            <div class="row">
-                                <div class="col-md-12 col-sm-12 col-12">
-                                    <video class="col-md-12 col-12" playsinline style="pointer-events: none;"
-                                        controls="">
-                                        <source src="{{tutorial.First}}">
-                                    </video>
-                                </div>
-                            </div>
+                <div class="top-seller-body container mt-2">
+                    <div class="row mt-2">
+                        <div class="col-md-6 col-6">
+                            <b>{{tutorial.Title}}</b>
                         </div>
-                    </div>
-                    <div class="top-seller-body mt-2">
-                        <div class="row mt-2">
-                            <div class="col-md-6 col-6">
-                                <b>{{tutorial.Title}}</b>
-                            </div>
-                            <div class="col-md-6 col-6 row">
-                                <b class="col-md-4 col-4">Fees</b>
-                                {% if tutorial.Discount_Validity %}
-                                <p class="col-md-8 col-8">
-                                    {{tutorial.Discounted_price}}&nbsp;<del>{{tutorial.Fees}}</del></p>
-                                {% else %}
-                                <p class="col-md-8 col-8">{{tutorial.Fees}}</p>
-                                {% endif %}
-                            </div>
+                        <div class="col-md-6 col-6 row">
+                            <b class="col-md-4 col-4">Fees</b>
+                            {% if tutorial.Discount_Validity %}
+                            <p class="col-md-8 col-8">
+                                {{tutorial.Discounted_price}}&nbsp;<del>{{tutorial.Fees}}</del>
+                            </p>
+                            {% else %}
+                            <p class="col-md-8 col-8">{{tutorial.Fees}}</p>
+                            {% endif %}
+                        </div>
 
-                            <div class="col-md-6 col-6 row">
-                                <b class="col-md-8 col-8">Duration</b>
-                                <p class="col-md-4 col-4">{{tutorial.Duration}}</p>
-                            </div>
-                            <div class="col-md-6 col-12">
-                                <a href="{% url 'watchInstitutecourse' tutorial.id %}" class="ml-4 btn btn-info">Watch</a>
-                            </div>
+                        <div class="col-md-6 col-6 row">
+                            <b class="col-md-8 col-8">Duration</b>
+                            <p class="col-md-4 col-4">{{tutorial.Duration}}</p>
+                        </div>
+                        <div class="col-md-6 col-12">
+                            <a href="{% url 'watchTutorcourse' tutorial.id %}" class="ml-4 btn btn-info">Watch</a>
                         </div>
                     </div>
                 </div>
             </div>
-            {% endfor %}
-        {% endif %}
+        </div>
+        {% endfor %}
+        {% elif institute %}
+        {% for tutorial in institute %}
+        <div class="col-md-4 col-12 layout-spacing">
+            <div class="widget-content widget-content-area h-100">
+                <div class="top-seller-container">
+                    <div class="top-seller-header h-100">
+                        <div class="row">
+                            <div class="col-md-12 col-sm-12 col-12">
+                                <video class="col-md-12 col-12" playsinline style="pointer-events: none;" controls="">
+                                    <source src="{{tutorial.First}}">
+                                </video>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="top-seller-body mt-2">
+                    <div class="row mt-2">
+                        <div class="col-md-6 col-6">
+                            <b>{{tutorial.Title}}</b>
+                        </div>
+                        <div class="col-md-6 col-6 row">
+                            <b class="col-md-4 col-4">Fees</b>
+                            {% if tutorial.Discount_Validity %}
+                            <p class="col-md-8 col-8">
+                                {{tutorial.Discounted_price}}&nbsp;<del>{{tutorial.Fees}}</del>
+                            </p>
+                            {% else %}
+                            <p class="col-md-8 col-8">{{tutorial.Fees}}</p>
+                            {% endif %}
+                        </div>
+
+                        <div class="col-md-6 col-6 row">
+                            <b class="col-md-8 col-8">Duration</b>
+                            <p class="col-md-4 col-4">{{tutorial.Duration}}</p>
+                        </div>
+                        <div class="col-md-6 col-12">
+                            <a href="{% url 'watchInstitutecourse' tutorial.id %}" class="ml-4 btn btn-info">Watch</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
 
         {% else %}
-            <div class="card w-100 mt-4">
-                <h5 class="mt-2 mx-2 mb-2 p-2">No Data Found</h5>
-            </div>
+        <div class="card w-100 mx-3">
+            <h5 class="mt-2 mb-2 p-2">No Data Found</h5>
         </div>
         {% endif %}
     </div>
+    {% endif %}
+
 </main>
 <script type="text/javascript">
     $(document).ready(function () {

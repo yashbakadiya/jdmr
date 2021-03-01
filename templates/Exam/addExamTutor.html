@@ -32,10 +32,11 @@
     </div>
   </div>
   {% endif %}
-  <div id="card">
-    <h3 style="align-items: center;text-align: center;">Add Exam</h3>
-    <hr>
-    <form id="frm" method="post">{% csrf_token %}
+  <div class="card" style="padding-top: 0;" id="card">
+    <div class="card-header">
+    <h2 style="align-items: center;text-align: center;">Add Exam</h2>
+  </div>
+    <form class="mt-2" id="frm" method="post">{% csrf_token %}
      {% if INSTtutor %}
       <div class="col-lg-12 col-sm-12 mb-3">
         <div class="custom-checkbox custom-control">

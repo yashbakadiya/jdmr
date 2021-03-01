@@ -7,7 +7,7 @@
 
 <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCBJybI10-Xa43-F5GSad1i0Y9W3yqlW6Q&libraries=places&v=3"
 	defer></script>
-<div class="container">
+<div class="">
 	{% if messages %}
         {% for k in messages%}
         <div class="alert alert-{{k.tags}} alert-dismissible fade show" role="alert">
@@ -20,82 +20,85 @@
         {% endif %}
 	<div class="row layout-spacing mt-5">
     <div class="col-lg-12">
-        <div class="statbox widget box box-shadow">
-            <div class="widget-header border-bottom border-default">
+        <div class="card statbox widget box box-shadow">
+            <div class="card-header">
                 <div class="row">
                     <div class="col-xl-12 col-md-12 col-sm-12 col-12">
-                        <h4 style="color:black;"><b>{{centre.user.first_name}} {{centre.user.last_name}} Profile</b></h4>
-                    </div>
-					<div class="col-xl-12 col-md-12 col-sm-12 col-12 d-flex justify-content-center">
-                        {% if centre.photo %}
-							<img class="circle" id="preview" src="{{centre.photo.url}}" alt="Not Found" style="height:10rem;width:10rem;">
-						{% else %}
-							<img class="circle" id="preview" src="{% static 'default-profile.png' %}" alt="Default Not Found" style="height:10rem;width:10rem;">
-						{% endif %}
+                        <h2 style="color:black;">{{centre.user.first_name}} {{centre.user.last_name}} Profile</b></h2>
                     </div>
                 </div>
             </div>
+			<div class="mt-4 col-xl-12 col-md-12 col-sm-12 col-12 d-flex justify-content-center">
+				{% if centre.photo %}
+					<img class="circle" id="preview" src="{{centre.photo.url}}" alt="Not Found" style="height:10rem;width:10rem;">
+				{% else %}
+					<img class="circle" id="preview" src="{% static 'default-profile.png' %}" alt="Default Not Found" style="height:10rem;width:10rem;">
+				{% endif %}
+			</div>
             <div class="widget-content widget-content-area">
                         <form enctype="multipart/form-data" method="post">{% csrf_token %}
                             {% csrf_token %}
-							<div class="row">
+							<div class="row col-lg-12">
 							<div class="col-lg-6 col-md-6 col-12 mt-2 row">
-                                <label class="control-label col-sm-3 col-md-4 col-5 text-center mt-3" style="color:black;">Username</label>
+                                <label class="control-label col-sm-3 col-md-4 col-5 mt-3" style="color:black;">Username</label>
                                 <input type="text" class="form-control mt-2 w-100 col-sm-9 col-md-8 col-7"
                                     name='loc' required disabled value="{{centre.user.username}}">
                                 
                             </div>
 							<div class="col-lg-6 col-md-6 col-12 mt-2 row">
-                                <label class="control-label col-sm-3 col-md-4 col-5 text-center mt-3" style="color:black;">Email</label>
+                                <label class="control-label col-sm-3 col-md-4 col-5 mt-3" style="color:black;">Email</label>
                                 <input type="email" class="form-control mt-2 w-100 col-sm-9 col-md-8 col-7"
                                     name='email' required value="{{centre.user.email}}">
                             </div>
 							<div class="col-lg-6 col-md-6 col-12 mt-2 row">
-                                <label class="control-label col-sm-3 col-md-4 col-5 text-center mt-3" style="color:black;">Phone</label>
+                                <label class="control-label col-sm-3 col-md-4 col-5 mt-3" style="color:black;">Phone</label>
                                 <input type="tel" class="form-control mt-2 w-100 col-sm-9 col-md-8 col-7"
                                     name='phone' required value="{{centre.phone}}">
                             </div>
 							<div class="col-lg-6 col-md-6 col-12 mt-2 row">
-                                <label class="control-label col-sm-3 col-md-4 col-5 text-center mt-3" style="color:black;">Old Password</label>
+                                <label class="control-label col-sm-3 col-md-4 col-5 mt-3" style="color:black;">Old Password</label>
                                 <input type="password" class="form-control mt-2 w-100 col-sm-9 col-md-8 col-7"
                                     name='oldPassword' required>
                             </div>
 							<div class="col-lg-6 col-md-6 col-12 mt-2 row">
-                                <label class="control-label col-sm-3 col-md-4 col-5 text-center mt-3" style="color:black;">New Password</label>
+                                <label class="control-label col-sm-3 col-md-4 col-5 mt-3" style="color:black;">New Password</label>
                                 <input type="password" class="form-control mt-2 w-100 col-sm-9 col-md-8 col-7"
                                     name='newPassword' required>
                             </div>
 							<div class="col-lg-6 col-md-6 col-12 mt-2 row">
-                                <label class="control-label col-sm-3 col-md-4 col-5 text-center mt-3" style="color:black;">Confirm Password</label>
+                                <label class="control-label col-sm-3 col-md-4 col-5 mt-3" style="color:black;">Confirm Password</label>
                                 <input type="password" class="form-control mt-2 w-100 col-sm-9 col-md-8 col-7"
                                     name='confirmPassword' required>
                             </div>
                             <div class="col-lg-6 col-md-6 col-12 mt-2 row">
-                                <label class="control-label col-sm-3 col-md-4 col-5 mt-3 text-center" style="color:black;"> Location</label>
+                                <label class="control-label col-sm-3 col-md-4 col-5 mt-3" style="color:black;"> Location</label>
                                 <input type="text" class="form-control mt-2 w-100 col-sm-9 col-md-8 col-7" id="pac-input" name='loc' required value="{{centre.address}}">
                                 <input type="hidden" id="cityLat" value="0" name="cityLat" />
                                 <input type="hidden" id="cityLng" value="0" name="cityLng" />
                             </div>
                             <div class="col-lg-6 col-md-6 col-12 mt-2 row">
-                                <label class="control-label col-sm-3 col-md-4 col-5 mt-3 text-center" style="color:black;">Change Img</label>
-                                <input class="form-control my-2 w-100 col-sm-9 col-md-8 col-7" type="file" value="{{centre.photo}}" name="photo">
-                            </div>
+                                <label class="control-label col-sm-3 col-md-4 col-5 mt-3" style="color:black;">Change Image</label>
+								<div class="mt-2 w-100 col-sm-9 col-md-8 col-7">
+                                <input class="custom-file-input" type="file" value="{{centre.photo}}" name="photo">
+								<label class="custom-file-label" >Choose file...</label>
+                            	</div>
+							</div>
 							{% if request.session.type == "Teacher" %}
                             <div class="col-lg-6 col-md-6 col-12 mt-2 row">
-                                <label class="control-label col-sm-3 col-md-4 col-5 mt-3 text-center" style="color:black;">Experience</label>
+                                <label class="control-label col-sm-3 col-md-4 col-5 mt-3" style="color:black;">Experience</label>
                                 <input type="number" class="form-control mt-2 w-100 col-sm-9 col-md-8 col-7"
                                     style="-moz-appearance: textfield;" min="0" name="experience"
                                     placeholder="Experience" value="{{centre.experiance}}">
                             </div>
 							<div class="col-lg-6 col-md-6 col-12 mt-2 row">
-                                <label class="control-label col-sm-3 col-md-4 col-5 mt-3 text-center" style="color:black;">Qualification</label>
+                                <label class="control-label col-sm-3 col-md-4 col-5 mt-3" style="color:black;">Qualification</label>
                                 <input type="text" class="form-control mt-2 w-100 col-sm-9 col-md-8 col-7" name="qualification"
                                     placeholder="Qualification" value="{{centre.qualification}}">
                             </div>
                             {% endif %}
 							{% if request.session.type == "Student" %}
 							<div class="col-lg-6 col-md-6 col-12 mt-2 row">
-                                <label class="control-label col-sm-3 col-md-4 col-5 mt-3 text-center" style="color:black;">School-Name</label>
+                                <label class="control-label col-sm-3 col-md-4 col-5 mt-3" style="color:black;">School-Name</label>
                                 <input type="text" class="form-control mt-2 w-100 col-sm-9 col-md-8 col-7" name="schoolName"
                                     placeholder="Qualification" value="{{centre.schoolName}}">
                             </div>

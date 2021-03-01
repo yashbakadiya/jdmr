@@ -1,6 +1,7 @@
-{% extends 'dashboard/dashboard.html' %}
+{% extends 'dashboard/base.html' %}
 {% load static %}
 {% block css %}
+<style>
 @import url('https://fonts.googleapis.com/css?family=Numans');
 .container{
     height: 100%;
@@ -258,10 +259,10 @@ input:focus{
     overflow-y:scroll;
     width:max-content;
 }
-
+</style>
    
 {% endblock %}
-{% block body %}
+{% block main-content %}
 <div>
     {% if messages %}
     <div class="alert alert-warning" role="alert">
@@ -273,8 +274,7 @@ input:focus{
     </div>
     {% endif %}
 </div>
-<div class="container">
-    <div class="d-flex justify-content-center h-100">
+<div class="mt-5">
         <div class="card">
             <div class="card-header">
                 <div class="row">
@@ -351,13 +351,12 @@ input:focus{
                     </div>
                     <br><br>
                     <div class="form-group text-center">
-                        <input type="submit" value="Save Course" class="btn login_btn form-control">
+                        <input type="submit" value="Save Tutorial" class="btn login_btn form-control">
                     </div>
                 </form>
             </div>
             <br>
         </div>
-    </div>
 </div>
 <script>
     function Enableddl(install)

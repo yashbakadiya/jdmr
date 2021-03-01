@@ -19,7 +19,7 @@
                         <!--Table head-->
                         <thead>
                             <tr>
-                                <th style="color: black;">##</th>
+                                <th style="color: black;">#</th>
                                 <th style="color: black;">Course Title</th>
                                 <th style="color: black;">Course Duration</th>
                                 <th style="color: black;">Course Fees</th>
@@ -34,7 +34,7 @@
                             {% for i in tutorials reversed %}
                             <tr>
                                 <td>{{forloop.counter}}</td>
-                                <td><p style="color: black;">{{i.Title}}</p></td>
+                                <td>{{i.Title}}</td>
                                 <td>{{i.Duration}} Months</td>
                                 <td>{{i.Fees}}</td>
                                 {% if i.Discount_Validity %}

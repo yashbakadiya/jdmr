@@ -23,22 +23,22 @@
 
                 </div>
             </div>
-            <div class="card-body container">
+            <div class="card-body">
                 <form method='post' action='' enctype='multipart/form-data'>{% csrf_token %}
                     <div class="row">
 
-                        <div class="col-md-12 col-lg-6 col-12 input-group form-group">
-                            <label class="control-label col-sm-2 col-md-3 col-5 mt-2"
+                        <div class="col-md-6 col-lg-4 col-12 input-group form-group">
+                            <label class="control-label col-sm-4 col-5 mt-2"
                                 style="color: black;">Title</label>
-                            <input type="text" step="0.01" class="form-control w-100 col-sm-10 col-md-8 col-7"
+                            <input type="text" step="0.01" class="form-control w-100 col-sm-8 col-7"
                                 id="title" name="title" placeholder="Enter Note Title" required value="{{note.title}}">
                         </div>
 
-                        <div class="col-md-6 col-lg-6 col-12 input-group form-group">
-                            <label class="control-label col-sm-3 col-md-3 col-5 mt-2"
+                        <div class="col-md-6 col-lg-4 col-12 input-group form-group">
+                            <label class="control-label col-sm-4 col-5 mt-2"
                                 style="color: black;">Course</label>
                             <select id="course" name="course"
-                                class="custom-select form-control w-100 col-md-8 col-sm-9 col-7" required>
+                                class="custom-select form-control w-100 col-sm-8 col-7" required>
                                 <option disabled selected>{{note.subject}}</option>
                                 {% for course in courses %}
                                 <option value="{{course.courseName}}">{{course.courseName}}</option>
@@ -46,8 +46,12 @@
                             </select>
                         </div>
 
-                        <div class="col-md-6 col-lg-6 col-12 input-group form-group">
-                            <input type="file" class="ml-2 mt-2 form-control-file" id="file" name="note">
+                        <div class="col-md-6 col-lg-4 col-12 input-group form-group">
+                            <label class="control-label col-sm-4 col-5 mt-2" style="color: black;">Choose File</label>
+                            <div class="w-100 col-sm-8 col-7">
+                            <input type="file" class="custom-file-input" id="file" name="note" required>
+                            <label class="custom-file-label" >Choose file...</label>
+                            </div>
                         </div>
 
                         <div class="col-md-12 col-lg-12 col-12 input-group form-group">

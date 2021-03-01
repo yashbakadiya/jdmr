@@ -13,7 +13,7 @@
     </div>
     {% endif %}
 </div>
-<div class="mt-5">
+<div class="mt-5 row">
     <div class="col-md-12 col-12">
         <div class="card">
             <div class="card-header">
@@ -23,19 +23,19 @@
                     </div>
                 </div>
             </div>
-            <div class="card-body container">
+            <div class="card-body">
                 <form id='submitForm' method='post' action='' enctype='multipart/form-data'>{% csrf_token %}
                     <div class="row">
                     
                         <div class="col-md-6 col-lg-4 col-12 input-group form-group">
-                            <label class="control-label col-sm-3 col-md-4 col-5 mt-2"
+                            <label class="control-label col-sm-4 col-5 mt-2"
                                 style="color: black;">Title</label>
-                            <input type="text" class="form-control w-100  col-md-8 col-sm-9 col-7" id="firstName " name='title' placeholder="Course Title" required value="{{tutorial.Title}}">
+                            <input type="text" class="form-control w-100 col-sm-8 col-7" id="firstName " name='title' placeholder="Course Title" required value="{{tutorial.Title}}">
                         </div>
                         <div class="col-md-6 col-lg-4 col-12 input-group form-group">
-                            <label class="control-label col-sm-3 col-md-4 col-5 mt-2"
+                            <label class="control-label col-sm-4 col-5 mt-2"
                                 style="color: black;">Time</label>
-                            <select name="duration" class="custom-select form-control w-100 col-md-8 col-sm-9 col-7"
+                            <select name="duration" class="custom-select form-control w-100 col-sm-8 col-7"
                                 required>
                                 <option disabled selected>{{tutorial.Duration}}</option>
                                 <option value="1">1</option>
@@ -54,16 +54,16 @@
                                 required value="{{tutorial.Fees}}">
                         </div>
                         <div class="col-lg-4 col-md-6 col-12 input-group form-group">
-                            <label class="control-label col-md-4 col-sm-5 col-8 mt-2"
+                            <label class="control-label col-sm-4 col-5 mt-2"
                                 style="color: black;">Discount</label>
                             <input type="number" step="0.01" style="-moz-appearance: textfield;" min="0"
-                                class="form-control w-100 col-sm-7 col-md-8 col-4" name="feeDisc"
+                                class="form-control w-100 col-sm-8 col-7" name="feeDisc"
                                 placeholder="(in %)Fees Discount" required value="{{tutorial.Discount}}">
                         </div>
                         <div class="col-lg-4 col-md-6 col-12 input-group form-group">
-                            <label class="control-label col-md-4 col-sm-5 col-8 mt-2"
+                            <label class="control-label col-sm-4 col-5 mt-2"
                                 style="color: black;">Validity</label>
-                            <input type="date" class="form-control-file col-sm-7 col-md-8 col-4" name="discValidity" value="{{tutorial.Validity}}">
+                            <input type="date" class="form-control col-sm-8 col-7" name="discValidity" value="{{tutorial.Validity}}">
                         </div>
 
                         <div class="col-md-12 col-lg-12 col-12 input-group form-group">

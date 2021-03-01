@@ -1,7 +1,7 @@
-{% extends 'dashboard/dashboard.html' %}
+{% extends 'dashboard/base.html' %}
 {% load static %}
 {% block css %}
-
+<style>
 .darken-grey-text {
     color: #2E2E2E;
 }
@@ -209,10 +209,11 @@
 .button-3e:hover:after {
     width: 35%;
 }
+</style>
 {% endblock %}
-{% block body %}
+{% block main-content %}
 <main>
-    <div class="container mt-4">
+    <div class="mt-5">
     {% if messages %}
     {% for k in messages%}
     <div class="alert alert-{{k.tags}} alert-dismissible fade show" role="alert">
