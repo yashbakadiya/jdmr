@@ -12,9 +12,11 @@ urlpatterns = [
     path('viewCourses/', viewCourses, name='viewCourses'),
     path('archiveCourseList/', archiveCourseList, name='archiveCourseList'),
     path('deleteCourse/<int:id>', deleteCourse, name='deleteCourse'),
+    path('deleteteaching/<int:id>', deleteteaching, name= 'deleteteaching' ),
     path('editCourse/<int:id>', editCourse, name='editCourse'),
     path('teachingType/', teachingType, name='teachingType'),
     path('teachingType-api/', TeachingTypeAPI, name='teachingTypeAPI'),
     path('viewteachType/', viewteachType, name='viewteachType'),
     path('editTeachingType/<int:id>', editTeachingType, name='editTeachingType'),
+    
 ]

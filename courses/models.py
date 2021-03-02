@@ -12,7 +12,8 @@ class Courses(models.Model):
     archieved = models.BooleanField(default=False)
 
     def __str__(self):
-        return str(self.id)+" "+self.courseName
+        return self.courseName
+     #   return str(self.id)+" "+self.courseName + " "+self.forclass
 
 
 class TeachingType(models.Model):

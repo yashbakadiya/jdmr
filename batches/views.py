@@ -41,8 +41,7 @@ def batchTiming2(request):
             user = User.objects.get(username=request.session['user'])
             institute = Institute.objects.get(user=user)
             if('delteSno' in request.POST):
-                delObj = BatchTiming.objects.get(
-                    id=request.POST.get('delteSno'))
+                delObj = BatchTiming.objects.get(sid=request.POST.get('delteSno'))
                 delObj.delete()
                 messages.warning(request, "Batch Deleted Successfully")
             else:
@@ -60,8 +59,10 @@ def batchTiming2(request):
                     print(e)
                 days = request.POST.getlist('forday')
                 days = ", ".join(days)
+                course = Courses.objects.get(id = courseID)
                 batchObj = BatchTiming(
-                    course=Courses.objects.get(id=int(courseID[0])),
+                    #course=Courses.objects.get(id=int(courseID[0])),
+                    course=course,
                     forclass=forclass,
                     batchName=batchName,
                     startTime=startTime,
@@ -129,7 +130,7 @@ def batchTiming(request):
         courses = Courses.objects.filter(intitute=inst, archieved=False)
         jsonCources = {}
         for x in courses:
-            jsonCources[x.id] = x.forclass
+            jsonCources[x.id] = x.forclass.split(", ")
         params = {'data': coachingCenter, 'courses': courses,
                   'json': json.dumps(jsonCources)}
         return render(request, 'batches/batchTiming.html', params)

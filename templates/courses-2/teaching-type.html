@@ -1,3 +1,37 @@
+Skip to content
+Search or jump to…
+
+Pull requests
+Issues
+Marketplace
+Explore
+ 
+@Rakesh10021997 
+Learn Git and GitHub without any code!
+Using the Hello World guide, you’ll start a branch, write comments, and open a pull request.
+
+
+jdrm13
+/
+coaching-
+Private
+0
+00
+Code
+Issues
+Pull requests
+Actions
+Projects
+Security
+Insights
+coaching-/templates/courses-2/teaching-type.html
+@GK-SVG
+GK-SVG Final commit to coaching-
+Latest commit 5fb6fe9 23 days ago
+ History
+ 1 contributor
+571 lines (510 sloc)  26.7 KB
+  
 {% extends 'dashboard/institute-dashboard.html' %}
 {% load static %}
 {% block head-title %}
@@ -92,8 +126,6 @@ Institute Dashboard
 
 <div class="container-fluid">
 
-  <br>
-  <br>
   <div class="row layout-spacing ">
     <div class="col-lg-12 h-100">
       <div class="card">
@@ -103,39 +135,47 @@ Institute Dashboard
         <br>
         <div class="card-body">
           <form action="" method="post">{% csrf_token %}
-            <select class="form-control" id="courseName" name="courseName" required>
-              <option selected="selected" disabled>Choose Course</option>
-              {% for i in courses %}
-              <option value="{{ i.id }}">{{ i.courseName }}</option>
-              {% endfor %}
-            </select>
-            <br>
+
             <div class="row">
-              <div class="col-1">
+              <div class="col-2">
                 <div class="input-group form-group">
                   <div class="input-group-prepend">
                     <span class="input-group-text">Select Class</span>
                   </div>
                 </div>
               </div>
-              <div class="col-11">
-                <select class="form-control tagging input-lg" multiple="multiple">
-                  <option>Nursery</option>
-                    <option>I </option>
-                    <option>II</option>
-                    <option>III</option>
-                    <option>IV</option>
-                    <option>V</option>
-                    <option>VI</option>
-                    <option>VII</option>
-                    <option>VIII</option>
-                    <option>IX</option>
-                    <option>X</option>
-                    <option>XI</option>
-                    <option>XII</option>
+              <div class="col-10">
+                <select class="form-control" id="forclass" name="forclass" required>
+                  <option selected="selected">Choose Course</option>
+                  {% for i in courses %}
+                  <option value="{{ i.id }}">{{ i.forclass }}</option>
+                  {% endfor %}
                 </select>
+
+                <!-- <select class="form-control tagging input-lg" multiple="multiple" name="forclass">
+                  <option>Nursery</option>
+                  <option>I </option>
+                  <option>II</option>
+                  <option>III</option>
+                  <option>IV</option>
+                  <option>V</option>
+                  <option>VI</option>
+                  <option>VII</option>
+                  <option>VIII</option>
+                  <option>IX</option>
+                  <option>X</option>
+                  <option>XI</option>
+                  <option>XII</option>
+                </select> -->
               </div>
             </div>
+
+            <select class="form-control" id="courseName" name="courseName" required>
+              <option selected="selected">Choose Course</option>
+              {% for i in courses %}
+              <option value="{{ i.id }}">{{ i.courseName }}</option>
+              {% endfor %}
+            </select>
 
 
 
@@ -251,7 +291,7 @@ Institute Dashboard
   </div>
 
   <div class="row layout-spacing">
-    <div class="row" id="cancel-row">
+    
                 
       <div class="col-xl-12 col-lg-12 col-sm-12  layout-spacing">
           <div class="statbox widget box box-shadow">
@@ -282,9 +322,9 @@ Institute Dashboard
                               <td>
                                 {{ forloop.counter }}
                               </td>
-                              <td>{{i.courseName}}</td>
-                              <td>{{i.forclass}}</td>
-                              <td>{{i.teachType}}</td>
+                              <td>{{i.course}}</td>
+                              <td>{{ i.forclass }}</td>
+                              <td>Online</td>
                               <td>{{i.duration}}</td>
                               <td>{{i.timePeriod}}</td>
                               <td>
@@ -318,7 +358,8 @@ Institute Dashboard
                                               Do you really want to delete this teaching-type?
                                             </p>
                                         <div class="modal-footer">
-                                            <button type="button" class="btn btn-danger btn-rounded mb-3 mt-3">Delete</button>
+                                          <a href="{% url 'deleteteaching' i.id %}" > <button type="button" class="btn btn-danger btn-rounded mb-3 mt-3">Delete</button></a>
+                                            <!-- <button type="button" class="btn btn-danger btn-rounded mb-3 mt-3">Delete</button> -->
                                             <button type="button" class="btn btn-dark btn-rounded mb-3 mt-3" data-dismiss="modal">Close</button>
                                         </div>
                                     </div>
@@ -519,7 +560,7 @@ Institute Dashboard
           </div>
       </div>
 
-  </div>
+  
 
   </div>
     

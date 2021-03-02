@@ -1,6 +1,7 @@
 {% extends 'dashboard/base.html' %}
 {% load static %}
 {% block css %}
+<style>
     @import url('https://fonts.googleapis.com/css?family=Numans');
 
     .container {
@@ -116,9 +117,10 @@
         color: rgb(66, 8, 8);
         font-size: 20px;
     }
+</style>
 {% endblock %}
 {% block main-content %}
-<div class="mt-5">
+<div class="container">
     {% if messages %}
     {% for k in messages%}
     <div class="alert alert-{{k.tags}} alert-dismissible fade show" role="alert">
@@ -129,143 +131,170 @@
     </div>
     {% endfor %}
     {% endif %}
-    <div class="card">
-        <div class="card-header">
-            <div class="row">
-                <div class="col-sm-4">
-                    <h2 style="color: rgb(66, 8, 8);">Batch Timing</h2>
+    <div class="d-flex justify-content-center h-100">
+        <div class="card">
+            <div class="card-header">
+                <div class="row">
+                    <div class="col-sm-4">
+                        <h2 style="color: rgb(66, 8, 8);">Batch Timing</h2>
+                    </div>
                 </div>
             </div>
-        </div>
-        <div class="card-body container">
-            <form id='submitForm' method='post' action=''>{% csrf_token %}
-                <div class="input-group form-group">
-                    <label class="control-label col-sm-4">Select Course<span class="text-danger">*</span></label>
-                    <select style="color: gray;" class="form-control" id="courseName" name="courseName" onchange="addclass(this)"  required>
-                        <option style="color: gray;" selected="selected" disabled>Choose Course</option>
-                        {% for i in courses %}
-                        <option style="color: gray;" value="{{ i.id }}">{{ i.courseName }}</option>
-                        {% endfor %}
-                    </select>
-                </div>
-                <br>
-                <div class="input-group form-group">
-                    <label class="control-label col-sm-4">Select Class<span class="text-danger">*</span></label>
-                    <select class="form-control multiselect multiple-checkboxes" style="border: 1px solid gainsboro;" id="forclass"
-                        name='forclass' multiple="multiple" required>
-                        <option style="color: gray;">Choose Class</option>
-                    </select>
-                </div>
-                <br>
-                <div class="input-group form-group">
-                    <label class="control-label col-sm-4">Batch Name<span class="text-danger">*</span></label>
-                    <div class="input-group-prepend">
-                        <span class="input-group-text"><i class="fas fa-user"></i></span>
-                    </div>
-                    <input type="text" class="form-control" id="batchName " name='batchName' placeholder="Batch Name"
-                        required>
-                </div>
-                <div class="input-group form-group">
-                    <label class="control-label col-sm-4">Start Time<span class="text-danger">*</span></label>
-                    <div class="input-group-prepend">
-                        <span class="input-group-text"><i class="fas fa-user"></i></span>
-                    </div>
-                    <input type="time" class="form-control" id="startTime" name='startTime' placeholder="Start Time"
-                        required>
-                </div>
-                <div class="input-group form-group">
-                    <label class="control-label col-sm-4">End Time<span class="text-danger">*</span></label>
-                    <div class="input-group-prepend">
-                        <span class="input-group-text"><i class="fas fa-user"></i></span>
-                    </div>
-                    <input type="time" class="form-control" id="endTime" name='endTime' placeholder="End Time" required>
-                </div>
-                <div class="form-group input-group">
-                    <label class="control-label col-sm-4" for='forday'>Days<span class="text-danger">*</span></label>
-                        <select class="form-control" style="border: 1px solid gainsboro;" id="forday" name='forday' multiple="multiple" required>
-                            <option style="color: gray;" >Monday</option>
-                            <option style="color: gray;" >Tuesday</option>
-                            <option style="color: gray;" >Wednesday</option>
-                            <option style="color: gray;" >Thursday</option>
-                            <option style="color: gray;" >Friday</option>
-                            <option style="color: gray;" >Saturday</option>
-                            <option style="color: gray;" >Sunday</option>
+            <div class="card-body container">
+                <form  method='post' action=''>{% csrf_token %}
+
+                    <div class="col-10">
+                        <label class="control-label col-sm-4">Select Class<span class="text-danger">*</span></label>
+                        <select class="form-control tagging input-lg" multiple="multiple" name="batchforclass">
+                            <option>Nursery</option>
+                            <option>I </option>
+                            <option>II</option>
+                            <option>III</option>
+                            <option>IV</option>
+                            <option>V</option>
+                            <option>VI</option>
+                            <option>VII</option>
+                            <option>VIII</option>
+                            <option>IX</option>
+                            <option>X</option>
+                            <option>XI</option>
+                            <option>XII</option>
                         </select>
-                </div>
-                <br>
-                <hr>
-                <div class="row container d-flex justify-content-center">
-                    <div class="col-sm-2 sm-ml-1">
-                        <button id='submitBtn' name="submit" type="submit" class="btn btn-warning">SUBMIT</button>
-
                     </div>
-                </div>
-
-            </form>
-        </div>
-    </div>
-    <div class="card" style="padding-top: 1%;margin-top:1rem;">
-        <div class="card-body" style="background: white">
-            <!-- Grid row -->
-            <div class="row">
-
-            </div>
-            <!-- Grid row -->
-            <div>
-                <!--Table-->
-                <div class="table-responsive">
-                <table class="table table-striped">
-                    <!--Table head-->
-                    <thead>
-                        <tr>
-                            <th>Batch Name</th>
-                            <th>Course Name</th>
-                            <th>Class</th>
-                            <th>Start Time</th>
-                            <th>End Time</th>
-                            <th>Days</th>
-                            <th>Edit</th>
-                            <th>Delete</th>
-                        </tr>
-                    </thead>
-                    <!--Table head-->
-                    <!--Table body-->
-                    <tbody>
-                        {% for i in data reversed %}
-                        <tr>
-                            <td>{{i.batchName}}</td>
-                            <td>{{i.course.courseName}}</td>
-                            <td>{{i.forclass}}</td>
-                            <td>{{i.startTime}}</td>
-                            <td>{{i.endTime}}</td>
-                            <td>{{i.days}}</td>
-                            <td><a href="{% url 'batchTimingEdit' i.id %}" class="btn btn-danger">EDIT</a></td>
-                            <td>
-                                <form method="post">{% csrf_token %}
-                                    <input type="hidden" name="delteSno" value="{{i.id}}">
-                                    <input type="submit" value="DELETE" class="btn btn-danger">
-                                </form>
-                            </td>
-                        </tr>
+                    <br>
+                    <select class="form-control" id="courseName" name="batchcourseName" required>
+                        <option selected="selected" disabled>Choose Course</option>
+                        {% for i in courses %}
+                        <option value="{{ i.id }}">{{ i.courseName }}</option>
                         {% endfor %}
-                    </tbody>
-                    <!--Table body-->
-                </table>
-                <!--Table-->
-            </div>
+                    </select>
+                    <br>
+
+
+                    <div class="input-group form-group">
+                        <label class="control-label col-sm-4">Batch Name<span class="text-danger">*</span></label>
+                        <div class="input-group-prepend">
+                            <span class="input-group-text"><i class="fas fa-user"></i></span>
+                        </div>
+                        <input type="text" class="form-control" id="batchName " name='batchName'
+                            placeholder="Batch Name" required>
+                    </div>
+                    <div class="input-group form-group">
+                        <label class="control-label col-sm-4">Start Time<span class="text-danger">*</span></label>
+                        <div class="input-group-prepend">
+                            <span class="input-group-text"><i class="fas fa-user"></i></span>
+                        </div>
+                        <input type="time" class="form-control" id="startTime" name='startTime' placeholder="Start Time"
+                            required>
+                    </div>
+                    <div class="input-group form-group">
+                        <label class="control-label col-sm-4">End Time<span class="text-danger">*</span></label>
+                        <div class="input-group-prepend">
+                            <span class="input-group-text"><i class="fas fa-user"></i></span>
+                        </div>
+                        <input type="time" class="form-control" id="endTime" name='endTime' placeholder="End Time"
+                            required>
+                    </div>
+                    <div class="input-group form-group">
+                        <label class="control-label col-sm-4" for='forday'>Days<span
+                                class="text-danger">*</span></label>
+                        <div>
+                            <select id="multiple-checkboxes" id="forday" name='forday' multiple required>
+                                <option>Monday</option>
+                                <option>Tuesday</option>
+                                <option>Wednesday</option>
+                                <option>Thursday</option>
+                                <option>Friday</option>
+                                <option>Saturday</option>
+                                <option>Sunday</option>
+                            </select>
+                        </div>
+                    </div><br>
+                    <hr>
+                    <div class="row container d-flex justify-content-end">
+                        <div class="col-sm-2 sm-ml-1">
+                            <button id='submitBtn' name="submit" type="submit" class="btn btn-warning">SUBMIT</button>
+
+                        </div>
+                    </div>
+
+                </form>
             </div>
         </div>
     </div>
-    <script>
-            
-            function addclass(el) {
-                var options = {{ json| safe }};
-                var currentops = options[el.value].split(",");
-                $("#forclass").empty();
-                for (i = 0; i < currentops.length; i++) {
-                    $("#forclass").append(`<option style="color:gray" value="${currentops[i]}">${currentops[i]}</option>`);
-                }
-            }
-    </script>
 </div>
-{% endblock %}
+</div>
+</div>
+<div class="container" style="padding-top: 1%;margin-top:1rem;">
+    <div class="card-body" style="overflow: scroll;background: white">
+        <!-- Grid row -->
+        <div class="row">
+
+        </div>
+        <!-- Grid row -->
+        <div>
+            <!--Table-->
+            <table class="table table-responsive table-striped">
+                <!--Table head-->
+                <thead>
+                    <tr>
+                        <th>Batch Name</th>
+                        <th>Course Name</th>
+                        <th>Class</th>
+                        <th>Start Time</th>
+                        <th>End Time</th>
+                        <th>Days</th>
+                        <th>Edit</th>
+                        <th>Delete</th>
+                    </tr>
+                </thead>
+                <!--Table head-->
+                <!--Table body-->
+                <tbody>
+                    {% for i in data reversed %}
+                    <tr>
+                        <td>{{i.batchName}}</td>
+                        <td>{{i.course.courseName}}</td>
+                        <td>{{i.forclass}}</td>
+                        <td>{{i.startTime}}</td>
+                        <td>{{i.endTime}}</td>
+                        <td>{{i.days}}</td>
+                        <td><a href="{% url 'batchTimingEdit' i.id %}" class="btn btn-danger">EDIT</a></td>
+                        <td>
+                            <form method="post">{% csrf_token %}
+                                <input type="hidden" name="delteSno" value="{{i.id}}">
+                                <input type="submit" value="DELETE" class="btn btn-danger">
+                            </form>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+                <!--Table body-->
+            </table>
+            <!--Table-->
+        </div>
+    </div>
+    <br><br>
+    <script>
+        $(document).ready(function () {
+            $('#multiple-checkboxes').multiselect({
+                includeSelectAllOption: true,
+                minwidth: 2000
+            });
+            $("#courseName").on("change", function () {
+                var options = {{ json| safe
+            }};
+        console.log('options--', options)
+        var currentops = options[this.value];
+        $("#forclass").empty();
+        for (i = 0; i < currentops.length; i++) {
+            $("#forclass").append(`<option value="${currentops[i]}">
+                    ${currentops[i]}
+                </option>`);
+        }
+        $("#forclass").multiselect('rebuild');
+        });
+        });
+        $("#forclass").multiselect();
+    </script>
+    {% endblock %}

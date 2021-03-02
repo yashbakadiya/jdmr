@@ -10,6 +10,10 @@ from rest_framework.response import Response
 from rest_framework import viewsets
 from .serializers import InstituteSerializer, StudentSerializer, TeacherSerializer, UserSerializer
 
+from django.core.mail import EmailMessage
+
+from django.conf import settings
+
 
 # Create your views here.
 
@@ -17,7 +21,9 @@ from .serializers import InstituteSerializer, StudentSerializer, TeacherSerializ
 
 # 1---------------------------------------------Login User View------------------------------------------
 
-
+def forgotpassword(request):
+    
+    return (render ,"accounst/password-reset/password_reset_form.html")
 def login(request):
     errors = []
     if request.method == "POST":
@@ -53,27 +59,27 @@ def signup(request):
     prefil = {}
     if request.method == "POST":
         username = request.POST.get('username')
-        firstname = request.POST.get('firstname')
-        lastname = request.POST.get('lastname')
+       # firstname = request.POST.get('firstname')
+       # lastname = request.POST.get('lastname')
         password = request.POST.get('password')
-        confpassword = request.POST.get('confpassword')
+       # confpassword = password
         email = request.POST.get('email')
         phone = request.POST.get('phone')
-        address = request.POST.get('address')
+        #address = request.POST.get('address')
         user_type = request.POST['type']
         prefil = {
             'username': username,
-            'firstname': firstname,
-            'lastname': lastname,
+         #   'firstname': firstname,
+          #  'lastname': lastname,
             'password': password,
-            'confpassword': confpassword,
+          #  'confpassword': confpassword,
             'email': email,
             'phone': phone,
-            'address': address
+           # 'address': address
         }
-        if password != confpassword:
-            errors.append("Passwords do not match")
-            return render(request, "accounts/signup.html", {"errors": errors, "prefil": prefil})
+        # if password != confpassword:
+        #     errors.append("Passwords do not match")
+        #     return render(request, "accounts/signup.html", {"errors": errors, "prefil": prefil})
         if user_type == "Institute":
             try:
                 email = Institute.objects.get(user__email=email)
@@ -88,20 +94,28 @@ def signup(request):
             except:
                 phone = request.POST.get('phone')
             try:
-                username = Institute.objects.get(user__username=username)
+                username = Institute.objects.get(user__username = username)
                 errors.append("Name Already Taken")
                 return render(request, "accounts/signup.html", {"errors": errors, "prefil": prefil})
             except:
                 username = request.POST.get('username')
-            user = User(username=username, first_name=firstname,
-                        last_name=lastname, password=password, email=email)
+            user = User(username=username, 
+                      #  first_name=firstname,
+                      #  last_name=lastname, 
+                        password=password, 
+                        email=email)
             user.save()
-            Institute(user=user, address=address, phone=phone).save()
+            Institute(user=user,
+                     # address=address,
+                      phone=phone).save()
             auth.login(request, user)
             request.session["user"] = username
             request.session["type"] = request.POST['type']
             return redirect("dashboard")
+
+
         elif user_type == "Teacher":
+
             try:
                 email = Teacher.objects.get(user__email=email)
                 errors.append("Email Already Taken")
@@ -120,14 +134,20 @@ def signup(request):
                 return render(request, "accounts/signup.html", {"errors": errors, "prefil": prefil})
             except:
                 username = request.POST.get('username')
-            user = User(username=username, first_name=firstname,
-                        last_name=lastname, password=password, email=email)
+            user = User(username=username, 
+                       #first_name=firstname,
+                       # last_name=lastname,
+                         password=password, 
+                         email=email)
             user.save()
-            Teacher(user=user, address=address, phone=phone).save()
+            Teacher(user=user, 
+                    #address=address,
+                     phone=phone).save()
             auth.login(request, user)
             request.session["user"] = username
             request.session["type"] = request.POST['type']
             return redirect("dashboard")
+
 
         elif user_type == "Student":
             try:
@@ -148,10 +168,15 @@ def signup(request):
                 return render(request, "accounts/signup.html", {"errors": errors, "prefil": prefil})
             except:
                 name = request.POST.get('name')
-            user = User(username=username, first_name=firstname,
-                        last_name=lastname, password=password, email=email)
+            user = User(username=username,
+                       # first_name=firstname,
+                       #last_name=lastname, 
+                        password=password,
+                         email=email)
             user.save()
-            Student(user=user, address=address, phone=phone).save()
+            Student(user=user, 
+                  # address=address,
+                    phone=phone).save()
             auth.login(request, user)
             request.session["user"] = username
             request.session["type"] = request.POST['type']

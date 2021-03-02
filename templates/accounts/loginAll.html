@@ -2,109 +2,238 @@
 <html>
 
 <head>
-	<meta name="google-signin-client_id"
-		content="1016598982512-u656rprh5a0f0j1jl0h00eq454kl1sla.apps.googleusercontent.com">
-	<title>Login</title>
-	<!--Bootsrap 4 CDN-->
-	<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
-		integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
-	<script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
-	<script src="https://apis.google.com/js/platform.js" async defer></script>
-	<!--Fontawesome CDN-->
-	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css"
-		integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
+    <meta name="google-signin-client_id"
+        content="1016598982512-u656rprh5a0f0j1jl0h00eq454kl1sla.apps.googleusercontent.com">
+    <title>Signup</title>
+    <!--Bootsrap 4 CDN-->
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
+        integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+    <script src="https://apis.google.com/js/platform.js" async defer></script>
+    <!--Fontawesome CDN-->
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css"
+        integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
 
-	<!--Custom styles-->
-	{% load static %}
-	<link rel="stylesheet" href="{% static 'css/stylesloginCoachingCentre.css' %}" type="text/css">
+    <!--Custom styles-->
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/stylesloginCoachingCentre.css' %}" type="text/css">
 </head>
 <style>
-	.input-group.form-inline {
-		align-items: center;
-	}
+    .card {
+        height: auto;
+    }
 
-	.card {
-		height: auto;
-	}
+    #map {
+        height: 100%;
+    }
+
+    #infowindow-content {
+        display: none;
+    }
+
+    #map #infowindow-content {
+        display: inline;
+    }
+
+    .pac-card {
+        margin: 10px 10px 0 0;
+        border-radius: 2px 0 0 2px;
+        box-sizing: border-box;
+        -moz-box-sizing: border-box;
+        outline: none;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+        background-color: #fff;
+    }
+
+    #pac-container {
+        padding-bottom: 12px;
+        margin-right: 12px;
+    }
+
+    .pac-controls {
+        display: inline-block;
+        padding: 5px 11px;
+    }
+
+    .pac-controls label {
+        font-weight: 300;
+    }
+
+    #pac-input {
+        text-overflow: ellipsis;
+    }
+
+    #pac-input:focus {
+        border-color: #4d90fe;
+    }
+
+    .pac-container {
+        z-index: 1100 !important;
+    }
+    .fa {
+        padding: 10px;
+        font-size: 15px;
+        width: 35px;
+        text-align: center;
+        text-decoration: none;
+        margin: 3px 1px;
+    }
+    .fa-facebook {
+        background: #3B5998;
+        color: white;
+    }
+    .fa-twitter {
+        background: #55ACEE;
+        color: white;
+    }
+
+    .fa-google {
+        background: #dd4b39;
+        color: white;
+    }
+    html,
+    body {
+        max-width: 100%;
+        overflow-y: auto;
+    }
 </style>
 
 <body>
-	<div class="container-fluid mt-5">
-		{% if errors %}
-		{% for k in errors %}
-		<div class="alert alert-warning alert-dismissible fade show" role="alert">
-			<b>{{ k }} !</b>
-			<button type="button" class="close" data-dismiss="alert" aria-label="Close">
-				<span aria-hidden="true">&times;</span>
-			</button>
-		</div>
-		{% endfor %}
-		{% endif %}
-		<div class="d-flex justify-content-center w-100 h-100">
-			<div class="card  col-lg-8 col-md-8 col-sm-12 col-12 w-100">
-				<div class="card-header">
-					<h2 style="color: rgb(66, 8, 8);">LogIn</h2>
-				</div>
-				<div class="card-body w-100 h-100">
-					<!-- Nav tabs -->
+    <div class="container ">
+        {% if errors %}
+        {% for k in errors %}
+        <div class="alert alert-warning alert-dismissible fade show" role="alert">
+            <b>{{ k }} !</b>
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        {% endfor %}
+        {% endif %}
+        <div class="d-flex justify-content-center w-60 h-100">
+            <div class="card w-50 h-90">
+                <!-- <div class="card-header">
+                    <h2 style="color: rgb(66, 8, 8);">Sign Up</h2>
+                </div> -->
+                <div class="card-body w-100 h-100">
+    
 					<form action="{% url 'Login' %}" method="post">{% csrf_token %}
+                        <div class="col-md-12 text-center mb-4">
+								
+                            <img src="{% static "assets/img/1.png" %}" alt="">
+                        </div>
+						<br>
+                        <div class="input-group form-group">
+                            <label class="control-label col-sm-4">Type<span class="text-danger">*</span></label>
+                            <select name="type" class="form-control form-control-lg mr-2">
+                                <option selected="true" value="Institute">Institute</option>
+                                <option value="Teacher">Teacher</option>
+                                <option value="Student">Student</option>
+                            </select>
+                        </div>
+                        <div class="input-group form-group">
+                            <label class="control-label col-sm-4">Username<span class="text-danger">*</span></label>
+                            <div class="input-group-prepend">
+                                <span class="input-group-text"><i class="fas fa-user"></i></span>
+                            </div>
+                            <input type="text" class="form-control form-control-lg" name='username'
+                                placeholder="Username" value="{{prefil.username}}" required>
+                        </div>
+                       
+                        
 
-						<div class="d-flex row justify-content-center">
-							<div class="input-group form-group col-lg-10 col-md-10 col-sm-12 col-12">
-								<label class="control-label col-sm-4" style="font-size: 2em;">Type<span
-										class="text-danger">*</span></label>
-								<select name="type" class="form-control mr-2" style="height: 4rem;">
-									<option selected="true" value="Institute">Institute</option>
-									<option value="Teacher">Teacher</option>
-									<option value="Student">Student</option>
-								</select>
-							</div>
-							<div class="input-group form-group col-lg-10 col-md-10 col-sm-12 col-12">
-								<div class="input-group-prepend">
-									<span class="input-group-text"><i class="fas fa-user"></i></span>
-								</div>
-								<input type="text" class="form-control" id="username" name='username' placeholder="Institute Name"
-									required style="height: 4rem;">
-							</div>
-							<div class="input-group form-group col-lg-10 col-md-10 col-sm-12 col-12">
-								<div class="input-group-prepend">
-									<span class="input-group-text"><i class="fas fa-key"></i></span>
-								</div>
-								<input type="password" id="password" name='password' class="form-control pwd"
-									value="{{ prefil.password }}" required style="height: 4rem;">
-								<span class="input-group-btn mt-3">
-									<button class="btn btn-default reveal" type="button"><i class="fa fa-eye"></i></button>
-								</span>
+                        <div class="input-group form-group">
+                            <label class="control-label col-sm-4"> Password<span class="text-danger">*</span></label>
+                            <div class="input-group-prepend">
+                                <span class="input-group-text"><i class="fas fa-key"></i></span>
+                            </div>
+                            <input type="password" name='password' class="form-control form-control-lg pwd"
+                                value="{{ prefil.password }}" required pattern=".{6,20}" title="At least 6 charcters">
+                            <span class="input-group-btn ml-1">
+                                <button class="btn btn-default reveal mt-1" type="button"><i class="fa fa-eye"></i></button>
+                            </span>
 
+                        </div>   
+						
+						<!-- <div class="input-group form-group ">
+							<div class="input-group-prepend">
+								<span class="input-group-text"><i class="fas fa-key"></i></span>
 							</div>
-							<div class="col-lg-10 col-md-10 col-sm-12 col-12">
-								<input type="checkbox" id="remember" name='remember'>
-								Remember me
-							</div>
-							<br>
-							<div class="form-group form-inline col-lg-10 col-md-10 col-sm-12 col-12">
-								<a href="/forgotpass">Forgot Password ?</a>
-							</div>
-							<div class="form-group form-inline col-sm-12">
-								<div class="g-signin2" style="margin-left: auto;" data-onsuccess="onSignInC">
-								</div>
-								<input type="submit" value="Login" class="btn login_btn mx-1">
-							</div>
-						</div>
-					</form>
-				</div>
-				<div class="card-footer">
+							<input type="password" id="password" name='password' class="form-control pwd"
+								value="{{ prefil.password }}" required style="height: 4rem;">
+							<span class="input-group-btn mt-3">
+								<button class="btn btn-default reveal" type="button"><i
+										class="fa fa-eye"></i></button>
+							</span>
 
-					<div class="d-flex justify-content-center links">
-						<h5 style="color: rgb(66, 8, 8);">Don't have an account?</h5><a href="{% url 'Signup'%}">Sign
-							Up</a>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
-	<script type="text/javascript">
+						</div> -->
+                        
+						<div class="input-group form-group ">
+							<div class="custom-control custom-checkbox mr-5">
+								<input type="checkbox" class="custom-control-input" id="customCheck1"
+									value="remember-me">
+								<label class="custom-control-label" for="customCheck1">Remember</label>
+							</div>  
+							<div class="forgot-pass">
+								<!-- <a href="user_pass_recovery_1.html">Forgot Password?</a> -->
+								<a href="{% url 'password_reset' %}">Forgot Password?</a>
+                                
+                               
+							</div>
+						</div> 
+
+						
+                       
+                        <br>                        
+                        <div class="form-group text-center col-md-2 col-sm-2" style="text-align:center;">
+                            <input type="submit" value="Submit"  class="btn btn-warning" ali>
+                        </div>
+                        <br>                        
+                            
+							<div class="d-flex justify-content-center links">
+								<h5 style="color: rgb(66, 8, 8);"> Don't have an account? </h5><a href="  {% url 'Signup'%} "> Register/SignUp </a>
+							</div>
+                             <!-- <div class="col-md-12">
+                                <span class="text-muted">
+                                    By clicking Sign Up, you agree to our <a href="#">Terms</a> and that
+                                    you have read
+                                    our <a href="#">Policy</a>, including our <a href="#">Cookie
+                                        Use</a>.
+                                </span>
+                            </div> -->
+                             <div class="col-md-12 mb-0 text-center social-icons">
+                                <h5 >or</h5>
+                                <button
+                                    class="btn btn-outline-secondary rounded-circle btn-rounded mb-4 mr-2 iconfa fa-facebook"
+                                    style="margin-left: auto;" data-onsuccess="onSignInC"></i></button>
+                                <button
+                                    class="btn btn-outline-secondary rounded-circle btn-rounded mb-4 mr-2 fa fa-twitter"><i
+                                        class="flaticon-google-plus-bold flaticon-circle-p"></i></button>
+                                <button
+                                    class="btn btn-outline-secondary rounded-circle btn-rounded mb-4 mr-2 fa fa-google "><i
+                                        class="flaticon-twitter-logo flaticon-circle-p"></i></button>
+                                <!-- <a href="#" class="fa fa-facebook"></a>
+                                        <a href="#" class="fa fa-twitter"></a>
+                                        <a href="#" class="fa fa-google"></a> -->
+                            </div>
+
+                            <!-- <div class="col-md-12">
+                                <span class="text-muted">
+                                    By clicking Sign Up, you agree to our <a href="#">Terms</a> and that
+                                    you have read
+                                    our <a href="#">Policy</a>, including our <a href="#">Cookie
+                                        Use</a>.
+                                </span>
+                            </div> -->
+                        
+                    </form>
+                </div>
+                
+            </div>
+        </div>
+    </div>
+    <script type="text/javascript">
 		$(".reveal").on('click', function () {
 			var $pwd = $(".pwd");
 			if ($pwd.attr('type') === 'password') {

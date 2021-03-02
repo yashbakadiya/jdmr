@@ -71,7 +71,27 @@
     .pac-container {
         z-index: 1100 !important;
     }
+    .fa {
+        padding: 10px;
+        font-size: 15px;
+        width: 35px;
+        text-align: center;
+        text-decoration: none;
+        margin: 3px 1px;
+    }
+    .fa-facebook {
+        background: #3B5998;
+        color: white;
+    }
+    .fa-twitter {
+        background: #55ACEE;
+        color: white;
+    }
 
+    .fa-google {
+        background: #dd4b39;
+        color: white;
+    }
     html,
     body {
         max-width: 100%;
@@ -91,13 +111,17 @@
         </div>
         {% endfor %}
         {% endif %}
-        <div class="d-flex justify-content-center w-100 h-100">
-            <div class="card w-100">
-                <div class="card-header">
+        <div class="d-flex justify-content-center w-60 h-100">
+            <div class="card w-50 h-90">
+                <!-- <div class="card-header">
                     <h2 style="color: rgb(66, 8, 8);">Sign Up</h2>
-                </div>
+                </div> -->
                 <div class="card-body w-100 h-100">
                     <form action="{% url 'Signup'%}" method="post">{% csrf_token %}
+                        <div class="col-md-12 text-center mb-4">
+								
+                            <img src="{% static "assets/img/1.png" %}" alt="">
+                        </div>
                         <div class="input-group form-group">
                             <label class="control-label col-sm-4">Type<span class="text-danger">*</span></label>
                             <select name="type" class="form-control form-control-lg mr-2">
@@ -112,24 +136,24 @@
                                 <span class="input-group-text"><i class="fas fa-user"></i></span>
                             </div>
                             <input type="text" class="form-control form-control-lg" name='username'
-                                placeholder="Institute-name\Username" value="{{prefil.username}}" required>
+                                placeholder="Username" value="{{prefil.username}}" required>
                         </div>
-                        <div class="input-group form-group">
+                        <!-- <div class="input-group form-group">
                             <label class="control-label col-sm-4">First name<span class="text-danger">*</span></label>
                             <div class="input-group-prepend">
                                 <span class="input-group-text"><i class="fas fa-user"></i></span>
                             </div>
                             <input type="text" class="form-control form-control-lg" name='firstname'
                                 placeholder="First Name" value="{{prefil.firstname}}" required>
-                        </div>
-                        <div class="input-group form-group">
+                        </div> -->
+                        <!-- <div class="input-group form-group">
                             <label class="control-label col-sm-4">Last name<span class="text-danger">*</span></label>
                             <div class="input-group-prepend">
                                 <span class="input-group-text"><i class="fas fa-user"></i></span>
                             </div>
                             <input type="text" class="form-control form-control-lg" name='lastname'
                                 placeholder="Last Name" value="{{prefil.lastname}}" required>
-                        </div>
+                        </div> -->
                         <div class="input-group form-group">
                             <label class="control-label col-sm-4">Email Id<span class="text-danger">*</span></label>
                             <div class="input-group-prepend">
@@ -151,7 +175,7 @@
                             </span>
 
                         </div>
-                        <div class="input-group form-group">
+                        <!-- <div class="input-group form-group">
                             <label class="control-label col-sm-4">Confirm Password<span
                                     class="text-danger">*</span></label>
                             <div class="input-group-prepend">
@@ -160,7 +184,7 @@
                             <input type="password" name='confpassword' class="form-control form-control-lg pwd"
                                 value="{{ prefil.confpassword }}" required pattern=".{6,20}"
                                 title="At least 6 charcters">
-                        </div>
+                        </div> -->
                         <div class="input-group form-group">
                             <label class="control-label col-sm-4">Phone Number<span class="text-danger">*</span></label>
                             <div class="input-group-prepend">
@@ -170,7 +194,9 @@
                                 placeholder="Phone Number" value="{{ prefil.phone }}" maxlength="10" pattern="\d{10}"
                                 type="number" required>
                         </div>
-                        <div class="input-group form-group">
+                        <br>
+                        
+                        <!-- <div class="input-group form-group">
                             <label class="control-label col-sm-4">Address<span class="text-danger">*</span></label>
                             <div class="input-group-prepend">
                                 <span class="input-group-text"><i class="fas fa-location-arrow"></i></span>
@@ -181,26 +207,51 @@
                                 name="getUserLocation">Get</button>
                             <input type="hidden" id="cityLat" name="cityLat" />
                             <input type="hidden" id="cityLng" name="cityLng" />
+                        </div> -->
+                        <div class="form-group text-center col-md-2 col-sm-2" style="text-align:center;">
+                            <input type="submit" value="Submit"  class="btn btn-warning" ali>
                         </div>
-                        <div class="row card-footer">
+                        <br>                        
                             <div class="links col-md-10 col-sm-10 mt-2">
                                 <h5 style="color: rgb(66, 8, 8);">Aready have an account?<a
-                                        href="{% url 'Login'%}">Login</a></h5>
+                                        href="  {% url 'Login'%} "> Login</a></h5>
                             </div>
-                            <div class="form-group text-center col-md-2 col-sm-2">
-                                <input type="submit" value="Sign Up" class="btn btn-warning">
-                            </div>
-                            <div class="col-md-12">
+                             <!-- <div class="col-md-12">
                                 <span class="text-muted">
                                     By clicking Sign Up, you agree to our <a href="#">Terms</a> and that
                                     you have read
                                     our <a href="#">Policy</a>, including our <a href="#">Cookie
                                         Use</a>.
                                 </span>
+                            </div> -->
+                             <div class="col-md-12 mb-0 text-center social-icons">
+                                <h5 >or</h5>
+                                <button
+                                    class="btn btn-outline-secondary rounded-circle btn-rounded mb-4 mr-2 iconfa fa-facebook"
+                                    style="margin-left: auto;" data-onsuccess="onSignInC"></i></button>
+                                <button
+                                    class="btn btn-outline-secondary rounded-circle btn-rounded mb-4 mr-2 fa fa-twitter"><i
+                                        class="flaticon-google-plus-bold flaticon-circle-p"></i></button>
+                                <button
+                                    class="btn btn-outline-secondary rounded-circle btn-rounded mb-4 mr-2 fa fa-google "><i
+                                        class="flaticon-twitter-logo flaticon-circle-p"></i></button>
+                                <!-- <a href="#" class="fa fa-facebook"></a>
+                                        <a href="#" class="fa fa-twitter"></a>
+                                        <a href="#" class="fa fa-google"></a> -->
                             </div>
-                        </div>
+
+                            <!-- <div class="col-md-12">
+                                <span class="text-muted">
+                                    By clicking Sign Up, you agree to our <a href="#">Terms</a> and that
+                                    you have read
+                                    our <a href="#">Policy</a>, including our <a href="#">Cookie
+                                        Use</a>.
+                                </span>
+                            </div> -->
+                        
                     </form>
                 </div>
+                
             </div>
         </div>
     </div>
