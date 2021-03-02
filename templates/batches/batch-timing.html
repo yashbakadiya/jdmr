@@ -243,19 +243,20 @@ Institute Dashboard
                 <tbody>
                     {% for i in data reversed %}
                     <tr>
-                        <td>{{i.batchName}}</td>                        
+                        <td>{{i.batchName}}</td>
                         <td>{{i.course.courseName}}</td>
-                        <td>{{i.forclass|slice:"2"}}</td>
+                        <td>{{i.forclass|slice:"0:1"}}</td>
                         <td>{{i.startTime}}</td>
                         <td>{{i.endTime}}</td>
                         <td>{{i.forclass|slice:"3:20"}}</td>
                         <td><a href="{% url 'batchTimingEdit' i.id %}" class="btn btn-danger">EDIT</a></td>
-                        <td>
+                        <td><a href="{% url 'batchTimingdelete' i.id %}" class="btn btn-danger">Delete</a></td>
+                        <!-- <td>
                             <form method="post">{% csrf_token %}
                                 <input type="hidden" name="delteSno" value="{{i.id}}">
                                 <input type="submit" value="DELETE" class="btn btn-danger">
                             </form>
-                        </td>
+                        </td> -->
                     </tr>
                     {% endfor %}
                 </tbody>

@@ -9,6 +9,7 @@ urlpatterns = [
     path('postNotice/', postNotice, name='postNotice'),
     path('postNotice-api/', NoticeAPI, name='NoticeAPI'),
     path('batchTimingEdit/<int:id>', batchTimingEdit, name='batchTimingEdit'),
+    path('batchTimingdelete/<int:id>', batchTimingdelete, name='batchTimingdelete'),
     path('Tutor/Batch/add/all', BatchTutor, name="addbatchtutor"),
     path('Tutor/Batch/batch/edit/<batch_id>',
          editBatchTutor, name="editbatchtutor"),
