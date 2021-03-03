@@ -95,26 +95,43 @@ def courseArchive(request):
         inst = Institute.objects.get(user=user)
 
         if(request.method == 'POST'):
-            undo = request.POST.getlist('undo')
+            undo = request.POST.get('undo')
+            print("undo",undo)
             for id in undo:
                 course = Courses.objects.get(id=int(id))
                 course.archieved = False
                 course.save()
-            messages.success(
-                request, "Courses Removed from Archive Successfully")
+            messages.success(request, "Courses Removed from Archive Successfully")
             return redirect("courseArchive")
         courses = Courses.objects.filter(intitute=inst, archieved=True)
-        paginator = Paginator(courses, 4)
-        page = request.GET.get('page', 1)
-        try:
-            course = paginator.page(page)
-        except PageNotAnInteger:
-            course = paginator.page(1)
-        except EmptyPage:
-            course = paginator.page(paginator.num_pages)
+        # paginator = Paginator(courses, 4)
+        # page = request.GET.get('page', 1)
+        # try:
+        #     course = paginator.page(page)
+        # except PageNotAnInteger:
+        #     course = paginator.page(1)
+        # except EmptyPage:
+        #     course = paginator.page(paginator.num_pages)
         params = {'course': courses}
         return render(request, 'courses-2/archive-courses.html', params)
     return HttpResponse("You Are Not Authenticated for this Page")
+
+
+@login_required(login_url='Login')
+def courseArchivefirst(request,id):
+    if request.session['type'] == "Institute":
+        user = User.objects.get(username=request.session['user'])
+        inst = Institute.objects.get(user=user)        
+        
+        course = Courses.objects.get(id=id, intitute=inst)
+        print('archieve id' ,id)
+        course.archieved = True
+        course.save()
+        messages.success(request, "Course Archive Succssfully")
+        return redirect("courses")
+    return HttpResponse("You Are Not Authenticated for this Page")
+
+       
 
 
 @login_required(login_url='Login')

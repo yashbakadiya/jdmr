@@ -239,7 +239,7 @@ Institute Dashboard
                       <!-- <button class="btn btn-secondary btn-sm dropdown-item" data-toggle="modal"
                             data-target="#delete-{{i.pk}}" href="#delete-{{i.pk}}" title="Delete"><i
                               class="flaticon-delete  bg-danger p-1 text-white br-6 mb-1"></i>Delete</button> -->
-                      <button class="btn btn-warning btn-sm dropdown-item" data-toggle="modal"
+                      <button class="btn btn-warning btn-sm dropdown-item" data-toggle="modal" name="undo"
                         data-target="#archive-{{i.pk}}" href="#archive-{{i.pk}}" title="Archive"><i
                           class="flaticon-delete  bg-warning p-1 text-white br-6 mb-1"></i>Archive</button>
 
@@ -255,7 +255,7 @@ Institute Dashboard
                   <div class="modal-content">
                     <div class="modal-header">
                       <h5 class="modal-title" id="archive-{{i.pk}}-Title">Archive Course</h5>
-                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                      <button type="button" class="close" name="undo" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                       </button>
                     </div>
@@ -264,9 +264,9 @@ Institute Dashboard
                       <p class="modal-text mb-4">
                         Do you really want to archive this course?
                       </p>
-                      <div class="modal-footer">
+                      <div class="modal-footer" name="undo">
 
-                        <a href="{% url 'course-archive' %}"> <button type="button"
+                        <a href="{% url 'courseArchivefirst' i.id %}"> <button type="button"
                             class="btn btn-warning btn-rounded mb-3 mt-3">Archive</button></a>
                         <!-- <button type="button" class="btn btn-warning btn-rounded mb-3 mt-3">Archive</button> -->
                         <button type="button" class="btn btn-dark btn-rounded mb-3 mt-3"
