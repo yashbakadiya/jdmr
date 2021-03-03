@@ -159,15 +159,15 @@ def batchTimingEdit(request, id):
             days = request.POST.getlist('forday')
             days = ", ".join(days)
             batchObj.batchName = batchName
-            batchObj.startTime = startTime
-            batchObj.course = Courses.objects.get(id=int(courseID[0]))
+            batchObj.startTime = startTime            
+            batchObj.course = Courses.objects.get(id = courseID)
             batchObj.forclass = forclass
             batchObj.endTime = endTime
             batchObj.days = days
             batchObj.original24time = original
             batchObj.save()
             messages.success(request, "Batch Edited Successfully")
-            return redirect("batchTiming")
+            return redirect("batchTiming2")
         courses = Courses.objects.filter(intitute=inst, archieved=False)
         jsonCources = {}
         for x in courses:
@@ -177,7 +177,18 @@ def batchTimingEdit(request, id):
         return render(request, 'batches/batchTimingEdit.html', params)
     return HttpResponse("You Are not Authenticated for this Page")
 
-
+@login_required(login_url="Login")
+def batchTimingdelete(request, id):
+    if request.session['type'] == "Institute":
+        user = User.objects.get(username=request.session['user'])
+        inst = Institute.objects.get(user=user)
+        batchObj = BatchTiming.objects.get(id=id)       
+       # course = Courses.objects.get(id=id, intitute=inst)
+        batchObj.delete()
+        messages.success(request, "Batch Deleted Succssfully")
+        return redirect("batchTiming2")
+    return HttpResponse("You Are Not Authenticated for this Page")
+        
 @login_required(login_url='Login')
 def postNotice(request):
     context = {}

@@ -111,8 +111,8 @@ Institute Dashboard
                   <thead>
                       <tr>
                           <th class="">#</th>
-                          <th class="">COURSE NAME</th>
-                          <th class="">CLASS</th>
+                          <th class="">Class</th>
+                          <th class="">Course</th>
                           <th class="text-center">Actions</th>
                       </tr>
                   </thead>
@@ -121,8 +121,9 @@ Institute Dashboard
                     {% for i in course %}
                     <tr id="{{ i.pk }}">
                       <td>{{ forloop.counter }}</td>
-                      <td>{{i.courseName}}</td>
                       <td>{{i.forclass}}</td>
+                      <td>{{i.courseName}}</td>
+                      
                       <td class="text-center">
                         <ul class="table-controls">
                             <li>

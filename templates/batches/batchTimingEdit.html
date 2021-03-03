@@ -1,6 +1,6 @@
 {% extends 'dashboard/base.html' %}
 {% load static %}
-{% load datesplit %}
+
 {% block css %}
 <style>
     @import url('https://fonts.googleapis.com/css?family=Numans');
@@ -120,7 +120,7 @@
     }
 </style>
 {% endblock %}
-{% block body %}
+{% block main-content %}
 <div class="container">
     {% if messages %}
     {% for k in messages%}
@@ -153,7 +153,9 @@
 					<div class="">
 					  <label class="control-label col-sm-4">Select Class<span class="text-danger">*</span></label>
 						<select class="multiselect multiple-checkboxes" id="forclass" name='forclass' multiple="multiple" required>
-						  <option selected="selected" disabled>Choose Course</option>
+						  <option selected="selected" >Choose Course</option>
+                          <option value="">I</option>
+                          <option value="">II</option>
 						</select>
 					</div>
 					<br>
@@ -172,7 +174,7 @@
 
                         </div>
                         <input type="time" class="form-control" id="startTime" name='startTime' placeholder="Start Time"
-                            required value="{{ prefilObj.original24time | leftdate }}">
+                            required value="{{ prefilObj.original24time }}">
                     </div>
                     <div class="input-group form-group">
                         <label class="control-label col-sm-4">End Time<span class="text-danger">*</span></label>
@@ -180,7 +182,7 @@
                             <span class="input-group-text"><i class="fas fa-user"></i></span>
                         </div>
                         <input type="time" class="form-control" id="endTime" name='endTime' placeholder="End Time"
-                            required value="{{ prefilObj.original24time | rightdate }}">
+                            required value="{{ prefilObj.original24time }}">
                     </div>
                     <div class="input-group form-group">
                         <label class="control-label col-sm-4" for='forday'>Days<span
@@ -237,4 +239,4 @@
     });
 
 </script>
-{% endblock %}
+{% endblock %} 
