@@ -6,7 +6,9 @@ from .api import CourseAPI, TeachingTypeAPI
 urlpatterns = [
     # path('addCourses/', addCourses, name='AddCourses'),
     path('', courses, name='courses'),
+   # path('course-archive/<int:id>', courseArchive, name='course-archive'),
     path('course-archive', courseArchive, name='course-archive'),
+    path('course-archive/<int:id>', courseArchive, name='course-archive'),
     path('teaching-type', teachingType2, name='teaching-type-2'),
     path('addCourse-api', CourseAPI, name='AddCoursesAPI'),
     path('viewCourses/', viewCourses, name='viewCourses'),

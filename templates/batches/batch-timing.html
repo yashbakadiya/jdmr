@@ -131,18 +131,7 @@ Institute Dashboard
         <br>
         <div class="card-body">
           <form action="." method="post">{% csrf_token %}
-            <div class="input-group form-group">
-              <div class="input-group-prepend">
-                <span class="input-group-text"><i class="fas fa-user"></i>Course Name</span>
-              </div>
-              <select class="form-control" id="courseName" name="courseName" required>
-                <option selected="selected" disabled>Not Selected</option>
-                {% for i in courses %}
-                <option value="{{ i.id }}">{{ i.courseName }}</option>
-                {% endfor %}
-              </select>
-            </div>
-            <br>
+
             <div class="input-group form-group">
               <div class="input-group-prepend">
                 <span class="input-group-text"><i class="fas fa-user"></i>Select Class<span
@@ -157,6 +146,19 @@ Institute Dashboard
                 <option>IV</option>
               </select>
             </div>
+            <br>
+            <div class="input-group form-group">
+              <div class="input-group-prepend">
+                <span class="input-group-text"><i class="fas fa-user"></i>Course Name</span>
+              </div>
+              <select class="form-control" id="courseName" name="courseName" required>
+                <option selected="selected" disabled>Not Selected</option>
+                {% for i in courses %}
+                <option value="{{ i.id }}">{{ i.courseName }}</option>
+                {% endfor %}
+              </select>
+            </div>
+            
             <br>
             <div class="input-group form-group">
               <div class="input-group-prepend">

@@ -89,7 +89,7 @@ def courses(request):
 
 
 @login_required(login_url='Login')
-def courseArchive(request,pk):
+def courseArchive(request):
     if request.session['type'] == "Institute":
         user = User.objects.get(username=request.session['user'])
         inst = Institute.objects.get(user=user)

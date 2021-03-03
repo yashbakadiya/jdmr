@@ -13,7 +13,10 @@ from json import loads
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from math import radians, sin, cos, asin, sqrt
 from geopy.geocoders import Nominatim
+
+
 # Create your views here.
+
 @login_required(login_url="Login")
 def instituteTutor(request):
     if request.session['type']=="Teacher" or request.session['type']=="Student":
