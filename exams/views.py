@@ -1,6 +1,6 @@
 from django.shortcuts import render,redirect,HttpResponse,HttpResponseRedirect
 from accounts.models import Institute,Student,Teacher
-from courses.models import Courses
+from courses.models import Courses, TeachingType
 from batches.models import BatchTiming,BatchTimingTutor
 from exams.models import *
 from django.contrib.auth.decorators import login_required
@@ -149,17 +149,27 @@ def EditExamQuestions(request):
 
 
 
-def FindClases(request):
-    cid = request.GET.get('course_id')
-    if cid:
-        subCategories = Courses.objects.get(id=cid)
-        sub_list = []
-        for sub in subCategories.forclass.split(","):
-            data = {}
-            data['value'] = sub
-            data['text'] = sub
-            sub_list.append(data)
-        return JsonResponse({'sub_categories':sub_list})
+def FindCourses(request):
+    courses={}
+    forclass = request.GET.get('forclass')
+
+    if forclass:
+        course_obj = Courses.objects.filter(forclass=forclass)
+        courses = []
+        for i in course_obj:
+            courses.append((i.id,i.courseName))
+    return JsonResponse({'courses':courses})
+
+def FindTeaching(request):
+    forclass = request.GET.get('forclass')
+    course = request.GET.get('course')
+    if course:
+        courses = Courses.objects.filter(courseName = course)[0]
+
+        if courses:
+            if forclass:
+                teaching = TeachingType.objects.filter(course=courses,forclass=forclass).values_list('teachType')
+    return JsonResponse({'teaching':list(teaching)})
 
 
 @login_required(login_url="Login")
@@ -1141,7 +1151,14 @@ def StudentExamsAll(request):
             examlist = []
 
             for i in exams:
-                if((datetime.combine(i.exam_date,i.exam_time) <= datetime_obj)):
+
+                if i.reexam_date:
+                    re_exam = datetime.combine(i.reexam_date, datetime.max.time())
+
+                else:
+                    re_exam = datetime.combine(i.exam_date,i.exam_time) + dt.timedelta(days=3)
+                
+                if((datetime.combine(i.exam_date,i.exam_time) <= datetime_obj) & (datetime_obj <= re_exam)):
                     examlist.append(i)
                 
             context = {

@@ -107,50 +107,57 @@
 						</div>
 					</div>
 					<hr>
-					<div id='entry1' class="row">
-						<div class="col-sm-3">
-							<div class="form-group">
-								<label for="ctn">Course Taught Name</label>
-								<div>
-									<select id="ctn" name="ctn" class="custom-select form-control" required="required"
-										onclick="addvals(this)">
-										<option disabled selected value>Select an option</option>
-										{% for x in data %}
-										<option value="{{ x.courseID }}">{{ x.course.courseName }}</option>
-										{% endfor %}
-									</select>
+					<div class="outside">
+						<div class="row entry">
+							<div class="col-sm-3">
+								<div class="form-group">
+									<label  class="control-label" for="cn">Class Name</label>
+									<div>
+										<select name="cn" class="cn custom-select form-control" required="required" onchange="selectclass(this)">
+											{% if editTutor.forclass %}
+											<option disabled selected value="{{editTutor.forclass}}">{{editTutor.forclass}}</option>
+											{% else %}
+											<option disabled selected value>Select an option</option>
+											{% endif %}
+											{% for x in data %}
+											<option value="{{ x.0 }}">{{ x.0 }}</option>
+											{% endfor %}
+										</select>
+									</div>
 								</div>
 							</div>
-						</div>
-						<div class="col-sm-3">
-							<div class="form-group">
-								<label for="cn">Class Name</label>
-								<div>
-									<select id="cn" name="cn" class="custom-select form-control multiselect1"
-										required="required" multiple onchange="cnCombine(this)">
-										<option disabled value>Select an option</option>
-									</select>
+							<div class="col-sm-3">
+								<div class="form-group">
+									<label class="control-label" for="ctn">Course Taught</label>
+									<div>
+										<select name="ctn" class="ctn custom-select form-control" required="required" onclick="selectcourse(this)">
+											{% if editTutor.courseName %}
+											<option disabled selected value="{{editTutor.courseName}}">{{editTutor.courseName}}</option>
+											{% else %}
+											<option disabled selected value="">Select an option</option>
+											{% endif %}
+										</select>
+									</div>
 								</div>
 							</div>
-						</div>
-						<div class="col-sm-4">
-							<div class="form-group">
-								<label for="ttn">Teaching Type name</label>
-								<div>
-									<select id="ttn" name="ttn" class="custom-select form-control multiselect2"
-										required="required" multiple onchange="ttnCombine(this)">
-										<option disabled value>Select an option</option>
-									</select>
+							<div class="col-sm-4">
+								<div class="form-group">
+									<label class="control-label" for="ttn">Teaching Type</label>
+									<div>
+										<select name="ttn" class="ttn custom-select form-control" required="required">
+											{% if editTutor.teachType %}
+											<option disabled selected value="{{editTutor.teachType}}">{{editTutor.teachType}}</option>
+											{% else %}
+											<option disabled selected value="">Select an option</option>
+											{% endif %}
+										</select>
+									</div>
 								</div>
 							</div>
-						</div>
-						<input type="hidden" name="cn_combined">
-						<input type="hidden" name="ttn_combined">
-						<input type="hidden" name="ctn_combined">
-						<div class="col-sm-2 form-inline" style="display: flex;align-items: center;">
-							<div class="form-group">
-								<button class="btn btn-warning btn-lg float-right" type="button"
-									onclick="duplicate(this)">Add New</button>
+							<div class="col-sm-2 form-inline" style="display: flex;align-items: center;">
+								<div class="form-group">
+									<button class="btn btn-warning btn-md float-right" type="button" onclick="duplicate(this)">Add New</button>
+								</div>
 							</div>
 						</div>
 					</div>
@@ -177,121 +184,206 @@
 
 </div>
 <script>
-	var counter = 1;
-	var Dclone = document.querySelector('#entry1').cloneNode(true);
-	function emptyit(ele) {
-		while (ele.length > 0) {
-			ele.remove(0);
-		}
-	}
-	function duplicate(data) {
-		var f = document.getElementById('submitForm');
-		if (!f.checkValidity()) {
-			f.reportValidity();
-		}
-		else {
-			var disParent = data.parentElement.parentElement.parentElement;
-			var ctn = disParent.children[0].children[0].children[1].children[0];
-			var cn = disParent.children[1].children[0].children[1].children[0];
-			var ttn = disParent.children[2].children[0].children[1].children[0];
-			ctn.disabled = true;
-			cn.disabled = true;
-			ttn.disabled = true;
-			data.disabled = true;
-			var removeCTN = document.getElementsByName("ctn")
-			var removeOptions = [];
-			for (var x = 0; x < removeCTN.length; x++) {
-				removeOptions.push(removeCTN[x].value);
-			}
-			var clone = Dclone.cloneNode(true);
-			counter += 1;
-			clone.setAttribute('id', 'entry' + counter);
-			var ctnNode = clone.children[0].children[0].children[1].children[0];
-			var cnNode = clone.children[1].children[0].children[1].children[0];
-			var ttnNode = clone.children[2].children[0].children[1].children[0];
-			$(cn).multiselect('disable');
-			$(ttn).multiselect('disable');
-			$(cnNode).multiselect();
-			$(ttnNode).multiselect();
-			var oldData = [];
-			for (var x = 1; x < ctnNode.length; x++) {
-				oldData.push(ctnNode[x].value)
-			}
-			emptyit(ctnNode);
-			for (var x in oldData) {
-				if (!removeOptions.includes(oldData[x])) {
-					addoption(ctnNode, oldData[x]);
-				}
-			}
-			document.querySelector('#mainForm').appendChild(clone)
-		}
-	}
-	function addoption(ele, val) {
-		var opt = document.createElement('option');
-		opt.value = val;
-		opt.innerHTML = val;
-		ele.appendChild(opt);
-	}
-	function addoptions(ele, ar) {
-		for (var x in ar) {
-			addoption(ele, ar[x]);
-		}
-	}
-	function addvals(data) {
-		var mainParentNode = data.parentElement.parentElement.parentElement.parentElement;
-		var cn = mainParentNode.children[1].children[0].children[1].children[0];
-		var ttn = mainParentNode.children[2].children[0].children[1].children[0];
-		var currentval = data.value;
-		var alldata = JSON.parse("{{jsdata|escapejs}}");
-		emptyit(cn);
-		emptyit(ttn);
-		addoptions(cn, alldata[currentval][0])
-		addoptions(ttn, alldata[currentval][1])
-		// htm0 = "";
-		// htm1 = "";
-		// for(i=0;i<alldata[currentval][0].length;i++){
-		// 	htm0 += "<option value='" + alldata[currentval][0][i] + "'>"+alldata[currentval][0][i]+"</option>";
-		// 	htm1 += "<option value='" + alldata[currentval][1][i] + "'>"+alldata[currentval][1][i]+"</option>";
-		// 	$("#cn").append(htm0);
-		// 	$("#ttn").append(htm1);
-		// 	console.log(i);
-		// }
-		$(cn).multiselect("rebuild");
-		$(ttn).multiselect("rebuild");
+	// var counter = 1;
+	// var Dclone = document.querySelector('#entry1').cloneNode(true);
+	// function emptyit(ele) {
+	// 	while (ele.length > 0) {
+	// 		ele.remove(0);
+	// 	}
+	// }
+	// function duplicate(data) {
+	// 	var f = document.getElementById('submitForm');
+	// 	if (!f.checkValidity()) {
+	// 		f.reportValidity();
+	// 	}
+	// 	else {
+	// 		var disParent = data.parentElement.parentElement.parentElement;
+	// 		var ctn = disParent.children[0].children[0].children[1].children[0];
+	// 		var cn = disParent.children[1].children[0].children[1].children[0];
+	// 		var ttn = disParent.children[2].children[0].children[1].children[0];
+	// 		ctn.disabled = true;
+	// 		cn.disabled = true;
+	// 		ttn.disabled = true;
+	// 		data.disabled = true;
+	// 		var removeCTN = document.getElementsByName("ctn")
+	// 		var removeOptions = [];
+	// 		for (var x = 0; x < removeCTN.length; x++) {
+	// 			removeOptions.push(removeCTN[x].value);
+	// 		}
+	// 		var clone = Dclone.cloneNode(true);
+	// 		counter += 1;
+	// 		clone.setAttribute('id', 'entry' + counter);
+	// 		var ctnNode = clone.children[0].children[0].children[1].children[0];
+	// 		var cnNode = clone.children[1].children[0].children[1].children[0];
+	// 		var ttnNode = clone.children[2].children[0].children[1].children[0];
+	// 		$(cn).multiselect('disable');
+	// 		$(ttn).multiselect('disable');
+	// 		$(cnNode).multiselect();
+	// 		$(ttnNode).multiselect();
+	// 		var oldData = [];
+	// 		for (var x = 1; x < ctnNode.length; x++) {
+	// 			oldData.push(ctnNode[x].value)
+	// 		}
+	// 		emptyit(ctnNode);
+	// 		for (var x in oldData) {
+	// 			if (!removeOptions.includes(oldData[x])) {
+	// 				addoption(ctnNode, oldData[x]);
+	// 			}
+	// 		}
+	// 		document.querySelector('#mainForm').appendChild(clone)
+	// 	}
+	// }
+	// function addoption(ele, val) {
+	// 	var opt = document.createElement('option');
+	// 	opt.value = val;
+	// 	opt.innerHTML = val;
+	// 	ele.appendChild(opt);
+	// }
+	// function addoptions(ele, ar) {
+	// 	for (var x in ar) {
+	// 		addoption(ele, ar[x]);
+	// 	}
+	// }
+	// function addvals(data) {
+	// 	var mainParentNode = data.parentElement.parentElement.parentElement.parentElement;
+	// 	var cn = mainParentNode.children[1].children[0].children[1].children[0];
+	// 	var ttn = mainParentNode.children[2].children[0].children[1].children[0];
+	// 	var currentval = data.value;
+	// 	var alldata = JSON.parse("{{jsdata|escapejs}}");
+	// 	emptyit(cn);
+	// 	emptyit(ttn);
+	// 	addoptions(cn, alldata[currentval][0])
+	// 	addoptions(ttn, alldata[currentval][1])
+	// 	// htm0 = "";
+	// 	// htm1 = "";
+	// 	// for(i=0;i<alldata[currentval][0].length;i++){
+	// 	// 	htm0 += "<option value='" + alldata[currentval][0][i] + "'>"+alldata[currentval][0][i]+"</option>";
+	// 	// 	htm1 += "<option value='" + alldata[currentval][1][i] + "'>"+alldata[currentval][1][i]+"</option>";
+	// 	// 	$("#cn").append(htm0);
+	// 	// 	$("#ttn").append(htm1);
+	// 	// 	console.log(i);
+	// 	// }
+	// 	$(cn).multiselect("rebuild");
+	// 	$(ttn).multiselect("rebuild");
 
-		var saveVal = mainParentNode.children[5]
-		saveVal.value = data.value;
-		console.log(saveVal.value)
-	}
-	function cnCombine(data) {
-		var mainParentNode = data.parentElement.parentElement.parentElement.parentElement;
-		var cn = mainParentNode.children[3];
-		var result = [];
-		var options = data && data.options;
-		var opt;
-		for (var i = 0, iLen = options.length; i < iLen; i++) {
-			opt = options[i];
-			if (opt.selected) {
-				result.push(opt.value || opt.text);
-			}
-		}
-		cn.value = result.join(', ');
-	}
-	function ttnCombine(data) {
-		var mainParentNode = data.parentElement.parentElement.parentElement.parentElement;
-		var ttn = mainParentNode.children[4];
-		var result = [];
-		var options = data && data.options;
-		var opt;
-		for (var i = 0, iLen = options.length; i < iLen; i++) {
-			opt = options[i];
-			if (opt.selected) {
-				result.push(opt.value || opt.text);
-			}
-		}
-		ttn.value = result.join('\n');
-	}
-	$("#cn").multiselect();
-	$("#ttn").multiselect();
+	// 	var saveVal = mainParentNode.children[5]
+	// 	saveVal.value = data.value;
+	// 	console.log(saveVal.value)
+	// }
+	// function cnCombine(data) {
+	// 	var mainParentNode = data.parentElement.parentElement.parentElement.parentElement;
+	// 	var cn = mainParentNode.children[3];
+	// 	var result = [];
+	// 	var options = data && data.options;
+	// 	var opt;
+	// 	for (var i = 0, iLen = options.length; i < iLen; i++) {
+	// 		opt = options[i];
+	// 		if (opt.selected) {
+	// 			result.push(opt.value || opt.text);
+	// 		}
+	// 	}
+	// 	cn.value = result.join(', ');
+	// }
+	// function ttnCombine(data) {
+	// 	var mainParentNode = data.parentElement.parentElement.parentElement.parentElement;
+	// 	var ttn = mainParentNode.children[4];
+	// 	var result = [];
+	// 	var options = data && data.options;
+	// 	var opt;
+	// 	for (var i = 0, iLen = options.length; i < iLen; i++) {
+	// 		opt = options[i];
+	// 		if (opt.selected) {
+	// 			result.push(opt.value || opt.text);
+	// 		}
+	// 	}
+	// 	ttn.value = result.join('\n');
+	// }
+	// $("#cn").multiselect();
+	// $("#ttn").multiselect();
+	function selectclass(el) {
+    var selected = el.value;
+    $.ajax({
+      url: "{% url 'findCourse' %}",
+      data: {
+        forclass: selected,
+      },
+      success: function (data) {
+        courses = data.courses;
+        $(el).closest(".entry").find(".ctn").empty().trigger("change");
+        for (i = 0; i < courses.length; i++) {
+          var newOption = new Option(
+            courses[i][1],
+            courses[i][1],
+            false,
+            false
+          );
+          $(el).closest(".entry").find(".ctn").append(newOption).trigger("change");
+        }
+      },
+    });
+  }
+
+  function selectcourse(el) {
+      var selected_course = el.value;
+    var selected_class = $(el).closest(".entry").find(".cn").val();
+    $.ajax({
+      url: "{% url 'findTeaching' %}",
+      data: {
+        forclass: selected_class,
+        course: selected_course
+      },
+      success: function (data) {
+        teaching = data.teaching;
+        $(el).closest(".entry").find(".ttn").empty().trigger("change");
+        for (i = 0; i < teaching.length; i++) {
+          var newOption = new Option(
+            teaching[i][0],
+            teaching[i][0],
+            false,
+            false
+          );
+          $(el).closest(".entry").find(".ttn").append(newOption).trigger("change");
+        }
+      },
+    });
+  }
+
+  function duplicate(){
+      $('.outside').append(`<div class="row entry">
+                            <div class="col-sm-3">
+                            <div class="form-group">
+                                <label  class="control-label" for="cn">Class Name</label>
+                                <div>
+                                    <select name="cn" class="cn custom-select form-control" required="required" onchange="selectclass(this)">
+                                        <option disabled selected value>Select an option</option>
+                                        {% for x in data %}
+                                        <option value="{{ x.0 }}">{{ x.0 }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-3">
+                            <div class="form-group">
+                                <label class="control-label" for="ctn">Course Taught</label>
+                                <div>
+                                    <select name="ctn" class="ctn custom-select form-control" required="required" onclick="selectcourse(this)">
+                                        <option disabled selected value="">Select an option</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-4">
+                            <div class="form-group">
+                                <label class="control-label" for="ttn">Teaching Type</label>
+                                <div>
+                                    <select name="ttn" class="ttn custom-select form-control" required="required">
+                                        <option disabled selected value="">Select an option</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        </div>`)
+  }
 </script>
 {% endblock %}

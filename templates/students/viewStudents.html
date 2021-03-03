@@ -15,25 +15,27 @@
     {% endfor %}
     {% endif %}
         <div class="card mb-4 ">
-            <div class="card-body">
-                <!-- Grid row -->
-                <div class="row">
-                    <!-- Grid column -->
-                    <div class="col-md-8">
-                        <h2 class="pt-3 pb-4 text-center font-bold font-up deep-purple-text" style="color: rgb(66, 8, 8);">List of Enrolled Students</h2>
-                    </div>
-                    <div class="col-md-4">
-                        <input id="searchbox" type="text" class="form-control" name='srh' placeholder="Enter Student Name or Email" required>
-                    </div>
-                    <!-- Grid column -->
+            <!-- Grid row -->
+            <div class="card-header">
+            <div class="row">
+                <!-- Grid column -->
+                <div class="col-md-8">
+                    <h2 style="color: rgb(0, 0, 0);">List of Enrolled Students</h2>
                 </div>
+                <div class="col-md-4">
+                    <input id="searchbox" type="text" class="form-control" name='srh' placeholder="Enter Student Name or Email" required>
+                </div>
+            </div>
+                <!-- Grid column -->
+            </div>
+            <div class="card-body">
                 <!-- Grid row -->
                 <div style="overflow-x:scroll;">
                 <form action=" " method="post">{% csrf_token %}
                     <!--Table-->
+                    <div class="table-responsive">
                     <table class="table table-striped">
                         <!--Table head-->
-                        <thead>
                             <tr>
                                 <th>Student Name</th>
                                 <th>First Name</th>
@@ -43,16 +45,14 @@
                                 <th>Phone Number</th>
                                 <th>Course Enrolled</th>
                                 <th>Class</th>
-                                <th>Delete</th>
-                                <th>Update</th>
-                                <th>Archive</th>
+                                <th class="text-center">Delete</th>
+                                <th class="text-center">Update</th>
+                                <th class="text-center">Archive</th>
                             </tr>
-                        </thead>
                         <!--Table head-->
                         <!--Table body-->
-                            <tbody>
                                 {% for student,course in students %}
-                                    <tr class="tr">
+                                    <tr class="main-row">
                                         <td>{{student.student.user.username}}</td>
                                         <td>{{student.student.user.first_name}}</td>
                                         <td>{{student.student.user.last_name}}</td>
@@ -61,20 +61,20 @@
                                         <td>{{student.student.phone}}</td>
                                         <td>{{course.courseName}}</td>
                                         <td>{{student.forclass}}</td>
-                                        <td>
+                                        <td class="text-center">
                                             <a href="{% url 'deleteStudent' student.id %}" class="btn btn-danger btn-sm">DELETE</a>
                                         </td>
-                                        <td>
+                                        <td class="text-center">
                                             <a href="{% url 'editStudent' student.id %}" class="btn btn-danger btn-sm">EDIT</a>
                                         </td>
-                                        <td>
+                                        <td class="text-center">
                                             <input type="checkbox" class="bigcheckbox" name="check" value="{{student.id}}">
                                         </td>
                                     </tr>
                                 {% endfor %}
-                            </tbody>
                         <!--Table body-->
                     </table>
+                </div>
                     <!--Table-->
                     <div class="form-group">
                         <input type="submit" value="Move to Archive" class="btn btn-danger float-right">
@@ -87,7 +87,7 @@
         </div>
 </main>
 <script type="text/javascript">
-    trlist = $("tbody>tr");
+    trlist = $(".main-row");
     $("body").on('input',"#searchbox",function(){
         trlist.hide();
         search = this.value.toLowerCase();

@@ -24,10 +24,11 @@
     </div>
     {% endfor %}
     {% endif %}
-    <div id="card">
+    <div class="card" style="color: black;">
+      <div class="card-header">
     <h3 style="align-items: center;text-align: center;">Add Exam</h3>
-    <hr>
-    <form id="frm" method="post">{% csrf_token %}
+  </div>
+    <form id="frm" class="mb-4 mt-4" method="post">{% csrf_token %}
       <div class="mx-2 row" id="INSTBATCH">
         <div class="col">
           <label for="validationCustom01"><strong>Select Course<span class="red">*</span></strong></label>

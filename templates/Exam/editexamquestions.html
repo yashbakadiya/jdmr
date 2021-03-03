@@ -15,12 +15,12 @@
     {% endfor %}
     {% endif %}
         <div class="card mb-4">
-            <div class="card-body">
+            <div class="card-header">
                 <!-- Grid row -->
                 <div class="row">
                     <!-- Grid column -->
                     <div class="col-md-8">
-                        <h2 class="pt-3 pb-4 text-center font-bold font-up deep-purple-text" style="color: rgb(66, 8, 8);">List of Exams</h2>
+                        <h2 style="color: rgb(0, 0, 0);">List of Exams</h2>
                     </div>
 
                     <div class="col-md-4">
@@ -29,12 +29,14 @@
 
                     <!-- Grid column -->
                 </div>
+            </div>
+                <div class="card-body">
                 <!-- Grid row -->
                 <form action="" method="post">{% csrf_token %}
                     <!--Table-->
-                    <table class="table">
+                    <div class="table-responsive">
+                    <table class="table table-striped">
                         <!--Table head-->
-                        <thead>
                             <tr>
                                 <th>Exam Name</th>
                                 <th>Course</th>
@@ -46,12 +48,10 @@
                                 <th>Exam status</th>
                                 <th class="text-center" colspan="2">Action</th>
                             </tr>
-                        </thead>
                         <!--Table head-->
                         <!--Table body-->
-                        <tbody>
                             {% for i in exams %}
-                            <tr>
+                            <tr class="main-row">
                                 <td><p style="color: black;font-size: 14px;">{{i.Name}}</p></td>
                                 <td><p style="color: black;font-size: 14px;">{{i.course.courseName}}</p></td>
                                 <td>{{i.Batch}}</td>
@@ -60,21 +60,21 @@
                                 <td>{{i.question_count}}</td>
                                 <td>{{i.pass_percentage}}</td>
                                 {% if i.status %}
-                                <td><a href="{% url 'toggle' i.id %}" class="btn btn-danger p-1">Deactivate</a></td>
+                                <td class="text-center"><a href="{% url 'toggle' i.id %}" class="btn btn-danger p-1">Deactivate</a></td>
                                 {% else %}
-                                <td><a href="{% url 'toggle' i.id %}" class="btn btn-primary p-1">Activate</a></td>
+                                <td class="text-center"><a href="{% url 'toggle' i.id %}" class="btn btn-primary p-1">Activate</a></td>
                                 {% endif %}
-                                <td>
+                                <td class="text-center">
                                     <a class="btn btn-warning" href="{% url 'editquestions' i.id %}"><i class="flaticon-pencil-line" style="font-size:medium;"></i></a>
                                 </td>
-                                <td>
+                                <td class="text-center">
                                     <a class="btn btn-danger" href="{% url 'DeleteExam' i.id %}"><i class="flaticon-delete-fill" style="font-size:medium;"></i></a>
                                 </td>
                             </tr>
                             {% endfor %}
-                        </tbody>
                         <!--Table body-->
                     </table>
+                </div>
                     <!--Table-->
                 </form>
                 <br>
@@ -82,7 +82,7 @@
         </div>
     </main>
     <script type="text/javascript">
-        trlist = $("tbody>tr");
+        trlist = $(".main-row");
         $("body").on('input',"#searchbox",function(){
             trlist.hide();
             search = this.value.toLowerCase();

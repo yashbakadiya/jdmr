@@ -225,21 +225,23 @@
     {% endif %}
         <div class="mt-5">
             <div class="card mb-4">
-                <div class="card-body">
+                <div class="card-header">
                     <!-- Grid row -->
                     <div class="row">
                         <!-- Grid column -->
                         <div class="col-md-12">
-                            <h2 class="pt-3 pb-4 text-center font-bold font-up deep-purple-text" style="color: rgb(66, 8, 8);">List of Archived Students</h2>
+                            <h2 style="color: rgb(0, 0, 0);">List of Archived Students</h2>
                         </div>
                         <!-- Grid column -->
                     </div>
+                </div>
+                    <div class="card-body">
                     <!-- Grid row -->
                     <form action=" " method="post">{% csrf_token %}
                         <!--Table-->
+                        <div class="table-responsive">
                         <table class="table table-striped">
                             <!--Table head-->
-                            <thead>
                                 <tr>
                                     <th>Student Name</th>
                                     <th>Email Id</th>
@@ -247,10 +249,8 @@
                                     <th>Delete</th>
                                     <th>Remove Archive</th>
                                 </tr>
-                            </thead>
                             <!--Table head-->
                             <!--Table body-->
-                            <tbody>
                                 {% for student in students %}
                                 <tr class="tr">
                                     <td>{{student.student.user.username}}</td>
@@ -264,9 +264,9 @@
                                     </td>
                                 </tr>
                                 {% endfor %}
-                            </tbody>
                             <!--Table body-->
                         </table>
+                    </div>
                         <!--Table-->
                         <div class="form-group">
                             <input type="submit" value="Remove from Archive" class="btn btn-danger float-right">

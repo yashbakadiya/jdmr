@@ -227,21 +227,23 @@
     {% endfor %}
     {% endif %}
             <div class="card mb-4">
-                <div class="card-body">
-                    <!-- Grid row -->
-                    <div class="row">
-                        <!-- Grid column -->
-                        <div class="col-md-12">
-                            <h2 class="pt-3 pb-4 text-center font-bold font-up deep-purple-text" style="color: rgb(66, 8, 8);">List of Archived Tutors</h2>
-                        </div>
-                        <!-- Grid column -->
+                <!-- Grid row -->
+                <div class="card-header">
+                <div class="row">
+                    <!-- Grid column -->
+                    <div class="col-md-12">
+                        <h2 style="color: rgb(0, 0, 0);">List of Archived Tutors</h2>
                     </div>
+                    <!-- Grid column -->
+                </div>
+            </div>
+                <div class="card-body">
                     <!-- Grid row -->
                     <form action="" method="post">{% csrf_token %}
                         <!--Table-->
+                        <div class="table-responsive">
                         <table class="table table-striped" style="font-size:small;">
                             <!--Table head-->
-                            <thead>
                                 <tr>
                                     <th>Tutor Name</th>
                                     <th>Email Id</th>
@@ -254,10 +256,8 @@
                                     <th>Delete</th>
                                     <th>Remove</th>
                                 </tr>
-                            </thead>
                             <!--Table head-->
                             <!--Table body-->
-                            <tbody>
                                 {% for i in tutor reversed %}
                                     <tr>
                                         <td>{{i.teacher.user.username}}</td>
@@ -285,9 +285,9 @@
 
                                     </tr>
                                 {% endfor %}
-                            </tbody>
                             <!--Table body-->
                         </table>
+                    </div>
                         <!--Table-->
                         <div class="form-group">
                             <input type="submit" value="Remove from Archive" class="btn btn-danger float-right">

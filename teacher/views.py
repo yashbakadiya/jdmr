@@ -30,7 +30,6 @@ def addTutors(request):
         inst = Institute.objects.get(user=user)
         if request.method == "POST":
             print(request.POST)
-            # return redirect('addTutors')
             firstName = request.POST.get('firstName', '')
             lastName = request.POST.get('lastName', '')
             email = request.POST.get('email', '')
@@ -55,10 +54,15 @@ def addTutors(request):
                 user2.save()
                 teacher = Teacher(user=user2,address=location,phone=phone)
                 teacher.save()
-                ctn = request.POST.getlist('ctn_combined')
-                cn = request.POST.getlist('cn_combined')
-                ttn = request.POST.getlist('ttn_combined')
-                ttn = [x.replace("\r","") for x in ttn]
+                # ctn = request.POST.getlist('ctn_combined')
+                # cn = request.POST.getlist('cn_combined')
+                # ttn = request.POST.getlist('ttn_combined')
+                # ttn = [x.replace("\r","") for x in ttn]
+
+                ctn = request.POST.getlist('ctn')
+                cn = request.POST.getlist('cn')
+                ttn = request.POST.getlist('ttn')
+
                 availability = request.POST.get('availability')
                 if(availability=='weekly'):
                     availability=1
@@ -74,20 +78,19 @@ def addTutors(request):
                     addTeacher.save()
                 messages.success(request,"Teacher Added Successfully")
                 return redirect("viewTutors")
-        data = TeachingType.objects.values_list('courseID','forclass','teachType','course')
-        processed_data = {}
-        for x in data:
-            processed_data[x[0]] = [x[1].split(", "),x[2].split("\n")]
+
+        # data = TeachingType.objects.values_list('courseID','forclass','teachType','course')
+        # processed_data = {}
+        # for x in data:
+        #     processed_data[x[0]] = [x[1].split(", "),x[2].split("\n")]
         return render(
             request,
             'teacher/addTutors.html',
             {
-                "data":TeachingType.objects.filter(course__intitute=inst),
-                "jsdata":dumps(processed_data)
+                "data":TeachingType.objects.filter(course__intitute=inst).values_list('forclass').distinct(),
             }
         )
     return HttpResponse("You Are Not Authenticated for this view")
-
 
 
 @login_required(login_url="Login")
@@ -101,7 +104,7 @@ def viewTutors(request):
         for course in courses:
             for tutor in tutors:
                 if tutor.courseName:
-                    if int(tutor.courseName)==course.id:
+                    if tutor.courseName==course.courseName:
                         courselist.append(course.courseName)
         tutors = zip(tutors,courselist)
         params = {'tutors':tutors}
@@ -136,14 +139,17 @@ def editTutor(request,id):
         inst = Institute.objects.get(user=user)
         editTutorObj = enrollTutors.objects.get(id = id)
         teacher = Teacher.objects.get(user__username=editTutorObj.teacher.user.username)
-        data = TeachingType.objects.values_list('courseID','forclass','teachType','course')
-        processed_data = {}
-        for x in data:
-            processed_data[x[0]] = [x[1].split(", "),x[2].split("\n")]
+        # data = TeachingType.objects.values_list('courseID','forclass','teachType','course')
+        # processed_data = {}
+        # for x in data:
+        #     processed_data[x[0]] = [x[1].split(", "),x[2].split("\n")]
         if request.method == "POST":
-            ctn = request.POST.get('ctn_combined')
-            cn = request.POST.get('cn_combined')
-            ttn = request.POST.get('ttn_combined')
+            # ctn = request.POST.get('ctn_combined')
+            # cn = request.POST.get('cn_combined')
+            # ttn = request.POST.get('ttn_combined')
+            ctn = request.POST.get('ctn')
+            cn = request.POST.get('cn')
+            ttn = request.POST.get('ttn')
             availability = request.POST.get('availability')
             if availability=="weekly":
                 availability = 1
@@ -177,9 +183,9 @@ def editTutor(request,id):
             messages.success(request,"Teacher Updated Successfully")
             return redirect("viewTutors")
         return render(request,"teacher/editTutorMini.html",{
-                "data":TeachingType.objects.filter(course__intitute=inst),
-                "jsdata":dumps(processed_data),
-                "tutorBaseData":teacher
+                "data":TeachingType.objects.filter(course__intitute=inst).values_list('forclass').distinct(),
+                "tutorBaseData":teacher,
+                "editTutor":editTutorObj
             })
     return HttpResponse("You Are Not Authenticated for this view")
 
@@ -231,10 +237,13 @@ def AddalreadyExistsTutor(request,id):
         user = User.objects.get(username=request.session['user'])
         inst = Institute.objects.get(user=user)
         if request.method=="POST":
-            ctn = request.POST.getlist('ctn_combined')
-            cn = request.POST.getlist('cn_combined')
-            ttn = request.POST.getlist('ttn_combined')
-            ttn = [x.replace("\r","") for x in ttn]
+            # ctn = request.POST.getlist('ctn_combined')
+            # cn = request.POST.getlist('cn_combined')
+            # ttn = request.POST.getlist('ttn_combined')
+            # ttn = [x.replace("\r","") for x in ttn]
+            ctn = request.POST.getlist('ctn')
+            cn = request.POST.getlist('cn')
+            ttn = request.POST.getlist('ttn')
             availability = request.POST.get('availability')
             if(availability=='weekly'):
                 availability=1
@@ -250,16 +259,16 @@ def AddalreadyExistsTutor(request,id):
                 addTeacher.save()
             messages.success(request,"Teacher Added Successfully")
             return redirect("viewTutors")
-        data = TeachingType.objects.values_list('courseName','forclass','teachType')
-        processed_data = {}
-        for x in data:
-            processed_data[x[0]] = [x[1].split(", "),x[2].split("\n")]
+
+        # data = TeachingType.objects.values_list('courseID','forclass','teachType','course')
+        # processed_data = {}
+        # for x in data:
+        #     processed_data[x[0]] = [x[1].split(", "),x[2].split("\n")]
         return render(
             request,
             'teacher/addTutorExist.html',
             {
-                "data":TeachingType.objects.filter(course__intitute=inst),
-                "jsdata":dumps(processed_data),
+                "data":TeachingType.objects.filter(course__intitute=inst).values_list('forclass').distinct(),
                 'teacher':teacher
             }
         )
