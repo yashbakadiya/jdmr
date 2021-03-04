@@ -25,7 +25,8 @@ def courses(request):
     if request.session['type'] == "Institute":
         user = User.objects.get(username=request.session['user'])
         inst = Institute.objects.get(user=user)
-        courses = Courses.objects.filter(intitute = inst)
+        courses = Courses.objects.filter(intitute = inst,archieved=False)
+
        # courses = Courses.objects.all()
        # courses = Courses.objects.filter(intitute = inst)
        # courses = Courses.objects.all()
@@ -59,7 +60,7 @@ def courses(request):
                     print('if else for class',forclass)  
                     Courses(courseName=courseName,
                      forclass=forclass,
-                     intitute=institute,
+                     intitute=institute,                     
                      courseID=course_ID).save()
                     messages.success(request, 'Course Has been added successfully.')
                     return redirect('courses')
@@ -123,7 +124,8 @@ def courseArchivefirst(request,id):
         user = User.objects.get(username=request.session['user'])
         inst = Institute.objects.get(user=user)        
         
-        course = Courses.objects.get(id=id, intitute=inst)
+        course = Courses.objects.get(id=id)
+
         print('archieve id' ,id)
         course.archieved = True
         course.save()
