@@ -26,7 +26,7 @@ class AddFeesC(models.Model):
     archieved = models.BooleanField(default=False)
 
     def __str__(self):
-        return self.course.courseName + " ," + str(self.fee_amt)
+        return self.course.courseName +" "+ str(self.fee_amt) +" "+self.forclass
 
 
 class SubmitFees(models.Model):

@@ -285,6 +285,14 @@ input:focus{
             <div class="card-body">
                 <form action="" method="post">
                     {% csrf_token %}
+
+
+
+
+
+
+
+
                     <div>
                         <label class="control-label col-sm-4">Courses Enrolled<span class="text-danger">*</span></label>
                         <select class="form-control col-sm-6" id="courseID" name="courseID" style="display: inline-block;">
@@ -297,18 +305,25 @@ input:focus{
                     <br>
                     <div>
                         <label class="control-label col-sm-4">Class<span class="text-danger">*</span></label>
-                        <select class="form-control col-sm-6" id="forclass" name="forclass" style="display: inline-block;">
-                            {% for class in classes %}
-                            <option value="{{ class }}">{{ class }}</option>
+                        <select class="form-control col-sm-6" id="forclas" name="forclas" style="display: inline-block;">
+                            <option selected disabled>None Selected</option>
+                            {% for i in courses %}
+                            <option value="class">{{ i.forclass }}</option>
                             {% endfor %}
                         </select>
+                        <!-- <select class="form-control col-sm-6" id="forclass" name="forclass" style="display: inline-block;">
+                            {% for i in courses %}
+                            <option value="{{ class }}">{{ i.forclass }}</option>
+                            {% endfor %}
+                        </select> -->
                     </div>
                     <br>
                     <div>
                         <label class="control-label col-sm-4">Teaching Type<span class="text-danger">*</span></label>
                         <select class="form-control col-sm-6" id="check" name="check" style="display: inline-block;">
+                            <!-- <option value="">online</option> -->
                             {% for teach in teachings %}
-                            <option value="{{ teach }}">{{ teach }}</option>
+                            <option value="{{ teach }}"><h5>online</h5> </option>
                             {% endfor %}
                         </select>
                     </div>
