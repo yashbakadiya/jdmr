@@ -12,8 +12,8 @@ class Courses(models.Model):
     archieved = models.BooleanField(default=False)
 
     def __str__(self):
-        return self.courseName + " "+self.forclass
-     #   return str(self.id)+" "+self.courseName + " "+self.forclass
+     #   return self.courseName+" "+self.forclass
+        return str(self.id)+" "+self.courseName + " "+self.forclass
 
 
 class TeachingType(models.Model):
@@ -26,4 +26,4 @@ class TeachingType(models.Model):
     timePeriod = models.CharField(max_length=255, default="")
 
     def __str__(self):
-        return self.course.courseName+" ,"+" "+self.forclass+" ,"+" "+self.teachType
+        return self.course.courseName+" "+self.course.forclass+" "+self.teachType

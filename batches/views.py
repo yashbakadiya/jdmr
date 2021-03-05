@@ -57,7 +57,7 @@ def batchTiming2(request):
                     endTime = ampm(endTime)
                 except Exception as e:
                     print(e)
-                days = request.POST.getlist('forday')
+                days = request.POST.getlist('fordays')
                 days = ", ".join(days)
                 course = Courses.objects.get(id = courseID)
                 batchObj = BatchTiming(
@@ -110,7 +110,8 @@ def batchTiming(request):
                     endTime = ampm(endTime)
                 except Exception as e:
                     print(e)
-                days = request.POST.getlist('forday')
+                days = request.POST.getlist('fordays')
+                print('days',days)
                 days = ", ".join(days)
                 batchObj = BatchTiming(
                     course=Courses.objects.get(id=int(courseID[0])),

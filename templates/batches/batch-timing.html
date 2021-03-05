@@ -186,8 +186,8 @@ Institute Dashboard
                 <span class="input-group-text"><i class="fas fa-user"></i>Select Days<span
                     class="text-danger">*</span></span>
               </div>
-              <select class="selectpicker multiselect multiple-checkboxes" data-actions-box="true" id="forclass"
-                name='forclass' multiple="multiple" required>
+              <select class="selectpicker multiselect multiple-checkboxes" data-actions-box="true" id="days"
+                name='fordays' multiple="multiple" required>
                 <option value="Sunday">Sunday</option>
                 <option value="Monday">Monday</option>
                 <option value="Tuesday">Tuesday</option>
@@ -247,10 +247,10 @@ Institute Dashboard
                     <tr>
                         <td>{{i.batchName}}</td>
                         <td>{{i.course.courseName}}</td>
-                        <td>{{i.forclass|slice:"0:1"}}</td>
+                        <td>{{i.course.forclass}}</td>
                         <td>{{i.startTime}}</td>
                         <td>{{i.endTime}}</td>
-                        <td>{{i.forclass|slice:"3:20"}}</td>
+                        <td>{{i.days}}</td>
                         <td><a href="{% url 'batchTimingEdit' i.id %}" class="btn btn-danger">EDIT</a></td>
                         <td><a href="{% url 'batchTimingdelete' i.id %}" class="btn btn-danger">Delete</a></td>
                         <!-- <td>

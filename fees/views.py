@@ -20,22 +20,27 @@ def addFeesC(request):
     if request.session['type'] == 'Institute':
         user = User.objects.get(username=request.session['user'])
         inst = Institute.objects.get(user=user)
-        course = TeachingType.objects.filter(
-            course__intitute=inst, course__archieved=False)
+        course = TeachingType.objects.filter(course__intitute=inst, course__archieved=False)
+        print('couseteaching',course)
+        forclas=Courses.objects.all()
+        print('forclass',forclas)
+        
         courses = []
+        print('course_teaching',course)
+
         for c in course:
             cou = Courses.objects.get(id=c.courseID)
             courses.append(cou)
-        params = {'courses': courses}
+            
+        print('courses',courses)
+        params = {'courses': courses, 'forclas':forclas}
         if request.method == "POST":
-            forclass = request.POST.get('forclass')
+            forclass = request.POST.get('forclas')
             teachType = request.POST.get('teachType')
             if 'ajax_getinfo' in request.POST:
                 courseID = request.POST.get('courseID')
-                qry = TeachingType.objects.filter(
-                    Q(courseID__icontains=courseID))
-                a = TeachingType.objects.filter(Q(courseID__icontains=courseID)).values(
-                    'forclass', 'teachType', 'duration')
+                qry = TeachingType.objects.filter(Q(courseID__icontains=courseID))
+                a = TeachingType.objects.filter(Q(courseID__icontains=courseID)).values('forclass', 'teachType', 'duration')
                 b = list(a)
                 c = b[0]["forclass"]
                 t = b[0]["teachType"]
@@ -49,7 +54,7 @@ def addFeesC(request):
             else:
                 courseID = request.POST.get('courseID')
                 course = Courses.objects.filter(id=courseID, intitute=inst)[0]
-                forclass = request.POST.get('forclass')
+                forclass = request.POST.get('forclas')
                 teachType = request.POST.get('check')
                 duration = request.POST.get('duration')
                 discValidity = request.POST.get('discValidity')
