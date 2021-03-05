@@ -106,9 +106,9 @@ WSGI_APPLICATION = 'tutorSearch.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'jdmr',
+        'NAME': '',
         'USER': 'postgres',
-        'PASSWORD': 'Yashkul@205',
+        'PASSWORD': '',
         'HOST':'localhost',
         'PORT':'5432',
     },
