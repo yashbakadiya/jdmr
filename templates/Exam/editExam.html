@@ -33,26 +33,24 @@
     <form class="mt-4" method="post">{% csrf_token %}
       <div class="mx-2 row">
         <div class="col">
-          <label for="validationCustom01"><strong>Select Course<span class="red">*</span></strong></label>
-          <select id="select_course" name="course" style="width: 100%" class="js-example-basic-single form-control"
-            value="{{exam.course.courseName}}">
-            <option class="form-control" selected disabled name="category" value="{{exam.course.id}}">{{exam.course.courseName}}
-            </option>
-            {% for cat in courses %}
-            <option class="form-control" value="{{cat.id}}" name="category">{{cat.courseName}} </option>
+          <label for="validationCustom01"><strong>Select Class <span class="red">*</span></strong></label>
+          <select id="class_select" name="class" style="width: 100%;" class="js-example-basic-single form-control" onchange="selectclass()">
+            <option class="form-control" selected disabled value="{{exam.Class}}">{{exam.Class}}</option>
+            {% for class in classes %}
+            <option class="form-control" value="{{class.0}}">{{class.0}}</option>
             {% endfor %}
           </select>
         </div>
         <div class="col">
-          <label for="validationCustom01"><strong>Select Class <span class="red">*</span></strong></label>
-          <select id="class_select" name="class" style="width: 100%;" class="js-example-basic-single form-control">
-            <option class="form-control" selected disabled value="exam.course">{{exam.Class}}</option>
+          <label for="validationCustom01"><strong>Select Course<span class="red">*</span></strong></label>
+          <select id="select_course" name="course" style="width: 100%" class="js-example-basic-single form-control">
+            <option class="form-control" selected disabled value="{{exam.course.id}}">{{exam.course.courseName}}
+            </option>
           </select>
         </div>
         <div class="col">
           <label for="validationCustom01"><strong>Select Batch <span class="red">*</span></strong></label>
-          <select id="batch_select" name="batch" style="width: 100%;" class="js-example-basic-single form-control"
-            value="{{exam.Batch}}">
+          <select id="batch_select" name="batch" style="width: 100%;" class="js-example-basic-single form-control">
             <option class="form-control" selected disabled>{{exam.Batch}}</option>
             {% for cat in batch %}
             <option class="form-control" value="{{cat.batchName}}">{{cat.batchName}}</option>
@@ -203,28 +201,30 @@ $(document).ready(function() {
 $('.js-example-basic-single').select2();
 });
 
-$("#select_course").change(function () {
-var selected = $(this).val();
-$.ajax({
-  url: "{% url 'classes' %}",
-  data: {
-    course_id: selected,
-  },
-  success: function (data) {
-    categories = data.sub_categories;
-    $("#class_select").empty().trigger("change");
-    for (i = 0; i < categories.length; i++) {
-      var newOption = new Option(
-        categories[i].text,
-        categories[i].value,
-        false,
-        false
-      );
-      $("#class_select").append(newOption).trigger("change");
-    }
-  },
-});
-});
+
+function selectclass() {
+    var selected = $("#class_select").val();
+    $.ajax({
+      url: "{% url 'findCourse' %}",
+      data: {
+        forclass: selected,
+      },
+      success: function (data) {
+        courses = data.courses;
+        console.log(courses)
+        $("#select_course").empty().trigger("change");
+        for (i = 0; i < courses.length; i++) {
+          var newOption = new Option(
+            courses[i][1],
+            courses[i][0],
+            false,
+            false
+          );
+          $("#select_course").append(newOption).trigger("change");
+        }
+      },
+    });
+  }
 </script>
 </div>
 {% endblock main-content %}

@@ -48,18 +48,18 @@
       </div>
       <div class="mx-2 row" id="INSTBATCH">
         <div class="col">
-          <label for="validationCustom01"><strong>Select Course<span class="red">*</span></strong></label>
-          <select id="select_course" name="course" style="width: 100%" class="js-example-basic-single form-control" onchange="selectcourse()">
-            <option class="form-control form-control-lg" selected disabled value="">Select Course</option>
-            {% for course in courses %}
-            <option class="form-control form-control-lg" value="{{course.id}}">{{course.courseName}} </option>
+          <label for="validationCustom01"><strong>Select Class <span class="red">*</span></strong></label>
+          <select id="class_select" name="class" style="width: 100%;" class="js-example-basic-single form-control" onchange="selectclass()">
+            <option class="form-control" selected disabled value="" >Select Class</option>
+            {% for class in classes %}
+            <option class="form-control form-control-lg" value="{{class.0}}">{{class.0}} </option>
             {% endfor %}
           </select>
         </div>
         <div class="col">
-          <label for="validationCustom01"><strong>Select Class <span class="red">*</span></strong></label>
-          <select id="class_select" name="class" style="width: 100%;" class="js-example-basic-single form-control">
-            <option class="form-control" selected disabled value="">Select Class</option>
+          <label for="validationCustom01"><strong>Select Course<span class="red">*</span></strong></label>
+          <select id="select_course" name="course" style="width: 100%" class="js-example-basic-single form-control">
+            <option class="form-control form-control-lg" selected disabled value="">Select Course</option>
           </select>
         </div>
         <div class="col">
@@ -151,8 +151,8 @@
           </select>
         </div>
         <div class="col-md-4">
-          <label for="validationCustom01"><strong>Exam Validity <span class="red">*</span></strong></label>
-          <input class="form-control" type="date" placeholder="" name="redate" required /><br />
+          <label for="validationCustom01"><strong>Re-Exam Date</strong></label>
+          <input class="form-control" type="date" placeholder="" name="redate"/><br />
           <div class="invalid-feedback">
             Select a valid Date!
           </div>
@@ -280,28 +280,28 @@
         INSTBATCH.innerHTML=output
     }
 
-    function selectcourse() {
-      var selected = $('#select_course').val();
-      $.ajax({
-        url: "{% url 'classes' %}",
-        data: {
-          course_id: selected,
-        },
-        success: function (data) {
-          categories = data.sub_categories;
-          $("#class_select").empty().trigger("change");
-          for (i = 0; i < categories.length; i++) {
-            var newOption = new Option(
-              categories[i].text,
-              categories[i].value,
-              false,
-              false
-            );
-            $("#class_select").append(newOption).trigger("change");
-          }
-        },
-      });
-    }
+    function selectclass() {
+    var selected = $("#class_select").val();
+    $.ajax({
+      url: "{% url 'findCourse' %}",
+      data: {
+        forclass: selected,
+      },
+      success: function (data) {
+        courses = data.courses;
+        $("#select_course").empty().trigger("change");
+        for (i = 0; i < courses.length; i++) {
+          var newOption = new Option(
+            courses[i][1],
+            courses[i][0],
+            false,
+            false
+          );
+          $("#select_course").append(newOption).trigger("change");
+        }
+      },
+    });
+  }
     
     function addoptions(el) {
       var data = JSON.parse("{{ data|escapejs }}".replaceAll("'", "\""));

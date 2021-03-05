@@ -1,4 +1,4 @@
-{% extends 'dashboard/dashboard.html' %}
+{% extends 'dashboard/base.html' %}
 {% load static %}
 {% block css %}
 @import url('https://fonts.googleapis.com/css?family=Numans');
@@ -258,7 +258,7 @@ input:focus{
 
    
 {% endblock %}
-{% block body %}
+{% block main-content %}
 <div>
     {% if messages %}
     <div class="alert alert-warning" role="alert">
@@ -310,25 +310,7 @@ input:focus{
                         <span class="input-group-text"><i class="fas fa-user"></i></span>
                     </div>
                     <textarea type="text" class="form-control" id="firstName " name='description' placeholder="Note Description" rows="1" required="">{{note.description}}</textarea>
-                </div>
-                    <br>                  
-                    <br>
-                    <div class="row ml-1">
-                        <div class="col-3">
-                           <div class="input-group form-group">
-                                <label class="control-label">Select Course</label>        
-                            </div>  
-                        </div>
-                        <div class="col">
-                               <div>
-                                <select class="form-control" id="select_course" name="course" required onchange="selectcourse()">
-                                    {% for course in courses %}
-                                    <option value="{{course.id}}">{{course.courseName}}</option>
-                                    {% endfor %}
-                                </select>
-                                </div>
-                        </div>                      
-                    </div>
+                </div>                  
                     <br>
                     <div class="row ml-1">
                         <div class="col-3">
@@ -338,8 +320,26 @@ input:focus{
                         </div>
                     <div class="col">
                                <div>
-                                <select class="form-control" id="class_select" name="forclass" required>
-                                    <option selected disabled>Select Class</option>
+                                <select class="form-control" id="class_select" name="forclass" onchange="selectclass()" required>
+                                    <option selected disabled value="{{note.forclass}}">{{note.forclass}}</option>
+                                    {% for class in classes %}
+                                    <option value="{{class.0}}">{{class.0}}</option>
+                                    {% endfor %}
+                                </select>
+                                </div>
+                        </div>                      
+                    </div>
+                    <br>
+                    <div class="row ml-1">
+                        <div class="col-3">
+                           <div class="input-group form-group">
+                                <label class="control-label">Select Course</label>        
+                            </div>  
+                        </div>
+                        <div class="col">
+                               <div>
+                                <select class="form-control" id="select_course" name="course" required>
+                                    <option selected disabled value="{{note.subject}}">{{note.subject}}</option>
                                 </select>
                                 </div>
                         </div>                      
@@ -375,5 +375,27 @@ input:focus{
         }
       }
     });
+    function selectclass() {
+    var selected = $("#class_select").val();
+    $.ajax({
+      url: "{% url 'findCourse' %}",
+      data: {
+        forclass: selected,
+      },
+      success: function (data) {
+        courses = data.courses;
+        $("#select_course").empty().trigger("change");
+        for (i = 0; i < courses.length; i++) {
+          var newOption = new Option(
+            courses[i][1],
+            courses[i][0],
+            false,
+            false
+          );
+          $("#select_course").append(newOption).trigger("change");
+        }
+      },
+    });
+  }
 </script>
 {% endblock %}

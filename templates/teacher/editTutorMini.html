@@ -87,17 +87,12 @@
 						<div class="input-group form-group">
 							<label class="control-label mt-2 col-sm-4">Username</label>
 							<input type="text" class="form-control col-sm-8" id="username " name='NewUsername'
-								placeholder="Username" required value="{{ tutorBaseData.user.username }}"><br><br>
+								placeholder="Username" readonly required value="{{ tutorBaseData.user.username }}"><br><br>
 						</div>
 						<div class="input-group form-group">
 							<label class="control-label mt-2 col-sm-4">Email-Id</label>
 							<input type="email" class="form-control col-sm-8" id="email" name='NewEmail'
-								placeholder="Email Address" required value="{{ tutorBaseData.user.email }}"><br><br>
-						</div>
-						<div class="input-group form-group">
-							<label class="control-label mt-2 col-sm-4">Password</label>
-							<input type="text" class="form-control col-sm-8" id="password" name='NewPassword'
-								placeholder="Password" required value="{{ tutorBaseData.user.password }}"><br><br>
+								placeholder="Email Address" readonly required value="{{ tutorBaseData.user.email }}"><br><br>
 						</div>
 						<div class="input-group form-group">
 							<label class="control-label mt-2 col-sm-4">Phone Number<span class="text-danger">*</span></label>
@@ -117,7 +112,7 @@
 											{% if editTutor.forclass %}
 											<option disabled selected value="{{editTutor.forclass}}">{{editTutor.forclass}}</option>
 											{% else %}
-											<option disabled selected value>Select an option</option>
+											<option disabled selected value="">Select an option</option>
 											{% endif %}
 											{% for x in data %}
 											<option value="{{ x.0 }}">{{ x.0 }}</option>
@@ -355,7 +350,7 @@
                                 <label  class="control-label" for="cn">Class Name</label>
                                 <div>
                                     <select name="cn" class="cn custom-select form-control" required="required" onchange="selectclass(this)">
-                                        <option disabled selected value>Select an option</option>
+                                        <option disabled selected value="">Select an option</option>
                                         {% for x in data %}
                                         <option value="{{ x.0 }}">{{ x.0 }}</option>
                                         {% endfor %}
