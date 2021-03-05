@@ -365,7 +365,7 @@
 <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCBJybI10-Xa43-F5GSad1i0Y9W3yqlW6Q&libraries=places&v=3"
   defer></script>
 
-<div class="container">
+<div class="mt-5">
   {% if messages %}
   {% for k in messages%}
   <div class="alert alert-{{k.tags}} alert-dismissible fade show" role="alert">
@@ -376,12 +376,11 @@
   </div>
   {% endfor %}
   {% endif %}
-  <div class="d-flex justify-content-center h-100">
     <div class="card">
       <div class="card-header">
         <div class="row">
           <div class="col-sm">
-            <h2 style="color: rgb(66, 8, 8);">Add Student</h2>
+            <h2 style="color: rgb(0, 0, 0);">Add Student</h2>
           </div>
           <div class="col-sm-8 form-inline justify-content-end">
             <button class="btn btn-warning btn-md" role="button">Already Exists &raquo;</button>
@@ -394,149 +393,138 @@
       </div>
       <div class="card-body">
         <form id="submitForm" action="" method="post">{% csrf_token %}
-          <div class="input-group form-group">
-                        <div class="input-group-prepend">
-                            <span class="input-group-text"><i class="fas fa-user"></i></span>
-                        </div>
-                        <input type="text" class="form-control" id="firstName" name='firstName' placeholder="First Name"
-                            value="{{stfname}}" readonly>
-                    </div>
-                    <div class="input-group form-group">
-                        <div class="input-group-prepend">
-                            <span class="input-group-text"><i class="fas fa-user"></i></span>
-                        </div>
-                        <input type="text" class="form-control" id="lastName" name='lastName' placeholder="Last Name"
-                            value="{{stlname}}" readonly>
-                    </div>
-                    <div class="input-group form-group">
-                        <div class="input-group-prepend">
-                            <span class="input-group-text"><i class="fa fa-envelope"></i></span>
-                        </div>
-                        <input type="email" class="form-control" id="email" name='email' placeholder="Email Address"
-                            value="{{stemail}}" readonly>
-                    </div>
-                    <div class="input-group form-group">
-                        <div class="input-group-prepend">
-                            <span class="input-group-text"><i class="fa fa-phone"></i></span>
-                        </div>
-                        <input type="tel" pattern="[0-9]{10}" class="form-control" id="phone" name='phone'
-                            placeholder="Phone Number (10 Digits)" value="{{stphone}}" required>
-                    </div>
-                    <div class="input-group form-group">
-                        <div class="input-group-prepend">
-                            <span class="input-group-text"><i class="fa fa-map-marker"></i></span>
-                        </div>
-                        <input id="pac-input" type="text" class="controls form-control" name='loc'
-                            placeholder="Search Address" value="{{address}}" required>
-                        <input type="hidden" id="cityLat" name="cityLat" value="{{qry.conector.latitude}}" />
-                        <input type="hidden" id="cityLng" name="cityLng" value="{{qry.conector.longitude}}" />
-                    </div>
-                    <div class="input-group form-group row school">
-                        <div class="input-group-prepend col-sm-12 school-input">
-                            <span class="input-group-text"><i class="fas fa-school"></i></span>
-                            <input type="text" class="form-control" id="schoolName" name='school'
-                                placeholder="School Name" value="{{schoolName}}" required>
-                        </div>
-                    </div>
-                    <br>
+          <div class="row">
+            <div class="col-md-6 col-lg-4 col-12 input-group form-group">
+              <label class="control-label col-sm-5 col-5 mt-2" style="color:black;">First name<span
+                  class="text-danger">*</span></label>
+              <input type="text" class="form-control" id="firstName" name='firstName' placeholder="First Name"
+                value="{{stfname}}" readonly>
+            </div>
+            <div class="col-md-6 col-lg-4 col-12 input-group form-group">
+              <label class="control-label col-sm-5 col-5 mt-2" style="color:black;">Last name<span
+                  class="text-danger">*</span></label>
+              <input type="text" class="form-control" id="lastName" name='lastName' placeholder="Last Name"
+                value="{{stlname}}" readonly>
+            </div>
+            <div class="col-md-6 col-lg-4 col-12 input-group form-group">
+              <label class="control-label col-sm-5 col-5 mt-2" style="color:black;">Email Id<span
+                  class="text-danger">*</span></label>
+              <input type="email" class="form-control" id="email" name='email' placeholder="Email Address"
+                value="{{stemail}}" readonly>
+            </div>
+            <div class="col-md-6 col-lg-4 col-12 input-group form-group">
+              <label class="control-label col-sm-5 col-5 mt-2" style="color:black;">Phone Number<span
+                  class="text-danger">*</span></label>
+              <input type="tel" pattern="[0-9]{10}" class="form-control" id="phone" name='phone' value="{{stphone}}"
+                required>
+            </div>
+            <div class="col-md-6 col-lg-4 col-12 input-group form-group">
+              <label class="control-label col-sm-5 col-5 mt-2" style="color:black;">Address<span
+                  class="text-danger">*</span></label>
+              <input id="pac-input" type="text" class="controls form-control" name='loc' placeholder="Search Address"
+                value="{{address}}" required>
+              <input type="hidden" id="cityLat" name="cityLat" value="{{qry.conector.latitude}}" />
+              <input type="hidden" id="cityLng" name="cityLng" value="{{qry.conector.longitude}}" />
+            </div>
+            <div class="col-md-6 col-lg-4 col-12 input-group form-group">
+              <label class="control-label col-sm-5 col-5 mt-2" style="color:black;">School Name<span
+                  class="text-danger">*</span></label>
+              <input type="text" class="form-control" id="schoolName" name='school' placeholder="School Name"
+                value="{{schoolName}}" required>
+            </div>
+          </div>
+          <hr>
 
           <!-- detail start -->
           <div id='mainForm' class="outside">
-            <div class="entry row" style="margin-bottom: 5%;padding-bottom: 2%">
-              <div class="col-sm-2">
-                <div class="form-group">
-                  <label for="cn">Class Name</label>
-                  <div>
-                    <select name="cn" class="cn custom-select form-control" required="required"
-                      onchange="selectclass(this)">
-                      <option disabled selected value="">Select an option</option>
-                      {% for x in data %}
-                      <option value="{{ x.0 }}">{{ x.0 }}</option>
-                      {% endfor %}
-                    </select>
-                  </div>
-                </div>
+            <div class="entry row">
+              <div class="col-md-6 col-lg-4 col-12 input-group form-group">
+                <label class="control-label col-sm-5 col-5 mt-2" style="color:black;" for="cn">Class Name</label>
+                <select name="cn" class="cn custom-select form-control" required="required"
+                  onchange="selectclass(this)">
+                  {% if qry.forclass %}
+											<option disabled selected value="{{qry.forclass}}">{{qry.forclass}}</option>
+											{% else %}
+											<option disabled selected value="">Select an option</option>
+											{% endif %}
+                  {% for x in data %}
+                  <option value="{{ x.0 }}">{{ x.0 }}</option>
+                  {% endfor %}
+                </select>
               </div>
-              <div class="col-sm-2">
-                <div class="form-group">
-                  <label for="ctn">Course</label>
-                  <div>
-                    <select name="ctn" class="ctn custom-select form-control" required="required" onclick="selectcourse(this)">
-                      <option disabled selected value="">Select an option</option>
-                  </select>
-                  </div>
-                </div>
+              <div class="col-md-6 col-lg-4 col-12 input-group form-group">
+                <label class="control-label col-sm-5 col-5 mt-2" style="color:black;" for="ctn">Course</label>
+                <select name="ctn" class="ctn custom-select form-control" required="required"
+                  onclick="selectcourse(this)">
+                  {% if qry.courseName %}
+											<option disabled selected value="{{qry.courseName}}">{{qry.courseName}}</option>
+											{% else %}
+											<option disabled selected value="">Select an option</option>
+											{% endif %}
+                </select>
               </div>
-              <div class="col-sm-2">
-                <div class="form-group">
-                  <label for="ttn">Teaching Type</label>
-                  <div>
-                    <select name="ttn" class="ttn custom-select form-control" required="required">
-                      <option disabled selected value="">Select an option</option>
-                  </select>
-                  </div>
-                </div>
+              <div class="col-md-6 col-lg-4 col-12 input-group form-group">
+                <label class="control-label col-sm-5 col-5 mt-2" style="color:black;" for="ttn">Teaching Type</label>
+                <select name="ttn" class="ttn custom-select form-control" required="required">
+                  {% if qry.teachType %}
+											<option disabled selected value="{{qry.teachType}}">{{qry.teachType}}</option>
+											{% else %}
+											<option disabled selected value="">Select an option</option>
+											{% endif %}
+                </select>
               </div>
-              <div class="col-sm-2">
-                <div class="form-group">
-                  <label for="noi">Installments</label>
-                  <div>
-                    <select id="no_of_installment" class="form-control" name="noi" id="noi"
-                      required>
+              <div class="col-md-6 col-lg-4 col-12 input-group form-group">
+                <label class="control-label col-sm-5 col-5 mt-2" style="color:black;" for="noi">Installments</label>
+                <select id="no_of_installment" class="form-control" name="noi" id="noi" required>
+                  {% if qry.installments %}
+											<option disabled selected value="{{qry.installments}}">{{qry.installments}}</option>
+											{% else %}
                       <option selected disabled value="">Installments</option>
-                      <option value="1">1</option>
-                      <option value="2">2</option>
-                      <option value="3">3</option>
-                      <option value="4">4</option>
-                      <option value="5">5</option>
-                      <option value="6">6</option>
-                    </select>
-                  </div>
-                </div>
+											{% endif %}
+                  <option value="1">1</option>
+                  <option value="2">2</option>
+                  <option value="3">3</option>
+                  <option value="4">4</option>
+                  <option value="5">5</option>
+                  <option value="6">6</option>
+                </select>
               </div>
-              <div class="col-sm-2">
-                <div class="form-group">
-                  <label for="batchN">Batch Name</label>
-                  <div>
-                    <select id="batch" class="form-control" name="batchN" id="batchN" required>
+              <div class="col-md-6 col-lg-4 col-12 input-group form-group">
+                <label class="control-label col-sm-5 col-5 mt-2" style="color:black;" for="batchN">Batch Name</label>
+                <select id="batch" class="form-control" name="batchN" id="batchN" required>
+                  {% if qry.batch %}
+											<option disabled selected value="{{qry.batch}}">{{qry.batch}}</option>
+											{% else %}
                       <option selected disabled value="">Batch Name</option>
-                      {% for i in batch %}
-                      <option value="{{i.batchName}}">{{i.batchName}}</option>
-                      {% endfor %}
-                    </select>
-                  </div>
-                </div>
+											{% endif %}
+                  {% for i in batch %}
+                  <option value="{{i.batchName}}">{{i.batchName}}</option>
+                  {% endfor %}
+                </select>
               </div>
-              <div class="col-sm-2">
-                <div class="form-group">
-                  <label for="feedis">Fee Discount</label>
-                  <div>
-                    <input type="number" class="custom-text form-control" name="feedis" value="{{qry.feeDisc}}" id="feedis">
-                  </div>
-                </div>
-              </div>
-              <div class="col-sm-1 form-inline" style="display: flex;align-items: center;">
-                <div class="form-group">
-                  <button class="btn btn-warning btn-md float-right" type="button" onclick="duplicate(this)">Add
-                    New</button>
-                </div>
+              <div class="col-md-6 col-lg-4 col-12 input-group form-group">
+                <label class="control-label col-sm-5 col-5 mt-2" style="color:black;" for="feedis">Fee Discount</label>
+                <input type="number" class="custom-text form-control" name="feedis" value="{{qry.feeDisc}}" id="feedis">
               </div>
             </div>
           </div>
-          <div class="row container d-flex justify-content-end">
-            <div class="col-sm-2 sm-ml-1">
-              <button id='submitBtn' name="submit" type="submit" class="btn btn-warning">Submit</button>
-            </div>
+          <div class="col-lg-12 col-md-12  col-12 d-flex justify-content-end">
+            <button class="btn btn-info btn-md" type="button" onclick="duplicate(this)">Add
+              New</button>
+          </div>
+          <hr>
+
+          <div class="col-lg-12 col-md-12 col-12 mt-4 text-center">
+            <button id='submitBtn' name="submit" type="submit" class="btn btn-info">Submit</button>
           </div>
         </form>
       </div>
     </div>
-  </div>
 </div>
 
 <script>
   //first part
-  var school_list = {{school_list|safe}};
+  var school_list = {{ school_list| safe}};
   $(document).on("DOMContentLoaded", function () {
     function initialize() {
       var input = document.getElementById('pac-input');
@@ -801,7 +789,7 @@
   }
 
   function selectcourse(el) {
-      var selected_course = el.value;
+    var selected_course = el.value;
     var selected_class = $(el).closest(".entry").find(".cn").val();
     $.ajax({
       url: "{% url 'findTeaching' %}",
@@ -825,8 +813,8 @@
     });
   }
 
-  function duplicate(){
-      $('.outside').append(`<div class="entry row" style="margin-bottom: 5%;padding-bottom: 2%">
+  function duplicate() {
+    $('.outside').append(`<div class="entry row" style="margin-bottom: 5%;padding-bottom: 2%">
             <div class="col-sm-2">
               <div class="form-group">
                 <label for="cn">Class Name</label>

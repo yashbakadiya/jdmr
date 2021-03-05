@@ -205,106 +205,82 @@
             </div>
             <div class="card-body" style="color: rgba(0, 0, 0);">
                 <form id='submitForm' method='post' action=''>{% csrf_token %}
-                    <div class="input-group form-group">
-                        <label class="control-label col-sm-4">User name<span class="text-danger">*</span></label>
-                        <div class="input-group-prepend">
-                            <span class="input-group-text"><i class="fas fa-user"></i></span>
-                        </div>
+                    <div class="row">
+                        <div class="col-md-6 col-lg-4 col-12 input-group form-group">
+                            <label class="control-label col-sm-5 col-5 mt-2" style="color:black;">User name<span class="text-danger">*</span></label>
                         <input type="text" class="form-control" id="username " name='username'
                             value="{{teacher.user.username}}" disabled>
                     </div>
-                    <div class="input-group form-group">
-                        <label class="control-label col-sm-4">First name<span class="text-danger">*</span></label>
-                        <div class="input-group-prepend">
-                            <span class="input-group-text"><i class="fas fa-user"></i></span>
-                        </div>
+                    <div class="col-md-6 col-lg-4 col-12 input-group form-group">
+                        <label class="control-label col-sm-5 col-5 mt-2" style="color:black;">First name<span class="text-danger"></span>*</span></label>
                         <input type="text" class="form-control" id="firstName " name='firstName'
                             value="{{teacher.user.first_name}}" disabled>
                     </div>
-                    <div class="input-group form-group">
-                        <label class="control-label col-sm-4">Last name<span class="text-danger">*</span></label>
-                        <div class="input-group-prepend">
-                            <span class="input-group-text"><i class="fas fa-user"></i></span>
-                        </div>
+                    <div class="col-md-6 col-lg-4 col-12 input-group form-group">
+                        <label class="control-label col-sm-5 col-5 mt-2" style="color:black;">Last name<span class="text-danger">*</span></label>
                         <input type="text" class="form-control" id="lastName " name='lastName'
                             value="{{teacher.user.last_name}}" disabled>
                     </div>
-                    <div class="input-group form-group">
-                        <label class="control-label col-sm-4">Email Id<span class="text-danger">*</span></label>
-                        <div class="input-group-prepend">
-                            <span class="input-group-text"><i class="fas fa-envelope"></i></span>
-                        </div>
+                    <div class="col-md-6 col-lg-4 col-12 input-group form-group">
+                        <label class="control-label col-sm-5 col-5 mt-2" style="color:black;">Email Id<span class="text-danger">*</span></label>
                         <input type="email" class="form-control" id="email" name='email' value="{{teacher.user.email}}"
                             disabled>
                     </div>
-                    <div class="input-group form-group">
-                        <label class="control-label col-sm-4">Address<span class="text-danger">*</span></label>
-                        <div class="input-group-prepend">
-                            <span class="input-group-text"><i class="fas fa-location-arrow"></i></span>
-                        </div>
+                    <div class="col-md-6 col-lg-4 col-12 input-group form-group">
+                        <label class="control-label col-sm-5 col-5 mt-2" style="color:black;">Address<span class="text-danger">*</span></label>
                         <input id="pac-input" type="text" class="controls form-control" name='loc'
                             value="{{teacher.address}}" disabled>
                     </div>
-                    <div class="input-group form-group">
-                        <label class="control-label col-sm-4">Phone Number<span class="text-danger">*</span></label>
-                        <div class="input-group-prepend">
-                            <span class="input-group-text"><i class="fas fa-phone"></i></span>
-                        </div>
+                    <div class="col-md-6 col-lg-4 col-12 input-group form-group">
+                        <label class="control-label col-sm-5 col-5 mt-2" style="color:black;">Phone Number<span class="text-danger">*</span></label>
                         <input type="number" class="form-control" id="phone" name='phone' value="{{teacher.phone}}"
                             disabled>
                     </div>
-                    <div class="outside">
-                        <div class="row entry">
-                            <div class="col-sm-3">
-                                <div class="form-group">
-                                    <label  class="control-label" for="cn">Class Name</label>
-                                    <div>
-                                        <select name="cn" class="cn custom-select form-control" required="required" onchange="selectclass(this)">
-                                            <option disabled selected value="">Select an option</option>
-                                            {% for x in data %}
-                                            <option value="{{ x.0 }}">{{ x.0 }}</option>
-                                            {% endfor %}
-                                        </select>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-sm-3">
-                                <div class="form-group">
-                                    <label class="control-label" for="ctn">Course Taught</label>
-                                    <div>
-                                        <select name="ctn" class="ctn custom-select form-control" required="required" onclick="selectcourse(this)">
-                                            <option disabled selected value="">Select an option</option>
-                                        </select>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-sm-4">
-                                <div class="form-group">
-                                    <label class="control-label" for="ttn">Teaching Type</label>
-                                    <div>
-                                        <select name="ttn" class="ttn custom-select form-control" required="required">
-                                            <option disabled selected value="">Select an option</option>
-                                        </select>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-sm-2 form-inline" style="display: flex;align-items: center;">
-                                <div class="form-group">
-                                    <button class="btn btn-warning btn-md float-right" type="button" onclick="duplicate(this)">Add New</button>
-                                </div>
-                            </div>
-                        </div>
+                    <div class="col-md-6 col-lg-4 col-12 input-group form-group">
+                        <label class="control-label col-sm-5 col-5 mt-2" style="color:black;">Availability</label>
+                        <select id="availability" name="availability"
+                            class="custom-select form-control" required="required">
+                            <option value="weekly" selected>weekly</option>
+                            <option value="weekend" selected>weekend</option>
+                            <option value="both" selected>both</option>
+                        </select>
                     </div>
-                    <div class="row container">
-                        <div class="form-group col-sm-6 sm-ml-1 control-label">
-                            Availability:
-                            <select id="availability" name="availability" class="custom-select form-control"
-                                required="required">
-                                <option value="weekly" selected>weekly</option>
-                                <option value="weekend" selected>weekend</option>
-                                <option value="both" selected>both</option>
+                </div>
+                <hr>
+                <div class="outside">
+                    <div class="row entry">
+                        <div class="col-md-6 col-lg-4 col-12 input-group form-group">
+                            <label class="control-label col-sm-5 col-5 mt-2" style="color:black;" for="cn">Class
+                                Name</label>
+                            <select name="cn" class="cn custom-select form-control"
+                                required="required" onchange="selectclass(this)">
+                                <option disabled selected value="">Select an option</option>
+                                {% for x in data %}
+                                <option value="{{ x.0 }}">{{ x.0 }}</option>
+                                {% endfor %}
                             </select>
                         </div>
+                        <div class="col-md-6 col-lg-4 col-12 input-group form-group">
+                            <label class="control-label col-sm-5 col-5 mt-2" style="color:black;" for="ctn">Course
+                                Taught</label>
+                            <select name="ctn" class="ctn custom-select form-control"
+                                required="required" onclick="selectcourse(this)">
+                                <option disabled selected value="">Select an option</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6 col-lg-4 col-12 input-group form-group">
+                            <label class="control-label col-sm-5 col-5 mt-2" style="color:black;" for="ttn">Teaching
+                                Type</label>
+                            <select name="ttn" class="ttn custom-select form-control"
+                                required="required">
+                                <option disabled selected value="">Select an option</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-12 col-md-12  col-12 d-flex justify-content-end">
+                        <button class="btn btn-info btn-md" type="button" onclick="duplicate(this)">Add
+                            New</button>
                     </div>
                     <hr>
                     <div class="form-group">
@@ -317,12 +293,10 @@
                         </div>
                     </div>
 
-                    <div class="row container d-flex justify-content-end">
-                        <div class="col-sm-2 sm-ml-1">
-                            <button id='submitBtn' name="submit" type="submit" class="btn btn-warning">SignUp</button>
+                    <div class="col-lg-12 col-md-12 col-12 mt-4 text-center">
+                        <button id='submitBtn' name="submit" type="submit" class="btn btn-info">Register</button>
+                </div>
 
-                        </div>
-                    </div>
 
                 </form>
             </div>
@@ -524,39 +498,27 @@
 
   function duplicate(){
       $('.outside').append(`<div class="row entry">
-                            <div class="col-sm-3">
-                            <div class="form-group">
-                                <label  class="control-label" for="cn">Class Name</label>
-                                <div>
+                        <div class="col-md-6 col-lg-4 col-12 input-group form-group">
+                            <label class="control-label col-sm-5 col-5 mt-2" style="color:black;" for="cn">Class Name</label>
                                     <select name="cn" class="cn custom-select form-control" required="required" onchange="selectclass(this)">
                                         <option disabled selected value="">Select an option</option>
                                         {% for x in data %}
                                         <option value="{{ x.0 }}">{{ x.0 }}</option>
                                         {% endfor %}
                                     </select>
-                                </div>
                             </div>
-                        </div>
-                        <div class="col-sm-3">
-                            <div class="form-group">
-                                <label class="control-label" for="ctn">Course Taught</label>
-                                <div>
+                            <div class="col-md-6 col-lg-4 col-12 input-group form-group">
+                                <label class="control-label col-sm-5 col-5 mt-2" style="color:black;" for="ctn">Course Taught</label>
                                     <select name="ctn" class="ctn custom-select form-control" required="required" onclick="selectcourse(this)">
                                         <option disabled selected value="">Select an option</option>
                                     </select>
-                                </div>
                             </div>
-                        </div>
-                        <div class="col-sm-4">
-                            <div class="form-group">
-                                <label class="control-label" for="ttn">Teaching Type</label>
-                                <div>
+                            <div class="col-md-6 col-lg-4 col-12 input-group form-group">
+                                <label class="control-label col-sm-5 col-5 mt-2" style="color:black;" for="ttn">Teaching Type</label>
                                     <select name="ttn" class="ttn custom-select form-control" required="required">
                                         <option disabled selected value="">Select an option</option>
                                     </select>
-                                </div>
                             </div>
-                        </div>
                         </div>`)
   }
 </script>

@@ -28,57 +28,57 @@
                     </div>
                 </div>
             </div>
-            <div class="card-body">
+            <div class="card-body mt-4">
                 <form id='submitForm' method='post' action=''>{% csrf_token %}
-                    <div class="row col-lg-12">
-                        <div class="col-lg-4 col-md-4 col-sm-6 col-12 row mt-4">
+                    <div class="row">
+                        <div class="col-md-6 col-lg-4 col-12 input-group form-group">
                             <label class="control-label col-sm-5 col-5 mt-2" style="color:black;">Class</label>
-                            <select id="className" name="className" class="col-sm-8 col-md-6 col-7 custom-select form-control w-100"
+                            <select id="className" name="className" class="custom-select form-control"
                                 onchange="subjects()">
                                 <option disabled selected>Class</option>
                             </select>
                         </div>
-                        <div class="col-lg-4 col-md-6 col-sm-6 col-12 row mt-4">
+                        <div class="col-md-6 col-lg-4 col-12 input-group form-group">
                             <label class="control-label col-sm-5 col-5 mt-2" style="color:black;">Course</label>
-                            <select id="subject" name="subject" class="col-sm-7 col-md-6 col-7 custom-select form-control w-100">
+                            <select id="subject" name="subject" class="custom-select form-control">
                                 <option disabled selected>Subject</option>
                             </select>
                         </div>
-                        <div class="col-lg-4 col-md-6 col-sm-6 col-12 row mt-4">
+                        <div class="col-md-6 col-lg-4 col-12 input-group form-group">
                             <label class="control-label col-sm-5 col-5 mt-2" style="color:black;">Teaching Mode</label>
-                            <select name="tm" class="col-sm-7 col-7 col-md-6 custom-select form-control w-100" required="required">
+                            <select name="tm" class="custom-select form-control" required="required">
                                 <option disabled selected value>Teaching Mode</option>
                                 <option value="Online Tutor">Online Tutor</option>
                                 <option value="Institute">Institute</option>
                                 <option value="Home Tutor">Home Tutor</option>
                             </select>
                         </div>
-                        <div class="col-lg-4 col-md-6 col-sm-6 col-12 row mt-4">
+                        <div class="col-md-6 col-lg-4 col-12 input-group form-group">
                             <label class="control-label col-sm-5 col-5 mt-3" style="color:black;">Start Date</label>
-                            <input type="date" class="col-sm-7 col-7 col-md-6 form-control my-2 w-100" id="sd" name="sd" placeholder="Starting Date" required>
+                            <input type="date" class="form-control my-2" id="sd" name="sd" placeholder="Starting Date" required>
                         </div>
-                        <div class="col-lg-4 col-md-6 col-sm-6 col-12 row mt-4">
+                        <div class="col-md-6 col-lg-4 col-12 input-group form-group">
                             <label class="control-label col-sm-5 col-5 mt-3" style="color:black;">Budget</label>
-                            <input type="number" step="0.01" class="col-md-6 col-sm-7 col-7 form-control my-2 w-100" style="-moz-appearance: textfield;" min="0" id="budgetvalue"
+                            <input type="number" step="0.01" class="form-control my-2" style="-moz-appearance: textfield;" min="0" id="budgetvalue"
                                 name="budgetvalue" placeholder="Budget" required>
                         </div>
-                        <div class="col-lg-4 col-md-6 col-sm-6 col-12 row mt-4">
+                        <div class="col-md-6 col-lg-4 col-12 input-group form-group">
                             <label class="control-label col-sm-5 col-5 mt-3" style="color:black;">No. of Sessions</label>
-                            <input type="number" class="col-sm-7 col-7 col-md-6 form-control my-2 w-100" id="monthlydigit" style="-moz-appearance: textfield;" min="0" name="monthlydigit" placeholder="No. of sessions">
+                            <input type="number" class="form-control my-2" id="monthlydigit" style="-moz-appearance: textfield;" min="0" name="monthlydigit" placeholder="No. of sessions">
                         </div>  
                         
-                        <div class="col-lg-4 col-md-6 col-sm-6 col-12 row mt-4">
+                        <div class="col-md-6 col-lg-4 col-12 input-group form-group">
                             <label class="control-label col-sm-5 col-5 mt-2" style="color:black;">Payment Type</label>
-                            <select id="budget" name="budget" class="col-sm-7 col-md-6 col-7 custom-select form-control w-100" required>
+                            <select id="budget" name="budget" class="custom-select form-control" required>
                                 <option disabled selected>Payment Type</option>
                                 <option value="monthly">Monthly</option>
                                 <option value="hourly">Hourly</option>
                             </select>
                         </div>
                         
-                        <div class="col-lg-4 col-md-6 col-sm-6 col-12 row mt-4">
+                        <div class="col-md-6 col-lg-4 col-12 input-group form-group">
                             <label class="control-label col-sm-5 col-5 mt-2" style="color:black;">Prefered Gender</label>
-                            <select id="gp" name="gp" class="col-sm-7 col-md-6 col-7 custom-select form-control w-100" required="required">
+                            <select id="gp" name="gp" class="custom-select form-control" required="required">
                                 <option disabled selected value>Prefered Gender</option>
                                 <option value="Male">Male</option>
                                 <option value="Female">Female</option>
@@ -86,7 +86,7 @@
                             </select>
                         </div>
 
-                        <div class="col-lg-12 col-md-12 col-12 mt-4">
+                        <div class="col-lg-12 col-md-12 col-12">
                             <textarea class="form-control my-2 w-100" rows="2" maxlength="250" name='description' placeholder="Description"
                                 type="number"></textarea>
                         </div>

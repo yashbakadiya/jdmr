@@ -4,44 +4,43 @@
 <style>
     @import url('https://fonts.googleapis.com/css?family=Numans');
 
-    .container{
+    .container {
         align-content: center;
     }
 
-    .card{
+    .card {
         margin-top: auto;
         margin-bottom: auto;
         width: 800px;
         background-color: white;
     }
 
-    .card-header h3{
+    .card-header h3 {
         color: white;
     }
 
-    input:focus{
-        outline: 0 0 0 0  !important;
+    input:focus {
+        outline: 0 0 0 0 !important;
         box-shadow: 0 0 0 0 !important;
 
     }
 
-    .remember{
+    .remember {
         color: white;
     }
 
-    .remember input
-    {
+    .remember input {
         width: 19px;
         height: 19px;
         margin-left: 15px;
         margin-right: 5px;
     }
 
-    .links{
+    .links {
         color: white;
     }
 
-    .links a{
+    .links a {
         margin-left: 4px;
     }
 
@@ -50,68 +49,67 @@
         font-size: 20px;
     }
 
-    .social_icon span{
+    .social_icon span {
         font-size: 60px;
         margin-left: 10px;
         color: #FFC312;
     }
 
-    .social_icon span:hover{
+    .social_icon span:hover {
         color: white;
         cursor: pointer;
     }
 
-    .card-header h3{
+    .card-header h3 {
         color: white;
     }
 
-    .social_icon{
+    .social_icon {
         position: absolute;
         right: 20px;
         top: -45px;
     }
 
-    .input-group-prepend span{
+    .input-group-prepend span {
         width: 50px;
         background-color: #FFC312;
         color: black;
-        border:0 !important;
+        border: 0 !important;
     }
 
-    input:focus{
-        outline: 0 0 0 0  !important;
+    input:focus {
+        outline: 0 0 0 0 !important;
         box-shadow: 0 0 0 0 !important;
 
     }
 
-    .remember{
+    .remember {
         color: white;
     }
 
-    .remember input
-    {
+    .remember input {
         width: 20px;
         height: 20px;
         margin-left: 15px;
         margin-right: 5px;
     }
 
-    .signup_btn{
+    .signup_btn {
         color: black;
         background-color: #FFC312;
         width: 300px;
     }
 
-    .signup_btn:hover{
+    .signup_btn:hover {
         background-color: #2a2b3d;
-        color:white;
-    }
-
-    .links{
         color: white;
     }
 
-    .links a{
+    .links {
+        color: white;
+    }
+
+    .links a {
         margin-left: 4px;
     }
 
@@ -119,7 +117,8 @@
         color: rgb(66, 8, 8);
         font-size: 20px;
     }
-    .buttonLikeLook{
+
+    .buttonLikeLook {
         padding-top: 0.5rem;
         padding-bottom: 0.5rem;
         padding-left: 1rem;
@@ -127,57 +126,63 @@
         background-color: #ffc312;
         color: black;
     }
-    .errorSpan{
-        color:red;
-        font-size:smaller;
-        display:none;
+
+    .errorSpan {
+        color: red;
+        font-size: smaller;
+        display: none;
     }
-    .multiselect-container > li > a > label{
-    	height:auto;
+
+    .multiselect-container>li>a>label {
+        height: auto;
     }
-    .multiselect-container{
-    	height:10rem;
-    	overflow-y:scroll;
-    	width:max-content;
+
+    .multiselect-container {
+        height: 10rem;
+        overflow-y: scroll;
+        width: max-content;
     }
+
     .pac-card {
-      margin: 10px 10px 0 0;
-      border-radius: 2px 0 0 2px;
-      box-sizing: border-box;
-      -moz-box-sizing: border-box;
-      outline: none;
-      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
-      background-color: #fff;
+        margin: 10px 10px 0 0;
+        border-radius: 2px 0 0 2px;
+        box-sizing: border-box;
+        -moz-box-sizing: border-box;
+        outline: none;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+        background-color: #fff;
     }
 
     #pac-container {
-      padding-bottom: 12px;
-      margin-right: 12px;
+        padding-bottom: 12px;
+        margin-right: 12px;
     }
 
     .pac-controls {
-      display: inline-block;
-      padding: 5px 11px;
+        display: inline-block;
+        padding: 5px 11px;
     }
 
     .pac-controls label {
-      font-weight: 300;
+        font-weight: 300;
     }
 
     #pac-input {
-      text-overflow: ellipsis;
+        text-overflow: ellipsis;
     }
 
     #pac-input:focus {
-      border-color: #4d90fe;
+        border-color: #4d90fe;
     }
+
     .pac-container {
-      z-index: 1100 !important;
+        z-index: 1100 !important;
     }
 </style>
 {% endblock %}
 {% block main-content %}
-<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCBJybI10-Xa43-F5GSad1i0Y9W3yqlW6Q&libraries=places&v=3" defer></script>
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCBJybI10-Xa43-F5GSad1i0Y9W3yqlW6Q&libraries=places&v=3"
+    defer></script>
 
 <div class="mt-5">
     {% if messages %}
@@ -190,103 +195,59 @@
     </div>
     {% endfor %}
     {% endif %}
-        <div class="card">
-            <div class="card-header">
-                <div class="row">
-                    <div class="col-sm-4"><h2 style="color: rgb(66, 8, 8);">Add Tutor</h2></div>
-                    <div class="col-sm-8 form-inline justify-content-end">
-                        <button class="btn btn-warning btn-md" role="button">Already Exists &raquo;</button>
-                        <form method="POST" action="{% url 'searchUserTutor' %}">{% csrf_token %}
-                            <input id="searchbox" type="text" class="form-control" name='srh' placeholder="Search Tutor" required>
-                            <button type="submit" class="btn btn-danger btn-md">Submit</button>
-                        </form>
+    <div class="card">
+        <div class="card-header">
+            <div class="row">
+                <div class="col-sm-4">
+                    <h2 style="color: rgb(66, 8, 8);">Add Tutor</h2>
+                </div>
+                <div class="col-sm-8 form-inline justify-content-end">
+                    <button class="btn btn-warning btn-md" role="button">Already Exists &raquo;</button>
+                    <form method="POST" action="{% url 'searchUserTutor' %}">{% csrf_token %}
+                        <input id="searchbox" type="text" class="form-control" name='srh' placeholder="Search Tutor"
+                            required>
+                        <button type="submit" class="btn btn-danger btn-md">Submit</button>
+                    </form>
                 </div>
             </div>
         </div>
-        <div class="card-body">
+        <div class="card-body mt-4">
             <form id='submitForm' method='post' action=''>{% csrf_token %}
-                <div class="input-group form-group">
-                    <label class="control-label mt-2 col-sm-2">First name<span class="text-danger">*</span></label>
-                    <div class="input-group-prepend">
-                        <span class="input-group-text"><i class="fas fa-user"></i></span>
-                    </div>
-                    <input type="text" class="form-control" id="firstName " name='firstName' placeholder="First name" required value = "{{ prefil.firstName }}">
-                </div>
-                <div class="input-group form-group">
-                    <label class="control-label mt-2 col-sm-2">Last name<span class="text-danger">*</span></label>
-                    <div class="input-group-prepend">
-                        <span class="input-group-text"><i class="fas fa-user"></i></span>
-                    </div>
-                    <input type="text" class="form-control" id="lastName " name='lastName' placeholder="Last name" required value = "{{ prefil.lastName }}">
-                </div>
-                <div class="input-group form-group">
-                    <label class="control-label mt-2 col-sm-2">Email Id<span class="text-danger">*</span></label>
-                    <div class="input-group-prepend">
-                        <span class="input-group-text"><i class="fas fa-envelope"></i></span>
-                    </div>
-                    <input type="email" class="form-control" id="email" name='email' placeholder="Email Address" required value = "{{ prefil.email }}">
-                </div>
-                <div class="input-group form-group">
-                    <label class="control-label mt-2 col-sm-2">Address<span class="text-danger">*</span></label>
-                    <div class="input-group-prepend">
-                        <span class="input-group-text"><i class="fas fa-location-arrow"></i></span>
-                    </div>
-                    <input id="pac-input" type="text" class="controls form-control" name='loc' placeholder="Search" required>
-                </div>
-                <div class="input-group form-group">
-                    <label class="control-label mt-2 col-sm-2">Phone Number<span class="text-danger">*</span></label>
-                    <div class="input-group-prepend">
-                        <span class="input-group-text"><i class="fas fa-phone"></i></span>
-                    </div>
-                    <input  type="number" class="form-control" id="phone" name='phone' placeholder="Phone Number" required value = "{{ prefil.phone }}" type="number">
-                </div>
-                <hr>
-                <div class="outside">
-                    <div class="row entry">
-                        <div class="col-sm-3">
-                            <div class="form-group">
-                                <label  class="control-label" for="cn">Class Name</label>
-                                <div>
-                                    <select name="cn" class="cn custom-select form-control" required="required" onchange="selectclass(this)">
-                                        <option disabled selected value="">Select an option</option>
-                                        {% for x in data %}
-                                        <option value="{{ x.0 }}">{{ x.0 }}</option>
-                                        {% endfor %}
-                                    </select>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-sm-3">
-                            <div class="form-group">
-                                <label class="control-label" for="ctn">Course Taught</label>
-                                <div>
-                                    <select name="ctn" class="ctn custom-select form-control" required="required" onclick="selectcourse(this)">
-                                        <option disabled selected value="">Select an option</option>
-                                    </select>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-sm-4">
-                            <div class="form-group">
-                                <label class="control-label" for="ttn">Teaching Type</label>
-                                <div>
-                                    <select name="ttn" class="ttn custom-select form-control" required="required">
-                                        <option disabled selected value="">Select an option</option>
-                                    </select>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-sm-2 form-inline" style="display: flex;align-items: center;">
-                            <div class="form-group">
-                                <button class="btn btn-warning btn-md float-right" type="button" onclick="duplicate(this)">Add New</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
                 <div class="row">
-                    <div class="form-group col-sm-6 sm-ml-1 control-label">
-                        Availability:
-                        <select id="availability" name="availability" class="custom-select form-control" required="required">
+                    <div class="col-md-6 col-lg-4 col-12 input-group form-group">
+                        <label class="control-label col-sm-5 col-5 mt-2" style="color:black;">First name<span
+                                class="text-danger">*</span></label>
+                        <input type="text" class="form-control" id="firstName "
+                            name='firstName' placeholder="First name" required value="{{ prefil.firstName }}">
+                    </div>
+                    <div class="col-md-6 col-lg-4 col-12 input-group form-group">
+                        <label class="control-label col-sm-5 col-5 mt-2" style="color:black;">Last name<span
+                                class="text-danger">*</span></label>
+                        <input type="text" class="form-control" id="lastName "
+                            name='lastName' placeholder="Last name" required value="{{ prefil.lastName }}">
+                    </div>
+                    <div class="col-md-6 col-lg-4 col-12 input-group form-group">
+                        <label class="control-label col-sm-5 col-5 mt-2" style="color:black;">Email Id<span
+                                class="text-danger">*</span></label>
+                        <input type="email" class="form-control" id="email" name='email'
+                            placeholder="Email Address" required value="{{ prefil.email }}">
+                    </div>
+                    <div class="col-md-6 col-lg-4 col-12 input-group form-group">
+                        <label class="control-label col-sm-5 col-5 mt-2" style="color:black;">Address<span
+                                class="text-danger">*</span></label>
+                        <input id="pac-input" type="text" class="controls form-control"
+                            name='loc' placeholder="Search" required>
+                    </div>
+                    <div class="col-md-6 col-lg-4 col-12 input-group form-group">
+                        <label class="control-label col-sm-5 col-5 mt-2" style="color:black;">Phone Number<span
+                                class="text-danger">*</span></label>
+                        <input type="number" class="form-control" id="phone" name='phone'
+                            placeholder="Phone Number" required value="{{ prefil.phone }}" type="number">
+                    </div>
+                    <div class="col-md-6 col-lg-4 col-12 input-group form-group">
+                        <label class="control-label col-sm-5 col-5 mt-2" style="color:black;">Availability</label>
+                        <select id="availability" name="availability"
+                            class="custom-select form-control" required="required">
                             <option value="weekly" selected>weekly</option>
                             <option value="weekend" selected>weekend</option>
                             <option value="both" selected>both</option>
@@ -294,249 +255,271 @@
                     </div>
                 </div>
                 <hr>
+                <div class="outside">
+                    <div class="row entry">
+                        <div class="col-md-6 col-lg-4 col-12 input-group form-group">
+                            <label class="control-label col-sm-5 col-5 mt-2" style="color:black;" for="cn">Class
+                                Name</label>
+                            <select name="cn" class="cn custom-select form-control"
+                                required="required" onchange="selectclass(this)">
+                                <option disabled selected value="">Select an option</option>
+                                {% for x in data %}
+                                <option value="{{ x.0 }}">{{ x.0 }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="col-md-6 col-lg-4 col-12 input-group form-group">
+                            <label class="control-label col-sm-5 col-5 mt-2" style="color:black;" for="ctn">Course
+                                Taught</label>
+                            <select name="ctn" class="ctn custom-select form-control"
+                                required="required" onclick="selectcourse(this)">
+                                <option disabled selected value="">Select an option</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6 col-lg-4 col-12 input-group form-group">
+                            <label class="control-label col-sm-5 col-5 mt-2" style="color:black;" for="ttn">Teaching
+                                Type</label>
+                            <select name="ttn" class="ttn custom-select form-control"
+                                required="required">
+                                <option disabled selected value="">Select an option</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-12 col-md-12  col-12 d-flex justify-content-end">
+                        <button class="btn btn-info btn-md" type="button" onclick="duplicate(this)">Add
+                            New</button>
+                    </div>
+                <hr>
                 <div class="form-group">
                     <label class="control-label col-sm-4"><span class="text-danger">Note :</span></label>
                     <div class="col-md-12">
                         <span class="text-muted">
-                            By clicking Sign Up, you agree to our <a href="#">Terms</a> and that you have read our <a href="#">Policy</a>, including our <a href="#">Cookie Use</a>.
+                            By clicking Sign Up, you agree to our <a href="#">Terms</a> and that you have read our <a
+                                href="#">Policy</a>, including our <a href="#">Cookie Use</a>.
                         </span>
                     </div>
                 </div>
 
-                <div class="row container d-flex justify-content-end">
-                    <div class="col-sm-2 sm-ml-1">
-                        <button id='submitBtn' name="submit" type="submit" class="btn btn-warning">Register</button>
-
-                    </div>
+                <div class="col-lg-12 col-md-12 col-12 mt-4 text-center">
+                        <button id='submitBtn' name="submit" type="submit" class="btn btn-info">Register</button>
                 </div>
 
             </form>
         </div>
-    
-</div>
+
+    </div>
 </div>
 <script>
-    function clear_all(){
+    function clear_all() {
         var x = document.getElementsByClassName("form-control");
-        for(var i=0;i<x.length;i++){
-            x[i].value='';
+        for (var i = 0; i < x.length; i++) {
+            x[i].value = '';
         }
     }
 
 
-    $(document).on("DOMContentLoaded",function(){
-        function initialize(){
+    $(document).on("DOMContentLoaded", function () {
+        function initialize() {
             var input = document.getElementById('pac-input');
             var autocomplete = new google.maps.places.Autocomplete(input);
             google.maps.event.addListener(autocomplete, 'place_changed', function () {
-            var place = autocomplete.getPlace();
-            document.getElementById('cityLat').value = place.geometry.location.lat();
-            document.getElementById('cityLng').value = place.geometry.location.lng();
+                var place = autocomplete.getPlace();
+                document.getElementById('cityLat').value = place.geometry.location.lat();
+                document.getElementById('cityLng').value = place.geometry.location.lng();
             });
         }
         initialize();
-});
+    });
 
     var url = document.location.toString();
-	if (url.match('#')) {
-	    $("#"+url.split('#')[1]).show();
-	}
+    if (url.match('#')) {
+        $("#" + url.split('#')[1]).show();
+    }
 
 
 
-//     var counter=1;
-//     var Dclone = document.querySelector('#entry1').cloneNode(true);
-//     function emptyit(ele){
-//         while (ele.length > 0) {
-//             ele.remove(0);
-//         }
-//     }
-//     function duplicate(data){
-//         var f = document.getElementById('submitForm');
-//         if(! f.checkValidity()){
-//             f.reportValidity();
-//         }
-//         else{
-//             var disParent = data.parentElement.parentElement.parentElement;
-//             var ctn = disParent.children[0].children[0].children[1].children[0];
-//             var cn = disParent.children[1].children[0].children[1].children[0];
-//             var ttn = disParent.children[2].children[0].children[1].children[0];
-//             ctn.disabled = true;
-//             cn.disabled = true;
-//             ttn.disabled = true;
-//             data.disabled = true;
-//             var removeCTN = document.getElementsByName("ctn")
-//             var removeOptions = [];
-//             for(var x=0;x<removeCTN.length;x++){
-//                 removeOptions.push(removeCTN[x].value);
-//             }
-//             var clone = Dclone.cloneNode(true);
-//             counter+=1;
-//             clone.setAttribute('id','entry'+counter);
-//             var ctnNode = clone.children[0].children[0].children[1].children[0];
-//             var cnNode = clone.children[1].children[0].children[1].children[0];
-//             var ttnNode = clone.children[2].children[0].children[1].children[0];
-//             $(cn).multiselect('disable');
-//             $(ttn).multiselect('disable');
-//             $(cnNode).multiselect();
-//             $(ttnNode).multiselect();
-//             var oldData = [];
-//             for(var x=1;x<ctnNode.length;x++){
-//                 oldData.push(ctnNode[x].value)
-//             }
-//             emptyit(ctnNode);
-//             for(var x in oldData){
-//                 if(! removeOptions.includes(oldData[x])){
-//                     addoption(ctnNode,oldData[x]);
-//                 }
-//             }
-//             document.querySelector('#mainForm').appendChild(clone)
-//         }
-//     }
-//     function addoption(ele,val){
-//         var opt = document.createElement('option');
-//         opt.value = val;
-//         opt.innerHTML = val;
-//         ele.appendChild(opt);
-//     }
-//     function addoptions(ele,ar){
-//         for(var x in ar){
-//             addoption(ele,ar[x]);
-//         }
-//     }
-//     function addvals(data){
-//         var mainParentNode = data.parentElement.parentElement.parentElement.parentElement;
-//         var cn = mainParentNode.children[1].children[0].children[1].children[0];
-//         var ttn = mainParentNode.children[2].children[0].children[1].children[0];
-//         var currentval = data.value;
-//         var alldata = JSON.parse("{{jsdata|escapejs}}");
-//         emptyit(cn);
-//         emptyit(ttn);
-//         addoptions(cn,alldata[currentval][0])
-//         addoptions(ttn,alldata[currentval][1])
-        
-//         $(cn).multiselect("rebuild");
-//         $(ttn).multiselect("rebuild");
+    //     var counter=1;
+    //     var Dclone = document.querySelector('#entry1').cloneNode(true);
+    //     function emptyit(ele){
+    //         while (ele.length > 0) {
+    //             ele.remove(0);
+    //         }
+    //     }
+    //     function duplicate(data){
+    //         var f = document.getElementById('submitForm');
+    //         if(! f.checkValidity()){
+    //             f.reportValidity();
+    //         }
+    //         else{
+    //             var disParent = data.parentElement.parentElement.parentElement;
+    //             var ctn = disParent.children[0].children[0].children[1].children[0];
+    //             var cn = disParent.children[1].children[0].children[1].children[0];
+    //             var ttn = disParent.children[2].children[0].children[1].children[0];
+    //             ctn.disabled = true;
+    //             cn.disabled = true;
+    //             ttn.disabled = true;
+    //             data.disabled = true;
+    //             var removeCTN = document.getElementsByName("ctn")
+    //             var removeOptions = [];
+    //             for(var x=0;x<removeCTN.length;x++){
+    //                 removeOptions.push(removeCTN[x].value);
+    //             }
+    //             var clone = Dclone.cloneNode(true);
+    //             counter+=1;
+    //             clone.setAttribute('id','entry'+counter);
+    //             var ctnNode = clone.children[0].children[0].children[1].children[0];
+    //             var cnNode = clone.children[1].children[0].children[1].children[0];
+    //             var ttnNode = clone.children[2].children[0].children[1].children[0];
+    //             $(cn).multiselect('disable');
+    //             $(ttn).multiselect('disable');
+    //             $(cnNode).multiselect();
+    //             $(ttnNode).multiselect();
+    //             var oldData = [];
+    //             for(var x=1;x<ctnNode.length;x++){
+    //                 oldData.push(ctnNode[x].value)
+    //             }
+    //             emptyit(ctnNode);
+    //             for(var x in oldData){
+    //                 if(! removeOptions.includes(oldData[x])){
+    //                     addoption(ctnNode,oldData[x]);
+    //                 }
+    //             }
+    //             document.querySelector('#mainForm').appendChild(clone)
+    //         }
+    //     }
+    //     function addoption(ele,val){
+    //         var opt = document.createElement('option');
+    //         opt.value = val;
+    //         opt.innerHTML = val;
+    //         ele.appendChild(opt);
+    //     }
+    //     function addoptions(ele,ar){
+    //         for(var x in ar){
+    //             addoption(ele,ar[x]);
+    //         }
+    //     }
+    //     function addvals(data){
+    //         var mainParentNode = data.parentElement.parentElement.parentElement.parentElement;
+    //         var cn = mainParentNode.children[1].children[0].children[1].children[0];
+    //         var ttn = mainParentNode.children[2].children[0].children[1].children[0];
+    //         var currentval = data.value;
+    //         var alldata = JSON.parse("{{jsdata|escapejs}}");
+    //         emptyit(cn);
+    //         emptyit(ttn);
+    //         addoptions(cn,alldata[currentval][0])
+    //         addoptions(ttn,alldata[currentval][1])
 
-//         var saveVal = mainParentNode.children[5]
-//         saveVal.value = data.value;
-//         console.log(saveVal.value)
-//     }
-//     function cnCombine(data){
-//         var mainParentNode = data.parentElement.parentElement.parentElement.parentElement;
-//         var cn = mainParentNode.children[3];
-//         var result = [];
-//         var options = data && data.options;
-//         var opt;
-//         for (var i=0, iLen=options.length; i<iLen; i++) {
-//             opt = options[i];
-//             if(opt.selected) {
-//                 result.push(opt.value || opt.text);
-//             }
-//         }
-//         cn.value = result.join(', ');
-//     }
-//     function ttnCombine(data){
-//         var mainParentNode = data.parentElement.parentElement.parentElement.parentElement;
-//         var ttn = mainParentNode.children[4];
-//         var result = [];
-//         var options = data && data.options;
-//         var opt;
-//         for (var i=0, iLen=options.length; i<iLen; i++) {
-//             opt = options[i];
-//             if(opt.selected) {
-//                 result.push(opt.value || opt.text);
-//             }
-//         }
-//         ttn.value = result.join('\n');
-//     }
-//     $("#cn").multiselect();
-//     $("#ttn").multiselect();
-//     window.scrollTo(0, 0);
-function selectclass(el) {
-    var selected = el.value;
-    $.ajax({
-      url: "{% url 'findCourse' %}",
-      data: {
-        forclass: selected,
-      },
-      success: function (data) {
-        courses = data.courses;
-        $(el).closest(".entry").find(".ctn").empty().trigger("change");
-        for (i = 0; i < courses.length; i++) {
-          var newOption = new Option(
-            courses[i][1],
-            courses[i][1],
-            false,
-            false
-          );
-          $(el).closest(".entry").find(".ctn").append(newOption).trigger("change");
-        }
-      },
-    });
-  }
+    //         $(cn).multiselect("rebuild");
+    //         $(ttn).multiselect("rebuild");
 
-  function selectcourse(el) {
-      var selected_course = el.value;
-    var selected_class = $(el).closest(".entry").find(".cn").val();
-    $.ajax({
-      url: "{% url 'findTeaching' %}",
-      data: {
-        forclass: selected_class,
-        course: selected_course
-      },
-      success: function (data) {
-        teaching = data.teaching;
-        $(el).closest(".entry").find(".ttn").empty().trigger("change");
-        for (i = 0; i < teaching.length; i++) {
-          var newOption = new Option(
-            teaching[i][0],
-            teaching[i][0],
-            false,
-            false
-          );
-          $(el).closest(".entry").find(".ttn").append(newOption).trigger("change");
-        }
-      },
-    });
-  }
+    //         var saveVal = mainParentNode.children[5]
+    //         saveVal.value = data.value;
+    //         console.log(saveVal.value)
+    //     }
+    //     function cnCombine(data){
+    //         var mainParentNode = data.parentElement.parentElement.parentElement.parentElement;
+    //         var cn = mainParentNode.children[3];
+    //         var result = [];
+    //         var options = data && data.options;
+    //         var opt;
+    //         for (var i=0, iLen=options.length; i<iLen; i++) {
+    //             opt = options[i];
+    //             if(opt.selected) {
+    //                 result.push(opt.value || opt.text);
+    //             }
+    //         }
+    //         cn.value = result.join(', ');
+    //     }
+    //     function ttnCombine(data){
+    //         var mainParentNode = data.parentElement.parentElement.parentElement.parentElement;
+    //         var ttn = mainParentNode.children[4];
+    //         var result = [];
+    //         var options = data && data.options;
+    //         var opt;
+    //         for (var i=0, iLen=options.length; i<iLen; i++) {
+    //             opt = options[i];
+    //             if(opt.selected) {
+    //                 result.push(opt.value || opt.text);
+    //             }
+    //         }
+    //         ttn.value = result.join('\n');
+    //     }
+    //     $("#cn").multiselect();
+    //     $("#ttn").multiselect();
+    //     window.scrollTo(0, 0);
+    function selectclass(el) {
+        var selected = el.value;
+        $.ajax({
+            url: "{% url 'findCourse' %}",
+            data: {
+                forclass: selected,
+            },
+            success: function (data) {
+                courses = data.courses;
+                $(el).closest(".entry").find(".ctn").empty().trigger("change");
+                for (i = 0; i < courses.length; i++) {
+                    var newOption = new Option(
+                        courses[i][1],
+                        courses[i][1],
+                        false,
+                        false
+                    );
+                    $(el).closest(".entry").find(".ctn").append(newOption).trigger("change");
+                }
+            },
+        });
+    }
 
-  function duplicate(){
-      $('.outside').append(`<div class="row entry">
-                            <div class="col-sm-3">
-                            <div class="form-group">
-                                <label  class="control-label" for="cn">Class Name</label>
-                                <div>
+    function selectcourse(el) {
+        var selected_course = el.value;
+        var selected_class = $(el).closest(".entry").find(".cn").val();
+        $.ajax({
+            url: "{% url 'findTeaching' %}",
+            data: {
+                forclass: selected_class,
+                course: selected_course
+            },
+            success: function (data) {
+                teaching = data.teaching;
+                $(el).closest(".entry").find(".ttn").empty().trigger("change");
+                for (i = 0; i < teaching.length; i++) {
+                    var newOption = new Option(
+                        teaching[i][0],
+                        teaching[i][0],
+                        false,
+                        false
+                    );
+                    $(el).closest(".entry").find(".ttn").append(newOption).trigger("change");
+                }
+            },
+        });
+    }
+
+    function duplicate() {
+        $('.outside').append(`<div class="row entry">
+                        <div class="col-md-6 col-lg-4 col-12 input-group form-group">
+                            <label class="control-label col-sm-5 col-5 mt-2" style="color:black;" for="cn">Class Name</label>
                                     <select name="cn" class="cn custom-select form-control" required="required" onchange="selectclass(this)">
                                         <option disabled selected value="">Select an option</option>
                                         {% for x in data %}
                                         <option value="{{ x.0 }}">{{ x.0 }}</option>
                                         {% endfor %}
                                     </select>
-                                </div>
                             </div>
-                        </div>
-                        <div class="col-sm-3">
-                            <div class="form-group">
-                                <label class="control-label" for="ctn">Course Taught</label>
-                                <div>
+                            <div class="col-md-6 col-lg-4 col-12 input-group form-group">
+                                <label class="control-label col-sm-5 col-5 mt-2" style="color:black;" for="ctn">Course Taught</label>
                                     <select name="ctn" class="ctn custom-select form-control" required="required" onclick="selectcourse(this)">
                                         <option disabled selected value="">Select an option</option>
                                     </select>
-                                </div>
                             </div>
-                        </div>
-                        <div class="col-sm-4">
-                            <div class="form-group">
-                                <label class="control-label" for="ttn">Teaching Type</label>
-                                <div>
+                            <div class="col-md-6 col-lg-4 col-12 input-group form-group">
+                                <label class="control-label col-sm-5 col-5 mt-2" style="color:black;" for="ttn">Teaching Type</label>
                                     <select name="ttn" class="ttn custom-select form-control" required="required">
                                         <option disabled selected value="">Select an option</option>
                                     </select>
-                                </div>
                             </div>
-                        </div>
                         </div>`)
-  }
+    }
 </script>
 {% endblock %}

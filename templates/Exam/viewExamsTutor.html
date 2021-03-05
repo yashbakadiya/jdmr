@@ -22,9 +22,9 @@
                         </div>
                     </div>
                 </div>
+                {% if exams %}
                 <div class="widget-content widget-content-area">
                     <div class="table-responsive">
-                    {% if exams %}
                     <div class="col-lg-12 col-sm-12 mb-3">
                     <label class="form-check-label" for="defaultCheck1">
                         Exam For Institute
@@ -68,9 +68,9 @@
                             </tr>
                             {% endfor %}{% endfor %}
                         </table>
-                        </form>{% endif %}
+                        </form>
                         <br>
-                        {% if tutorexams %}
+                        {% elif tutorexams %}
                         <div class="col-lg-12 col-sm-12 mb-3">
                         <label class="form-check-label" for="defaultCheck1">
                             Exam For Sell
@@ -113,9 +113,18 @@
                             </tr>
                             {% endfor %}
                         </table>
-                        </form>{% endif %}
+                        </form>
                     </div>
                 </div>
+                {% else %}
+                <div class="card-header" style="background: none;">
+                    <div class="row">
+                        <div class="col-xl-12 col-md-12 col-12">
+                            <h2>No Exams to show</h2>
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
             </div>
         </div>
     </main>

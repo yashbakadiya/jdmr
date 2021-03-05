@@ -26,9 +26,9 @@
                           
                       </div>
                   </div>
+                  {% if exams %}
                   <div class="widget-content widget-content-area">
                       <div class="table-responsive">
-                      {% if exams %}
                        <form action="" method="post">{% csrf_token %}
                           <table id="htmlgrid" class="testgrid table table-striped table-bordered table-hover mb-4">
                               <tr>
@@ -59,9 +59,17 @@
                               {% endfor %}
                           </table>
                           </form>
-                          {% endif %}
                       </div>
                   </div>
+                  {% else %}
+                <div class="card-header" style="background: none;">
+                    <div class="row">
+                        <div class="col-xl-12 col-md-12 col-12">
+                            <h2>No Exams to show</h2>
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
               </div>
           </div>
   </div>

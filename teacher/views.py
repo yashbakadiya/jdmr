@@ -147,9 +147,9 @@ def editTutor(request,id):
             # ctn = request.POST.get('ctn_combined')
             # cn = request.POST.get('cn_combined')
             # ttn = request.POST.get('ttn_combined')
-            ctn = request.POST.get('ctn')
-            cn = request.POST.get('cn')
-            ttn = request.POST.get('ttn')
+            ctn = request.POST.getlist('ctn')
+            cn = request.POST.getlist('cn')
+            ttn = request.POST.getlist('ttn')
             availability = request.POST.get('availability')
             if availability=="weekly":
                 availability = 1
@@ -169,16 +169,25 @@ def editTutor(request,id):
             teacher.save()
             user = User.objects.get(username=editTutorObj.teacher.user.username)
             user.username = NewUsername
-            user.password = NewPassword
+            user.password = NewPhone
             user.email = NewEmail
             user.save()
             inst = Institute.objects.get(user=User.objects.get(username=request.session['user']))
-            editTutorObj.courseName = ctn
-            editTutorObj.forclass = cn
-            editTutorObj.teachType = ttn
+
+            if ctn:    
+                editTutorObj.courseName = ctn[0]
+            if cn:
+                editTutorObj.forclass = cn[0]
+            if ttn:
+                editTutorObj.teachType = ttn[0]
             editTutorObj.teacher = teacher
             editTutorObj.availability = availability
             editTutorObj.save()
+
+            for x in range(1,len(ttn)):
+                addTeacher = enrollTutors(forclass=cn[x],teachType=ttn[x],courseName=ctn[x],institute=inst,teacher=teacher,availability=availability)
+                addTeacher.save()
+                
             messages.success(request,"Teacher Updated Successfully")
             return redirect("viewTutors")
         return render(request,"teacher/editTutorMini.html",{

@@ -33,7 +33,7 @@
 }
 {% endblock %}
 {% block main-content %}
-        <div class="container mt-4">
+        <div class="mt-5">
         {% if messages %}
         {% for k in messages%}
         <div class="alert alert-{{k.tags}} alert-dismissible fade show" role="alert">
@@ -45,14 +45,17 @@
         {% endfor %}
         {% endif %}
             <div class="card mb-4">
-                <div class="card-body">
+                <div class="card-header">
                     <div>
-                        <h2 style="color: rgb(66, 8, 8);">Results Are for your search</h2>
-                        <br>
+                        <h2 style="color: rgb(0, 0, 0);">Results Are for your search</h2>
+                    </div>
+                </div>
+
+                    <div class="card-body">
                             {% if sr %}
+                            <div class="table-responsive">
                                     <table class="table table-striped">
                                         <!--Table head-->
-                                        <thead>
                                             <tr>
                                                 <th>Username</th>
                                                 <th>First Name</th>
@@ -61,13 +64,11 @@
                                                 <th>Pin Code</th>
                                                 <th>Phone Number</th>
                                                 <th>School Name</th>
-                                                <th></th>
+                                                <th>Add</th>
                                             </tr>
-                                        </thead>
                                         <!--Table head-->
                                         <!--Table body-->
                                         {% for i in sr %}
-                                            <tbody>
                                                 <tr>
                                                     <td>{{i.user.username}}</td>
                                                     <td>{{i.user.first_name}}</td>
@@ -80,10 +81,10 @@
                                                         <a href="{% url 'AddalreadyExistsStudent' i.id %}" class="btn btn-danger">Add</a>
                                                     </td>
                                                 </tr>
-                                            </tbody>
                                         {% endfor %}
                                         <!--Table body-->
                                     </table>
+                                </div>
                                     <!--Table-->
                                     <hr>
                             {% endif %}

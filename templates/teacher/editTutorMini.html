@@ -75,40 +75,47 @@
 		<div class="card-header">
 			<div class="row">
 				<div class="col-sm">
-					<h2 style="color: rgb(66, 8, 8);">Edit Tutor Instance</h2>
+					<h2 style="color: rgb(0, 0, 0);">Edit Tutor Instance</h2>
 				</div>
 			</div>
 		</div>
-		<div class="card-body container">
+		<div class="card-body mt-4">
 			<form id='submitForm' method='post' action=''>{% csrf_token %}
-				<div id='mainForm' class="container">
-					<hr>
-					<div id='basicData' name='basicData' class="row">
-						<div class="input-group form-group">
-							<label class="control-label mt-2 col-sm-4">Username</label>
-							<input type="text" class="form-control col-sm-8" id="username " name='NewUsername'
-								placeholder="Username" readonly required value="{{ tutorBaseData.user.username }}"><br><br>
+				<div id='mainForm' class="row">
+					<div class="col-md-6 col-lg-4 col-12 input-group form-group">
+						<label class="control-label col-sm-5 col-5 mt-2" style="color:black;">Username</label>
+						<input style="height: fit-content;" type="text" class="form-control" id="username " name='NewUsername'
+						placeholder="Username" readonly required value="{{ tutorBaseData.user.username }}"><br><br>
+					</div>
+					<div class="col-md-6 col-lg-4 col-12 input-group form-group">
+						<label class="control-label col-sm-5 col-5 mt-2" style="color:black;">Email-Id</label>
+							<input style="height: fit-content;" type="email" class="form-control" id="email" name='NewEmail'
+							placeholder="Email Address" readonly required value="{{ tutorBaseData.user.email }}"><br><br>
 						</div>
-						<div class="input-group form-group">
-							<label class="control-label mt-2 col-sm-4">Email-Id</label>
-							<input type="email" class="form-control col-sm-8" id="email" name='NewEmail'
-								placeholder="Email Address" readonly required value="{{ tutorBaseData.user.email }}"><br><br>
+						<div class="col-md-6 col-lg-4 col-12 input-group form-group">
+							<label class="control-label col-sm-5 col-5 mt-2" style="color:black;">Phone Number<span class="text-danger">*</span></label>
+							<input style="height: fit-content;" type="number" class="form-control" id="phone" name='NewPhone'
+							placeholder="Phone Number" required value="{{ tutorBaseData.phone }}"
+							type="number">
 						</div>
-						<div class="input-group form-group">
-							<label class="control-label mt-2 col-sm-4">Phone Number<span class="text-danger">*</span></label>
-							<input type="number" class="form-control col-sm-8" id="phone" name='NewPhone'
-								placeholder="Phone Number" required value="{{ tutorBaseData.phone }}"
-								type="number"><br><br>
-						</div>
+						<div class="col-md-6 col-lg-4 col-12 input-group form-group">
+							<label class="control-label col-sm-5 col-5 mt-2" style="color:black;">Availability</label>
+								<select id="availability" name="availability" class="custom-select form-control"
+									required="required">
+									<option value="weekly" selected>weekly</option>
+									<option value="weekend" selected>weekend</option>
+									<option value="both" selected>both</option>
+								</select>
+							</div>
 					</div>
 					<hr>
 					<div class="outside">
-						<div class="row entry">
-							<div class="col-sm-3">
-								<div class="form-group">
-									<label  class="control-label" for="cn">Class Name</label>
-									<div>
-										<select name="cn" class="cn custom-select form-control" required="required" onchange="selectclass(this)">
+                    <div class="row entry">
+                        <div class="col-md-6 col-lg-4 col-12 input-group form-group">
+                            <label class="control-label col-sm-5 col-5 mt-2" style="color:black;" for="cn">Class
+                                Name</label>
+                            <select name="cn" class="cn custom-select form-control"
+                                required="required" onchange="selectclass(this)">
 											{% if editTutor.forclass %}
 											<option disabled selected value="{{editTutor.forclass}}">{{editTutor.forclass}}</option>
 											{% else %}
@@ -119,13 +126,11 @@
 											{% endfor %}
 										</select>
 									</div>
-								</div>
-							</div>
-							<div class="col-sm-3">
-								<div class="form-group">
-									<label class="control-label" for="ctn">Course Taught</label>
-									<div>
-										<select name="ctn" class="ctn custom-select form-control" required="required" onclick="selectcourse(this)">
+									<div class="col-md-6 col-lg-4 col-12 input-group form-group">
+										<label class="control-label col-sm-5 col-5 mt-2" style="color:black;" for="ctn">Course
+											Taught</label>
+										<select name="ctn" class="ctn custom-select form-control"
+											required="required" onclick="selectcourse(this)">
 											{% if editTutor.courseName %}
 											<option disabled selected value="{{editTutor.courseName}}">{{editTutor.courseName}}</option>
 											{% else %}
@@ -133,13 +138,11 @@
 											{% endif %}
 										</select>
 									</div>
-								</div>
-							</div>
-							<div class="col-sm-4">
-								<div class="form-group">
-									<label class="control-label" for="ttn">Teaching Type</label>
-									<div>
-										<select name="ttn" class="ttn custom-select form-control" required="required">
+									<div class="col-md-6 col-lg-4 col-12 input-group form-group">
+										<label class="control-label col-sm-5 col-5 mt-2" style="color:black;" for="ttn">Teaching
+											Type</label>
+										<select name="ttn" class="ttn custom-select form-control"
+											required="required">
 											{% if editTutor.teachType %}
 											<option disabled selected value="{{editTutor.teachType}}">{{editTutor.teachType}}</option>
 											{% else %}
@@ -149,30 +152,13 @@
 									</div>
 								</div>
 							</div>
-							<div class="col-sm-2 form-inline" style="display: flex;align-items: center;">
-								<div class="form-group">
-									<button class="btn btn-warning btn-md float-right" type="button" onclick="duplicate(this)">Add New</button>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-				<div class="row container">
-					<div class="form-group col-sm-6 sm-ml-1">
-						Availability:
-						<select id="availability" name="availability" class="custom-select form-control"
-							required="required">
-							<option value="weekly" selected>weekly</option>
-							<option value="weekend" selected>weekend</option>
-							<option value="both" selected>both</option>
-						</select>
-					</div>
-				</div>
-				<div class="row container">
-					<div class="col-sm-4 sm-ml-1">
-						<button id='submitBtn' name="submit" type="submit" class="btn btn-primary">Submit</button>
-					</div>
-				</div>
+							<div class="col-lg-12 col-md-12  col-12 d-flex justify-content-end">
+                        <button class="btn btn-info btn-md" type="button" onclick="duplicate(this)">Add
+                            New</button>
+                    </div>
+				<div class="col-lg-12 col-md-12 col-12 mt-4 text-center">
+					<button id='submitBtn' name="submit" type="submit" class="btn btn-info">Submit</button>
+			</div>
 			</form>
 		</div>
 	</div>
@@ -345,39 +331,27 @@
 
   function duplicate(){
       $('.outside').append(`<div class="row entry">
-                            <div class="col-sm-3">
-                            <div class="form-group">
-                                <label  class="control-label" for="cn">Class Name</label>
-                                <div>
+                        <div class="col-md-6 col-lg-4 col-12 input-group form-group">
+                            <label class="control-label col-sm-5 col-5 mt-2" style="color:black;" for="cn">Class Name</label>
                                     <select name="cn" class="cn custom-select form-control" required="required" onchange="selectclass(this)">
                                         <option disabled selected value="">Select an option</option>
                                         {% for x in data %}
                                         <option value="{{ x.0 }}">{{ x.0 }}</option>
                                         {% endfor %}
                                     </select>
-                                </div>
                             </div>
-                        </div>
-                        <div class="col-sm-3">
-                            <div class="form-group">
-                                <label class="control-label" for="ctn">Course Taught</label>
-                                <div>
+                            <div class="col-md-6 col-lg-4 col-12 input-group form-group">
+                                <label class="control-label col-sm-5 col-5 mt-2" style="color:black;" for="ctn">Course Taught</label>
                                     <select name="ctn" class="ctn custom-select form-control" required="required" onclick="selectcourse(this)">
                                         <option disabled selected value="">Select an option</option>
                                     </select>
-                                </div>
                             </div>
-                        </div>
-                        <div class="col-sm-4">
-                            <div class="form-group">
-                                <label class="control-label" for="ttn">Teaching Type</label>
-                                <div>
+                            <div class="col-md-6 col-lg-4 col-12 input-group form-group">
+                                <label class="control-label col-sm-5 col-5 mt-2" style="color:black;" for="ttn">Teaching Type</label>
                                     <select name="ttn" class="ttn custom-select form-control" required="required">
                                         <option disabled selected value="">Select an option</option>
                                     </select>
-                                </div>
                             </div>
-                        </div>
                         </div>`)
   }
 </script>

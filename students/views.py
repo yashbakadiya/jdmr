@@ -200,7 +200,6 @@ def editStudent(request,id):
             'batch':BatchTiming.objects.filter(institute=inst),
             }
         if request.method=="POST":
-            print(request.POST)
             phone = request.POST.get('phone', '')
             schoolName = request.POST.get('schoolName', '')
             # ctn = request.POST.getlist('ctn_combined')
@@ -228,7 +227,30 @@ def editStudent(request,id):
             studentOBJ.address = request.POST.get("loc")
             studentOBJ.schoolName = schoolName
             studentOBJ.save()
-            for x in range(len(ttn)):
+            
+            if ctn:
+                student.courseName = ctn[0]
+            if cn:
+                student.forclass = cn[0]
+            if ttn:
+                student.teachType = ttn[0]
+            if batchName:
+                student.batch = batchName[0]
+            if feeDis:
+                try:
+                    temp = float(feeDis[0])
+                except:
+                    try:
+                        temp = int(feeDis[0])
+                    except:
+                        temp = 0
+                student.feeDisc = temp
+            if installments:
+                student.installments=installments[0]
+            student.student = studentOBJ
+            student.save()
+
+            for x in range(1,len(ttn)):
                 try:
                     temp = float(feeDis[x])
                 except:
@@ -236,14 +258,18 @@ def editStudent(request,id):
                         temp = int(feeDis[x])
                     except:
                         temp = 0
-                student.student = studentOBJ
-                student.courseName = ctn[x]
-                student.forclass = cn[x]
-                student.teachType = ttn[x]
-                student.batch = batchName[x]
-                student.feeDisc = temp
-                student.installments=installments[x]
-                student.save()
+
+                addstudent = AddStudentInst(
+                        student=studentOBJ,
+                        institute=inst,
+                        courseName = ctn[x] ,
+                        forclass = cn[x] ,
+                        teachType = ttn[x] ,
+                        batch = batchName[x],
+                        feeDisc = temp,
+                        installments=installments[x]
+                    )
+
             messages.success(request,"Student Updated Successfully")
             return redirect("viewStudents")
         return render(request, 'students/editStudent.html', params)

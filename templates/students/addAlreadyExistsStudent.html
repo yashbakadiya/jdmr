@@ -2,95 +2,94 @@
 {% load static %}
 {% block css %}
 <style>
-@import url('https://fonts.googleapis.com/css?family=Numans');
+  @import url('https://fonts.googleapis.com/css?family=Numans');
 
-.container{
-height: 100%;
-align-content: center;
-}
+  .container {
+    height: 100%;
+    align-content: center;
+  }
 
-.card{
-margin-top: auto;
-margin-bottom: auto;
-background-color: white;
-}
+  .card {
+    margin-top: auto;
+    margin-bottom: auto;
+    background-color: white;
+  }
 
-.social_icon span{
-font-size: 60px;
-margin-left: 10px;
-color: #FFC312;
-}
+  .social_icon span {
+    font-size: 60px;
+    margin-left: 10px;
+    color: #FFC312;
+  }
 
-.social_icon span:hover{
-color: white;
-cursor: pointer;
-}
+  .social_icon span:hover {
+    color: white;
+    cursor: pointer;
+  }
 
-.card-header h3{
-color: white;
-}
+  .card-header h3 {
+    color: white;
+  }
 
-.social_icon{
-position: absolute;
-right: 20px;
-top: -45px;
-}
+  .social_icon {
+    position: absolute;
+    right: 20px;
+    top: -45px;
+  }
 
-.input-group-prepend span{
-width: 50px;
-background-color: #FFC312;
-color: black;
-border:0 !important;
-}
+  .input-group-prepend span {
+    width: 50px;
+    background-color: #FFC312;
+    color: black;
+    border: 0 !important;
+  }
 
-input:focus{
-outline: 0 0 0 0  !important;
-box-shadow: 0 0 0 0 !important;
+  input:focus {
+    outline: 0 0 0 0 !important;
+    box-shadow: 0 0 0 0 !important;
 
-}
+  }
 
-.remember{
-color: white;
-}
+  .remember {
+    color: white;
+  }
 
-.remember input
-{
-width: 20px;
-height: 20px;
-margin-left: 20px;
-margin-right: 10px;
-}
-
-.login_btn{
-color: black;
-background-color: #FFC312;
-width: 100px;
-}
-
-.login_btn:hover{
-    background-color: #2a2b3d;
-    color:white;
-}
-
-.links{
-color: white;
-}
-
-.links a{
-margin-left: 4px;
-}
-
-.bigcheckbox{
+  .remember input {
     width: 20px;
     height: 20px;
-}
+    margin-left: 20px;
+    margin-right: 10px;
+  }
 
-.color-pattern-3 {
+  .login_btn {
+    color: black;
+    background-color: #FFC312;
+    width: 100px;
+  }
+
+  .login_btn:hover {
+    background-color: #2a2b3d;
+    color: white;
+  }
+
+  .links {
+    color: white;
+  }
+
+  .links a {
+    margin-left: 4px;
+  }
+
+  .bigcheckbox {
+    width: 20px;
+    height: 20px;
+  }
+
+  .color-pattern-3 {
     text-align: center;
-}
+  }
 
-/* General button style (reset) */
-.button {
+  /* General button style (reset) */
+  .button {
     border: none;
     font-family: inherit;
     font-size: inherit;
@@ -109,37 +108,42 @@ margin-left: 4px;
     -webkit-transition: all 0.3s;
     -moz-transition: all 0.3s;
     transition: all 0.3s;
-}
-.button:after {
+  }
+
+  .button:after {
     content: '';
     position: absolute;
     z-index: -1;
     -webkit-transition: all 0.3s;
     -moz-transition: all 0.3s;
     transition: all 0.3s;
-}
+  }
 
-/* Button 3 */
-.button-3 {
+  /* Button 3 */
+  .button-3 {
     background: #fcad26;
     color: #fff;
-}
-.button-3:hover {
+  }
+
+  .button-3:hover {
     background: #f29e0d;
-}
-.button-3:active {
+  }
+
+  .button-3:active {
     background: #f58500;
     top: 2px;
-}
-.button-3>.fa {
+  }
+
+  .button-3>.fa {
     position: absolute;
     height: 100%;
     left: 0;
     top: 0;
     font-size: 140%;
     width: 60px;
-}
-.button-3>.fa:before {
+  }
+
+  .button-3>.fa:before {
     position: absolute;
     width: 25px;
     height: 25px;
@@ -148,57 +152,69 @@ margin-left: 4px;
     right: 0;
     bottom: 0;
     margin: auto;
-}
-/* Button 3a */
-.button-3a {
+  }
+
+  /* Button 3a */
+  .button-3a {
     padding: 25px 60px 25px 120px;
-}
-.button-3a>.fa {
+  }
+
+  .button-3a>.fa {
     background: rgba(0, 0, 0, 0.05);
-}
-/* Button 3b */
-.button-3b {
+  }
+
+  /* Button 3b */
+  .button-3b {
     padding: 25px 60px 25px 120px;
     border-radius: 10px;
-}
-.button-3b>.fa {
+  }
+
+  .button-3b>.fa {
     border-right: 2px solid rgba(255, 255, 255, 0.75);
-}
-/* Button 3c */
-.button-3c {
+  }
+
+  /* Button 3c */
+  .button-3c {
     padding: 80px 20px 20px 20px;
     border-radius: 10px;
     box-shadow: 0 3px #da9622;
-}
-.button-3c>.fa:before {
+  }
+
+  .button-3c>.fa:before {
     position: static;
-}
-.button-3c:active {
+  }
+
+  .button-3c:active {
     box-shadow: 0 3px #dc7801;
-}
-.button-3c>.fa {
+  }
+
+  .button-3c>.fa {
     height: 60px;
     width: 100%;
     line-height: 60px;
     background: #fff;
     color: #f29e0d;
     border-radius: 10px 10px 0 0;
-}
-.button-3c:active:before {
+  }
+
+  .button-3c:active:before {
     color: #f58500;
-}
-/* Button 3d */
-.button-3d {
+  }
+
+  /* Button 3d */
+  .button-3d {
     padding: 25px 60px 25px 120px;
     border-radius: 10px;
-}
-.button-3d>.fa {
+  }
+
+  .button-3d>.fa {
     background: #fff;
     color: #fcad26;
     z-index: 2;
     border-radius: 10px 0 0 10px;
-}
-.button-3d:after {
+  }
+
+  .button-3d:after {
     width: 20px;
     height: 20px;
     background: #fff;
@@ -210,27 +226,33 @@ margin-left: 4px;
     -moz-transform: rotate(45deg);
     -ms-transform: rotate(45deg);
     transform: rotate(45deg);
-}
-.button-3d:active:before {
+  }
+
+  .button-3d:active:before {
     color: #f58500;
-}
-.button-3d:active {
+  }
+
+  .button-3d:active {
     top: 0;
-}
-.button-3d:active:after {
+  }
+
+  .button-3d:active:after {
     left: 60px;
-}
-/* Button 3e */
-.button-3e {
+  }
+
+  /* Button 3e */
+  .button-3e {
     padding: 25px 120px 25px 60px;
     overflow: hidden;
-}
-.button-3e>.fa {
+  }
+
+  .button-3e>.fa {
     left: auto;
     right: 10px;
     z-index: 2;
-}
-.button-3e:after {
+  }
+
+  .button-3e:after {
     width: 30%;
     height: 200%;
     background: rgba(255, 255, 255, 0.1);
@@ -246,309 +268,292 @@ margin-left: 4px;
     -ms-transform: rotate(-20deg);
     transform-origin: 0 0;
     transform: rotate(-20deg);
-}
-.button-3e:hover:after {
+  }
+
+  .button-3e:hover:after {
     width: 35%;
-}
+  }
+
   .control-label {
     color: white;
     font-size: 20px;
-}
-[type="checkbox"]
-{
-    vertical-align:middle;
-}
+  }
 
-[type="radio"]
-{
-    vertical-align:middle;
-}
- .autocomplete-items {
-  position: absolute;
-  border: 1px solid #d4d4d4;
-  border-bottom: none;
-  border-top: none;
-  z-index: 99;
-  top: 100%;
-  left: 0;
-  right: 0;
-}
-.autocomplete-items div {
-  padding: 10px;
-  cursor: pointer;
-  background-color: #fff;
-  border-bottom: 1px solid #d4d4d4;
-}
-.autocomplete-items div:hover {
-  background-color: #e9e9e9;
-}
-.autocomplete-active {
-  background-color: DodgerBlue !important;
-  color: #ffffff;
-}
-.school{
-   margin-left : 0;
-   color: black;
-}
-.school-input{
-   padding-left:0;
-   padding-right:0;
-}
-.pac-card {
-  margin: 10px 10px 0 0;
-  border-radius: 2px 0 0 2px;
-  box-sizing: border-box;
-  -moz-box-sizing: border-box;
-  outline: none;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
-  background-color: #fff;
-}
+  [type="checkbox"] {
+    vertical-align: middle;
+  }
 
-#pac-container {
-  padding-bottom: 12px;
-  margin-right: 12px;
-}
+  [type="radio"] {
+    vertical-align: middle;
+  }
 
-.pac-controls {
-  display: inline-block;
-  padding: 5px 11px;
-}
+  .autocomplete-items {
+    position: absolute;
+    border: 1px solid #d4d4d4;
+    border-bottom: none;
+    border-top: none;
+    z-index: 99;
+    top: 100%;
+    left: 0;
+    right: 0;
+  }
 
-.pac-controls label {
-  font-weight: 300;
-}
+  .autocomplete-items div {
+    padding: 10px;
+    cursor: pointer;
+    background-color: #fff;
+    border-bottom: 1px solid #d4d4d4;
+  }
 
-#pac-input {
-  text-overflow: ellipsis;
-}
+  .autocomplete-items div:hover {
+    background-color: #e9e9e9;
+  }
 
-#pac-input:focus {
-  border-color: #4d90fe;
-}
-.pac-container {
-  z-index: 1100 !important;
-}
+  .autocomplete-active {
+    background-color: DodgerBlue !important;
+    color: #ffffff;
+  }
+
+  .school {
+    margin-left: 0;
+    color: black;
+  }
+
+  .school-input {
+    padding-left: 0;
+    padding-right: 0;
+  }
+
+  .pac-card {
+    margin: 10px 10px 0 0;
+    border-radius: 2px 0 0 2px;
+    box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    outline: none;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+    background-color: #fff;
+  }
+
+  #pac-container {
+    padding-bottom: 12px;
+    margin-right: 12px;
+  }
+
+  .pac-controls {
+    display: inline-block;
+    padding: 5px 11px;
+  }
+
+  .pac-controls label {
+    font-weight: 300;
+  }
+
+  #pac-input {
+    text-overflow: ellipsis;
+  }
+
+  #pac-input:focus {
+    border-color: #4d90fe;
+  }
+
+  .pac-container {
+    z-index: 1100 !important;
+  }
 </style>
 {% endblock %}
 {% block main-content %}
-<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCBJybI10-Xa43-F5GSad1i0Y9W3yqlW6Q&libraries=places&v=3" defer></script>
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCBJybI10-Xa43-F5GSad1i0Y9W3yqlW6Q&libraries=places&v=3"
+  defer></script>
 
-<div class="container">
-    {% if messages %}
-    {% for k in messages%}
-    <div class="alert alert-{{k.tags}} alert-dismissible fade show" role="alert">
-        <b>{{ k }} !</b>
-        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-        </button>
-    </div>
-    {% endfor %}
-    {% endif %}
-	<div class="d-flex justify-content-center h-100">
-		<div class="card">
-			<div class="card-header">
-                <div class="row">
-                    <div class="col-sm"><h2 style="color: rgb(66, 8, 8);">Add Student</h2></div>
+<div class="mt-5">
+  {% if messages %}
+  {% for k in messages%}
+  <div class="alert alert-{{k.tags}} alert-dismissible fade show" role="alert">
+    <b>{{ k }} !</b>
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  {% endfor %}
+  {% endif %}
+    <div class="card">
+      <div class="card-header">
+        <div class="row">
+          <div class="col-sm">
+            <h2 style="color: rgb(0, 0, 0);">Add Student</h2>
+          </div>
+        </div>
+      </div>
+      <div class="card-body">
+        <form id="submitForm" action="" method="post">{% csrf_token %}
+          <div class="row">
+            <div class="col-md-6 col-lg-4 col-12 input-group form-group">
+              <label class="control-label col-sm-5 col-5 mt-2" style="color:black;">Username<span
+                  class="text-danger">*</span></label>
+            <input type="text" class="form-control" id="username" name='username' value="{{student.user.username}}"
+              disabled>
+          </div>
+          <div class="col-md-6 col-lg-4 col-12 input-group form-group">
+            <label class="control-label col-sm-5 col-5 mt-2" style="color:black;">First name<span
+                class="text-danger">*</span></label>
+            <input type="text" class="form-control" id="firstName" name='firstName' placeholder="First Name" disabled>
+          </div>
+          <div class="col-md-6 col-lg-4 col-12 input-group form-group">
+            <label class="control-label col-sm-5 col-5 mt-2" style="color:black;">Last name<span
+                class="text-danger">*</span></label>
+            <input type="text" class="form-control" id="lastName" name='lastName' placeholder="Last Name" value="{{student.user.last_name}}"
+              disabled>
+          </div>
+          <div class="col-md-6 col-lg-4 col-12 input-group form-group">
+            <label class="control-label col-sm-5 col-5 mt-2" style="color:black;">Email Id<span
+                class="text-danger">*</span></label>
+            <input type="email" class="form-control" id="email" name='email' value="{{student.user.email}}" disabled>
+          </div>
+          <div class="col-md-6 col-lg-4 col-12 input-group form-group">
+            <label class="control-label col-sm-5 col-5 mt-2" style="color:black;">Phone Number<span
+                class="text-danger">*</span></label>
+            <input type="tel" pattern="[0-9]{10}" class="form-control" id="phone" name='phone' value="{{student.phone}}"
+              disabled>
+          </div>
+          <div class="col-md-6 col-lg-4 col-12 input-group form-group">
+            <label class="control-label col-sm-5 col-5 mt-2" style="color:black;">Address<span
+                class="text-danger">*</span></label>
+            <input id="pac-input" type="text" class="controls form-control" name='loc' value="{{student.address}}"
+              disabled>
+            <input type="hidden" id="cityLat" name="cityLat" />
+            <input type="hidden" id="cityLng" name="cityLng" />
+          </div>
+          <div class="col-md-6 col-lg-4 col-12 input-group form-group">
+            <label class="control-label col-sm-5 col-5 mt-2" style="color:black;">School Name<span
+                class="text-danger">*</span></label>
+            <input type="text" class="form-control" id="schoolName" name='school' value="{{student.schoolName}}"
+                disabled>
+            </div>
+          </div>
+          <hr>
+
+          <!-- detail start -->
+          <div id='mainForm' class="outside">
+            <div class="entry row">
+              <div class="col-md-6 col-lg-4 col-12 input-group form-group">
+                <label class="control-label col-sm-5 col-5 mt-2" style="color:black;" for="cn">Class Name</label>
+                <select name="cn" class="cn custom-select form-control" required="required" onchange="selectclass(this)">
+                  <option disabled selected value="">Select an option</option>
+                  {% for x in data %}
+                  <option value="{{ x.0 }}">{{ x.0 }}</option>
+                  {% endfor %}
+                </select>
+              </div>
+              <div class="col-md-6 col-lg-4 col-12 input-group form-group">
+                <label class="control-label col-sm-5 col-5 mt-2" style="color:black;" for="ctn">Course</label>
+                <select name="ctn" class="ctn custom-select form-control" required="required"
+                  onclick="selectcourse(this)">
+                  <option disabled selected value="">Select an option</option>
+                </select>
+              </div>
+              <div class="col-md-6 col-lg-4 col-12 input-group form-group">
+                <label class="control-label col-sm-5 col-5 mt-2" style="color:black;" for="ttn">Teaching Type</label>
+                  <select name="ttn" class="ttn custom-select form-control" required="required">
+                    <option disabled selected value="">Select an option</option>
+                  </select>
                 </div>
-			</div>
-			<div class="card-body">
-				<form id="submitForm" action="" method="post">{% csrf_token %}
-                    <div class="input-group form-group">
-						<div class="input-group-prepend">
-							<span class="input-group-text"><i class="fas fa-user"></i></span>
-						</div>
-						<input type="text" class="form-control" id="username" name='username' value="{{student.user.username}}" disabled>
+                <div class="col-md-6 col-lg-4 col-12 input-group form-group">
+                  <label class="control-label col-sm-5 col-5 mt-2" style="color:black;" for="noi">Installments</label>
+                    <select id="no_of_installment" class="form-control" name="noi" id="noi" required>
+                      <option selected disabled value="">Installments</option>
+                      <option value="1">1</option>
+                      <option value="2">2</option>
+                      <option value="3">3</option>
+                      <option value="4">4</option>
+                      <option value="5">5</option>
+                      <option value="6">6</option>
+                    </select>
+                  </div>
+                  <div class="col-md-6 col-lg-4 col-12 input-group form-group">
+                    <label class="control-label col-sm-5 col-5 mt-2" style="color:black;" for="batchN">Batch Name</label>
+                      <select id="batch" class="form-control" name="batchN" id="batchN" required>
+                        <option selected disabled value="">Batch Name</option>
+                        {% for i in batch %}
+                        <option value="{{i.batchName}}">{{i.batchName}}</option>
+                        {% endfor %}
+                      </select>
                     </div>
-					<div class="input-group form-group">
-						<div class="input-group-prepend">
-							<span class="input-group-text"><i class="fas fa-user"></i></span>
-						</div>
-						<input type="text" class="form-control" id="firstName" name='firstName' value="{{student.user.first_name}}" disabled>
+                    <div class="col-md-6 col-lg-4 col-12 input-group form-group">
+                        <label class="control-label col-sm-5 col-5 mt-2" style="color:black;" for="feedis">Fee Discount</label>
+                      <input type="number" class="form-control" name="feedis" id="feedis">
                     </div>
-                    <div class="input-group form-group">
-						<div class="input-group-prepend">
-							<span class="input-group-text"><i class="fas fa-user"></i></span>
-						</div>
-						<input type="text" class="form-control" id="lastName" name='lastName' value="{{student.user.last_name}}" disabled>
-                    </div>
-                    <div class="input-group form-group">
-						<div class="input-group-prepend">
-							<span class="input-group-text"><i class="fa fa-envelope"></i></span>
-						</div>
-						<input type="email" class="form-control" id="email" name='email' value="{{student.user.email}}" disabled>
-                    </div>
-                    <div class="input-group form-group">
-                        <div class="input-group-prepend">
-                            <span class="input-group-text"><i class="fa fa-phone"></i></span>
-                        </div>
-                        <input type="tel" pattern="[0-9]{10}" class="form-control" id="phone" name='phone' value="{{student.phone}}" disabled>
-                    </div>
-                    <div class="input-group form-group">
-                        <div class="input-group-prepend">
-                            <span class="input-group-text"><i class="fa fa-map-marker"></i></span>
-                        </div>
-                        <input id="pac-input" type="text" class="controls form-control" name='loc' value="{{student.address}}" disabled>
-                        <input type="hidden" id="cityLat" name="cityLat" />
-                        <input type="hidden" id="cityLng" name="cityLng" />
-                    </div>
-                    <div class="input-group form-group row school">
-                        <div class="input-group-prepend col-sm-12 school-input">
-                          <span class="input-group-text"><i class="fas fa-school"></i></span>
-                          <input type="text" class="form-control" id="schoolName" name='school' value="{{student.schoolName}}" disabled>
-                        </div>
-                    </div>
-                    <br>
-
-<!-- detail start -->
-<div id='mainForm' class="outside">
-  <div class="entry row" style="margin-bottom: 5%;padding-bottom: 2%">
-    <div class="col-sm-2">
-      <div class="form-group">
-        <label for="cn">Class Name</label>
-        <div>
-          <select name="cn" class="cn custom-select form-control" required="required"
-            onchange="selectclass(this)">
-            <option disabled selected value="">Select an option</option>
-            {% for x in data %}
-            <option value="{{ x.0 }}">{{ x.0 }}</option>
-            {% endfor %}
-          </select>
-        </div>
-      </div>
-    </div>
-    <div class="col-sm-2">
-      <div class="form-group">
-        <label for="ctn">Course</label>
-        <div>
-          <select name="ctn" class="ctn custom-select form-control" required="required" onclick="selectcourse(this)">
-            <option disabled selected value="">Select an option</option>
-        </select>
-        </div>
-      </div>
-    </div>
-    <div class="col-sm-2">
-      <div class="form-group">
-        <label for="ttn">Teaching Type</label>
-        <div>
-          <select name="ttn" class="ttn custom-select form-control" required="required">
-            <option disabled selected value="">Select an option</option>
-        </select>
-        </div>
-      </div>
-    </div>
-    <div class="col-sm-2">
-      <div class="form-group">
-        <label for="noi">Installments</label>
-        <div>
-          <select id="no_of_installment" class="form-control" name="noi" id="noi"
-            required>
-            <option selected disabled value="">Installments</option>
-            <option value="1">1</option>
-            <option value="2">2</option>
-            <option value="3">3</option>
-            <option value="4">4</option>
-            <option value="5">5</option>
-            <option value="6">6</option>
-          </select>
-        </div>
-      </div>
-    </div>
-    <div class="col-sm-2">
-      <div class="form-group">
-        <label for="batchN">Batch Name</label>
-        <div>
-          <select id="batch" class="form-control" name="batchN" id="batchN" required>
-            <option selected disabled value="">Batch Name</option>
-            {% for i in batch %}
-            <option value="{{i.batchName}}">{{i.batchName}}</option>
-            {% endfor %}
-          </select>
-        </div>
-      </div>
-    </div>
-    <div class="col-sm-2">
-      <div class="form-group">
-        <label for="feedis">Fee Discount</label>
-        <div>
-          <input type="number" class="custom-text form-control" name="feedis" id="feedis">
-        </div>
-      </div>
-    </div>
-    <div class="col-sm-1 form-inline" style="display: flex;align-items: center;">
-      <div class="form-group">
-        <button class="btn btn-warning btn-md float-right" type="button" onclick="duplicate(this)">Add
-          New</button>
+                  </div>
+                </div>
+                <div class="col-lg-12 col-md-12  col-12 d-flex justify-content-end">
+                  <button class="btn btn-info btn-md" type="button" onclick="duplicate(this)">Add
+                      New</button>
+              </div>
+              <hr>
+  
+            <div class="col-lg-12 col-md-12 col-12 mt-4 text-center">
+                          <button id='submitBtn' name="submit" type="submit" class="btn btn-info">Register</button>
+                  </div>
+        </form>
       </div>
     </div>
   </div>
-</div>
-          <div class="row container d-flex justify-content-end">
-            <div class="col-sm-2 sm-ml-1">
-              <button id='submitBtn' name="submit" type="submit" class="btn btn-warning">Submit</button>
-            </div>
-          </div>
-        </form>
-			</div>
-		</div>
-	</div>
-</div>
 
 <script>
-//first part
-  var school_list= {{school_list|safe}};
-  $(document).on("DOMContentLoaded",function(){
-      function initialize(){
-          var input = document.getElementById('pac-input');
-          var autocomplete = new google.maps.places.Autocomplete(input);
-          google.maps.event.addListener(autocomplete, 'place_changed', function () {
-          var place = autocomplete.getPlace();
-          document.getElementById('cityLat').value = place.geometry.location.lat();
-          document.getElementById('cityLng').value = place.geometry.location.lng();
-          });
-      }
-      initialize();
-});
+  //first part
+  var school_list = {{ school_list| safe}};
+  $(document).on("DOMContentLoaded", function () {
+    function initialize() {
+      var input = document.getElementById('pac-input');
+      var autocomplete = new google.maps.places.Autocomplete(input);
+      google.maps.event.addListener(autocomplete, 'place_changed', function () {
+        var place = autocomplete.getPlace();
+        document.getElementById('cityLat').value = place.geometry.location.lat();
+        document.getElementById('cityLng').value = place.geometry.location.lng();
+      });
+    }
+    initialize();
+  });
 
   function autocomplete(inp, arr) {
     var currentFocus;
-    inp.addEventListener("input", function(e) {
-        var a, b, i, val = this.value;
-        closeAllLists();
-        if (!val) { return false;}
-        currentFocus = -1;
-        a = document.createElement("DIV");
-        a.setAttribute("id", this.id + "autocomplete-list");
-        a.setAttribute("class", "autocomplete-items");
-        this.parentNode.appendChild(a);
-        for (i = 0; i < arr.length; i++) {
-          if (arr[i].substr(0, val.length).toUpperCase() == val.toUpperCase()) {
-            b = document.createElement("DIV");
-            b.innerHTML = "<strong>" + arr[i].substr(0, val.length) + "</strong>";
-            b.innerHTML += arr[i].substr(val.length);
-            b.innerHTML += "<input type='hidden' value='" + arr[i] + "'>";
-        b.addEventListener("click", function(e) {
-                inp.value = this.getElementsByTagName("input")[0].value;
-                closeAllLists();
-            });
-            a.appendChild(b);
-          }
+    inp.addEventListener("input", function (e) {
+      var a, b, i, val = this.value;
+      closeAllLists();
+      if (!val) { return false; }
+      currentFocus = -1;
+      a = document.createElement("DIV");
+      a.setAttribute("id", this.id + "autocomplete-list");
+      a.setAttribute("class", "autocomplete-items");
+      this.parentNode.appendChild(a);
+      for (i = 0; i < arr.length; i++) {
+        if (arr[i].substr(0, val.length).toUpperCase() == val.toUpperCase()) {
+          b = document.createElement("DIV");
+          b.innerHTML = "<strong>" + arr[i].substr(0, val.length) + "</strong>";
+          b.innerHTML += arr[i].substr(val.length);
+          b.innerHTML += "<input type='hidden' value='" + arr[i] + "'>";
+          b.addEventListener("click", function (e) {
+            inp.value = this.getElementsByTagName("input")[0].value;
+            closeAllLists();
+          });
+          a.appendChild(b);
         }
+      }
     });
-    inp.addEventListener("keydown", function(e) {
-        var x = document.getElementById(this.id + "autocomplete-list");
-        if (x) x = x.getElementsByTagName("div");
-        if (e.keyCode == 40) {
-          currentFocus++;
-          addActive(x);
-        } else if (e.keyCode == 38) { //up
-          currentFocus--;
-          addActive(x);
-        } else if (e.keyCode == 13) {
-          e.preventDefault();
-          if (currentFocus > -1) {
-            if (x) x[currentFocus].click();
-          }
+    inp.addEventListener("keydown", function (e) {
+      var x = document.getElementById(this.id + "autocomplete-list");
+      if (x) x = x.getElementsByTagName("div");
+      if (e.keyCode == 40) {
+        currentFocus++;
+        addActive(x);
+      } else if (e.keyCode == 38) { //up
+        currentFocus--;
+        addActive(x);
+      } else if (e.keyCode == 13) {
+        e.preventDefault();
+        if (currentFocus > -1) {
+          if (x) x[currentFocus].click();
         }
+      }
     });
     function addActive(x) {
       if (!x) return false;
@@ -566,21 +571,21 @@ margin-left: 4px;
       var x = document.getElementsByClassName("autocomplete-items");
       for (var i = 0; i < x.length; i++) {
         if (elmnt != x[i] && elmnt != inp) {
-        x[i].parentNode.removeChild(x[i]);
+          x[i].parentNode.removeChild(x[i]);
+        }
       }
     }
-  }
-  document.addEventListener("click", function (e) {
+    document.addEventListener("click", function (e) {
       closeAllLists(e.target);
-  });
+    });
   }
 
-  window.addEventListener('DOMContentLoaded', function() {
-      autocomplete(document.getElementById("schoolName"), school_list);
+  window.addEventListener('DOMContentLoaded', function () {
+    autocomplete(document.getElementById("schoolName"), school_list);
   });
 
 
-//next part
+  //next part
 
   // var counter=1;
   // var Dclone = document.querySelector('#entry1').cloneNode(true);
@@ -664,7 +669,7 @@ margin-left: 4px;
   //   $(ttn).append("<option disabled selected>Select an option</option>");
   //   addoptions(cn,alldata[currentval][0]);
   //   addoptions(ttn,alldata[currentval][1]);
-  
+
 
   //   var saveVal = mainParentNode.children[6];
   //   saveVal.value = data.value;
@@ -741,7 +746,7 @@ margin-left: 4px;
   }
 
   function selectcourse(el) {
-      var selected_course = el.value;
+    var selected_course = el.value;
     var selected_class = $(el).closest(".entry").find(".cn").val();
     $.ajax({
       url: "{% url 'findTeaching' %}",
@@ -765,81 +770,56 @@ margin-left: 4px;
     });
   }
 
-  function duplicate(){
-      $('.outside').append(`<div class="entry row" style="margin-bottom: 5%;padding-bottom: 2%">
-            <div class="col-sm-2">
-              <div class="form-group">
-                <label for="cn">Class Name</label>
-                <div>
-                  <select name="cn" class="cn custom-select form-control" required="required"
-                    onchange="selectclass(this)">
-                    <option disabled selected value="">Select an option</option>
-                    {% for x in data %}
-                    <option value="{{ x.0 }}">{{ x.0 }}</option>
-                    {% endfor %}
-                  </select>
-                </div>
-              </div>
-            </div>
-            <div class="col-sm-2">
-              <div class="form-group">
-                <label for="ctn">Course</label>
-                <div>
-                  <select name="ctn" class="ctn custom-select form-control" required="required" onclick="selectcourse(this)">
-                    <option disabled selected value="">Select an option</option>
+  function duplicate() {
+    $('.outside').append(`<div class="entry row">
+              <div class="col-md-6 col-lg-4 col-12 input-group form-group">
+                <label class="control-label col-sm-5 col-5 mt-2" style="color:black;" for="cn">Class Name</label>
+                <select name="cn" class="cn custom-select form-control" required="required" onchange="selectclass(this)">
+                  <option disabled selected value="">Select an option</option>
+                  {% for x in data %}
+                  <option value="{{ x.0 }}">{{ x.0 }}</option>
+                  {% endfor %}
                 </select>
-                </div>
               </div>
-            </div>
-            <div class="col-sm-2">
-              <div class="form-group">
-                <label for="ttn">Teaching Type</label>
-                <div>
+              <div class="col-md-6 col-lg-4 col-12 input-group form-group">
+                <label class="control-label col-sm-5 col-5 mt-2" style="color:black;" for="ctn">Course</label>
+                <select name="ctn" class="ctn custom-select form-control" required="required"
+                  onclick="selectcourse(this)">
+                  <option disabled selected value="">Select an option</option>
+                </select>
+              </div>
+              <div class="col-md-6 col-lg-4 col-12 input-group form-group">
+                <label class="control-label col-sm-5 col-5 mt-2" style="color:black;" for="ttn">Teaching Type</label>
                   <select name="ttn" class="ttn custom-select form-control" required="required">
                     <option disabled selected value="">Select an option</option>
-                </select>
-                </div>
-              </div>
-            </div>
-            <div class="col-sm-2">
-              <div class="form-group">
-                <label for="noi">Installments</label>
-                <div>
-                  <select id="no_of_installment" class="form-control" name="noi" id="noi"
-                    required>
-                    <option selected disabled value="">Installments</option>
-                    <option value="1">1</option>
-                    <option value="2">2</option>
-                    <option value="3">3</option>
-                    <option value="4">4</option>
-                    <option value="5">5</option>
-                    <option value="6">6</option>
                   </select>
                 </div>
-              </div>
-            </div>
-            <div class="col-sm-2">
-              <div class="form-group">
-                <label for="batchN">Batch Name</label>
-                <div>
-                  <select id="batch" class="form-control" name="batchN" id="batchN" required>
-                    <option selected disabled value="">Batch Name</option>
-                    {% for i in batch %}
-                    <option value="{{i.batchName}}">{{i.batchName}}</option>
-                    {% endfor %}
-                  </select>
-                </div>
-              </div>
-            </div>
-            <div class="col-sm-2">
-              <div class="form-group">
-                <label for="feedis">Fee Discount</label>
-                <div>
-                  <input type="number" class="custom-text form-control" name="feedis" id="feedis">
-                </div>
-              </div>
-            </div>
-          </div>`)
+                <div class="col-md-6 col-lg-4 col-12 input-group form-group">
+                  <label class="control-label col-sm-5 col-5 mt-2" style="color:black;" for="noi">Installments</label>
+                    <select id="no_of_installment" class="form-control" name="noi" id="noi" required>
+                      <option selected disabled value="">Installments</option>
+                      <option value="1">1</option>
+                      <option value="2">2</option>
+                      <option value="3">3</option>
+                      <option value="4">4</option>
+                      <option value="5">5</option>
+                      <option value="6">6</option>
+                    </select>
+                  </div>
+                  <div class="col-md-6 col-lg-4 col-12 input-group form-group">
+                    <label class="control-label col-sm-5 col-5 mt-2" style="color:black;" for="batchN">Batch Name</label>
+                      <select id="batch" class="form-control" name="batchN" id="batchN" required>
+                        <option selected disabled value="">Batch Name</option>
+                        {% for i in batch %}
+                        <option value="{{i.batchName}}">{{i.batchName}}</option>
+                        {% endfor %}
+                      </select>
+                    </div>
+                    <div class="col-md-6 col-lg-4 col-12 input-group form-group">
+                        <label class="control-label col-sm-5 col-5 mt-2" style="color:black;" for="feedis">Fee Discount</label>
+                      <input type="number" class="form-control" name="feedis" id="feedis">
+                    </div>
+                  </div>`)
   }
 
 </script>
