@@ -248,7 +248,7 @@
                                 <label  class="control-label" for="cn">Class Name</label>
                                 <div>
                                     <select name="cn" class="cn custom-select form-control" required="required" onchange="selectclass(this)">
-                                        <option disabled selected value>Select an option</option>
+                                        <option disabled selected value="">Select an option</option>
                                         {% for x in data %}
                                         <option value="{{ x.0 }}">{{ x.0 }}</option>
                                         {% endfor %}
@@ -316,31 +316,31 @@
 </div>
 </div>
 <script>
-//     function clear_all(){
-//         var x = document.getElementsByClassName("form-control");
-//         for(var i=0;i<x.length;i++){
-//             x[i].value='';
-//         }
-//     }
+    function clear_all(){
+        var x = document.getElementsByClassName("form-control");
+        for(var i=0;i<x.length;i++){
+            x[i].value='';
+        }
+    }
 
 
-//     $(document).on("DOMContentLoaded",function(){
-//         function initialize(){
-//             var input = document.getElementById('pac-input');
-//             var autocomplete = new google.maps.places.Autocomplete(input);
-//             google.maps.event.addListener(autocomplete, 'place_changed', function () {
-//             var place = autocomplete.getPlace();
-//             document.getElementById('cityLat').value = place.geometry.location.lat();
-//             document.getElementById('cityLng').value = place.geometry.location.lng();
-//             });
-//         }
-//         initialize();
-// });
+    $(document).on("DOMContentLoaded",function(){
+        function initialize(){
+            var input = document.getElementById('pac-input');
+            var autocomplete = new google.maps.places.Autocomplete(input);
+            google.maps.event.addListener(autocomplete, 'place_changed', function () {
+            var place = autocomplete.getPlace();
+            document.getElementById('cityLat').value = place.geometry.location.lat();
+            document.getElementById('cityLng').value = place.geometry.location.lng();
+            });
+        }
+        initialize();
+});
 
-//     var url = document.location.toString();
-// 	if (url.match('#')) {
-// 	    $("#"+url.split('#')[1]).show();
-// 	}
+    var url = document.location.toString();
+	if (url.match('#')) {
+	    $("#"+url.split('#')[1]).show();
+	}
 
 
 
@@ -508,7 +508,7 @@ function selectclass(el) {
                                 <label  class="control-label" for="cn">Class Name</label>
                                 <div>
                                     <select name="cn" class="cn custom-select form-control" required="required" onchange="selectclass(this)">
-                                        <option disabled selected value>Select an option</option>
+                                        <option disabled selected value="">Select an option</option>
                                         {% for x in data %}
                                         <option value="{{ x.0 }}">{{ x.0 }}</option>
                                         {% endfor %}

@@ -28,10 +28,10 @@ def AddExam(request):
         if request.session['type'] == "Institute":
             user = User.objects.get(username=request.session['user'])
             inst = Institute.objects.get(user=user)
-            courses = Courses.objects.filter(intitute=inst)
+            forclass = Courses.objects.filter(intitute=inst).values_list('forclass').distinct()
             batch = BatchTiming.objects.filter(institute=inst)
             context ={
-            'courses':courses,
+            'classes':forclass,
             'batch':batch
             }
             if request.method == "POST":
@@ -81,7 +81,8 @@ def AddExam(request):
                     data.status = True
                 else:
                     data.status = False
-                data.question_count = noquestions
+                if noquestions:
+                    data.question_count = noquestions
                 data.save()
                 messages.success(request,"Exam Added Successfully")
                 return redirect("viewexams")
@@ -230,10 +231,10 @@ def Editexam(request,exam_id):
                 return HttpResponse("Unable to edit")
             if request.session['type']=="Institute":
                 inst = Institute.objects.get(user=user)
-                courses = Courses.objects.filter(intitute=inst)
+                forclass = Courses.objects.filter(intitute=inst).values_list('forclass').distinct()
                 batch = BatchTiming.objects.filter(institute=inst)
                 context = {
-                'courses':courses,
+                'classes':forclass,
                 'exam':exam,
                 'batch':batch,
                 'template':'dashboard/base.html'

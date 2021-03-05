@@ -263,28 +263,6 @@
         $('.js-example-basic-single').select2();
       });
 
-      $("#select_course").change(function () {
-        var selected = $(this).val();
-        $.ajax({
-          url: "{% url 'classes' %}",
-          data: {
-            course_id: selected,
-          },
-          success: function (data) {
-            categories = data.sub_categories;
-            $("#class_select").empty().trigger("change");
-            for (i = 0; i < categories.length; i++) {
-              var newOption = new Option(
-                categories[i].text,
-                categories[i].value,
-                false,
-                false
-              );
-              $("#class_select").append(newOption).trigger("change");
-            }
-          },
-        });
-      });
 
       $(document).ready(function () {
         $('#question_type_select').change(function () {

@@ -23,7 +23,6 @@ def addStudents(request):
         user = User.objects.get(username=request.session['user'])
         inst = Institute.objects.get(user=user)
         if request.method=="POST":
-            print(request.POST)
             firstName = request.POST.get('firstName', '')
             lastName = request.POST.get('lastName', '')
             email = request.POST.get('email', '')
@@ -61,13 +60,20 @@ def addStudents(request):
             else:
                 school = School(name=schoolName)
                 school.save()
-            ctn = request.POST.getlist('ctn_combined')
-            cn = request.POST.getlist('cn_combined')
-            ttn = request.POST.getlist('ttn_combined')
-            ttn = [x.replace("\r","") for x in ttn]
-            batchName = request.POST.getlist('batchN_combined')
-            feeDis = request.POST.getlist('feedis_combined')
-            installments = request.POST.getlist('noi_combined')
+            # ctn = request.POST.getlist('ctn_combined')
+            # cn = request.POST.getlist('cn_combined')
+            # ttn = request.POST.getlist('ttn_combined')
+            # ttn = [x.replace("\r","") for x in ttn]
+            # batchName = request.POST.getlist('batchN_combined')
+            # feeDis = request.POST.getlist('feedis_combined')
+            # installments = request.POST.getlist('noi_combined')
+
+            ctn = request.POST.getlist('ctn')
+            cn = request.POST.getlist('cn')
+            ttn = request.POST.getlist('ttn')
+            batchName = request.POST.getlist('batchN')
+            feeDis = request.POST.getlist('feedis')
+            installments = request.POST.getlist('noi')
             for x in range(len(ttn)):
                 try:
                     temp = float(feeDis[x])
@@ -90,17 +96,16 @@ def addStudents(request):
             return redirect('viewStudents')
         schools = School.objects.all()
         school_list = list(map(str,schools))
-        data = TeachingType.objects.filter(course__intitute__user=user).values_list('courseID','forclass','teachType','course')
-        print('data--',data)
-        processed_data = {}
-        for x in data:
-            processed_data[x[0]] = [x[1].split(", "),x[2].split("\n")]
+        # data = TeachingType.objects.filter(course__intitute__user=user).values_list('courseID','forclass','teachType','course')
+        # print('data--',data)
+        # processed_data = {}
+        # for x in data:
+        #     processed_data[x[0]] = [x[1].split(", "),x[2].split("\n")]
         return render(
             request,
             'students/addStudents.html',
             {
-                "data":TeachingType.objects.filter(course__intitute__user=user),
-                "jsdata":dumps(processed_data),
+                "data":TeachingType.objects.filter(course__intitute=inst).values_list('forclass').distinct(),
                 "school_list":school_list,
                 'batch':BatchTiming.objects.filter(institute=inst)
             }
@@ -125,7 +130,7 @@ def viewStudents(request):
         students = AddStudentInst.objects.filter(institute=inst,archieved=False)
         courses = []
         for student in students:
-            course = Courses.objects.get(id=int(student.courseName))
+            course = Courses.objects.get(courseName=student.courseName)
             courses.append(course)
         students = zip(students,courses)
         params = {'students':students}
@@ -175,10 +180,10 @@ def editStudent(request,id):
         inst = Institute.objects.get(user=user)
         schools = School.objects.all()
         school_list = list(map(str,schools))
-        data = TeachingType.objects.filter(course__intitute__user=user).values_list('courseID','forclass','teachType','course')
-        processed_data = {}
-        for x in data:
-            processed_data[x[0]] = [x[1].split(", "),x[2].split("\n")]
+        # data = TeachingType.objects.filter(course__intitute__user=user).values_list('courseID','forclass','teachType','course')
+        # processed_data = {}
+        # for x in data:
+        #     processed_data[x[0]] = [x[1].split(", "),x[2].split("\n")]
         student = AddStudentInst.objects.get(id=id)
         courses = Courses.objects.filter(intitute=inst)
         params = {
@@ -190,8 +195,7 @@ def editStudent(request,id):
             'schoolName':student.student.schoolName,
             'courses':courses,
             'qry':student,
-            "data":TeachingType.objects.filter(course__intitute__user=user),
-            "jsdata":dumps(processed_data),
+            "data":TeachingType.objects.filter(course__intitute=inst).values_list('forclass').distinct(),
             "school_list":school_list,
             'batch':BatchTiming.objects.filter(institute=inst),
             }
@@ -199,15 +203,22 @@ def editStudent(request,id):
             print(request.POST)
             phone = request.POST.get('phone', '')
             schoolName = request.POST.get('schoolName', '')
-            ctn = request.POST.getlist('ctn_combined')
-            cn = request.POST.getlist('cn_combined')
-            ttn = request.POST.getlist('ttn_combined')
-            ttn = [x.replace("\r","") for x in ttn]
-            print('tnn--',ttn)
-            batchName = request.POST.getlist('batchN_combined')
-            feeDis = request.POST.getlist('feedis_combined')
-            installments = request.POST.getlist('noi_combined')
-            print("installments--",installments)
+            # ctn = request.POST.getlist('ctn_combined')
+            # cn = request.POST.getlist('cn_combined')
+            # ttn = request.POST.getlist('ttn_combined')
+            # ttn = [x.replace("\r","") for x in ttn]
+            # print('tnn--',ttn)
+            # batchName = request.POST.getlist('batchN_combined')
+            # feeDis = request.POST.getlist('feedis_combined')
+            # installments = request.POST.getlist('noi_combined')
+
+            ctn = request.POST.getlist('ctn')
+            cn = request.POST.getlist('cn')
+            ttn = request.POST.getlist('ttn')
+            batchName = request.POST.getlist('batchN')
+            feeDis = request.POST.getlist('feedis')
+            installments = request.POST.getlist('noi')
+
             user = User.objects.get(username=student.student.user.username)
             studentOBJ = Student.objects.get(user=user)
             user.password = phone
@@ -262,13 +273,20 @@ def AddalreadyExistsStudent(request,id):
         user = User.objects.get(username=request.session['user'])
         inst = Institute.objects.get(user=user)
         if request.method=="POST":
-            ctn = request.POST.getlist('ctn_combined')
-            cn = request.POST.getlist('cn_combined')
-            ttn = request.POST.getlist('ttn_combined')
-            ttn = [x.replace("\r","") for x in ttn]
-            batchName = request.POST.getlist('batchN_combined')
-            feeDis = request.POST.getlist('feedis_combined')
-            installments = request.POST.getlist('noi_combined')
+            # ctn = request.POST.getlist('ctn_combined')
+            # cn = request.POST.getlist('cn_combined')
+            # ttn = request.POST.getlist('ttn_combined')
+            # ttn = [x.replace("\r","") for x in ttn]
+            # batchName = request.POST.getlist('batchN_combined')
+            # feeDis = request.POST.getlist('feedis_combined')
+            # installments = request.POST.getlist('noi_combined')
+
+            ctn = request.POST.getlist('ctn')
+            cn = request.POST.getlist('cn')
+            ttn = request.POST.getlist('ttn')
+            batchName = request.POST.getlist('batchN')
+            feeDis = request.POST.getlist('feedis')
+            installments = request.POST.getlist('noi')
             for x in range(len(ttn)):
                 try:
                     temp = float(feeDis[x])
@@ -292,17 +310,16 @@ def AddalreadyExistsStudent(request,id):
             return redirect('viewStudents')
         schools = School.objects.all()
         school_list = list(map(str,schools))
-        data = TeachingType.objects.filter(course__intitute__user=user).values_list('courseID','forclass','teachType','course')
-        processed_data = {}
-        for x in data:
-            processed_data[x[0]] = [x[1].split(", "),x[2].split("\n")]
+        # data = TeachingType.objects.filter(course__intitute__user=user).values_list('courseID','forclass','teachType','course')
+        # processed_data = {}
+        # for x in data:
+        #     processed_data[x[0]] = [x[1].split(", "),x[2].split("\n")]
         return render(
             request,
             'students/addAlreadyExistsStudent.html',
             {
-                "data":TeachingType.objects.filter(course__intitute__user=user),
+                "data":TeachingType.objects.filter(course__intitute=inst).values_list('forclass').distinct(),
                 "student":student,
-                "jsdata":dumps(processed_data),
                 "school_list":school_list,
                 'batch':BatchTiming.objects.filter(institute=inst)
             }

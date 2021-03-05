@@ -161,11 +161,10 @@ def editTutor(request,id):
                 availability=0
             NewUsername = request.POST.get("NewUsername")
             NewEmail = request.POST.get("NewEmail")
-            NewPassword = request.POST.get("NewPassword")
             NewPhone = request.POST.get("NewPhone")
             teacher.name = NewUsername
             teacher.email = NewEmail
-            teacher.password = NewPassword
+            teacher.password = NewPhone
             teacher.phone = NewPhone
             teacher.save()
             user = User.objects.get(username=editTutorObj.teacher.user.username)
