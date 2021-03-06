@@ -106,23 +106,37 @@ Institute Dashboard
               <form id="results" class="form-inline mt-2 mb-5" method="POST">
                 {% csrf_token %}
 
-                <form action="" method="post">{% csrf_token %}
+                <form id="frm" action="" method="post">{% csrf_token %}
 
 
 
                   <div class="col-md-5 col-lg-5 col-12 mt-2 row">
+                    <label for="validationCustom01"><strong>Select Class <span class="red">*</span></strong></label>
+                    <select id="class_select" name="forclass" style="width: 100%;"
+                      class="js-example-basic-single form-control" onchange="selectclass()">
+                      <option class="form-control" selected disabled value="">Select Class</option>
+                      {% for i in courses %}
+                      <option class="form-control form-control-lg" value="{{ i.id }}">{{i.forclass}} </option>
+                      {% endfor %}
+                    </select>
 
-                    <label class="control-label col-sm-3 col-5 mt-2" style="display:block; color:black;">Class</label>
+                    <!-- <label class="control-label col-sm-3 col-5 mt-2" style="display:block; color:black;">Class</label>
                     <select class="form-control" id="forclass" name="forclass" required>
                       <option selected="selected">Choose Course</option>
                       {% for i in courses %}
                       <option value="{{ i.id }}">{{ i.forclass }}</option>
                       {% endfor %}
-                    </select>
+                    </select> -->
 
                   </div>
+                  <div class="col">
+                    <label for="validationCustom01"><strong>Select Course<span class="red">*</span></strong></label>
+                    <select id="courseName" name="courseName" style="width: 100%" class="js-example-basic-single form-control">
+                      <option class="form-control form-control-lg" selected disabled value="">Select Course</option>
+                    </select>
+                  </div>
 
-                  <div class="col-lg-5 col-md-5 col-12 mt-2 row">
+                  <!-- <div class="col-lg-5 col-md-5 col-12 mt-2 row">
                     <label class="control-label col-sm-3 col-5 mt-2" style="display:block; color:black;">Courses</label>
 
                     <select id="courseName" name="courseName" class="custom-select form-control w-100 col-sm-8 col-7"
@@ -132,7 +146,7 @@ Institute Dashboard
                       <option value="{{ i.id }}">{{ i.courseName }}</option>
                       {% endfor %}
                     </select>
-                  </div>
+                  </div> -->
                   <br>
                   <br>
                   <div class="container">
@@ -344,140 +358,143 @@ Institute Dashboard
                         <div class="modal-body">
 
 
-<!-- 
+                          <!-- 
                           <form class="mt-0" action="#" method="post">{% csrf_token %} -->
-                            <form class="mt-0" action="#" method="post">{% csrf_token %}
+                          <form class="mt-0" action="#" method="post">{% csrf_token %}
 
 
 
-                              <div class="col-md-5 col-lg-5 col-12 mt-2 row">
-            
-                                <label class="control-label col-sm-3 col-5 mt-2" style="display:block; color:black;">Class</label>
-                                <select class="form-control" id="forclass" name="forclass" required>
-                                  <option selected="selected">Choose Course</option>
-                                  {% for i in courses %}
-                                  <option value="{{ i.id }}">{{ i.forclass }}</option>
-                                  {% endfor %}
-                                </select>
-            
-                              </div>
-            
-                              <div class="col-lg-5 col-md-5 col-12 mt-2 row">
-                                <label class="control-label col-sm-3 col-5 mt-2" style="display:block; color:black;">Courses</label>
-            
-                                <select id="courseName" name="courseName" class="custom-select form-control w-100 col-sm-8 col-7"
-                                  required>
-                                  <option selected="selected">Choose Course</option>
-                                  {% for i in courses %}
-                                  <option value="{{ i.id }}">{{ i.courseName }}</option>
-                                  {% endfor %}
-                                </select>
-                              </div>
-                              <br>
-                              <div class="container">
-                                <input type="radio" name="radio" class="radioInput" id="tab1" checked hidden />
-                                <input type="radio" name="radio" class="radioInput" id="tab2" hidden />
-                                <input type="radio" name="radio" class="radioInput" id="tab3" hidden />
-                                <select id="check" name='check' multiple="multiple" hidden>
-                                  <option class="online" value="Online">Online</option>
-                                  <option class="hometutor" value="Home Tutors">Home Tutors</option>
-                                  <option class="classroom" value="Classroom">Classroom</option>
-                                </select>
-            
-                                <div class="row hideforphone">
-                                  <div class="col-md-4">
+                            <div class="col-md-5 col-lg-5 col-12 mt-2 row">
+
+                              <label class="control-label col-sm-3 col-5 mt-2"
+                                style="display:block; color:black;">Class</label>
+                              <select class="form-control" id="forclass" name="forclass" required>
+                                <option selected="selected">Choose Course</option>
+                                {% for i in courses %}
+                                <option value="{{ i.id }}">{{ i.forclass }}</option>
+                                {% endfor %}
+                              </select>
+
+                            </div>
+
+                            <div class="col-lg-5 col-md-5 col-12 mt-2 row">
+                              <label class="control-label col-sm-3 col-5 mt-2"
+                                style="display:block; color:black;">Courses</label>
+
+                              <select id="courseName" name="courseName"
+                                class="custom-select form-control w-100 col-sm-8 col-7" required>
+                                <option selected="selected">Choose Course</option>
+                                {% for i in courses %}
+                                <option value="{{ i.id }}">{{ i.courseName }}</option>
+                                {% endfor %}
+                              </select>
+                            </div>
+                            <br>
+                            <div class="container">
+                              <input type="radio" name="radio" class="radioInput" id="tab1" checked hidden />
+                              <input type="radio" name="radio" class="radioInput" id="tab2" hidden />
+                              <input type="radio" name="radio" class="radioInput" id="tab3" hidden />
+                              <select id="check" name='check' multiple="multiple" hidden>
+                                <option class="online" value="Online">Online</option>
+                                <option class="hometutor" value="Home Tutors">Home Tutors</option>
+                                <option class="classroom" value="Classroom">Classroom</option>
+                              </select>
+
+                              <div class="row hideforphone">
+                                <div class="col-md-4">
+                                </div>
+                                <div class="col-md-4">
+                                  <div class="form-group">
+                                    <label class="control-label">Course Duration<span
+                                        class="text-danger">*</span></label>
                                   </div>
-                                  <div class="col-md-4">
-                                    <div class="form-group">
-                                      <label class="control-label">Course Duration<span class="text-danger">*</span></label>
-                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                  <div class="input-group form-group">
+                                    <label class="control-label">How many hours/weeks/months?<span
+                                        class="text-danger">*</span></label>
                                   </div>
-                                  <div class="col-md-4">
-                                    <div class="input-group form-group">
-                                      <label class="control-label">How many hours/weeks/months?<span
-                                          class="text-danger">*</span></label>
+                                </div>
+                              </div>
+
+                              <div class="row remember">
+                                <div class="col-md-4">
+                                  <label style="color: rgb(66, 8, 8);">Online </label>
+                                </div>
+                                <div class="col-md-4">
+                                  <div class="form-group">
+                                    <div style="display: inline-block;">
+                                      <select id="DDL" name="duration" class="form-control col-sm-12">
+                                        <option value="" selected Disabled>Course Duration</option>
+                                        <option>Hourly</option>
+                                        <option>Weekly</option>
+                                        <option>Monthly</option>
+                                      </select>
                                     </div>
                                   </div>
                                 </div>
-            
-                                <div class="row remember">
-                                  <div class="col-md-4">
-                                    <label style="color: rgb(66, 8, 8);">Online </label>
-                                  </div>
-                                  <div class="col-md-4">
-                                    <div class="form-group">
-                                      <div style="display: inline-block;">
-                                        <select id="DDL" name="duration" class="form-control col-sm-12">
-                                          <option value="" selected Disabled>Course Duration</option>
-                                          <option>Hourly</option>
-                                          <option>Weekly</option>
-                                          <option>Monthly</option>
-                                        </select>
-                                      </div>
-                                    </div>
-                                  </div>
-                                  <div class="col-md-4">
-                                    <div class="input-group form-group">
-                                      <input type="text" class="form-control" id="time" name='time'
-                                        placeholder="No. of Hours/Weeks/Months">
-                                    </div>
+                                <div class="col-md-4">
+                                  <div class="input-group form-group">
+                                    <input type="text" class="form-control" id="time" name='time'
+                                      placeholder="No. of Hours/Weeks/Months">
                                   </div>
                                 </div>
-            
-                                <div class="row remember">
-                                  <div class="col-md-4">
-                                    <label style="color: rgb(66, 8, 8);">Home Tutors </label>
-                                  </div>
-                                  <div class="col-md-4">
-                                    <div class="form-group">
-                                      <div style="display: inline-block;">
-                                        <select id="DDL1" name="duration" class="form-control col-sm-12">
-                                          <option value="" selected Disabled>Course Duration</option>
-                                          <option>Hourly</option>
-                                          <option>Weekly</option>
-                                          <option>Monthly</option>
-                                        </select>
-                                      </div>
-                                    </div>
-                                  </div>
-                                  <div class="col-md-4">
-                                    <div class="input-group form-group">
-                                      <input type="text" class="form-control" id="time1" name='time'
-                                        placeholder="No. of Hours/Weeks/Months">
-                                    </div>
-                                  </div>
-                                </div>
-            
-                                <div class="row remember">
-                                  <div class="col-md-4">
-                                    <label style="color: rgb(66, 8, 8);">Classroom </label>
-                                  </div>
-                                  <div class="col-md-4">
-                                    <div class="form-group">
-                                      <div style="display: inline-block;">
-                                        <select id="DDL2" name="duration" class="form-control col-sm-12">
-                                          <option value="" selected Disabled>Course Duration</option>
-                                          <option>Hourly</option>
-                                          <option>Weekly</option>
-                                          <option>Monthly</option>
-                                        </select>
-                                      </div>
-                                    </div>
-                                  </div>
-                                  <div class="col-md-4">
-                                    <div class="input-group form-group">
-                                      <input type="text" class="form-control" id="time2" name='time'
-                                        placeholder="No. of Hours/Weeks/Months">
-                                    </div>
-                                  </div>
-                                </div>
-            
                               </div>
-            
-                              <br>
-                              <div class="form-group">
-                                <input type="submit" value="Add" class="btn btn-success float-right login_btn">
+
+                              <div class="row remember">
+                                <div class="col-md-4">
+                                  <label style="color: rgb(66, 8, 8);">Home Tutors </label>
+                                </div>
+                                <div class="col-md-4">
+                                  <div class="form-group">
+                                    <div style="display: inline-block;">
+                                      <select id="DDL1" name="duration" class="form-control col-sm-12">
+                                        <option value="" selected Disabled>Course Duration</option>
+                                        <option>Hourly</option>
+                                        <option>Weekly</option>
+                                        <option>Monthly</option>
+                                      </select>
+                                    </div>
+                                  </div>
+                                </div>
+                                <div class="col-md-4">
+                                  <div class="input-group form-group">
+                                    <input type="text" class="form-control" id="time1" name='time'
+                                      placeholder="No. of Hours/Weeks/Months">
+                                  </div>
+                                </div>
                               </div>
+
+                              <div class="row remember">
+                                <div class="col-md-4">
+                                  <label style="color: rgb(66, 8, 8);">Classroom </label>
+                                </div>
+                                <div class="col-md-4">
+                                  <div class="form-group">
+                                    <div style="display: inline-block;">
+                                      <select id="DDL2" name="duration" class="form-control col-sm-12">
+                                        <option value="" selected Disabled>Course Duration</option>
+                                        <option>Hourly</option>
+                                        <option>Weekly</option>
+                                        <option>Monthly</option>
+                                      </select>
+                                    </div>
+                                  </div>
+                                </div>
+                                <div class="col-md-4">
+                                  <div class="input-group form-group">
+                                    <input type="text" class="form-control" id="time2" name='time'
+                                      placeholder="No. of Hours/Weeks/Months">
+                                  </div>
+                                </div>
+                              </div>
+
+                            </div>
+
+                            <br>
+                            <div class="form-group">
+                              <input type="submit" value="Add" class="btn btn-success float-right login_btn">
+                            </div>
                             <!-- </form> -->
                           </form>
 
@@ -525,6 +542,40 @@ Institute Dashboard
   <script src="{% static 'plugins/table/datatable/button-ext/buttons.html5.min.js' %}"></script>
   <script src="{% static 'plugins/table/datatable/button-ext/buttons.print.min.js' %}"></script>
   <script>
+
+$(document).ready(function() {
+    $('.js-example-basic-single').select2();
+});
+
+function selectclass() {
+    var selected = $("#class_select").val();
+    $.ajax({
+      url: "{% url 'findCourse' %}",
+      data: {
+        forclass: selected,
+      },
+      success: function (data) {
+        courses = data.courses;
+        $("#select_course").empty().trigger("change");
+        for (i = 0; i < courses.length; i++) {
+          var newOption = new Option(
+            courses[i][1],
+            courses[i][0],
+            false,
+            false
+          );
+          $("#select_course").append(newOption).trigger("change");
+        }
+      },
+    });
+  }
+
+  $(window).on('pageshow', ()=>{ var frm = $('#frm');
+    frm[0].reset();
+  });
+
+
+
     $('#html5-extension').DataTable({
       dom: '<"row"<"col-md-12"<"row"<"col-md-6"B><"col-md-6"f> > ><"col-md-12"rt> <"col-md-12"<"row"<"col-md-5 mb-md-0 mb-5"i><"col-md-7"p>>> >',
       buttons: {

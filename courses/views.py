@@ -12,6 +12,7 @@ from rest_framework import viewsets
 from .serializers import TeachingTypeSerializer, CoursesSerializer
 from django.core import serializers
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from django.http import HttpResponse,JsonResponse
 
 # Create your views here.
 
@@ -152,14 +153,14 @@ def teachingType2(request):
             classes[i.pk] = i.forclass
         print('classes',classes)
         teach = TeachingType.objects.filter(course__intitute = inst)
-        paginator = Paginator(teach, 10)
-        page = request.GET.get('page', 1)
-        try:
-            teach = paginator.page(page)
-        except PageNotAnInteger:
-            teach = paginator.page(1)
-        except EmptyPage:
-            teach = paginator.page(paginator.num_pages)
+        # paginator = Paginator(teach, 10)
+        # page = request.GET.get('page', 1)
+        # try:
+        #     teach = paginator.page(page)
+        # except PageNotAnInteger:
+        #     teach = paginator.page(1)
+        # except EmptyPage:
+        #     teach = paginator.page(paginator.num_pages)
         params = {'teach': teach, 
                   'courses': courses,
                   'classes': classes, 
@@ -224,8 +225,17 @@ def teachingType2(request):
 #     return HttpResponse("You Are Not Authenticated for this Page")
 
 
+def FindCoursesclass(request):
+    courses={}
+    forclass = request.GET.get('forclass')
 
-
+    if forclass:
+        course_obj = Courses.objects.filter(forclass=forclass)
+        courses = []
+        for i in course_obj:
+            courses.append((i.id,i.courseName))
+        print('jsoncourse',courses)
+    return JsonResponse({'courses':courses})
 
 @login_required(login_url='Login')
 def addCourses(request):
