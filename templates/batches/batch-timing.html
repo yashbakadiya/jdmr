@@ -132,7 +132,26 @@ Institute Dashboard
         <div class="card-body">
           <form action="." method="post">{% csrf_token %}
 
-            <div class="input-group form-group">
+
+            <div class="col-md-5 col-lg-5 col-12 mt-2 row">
+              <label for="validationCustom01"><strong>Select Class <span class="red">*</span></strong></label>
+              <select id="forclass"  name='forclass' style="width: 100%;"
+                class="js-example-basic-single form-control" onchange="selectclass()">
+                <option class="form-control" selected disabled value="">Select Class</option>
+                {% for i in classes %}
+                <option class="form-control form-control-lg" value="{{ i.0 }}">{{i.0}} </option>
+                {% endfor %}
+              </select>
+
+            </div>
+            <div class="col">
+              <label for="validationCustom01"><strong>Select Course<span class="red">*</span></strong></label>
+              <select id="courseName" name="courseName" style="width: 100%" class="js-example-basic-single form-control">
+                <option class="form-control form-control-lg" selected disabled value="">Select Course</option>
+              </select>
+            </div>
+
+            <!-- <div class="input-group form-group">
               <div class="input-group-prepend">
                 <span class="input-group-text"><i class="fas fa-user"></i>Select Class<span
                     class="text-danger">*</span></span>
@@ -158,8 +177,8 @@ Institute Dashboard
                 {% endfor %}
               </select>
             </div>
+             -->
             
-            <br>
             <div class="input-group form-group">
               <div class="input-group-prepend">
                 <span class="input-group-text"><i class="fas fa-user"></i>Batch Name</span>
@@ -323,4 +342,29 @@ Institute Dashboard
   src="{% static 'plugins/date_time_pickers/bootstrap-datetimepicker/bootstrap-datetimepicker.min.js' %}"></script>
 <script src="{% static 'plugins/date_time_pickers/bootstrap_date_range_picker/daterangepicker_examples.js' %}"></script>
 <script src="{% static 'plugins/timepicker/custom-timepicker.js' %}"></script>
+
+<script>
+  function selectclass() {
+    var selected = $("#forclass").val();
+    $.ajax({
+      url: "{% url 'findbatch' %}",
+      data: {
+        forclass: selected,
+      },
+      success: function (data) {
+        courses = data.courses;
+        $("#courseName").empty().trigger("change");
+        for (i = 0; i < courses.length; i++) {
+          var newOption = new Option(
+            courses[i][1],
+            courses[i][0],
+            false,
+            false
+          );
+          $("#courseName").append(newOption).trigger("change");
+        }
+      },
+    });
+  }  
+</script>
 {% endblock extra-script %}
