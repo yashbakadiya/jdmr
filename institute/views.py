@@ -28,7 +28,7 @@ def instituteTutor(request):
                 courses = []
                 for ins in INST:
                     if ins.courseName:
-                        course = Courses.objects.get(id= int(ins.courseName))
+                        course = Courses.objects.get(courseName= ins.courseName)
                         courses.append(course)
                 batches = zip(INST,courses)
                 return render(request,"Institute/institute.html",{"INST":INST[0],"batches":batches,"template":"dashboard/Tutor-dashboard.html"})

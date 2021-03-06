@@ -214,7 +214,11 @@ def WatchTutorialsInstitute(request,course_id):
 def DeleteTutorialsInstituteVideos(request,playlist_id):
     if request.session['type']=="Institute":
         data = TutorialInstitutePlaylist.objects.get(id=playlist_id)
+        tutorial = data.tutorial
         data.delete()
+        count = TutorialInstitutePlaylist.objects.filter(tutorial=tutorial).count()
+        if count<1:
+            return redirect('addplaylist',tutorial.id)
         return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
 
 
@@ -368,7 +372,11 @@ def DeleteTutorialsTutor(request,course_id):
 def DeleteTutorialsTutorVideos(request,playlist_id):
     if request.session['type']=="Teacher":
         data = TutorialTutorsPlaylist.objects.get(id=playlist_id)
+        tutorial = data.tutorial
         data.delete()
+        count = TutorialTutorsPlaylist.objects.filter(tutorial=tutorial).count()
+        if count<1:
+            return redirect('addvideosTutor',tutorial.id)
         return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
     return HttpResponse("You Are not Authenticated User for this Page")
 

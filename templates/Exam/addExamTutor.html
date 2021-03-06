@@ -232,19 +232,19 @@
        var output ;
        if (value){
            output = `<div class="col">
-            <label for="validationCustom01"><strong>Select Course<span class="red">*</span></strong></label>
-          <select id="select_course" name="course" style="width: 100%" class="js-example-basic-single form-control" onchange="selectcourse()">
-            <option class="form-control form-control-lg" selected disabled value="">Select Course</option>
-            {% for course in courses %}
-            <option class="form-control form-control-lg" value="{{course.id}}">{{course.courseName}} </option>
+          <label for="validationCustom01"><strong>Select Class <span class="red">*</span></strong></label>
+          <select id="class_select" name="class" style="width: 100%;" class="js-example-basic-single form-control" onchange="selectclass()">
+            <option class="form-control" selected disabled value="" >Select Class</option>
+            {% for class in classes %}
+            <option class="form-control form-control-lg" value="{{class.0}}">{{class.0}} </option>
             {% endfor %}
           </select>
-          </div>
-          <div class="col">
-            <label for="validationCustom01"><strong>Select Class <span class="red">*</span></strong></label>
-            <select id="class_select" name="class" style="width: 100%;" class="js-example-basic-single form-control">
-            <option class="form-control" selected disabled value="">Select Class</option>
-            </select>
+        </div>
+        <div class="col">
+          <label for="validationCustom01"><strong>Select Course<span class="red">*</span></strong></label>
+          <select id="select_course" name="course" style="width: 100%" class="js-example-basic-single form-control">
+            <option class="form-control form-control-lg" selected disabled value="">Select Course</option>
+          </select>
         </div>
         <div class="col">
           <label for="validationCustom01"><strong>Select Batch <span class="red">*</span></strong></label>
@@ -253,8 +253,8 @@
             {% for cat in batch %}
             <option class="form-control" value="{{cat.batchName}}">{{cat.batchName}}</option>
             {% endfor %}
-            </select>
-            </div>`
+          </select>
+        </div>`
           }
           else{
             output = `<div class="col">

@@ -367,31 +367,14 @@
                 </div>
               </div>
             </li>
-
+            
             <li class="menu">
-              <a href="#notes" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle collapsed">
+              <a href="{% url 'addnotes' %}">
                 <div class="">
                   <img src="{% static 'assets/img/notes.png' %}" alt="">
                   <span>Notes</span>
                 </div>
               </a>
-              <div class="submenu list-unstyled collapse eq-animated eq-fadeInUp" id="notes"
-                data-parent="#topAccordion">
-                <div class="submenu-scroll">
-                  <ul class="list-unstyled">
-                    <li>
-                      <a href="#ecommerce" data-toggle="collapse" aria-expanded="true" class="dropdown-toggle"> <span
-                          class="">Notes</span> </a>
-                      <ul class="list-unstyled sub-submenu collapse show eq-animated eq-fadeInUp" id="ecommerce">
-                        <li><a href="{% url 'addnotes' %}">Add Notes</a>
-                        </li>
-                        <li><a href="{% url 'viewnotes' %}">View /Delete /Update Notes</a>
-                        </li>
-                      </ul>
-                    </li>
-                  </ul>
-                </div>
-              </div>
             </li>
 
             <li class="menu">

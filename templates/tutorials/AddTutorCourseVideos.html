@@ -12,8 +12,8 @@
             </div>
         <div class="card-body">
             <form id='submitForm' method='post' action="" enctype= multipart/form-data onsubmit="valid()">{% csrf_token %}
-                <div id='mainForm' class="table-responsive">
-                    <div id='entry1'>
+                <div id='mainForm'>
+                    <div id='entry1' class="table-responsive">
                         <table id="htmlgrid" class="testgrid table table-striped table-bordered table-hover mb-4" style="color:black;">
                             <thead>
                                 <th style="color:black;">Add Video*</th>
@@ -24,19 +24,19 @@
                             <tbody>
                                 <tr>
                                 <td>
-                                    <div class="w-100 col-12">
+                                    <div class="w-100 col-12" style="min-width: 205px;">
                                     <input type="file" class="my-table-input custom-file-input" id="file" name="video" required>
                                     <label class="custom-file-label" >Choose file...</label>
                                 </div>
                                 </td>
                                 <td>
-                                    <input type="text" class="my-table-input form-control" id="exampleInputEmail1" aria-describedby="emailHelp" name="title" placeholder="Enter Video Title" required>
+                                    <input style="min-width: 205px;" type="text" class="my-table-input form-control" id="exampleInputEmail1" aria-describedby="emailHelp" name="title" placeholder="Enter Video Title" required>
                                 </td>
                                 <td>
-                                    <textarea type="text" rows="1" class="my-table-input form-control" id="exampleInputEmail1" name="description" aria-describedby="emailHelp" placeholder="Enter Video Description" required></textarea>
+                                    <textarea style="min-width: 205px;" type="text" rows="1" class="my-table-input form-control" id="exampleInputEmail1" name="description" aria-describedby="emailHelp" placeholder="Enter Video Description" required></textarea>
                                 </td>
                                 <td>
-                                    <a id='add' class="btn btn-primary">Add Video</a>
+                                    <a id='add' class="btn btn-warning">Add Video</a>
                                 </td>
                             </tr>
                             </tbody>
@@ -45,7 +45,7 @@
                 </div>
                 <hr>
                 <div class="col-sm-12 col-12 d-flex justify-content-end">
-                    <button name="submit" type="submit" class="btn btn-warning">Add Videos</button>
+                    <button name="submit" type="submit" class="btn btn-info">Add Videos</button>
                 </div>
             </form>
         </div>
@@ -64,10 +64,10 @@
         addwidth();
         $("#add").click(function(){
             var AddVideo = "<tr>"
-            AddVideo += `<td><div class="w-100 col-12"><input type="file" class="my-table-input custom-file-input" id="file" name="video" required><label class="custom-file-label" >Choose file...</label></div></td>`
-            AddVideo += "<td><input type='text' name='title' class='my-table-input form-control' id='exampleInputEmail1' aria-describedby='emailHelp' placeholder='Enter Video Title'></td>"
-            AddVideo += "<td><textarea type='text' rows='1' name='description' class='my-table-input form-control' id='exampleInputEmail1' aria-describedby='emailHelp' placeholder='Enter Video Description'></textarea></td>"
-            AddVideo +=  "</tr>";
+            AddVideo += `<td><div style="min-width: 205px;" class="w-100 col-12"><input type="file" class="my-table-input custom-file-input" id="file" name="video" required><label class="custom-file-label" >Choose file...</label></div></td>`
+            AddVideo += `<td><input style="min-width: 205px;" type='text' name='title' class='my-table-input form-control' id='exampleInputEmail1' aria-describedby='emailHelp' placeholder='Enter Video Title'></td>`
+            AddVideo += `<td><textarea style="min-width: 205px;" type='text' rows='1' name='description' class='my-table-input form-control' id='exampleInputEmail1' aria-describedby='emailHelp' placeholder='Enter Video Description'></textarea></td>`
+            AddVideo +=  `</tr>`;
                     $("table tbody").append(AddVideo);
             addwidth();
         });
