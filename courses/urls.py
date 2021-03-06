@@ -10,6 +10,7 @@ urlpatterns = [
     path('course-archive', courseArchive, name='course-archive'),
     path('courseArchivefirst/<int:id>', courseArchivefirst, name='courseArchivefirst'),
     path('teaching-type', teachingType2, name='teaching-type-2'),
+    path('classes', FindCoursesclass, name="findCourseclass"), #altered
     path('addCourse-api', CourseAPI, name='AddCoursesAPI'),
     path('viewCourses/', viewCourses, name='viewCourses'),
     path('archiveCourseList/', archiveCourseList, name='archiveCourseList'),
