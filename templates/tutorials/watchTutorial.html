@@ -42,8 +42,10 @@
                   <div class="card-body">
                     {{item.Description}}
                     <div class="container p-0">
-                      <button class="btn btn-warning mr-5" onclick="myFunction('{{item.Video.url}}')"><i
+                      <button class="btn btn-info m-2" onclick="myFunction('{{item.Video.url}}')"><i
                           class="flaticon-youtube-play-fill" style="size:2rem;"></i></button>
+                          <a class="btn btn-warning m-2" href="{% url 'editTutorialvideos' item.id %}"><i class="flaticon-pencil-line"></i></a>
+                          <a class="btn btn-danger m-2" href="{% url 'deleteplaylistvideo' item.id %}"><i class="flaticon-delete-fill"></i></a>
                     </div>
                   </div>
                 </div>

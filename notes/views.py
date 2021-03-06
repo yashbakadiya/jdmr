@@ -18,7 +18,9 @@ def AddNotesInstitute(request):
         user = User.objects.get(username=request.session['user'])
         inst = Institute.objects.get(user=user)
         classes = Courses.objects.filter(intitute=inst).values_list('forclass')
+        notes = NotesInstitute.objects.filter(institute=inst)
         context = {
+        'notes':notes,
         'classes':classes
         }
         if request.method == "POST":
