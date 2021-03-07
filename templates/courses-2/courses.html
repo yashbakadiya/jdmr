@@ -63,6 +63,35 @@ Institute Dashboard
   .btn-group.bootstrap-select.dropup:focus {
     outline: none;
   }
+  .table > thead > tr > th {
+    color: black;
+    font-weight: 600;
+  }
+  .form-control{
+    border-radius: 0px;
+    border: 1px solid #ced4da;
+  }
+  .page-item.active .page-link {
+    background-color: #333d46;
+    border-color: #333d46;
+    border-radius: 4px;
+}
+.btn-secondary {
+    color: #fff !important;
+    background-color: #333d46;
+    border-color: #333d46;
+    border-radius: 0px;
+
+}
+.widget.box .widget-header {
+    background: #fff;
+    padding: 0px;
+    border-top-right-radius: 6px;
+    border-top-left-radius: 6px;
+}
+tbody {
+    color: #000;
+}
 </style>
 {% endblock extra-style %}
 
@@ -102,7 +131,7 @@ Institute Dashboard
 
 {% block main-content %}
 
-<div class="container-fluid">
+<div class="container-fluid" style="padding-right:0px; padding-left: 0px;">
 
   {% for k in messages%}
   <div class="dropdown-item">
@@ -130,7 +159,7 @@ Institute Dashboard
     <div class="col-lg-12 h-100">
       <div class="card">
         <div class="card-header">
-          <h2 style="color: rgb(66, 8, 8);">Add Courses</h2>
+          <h2 style="color: black;">Add Courses</h2>
         </div>
         <br>
 
@@ -141,12 +170,12 @@ Institute Dashboard
                 {% csrf_token %}
 
 
-                <div class="col-md-5 col-lg-5 col-12 mt-2 row">
+                <div class="col-md-5 col-lg-5 col-12 mt-2 row ">
 
-                  <label class="control-label col-sm-3 col-5 mt-2" style="display:block; color:black;">Class</label>
-                  <select id="class_select" name="forclass" class="custom-select form-control w-100 col-sm-8 col-7"
+                  <label class="control-label col-sm-3 col-5 mt-2 " style="display:block; color:black;">Class</label>
+                  <select id="class_select" name="forclass" class="custom-select form-group w-100 col-sm-8 col-7"
                      placeholder="Select class" onchange="addoptions(this)">
-                     <option class="form-control" selected disabled value="">No selection</option>
+                     <option class="form-group" selected disabled value="">No selection</option>
                      
                     {% for x,y in data.items %}
                     <option value="{{ x }}">{{ x }}</option>
@@ -164,12 +193,12 @@ Institute Dashboard
                 <div class="col-lg-5 col-md-5 col-12 mt-2 row">
                   <label class="control-label col-sm-3 col-5 mt-2" style="display:block; color:black;">Courses</label>
                   
-                  <select id="cn" name="courseName" class="custom-select form-control w-100 col-sm-8 col-7">
-                     <option class="form-control" selected disabled value="">Subject</option>
+                  <select id="cn" name="courseName" class="custom-select form-group w-100 col-sm-8 col-7">
+                     <option class="form-group" selected disabled value="">Subject</option>
                   </select>
                 </div>
                 <div class="form-group">
-                  <input type="submit" value="Add" class="btn btn-success float-right login_btn">
+                  <input type="submit" value="Add" class="btn btn-success btn-lg float-right login_btn mt-2">
                 </div>
               </form>
             </div>
@@ -195,9 +224,15 @@ Institute Dashboard
   <div class="col-xl-12 col-lg-12 col-sm-10  layout-spacing">
     <div class="statbox widget box box-shadow">
       <div class="widget-header">
+<<<<<<< HEAD
+        <div class="card p-0">
+          <div class="card-header">
+            <h2 style="color: black;">Courses</h2>
+=======
         <div class="row">
           <div class="col-lg-12 col-md-12 cms-search">
             <h4>Courses</h4>
+>>>>>>> c28dc77e1fb0ef34b980cc5516ac4de02920169d
           </div>
         </div>
       </div>
@@ -224,19 +259,20 @@ Institute Dashboard
 
                 <td>
                   <div class="btn-group">
+                  <p></p>
                     <button type="button" data-toggle="modal" data-target="#edit-{{i.pk}}" href="#edit-{{i.pk}}"
-                      class="btn btn-secondary btn-sm"><i
+                      class="btn btn-success btn-sm"><i
                         class="flaticon-edit  bg-success p-1 text-white br-6 mb-1"></i>Edit</button>
-                    <button type="button" class="btn btn-secondary btn-sm dropdown-toggle dropdown-toggle-split"
+                    <button type="button" class="btn btn-success btn-sm dropdown-toggle dropdown-toggle-split"
                       id="dropdownMenuReference1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
                       data-reference="parent">
                       <span class="sr-only">Toggle Dropdown</span>
                     </button>
                     <div class="dropdown-menu" aria-labelledby="dropdownMenuReference1">
-                      <button class="btn btn-secondary btn-sm dropdown-item" data-toggle="modal"
+                      <button class="btn btn-danger btn-sm dropdown-item" data-toggle="modal"
                         data-target="#delete-{{i.pk}}" href="#delete-{{i.pk}}" title="Delete"><i
                           class="flaticon-delete  bg-danger p-1 text-white br-6 mb-1"></i>Delete</button>
-                      <!-- <button class="btn btn-secondary btn-sm dropdown-item" data-toggle="modal"
+                      <!-- <button class="btn btn-success btn-sm dropdown-item" data-toggle="modal"
                             data-target="#delete-{{i.pk}}" href="#delete-{{i.pk}}" title="Delete"><i
                               class="flaticon-delete  bg-danger p-1 text-white br-6 mb-1"></i>Delete</button> -->
                       <button class="btn btn-warning btn-sm dropdown-item" data-toggle="modal" name="undo"
