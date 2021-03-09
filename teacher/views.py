@@ -300,10 +300,13 @@ def enrolledTutorsObjectToDict(obj):
     if obj.photo:
         data['photo']=obj.photo.url
     
-    tutorlist = enrolledTutors.objects.all().values_list('courseName')
+    courseID = obj.course.replace(";",'')
+    courseID = list(set(courseID))
+    courses = []
+    for i in courseID:
+        course = Courses.objects.get(id = i)
+        courses.append(course.courseName)
 
-    for i in tutorlist:
-        courses.append(i[0])
     data['courseName']=courses
     return data
 
