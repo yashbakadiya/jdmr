@@ -20,25 +20,28 @@ def addFeesC(request):
     if request.session['type'] == 'Institute':
         user = User.objects.get(username=request.session['user'])
         inst = Institute.objects.get(user=user)
-        course = TeachingType.objects.filter(course__intitute=inst, course__archieved=False)
-        print('couseteaching',course)
-        forclas=Courses.objects.all()
-        print('forclass',forclas)
+        teach = TeachingType.objects.filter(course__intitute=inst, course__archieved=False)
+        courses = Courses.objects.filter(intitute=inst, archieved=False)
+        forclass = Courses.objects.filter(intitute=inst).values_list('forclass').distinct()
+        print('couser',courses)
         
-        courses = []
-        print('course_teaching',course)
+        
+        # courses = []
+        # print('course_teaching',course)
 
-        for c in course:
-            cou = Courses.objects.get(id=c.courseID)
-            courses.append(cou)
+        # for c in course:
+        #     cou = Courses.objects.get(id=c.courseID)
+        #     courses.append(cou)
             
-        print('courses',courses)
-        params = {'courses': courses,'course':course, 'forclas':forclas}
+        
+        params = {'courses': courses, 'classes':forclass,'teach':teach}
         if request.method == "POST":
-            forclass = request.POST.get('forclas')
-            teachType = request.POST.get('teachType')
+            forclass = request.POST.get('forclass')
+            print('forclas',forclass)
+            teachType = request.POST.get('teaching')
+            print('teachingType',teachType)
             if 'ajax_getinfo' in request.POST:
-                courseID = request.POST.get('courseID')
+                courseID = request.POST.get('courseName')
                 qry = TeachingType.objects.filter(Q(courseID__icontains=courseID))
                 a = TeachingType.objects.filter(Q(courseID__icontains=courseID)).values('forclass', 'teachType', 'duration')
                 b = list(a)
@@ -52,10 +55,13 @@ def addFeesC(request):
                          'teachings': teachings, 'durations': durations}
                 return JsonResponse(param)
             else:
-                courseID = request.POST.get('courseID')
-                course = Courses.objects.filter(id=courseID, intitute=inst)[0]
-                forclass = request.POST.get('forclas')
-                teachType = request.POST.get('check')
+                courseID = request.POST.get('courseName')
+
+                
+                course = Courses.objects.get(id = courseID)
+
+                forclass = request.POST.get('forclass')
+                teachType = request.POST.get('teaching')
                 duration = request.POST.get('duration')
                 discValidity = request.POST.get('discValidity')
                 discValidity = datetime.strptime(discValidity, '%Y-%m-%d')
@@ -84,7 +90,7 @@ def addFeesC(request):
                     finalValue = feeCalc + ((feeCalc*tax)/100)
                 finalValue -= feeDisc
                 addFees = AddFeesC(
-                    course=course,
+                    course = course,
                     intitute=inst,
                     courseName=courseID,
                     forclass=forclass,

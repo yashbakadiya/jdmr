@@ -32,17 +32,20 @@
             <div class="mx-2 row" id="INSTBATCH">
                 <div class="col">
                     <label for="validationCustom01"><strong>Select Class <span class="red">*</span></strong></label>
-                    <select id="class_select" name="class" style="width: 100%;"
+
+
+                    <select id="forclass" name='forclass' style="width: 100%;"
                         class="js-example-basic-single form-control" onchange="selectclass()">
                         <option class="form-control" selected disabled value="">Select Class</option>
-                        {% for class in courses %}
-                        <option class="form-control form-control-lg" value="{{class.0}}">{{class.0}} </option>
+                        {% for i in classes %}
+                        <option class="form-control form-control-lg" value="{{ i.0 }}">{{i.0}} </option>
                         {% endfor %}
                     </select>
+
                 </div>
                 <div class="col">
                     <label for="validationCustom01"><strong>Select Course<span class="red">*</span></strong></label>
-                    <select id="select_course" name="course" style="width: 100%"
+                    <select id="courseName" name="courseName" style="width: 100%"
                         class="js-example-basic-single form-control">
                         <option class="form-control form-control-lg" selected disabled value="">Select Course</option>
                     </select>
@@ -52,8 +55,8 @@
                     <select id="teachingtype" name="teaching" style="width: 100%;"
                         class="js-example-basic-single form-control">
                         <option class="form-control" selected disabled value="">Select teaching-type</option>
-                        {% for cour in course %}
-                        <option class="form-control" value="{{cour.teachingType}}">{{cour.teachingType}}</option>
+                        {% for i in teach %}
+                        <option class="form-control" value="{{i.teachType}}">{{i.teachType}}</option>
                         {% endfor %}
                     </select>
                 </div>
@@ -66,24 +69,29 @@
                     <label for="validationCustom01"><strong>Course Duration <span class="red">*</span></strong></label>
                     <div>
                         <select class="form-control " data-actions-box="true" id="duration" name="duration" required>
-                            {% for dura in durations %}
-                            <option value="{{ dura }}">{{ dura }}</option>
-                            {% endfor %}
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                            <option value="4">4</option>
+                            <option value="5">5</option>
+                            <option value="6">6</option>
+                            <!-- {% for dura in durations %}
+                            <option value="{{ dura }}">{{ 1 }}</option>
+                            {% endfor %} -->
                         </select>
                     </div>
                 </div>
 
                 <div class="col">
                     <label for="validationCustom01"><strong> Course Fees <span class="red">*</span></strong></label>
-                    <input class="form-control" type='text' id="feeamt" name='feeamt' placeholder="Course Fee" required>
-                    <div class="invalid-feedback">
-                        Select a valid Time!
-                    </div>
+                    <input class="form-control finalcalc" type='text' id="feeamt" name='feeamt' placeholder="Course Fee" required>
+                    
+                   
                 </div>
 
                 <div class="col">
                     <label for="validationCustom01"><strong> Tax <span class="red">*</span></strong></label>
-                    <input class="form-control" type='text' id="tax" name='tax' placeholder="Tax %" required /><br />
+                    <input class="form-control finalcalc" type='text' id="tax" name='tax' placeholder="Tax %" required /><br />
                 </div>
 
                 <div class="col">
@@ -115,39 +123,51 @@
                 </div>
 
 
+                <!-- <div class="input-group form-group">
+                    <label class="control-label col-sm-4">Charge Type<span class="text-danger">*</span></label>
+                    <div class="col-sm-3 form-inline">
+                        <label for="chargeType1" class="control-label">Amount</label>&nbsp;&nbsp;&nbsp;&nbsp;
+                        <input id="chargeType1" type="radio" name="chargeType" value="1">
+                    </div>
+                    <div class="col-sm-3 form-inline">
+                        <label for="chargeType2" class="control-label">Percent</label>&nbsp;&nbsp;&nbsp;&nbsp;
+                        <input id="chargeType2" type="radio" name="chargeType" value="0">
+                    </div>
+                </div> -->
 
-                <div class="col-md-4 mb-3">
-                    <label for="validationCustom01" for="chargeType1"><strong>Amount <span
+                <div class="col">
+                    <label for="validationCustom01" for="chargeType1"><strong>Charge Type <span
                                 class="red">*</span></strong></label>
-                    <input class="form-control" id="chargeType1" type="radio" name="chargeType" value="1" required />
+
+                    <div class="col">
+                        <label for="chargeType1" class="control-label">Amount </label> &nbsp;&nbsp;&nbsp;&nbsp;
+                        <input id="chargeType1" type="radio" name="chargeType" value="1">
+
+
+                        <label for="chargeType2" class="control-label">Percent</label>&nbsp;&nbsp;&nbsp;&nbsp;
+                        <input id="chargeType2" type="radio" name="chargeType" value="0">
+                    </div>
+
 
                 </div>
 
-                <div class="col-md-4 mb-3 ">
-                    <label for="validationCustom01" for="chargeType2"><strong>Percent <span
-                                class="red">*</span></strong></label>
-                    <input class="form-control" id="chargeType2" type="radio" name="chargeType" value="0" />
-
-                </div>
             </div>
             <div class=" mx-2 row mt-4">
-                <div class="col-md-4 mb-3 ">
-
-                    <label for="validationCustom01"><strong>Extra Charges</strong></label>
-
-                    <input type="text" class="form-control " id="echarge1" name='echarge' placeholder="1"
-                        disabled="disabled">
-                    <input type="text" class="form-control " id="echarge2" name='echarge' placeholder="2"
+                <div id="echarges" class="input-group form-group">
+                    <!-- <label class="control-label col-sm-4">Extra Charges (Each Installment)<span class="text-danger">*</span></label> -->
+                    <label for="validationCustom01" for="chargeType2"><strong>Extra Charges (Each Installment) <span
+                                class="red">*</span></strong></label>
+                    <!-- <input type="text" class="form-control col-sm-1" id="echarge1" name='echarge' placeholder="1" disabled="disabled"> -->
+                    <input type="text" class="form-control col-sm-1" id="echarge2" name='echarge' placeholder="2"
                         disabled="disabled" value="2">
-                    <input type="text" class="form-control " id="echarge3" name='echarge' placeholder="3"
+                    <input type="text" class="form-control col-sm-1" id="echarge3" name='echarge' placeholder="3"
                         disabled="disabled" value="3">
-                    <input type="text" class="form-control " id="echarge4" name='echarge' placeholder="4"
+                    <input type="text" class="form-control col-sm-1" id="echarge4" name='echarge' placeholder="4"
                         disabled="disabled" value="4">
-                    <input type="text" class="form-control " id="echarge5" name='echarge' placeholder="5"
+                    <input type="text" class="form-control col-sm-1" id="echarge5" name='echarge' placeholder="5"
                         disabled="disabled" value="5">
-                    <input type="text" class="form-control " id="echarge6" name='echarge' placeholder="6"
+                    <input type="text" class="form-control col-sm-1" id="echarge6" name='echarge' placeholder="6"
                         disabled="disabled" value="6">
-
                 </div>
 
                 <div class="col-md-4 mb-3 ">
@@ -167,11 +187,10 @@
             </div>
 
             <div class="text-center">
-                <button type="submit" class="btn btn-primary"> Save </button>
+                <button type="submit" class="btn btn-primary"> Submit </button>
             </div>
         </form>
     </div>
-
     <script>
         function checkbox() {
             var value = $("#negativecheck").is(":checked");
@@ -179,16 +198,16 @@
             var output;
             if (value) {
                 output = `<input
-      type="number"
-      class="mt-2 form-control"
-      placeholder="Enter Negative Marks"
-      name="negative_marks"
-      value="0"
-      required
-    />
-    <div class="invalid-feedback">
-      Enter a valid No.
-    </div>`;
+          type="number"
+          class="mt-2 form-control"
+          placeholder="Enter Negative Marks"
+          name="negative_marks"
+          value="0"
+          required
+        />
+        <div class="invalid-feedback">
+          Enter a valid No.
+        </div>`;
             } else {
                 output = "";
             }
@@ -200,15 +219,15 @@
         });
 
         function selectclass() {
-            var selected = $("#class_select").val();
+            var selected = $("#forclass").val();
             $.ajax({
-                url: "{% url 'findCourse' %}",
+                url: "{% url 'findbatch' %}",
                 data: {
                     forclass: selected,
                 },
                 success: function (data) {
                     courses = data.courses;
-                    $("#select_course").empty().trigger("change");
+                    $("#courseName").empty().trigger("change");
                     for (i = 0; i < courses.length; i++) {
                         var newOption = new Option(
                             courses[i][1],
@@ -216,7 +235,7 @@
                             false,
                             false
                         );
-                        $("#select_course").append(newOption).trigger("change");
+                        $("#courseName").append(newOption).trigger("change");
                     }
                 },
             });
@@ -227,76 +246,78 @@
             frm[0].reset();
         });
     </script>
+    <script>
 
-<script>
-
-    console.log("this is jquery")
-        function Enableddl(install)
-        {
-            var ddl=document.getElementById("no_of_installment");
-            ddl.disabled=install.checked ? false : true;
-            if(!ddl.disabled)
+        console.log("this is jquery")
+            function Enableddl(install)
             {
-                ddl.focus();
-            }
-        }
-    
-        $(function() {
-            $("#no_of_installment").on("change", function() {
-                $("#echarges input").prop("disabled",true);
-                var selected = $("option:selected", this).map(function() {
-                    return $(this).text();
-                }).toArray();
-                var i;
-                for (i = 0; i < selected.length; ++i)
+                var ddl=document.getElementById("no_of_installment");
+                ddl.disabled=install.checked ? false : true;
+                if(!ddl.disabled)
                 {
-                    if(selected[i]==2)
-                    // {
-                    //     $('#echarge1').prop( "disabled", false );
-                    // }
-                    // else if(selected[i]==2)
-                    {
-                        $('#echarge2').prop( "disabled", false );
-                    }
-                    else if(selected[i]==3)
-                    {
-                        $('#echarge3').prop( "disabled", false );
-                    }
-                    else if(selected[i]==4)
-                    {
-                        $('#echarge4').prop( "disabled", false );
-                    }
-                    else if(selected[i]==5)
-                    {
-                        $('#echarge5').prop( "disabled", false );
-                    }
-                    else if(selected[i]==6)
-                    {
-                        $('#echarge6').prop( "disabled", false );
-                    }
+                    ddl.focus();
                 }
+            }
+        
+            $(function() {
+                $("#no_of_installment").on("change", function() {
+                    $("#echarges input").prop("disabled",true);
+                    var selected = $("option:selected", this).map(function() {
+                        return $(this).text();
+                    }).toArray();
+                    var i;
+                    for (i = 0; i < selected.length; ++i)
+                    {
+                        if(selected[i]==2)
+                        // {
+                        //     $('#echarge1').prop( "disabled", false );
+                        // }
+                        // else if(selected[i]==2)
+                        {
+                            $('#echarge2').prop( "disabled", false );
+                        }
+                        else if(selected[i]==3)
+                        {
+                            $('#echarge3').prop( "disabled", false );
+                        }
+                        else if(selected[i]==4)
+                        {
+                            $('#echarge4').prop( "disabled", false );
+                        }
+                        else if(selected[i]==5)
+                        {
+                            $('#echarge5').prop( "disabled", false );
+                        }
+                        else if(selected[i]==6)
+                        {
+                            $('#echarge6').prop( "disabled", false );
+                        }
+                    }
+                });
             });
-        });
-    
-    
-        $(document).ready(function() {
-            $('#no_of_installment').multiselect({
-                includeSelectAllOption: true,
+        
+        
+            $(document).ready(function() {
+                $('#no_of_installment').multiselect({
+                    includeSelectAllOption: true,
+                });
             });
-        });
-    
-        $(".finalcalc").on("change",function(){
-            var a,b,c;
-            a=Number(document.getElementById("feeamt").value);
-            b=Number(document.getElementById("tax").value);
-            if(a==undefined){a = 0;}
-            if(b==undefined){b = 0;}
-            c= a + (b/100)*a;
-            $('#final').val(c);
-            event.preventDefault()
-        });
-    
-    </script>
+        
+            $(".finalcalc").on("change",function(){
+                var a,b,c;
+                a=Number(document.getElementById("feeamt").value);
+                b=Number(document.getElementById("tax").value);
+                if(a==undefined){a = 0;}
+                if(b==undefined){b = 0;}
+                c= a + (b/100)*a;
+                $('#final').val(c);
+                event.preventDefault()
+            });
+        
+        </script>
+
+
+
 
 </div>
 {% endblock %}
