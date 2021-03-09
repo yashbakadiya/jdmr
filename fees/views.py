@@ -33,7 +33,7 @@ def addFeesC(request):
             courses.append(cou)
             
         print('courses',courses)
-        params = {'courses': courses, 'forclas':forclas}
+        params = {'courses': courses,'course':course, 'forclas':forclas}
         if request.method == "POST":
             forclass = request.POST.get('forclas')
             teachType = request.POST.get('teachType')

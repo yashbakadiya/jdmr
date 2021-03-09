@@ -1,127 +1,21 @@
 {% extends 'dashboard/base.html' %}
 {% load static %}
-
 {% block css %}
-<style>
-    @import url('https://fonts.googleapis.com/css?family=Numans');
-
-    .container {
-        align-content: center;
-    }
-
-    .card {
-        margin-top: auto;
-        margin-bottom: auto;
-        width: 800px;
-        background-color: white;
-    }
-
-    .card-header h3 {
-        color: white;
-    }
-
-    input:focus {
-        outline: 0 0 0 0 !important;
-        box-shadow: 0 0 0 0 !important;
-
-    }
-
-    .remember {
-        color: white;
-    }
-
-    .remember input {
-        width: 19px;
-        height: 19px;
-        margin-left: 15px;
-        margin-right: 5px;
-    }
-
-    .links {
-        color: white;
-    }
-
-    .links a {
-        margin-left: 4px;
-    }
-
-    .control-label {
-        color: rgb(66, 8, 8);
-        font-size: 20px;
-    }
-
-    .social_icon span {
-        font-size: 60px;
-        margin-left: 10px;
-        color: #FFC312;
-    }
-
-    .social_icon span:hover {
-        color: white;
-        cursor: pointer;
-    }
-
-    .card-header h3 {
-        color: white;
-    }
-
-    .social_icon {
-        position: absolute;
-        right: 20px;
-        top: -45px;
-    }
-
-    .input-group-prepend span {
-        width: 50px;
-        background-color: #FFC312;
-        color: black;
-        border: 0 !important;
-    }
-
-    input:focus {
-        outline: 0 0 0 0 !important;
-        box-shadow: 0 0 0 0 !important;
-
-    }
-
-    .remember {
-        color: white;
-    }
-
-    .remember input {
-        width: 20px;
-        height: 20px;
-        margin-left: 15px;
-        margin-right: 5px;
-    }
-
-    .signup_btn {
-        color: black;
-        background-color: #FFC312;
-        width: 300px;
-    }
-
-    .signup_btn:hover {
-        background-color: #2a2b3d;
-        color: white;
-    }
-
-    .links {
-        color: white;
-    }
-
-    .links a {
-        margin-left: 4px;
-    }
-
-    .control-label {
-        color: rgb(66, 8, 8);
-        font-size: 20px;
-    }
-</style>
 {% endblock %}
 {% block main-content %}
-<div class="container">
+<style>
+    #card {
+        background-color: white;
+        padding-bottom: 3rem;
+        padding-top: 3rem;
+        color: black;
+    }
+</style>
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/css/select2.min.css" rel="stylesheet" />
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/js/select2.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
+<div class="mt-5">
     {% if messages %}
     {% for k in messages%}
     <div class="alert alert-{{k.tags}} alert-dismissible fade show" role="alert">
@@ -132,111 +26,149 @@
     </div>
     {% endfor %}
     {% endif %}
-    <div class="d-flex justify-content-center h-100">
-        <div class="card">
-            <div class="card-header">
-                <div class="row">
-                    <div class="col-sm-4">
-                        <h2 style="color: rgb(66, 8, 8);">Batch Timing</h2>
+    <div style="padding-top: 0;" class="class" id="card">
+        <div class="card-header">
+            <h2 style="align-items: center;text-align: center;">Update Batch</h2>
+        </div>
+        <form id="frm" class="mb-4 mt-4" method="post">{% csrf_token %}
+            <div class="mx-2 row" id="INSTBATCH">
+
+                <div class="col">
+                    <label for="validationCustom01"><strong> Batch Name<span class="red">*</span></strong></label>
+                    <input type="text" class="form-control" id="batchName" name='batchName' placeholder="Batch Name"
+                    value="{{batchObj.batchName}}">
+
+                </div>
+
+
+                <div class="col">
+                    <label for="validationCustom01"><strong>Select Class <span class="red">*</span></strong></label>
+                    
+
+
+                    <select id="forclass" name='forclass' style="width: 100%;"  class="js-example-basic-single form-control" onchange="selectclass()">
+                        <option class="form-control" selected disabled value="{{batchObj.Class}}">{{batchObj.Class}}</option>
+                        {% for i in classes %}
+                        <option class="form-control form-control-lg" value="{{ i.0 }}">{{i.0}} </option>
+                        {% endfor %}
+                    </select>
+                    
+                    <!-- <select id="class_select" name="class" style="width: 100%;" class="js-example-basic-single form-control" onchange="selectclass()">
+                        <option class="form-control" selected disabled value="{{exam.Class}}">{{exam.Class}}</option>
+                        {% for class in classes %}
+                        <option class="form-control" value="{{class.0}}">{{class.0}}</option>
+                        {% endfor %}
+                      </select> -->
+
+
+                </div>
+                <div class="col">
+                    <label for="validationCustom01"><strong>Select Course<span class="red">*</span></strong></label>
+                    <select id="courseName" name="courseName" style="width: 100%"
+                        class="js-example-basic-single form-control">
+                        <option class="form-control form-control-lg" selected disabled value="{{batchObj.course.id}}">{{batchObj.course.courseName}}</option>
+                    </select>
+                </div>
+                
+            </div>
+            <div class="mx-2 row mt-4">
+
+
+                <div class="col">
+                    <label for="validationCustom01"><strong>Start Time <span class="red">*</span></strong></label>
+                    <input class="form-control" type="time" placeholder="" name="startTime"  value="{{batchObj.startTime|date:'H:i'}}" /><br />
+                    
+                    <div class="invalid-feedback">
+                        Select a valid Time!
+                    </div>
+                </div>
+
+                <div class="col">
+                    <label for="validationCustom01"><strong>End Time <span class="red">*</span></strong></label>
+                    <input class="form-control" type="time" placeholder="" name="endTime" value="{{batchObj.endtime|date:'H:i'}}" /><br />
+                    <div class="invalid-feedback">
+                        Select a valid Time!
+                    </div>
+                </div>
+
+                <div class="col">
+                    <label for="validationCustom01"><strong>Select Days <span class="red">*</span></strong></label>
+
+                    <div>
+                        <select class="form-control " data-actions-box="true" id="days" name='fordays' value="{{batchObj.days}}" >
+                            <option value="disabled">Day</option>
+                            <option value="Sunday">Sunday</option>
+                            <option value="Monday">Monday</option>
+                            <option value="Tuesday">Tuesday</option>
+                            <option value="Wednesday">Wednesday</option>
+                            <option value="Thursday">Thursday</option>
+                            <option value="Friday">Friday</option>
+                            <option value="Saturday">Saturday</option>
+                        </select>
                     </div>
                 </div>
             </div>
-            <div class="card-body container">
-                <form id='submitForm' method='post' action=''>{% csrf_token %}
-                    <select class="form-control" id="courseName" name="courseName" required>
-                        <option selected="selected" disabled>Choose Course</option>
-						{% for i in courses %}
-							<option value="{{ i.id }}">{{ i.courseName }}</option>
-						{% endfor %}
-					</select>
-					<br>
-					<div class="">
-					  <label class="control-label col-sm-4">Select Class<span class="text-danger">*</span></label>
-						<select class="multiselect multiple-checkboxes" id="forclass" name='forclass' multiple="multiple" required>
-						  <option selected="selected" >Choose Course</option>
-                          <option value="">I</option>
-                          <option value="">II</option>
-						</select>
-					</div>
-					<br>
-                    <div class="input-group form-group">
-                        <label class="control-label col-sm-4">Batch Name<span class="text-danger">*</span></label>
-                        <div class="input-group-prepend">
-                            <span class="input-group-text"><i class="fas fa-user"></i></span>
-                        </div>
-                        <input type="text" class="form-control" id="batchName " name='batchName'
-                            placeholder="Batch Name" required value="{{ prefilObj.batchName }}">
-                    </div>
-                    <div class="input-group form-group">
-                        <label class="control-label col-sm-4">Start Time<span class="text-danger">*</span></label>
-                        <div class="input-group-prepend">
-                            <span class="input-group-text"><i class="fas fa-user"></i></span>
-
-                        </div>
-                        <input type="time" class="form-control" id="startTime" name='startTime' placeholder="Start Time"
-                            required value="{{ prefilObj.original24time }}">
-                    </div>
-                    <div class="input-group form-group">
-                        <label class="control-label col-sm-4">End Time<span class="text-danger">*</span></label>
-                        <div class="input-group-prepend">
-                            <span class="input-group-text"><i class="fas fa-user"></i></span>
-                        </div>
-                        <input type="time" class="form-control" id="endTime" name='endTime' placeholder="End Time"
-                            required value="{{ prefilObj.original24time }}">
-                    </div>
-                    <div class="input-group form-group">
-                        <label class="control-label col-sm-4" for='forday'>Days<span
-                                class="text-danger">*</span></label>
-                        <div>
-                            <select id="multiple-checkboxes" id="forday" name='forday' multiple required>
-                                <option value="Monday">Monday</option>
-                                <option value="Tuesday">Tuesday</option>
-                                <option value="Wednesday">Wednesday</option>
-                                <option value="Thursday">Thursday</option>
-                                <option value="Friday">Friday</option>
-                                <option value="Saturday">Saturday</option>
-                                <option value="Sunday">Sunday</option>
-                            </select>
-                        </div>
-                    </div><br>
-                    <hr>
-                    <div class="row container d-flex justify-content-end">
-                        <div class="col-sm-2 sm-ml-1">
-                            <button id='submitBtn' name="submit" type="submit" class="btn btn-warning">SUBMIT</button>
-                        </div>
-                    </div>
-
-                </form>
+            <div class="text-center">
+                <button type="submit" class="btn btn-primary"> Submit </button>
             </div>
-        </div>
+        </form>
     </div>
-</div>
-</div>
-</div>
-<script>
-    $(document).ready(function () {
-        var array = "{{prefilObj.days}}".replace(/ /g, "").split(",");
-
-        $("#multiple-checkboxes").val(array);
-
-        $('#multiple-checkboxes').multiselect({
-            includeSelectAllOption: true,
-            minwidth: 2000
-        });
-        $("#courseName").on("change",function(){
-            var options = {{json|safe}};
-            console.log('options--',options)
-            var currentops = options[this.value];
-            $("#forclass").empty();
-            for(i=0;i<currentops.length;i++){
-                $("#forclass").append(`<option value="${currentops[i]}">
-                    ${currentops[i]}
-                </option>`);
+    <script>
+        function checkbox() {
+            var value = $("#negativecheck").is(":checked");
+            negative = document.getElementById("negative");
+            var output;
+            if (value) {
+                output = `<input
+  type="number"
+  class="mt-2 form-control"
+  placeholder="Enter Negative Marks"
+  name="negative_marks"
+  {% if exam.negative_marks %}
+  value="{{exam.negative_marks|floatformat}}"
+  {% else %}
+  value="0"
+  {% endif %}
+  required
+/>
+<div class="invalid-feedback">
+  Enter a valid No.
+</div>`;
+            } else {
+                output = "";
             }
-            $("#forclass").multiselect('rebuild');
+            negative.innerHTML = output;
+        }
+        // In your Javascript (external .js resource or <script> tag)
+        $(document).ready(function () {
+            checkbox();
+            $('.js-example-basic-single').select2();
         });
-        $("#forclass").multiselect();
-    });
 
-</script>
-{% endblock %} 
+
+        function selectclass() {
+            var selected = $("#class_select").val();
+            $.ajax({
+                url: "{% url 'findCourse' %}",
+                data: {
+                    forclass: selected,
+                },
+                success: function (data) {
+                    courses = data.courses;
+                    console.log(courses)
+                    $("#select_course").empty().trigger("change");
+                    for (i = 0; i < courses.length; i++) {
+                        var newOption = new Option(
+                            courses[i][1],
+                            courses[i][0],
+                            false,
+                            false
+                        );
+                        $("#select_course").append(newOption).trigger("change");
+                    }
+                },
+            });
+        }
+    </script>
+</div>
+{% endblock main-content %}

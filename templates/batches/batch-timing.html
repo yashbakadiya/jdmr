@@ -92,30 +92,111 @@
 
         <div class="col">
           <label for="validationCustom01"><strong>Select Days <span class="red">*</span></strong></label>
-          
+
           <div>
-            <select class="form-control " data-actions-box="true" id="days" name='fordays' multiple="multiple" required>
-            <option value="Sunday">Sunday</option>
-            <option value="Monday">Monday</option>
-            <option value="Tuesday">Tuesday</option>
-            <option value="Wednesday">Wednesday</option>
-            <option value="Thursday">Thursday</option>
-            <option value="Friday">Friday</option>
-            <option value="Saturday">Saturday</option>
-          </select>
+            <select class="form-control " data-actions-box="true" id="days" name='fordays' required>
+              <option value="disabled">Day</option>
+              <option value="Sunday">Sunday</option>
+              <option value="Monday">Monday</option>
+              <option value="Tuesday">Tuesday</option>
+              <option value="Wednesday">Wednesday</option>
+              <option value="Thursday">Thursday</option>
+              <option value="Friday">Friday</option>
+              <option value="Saturday">Saturday</option>
+            </select>
           </div>
-          
         </div>
       </div>
-
-
-
-
       <div class="text-center">
         <button type="submit" class="btn btn-primary"> Submit </button>
       </div>
     </form>
   </div>
+
+  <br>
+  <br>
+
+  <div class="card mb-4">
+    <div class="card-header">
+      <!-- Grid row -->
+      <div class="row">
+        <!-- Grid column -->
+        <div class="col-md-8">
+          <h2 style="color: rgb(0, 0, 0 );">List of Batches</h2>
+        </div>
+
+        <div class="col-md-4">
+          <input id="searchbox" type="text" class="form-control" name='srh' placeholder="Search Exam or Course"
+            required>
+        </div>
+
+        <!-- Grid column -->
+      </div>
+    </div>
+    {% if bat %}
+    <div class="card-body">
+      <!-- Grid row -->
+      <form action="" method="post">{% csrf_token %}
+        <!--Table-->
+        <div class="table-responsive">
+          <table class="table table-striped">
+            <!--Table head-->
+            <tr>
+              <th>Batch Name</th>
+              <th>Course Name</th>
+              <th>Class</th>
+              <th>Start Time</th>
+              <th>End Time</th>
+              <th>Days</th>
+              <th class='text-center'>Action</th>
+
+            </tr>
+            <!--Table head-->
+            <!--Table body-->
+
+            {% for i in bat %}
+            <tr>
+              <td>{{i.batchName}}</td>
+              <td>{{i.course.courseName}}</td>
+              <td>{{i.course.forclass}}</td>
+              <td>{{i.startTime}}</td>
+              <td>{{i.endTime}}</td>
+              <td>{{i.days}}</td>
+
+              <td class="text-center">
+                <a class="btn btn-warning" href="{% url 'batchTimingEdit' i.id %}"><i class="flaticon-pencil-line"
+                    style="font-size:medium;"></i></a>
+                <a class="btn btn-danger" href="{% url 'batchTimingdelete' i.id %}"><i class="flaticon-delete-fill"
+                    style="font-size:medium;"></i></a>              
+
+              </td>
+              <!-- <td><a href="{% url 'batchTimingEdit' i.id %}" class="btn btn-danger">EDIT</a></td>
+              <td><a href="{% url 'batchTimingdelete' i.id %}" class="btn btn-danger">Delete</a></td>
+              -->
+            </tr>
+            {% endfor %}
+
+
+            <!--Table body-->
+          </table>
+        </div>
+        <!--Table-->
+      </form>
+      <br>
+    </div>
+    {% else %}
+    <div class="card-header" style="background: none;">
+      <div class="row">
+        <div class="col-xl-12 col-md-12 col-12">
+          <h2>No Exams to show</h2>
+        </div>
+      </div>
+    </div>
+    {% endif %}
+  </div>
+
+
+
 
   <script>
     function checkbox() {
