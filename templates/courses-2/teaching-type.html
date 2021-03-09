@@ -115,8 +115,8 @@ Institute Dashboard
                     <select id="class_select" name="forclass" style="width: 100%;"
                       class="js-example-basic-single form-control" onchange="selectclass()">
                       <option class="form-control" selected disabled value="">Select Class</option>
-                      {% for i in courses %}
-                      <option class="form-control form-control-lg" value="{{ i.id }}">{{i.forclass}} </option>
+                      {% for i in classes %}
+                      <option class="form-control form-control-lg" value="{{ i.0 }}">{{i.0}} </option>
                       {% endfor %}
                     </select>
 
@@ -550,13 +550,13 @@ $(document).ready(function() {
 function selectclass() {
     var selected = $("#class_select").val();
     $.ajax({
-      url: "{% url 'findCourse' %}",
+      url: "{% url 'findCourseclass' %}",
       data: {
         forclass: selected,
       },
       success: function (data) {
         courses = data.courses;
-        $("#select_course").empty().trigger("change");
+        $("#courseName").empty().trigger("change");
         for (i = 0; i < courses.length; i++) {
           var newOption = new Option(
             courses[i][1],
@@ -564,11 +564,11 @@ function selectclass() {
             false,
             false
           );
-          $("#select_course").append(newOption).trigger("change");
+          $("#courseName").append(newOption).trigger("change");
         }
       },
     });
-  }
+  }  
 
   $(window).on('pageshow', ()=>{ var frm = $('#frm');
     frm[0].reset();

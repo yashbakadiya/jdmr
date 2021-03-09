@@ -9,6 +9,7 @@ import datetime as dt
 from courses.models import Courses
 from json import dumps, loads
 import json
+from django.http import JsonResponse
 from teacher.models import enrollTutors
 from django.db.models import Q
 # Create your views here.
@@ -40,6 +41,7 @@ def batchTiming2(request):
         if request.method == 'POST':
             user = User.objects.get(username=request.session['user'])
             institute = Institute.objects.get(user=user)
+            
             if('delteSno' in request.POST):
                 delObj = BatchTiming.objects.get(sid=request.POST.get('delteSno'))
                 delObj.delete()
@@ -77,13 +79,27 @@ def batchTiming2(request):
         coachingCenter = Institute.objects.get(user=user).BatchTiming.all()
         inst = Institute.objects.get(user=user)
         courses = Courses.objects.filter(intitute=inst, archieved=False)
+        forclass_sel = Courses.objects.filter(intitute=inst).values_list('forclass').distinct()
         jsonCources = {}
         for x in courses:
             jsonCources[x.id] = x.forclass.split(", ")
-        params = {'data': coachingCenter, 'courses': courses,
+        params = {'data': coachingCenter, 'courses': courses,'classes':forclass_sel,
                   'json': json.dumps(jsonCources)}
         return render(request, 'batches/batch-timing.html', params)
     return HttpResponse("You Are not Authenticated for this Page")
+
+def Findbatch(request):
+    courses={}
+    forclass = request.GET.get('forclass')
+    print("forclass",forclass)
+
+    if forclass:
+        course_obj = Courses.objects.filter(forclass=forclass)
+        courses = []
+        for i in course_obj:
+            courses.append((i.id,i.courseName))
+        print('jsoncourse',courses)
+    return JsonResponse({'courses':courses})
 
 
 @login_required(login_url='Login')
