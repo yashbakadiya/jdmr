@@ -8,7 +8,7 @@ class NotesInstitute(models.Model):
     title = models.CharField(max_length=2000)
     subject = models.CharField(max_length=3000)
     forclass = models.CharField(max_length=150, default="")
-    description = models.TextField()
+    description = models.TextField(max_length=150)
         
     def __str__(self):
         return f"notes"
@@ -23,7 +23,7 @@ class NotesTutor(models.Model):
     notes = models.FileField(upload_to="notes/Institute")
     title = models.CharField(max_length=2000)
     subject = models.CharField(max_length=3000)
-    description = models.TextField()
+    description = models.TextField(max_length=150)
         
     def __str__(self):
         return f"notes"

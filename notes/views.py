@@ -24,27 +24,28 @@ def AddNotesInstitute(request):
         'classes':classes
         }
         if request.method == "POST":
-            note = request.FILES.get("note","")
+            note = request.FILES.getlist("note","")
             title = request.POST.get("title","")
             description = request.POST.get("description","")
             course = request.POST.get("course","")
             course = Courses.objects.get(id=course).courseName
             forclass = request.POST.get('forclass','')
             if (note and title and description and course):
-                data = NotesInstitute(
-                    institute = inst,
-                    notes = note,
-                    title = title,
-                    subject = course,
-                    forclass = forclass,
-                    description = description,
-                    )
-                try:
-                    data.save()
-                    return redirect('viewnotes')
-                except:
-                    errors.append("Some error Occured! Try Again")
-                    context['errors'] = errors
+                for i in range(len(note)):
+                    data = NotesInstitute(
+                        institute = inst,
+                        notes = note[i],
+                        title = title,
+                        subject = course,
+                        forclass = forclass,
+                        description = description,
+                        )
+                    try:
+                        data.save()
+                        return redirect('viewnotes')
+                    except:
+                        errors.append("Some error Occured! Try Again")
+                        context['errors'] = errors
         return render(request,'Notes/addNotesInstitute.html',context)
     return HttpResponse("You are Not Authenticated for this page")
     
@@ -100,14 +101,15 @@ def EditNoteInstitute(request,note_id):
         'note':data
         }
         if request.method == "POST":
-            note = request.FILES.get("note","")
+            note = request.FILES.getlist("note","")
             title = request.POST.get("title","")
             description = request.POST.get("description","")
             course = request.POST.get("course","")
             course = Courses.objects.get(id=course).courseName
             forclass = request.POST.get('forclass','')
+
             if note:
-                data.notes = note
+                data.notes = note[0]
             if title:
                 data.title = title
             if description:
@@ -122,6 +124,23 @@ def EditNoteInstitute(request,note_id):
             except:
                 errors.append('Error Occured! Try Again')
                 context['errors'] = errors
+
+            if len(note)>1:
+                for i in range(1,len(note)):
+                    data = NotesInstitute(
+                        institute = inst,
+                        notes = note[i],
+                        title = title,
+                        subject = course,
+                        forclass = forclass,
+                        description = description,
+                        )
+                    try:
+                        data.save()
+                        return redirect('viewnotes')
+                    except:
+                        errors.append("Some error Occured! Try Again")
+                        context['errors'] = errors
         return render(request,'Notes/editNoteInstitute.html',context)
     return HttpResponse("You are not Authenticated for this Page")
 
@@ -160,25 +179,26 @@ def AddNotesTutor(request):
         'notes':notes
         }
         if request.method == "POST":
-            note = request.FILES.get("note","")
+            note = request.FILES.getlist("note","")
             title = request.POST.get("title","")
             description = request.POST.get("description","")
             course = request.POST.get("course","")
             print(note,title,description,course)
             if note:
-                data = NotesTutor(
-                    tutor = tutor,
-                    notes = note,
-                    title = title,
-                    subject = course,
-                    description = description,
-                    )
-                try:
-                    data.save()
-                    return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
-                except:
-                    errors.append("Some error Occured! Try Again")
-                    context['errors'] = errors
+                for i in range(len(note)):
+                    data = NotesTutor(
+                        tutor = tutor,
+                        notes = note[i],
+                        title = title,
+                        subject = course,
+                        description = description,
+                        )
+                    try:
+                        data.save()
+                        return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+                    except:
+                        errors.append("Some error Occured! Try Again")
+                        context['errors'] = errors
                 return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
         return render(request,'Notes/addNotesTutor.html',context)
     return HttpResponse("You are not Authenticated for this Page")
@@ -236,13 +256,13 @@ def EditNoteTutor(request,note_id):
         'note':data
         }
         if request.method == "POST":
-            note = request.FILES.get("note","")
+            note = request.FILES.getlist("note","")
             title = request.POST.get("title","")
             description = request.POST.get("description","")
             course = request.POST.get("course","")
-            print(note,title,description,course)
+
             if note:
-                data.notes = note
+                data.notes = note[0]
             if title:
                 data.title = title
             if description:
@@ -255,6 +275,22 @@ def EditNoteTutor(request,note_id):
             except:
                 errors.append('Error Occured! Try Again')
                 context['errors'] = errors
+
+            if len(note)>1:
+                for i in range(1,len(note)):
+                    data = NotesTutor(
+                        tutor = tutor,
+                        notes = note[i],
+                        title = title,
+                        subject = course,
+                        description = description,
+                        )
+                    try:
+                        data.save()
+                        return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+                    except:
+                        errors.append("Some error Occured! Try Again")
+                        context['errors'] = errors
         return render(request,'Notes/editNotesTutor.html',context)
     return HttpResponse("You are not Authenticated for this Page")
 

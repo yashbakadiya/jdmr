@@ -225,7 +225,7 @@ def searchUserTutor(request):
         if request.method=="POST":
             srch = request.POST.get('srh', '')
             if srch:
-                teacher = Teacher.objects.filter(Q(user__username__icontains=srch) | Q(user__email__icontains=srch))
+                teacher = Teacher.objects.filter(Q(phone=srch) | Q(user__email=srch))
                 if teacher:
                     return render(request,'teacher/searchUserTutor.html', {'sr':teacher})
                 else:
@@ -301,12 +301,11 @@ def enrolledTutorsObjectToDict(obj):
     }
     if obj.photo:
         data['photo']=obj.photo.url
-    courseID = obj.course.replace(";",'')
-    courseID = list(set(courseID))
-    courses = []
-    for i in courseID:
-        course = Courses.objects.get(id = i)
-        courses.append(course.courseName)
+    
+    tutorlist = enrolledTutors.objects.all().values_list('courseName')
+
+    for i in tutorlist:
+        courses.append(i[0])
     data['courseName']=courses
     return data
 

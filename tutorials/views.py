@@ -17,30 +17,37 @@ def addTutorialsInstitute(request):
     if request.session["type"] == "Institute":
         user = User.objects.get(username=request.session['user'])
         inst = Institute.objects.get(user=user)
-        courses = Courses.objects.filter(intitute=inst,archieved=False)
+        forclass = Courses.objects.filter(intitute=inst,archieved=False).values_list('forclass').distinct()
         context = {
-        'courses':courses
+        'data':forclass
         }
         if request.method == "POST":
-            print(request.POST)
             title = request.POST.get('title',"")
             description = request.POST.get('description',"")
             fees = request.POST.get('fees',"")
             duration = request.POST.get("duration","")
             course = request.POST.get("course","")
+            forclass = request.POST.get("forclass","")
             feeDisc = request.POST.get("feeDisc","")
-            discValidity = request.POST.get("discValidity","")
-            discValidity = datetime.strptime(discValidity,'%Y-%m-%d')
-            print(title,description,fees,duration,course,feeDisc,discValidity)
+            unit = request.POST.get("unit","0")
+            if unit=="1":
+                if fees:
+                    if feeDisc:
+                        feeDisc = float(feeDisc)/float(fees)
+                        feeDisc=feeDisc*100
             data = TutorialInstitute(
                 Title = title,
                 Course = Courses.objects.get(intitute=inst,courseName=course),
+                forclass = forclass,
                 Fees = fees,
                 Duration = duration,
                 Description = description,
-                Validity = discValidity,
                 Discount = feeDisc,
                 )
+            if discValidity:
+                discValidity = datetime.strptime(discValidity,'%Y-%m-%d')
+                data.Validity = discValidity
+
             data.save()
             return redirect('addplaylist',data.id)
         return render(request,'tutorials/addTutorialsInstitute.html',context)
@@ -57,7 +64,6 @@ def ViewTutorials(request):
         try:
             for i in courses:
                 if TutorialInstitute.objects.filter(Course=i).exists():
-                    print(TutorialInstitute.objects.filter(Q(Course=i) & Q(Archived=False)))
                     tutorials.extend(TutorialInstitute.objects.filter(Q(Course=i) & Q(Archived=False)))
         except:
             tutorials=[]
@@ -124,9 +130,9 @@ def addTutorialsInstituteVideos(request,course_id):
 				data.save()
 		except:
 			errors.append("File Field Must Not be Empty")
-			return render(request,'tutorials/AddTutorCourseVideos.html',{'errors':errors})
+			return render(request,'tutorials/AddTutorCourseVideos.html',{'template':'dashboard/base.html','errors':errors})
 		return redirect('viewtutorials')
-	return render(request,'tutorials/AddTutorCourseVideos.html')
+	return render(request,'tutorials/AddTutorCourseVideos.html',{'template':'dashboard/base.html'})
 
 
 @login_required(login_url="Login")
@@ -145,11 +151,11 @@ def EditTutorialsInstitute(request,course_id):
     if request.session['type'] == "Institute":
         user = User.objects.get(username=request.session['user'])
         inst = Institute.objects.get(user=user)
-        courses = Courses.objects.filter(intitute=inst)
+        forclass = Courses.objects.filter(intitute=inst).values_list('forclass').distinct()
         tutorial = TutorialInstitute.objects.get(id=course_id)
         context = {
         'tutorial':tutorial,
-        'courses':courses
+        'data':forclass
         }
         if request.method == "POST":
             title = request.POST.get('title',"")
@@ -157,7 +163,14 @@ def EditTutorialsInstitute(request,course_id):
             fees = request.POST.get('fees',"")
             duration = request.POST.get("duration","")
             course = request.POST.get("course","")
+            forclass = request.POST.get("forclass","")
             feeDisc = request.POST.get("feeDisc","")
+            unit = request.POST.get("unit","0")
+            if unit=="1":
+                if fees:
+                    if feeDisc:
+                        feeDisc = float(feeDisc)/float(fees)
+                        feeDisc=feeDisc*100
             discValidity = request.POST.get("discValidity","")
             if title:
                 tutorial.Title = title
@@ -169,6 +182,8 @@ def EditTutorialsInstitute(request,course_id):
                 tutorial.Duration = duration
             if course:
                 tutorial.Course = AddCourses.objects.get(s_num=course)
+            if forclass:
+                tutorial.forclass = forclass
             if feeDisc:
                 tutorial.Discount = feeDisc
             if discValidity:
@@ -256,17 +271,24 @@ def addTutorialsTutor(request):
             fees = request.POST.get('fees',"")
             duration = request.POST.get("duration","")
             feeDisc = request.POST.get("feeDisc","")
+            unit = request.POST.get("unit","0")
+            if unit=="1":
+                if fees:
+                    if feeDisc:
+                        feeDisc = float(feeDisc)/float(fees)
+                        feeDisc=feeDisc*100
             discValidity = request.POST.get("discValidity","")
-            discValidity = datetime.strptime(discValidity,'%Y-%m-%d')
             data = TutorialTutors(
                 Title = title,
                 Tutor = tutor,
                 Fees = fees,
                 Duration = duration,
                 Description = description,
-                Validity = discValidity,
                 Discount = feeDisc,
                 )
+            if discValidity:
+                discValidity = datetime.strptime(discValidity,'%Y-%m-%d')
+                data.Validity = discValidity
             data.save()
             return redirect('addvideosTutor',data.id)
         return render(request,'tutorials/addTutorialsTutor.html',context)
@@ -295,9 +317,9 @@ def addTutorialsTutorVideos(request,course_id):
                     data.save()
             except:
                 errors.append("File Field Must Not be Empty")
-                return render(request,'tutorials/AddTutorCourseVideos.html',{'errors':errors})
+                return render(request,'tutorials/AddTutorCourseVideos.html',{'template':'dashboard/Tutor-dashboard.html', 'errors':errors})
             return redirect('viewtutorialstutor')
-        return render(request,'tutorials/AddTutorCourseVideos.html')
+        return render(request,'tutorials/AddTutorCourseVideos.html',{'template':'dashboard/Tutor-dashboard.html'})
     return HttpResponse("You Are not Authenticated User for this Page")
 
 
@@ -420,6 +442,13 @@ def EditTutorialsTutor(request,course_id):
             fees = request.POST.get('fees',"")
             duration = request.POST.get("duration","")
             feeDisc = request.POST.get("feeDisc","")
+            discValidity = request.POST.get("discValidity","")
+            unit = request.POST.get("unit","0")
+            if unit=="1":
+                if fees:
+                    if feeDisc:
+                        feeDisc = float(feeDisc)/float(fees)
+                        feeDisc=feeDisc*100
             discValidity = request.POST.get("discValidity","")
             if title:
                 tutorial.Title = title

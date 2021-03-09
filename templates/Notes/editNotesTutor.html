@@ -46,12 +46,16 @@
                             </select>
                         </div>
 
-                        <div class="col-md-6 col-lg-4 col-12 input-group form-group">
-                            <label class="control-label col-sm-4 col-5 mt-2" style="color: black;">Choose File</label>
+                        <div class="col-lg-4 col-md-6 col-12 input-group form-group">
+                            <label class="file-box control-label col-sm-4 col-5 mt-2" style="color: black;">Choose File</label>
                             <div class="w-100 col-sm-8 col-7">
-                            <input type="file" class="custom-file-input" id="file" name="note" required>
+                            <input type="file" class="custom-file-input" id="file" name="note" required onchange="addfile(this)">
                             <label class="custom-file-label" >Choose file...</label>
                             </div>
+                        </div>
+
+                        <div class="col-lg-12 col-md-12  col-12 d-flex justify-content-end">
+                            <button class="btn btn-info btn-md" type="button" onclick="duplicate(this)">Add File</button>
                         </div>
 
                         <div class="col-md-12 col-lg-12 col-12 input-group form-group">
@@ -68,3 +72,38 @@
     </div>
 </div>
 {% endblock main-content %}
+
+
+<script>
+    function addfile(el) {
+        var file = $(el).val();
+        var exts = ['pdf'];
+        // first check if file field has any value
+        if (file) {
+            // split file name at dot
+            var get_ext = file.split('.');
+            // reverse name to check extension
+            get_ext = get_ext.reverse();
+            // check file type is valid as given in 'exts' array
+            if ($.inArray(get_ext[0].toLowerCase(), exts) > -1) {
+                var filename = file.replace(/^.*\\/, "");
+                $(el).closest(".file-box").find(".custom-file-label").html(filename);
+            } else {
+                $(el).closest(".file-box").find(".custom-file-label").html("Choose File");
+                $(el).closest(".file-box").find('.invalid-feedback').show();
+                $(el).closest(".file-box").find('#validatedCustomFile').val("");
+                $(el).closest(".file-box").find('#validatedCustomFile').val().focus();
+            }
+        }
+    }
+
+    function duplicate(el) {
+        $(el).parent().before(`<div class="col-lg-4 col-md-6 col-12 input-group form-group">
+                            <label class="file-box control-label col-sm-4 col-5 mt-2" style="color: black;">Choose File</label>
+                            <div class="w-100 col-sm-8 col-7">
+                            <input type="file" class="custom-file-input" id="file" name="note" required onchange="addfile(this)">
+                            <label class="custom-file-label" >Choose file...</label>
+                            </div>
+                        </div>`)
+                    }
+</script>

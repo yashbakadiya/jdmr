@@ -10,6 +10,7 @@ urlpatterns = [
     path('toggle/<exam_id>', ToggleExam, name='toggle'),
     path('classes', FindCourses, name="findCourse"), #altered
     path('teachings', FindTeaching, name="findTeaching"), #altered
+    path('batches', FindBatches, name="findBatch"), #altered
     path('Questions/all/add', QuestionsSection, name="questionsection"),
     path('Questions/add/<exam_id>', CreateQuestions, name='questions'),
     path('Questions/edit/all', EditExamQuestions, name="editexamquestions"),
