@@ -10,7 +10,7 @@ class enrollTutors(models.Model):
     forclass = models.CharField(max_length=255,default="")
     teachType = models.CharField(max_length=255,default="")
     teacher = models.ForeignKey(Teacher,on_delete=models.CASCADE)
-    availability = models.DecimalField(max_digits=1,decimal_places=0,default=0,help_text='0=>nothing,1=>weekly,2=>weekend,3=>both')
+    availability = models.CharField(max_length=30)
     archieved = models.BooleanField(default=False)
 
 

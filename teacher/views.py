@@ -65,14 +65,13 @@ def addTutors(request):
 
                 availability = request.POST.get('availability')
                 if(availability=='weekly'):
-                    availability=1
+                    availability='weekly'
                 elif(availability=='weekend'):
-                    availability=2
+                    availability='weekend'
                 elif(availability=='both'):
-                    availability=3
+                    availability='weekly,weekend'
                 else:
-                    print('availability error')
-                    availability=0
+                    availability="not available"
                 for x in range(len(ttn)):
                     addTeacher = enrollTutors(forclass=cn[x],teachType=ttn[x],courseName=ctn[x],institute=inst,teacher=teacher,availability=availability)
                     addTeacher.save()
@@ -151,14 +150,14 @@ def editTutor(request,id):
             cn = request.POST.getlist('cn')
             ttn = request.POST.getlist('ttn')
             availability = request.POST.get('availability')
-            if availability=="weekly":
-                availability = 1
-            elif availability=="weekend":
-                availability = 2
-            elif availability=="both":
-                availability = 3
+            if(availability=='weekly'):
+                availability='weekly'
+            elif(availability=='weekend'):
+                availability='weekend'
+            elif(availability=='both'):
+                availability='weekly,weekend'
             else:
-                availability=0
+                availability="not available"
             NewUsername = request.POST.get("NewUsername")
             NewEmail = request.POST.get("NewEmail")
             NewPhone = request.POST.get("NewPhone")
@@ -254,14 +253,13 @@ def AddalreadyExistsTutor(request,id):
             ttn = request.POST.getlist('ttn')
             availability = request.POST.get('availability')
             if(availability=='weekly'):
-                availability=1
+                availability='weekly'
             elif(availability=='weekend'):
-                availability=2
+                availability='weekend'
             elif(availability=='both'):
-                availability=3
+                availability='weekly,weekend'
             else:
-                print('availability error')
-                availability=0
+                availability="not available"
             for x in range(len(ttn)):
                 addTeacher = enrollTutors(forclass=cn[x],teachType=ttn[x],courseName=ctn[x],institute=inst,teacher=teacher,availability=availability)
                 addTeacher.save()
