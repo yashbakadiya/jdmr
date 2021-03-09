@@ -72,20 +72,6 @@ def courses(request):
                 messages.warning(request, 'Course Already Exists!!! ',extra_tags = 'alert alert-warning alert-dismissible show')            
    
 
-            #Added coursse
-            # Courses(courseName=courseName,
-            #          forclass=forclass,
-            #          intitute=institute,
-            #          courseID=course_ID).save()
-            # messages.success(request,"Course Added Successfully")
-            # return redirect('courses')
-
-            # Courses(courseName=courseName,
-            #          forclass=forclass,
-            #          intitute=institute,
-            #          courseID=course_ID).save()
-            # messages.success(request,"Course Added Successfully")
-            # return redirect('courses')
         return render(request, 'courses-2/courses.html', params)
     return HttpResponse("You Are Not Authenticated for this Page")
 
@@ -173,18 +159,15 @@ def teachingType2(request):
             courseID = request.POST.get('courseName')
 
             forclass1 = request.POST.getlist('forclass', '')
-            forclass = ', '.join(forclass1)
-            teachType1 = request.POST.getlist('check')
+            forclass = ', '.join(forclass1)            
+            teachType1 = request.POST.getlist('teaching')
+            print('teachTYpe1',teachType1)
             teachType = '\n'.join(teachType1)
-            print('teachtype',teachType1)
+           
             duration1 = request.POST.getlist('duration', '')
             duration = '\n'.join(duration1)
             timePeriod1 = request.POST.getlist('time', '')
             timePeriod = '\n'.join(timePeriod1)
-
-
-
-
             alreadyExists = TeachingType.objects.filter(courseID = courseID, forclass = forclass,                                           
                                                         teachType = teachType,
                                                          duration = duration, 
@@ -197,8 +180,7 @@ def teachingType2(request):
 							alert('Teach Type already exists');
 							window.location.href = "/teachingType2";
 						</script>
-					""")
-      
+					""")     
             #course = Courses.objects.get(id = int(courseID[0]))
             course = Courses.objects.get(id = courseID)
                        
@@ -334,29 +316,53 @@ def deleteteaching(request, id):
     return HttpResponse("You Are Not Authenticated for this Page")
 
 @login_required(login_url="Login")
+
+
 def editCourse(request, id):
     if request.session['type'] == "Institute":
+
+        try:
+            cour = Courses.objects.get(id=id)
+        except:
+            return HttpResponse("Unable to edit")
+
         user = User.objects.get(username=request.session['user'])
         inst = Institute.objects.get(user=user)
-        course = Courses.objects.get(id=id, intitute=inst)
-        classes = course.forclass.split(', ')
+        #course = Courses.objects.get(id=id, intitute=inst)
+        courses = Courses.objects.filter(intitute = inst,id=id, archieved=False)
+        forclass = Courses.objects.filter(intitute=inst).values_list('forclass').distinct()
+       
 
-        params = {'course': course.courseName, 'class': classes}
+        params = {'course': courses,'classes':forclass,'cour':cour}
+
+        # params = {'course': course.courseName, 'class': classes}
 
         if request.method == "POST":
-            courseName = request.POST.get('editcourseName', '')
-            print('editcourseName',courseName)
-
-            forclass = request.POST.getlist('forclass', '')
-
-            print('editforclass',forclass)
-            forclass = ', '.join(forclass)
-            course.courseName = courseName
-            course.forclass = forclass
-            course.save()
-            messages.success(request, "Course Updated Successfully")
-            return redirect("courses")
-        return render(request, 'courses/editCourse.html', params)
+            courseName = request.POST.get('courseName') 
+            print('coursename',courseName)           
+            forclass = request.POST.get('forclass')             
+            user = User.objects.get( username=request.session['user'])            
+            institute = Institute.objects.get(user=user)
+            count = (Courses.objects.all().count())+1 
+            course_ID = courseName[:3] + str("%03d" % count)
+            if  not Courses.objects.filter(courseName=request.POST['courseName']).exists():
+                if not Courses.objects.filter(forclass=request.POST['forclass']).exists():
+                    
+                    print('if else coursename',courseName)  
+                    print('if else for class',forclass)  
+                    Courses(courseName=courseName,
+                     forclass=forclass,
+                     intitute=institute,                     
+                     courseID=course_ID).save()
+                    messages.success(request, 'Course Has been Update successfully.')
+                    return redirect('courses')
+                    
+                else:
+                    messages.warning(request, 'class Number Already Exists!!! ',extra_tags = 'alert alert-warning alert-dismissible show')
+            else:
+                messages.warning(request, 'Course Already Exists!!! ',extra_tags = 'alert alert-warning alert-dismissible show')            
+   
+        return render(request, 'courses-2/editCourse2.html', params)
     return HttpResponse("You Are Not Authenticated for this Page")
 
 

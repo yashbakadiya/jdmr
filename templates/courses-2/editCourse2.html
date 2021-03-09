@@ -1,0 +1,161 @@
+{% extends 'dashboard/base.html' %}
+{% load static %}
+{% block css %}
+{% endblock %}
+{% block main-content %}
+<style>
+  #card {
+    background-color: white;
+    padding-bottom: 3rem;
+    padding-top: 3rem;
+    color: black;
+  }
+</style>
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/css/select2.min.css" rel="stylesheet" />
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/js/select2.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
+<div class="mt-5">
+  {% if messages %}
+  {% for k in messages%}
+  <div class="alert alert-{{k.tags}} alert-dismissible fade show" role="alert">
+    <b>{{ k }} !</b>
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  {% endfor %}
+  {% endif %}
+  <div style="padding-top: 0;" class="class" id="card">
+    <div class="card-header">
+      <h2 style="align-items: center;text-align: center;">Edit Course</h2>
+    </div>
+    <form id="frm" class="mb-4 mt-4" method="post">{% csrf_token %}
+
+
+      <div class="mx-2 row" id="INSTBATCH">
+
+
+        <div class="col">
+          <label for="validationCustom01"><strong>Select Class <span class="red">*</span></strong></label>
+
+
+
+          <select id="forclass" name='forclass' style="width: 100%;" class="js-example-basic-single form-control"
+            onchange="selectclass()">
+            <option class="form-control"  value="{{cour.Class}}">{{cour.Class}}</option>
+            {% for i in classes %}
+            <option class="form-control form-control-lg" value="{{ i.0 }}">{{i.0}} </option>
+            {% endfor %}
+          </select>
+        </div>
+        <div class="col">
+          <label for="validationCustom01"><strong>Select Course<span class="red">*</span></strong></label>
+          <select id="courseName" name="courseName" style="width: 100%" class="js-example-basic-single form-control">
+            <option class="form-control form-control-lg" selected disabled value="{{course.id}}">
+              {{cour.courseName}}</option>
+          </select>
+        </div>
+
+        
+
+      </div>
+      <br>
+      <div class="text-center">
+        <button type="submit" class="btn btn-primary"> Add </button>
+      </div>
+    </form>
+  </div>
+
+
+  <script>
+    function checkbox() {
+      var value = $("#negativecheck").is(":checked");
+      negative = document.getElementById("negative");
+      var output;
+      if (value) {
+        output = `<input
+          type="number"
+          class="mt-2 form-control"
+          placeholder="Enter Negative Marks"
+          name="negative_marks"
+          value="0"
+          required
+        />
+        <div class="invalid-feedback">
+          Enter a valid No.
+        </div>`;
+      } else {
+        output = "";
+      }
+      negative.innerHTML = output;
+    }
+    // In your Javascript (external .js resource or <script> tag)
+    $(document).ready(function () {
+      $('.js-example-basic-single').select2();
+    });
+
+    $(window).on('pageshow', () => {
+      var frm = $('#frm');
+      frm[0].reset();
+    });
+  </script>
+
+  <script>
+
+    function addoptions(el) {
+      var data = JSON.parse("{{ data|escapejs }}".replaceAll("'", "\""));
+      var items = data[el.value];
+
+      html1 = "";
+      for (i = 0; i < items.length; i++) {
+        html1 += "<option value=\"" + items[i] + "\">" + items[i] + "</option> ";
+      }
+      $("#cn").html(html1);
+    };
+
+    $('#html5-extension').DataTable({
+      dom: '<"row"<"col-md-12"<"row"<"col-md-6"B><"col-md-6"f> > ><"col-md-12"rt> <"col-md-12"<"row"<"col-md-5 mb-md-0 mb-5"i><"col-md-7"p>>> >',
+      buttons: {
+        buttons: [
+          { extend: 'copy', className: 'btn btn-default btn-rounded btn-sm mb-4' },
+          { extend: 'csv', className: 'btn btn-default btn-rounded btn-sm mb-4' },
+          { extend: 'excel', className: 'btn btn-default btn-rounded btn-sm mb-4' },
+          { extend: 'print', className: 'btn btn-default btn-rounded btn-sm mb-4' }
+        ]
+      },
+      "language": {
+        "paginate": {
+          "previous": "<i class='flaticon-arrow-left-1'></i>",
+          "next": "<i class='flaticon-arrow-right'></i>"
+        },
+        "info": "Showing page _PAGE_ of _PAGES_"
+      }
+    });
+
+    function selectclass() {
+    var selected = $("#class_select").val();
+    $.ajax({
+      url: "{% url 'findCourseclass' %}",
+      data: {
+        forclass: selected,
+      },
+      success: function (data) {
+        courses = data.courses;
+        $("#courseName").empty().trigger("change");
+        for (i = 0; i < courses.length; i++) {
+          var newOption = new Option(
+            courses[i][1],
+            courses[i][0],
+            false,
+            false
+          );
+          $("#courseName").append(newOption).trigger("change");
+        }
+      },
+    });
+  }  
+  </script>
+
+</div>
+{% endblock main-content %}

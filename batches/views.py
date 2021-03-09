@@ -12,6 +12,7 @@ import json
 from django.http import JsonResponse
 from teacher.models import enrollTutors
 from django.db.models import Q
+from batches.models import BatchTiming
 # Create your views here.
 
 
@@ -81,9 +82,10 @@ def batchTiming2(request):
         courses = Courses.objects.filter(intitute=inst, archieved=False)
         forclass_sel = Courses.objects.filter(intitute=inst).values_list('forclass').distinct()
         jsonCources = {}
+        bat = BatchTiming.objects.all()
         for x in courses:
             jsonCources[x.id] = x.forclass.split(", ")
-        params = {'data': coachingCenter, 'courses': courses,'classes':forclass_sel,
+        params = {'data': coachingCenter, 'courses': courses,'classes':forclass_sel,'bat':bat,
                   'json': json.dumps(jsonCources)}
         return render(request, 'batches/batch-timing.html', params)
     return HttpResponse("You Are not Authenticated for this Page")
@@ -160,8 +162,9 @@ def batchTimingEdit(request, id):
         user = User.objects.get(username=request.session['user'])
         inst = Institute.objects.get(user=user)
         batchObj = BatchTiming.objects.get(id=id, institute=inst)
+        forclass = Courses.objects.filter(intitute=inst).values_list('forclass').distinct()
         if request.method == "POST":
-            courseID = request.POST.get("courseName")
+            courseName = request.POST.get("courseName")
             forclass1 = request.POST.getlist('forclass', '')
             forclass = ', '.join(forclass1)
             batchName = request.POST.get('batchName')
@@ -176,8 +179,9 @@ def batchTimingEdit(request, id):
             days = request.POST.getlist('forday')
             days = ", ".join(days)
             batchObj.batchName = batchName
-            batchObj.startTime = startTime            
-            batchObj.course = Courses.objects.get(id = courseID)
+            batchObj.startTime = startTime        
+            batchObj.courseName=courseName
+            # batchObj.course = Courses.objects.get(id = courseID)
             batchObj.forclass = forclass
             batchObj.endTime = endTime
             batchObj.days = days
@@ -189,7 +193,7 @@ def batchTimingEdit(request, id):
         jsonCources = {}
         for x in courses:
             jsonCources[x.id] = x.forclass.split(", ")
-        params = {'prefilObj': batchObj, 'courses': courses,
+        params = {'batchObj': batchObj, 'courses': courses,'classes':forclass,
                   'json': json.dumps(jsonCources)}
         return render(request, 'batches/batchTimingEdit.html', params)
     return HttpResponse("You Are not Authenticated for this Page")
