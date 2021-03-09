@@ -106,7 +106,7 @@ def profileUpdate(request):
                         obj.longitude = longitude
                         obj.address = address
                         if image:
-                            inst.photo = image
+                            obj.photo = image
                         obj.save()
                         auth.login(request, user)
                         request.session["user"] = user.username
