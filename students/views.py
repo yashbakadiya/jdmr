@@ -283,7 +283,7 @@ def searchUserStudent(request):
             print(request.POST)
             srch = request.POST.get('srh', '')
             if srch:
-                match = Student.objects.filter(Q(user__username__icontains=srch) | Q(user__email__icontains=srch))
+                match = Student.objects.filter(Q(phone=srch) | Q(user__email=srch))
                 if len(match):
                     return render(request,'students/searchUserStudent.html', {'sr':match})
                 else:

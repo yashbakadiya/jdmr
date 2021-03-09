@@ -47,8 +47,8 @@
                             {% for i in exam %}
                             <tr>
                                 <td>{{forloop.counter}}</td>
-                                <td><p style="color: black;font-size: 14px;">{{i.Name}}</p></td>
-                                <td><p style="color: black;font-size: 14px;">{{i.course.courseName}}</p></td>
+                                <td>{{i.Name}}</td>
+                                <td>{{i.course.courseName}}</td>
                                 <td>{{i.Batch}}</td>
                                 <td>{{i.exam_date}}</td>
                                 <td>{{i.exam_duration}}</td>
@@ -92,8 +92,8 @@
                             {% for i in tutorexams %}
                             <tr>
                                 <td>{{forloop.counter}}</td>
-                                <td><p style="color: black;font-size: 14px;">{{i.Name}}</p></td>
-                                <td><p style="color: black;font-size: 14px;">{{i.course.courseName}}</p></td>
+                                <td>{{i.Name}}</td>
+                                <td>{{i.course.courseName}}</td>
                                 <td>{{i.price}}</td>
                                 <td>{{i.exam_date}}</td>
                                 <td>{{i.exam_duration}}</td>

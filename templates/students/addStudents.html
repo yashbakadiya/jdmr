@@ -446,7 +446,7 @@
             <div class="col-md-6 col-lg-4 col-12 input-group form-group">
               <label class="control-label col-sm-5 col-5 mt-2" style="color:black;" for="ctn">Course</label>
               <select name="ctn" class="ctn custom-select form-control" required="required"
-                onclick="selectcourse(this)">
+                onchange="selectcourse(this)">
                 <option disabled selected value="">Select an option</option>
               </select>
             </div>
@@ -470,11 +470,8 @@
                 </div>
                 <div class="col-md-6 col-lg-4 col-12 input-group form-group">
                   <label class="control-label col-sm-5 col-5 mt-2" style="color:black;" for="batchN">Batch Name</label>
-                    <select id="batch" class="form-control" name="batchN" id="batchN" required>
+                    <select id="batch" class="batchN form-control" name="batchN" required>
                       <option selected disabled value="">Batch Name</option>
-                      {% for i in batch %}
-                      <option value="{{i.batchName}}">{{i.batchName}}</option>
-                      {% endfor %}
                     </select>
                   </div>
                   <div class="col-md-6 col-lg-4 col-12 input-group form-group">
@@ -485,7 +482,7 @@
               </div>
               <div class="col-lg-12 col-md-12  col-12 d-flex justify-content-end">
                 <button class="btn btn-info btn-md" type="button" onclick="duplicate(this)">Add
-                    New</button>
+                    New Course</button>
             </div>
             <hr>
 
@@ -777,12 +774,32 @@
         $(el).closest(".entry").find(".ttn").empty().trigger("change");
         for (i = 0; i < teaching.length; i++) {
           var newOption = new Option(
-            teaching[i][0],
-            teaching[i][0],
+            teaching[i],
+            teaching[i],
             false,
             false
           );
           $(el).closest(".entry").find(".ttn").append(newOption).trigger("change");
+        }
+      },
+    });
+          $.ajax({
+      url: "{% url 'findBatch' %}",
+      data: {
+        forclass: selected_class,
+        course: selected_course
+      },
+      success: function (data) {
+        batches = data.batches;
+        $(el).closest(".entry").find(".batchN").empty().trigger("change");
+        for (i = 0; i < batches.length; i++) {
+          var newOption = new Option(
+            batches[i][0],
+            batches[i][0],
+            false,
+            false
+          );
+          $(el).closest(".entry").find(".batchN").append(newOption).trigger("change");
         }
       },
     });
@@ -802,7 +819,7 @@
             <div class="col-md-6 col-lg-4 col-12 input-group form-group">
               <label class="control-label col-sm-5 col-5 mt-2" style="color:black;" for="ctn">Course</label>
               <select name="ctn" class="ctn custom-select form-control" required="required"
-                onclick="selectcourse(this)">
+                onchange="selectcourse(this)">
                 <option disabled selected value="">Select an option</option>
               </select>
             </div>
@@ -826,11 +843,8 @@
                 </div>
                 <div class="col-md-6 col-lg-4 col-12 input-group form-group">
                   <label class="control-label col-sm-5 col-5 mt-2" style="color:black;" for="batchN">Batch Name</label>
-                    <select id="batch" class="form-control" name="batchN" id="batchN" required>
+                    <select id="batch" class="batchN form-control" name="batchN" required>
                       <option selected disabled value="">Batch Name</option>
-                      {% for i in batch %}
-                      <option value="{{i.batchName}}">{{i.batchName}}</option>
-                      {% endfor %}
                     </select>
                   </div>
                   <div class="col-md-6 col-lg-4 col-12 input-group form-group">

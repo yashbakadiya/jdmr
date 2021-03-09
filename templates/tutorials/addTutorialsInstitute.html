@@ -315,28 +315,45 @@ width:max-content;
                     </div>
 
                     <div class="col-md-6 col-lg-4 col-12 input-group form-group">
-                        <label class="control-label col-sm-5 col-5 mt-2" style="color:black;">Select Course<span
+                        <label class="control-label col-sm-5 col-5 mt-2" style="color:black;">Select Class<span
                                 class="text-danger">*</span></label>
 
-                        <select class="custom-select form-control" name="course" required>
-                            <option disabled selected value>Select an option</option>
-                            {% for course in courses %}
-                            <option>{{course.courseName}}</option>
+                        <select class="cn custom-select form-control" name="forclass" required
+                            onchange="selectclass(this)">
+                            <option disabled selected value="">Select an option</option>
+                            {% for x in data %}
+                            <option value="{{ x.0 }}">{{ x.0 }}</option>
                             {% endfor %}
                         </select>
                     </div>
+
                     <div class="col-md-6 col-lg-4 col-12 input-group form-group">
-                        <label class="control-label col-sm-5 col-5 mt-2" style="color:black;">Discount (in %)<span
+                        <label class="control-label col-sm-5 col-5 mt-2" style="color:black;">Select Course<span
                                 class="text-danger">*</span></label>
-                        <input type="number" step="0.01" class="form-control" id="discount" name='feeDisc'
-                            placeholder="Discount (%)" required="">
+
+                        <select class="ctn custom-select form-control" name="course" required>
+                            <option disabled selected value="">Select an option</option>
+                        </select>
                     </div>
 
                     <div class="col-md-6 col-lg-4 col-12 input-group form-group">
-                        <label class="control-label col-sm-5 col-5 mt-2" style="color:black;">Validity<span
-                                class="text-danger">*</span></label>
-                        <input type="Date" class="form-control" id="validity" name='discValidity' placeholder="Val"
-                            required="">
+                        <label class="control-label col-sm-5 col-5 mt-2" style="color:black;">Discount Type</label>
+
+                        <select class="custom-select form-control" name="unit">
+                            <option selected value="0">In Percentage (%)</option>
+                            <option value="1">In Rupees </option>
+                        </select>
+                    </div>
+
+                    <div class="col-md-6 col-lg-4 col-12 input-group form-group">
+                        <label class="control-label col-sm-5 col-5 mt-2" style="color:black;">Discount</label>
+                        <input type="number" step="0.01" class="form-control" id="discount" name='feeDisc'
+                            placeholder="Discount">
+                    </div>
+
+                    <div class="col-md-6 col-lg-4 col-12 input-group form-group">
+                        <label class="control-label col-sm-5 col-5 mt-2" style="color:black;">Validity</label>
+                        <input type="Date" class="form-control" id="validity" name='discValidity' placeholder="Val">
                     </div>
 
                     <div class="col-md-12 col-lg-12 col-12 input-group form-group">
@@ -446,5 +463,28 @@ width:max-content;
             }
         });
     });
+
+    function selectclass(el) {
+        var selected = el.value;
+        $.ajax({
+            url: "{% url 'findCourse' %}",
+            data: {
+                forclass: selected,
+            },
+            success: function (data) {
+                courses = data.courses;
+                $(".ctn").empty().trigger("change");
+                for (i = 0; i < courses.length; i++) {
+                    var newOption = new Option(
+                        courses[i][1],
+                        courses[i][1],
+                        false,
+                        false
+                    );
+                    $(".ctn").append(newOption).trigger("change");
+                }
+            },
+        });
+    }
 </script>
 {% endblock %}
