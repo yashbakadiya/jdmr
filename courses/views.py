@@ -104,6 +104,30 @@ def courseArchive(request):
         return render(request, 'courses-2/archive-courses.html', params)
     return HttpResponse("You Are Not Authenticated for this Page")
 
+@login_required(login_url='Login')
+def courseUnArchive(request,id):
+    if request.session['type'] == "Institute":
+        user = User.objects.get(username=request.session['user'])
+        inst = Institute.objects.get(user=user)
+        courses = Courses.objects.filter(intitute=inst, archieved=True)
+        
+        course_archive = Courses.objects.get(id=id)
+        course_archive.archieved = False
+        course_archive.save()
+        messages.success(request, "Course Removed from Archive Successfully")
+        return redirect("courses")
+        
+        # paginator = Paginator(courses, 4)
+        # page = request.GET.get('page', 1)
+        # try:
+        #     course = paginator.page(page)
+        # except PageNotAnInteger:
+        #     course = paginator.page(1)
+        # except EmptyPage:
+        #     course = paginator.page(paginator.num_pages)
+        params = {'teach': teach}
+        return render(request, 'courses-2/archive-teaching.html', params)
+    return HttpResponse("You Are Not Authenticated for this Page")
 
 @login_required(login_url='Login')
 def courseArchivefirst(request,id):
@@ -198,15 +222,6 @@ def teachingType2(request):
         return render(request, 'courses-2/teaching-type.html', params)
     return HttpResponse("You Are Not Authenticated for this Page")
 
-# @login_required(login_url='Login')
-# def couse_delete(request, pk):
-#     if request.session['type'] == "Institute": 
-#         user = User.objects.get(username=request.session['user'])
-#         inst = Institute.objects.get(user=user)
-#         course = Couse.objects.get(id=pk)
-#         course.delete()
-#         return redirect("course")
-#     return HttpResponse("You Are Not Authenticated for this Page")
 
 @login_required(login_url='Login')
 def teachingArchive(request,id):
@@ -230,15 +245,6 @@ def teachArchive(request):
         inst = Institute.objects.get(user=user)
         teach = TeachingType.objects.filter(course__intitute = inst, archieved=True)
 
-        if(request.method == 'POST'):
-            undo = request.POST.get('undo')
-            print("undo",undo)
-            for id in undo:
-                teach = TeachingType.objects.get(id=int(id))
-                teach.archieved = False
-                teach.save()
-            messages.success(request, "Teaching Removed from Archive Successfully")
-            return redirect("teaching-type-2")
         
         # paginator = Paginator(courses, 4)
         # page = request.GET.get('page', 1)
@@ -250,6 +256,21 @@ def teachArchive(request):
         #     course = paginator.page(paginator.num_pages)
         params = {'teach': teach}
         return render(request, 'courses-2/archive-teaching.html', params)
+    return HttpResponse("You Are Not Authenticated for this Page")
+
+@login_required(login_url='Login')
+def teachUnArchive(request,id):
+    if request.session['type'] == "Institute":
+        user = User.objects.get(username=request.session['user'])
+        inst = Institute.objects.get(user=user)
+        teach = TeachingType.objects.filter(course__intitute = inst, archieved=True)
+        
+        teach_type = TeachingType.objects.get(id=id)
+        teach_type.archieved = False
+        teach_type.save()
+        messages.success(request, "Teaching Removed from Archive Successfully")
+        return redirect("teaching-type-2")        
+        
     return HttpResponse("You Are Not Authenticated for this Page")
 
 
