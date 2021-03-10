@@ -84,7 +84,7 @@
           <input type="radio" name="radio" class="radioInput" id="tab2" hidden />
           <input type="radio" name="radio" class="radioInput" id="tab3" hidden />
           <select id="check" name='check' multiple="multiple" hidden>
-             <option class="online" value="Online">Online</option>
+            <option class="online" value="Online">Online</option>
             <option class="hometutor" value="Home Tutors">Home Tutors</option>
             <option class="classroom" value="Classroom">Classroom</option>
           </select>
@@ -239,6 +239,8 @@
                     style="font-size:medium;"></i></a>
                 <a class="btn btn-danger" href="{% url 'deleteteaching' i.id %}"><i class="flaticon-delete-fill"
                     style="font-size:medium;"></i></a>
+                <a class="btn btn-dark" href="{% url 'teachingArchive' i.id %}"><i class="flaticon-delete-fill"
+                      style="font-size:medium;"></i></a>
 
               </td>
 

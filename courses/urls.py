@@ -6,10 +6,13 @@ from .api import CourseAPI, TeachingTypeAPI
 urlpatterns = [
     # path('addCourses/', addCourses, name='AddCourses'),
     path('', courses, name='courses'),
-   # path('course-archive/<int:id>', courseArchive, name='course-archive'),
+   # path('course-unarchive/<int:id>', courseunArchive, name='course-unarchive'),
     path('course-archive', courseArchive, name='course-archive'),
+    path('teach-archive', teachArchive, name='teach-archive'),
     path('courseArchivefirst/<int:id>', courseArchivefirst, name='courseArchivefirst'),
     path('teaching-type', teachingType2, name='teaching-type-2'),
+    path('teachingArchive/<int:id>',teachingArchive,name='teachingArchive'),
+
     path('classes', FindCoursesclass, name="findCourseclass"), #altered
     path('addCourse-api', CourseAPI, name='AddCoursesAPI'),
     path('viewCourses/', viewCourses, name='viewCourses'),
@@ -23,3 +26,4 @@ urlpatterns = [
     path('editTeachingType/<int:id>', editTeachingType, name='editTeachingType'),
     
 ]
+
