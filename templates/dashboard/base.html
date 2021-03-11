@@ -90,26 +90,15 @@
       </li>
 
       <li class="nav-item dropdown notification-dropdown ml-3 mr-lg-4 align-self-center">
-        <a href="javascript:void(0);" class="nav-link dropdown-toggle" id="notification-dropdown" data-toggle="dropdown"
-          aria-haspopup="true" aria-expanded="false">
-          <span class="icon flaticon-bell-4"></span><span class="badge badge-success">15</span>
-        </a>
-        <div class="dropdown-menu position-absolute eq-animated eq-fadeInUp" aria-labelledby="notification-dropdown">
-          <div class="notification-scroll">
-            <div class="dropdown-item">
-              <a href="">
-                <div class="media">
-                  <div class="user-profile">
-                    <img src="{% static 'assets/img/90x90.jpg' %}" alt="admin-profile" class="img-fluid">
-                  </div>
-                  <div class="media-body">
-                    <span>Alan Green</span>
-                  </div>
-                </div>
-              </a>
-            </div>
-          </div>
-        </div>
+        {% if request.session.type == "Teacher" %}
+          <a href="{% url 'teaShowAllNotice' %}">
+            <span class="icon flaticon-bell-4"></span>
+          </a>
+        {% elif request.session.type  == "Student" %}
+          <a href="{% url 'stuShowAllNotice' %}">
+            <span class="icon flaticon-bell-4"></span>
+          </a>
+        {% endif %}
       </li>
       <li class="nav-item dropdown user-profile-dropdown pl-4 pr-lg-0 pr-2 ml-lg-2 mr-lg-4  align-self-center">
         <a href="javascript:void(0);" class="nav-link dropdown-toggle user">

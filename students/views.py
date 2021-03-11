@@ -15,7 +15,21 @@ from json import dumps,loads
 import os
 from math import radians, sin, cos, asin, sqrt
 from geopy.geocoders import Nominatim
+from get_notice import notice
+from batches.models import Notice
 # Create your views here.
+
+
+@login_required(login_url="Login")
+def stuShowAllNotice(request):
+    notices = notice(request)
+    return render(request, "batches/stu_showAllNotice.html", context={"notices":notices})
+
+@login_required(login_url="Login")
+def stuShowNotice(request, id):
+    notice = Notice.objects.get(id=id)
+    return render(request, "batches/stu_showNotice.html", context={"notice":notice})
+
 
 @login_required(login_url="Login")
 def addStudents(request):
