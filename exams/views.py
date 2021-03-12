@@ -151,27 +151,41 @@ def EditExamQuestions(request):
 
 
 def FindCourses(request):
-    courses={}
+    courses = []
     forclass = request.GET.get('forclass')
 
     if forclass:
         course_obj = Courses.objects.filter(forclass=forclass)
-        courses = []
         for i in course_obj:
             courses.append((i.id,i.courseName))
-    return JsonResponse({'courses':courses})
+    return JsonResponse({'courses':list(set(courses))})
 
 def FindTeaching(request):
     forclass = request.GET.get('forclass')
     course = request.GET.get('course')
+    teaching=[]
     if course:
         courses = Courses.objects.filter(courseName = course)[0]
-
         if courses:
             if forclass:
-                teaching = TeachingType.objects.filter(course=courses,forclass=forclass).values_list('teachType')
-    return JsonResponse({'teaching':list(teaching)})
+                teach = TeachingType.objects.filter(course=courses,forclass=forclass).values_list('teachType')
+                for i in teach:
+                    teaching.extend(i[0].split(','))
 
+    return JsonResponse({'teaching':list(set(teaching))})
+
+def FindBatches(request):
+    forclass = request.GET.get('forclass')
+    course = request.GET.get('course')
+    batches=[]
+
+    if course:
+        courses = Courses.objects.filter(courseName = course)[0]
+        if courses:
+            if forclass:
+                batches = BatchTiming.objects.filter(course=courses,forclass=forclass).values_list('batchName')
+
+    return JsonResponse({'batches':list(set(batches))})
 
 @login_required(login_url="Login")
 def deleteExam(request,exam_id):
@@ -194,18 +208,26 @@ def deleteExam(request,exam_id):
                 if request.session['type']=="Teacher":
                     user = User.objects.get(username=request.session['user'])
                     tutor = Teacher.objects.get(user=user)
-                    instTutor = enrollTutors.objects.get(teacher=tutor)
-                    INSTcourse = instTutor.courseName.replace(";",'')
-                    coursesID = list(set(INSTcourse))
-                    courses = []
-                    for i in coursesID:
-                        try:
-                            course = Courses.objects.get(id=int(i))
-                            courses.append(course)
-                        except:
-                            pass
-                    if exam.institute==instTutor.institute:
-                        if exam.course in courses:
+                    instTutor = enrollTutors.objects.filter(teacher=tutor) #added
+                    courses = [] #added
+                    instituteslist = [] #added
+                    # INSTcourse = instTutor.courseName.replace(";",'')
+                    # coursesID = list(set(INSTcourse))
+                    # courses = []
+                    # for i in coursesID:
+                    #     try:
+                    #         course = Courses.objects.get(id=int(i))
+                    #         courses.append(course)
+                    #     except:
+                    #         pass
+                    for i in instTutor.values_list('courseName'): #added
+                        courses.append(i[0])
+
+                    for i in instTutor.values_list('institute'): #added
+                        instituteslist.append(i[0])
+
+                    if exam.institute.id in instituteslist:
+                        if exam.course.courseName in courses:
                             exam.delete()
                             messages.success(request,"Exam deleted Successfully")
                             return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
@@ -241,19 +263,29 @@ def Editexam(request,exam_id):
                 }
             elif request.session['type']=="Teacher":
                 tutor = Teacher.objects.get(user=user)
-                instTutor = enrollTutors.objects.get(teacher=tutor)
-                INSTcourse = instTutor.courseName.replace(";",'')
-                coursesID = list(set(INSTcourse))
-                courses = []
-                for i in coursesID:
-                    try:
-                        course = Courses.objects.get(id=int(i))
-                        courses.append(course)
-                    except:
-                        pass
-                if exam.institute==instTutor.institute:
-                    if exam.course in courses:
-                        batch = BatchTiming.objects.filter(institute=instTutor.institute)
+                instTutor = enrollTutors.objects.filter(teacher=tutor) #added
+                courses = [] #added
+                instituteslist = [] #added
+                batch=[]
+                    # INSTcourse = instTutor.courseName.replace(";",'')
+                    # coursesID = list(set(INSTcourse))
+                    # courses = []
+                    # for i in coursesID:
+                    #     try:
+                    #         course = Courses.objects.get(id=int(i))
+                    #         courses.append(course)
+                    #     except:
+                    #         pass
+                for i in instTutor.values_list('courseName'): #added
+                    courses.append(i[0])
+
+                for i in instTutor.values_list('institute'): #added
+                        instituteslist.append(i[0])
+
+                if exam.institute.id in instituteslist:
+                    if exam.course.courseName in courses:
+                        for ins in instTutor:
+                            batch += BatchTiming.objects.filter(institute=ins.institute)
                         context = {
                         'courses':courses,
                         'exam':exam,
@@ -344,40 +376,46 @@ def ToggleExam(request,exam_id):
                     exam.status = False
                 else:
                     return HttpResponse("You Are not Authenticated User for this Action")
-                messages.success(request,"Exam Activated Successfully")
+                messages.warning(request,"Exam Deactivated Successfully")
             else:
                 if exam.institute == inst:
                     exam.status = True
                 else:
                     return HttpResponse("You Are not Authenticated User for this Action")
-                messages.warning(request,"Exam Deactivated Successfully")
+                messages.success(request,"Exam Activated Successfully")
             exam.save()
             return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
         elif request.session['type']=="Teacher":
             user = User.objects.get(username=request.session['user'])
             tutor = Teacher.objects.get(user=user)
             if enrollTutors.objects.filter(teacher=tutor).exists():
-                instTutor = enrollTutors.objects.get(teacher=tutor)
-                INSTcourse = instTutor.courseName.replace(";",'')
-                coursesID = list(set(INSTcourse))
-                courses = []
-                for i in coursesID:
-                    try:
-                        course = Courses.objects.get(id=int(i))
-                        courses.append(course)
-                    except:
-                        pass
-                    if instTutor.institute == exam.institute:
-                        if exam.course in courses:
-                            if exam.status:
-                                exam.status = False
-                                messages.warning(request,"Exam Deactivated Successfully")
-                            else:
-                                exam.status = True
-                                messages.success(request,"Exam Activated Successfully")
-                            exam.save()
+                instTutor = enrollTutors.objects.filter(teacher=tutor) #added
+                courses = [] #added
+                instituteslist = [] #added
+                    # INSTcourse = instTutor.courseName.replace(";",'')
+                    # coursesID = list(set(INSTcourse))
+                    # courses = []
+                    # for i in coursesID:
+                    #     try:
+                    #         course = Courses.objects.get(id=int(i))
+                    #         courses.append(course)
+                    #     except:
+                    #         pass
+                for i in instTutor.values_list('courseName'): #added
+                    courses.append(i[0])
+                
+                for i in instTutor.values_list('institute'): #added
+                    instituteslist.append(i[0])
+
+                if exam.institute.id in instituteslist:
+                    if exam.course.courseName in courses:
+                        if exam.status:
+                            exam.status = False
+                            messages.warning(request,"Exam Deactivated Successfully")
                         else:
-                            return HttpResponse("You Are not Authenticated User for this Action")
+                            exam.status = True
+                            messages.success(request,"Exam Activated Successfully")
+                        exam.save()
                     else:
                         return HttpResponse("You Are not Authenticated User for this Action")
                 return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
@@ -398,7 +436,13 @@ def CreateQuestions(request,exam_id):
             user = User.objects.get(username=request.session['user'])
             tutor = Teacher.objects.get(user=user)
             if enrollTutors.objects.filter(teacher=tutor).exists():
-                INSTtutor = enrollTutors.objects.get(teacher=tutor)
+                # INSTtutor = enrollTutors.objects.get(teacher=tutor)
+
+                instTutor = enrollTutors.objects.filter(teacher=tutor) #added
+                instituteslist = [] #added
+                for i in instTutor.values_list('institute'): #added
+                    instituteslist.append(i[0])
+
                 template  = 'dashboard/Tutor-dashboard.html'
             else:
                 return HttpResponse("You are not Authenticated for this Page")
@@ -492,7 +536,7 @@ def CreateQuestions(request,exam_id):
                     except Exception as e:
                         print(e)
                         errors.append('Something Went Wrong! Try Again')
-            elif request.session['type']=="Teacher" and exam.institute == INSTtutor.institute:
+            elif request.session['type']=="Teacher" and  exam.institute.id in instituteslist:
                 question_type = request.POST.get('question_type',"")
                 question = request.POST.get('question',"")
                 solution = request.POST.get('solution',"")
@@ -679,8 +723,15 @@ def EditQuestions(request,exam_id):
         elif request.session['type']=="Teacher":
             tutor = Teacher.objects.get(user=user)
             if enrollTutors.objects.filter(teacher=tutor).exists():
-                INSTtutor = enrollTutors.objects.get(teacher=tutor)
-                if exam.institute == INSTtutor.institute:
+                if enrollTutors.objects.filter(teacher=tutor).exists():
+                # INSTtutor = enrollTutors.objects.get(teacher=tutor)
+
+                    instTutor = enrollTutors.objects.filter(teacher=tutor) #added
+                    instituteslist = [] #added
+                    for i in instTutor.values_list('institute'): #added
+                        instituteslist.append(i[0])
+
+                if exam.institute.id in instituteslist:
                     shortquestions = ShortAnswerQuestion.objects.filter(exam=exam_id)
                     booleanquestions = BooleanQuestion.objects.filter(exam=exam_id)
                     longquestions = LongAnswerQuestion.objects.filter(exam=exam_id)
@@ -752,8 +803,12 @@ def EditShortQuestions(request,question_id):
             user = User.objects.get(username=request.session['user'])
             tutor = Teacher.objects.get(user=user)
             if enrollTutors.objects.filter(teacher=tutor).exists():
-                INSTtutor = enrollTutors.objects.get(teacher=tutor)
-                if question.exam.institute == INSTtutor.institute:
+                instTutor = enrollTutors.objects.filter(teacher=tutor) #added
+                instituteslist = [] #added
+                for i in instTutor.values_list('institute'): #added
+                    instituteslist.append(i[0])
+
+                if question.exam.institute.id in instituteslist:
                     context={
                     'question':question,
                     'template':"dashboard/Tutor-dashboard.html"
@@ -814,8 +869,11 @@ def DeleteShortQuestions(request,question_id):
             user = User.objects.get(username=request.session['user'])
             tutor = Teacher.objects.get(user=user)
             if enrollTutors.objects.filter(teacher=tutor).exists():
-                INSTtutor = enrollTutors.objects.get(teacher=tutor)
-                if question.exam.institute == INSTtutor.institute:
+                instTutor = enrollTutors.objects.filter(teacher=tutor) #added
+                instituteslist = [] #added
+                for i in instTutor.values_list('institute'): #added
+                    instituteslist.append(i[0])
+                if question.exam.institute.id in instituteslist:
                     question.delete()
                     messages.success(request,"Question Deleted Successfully")
                     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
@@ -849,8 +907,12 @@ def EditLongQuestions(request,question_id):
             user = User.objects.get(username=request.session['user'])
             tutor = Teacher.objects.get(user=user)
             if enrollTutors.objects.filter(teacher=tutor).exists():
-                INSTtutor = enrollTutors.objects.get(teacher=tutor)
-                if question.exam.institute == INSTtutor.institute:
+                instTutor = enrollTutors.objects.filter(teacher=tutor) #added
+                instituteslist = [] #added
+                for i in instTutor.values_list('institute'): #added
+                    instituteslist.append(i[0])
+
+                if question.exam.institute.id in instituteslist:
                     context={
                     'question':question,
                     'template':"dashboard/Tutor-dashboard.html",
@@ -911,8 +973,12 @@ def EditBooleanQuestions(request,question_id):
             user = User.objects.get(username=request.session['user'])
             tutor = Teacher.objects.get(user=user)
             if enrollTutors.objects.filter(teacher=tutor).exists():
-                INSTtutor = enrollTutors.objects.get(teacher=tutor)
-                if question.exam.institute == INSTtutor.institute:
+                instTutor = enrollTutors.objects.filter(teacher=tutor) #added
+                instituteslist = [] #added
+                for i in instTutor.values_list('institute'): #added
+                    instituteslist.append(i[0])
+
+                if question.exam.institute.id in instituteslist:
                     context={
                     'question':question,
                     'template':"dashboard/Tutor-dashboard.html",
@@ -980,8 +1046,12 @@ def EditMultipleQuestions(request,question_id):
             user = User.objects.get(username=request.session['user'])
             tutor = Teacher.objects.get(user=user)
             if enrollTutors.objects.filter(teacher=tutor).exists():
-                INSTtutor = enrollTutors.objects.get(teacher=tutor)
-                if question.exam.institute == INSTtutor.institute:
+                instTutor = enrollTutors.objects.filter(teacher=tutor) #added
+                instituteslist = [] #added
+                for i in instTutor.values_list('institute'): #added
+                    instituteslist.append(i[0])
+
+                if question.exam.institute.id in instituteslist:
                     context={
                     'question':question,
                     'template':"dashboard/Tutor-dashboard.html",
@@ -1054,8 +1124,12 @@ def DeleteLongQuestions(request,question_id):
             user = User.objects.get(username=request.session['user'])
             tutor = Teacher.objects.get(user=user)
             if enrollTutors.objects.filter(teacher=tutor).exists():
-                INSTtutor = enrollTutors.objects.get(teacher=tutor)
-                if question.exam.institute == INSTtutor.institute:
+                instTutor = enrollTutors.objects.filter(teacher=tutor) #added
+                instituteslist = [] #added
+                for i in instTutor.values_list('institute'): #added
+                    instituteslist.append(i[0])
+
+                if question.exam.institute.id in instituteslist:
                     question.delete()
                     messages.success(request,"Question Deleted Successfully")
                     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
@@ -1087,8 +1161,12 @@ def DeleteBooleanQuestions(request,question_id):
             user = User.objects.get(username=request.session['user'])
             tutor = Teacher.objects.get(user=user)
             if enrollTutors.objects.filter(teacher=tutor).exists():
-                INSTtutor = enrollTutors.objects.get(teacher=tutor)
-                if question.exam.institute == INSTtutor.institute:
+                instTutor = enrollTutors.objects.filter(teacher=tutor) #added
+                instituteslist = [] #added
+                for i in instTutor.values_list('institute'): #added
+                    instituteslist.append(i[0])
+
+                if question.exam.institute.id in instituteslist:
                     question.delete()
                     messages.success(request,"Question Deleted Successfully")
                     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
@@ -1120,8 +1198,12 @@ def DeleteMultipleQuestions(request,question_id):
             user = User.objects.get(username=request.session['user'])
             tutor = Teacher.objects.get(user=user)
             if enrollTutors.objects.filter(teacher=tutor).exists():
-                INSTtutor = enrollTutors.objects.get(teacher=tutor)
-                if question.exam.institute == INSTtutor.institute:
+                instTutor = enrollTutors.objects.filter(teacher=tutor) #added
+                instituteslist = [] #added
+                for i in instTutor.values_list('institute'): #added
+                    instituteslist.append(i[0])
+
+                if question.exam.institute.id in instituteslist:
                     question.delete()
                     messages.success(request,"Question Deleted Successfully")
                     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
@@ -1286,6 +1368,7 @@ def start_exam(request, pk):
         if exam_status == 'start':
             currentsession = {}
             for q in result:
+                new = StudentAnswer.objects.filter(student=s[0],exam=exam_mapping,question=q['question']).delete()
                 new = StudentAnswer()
                 new.student = s[0]
                 new.exam = exam_mapping
@@ -1294,6 +1377,7 @@ def start_exam(request, pk):
                 new.correct_ans = q['correct_ans']
                 new.negative_marks = q['negative_marks']
                 new.qtype = q['qmain']
+                new.section = q['section']
                 new.save()
 
             with open(os.path.join(BASE_DIR, 'static/currentsession.json'), 'w') as out:
@@ -1355,16 +1439,14 @@ def submitted(request):
 	for ans in student_answers:
 		if ans.qtype == 'multiple' or ans.qtype == 'tof':
 			if ans.input_ans != 'Not Answered':
-				if ans.input_ans == ans.correct_ans:
+				if ans.input_ans == re.sub(re.compile('<.*?>'),'',ans.correct_ans):
 					ans.marks_given = ans.marks
 					ans.check = 'correct'
 				else:
 					ans.marks_given = -abs(ans.negative_marks)
 					ans.check = 'incorrect'
 				ans.save()
-	new = StudentExamResult(exam=exam, attempted=True)
-	new.student = s
-	new.save()
+	StudentExamResult.objects.get_or_create(exam=exam,student=s,attempted=True)
 	del request.session['exam_status']
 	return render(request, 'Exam/submitted.html')
 
@@ -1504,20 +1586,27 @@ def ExamTutor(request):
         tutor = Teacher.objects.get(user=user)
         courses = []
         batch = []
-        INSTtutor = []
-        if enrollTutors.objects.filter(teacher=tutor).exists():
-            INSTtutor = enrollTutors.objects.get(teacher=tutor)
-            INSTcourse = INSTtutor.courseName.replace(";",'')
-            Tutorcourse = tutor.course.replace(";",'')
-            coursesID = INSTcourse+Tutorcourse
-            coursesID = list(set(coursesID))
-            for i in coursesID:
-                try:
-                    course = Courses.objects.get(id=int(i))
-                    courses.append(course)
-                except:
-                    pass
-            batch = BatchTiming.objects.filter(institute=INSTtutor.institute)
+        # INSTtutor = []
+        # if enrollTutors.objects.filter(teacher=tutor).exists():
+        #     INSTtutor = enrollTutors.objects.get(teacher=tutor)
+        #     INSTcourse = INSTtutor.courseName.replace(";",'')
+        #     Tutorcourse = tutor.course.replace(";",'')
+        #     coursesID = INSTcourse+Tutorcourse
+        #     coursesID = list(set(coursesID))
+        #     for i in coursesID:
+        #         try:
+        #             course = Courses.objects.get(id=int(i))
+        #             courses.append(course)
+        #         except:
+        #             pass
+        #     batch = BatchTiming.objects.filter(institute=INSTtutor.institute)
+        forclass = []
+        if enrollTutors.objects.filter(teacher=tutor).exists(): #added
+            INSTtutor = enrollTutors.objects.filter(teacher=tutor)
+            for x in enrollTutors.objects.filter(teacher=tutor):
+                batch += BatchTiming.objects.filter(institute=x.institute)
+                forclass+=Courses.objects.filter(intitute=x.institute).values_list('forclass').distinct()
+                
         else:
             Tutorcourse = tutor.course.replace(";",'')
             coursesID = list(set(Tutorcourse))
@@ -1527,8 +1616,10 @@ def ExamTutor(request):
                     courses.append(course)
                 except:
                     pass
+
         context = {
         'INSTtutor':INSTtutor,
+        'classes':forclass,
         'courses':courses,
         'batch':batch,
         }
@@ -1635,13 +1726,25 @@ def ViewExamTutor(request):
             exams = []
             tutorexams = []
             if enrollTutors.objects.filter(teacher=tutor).exists():
-                INSTtutor = enrollTutors.objects.get(teacher=tutor)
-                INSTcourse = INSTtutor.courseName.replace(";",'')
-                coursesID = list(set(INSTcourse))
-                for i in coursesID:
-                    course = Courses.objects.get(id=int(i))
-                    exam = Exam.objects.filter(Q(institute=INSTtutor.institute) & Q(course=course))
-                    exams.append(exam)
+                INSTtutor = enrollTutors.objects.filter(teacher=tutor) #added
+                courses = [] #added
+                    # INSTcourse = instTutor.courseName.replace(";",'')
+                    # coursesID = list(set(INSTcourse))
+                    # courses = []
+                    # for i in coursesID:
+                    #     try:
+                    #         course = Courses.objects.get(id=int(i))
+                    #         courses.append(course)
+                    #     except:
+                    #         pass
+                for i in INSTtutor.values_list('courseName'): #added
+                    courses.append(i[0])
+
+                for i in courses: #added
+                    course = Courses.objects.get(courseName=i)
+                    for ins in INSTtutor:
+                        exam = Exam.objects.filter(Q(institute=ins.institute) & Q(course=course))
+                        exams.append(exam)
                 context = {
                 'INSTtutor':INSTtutor,
                 'exams':exams,
@@ -1805,13 +1908,25 @@ def addQuestionsTutor(request):
             exams = []
             tutorexams = []
             if enrollTutors.objects.filter(teacher=tutor).exists():
-                INSTtutor = enrollTutors.objects.get(teacher=tutor)
-                INSTcourse = INSTtutor.courseName.replace(";",'')
-                coursesID = list(set(INSTcourse))
-                for i in coursesID:
-                    course = Courses.objects.get(id=int(i))
-                    exam = Exam.objects.filter(Q(institute=INSTtutor.institute) & Q(course=course))
-                    exams.append(exam)
+                INSTtutor = enrollTutors.objects.filter(teacher=tutor) #added
+                courses = [] #added
+                    # INSTcourse = instTutor.courseName.replace(";",'')
+                    # coursesID = list(set(INSTcourse))
+                    # courses = []
+                    # for i in coursesID:
+                    #     try:
+                    #         course = Courses.objects.get(id=int(i))
+                    #         courses.append(course)
+                    #     except:
+                    #         pass
+                for i in INSTtutor.values_list('courseName'): #added
+                    courses.append(i[0])
+
+                for i in courses:
+                    course = Courses.objects.get(courseName=i)
+                    for ins in INSTtutor:
+                        exam = Exam.objects.filter(Q(institute=ins.institute) & Q(course=course))
+                        exams.append(exam)
             tutorexams = TutorExam.objects.filter(tutor=tutor)
             context = {
             'INSTtutor':INSTtutor,
@@ -1972,13 +2087,25 @@ def EditExamQuestionsTutor(request):
         exams = []
         try:
             if enrollTutors.objects.filter(teacher=tutor).exists():
-                INSTtutor = enrollTutors.objects.get(teacher=tutor)
-                INSTcourse = INSTtutor.courseName.replace(";",'')
-                coursesID = list(set(INSTcourse))
-                for i in coursesID:
-                    course = Courses.objects.get(id=int(i))
-                    exam = Exam.objects.filter(Q(institute=INSTtutor.institute) & Q(course=course))
-                    exams.append(exam)
+                INSTtutor = enrollTutors.objects.filter(teacher=tutor) #added
+                courses = [] #added
+                    # INSTcourse = instTutor.courseName.replace(";",'')
+                    # coursesID = list(set(INSTcourse))
+                    # courses = []
+                    # for i in coursesID:
+                    #     try:
+                    #         course = Courses.objects.get(id=int(i))
+                    #         courses.append(course)
+                    #     except:
+                    #         pass
+                for i in INSTtutor.values_list('courseName'): #added
+                    courses.append(i[0])
+
+                for i in courses:
+                    course = Courses.objects.get(courseName=i)
+                    for ins in INSTtutor:
+                        exam = Exam.objects.filter(Q(institute=ins.institute) & Q(course=course))
+                        exams.append(exam)
         except:
             pass
         tutorexams = TutorExam.objects.filter(tutor=tutor)

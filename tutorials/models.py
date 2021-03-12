@@ -6,10 +6,11 @@ from django.utils.timezone import now
 class TutorialInstitute(models.Model):
     Title = models.CharField(max_length=1000)
     Course = models.ForeignKey(Courses,related_name='tutorialsinstitute',on_delete=models.CASCADE)
+    forclass = models.CharField(max_length=150, default="")
     Fees = models.PositiveIntegerField()
     Duration = models.PositiveIntegerField()
     Description = models.TextField()
-    Validity = models.DateTimeField()
+    Validity = models.DateTimeField(null=True, blank=True)
     Discount = models.DecimalField(max_digits=10,decimal_places=6,default=0)
     Archived = models.BooleanField(default=False)
 
@@ -55,7 +56,7 @@ class TutorialTutors(models.Model):
     Fees = models.PositiveIntegerField()
     Duration = models.PositiveIntegerField()
     Description = models.TextField()
-    Validity = models.DateTimeField()
+    Validity = models.DateTimeField(null=True, blank=True)
     Discount = models.DecimalField(max_digits=10,decimal_places=6,default=0)
     Archived = models.BooleanField(default=False)
 

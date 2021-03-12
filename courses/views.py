@@ -72,20 +72,6 @@ def courses(request):
                 messages.warning(request, 'Course Already Exists!!! ',extra_tags = 'alert alert-warning alert-dismissible show')            
    
 
-            #Added coursse
-            # Courses(courseName=courseName,
-            #          forclass=forclass,
-            #          intitute=institute,
-            #          courseID=course_ID).save()
-            # messages.success(request,"Course Added Successfully")
-            # return redirect('courses')
-
-            # Courses(courseName=courseName,
-            #          forclass=forclass,
-            #          intitute=institute,
-            #          courseID=course_ID).save()
-            # messages.success(request,"Course Added Successfully")
-            # return redirect('courses')
         return render(request, 'courses-2/courses.html', params)
     return HttpResponse("You Are Not Authenticated for this Page")
 
@@ -118,6 +104,30 @@ def courseArchive(request):
         return render(request, 'courses-2/archive-courses.html', params)
     return HttpResponse("You Are Not Authenticated for this Page")
 
+@login_required(login_url='Login')
+def courseUnArchive(request,id):
+    if request.session['type'] == "Institute":
+        user = User.objects.get(username=request.session['user'])
+        inst = Institute.objects.get(user=user)
+        courses = Courses.objects.filter(intitute=inst, archieved=True)
+        
+        course_archive = Courses.objects.get(id=id)
+        course_archive.archieved = False
+        course_archive.save()
+        messages.success(request, "Course Removed from Archive Successfully")
+        return redirect("courses")
+        
+        # paginator = Paginator(courses, 4)
+        # page = request.GET.get('page', 1)
+        # try:
+        #     course = paginator.page(page)
+        # except PageNotAnInteger:
+        #     course = paginator.page(1)
+        # except EmptyPage:
+        #     course = paginator.page(paginator.num_pages)
+        params = {'teach': teach}
+        return render(request, 'courses-2/archive-teaching.html', params)
+    return HttpResponse("You Are Not Authenticated for this Page")
 
 @login_required(login_url='Login')
 def courseArchivefirst(request,id):
@@ -144,6 +154,7 @@ def teachingType2(request):
         inst = Institute.objects.get(user=user)
         courses = Courses.objects.filter(intitute=inst)  
         forclass = Courses.objects.filter(intitute=inst).values_list('forclass').distinct()
+        
 
         
         print('courses',courses)       
@@ -153,7 +164,7 @@ def teachingType2(request):
         print('jsonCources ',jsonCources)
         
         
-        teach = TeachingType.objects.filter(course__intitute = inst)
+        teach = TeachingType.objects.filter(course__intitute = inst, archieved=False)
         # paginator = Paginator(teach, 10)
         # page = request.GET.get('page', 1)
         # try:
@@ -173,18 +184,15 @@ def teachingType2(request):
             courseID = request.POST.get('courseName')
 
             forclass1 = request.POST.getlist('forclass', '')
-            forclass = ', '.join(forclass1)
-            teachType1 = request.POST.getlist('check')
+            forclass = ', '.join(forclass1)            
+            teachType1 = request.POST.getlist('teaching')
+            print('teachTYpe1',teachType1)
             teachType = '\n'.join(teachType1)
-            print('teachtype',teachType1)
+           
             duration1 = request.POST.getlist('duration', '')
             duration = '\n'.join(duration1)
             timePeriod1 = request.POST.getlist('time', '')
             timePeriod = '\n'.join(timePeriod1)
-
-
-
-
             alreadyExists = TeachingType.objects.filter(courseID = courseID, forclass = forclass,                                           
                                                         teachType = teachType,
                                                          duration = duration, 
@@ -197,8 +205,7 @@ def teachingType2(request):
 							alert('Teach Type already exists');
 							window.location.href = "/teachingType2";
 						</script>
-					""")
-      
+					""")     
             #course = Courses.objects.get(id = int(courseID[0]))
             course = Courses.objects.get(id = courseID)
                        
@@ -215,15 +222,56 @@ def teachingType2(request):
         return render(request, 'courses-2/teaching-type.html', params)
     return HttpResponse("You Are Not Authenticated for this Page")
 
-# @login_required(login_url='Login')
-# def couse_delete(request, pk):
-#     if request.session['type'] == "Institute": 
-#         user = User.objects.get(username=request.session['user'])
-#         inst = Institute.objects.get(user=user)
-#         course = Couse.objects.get(id=pk)
-#         course.delete()
-#         return redirect("course")
-#     return HttpResponse("You Are Not Authenticated for this Page")
+
+@login_required(login_url='Login')
+def teachingArchive(request,id):
+    if request.session['type'] == "Institute":
+        user = User.objects.get(username=request.session['user'])
+        inst = Institute.objects.get(user=user)        
+        
+        teaching = TeachingType.objects.get(id=id)
+
+        print('archieve id' ,id)
+        teaching.archieved = True
+        teaching.save()
+        messages.success(request, "Teaching type  Archive Succssfully")
+        return redirect("teaching-type-2")
+    return HttpResponse("You Are Not Authenticated for this Page")
+
+@login_required(login_url='Login')
+def teachArchive(request):
+    if request.session['type'] == "Institute":
+        user = User.objects.get(username=request.session['user'])
+        inst = Institute.objects.get(user=user)
+        teach = TeachingType.objects.filter(course__intitute = inst, archieved=True)
+
+        
+        # paginator = Paginator(courses, 4)
+        # page = request.GET.get('page', 1)
+        # try:
+        #     course = paginator.page(page)
+        # except PageNotAnInteger:
+        #     course = paginator.page(1)
+        # except EmptyPage:
+        #     course = paginator.page(paginator.num_pages)
+        params = {'teach': teach}
+        return render(request, 'courses-2/archive-teaching.html', params)
+    return HttpResponse("You Are Not Authenticated for this Page")
+
+@login_required(login_url='Login')
+def teachUnArchive(request,id):
+    if request.session['type'] == "Institute":
+        user = User.objects.get(username=request.session['user'])
+        inst = Institute.objects.get(user=user)
+        teach = TeachingType.objects.filter(course__intitute = inst, archieved=True)
+        
+        teach_type = TeachingType.objects.get(id=id)
+        teach_type.archieved = False
+        teach_type.save()
+        messages.success(request, "Teaching Removed from Archive Successfully")
+        return redirect("teaching-type-2")        
+        
+    return HttpResponse("You Are Not Authenticated for this Page")
 
 
 def FindCoursesclass(request):
@@ -334,29 +382,53 @@ def deleteteaching(request, id):
     return HttpResponse("You Are Not Authenticated for this Page")
 
 @login_required(login_url="Login")
+
+
 def editCourse(request, id):
     if request.session['type'] == "Institute":
+
+        try:
+            cour = Courses.objects.get(id=id)
+        except:
+            return HttpResponse("Unable to edit")
+
         user = User.objects.get(username=request.session['user'])
         inst = Institute.objects.get(user=user)
-        course = Courses.objects.get(id=id, intitute=inst)
-        classes = course.forclass.split(', ')
+        #course = Courses.objects.get(id=id, intitute=inst)
+        courses = Courses.objects.filter(intitute = inst,id=id, archieved=False)
+        forclass = Courses.objects.filter(intitute=inst).values_list('forclass').distinct()
+       
 
-        params = {'course': course.courseName, 'class': classes}
+        params = {'course': courses,'classes':forclass,'cour':cour}
+
+        # params = {'course': course.courseName, 'class': classes}
 
         if request.method == "POST":
-            courseName = request.POST.get('editcourseName', '')
-            print('editcourseName',courseName)
-
-            forclass = request.POST.getlist('forclass', '')
-
-            print('editforclass',forclass)
-            forclass = ', '.join(forclass)
-            course.courseName = courseName
-            course.forclass = forclass
-            course.save()
-            messages.success(request, "Course Updated Successfully")
-            return redirect("courses")
-        return render(request, 'courses/editCourse.html', params)
+            courseName = request.POST.get('courseName') 
+            print('coursename',courseName)           
+            forclass = request.POST.get('forclass')             
+            user = User.objects.get( username=request.session['user'])            
+            institute = Institute.objects.get(user=user)
+            count = (Courses.objects.all().count())+1 
+            course_ID = courseName[:3] + str("%03d" % count)
+            if  not Courses.objects.filter(courseName=request.POST['courseName']).exists():
+                if not Courses.objects.filter(forclass=request.POST['forclass']).exists():
+                    
+                    print('if else coursename',courseName)  
+                    print('if else for class',forclass)  
+                    Courses(courseName=courseName,
+                     forclass=forclass,
+                     intitute=institute,                     
+                     courseID=course_ID).save()
+                    messages.success(request, 'Course Has been Update successfully.')
+                    return redirect('courses')
+                    
+                else:
+                    messages.warning(request, 'class Number Already Exists!!! ',extra_tags = 'alert alert-warning alert-dismissible show')
+            else:
+                messages.warning(request, 'Course Already Exists!!! ',extra_tags = 'alert alert-warning alert-dismissible show')            
+   
+        return render(request, 'courses-2/editCourse2.html', params)
     return HttpResponse("You Are Not Authenticated for this Page")
 
 
@@ -453,3 +525,4 @@ def editTeachingType(request, id):
             return redirect('viewteachType')
         return render(request, 'courses/editTeachingType.html', params)
     return HttpResponse("You Are Not Authenticated for this Page")
+

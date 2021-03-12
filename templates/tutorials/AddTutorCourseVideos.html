@@ -1,4 +1,4 @@
-{% extends 'dashboard/Tutor-dashboard.html' %}
+{% extends template %}
 {% load static %}
 
 {% block main-content %}
@@ -24,9 +24,9 @@
                             <tbody>
                                 <tr>
                                 <td>
-                                    <div class="w-100 col-12" style="min-width: 205px;">
-                                    <input type="file" class="my-table-input custom-file-input" id="file" name="video" required>
-                                    <label class="custom-file-label" >Choose file...</label>
+                                    <div class="file-box w-100 col-12" style="min-width: 205px;">
+                                    <input type="file" class="my-table-input custom-file-input" id="file" name="video" onchange="addfile(this)" required>
+                                    <label class="custom-file-label" for="validatedCustomFile">Choose file...</label>
                                 </div>
                                 </td>
                                 <td>
@@ -64,13 +64,27 @@
         addwidth();
         $("#add").click(function(){
             var AddVideo = "<tr>"
-            AddVideo += `<td><div style="min-width: 205px;" class="w-100 col-12"><input type="file" class="my-table-input custom-file-input" id="file" name="video" required><label class="custom-file-label" >Choose file...</label></div></td>`
-            AddVideo += `<td><input style="min-width: 205px;" type='text' name='title' class='my-table-input form-control' id='exampleInputEmail1' aria-describedby='emailHelp' placeholder='Enter Video Title'></td>`
+            AddVideo += `<td><div style="min-width: 205px;" class="file-box w-100 col-12"><input type="file" class="my-table-input custom-file-input" id="file" name="video" required><label class="custom-file-label" >Choose file...</label></div></td>`
+            AddVideo += `<td><input style="min-width: 205px;" type='text' name='title' class='my-table-input form-control' onchange="addfile(this)" id='exampleInputEmail1' aria-describedby='emailHelp' placeholder='Enter Video Title'></td>`
             AddVideo += `<td><textarea style="min-width: 205px;" type='text' rows='1' name='description' class='my-table-input form-control' id='exampleInputEmail1' aria-describedby='emailHelp' placeholder='Enter Video Description'></textarea></td>`
             AddVideo +=  `</tr>`;
                     $("table tbody").append(AddVideo);
             addwidth();
         });
     })
+
+    function addfile(el) {
+        var file = $(el).val();
+        // first check if file field has any value
+        if (file) {
+            // split file name at dot
+            var get_ext = file.split('.');
+            // reverse name to check extension
+            get_ext = get_ext.reverse();
+            // check file type is valid as given in 'exts' array
+            var filename = file.replace(/^.*\\/, "");
+            $(el).closest(".file-box").find(".custom-file-label").html(filename);
+        }
+    }
 </script>
 {% endblock main-content %}

@@ -153,7 +153,7 @@
                         <label class="control-label col-sm-5 col-5 mt-2" style="color:black;">Add Video<span
                                 class="text-danger">*</span></label>
                         <div class="w-100 col-sm-7 col-7">
-                            <input type="file" class="custom-file-input" id="validatedCustomFile" required name="video">
+                            <input type="file" class="custom-file-input" id="validatedCustomFile" onchange="addfile()" required name="video">
                             <label class="custom-file-label" for="validatedCustomFile">Choose file...</label>
                         </div>
                     </div>
@@ -189,5 +189,19 @@
             $("table tbody").append(AddVideo);
         })
     })
+
+    function addfile(el) {
+        var file = $(el).val();
+        // first check if file field has any value
+        if (file) {
+            // split file name at dot
+            var get_ext = file.split('.');
+            // reverse name to check extension
+            get_ext = get_ext.reverse();
+            // check file type is valid as given in 'exts' array
+            var filename = file.replace(/^.*\\/, "");
+            $(".custom-file-label").html(filename);
+        }
+    }
 </script>
 {% endblock %}

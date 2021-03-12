@@ -1,67 +1,14 @@
-{% extends 'dashboard/institute-dashboard.html' %}
+{% extends 'dashboard/base.html' %}
 {% load static %}
-{% block head-title %}
-Institute Dashboard
-{% endblock head-title %}
-
-
-{% block extra-stylesheets %}
-
-<link rel="stylesheet" type="text/css" href="{% static 'plugins/bootstrap-select/bootstrap-select.min.css' %}">
-
-<link href="{% static 'assets/css/ui-kit/custom-pagination.css' %}" rel="stylesheet" type="text/css" />
-
-
-<link href="{% static 'plugins/jquery-ui/jquery-ui.min.css' %}" rel="stylesheet" type="text/css" />
-<link href="{% static 'assets/css/components/searchbox/search-multiple.css' %}" rel="stylesheet" type="text/css" />
-
-<link href="{% static 'plugins/animate/animate.css' %}" rel="stylesheet" type="text/css" />
-<link href="{% static 'assets/css/modals/component.css' %}" rel="stylesheet" type="text/css" />
-
-<link href="{% static 'assets/css/ui-kit/custom-modal.css' %}" rel="stylesheet" type="text/css" />
-
-
-<link rel="stylesheet" type="text/css" href="{% static 'plugins/bootstrap-select/bootstrap-select.min.css' %}">
-
-<link rel="stylesheet" type="text/css" href="{% static 'plugins/select2/select2.min.css' %}">
-
-<link rel="stylesheet" type="text/css" href="{% static 'plugins/table/datatable/datatables.css' %}">
-<link rel="stylesheet" type="text/css" href="{% static 'plugins/table/datatable/custom_dt_html5.css' %}">
-{% endblock extra-stylesheets %}
-
-
-{% block extra-style %}
+{% block css %}
+{% endblock %}
+{% block main-content %}
 <style>
-  .special {
-    font-weight: bold !important;
-    color: #fff !important;
-    background: #e7515a !important;
-    text-transform: uppercase;
-  }
-
-  .bootstrap-select.btn-group .dropdown-menu a.dropdown-item span.dropdown-item-inner {
-    color: #171820;
-  }
-
-  .dropdown-item:active {
-    background-color: #f1f3f9;
-  }
-
-  .dropdown-menu.select-dropdown .dropdown-item:focus,
-  .dropdown-menu.select-dropdown .dropdown-item:hover {
-    background-color: #e6e3fe;
-  }
-
-  .dropdown-item.active {
-    background-color: #f1f3f0;
-  }
-
-  .row [class*="col-"] .widget .widget-header h4 {
-    color: #6156ce;
-  }
-
-  .btn-group.bootstrap-select.dropup:focus {
-    outline: none;
+  #card {
+    background-color: white;
+    padding-bottom: 3rem;
+    padding-top: 3rem;
+    color: black;
   }
   .table > thead > tr > th {
     color: black;
@@ -93,6 +40,7 @@ tbody {
     color: #000;
 }
 </style>
+<<<<<<< HEAD
 {% endblock extra-style %}
 
 {% block notifications %}
@@ -133,25 +81,31 @@ tbody {
 
 <div class="container-fluid" style="padding-right:0px; padding-left: 0px;">
 
+=======
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/css/select2.min.css" rel="stylesheet" />
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/js/select2.min.js"></script>
+<div class="mt-5">
+  {% if messages %}
+>>>>>>> a7a45ecb25902c01949cbeb6e5bdced1a3427c9f
   {% for k in messages%}
-  <div class="dropdown-item">
-    <a href="">
-      <div class="media">
-        <div class="media-body">
-          <span>
-            <div class="alert alert-{{k.tags}} alert-dismissible fade show" role="alert">
-              <b>{{ k }} !</b>
-              <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-              </button>
-            </div>
-          </span>
-        </div>
-      </div>
-    </a>
+  <div class="alert alert-{{k.tags}} alert-dismissible fade show" role="alert">
+    <b>{{ k }} !</b>
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+      <span aria-hidden="true">&times;</span>
+    </button>
   </div>
   {% endfor %}
+  {% endif %}
+  <div class="card" style="color: black;">
+    <div class="card-header">
+      <h3 style="align-items: center;text-align: center;">Add Course</h3>
+    </div>
+    <form id="frm" class="mb-4 mt-4" method="post">{% csrf_token %}
+      <div class="mx-2 row" id="INSTBATCH">
+        <div class="col">
+          <label for="validationCustom01"><strong>Select Class <span class="red">*</span></strong></label>
 
+<<<<<<< HEAD
   
   <br>
 
@@ -203,24 +157,38 @@ tbody {
               </form>
             </div>
           </div>
+=======
+          <select id="class_select" name="forclass" class="js-example-basic-single form-control"
+            placeholder="Select class" onchange="addoptions(this)">
+            <option class="form-control" selected disabled value="">No selection</option>
+
+            {% for x,y in data.items %}
+            <option value="{{ x }}">{{ x }}</option>
+            {% endfor %}
+          </select>
+
+
+        </div>
+        <div class="col">
+          <label for="validationCustom01"><strong>Select Course<span class="red">*</span></strong></label>
+          <select id="cn" name="courseName" style="width: 100%" class="js-example-basic-single form-control">
+            <option class="form-control form-control-lg" selected disabled value="">Select Course</option>
+          </select>
+>>>>>>> a7a45ecb25902c01949cbeb6e5bdced1a3427c9f
         </div>
 
 
-
-        <br>
-        <br>
-        <!-- <div class="form-group">
-          <input type="submit" value="Add" class="btn btn-success float-right login_btn">
-        </div> -->
-        <!-- </form> -->
       </div>
-    </div>
+      <br>
+      <div class="text-center">
+        <button type="submit" class="btn btn-primary"> Add </button>
+      </div>
+    </form>
   </div>
+  <br>
 
-</div>
 
-<div class="row layout-spacing">
-
+<<<<<<< HEAD
   <div class="col-xl-12 col-lg-12 col-sm-10  layout-spacing">
     <div class="statbox widget box box-shadow">
       <div class="widget-header">
@@ -283,190 +251,199 @@ tbody {
                   </div>
                 </td>
               </tr>
+=======
+  <div class="card mb-4">
+    <div class="card-header">
+      <!-- Grid row -->
+      <div class="row">
+        <!-- Grid column -->
+        <div class="col-md-8">
+          <h2 style="color: rgb(0, 0, 0 );">List of Courses</h2>
+        </div>
+>>>>>>> a7a45ecb25902c01949cbeb6e5bdced1a3427c9f
 
-              <!--Modals-->
-              <div class="modal fade" id="archive-{{i.pk}}" tabindex="-1" role="dialog"
-                aria-labelledby="archive-{{i.pk}}=Title" aria-hidden="true">
-                <div class="modal-dialog modal-dialog-centered" role="document">
-                  <div class="modal-content">
-                    <div class="modal-header">
-                      <h5 class="modal-title" id="archive-{{i.pk}}-Title">Archive Course</h5>
-                      <button type="button" class="close" name="undo" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                      </button>
-                    </div>
-                    <div class="modal-body">
-                      <h4 class="modal-heading mb-4 mt-2">ARCHIVE COURSE</h4>
-                      <p class="modal-text mb-4">
-                        Do you really want to archive this course?
-                      </p>
-                      <div class="modal-footer" name="undo">
+        <div class="col-md-4">
+          <input id="searchbox" type="text" class="form-control" name='srh' placeholder="Search Exam or Course"
+            required>
+        </div>
 
-                        <a href="{% url 'courseArchivefirst' i.id %}"> <button type="button"
-                            class="btn btn-warning btn-rounded mb-3 mt-3">Archive</button></a>
-                        <!-- <button type="button" class="btn btn-warning btn-rounded mb-3 mt-3">Archive</button> -->
-                        <button type="button" class="btn btn-dark btn-rounded mb-3 mt-3"
-                          data-dismiss="modal">Close</button>
-                      </div>
-                    </div>
+        <!-- Grid column -->
+      </div>
+    </div>
+    {% if course %}
+    <div class="card-body">
+      <!-- Grid row -->
+      <!-- <form action="" method="post">{% csrf_token %} -->
+      <!--Table-->
+      <div class="table-responsive">
+        <table class="table table-striped">
+          <!--Table head-->
+          <tr>
+            <th class="">Sr no</th>
+            <th class="">CLASS</th>
+            <th class="">COURSE NAME</th>
+
+            <th class="text-center">Action</th>
+            <!-- <th class="text-center" colspan="2">Action</th> -->
+          </tr>
+          <!--Table head-->
+          <!--Table body-->
+          {% for i in course %}
+          <tr id="{{ i.pk }}">
+            <td>{{ forloop.counter }}</td>
+            <td>{{i.forclass}}</td>
+            <td>{{i.courseName}}</td>
+            <td class="text-center">
+              <a class="btn btn-warning" href="{% url 'editCourse' i.id %}"><i class="flaticon-pencil-line"
+                  style="font-size:medium;"></i></a>
+              <a class="btn btn-danger" href="{% url 'deleteCourse' i.id %}"><i class="flaticon-delete-fill"
+                  style="font-size:medium;"></i></a>
+              <a class="btn btn-dark" href="{% url 'courseArchivefirst' i.id %}"><i class="flaticon-delete-fill"
+                  style="font-size:medium;"></i></a>
+            </td>
+            <td class="text-center">
+
+            </td>
+
+            <td>
+
+
+
+
+
+              <!-- <div class="btn-group">
+                  <button type="button" data-toggle="modal" data-target="#edit-{{i.pk}}" href="#edit-{{i.pk}}"
+                    class="btn btn-secondary btn-sm"><i
+                      class="flaticon-edit  bg-success p-1 text-white br-6 mb-1"></i>Edit</button>
+                  <button type="button" class="btn btn-secondary btn-sm dropdown-toggle dropdown-toggle-split"
+                    id="dropdownMenuReference1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
+                    data-reference="parent">
+                    <span class="sr-only">Toggle Dropdown</span>
+                  </button>
+                  <div class="dropdown-menu" aria-labelledby="dropdownMenuReference1">
+                    <button class="btn btn-secondary btn-sm dropdown-item" data-toggle="modal"
+                      data-target="#delete-{{i.pk}}" href="#delete-{{i.pk}}" title="Delete"><i
+                        class="flaticon-delete  bg-danger p-1 text-white br-6 mb-1"></i>Delete</button>
+                
+                    <button class="btn btn-warning btn-sm dropdown-item" data-toggle="modal" name="undo"
+                      data-target="#archive-{{i.pk}}" href="#archive-{{i.pk}}" title="Archive"><i
+                        class="flaticon-delete  bg-warning p-1 text-white br-6 mb-1"></i>Archive</button>
+
                   </div>
-                </div>
-              </div>
+                </div> -->
+            </td>
+          </tr>
 
-              <div class="modal fade" id="delete-{{i.pk}}" tabindex="-1" role="dialog"
-                aria-labelledby="delete-{{i.pk}}=Title" aria-hidden="true">
-                <div class="modal-dialog modal-dialog-centered" role="document">
-                  <div class="modal-content">
-                    <div class="modal-header">
-                      <h5 class="modal-title" id="delete-{{i.pk}}-Title">Delete Course</h5>
-                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                      </button>
-                    </div>
-                    <div class="modal-body">
-                      <h4 class="modal-heading mb-4 mt-2">DELETE COURSE</h4>
-                      <p class="modal-text mb-4">
-                        Do you really want to delete this course?
-                      </p>
-                      <div class="modal-footer">
-                        <a href="{% url 'deleteCourse' i.id %}"> <button type="button"
-                            class="btn btn-danger btn-rounded mb-3 mt-3">Delete</button></a>
-                        <!-- <button type="button" class="btn btn-danger btn-rounded mb-3 mt-3">Delete</button> -->
-                        <button type="button" class="btn btn-dark btn-rounded mb-3 mt-3"
-                          data-dismiss="modal">Close</button>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
 
-              <div class="modal fade" id="edit-{{i.pk}}" tabindex="-1" role="dialog"
-                aria-labelledby="edit-{{i.pk}}-Label" aria-hidden="true">
-                <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
-                  <div class="modal-content">
 
-                    <div class="modal-header" id="edit-{{i.pk}}-Label">
-                      <h4 class="modal-title">Edit Course</h4>
-                    </div>
-                    <div class="modal-body text-center">
 
-                      <form class="mt-0" action="{% url 'editCourse' i.id %}" method="post">{% csrf_token %}
-                        <div class="input-group form-group">
-                          <div class="input-group-prepend">
-                            <span class="input-group-text"><i class="fas fa-user"></i>Course Name</span>
-                          </div>
-                          <input type="text" class="form-control" name='editcourseName' placeholder="Course Name"
-                            value="{{ i.courseName }}" required>
-                        </div>
-                        <br>
-                        <div class="input-group form-group">
-                          <div class="input-group-prepend">
-                            <span class="input-group-text">Select Class</span>
-                          </div>
-                          <select name="forclass" class="">
-                            <option {% if "Nursery" in i.forclass %} selected {% endif %}>Nursery</option>
-                            <option {% if "I" in i.forclass %} selected {% endif %}>I </option>
-                            <option {% if "II" in i.forclass %} selected {% endif %}>II</option>
-                            <option{% if "III" in i.forclass %} selected {% endif %}>III</option>
-                              <option{% if "IV" in i.forclass %} selected {% endif %}>IV</option>
-                                <option{% if "V" in i.forclass %} selected {% endif %}>V</option>
-                                  <option{% if "VI" in i.forclass %} selected {% endif %}>VI</option>
-                                    <option{% if "VII" in i.forclass %} selected {% endif %}>VII</option>
-                                      <option{% if "VIII" in i.forclass %} selected {% endif %}>VIII</option>
-                                        <option{% if "IX" in i.forclass %} selected {% endif %}>IX</option>
-                                          <option{% if "X" in i.forclass %} selected {% endif %}>X</option>
-                                            <option{% if "XI" in i.forclass %} selected {% endif %}>XI</option>
-                                              <option{% if "XII" in i.forclass %} selected {% endif %}>XII</option>
-                          </select>
-                        </div>
-                        <br>
-                        <div class="form-group">
-                          <!-- <a href="{% url 'editCourse' i.id %}" > <input type="submit" value="Update" class="btn btn-warning float-right login_btn"></a>
-                              <a href="">updete</a> -->
-                          <input type="submit" value="Update" class="btn btn-warning float-right login_btn">
+          <!-- <tr class="main-row">
+              <td>{{i.Name}}</td>
+              <td>{{i.course.courseName}}</td>
+              <td>{{i.Batch}}</td>
+              <td>{{i.exam_date}}</td>
+              <td>{{i.exam_duration}}</td>
+              <td>{{i.question_count}}</td>
+              <td>{{i.pass_percentage}}</td>
+              {% if i.status %}
+              <td class="text-center"><a href="{% url 'toggle' i.id %}" class="btn btn-danger p-1">Deactivate</a></td>
+              {% else %}
+              <td class="text-center"><a href="{% url 'toggle' i.id %}" class="btn btn-primary p-1">Activate</a></td>
+              {% endif %}
+              <td class="text-center">
+                <a class="btn btn-warning" href="{% url 'EditExam' i.id %}"><i class="flaticon-pencil-line"
+                    style="font-size:medium;"></i></a>
+              </td>
+              <td class="text-center">
+                <a class="btn btn-danger" href="{% url 'DeleteExam' i.id %}"><i class="flaticon-delete-fill"
+                    style="font-size:medium;"></i></a>
+              </td>
+            </tr> -->
 
-                        </div>
-                      </form>
-
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <!--Modals-->
-
-              {% endfor %}
-            </tbody>
-          </table>
+          {% endfor %}
+          <!--Table body-->
+        </table>
+      </div>
+      <!--Table-->
+      <!-- </form> -->
+      <br>
+    </div>
+    {% else %}
+    <div class="card-header" style="background: none;">
+      <div class="row">
+        <div class="col-xl-12 col-md-12 col-12">
+          <h2>No Course to show</h2>
         </div>
       </div>
     </div>
+    {% endif %}
   </div>
 
-</div>
-</div>
-
-<script>
-
-  $(document).ready(function () {
-    $('#multiple-checkboxes').multiselect({
-      includeSelectAllOption: true,
+  <script>
+    function checkbox() {
+      var value = $("#negativecheck").is(":checked");
+      negative = document.getElementById("negative");
+      var output;
+      if (value) {
+        output = `<input
+      type="number"
+      class="mt-2 form-control"
+      placeholder="Enter Negative Marks"
+      name="negative_marks"
+      value="0"
+      required
+    />
+    <div class="invalid-feedback">
+      Enter a valid No.
+    </div>`;
+      } else {
+        output = "";
+      }
+      negative.innerHTML = output;
+    }
+    // In your Javascript (external .js resource or <script> tag)
+    $(document).ready(function () {
+      $('.js-example-basic-single').select2();
     });
-  });
-</script>
-{% endblock main-content %}
 
+    $(window).on('pageshow', () => {
+      var frm = $('#frm');
+      frm[0].reset();
+    });
+  </script>
 
-{% block extra-script %}
+  <script>
 
-<script src="{% static 'plugins/bootstrap-select/bootstrap-select.min.js' %}"></script>
+    function addoptions(el) {
+      var data = JSON.parse("{{ data|escapejs }}".replaceAll("'", "\""));
+      var items = data[el.value];
 
+      html1 = "";
+      for (i = 0; i < items.length; i++) {
+        html1 += "<option value=\"" + items[i] + "\">" + items[i] + "</option> ";
+      }
+      $("#cn").html(html1);
+    };
 
-<script src="{% static 'assets/js/components/search/autocomplete.js' %}"></script>
-<script src="{% static 'assets/js/components/custom-search-multiple.js' %}"></script>
-
-<script src="{% static 'assets/js/modal/classie.js' %}"></script>
-<script src="{% static 'assets/js/modal/modalEffects.js' %}"></script>
-
-
-<script src="{% static 'plugins/select2/select2.min.js' %}"></script>
-<script src="{% static 'plugins/select2/custom-select2.js' %}"></script>
-
-<script src="{% static 'plugins/table/datatable/datatables.js' %}"></script>
-<!-- NOTE TO Use Copy CSV Excel PDF Print Options You Must Include These Files  -->
-<script src="{% static 'plugins/table/datatable/button-ext/dataTables.buttons.min.js' %}"></script>
-<script src="{% static 'plugins/table/datatable/button-ext/jszip.min.js' %}"></script>
-<script src="{% static 'plugins/table/datatable/button-ext/buttons.html5.min.js' %}"></script>
-<script src="{% static 'plugins/table/datatable/button-ext/buttons.print.min.js' %}"></script>
-<script>
-
-  function addoptions(el) {
-    var data = JSON.parse("{{ data|escapejs }}".replaceAll("'", "\""));
-    var items = data[el.value];
-
-    html1 = "";
-    for (i = 0; i < items.length; i++) {
-      html1 += "<option value=\"" + items[i] + "\">" + items[i] + "</option> ";
-    }
-    $("#cn").html(html1);
-  };
-
-  $('#html5-extension').DataTable({
-    dom: '<"row"<"col-md-12"<"row"<"col-md-6"B><"col-md-6"f> > ><"col-md-12"rt> <"col-md-12"<"row"<"col-md-5 mb-md-0 mb-5"i><"col-md-7"p>>> >',
-    buttons: {
-      buttons: [
-        { extend: 'copy', className: 'btn btn-default btn-rounded btn-sm mb-4' },
-        { extend: 'csv', className: 'btn btn-default btn-rounded btn-sm mb-4' },
-        { extend: 'excel', className: 'btn btn-default btn-rounded btn-sm mb-4' },
-        { extend: 'print', className: 'btn btn-default btn-rounded btn-sm mb-4' }
-      ]
-    },
-    "language": {
-      "paginate": {
-        "previous": "<i class='flaticon-arrow-left-1'></i>",
-        "next": "<i class='flaticon-arrow-right'></i>"
+    $('#html5-extension').DataTable({
+      dom: '<"row"<"col-md-12"<"row"<"col-md-6"B><"col-md-6"f> > ><"col-md-12"rt> <"col-md-12"<"row"<"col-md-5 mb-md-0 mb-5"i><"col-md-7"p>>> >',
+      buttons: {
+        buttons: [
+          { extend: 'copy', className: 'btn btn-default btn-rounded btn-sm mb-4' },
+          { extend: 'csv', className: 'btn btn-default btn-rounded btn-sm mb-4' },
+          { extend: 'excel', className: 'btn btn-default btn-rounded btn-sm mb-4' },
+          { extend: 'print', className: 'btn btn-default btn-rounded btn-sm mb-4' }
+        ]
       },
-      "info": "Showing page _PAGE_ of _PAGES_"
-    }
-  });
-</script>
-{% endblock extra-script %}
+      "language": {
+        "paginate": {
+          "previous": "<i class='flaticon-arrow-left-1'></i>",
+          "next": "<i class='flaticon-arrow-right'></i>"
+        },
+        "info": "Showing page _PAGE_ of _PAGES_"
+      }
+    });
+  </script>
+
+</div>
+{% endblock %}

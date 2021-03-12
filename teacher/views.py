@@ -76,14 +76,13 @@ def addTutors(request):
 
                 availability = request.POST.get('availability')
                 if(availability=='weekly'):
-                    availability=1
+                    availability='weekly'
                 elif(availability=='weekend'):
-                    availability=2
+                    availability='weekend'
                 elif(availability=='both'):
-                    availability=3
+                    availability='weekly,weekend'
                 else:
-                    print('availability error')
-                    availability=0
+                    availability="not available"
                 for x in range(len(ttn)):
                     addTeacher = enrollTutors(forclass=cn[x],teachType=ttn[x],courseName=ctn[x],institute=inst,teacher=teacher,availability=availability)
                     addTeacher.save()
@@ -162,14 +161,14 @@ def editTutor(request,id):
             cn = request.POST.getlist('cn')
             ttn = request.POST.getlist('ttn')
             availability = request.POST.get('availability')
-            if availability=="weekly":
-                availability = 1
-            elif availability=="weekend":
-                availability = 2
-            elif availability=="both":
-                availability = 3
+            if(availability=='weekly'):
+                availability='weekly'
+            elif(availability=='weekend'):
+                availability='weekend'
+            elif(availability=='both'):
+                availability='weekly,weekend'
             else:
-                availability=0
+                availability="not available"
             NewUsername = request.POST.get("NewUsername")
             NewEmail = request.POST.get("NewEmail")
             NewPhone = request.POST.get("NewPhone")
@@ -236,7 +235,7 @@ def searchUserTutor(request):
         if request.method=="POST":
             srch = request.POST.get('srh', '')
             if srch:
-                teacher = Teacher.objects.filter(Q(user__username__icontains=srch) | Q(user__email__icontains=srch))
+                teacher = Teacher.objects.filter(Q(phone=srch) | Q(user__email=srch))
                 if teacher:
                     return render(request,'teacher/searchUserTutor.html', {'sr':teacher})
                 else:
@@ -265,14 +264,13 @@ def AddalreadyExistsTutor(request,id):
             ttn = request.POST.getlist('ttn')
             availability = request.POST.get('availability')
             if(availability=='weekly'):
-                availability=1
+                availability='weekly'
             elif(availability=='weekend'):
-                availability=2
+                availability='weekend'
             elif(availability=='both'):
-                availability=3
+                availability='weekly,weekend'
             else:
-                print('availability error')
-                availability=0
+                availability="not available"
             for x in range(len(ttn)):
                 addTeacher = enrollTutors(forclass=cn[x],teachType=ttn[x],courseName=ctn[x],institute=inst,teacher=teacher,availability=availability)
                 addTeacher.save()
@@ -312,12 +310,14 @@ def enrolledTutorsObjectToDict(obj):
     }
     if obj.photo:
         data['photo']=obj.photo.url
+    
     courseID = obj.course.replace(";",'')
     courseID = list(set(courseID))
     courses = []
     for i in courseID:
         course = Courses.objects.get(id = i)
         courses.append(course.courseName)
+
     data['courseName']=courses
     return data
 

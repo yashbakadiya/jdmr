@@ -24,6 +24,7 @@ class TeachingType(models.Model):
     teachType = models.CharField(max_length=255, default="")
     duration = models.CharField(max_length=255, default="")
     timePeriod = models.CharField(max_length=255, default="")
+    archieved = models.BooleanField(default=False)
 
     def __str__(self):
         return self.course.courseName+" "+self.course.forclass+" "+self.teachType

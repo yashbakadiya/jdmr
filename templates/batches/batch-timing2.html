@@ -26,45 +26,50 @@
   {% endif %}
   <div class="card" style="color: black;">
     <div class="card-header">
-      <h3 style="align-items: center;text-align: center;">Add Exam</h3>
+      <h3 style="align-items: center;text-align: center;">Add Batch</h3>
     </div>
     <form id="frm" class="mb-4 mt-4" method="post">{% csrf_token %}
       <div class="mx-2 row" id="INSTBATCH">
         <div class="col">
           <label for="validationCustom01"><strong>Select Class <span class="red">*</span></strong></label>
-          <select id="class_select" name="class" style="width: 100%;" class="js-example-basic-single form-control"
+
+
+          <select id="forclass" name='forclass' style="width: 100%;" class="js-example-basic-single form-control"
             onchange="selectclass()">
             <option class="form-control" selected disabled value="">Select Class</option>
-            {% for class in classes %}
-            <option class="form-control form-control-lg" value="{{class.0}}">{{class.0}} </option>
+            {% for i in classes %}
+            <option class="form-control form-control-lg" value="{{ i.0 }}">{{i.0}} </option>
             {% endfor %}
           </select>
+
+
         </div>
         <div class="col">
           <label for="validationCustom01"><strong>Select Course<span class="red">*</span></strong></label>
-          <select id="select_course" name="course" style="width: 100%" class="js-example-basic-single form-control">
+          <select id="courseName" name="courseName" style="width: 100%" class="js-example-basic-single form-control">
             <option class="form-control form-control-lg" selected disabled value="">Select Course</option>
           </select>
         </div>
         <div class="col">
-          <label for="validationCustom01"><strong>Select Batch <span class="red">*</span></strong></label>
-          <select id="batch_select" name="batch" style="width: 100%;" class="js-example-basic-single form-control">
+          <label for="validationCustom01"><strong> Batch Name<span class="red">*</span></strong></label>
+          <input type="text" class="form-control" id="batchName" name='batchName' placeholder="Batch Name" required>
+          <!-- <select id="batch_select" name="batch" style="width: 100%;" class="js-example-basic-single form-control">
             <option class="form-control" selected disabled value="">Select Batch</option>
             {% for cat in batch %}
             <option class="form-control" value="{{cat.batchName}}">{{cat.batchName}}</option>
             {% endfor %}
-          </select>
+          </select> -->
         </div>
 
       </div>
       <div class="mx-2 row mt-4">
         <div class="col">
-          <label for="validationCustom01"><strong>Exam Name <span class="red">*</span></strong></label>
+          <label for="validationCustom01"><strong>Start Time <span class="red">*</span></strong></label>
 
-          <input type="text" class="form-control" placeholder="Exam name" name="examname" required>
+          <input type="text" name="startTime" class="form-control timepicker mb-0">
         </div>
         <div class="col">
-          <label for="validationCustom01"><strong>Exam Date <span class="red">*</span></strong></label>
+          <label for="validationCustom01"><strong>End Time <span class="red">*</span></strong></label>
           <input class="form-control" type="date" placeholder="" name="date" required /><br />
           <div class="invalid-feedback">
             Select a valid Date!
@@ -194,15 +199,15 @@
     });
 
     function selectclass() {
-      var selected = $("#class_select").val();
+      var selected = $("#forclass").val();
       $.ajax({
-        url: "{% url 'findCourse' %}",
+        url: "{% url 'findbatch' %}",
         data: {
           forclass: selected,
         },
         success: function (data) {
           courses = data.courses;
-          $("#select_course").empty().trigger("change");
+          $("#courseName").empty().trigger("change");
           for (i = 0; i < courses.length; i++) {
             var newOption = new Option(
               courses[i][1],
@@ -210,7 +215,7 @@
               false,
               false
             );
-            $("#select_course").append(newOption).trigger("change");
+            $("#courseName").append(newOption).trigger("change");
           }
         },
       });
