@@ -376,13 +376,13 @@ def ToggleExam(request,exam_id):
                     exam.status = False
                 else:
                     return HttpResponse("You Are not Authenticated User for this Action")
-                messages.success(request,"Exam Activated Successfully")
+                messages.warning(request,"Exam Deactivated Successfully")
             else:
                 if exam.institute == inst:
                     exam.status = True
                 else:
                     return HttpResponse("You Are not Authenticated User for this Action")
-                messages.warning(request,"Exam Deactivated Successfully")
+                messages.success(request,"Exam Activated Successfully")
             exam.save()
             return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
         elif request.session['type']=="Teacher":
@@ -1368,6 +1368,7 @@ def start_exam(request, pk):
         if exam_status == 'start':
             currentsession = {}
             for q in result:
+                new = StudentAnswer.objects.filter(student=s[0],exam=exam_mapping,question=q['question']).delete()
                 new = StudentAnswer()
                 new.student = s[0]
                 new.exam = exam_mapping
@@ -1376,6 +1377,7 @@ def start_exam(request, pk):
                 new.correct_ans = q['correct_ans']
                 new.negative_marks = q['negative_marks']
                 new.qtype = q['qmain']
+                new.section = q['section']
                 new.save()
 
             with open(os.path.join(BASE_DIR, 'static/currentsession.json'), 'w') as out:
@@ -1437,16 +1439,14 @@ def submitted(request):
 	for ans in student_answers:
 		if ans.qtype == 'multiple' or ans.qtype == 'tof':
 			if ans.input_ans != 'Not Answered':
-				if ans.input_ans == ans.correct_ans:
+				if ans.input_ans == re.sub(re.compile('<.*?>'),'',ans.correct_ans):
 					ans.marks_given = ans.marks
 					ans.check = 'correct'
 				else:
 					ans.marks_given = -abs(ans.negative_marks)
 					ans.check = 'incorrect'
 				ans.save()
-	new = StudentExamResult(exam=exam, attempted=True)
-	new.student = s
-	new.save()
+	StudentExamResult.objects.get_or_create(exam=exam,student=s,attempted=True)
 	del request.session['exam_status']
 	return render(request, 'Exam/submitted.html')
 
