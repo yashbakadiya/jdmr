@@ -270,7 +270,7 @@ def submitFee(request):
                 dataObj = Student.objects.get(id=subjectId)
                 print(dataObj.instalment)
                 addFeeObj = AddFeesC.objects.filter(
-                    courseName=dataObj.courseName,
+                    courseName=dataObj.courseName, 
                     forclass=dataObj.forclass,
                     teachType=dataObj.teachType
                 )

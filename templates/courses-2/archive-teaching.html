@@ -78,13 +78,13 @@
                             <td>{{ forloop.counter }}</td>
                             <td>{{i.course.courseName}}</td>
                             <td>{{ i.course.forclass }}</td>
-                            <td>{{i.teachType}}</td>
+                            <td>{{i.teachType}} {{i.duration}}</td>
                             <td>{{i.duration}}</td>
                             <td>{{i.timePeriod}}</td>
 
                             <td class="text-center">
 
-                                <a class="btn btn-dark" href="{% url 'teach-unarchive' i.id %}"><i
+                                <a class="btn btn-success" href="{% url 'teach-unarchive' i.id %}"><i
                                         class="flaticon-delete-fill" style="font-size:medium;"></i></a>
 
                             </td>
