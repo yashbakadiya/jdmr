@@ -203,7 +203,7 @@
                 </div>
                 <div class="col-sm-8 form-inline justify-content-end">
                     <button class="btn btn-warning btn-md" role="button">Already Exists &raquo;</button>
-                    <form method="POST" action="{% url 'searchUserTutor' %}">{% csrf_token %}
+                    <form method="POST" class="my-0" action="{% url 'searchUserTutor' %}">{% csrf_token %}
                         <input id="searchbox" type="text" class="form-control" name='srh' placeholder="Search Tutor"
                             required>
                         <button type="submit" class="btn btn-danger btn-md">Submit</button>

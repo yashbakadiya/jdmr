@@ -213,28 +213,29 @@
 {% endblock %}
 {% block main-content %}
 <main>
-    <div class="container mt-4">
+    <div class="mt-5">
         <div class="card mb-4">
-            <div class="card-body">
+            <div class="card-header">
                 <!-- Grid row -->
                 <div class="row">
                     <!-- Grid column -->
                     <div class="col-md-8">
-                        <h2 class="pt-3 pb-4 text-center font-bold font-up deep-purple-text" style="color: rgb(66, 8, 8);">List of Exams</h2>
+                        <h2 style="color: rgb(0, 0, 0);">List of Exams</h2>
                     </div>
-
+                    
                     <div class="col-md-4">
                         <input id="searchbox" type="text" class="form-control" name='srh' placeholder="Search Exam or Course" required>
                     </div>
-
-                    <!-- Grid column -->
                 </div>
+                <!-- Grid column -->
+            </div>
+            <div class="card-body">
                 <!-- Grid row -->
                 <form action="" method="post">{% csrf_token %}
                     <!--Table-->
-                    <table class="table">
+                    <div class="table-responsive">
+                    <table class="table table-striped table-bordered table-hover mb-4">
                         <!--Table head-->
-                        <thead>
                             <tr>
                                 <th>Exam Name</th>
                                 <th>Course</th>
@@ -242,26 +243,24 @@
                                 <th>Exam Duration</th>
                                 <th>Total No. of Questions</th>
                                 <th>Pass Percentage</th>
-                                <th></th>
+                                <th class="text-center">Results</th>
                             </tr>
-                        </thead>
                         <!--Table head-->
                         <!--Table body-->
-                        <tbody>
                             {% for i in exams %}
-                            <tr>
-                                <td><p style="color: black;font-size: 14px;">{{i.Name}}</p></td>
-                                <td><p style="color: black;font-size: 14px;">{{i.course.courseName}}</p></td>
+                            <tr class="main-row">
+                                <td>{{i.Name}}</td>
+                                <td>{{i.course.courseName}}</td>
                                 <td>{{i.exam_date}}</td>
                                 <td>{{i.exam_duration}}</td>
                                 <td>{{i.question_count}}</td>
                                 <td>{{i.pass_percentage}}</td>
-                                <td><a href="{% url 'getexamresults' i.id %}" class="btn btn-danger">Results</a></td>
+                                <td class="text-center"><a href="{% url 'getexamresults' i.id %}" class="btn btn-danger">Results</a></td>
                             </tr>
                             {% endfor %}
-                        </tbody>
                         <!--Table body-->
                     </table>
+                    </div>
                     <!--Table-->
                 </form>
                 <br>
@@ -269,7 +268,7 @@
         </div>
     </main>
     <script type="text/javascript">
-        trlist = $("tbody>tr");
+        trlist = $(".main-row");
         $("body").on('input',"#searchbox",function(){
             trlist.hide();
             search = this.value.toLowerCase();

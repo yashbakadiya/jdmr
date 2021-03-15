@@ -1,4 +1,4 @@
-from django.shortcuts import render,HttpResponse
+from django.shortcuts import render,HttpResponse,redirect
 from django.contrib.auth.decorators import login_required
 from accounts.models import Institute,Teacher,Student
 from exams.models import *
@@ -7,8 +7,10 @@ from django.db.models import Sum
 import json
 from django.core.serializers.json import DjangoJSONEncoder
 from django.core import serializers
+from .utils import render_to_pdf
 # Create your views here.
 
+# coaching result 
 @login_required(login_url="Login")
 def CoachingResultStudent(request):
     if request.session['type'] == "Institute":
@@ -21,7 +23,127 @@ def CoachingResultStudent(request):
         return render(request,'Results/ResultInstitute.html',context)
     return HttpResponse("You Are not Authenticated User for this Page")
 
+@login_required(login_url="Login")
+def GetExamResults(request,exam_id):
+    exam = Exam.objects.get(id=exam_id)
+    students = StudentMapping.objects.filter(exam=exam)
+    context={
+	'students':students
+	}
+    return render(request,'Results/GetExamResultCenter.html',context)
 
+@login_required(login_url="Login")
+def GetStudentResults(request,student_id,exam_id):
+    mapping = StudentMapping.objects.get(id=student_id)
+    exam = Exam.objects.get(id=exam_id)
+    student_results = StudentExamResult.objects.get(student=mapping,exam=exam)
+    student_answers = StudentAnswer.objects.filter(student=mapping,exam=exam).order_by('id')
+    question_no_list = []
+    for que in student_answers:
+        if que.qtype == 'long':
+            question_no_list.append(LongAnswerQuestion.objects.get(exam=exam,question=que.question).question_no)
+        elif que.qtype == 'short':
+            question_no_list.append(ShortAnswerQuestion.objects.get(exam=exam,question=que.question).question_no)
+        elif que.qtype == 'multiple':
+            question_no_list.append(MultipleQuestion.objects.get(exam=exam,question=que.question).question_no)
+        elif que.qtype == 'tof':
+            question_no_list.append(BooleanQuestion.objects.get(exam=exam,question=que.question).question_no)
+            
+    if request.method=='POST':
+        calculate(student_answers,student_results)
+    context = {
+	'student_answers':zip(question_no_list,student_answers),
+	'status':student_results.attempted,
+	'result':student_results,
+	'exam':exam,
+	'mapping':mapping
+	}
+    
+    return render(request,'Results/StudentResult.html',context) 
+
+@login_required(login_url="Login")
+def Review_Answer(request,question_id):
+    answer = StudentAnswer.objects.get(id=question_id)
+    context={
+	'answer':answer
+	}
+    if request.method == "POST":
+        marks = request.POST.get("marks",0.0)
+        answer.marks_given = marks
+        answer.save()
+        return redirect('studentresult',answer.student.id,answer.exam.id)
+    return render(request,'Results/Review_Answer.html',context)
+
+def giveMarks(marks):
+    if marks == None:
+        return 0
+    else:
+        return marks
+
+def countQuestionAttributes(exam_mapping):
+    for exam in exam_mapping:
+        mq = MultipleQuestion.objects.filter(exam=exam)
+        negativeq = mq.filter(negative_marks__lte=-0.1).count()
+        multiple_marks = mq.aggregate(Sum('marks'))
+        multiple_marks = giveMarks(multiple_marks['marks__sum'])
+        count = mq.count()
+
+        lq = LongAnswerQuestion.objects.filter(exam=exam)
+        negativeq += lq.filter(negative_marks__lte=-0.1).count()
+        long_marks = lq.aggregate(Sum('marks'))
+        long_marks = giveMarks(long_marks['marks__sum'])
+        count += lq.count()
+
+        sq = ShortAnswerQuestion.objects.filter(exam=exam)
+        negativeq += sq.filter(negative_marks__lte=-0.1).count()
+        short_marks = sq.aggregate(Sum('marks'))
+        short_marks = giveMarks(short_marks['marks__sum'])
+        count += sq.count()
+
+        tq = BooleanQuestion.objects.filter(exam=exam)
+        negativeq += tq.filter(negative_marks__lte=-0.1).count()
+        tof_marks = tq.aggregate(Sum('marks'))
+        tof_marks = giveMarks(tof_marks['marks__sum'])
+        count += tq.count()
+
+        marks = multiple_marks + short_marks + long_marks + tof_marks
+        exam.marks = marks
+        exam.q_count = count
+        exam.negativeq = negativeq
+
+    return exam_mapping
+
+@login_required(login_url="Login")
+def webViewerAnnotate(request, id, pk):
+    return render(request, 'Results/annotation.html',{"id":id,"pk":pk})
+
+@login_required(login_url="Login")
+def annotateAnswers(request, id, pk):
+    exam_mapping = Exam.objects.filter(id=id)
+    exam = exam_mapping[0]
+    student = StudentMapping.objects.get(id=pk)
+    name = f"{student.student.user.first_name} {student.student.user.last_name}"
+    student_results = StudentAnswer.objects.filter(student=student, exam=exam)
+    exam_mapping = countQuestionAttributes(exam_mapping)[0]
+    try:
+        one = student_results[0]
+        pdf = render_to_pdf('Results/annotatable_pdf.html', {'student_results': student_results, 'one': one, 'name': name, 'status': True})
+        return HttpResponse(pdf,content_type="application/pdf")
+    except:
+        pdf = render_to_pdf('xyz.html', {'status': False})
+        return HttpResponse(pdf,content_type="application/pdf")
+
+def checked_copies_upload(request, id, pk):
+    if request.POST:
+        print("yes")
+        print(id,pk)
+        s = StudentExamResult.objects.filter(exam=id,student=pk)
+        s[0].annotated_copies = request.FILES['coppies']
+        s.save()
+
+    return HttpResponseRedirect(reverse('result'))
+
+# student result 
 @login_required(login_url="Login")
 def ViewExamsResult(request):
     if request.session['type']=="Student":
@@ -72,6 +194,19 @@ def calculate(answers,result):
     result.marks_scored = answers.all().aggregate(Sum('marks_given'))['marks_given__sum']
     result.save()
 
+    #percent
+    result.percentage = result.marks_scored/result.total_marks
+    result.percentage = result.percentage * 100
+
+    if result.percentage >= result.exam.pass_percentage:
+        result.pass_status = 1
+    else:
+        result.pass_status = 0
+    if result.percentage<0:
+        result.percentage = 0.0
+
+    result.save()
+
     # Question Answered
     q_answered = result.total_questions - q_unanswered
     q_answered_marks = result.total_marks - q_unanswered_marks
@@ -87,7 +222,6 @@ def detailed_result(request, pk):
         exam = result.exam
         student = result.student
         all_results = StudentExamResult.objects.filter(exam=exam)
-        overall_percent = 0
 
         # Calculate student attributes
         answers = StudentAnswer.objects.filter(student=student, exam=exam)
@@ -156,7 +290,6 @@ def detailed_result(request, pk):
                         (section_marks_scored/section_total_marks) * 100, 2)
                     if percentage<0:
                         percentage = 0.0
-                    overall_percent+=percentage
                     percentage = f'{percentage}%'
 
                     section_time = section_ans.aggregate(Sum('time'))[
@@ -175,10 +308,6 @@ def detailed_result(request, pk):
                 section[f'{A}_section_percentage'] = percentage
                 section[f'{A}_section_time'] = round(section_time, 2)
             
-            overall_percent = overall_percent/4
-            result.percentage = overall_percent
-            if overall_percent >= exam.pass_percentage:
-                result.pass_status = 1
             result.correct_qs_count = correct_qs_count
             result.correct_qs_marks = correct_qs_marks
             result.incorrect_qs_count = incorrect_qs_count
