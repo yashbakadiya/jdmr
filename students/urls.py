@@ -3,6 +3,8 @@ from .views import *
 from .api import *
 
 urlpatterns = [
+    path('stuShowAllNotice/', stuShowAllNotice, name='stuShowAllNotice'),
+    path('stuShowNotice/<int:id>', stuShowNotice, name='stuShowNotice'),
     path('addStudents/', addStudents, name='addStudents'),
     path('viewStudents/', viewStudents, name='viewStudents'),
     path('deleteStudent/<int:id>', deleteStudent, name="deleteStudent"),
