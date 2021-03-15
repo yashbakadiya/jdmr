@@ -43,12 +43,12 @@ def instituteTutor(request):
                 batches = []
                 for ins in INST:
                     if ins.batch:
-                        batch = BatchTiming.objects.get(id= int(ins.batch))
+                        batch = BatchTiming.objects.get(batchName= ins.batch)
                         batches.append(batch)
-                return render(request,"Institute/institute.html",{"batches":batches,'student':student,"INST":INST[0],"template":"dashboard/student-dashboard.html"})
+                return render(request,"Institute/institute.html",{"batches":batches,'student':student,"INST":INST[0],"template":"dashboard/base.html"})
             else:
                 messages.warning(request,"Not Found")
-                return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+                return render(request,"Institute/institute.html",{"template":"dashboard/base.html"})
     return HttpResponse("You are not Authenticated for this Page")
 
 def haversine(lon1, lat1, lon2, lat2):

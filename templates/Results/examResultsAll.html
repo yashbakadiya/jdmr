@@ -2,12 +2,12 @@
 {% load static %}
 {% block main-content %}
 <main>
-    <div class="container mt-4">
-        <div class="statbox widget box box-shadow">
-                <div class="widget-header">
+    <div class="mt-5">
+        <div class="card statbox widget box box-shadow">
+                <div class="card-header">
                     <div class="row">
                         <div class="col-xl-12 col-md-12 col-12">
-                            <h4 class="p-2" style="color:black;"><b>List of Results</b></h4>
+                            <h2 style="color:black;">List of Results</h2>
                         </div>
                     </div>
                 </div>
@@ -30,11 +30,11 @@
                             {% if i.attempted %}
                             <tr>
                                 <td>{{forloop.counter}}</td>
-                                <td><p style="color: black;font-size: 14px;">{{i.exam.Name}}</p></td>
-                                <td><p style="color: black;font-size: 14px;">{{i.exam.course.courseName}}</p></td>
+                                <td>{{i.exam.Name}}</td>
+                                <td>{{i.exam.course.courseName}}</td>
                                 <td>{{i.exam.exam_date}}</td>
-                                <td>{{i.exam.question_count}}</td>
-                                <td>{{i.percentage}}</td>
+                                <td>{{i.total_questions}}</td>
+                                <td>{{i.percentage}} %</td>
                                 {% if i.pass_status %}
                                 <td><a class="btn btn-success">Pass</a></td>
                                 {% else %}
