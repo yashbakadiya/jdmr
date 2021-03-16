@@ -2,6 +2,7 @@ from django.shortcuts import render,HttpResponse,redirect
 from django.contrib.auth.decorators import login_required
 from accounts.models import Institute,Teacher,Student
 from exams.models import *
+from students.models import AddStudentInst
 from django.contrib.auth.models import User
 from django.db.models import Sum
 import json
@@ -27,8 +28,11 @@ def CoachingResultStudent(request):
 def GetExamResults(request,exam_id):
     exam = Exam.objects.get(id=exam_id)
     students = StudentMapping.objects.filter(exam=exam)
+    batches = []
+    for std in students:
+        batches.append(AddStudentInst.objects.get(student = std.student).batch)
     context={
-	'students':students
+	'students':zip(students,batches)
 	}
     return render(request,'Results/GetExamResultCenter.html',context)
 

@@ -238,6 +238,7 @@
                         <!--Table head-->
                             <tr>
                                 <th>Student Name</th>
+                                <th>Batch</th>
                                 <th>Exam Name</th>
                                 <th>Exam Date</th>
                                 <th>Exam Duration</th>
@@ -247,9 +248,10 @@
                             </tr>
                         <!--Table head-->
                         <!--Table body-->
-                            {% for i in students %}
+                            {% for i,batch in students %}
                             <tr>
                             <td>{{i.student.user.first_name}} {{i.student.user.last_name}}</td>
+                            <td>{{batch}}</td>
                             <td>{{i.exam.Name}}</td>
                             <td>{{i.exam.exam_date}}</td>
                             <td>{{i.exam.exam_duration}}</td>
