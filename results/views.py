@@ -3,6 +3,7 @@ from django.contrib.auth.decorators import login_required
 from accounts.models import Institute,Teacher,Student
 from exams.models import *
 from students.models import AddStudentInst
+from teacher.models import enrollTutors
 from django.contrib.auth.models import User
 from django.db.models import Sum
 import json
@@ -14,14 +15,37 @@ from .utils import render_to_pdf
 # coaching result 
 @login_required(login_url="Login")
 def CoachingResultStudent(request):
+    context = {}
     if request.session['type'] == "Institute":
         user = User.objects.get(username=request.session['user'])
         inst = Institute.objects.get(user=user)
-        context = {}
         if Exam.objects.filter(institute=inst).exists():
             exams = Exam.objects.filter(institute=inst)
             context['exams']=exams
         return render(request,'Results/ResultInstitute.html',context)
+        
+    elif request.session['type'] == "Teacher":
+        user = User.objects.get(username=request.session['user'])
+        tutor = Teacher.objects.get(user=user)
+        instTutor = enrollTutors.objects.filter(teacher=tutor)
+        exam_filter = Exam.objects.all()
+        exams = []
+        courses = []
+        instituteslist = []
+        for i in instTutor.values_list('courseName'): #all courses in which teacher is enrolled
+            courses.append(i[0])
+
+        for i in instTutor.values_list('institute'): #all institute in which teacher is enrolled
+            instituteslist.append(i[0])
+
+        for exam in exam_filter:
+            if exam.institute.id in instituteslist: #if the exam is of the institute in which teacher is enrolled
+                if exam.course.courseName in courses: #if the exam is of course in which teacher is enrolled
+                    exams.append(exam)
+
+        context['exams']=exams
+        return render(request,'Results/ResultInstitute.html',context)
+    
     return HttpResponse("You Are not Authenticated User for this Page")
 
 @login_required(login_url="Login")
