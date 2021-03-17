@@ -5,4 +5,6 @@ urlpatterns = [
     path("endrolledINstitute/",instituteTutor,name="EndrolledInstitute"),
     path('searchCoachingCenter/',searchCoachingCenter,name='searchCoachingCenter'),
     path('Review/Institutes/<inst_id>',ReviewInstitute,name="reviewinstitute"),
-]
+    path('institutecalendar',institutecalendar,name="institutecalendar"),
+    path('dateandbatch',dateandbatch,name="dateandbatch"),
+    ]

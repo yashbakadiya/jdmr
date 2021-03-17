@@ -4,6 +4,7 @@ from django.contrib.auth.models import User
 from teacher.models import enrollTutors
 from students.models import AddStudentInst
 from accounts.models import Teacher,Student,Institute
+from batches.models import BatchTiming,BatchTimingTutor
 from django.contrib import messages
 from .models import *
 from courses.models import Courses
@@ -184,4 +185,59 @@ def ReviewInstitute(request,inst_id):
         'template':template
         }
     return render(request,'Institute/Reviewsinstitute.html',context)
+
+
+
+@login_required()
+def institutecalendar(request):
+    if request.session['type']=="Institute":
+        template = 'dashboard/institute-dashboard.html'
+    
+    return render(request,'Institute/institutecalendar.html',{'template':template})
+
+
+def dateandbatch(request):
+    if request.session['type']=='Institute':
+        user = User.objects.get(username=request.session['user'])
+        inst = Institute.objects.get(user=user)
+        if request.method == 'POST':
+            date = request.POST.get("selectdate") 
+            print('date',date) 
+            dat = (date.split('/'))
+            month = dat[0]        
+            day = int(dat[1])
+            year =dat[2]       
+            
+            if day == 0 :
+                obj = BatchTiming.objects.filter( days__icontains ='Sunday')                   
+            elif day == 1:
+                obj = BatchTiming.objects.filter( days__icontains ='Monday')                 
+            elif day == 2:
+                obj = BatchTiming.objects.filter( days__icontains ='Tuesday')               
+            elif day == 3:
+                obj = BatchTiming.objects.filter( days__icontains ='Wednesday')
+            elif day == 4:
+                obj = BatchTiming.objects.filter( days__icontains ='Thrusday')
+            elif day == 5:
+                obj = BatchTiming.objects.filter( days__icontains ='Friday')
+            elif day == 6:
+                obj = BatchTiming.objects.filter( days__icontains ='Saturday') 
+            
+      #  obj = BatchTiming.objects.filter( days__icontains ='Sunday')
+
+    return render(request,'Institute/institutecalendar.html',{'obj':obj})
+    
+
+            
         
+    
+
+
+
+# @login_required()
+# def institutecalendar(request):
+#     if request.session['type']=="institute":
+#         template = 'dashboard/student-dashboard.html'
+#     elif request.session['type']=="Teacher":
+#         template = 'dashboard/Tutor-dashboard.html'
+#     return render(request,'students/studentcalendar.html',{'template':template})
