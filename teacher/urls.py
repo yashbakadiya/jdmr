@@ -3,6 +3,8 @@ from .views import *
 from .api import *
 
 urlpatterns = [
+    path('teaShowAllNotice/', teaShowAllNotice, name='teaShowAllNotice'),
+    path('teaShowNotice/<int:id>', teaShowNotice, name='teaShowNotice'),
     path('addTutors/', addTutors, name='addTutors'),
     path('viewTutors/', viewTutors, name='viewTutors'),
     path('deleteTutor/<int:id>', deleteTutor, name='deleteTutor'),

@@ -17,10 +17,21 @@ from django.core.serializers.json import DjangoJSONEncoder
 import json
 from geopy.geocoders import Nominatim 
 from math import radians, sin, cos, asin, sqrt
+from get_notice import notice
+from batches.models import Notice
 # Create your views here.
 
 allTimezones = pytz.all_timezones
 
+@login_required(login_url="Login")
+def teaShowAllNotice(request):
+    notices = notice(request)
+    return render(request, "batches/tea_showAllNotice.html", context={"notices":notices})
+
+@login_required(login_url="Login")
+def teaShowNotice(request, id):
+    notice = Notice.objects.get(id=id)
+    return render(request, "batches/tea_showNotice.html", context={"notice":notice})
 
 @login_required(login_url="Login")
 def addTutors(request):

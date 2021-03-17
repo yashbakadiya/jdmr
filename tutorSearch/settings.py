@@ -26,11 +26,14 @@ SECRET_KEY = '1zqb-ml)1hbr6+5+jpm89c_hwi(qx(+m8*$xn+)8)_klm1^eiw'
 DEBUG = True
 
 ALLOWED_HOSTS = ['jdmrischool.herokuapp.com', 'localhost']
+# ALLOWED_HOSTS = []
 
 
 # Application definition
 
 INSTALLED_APPS = [
+    'channels',
+    'chat',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -152,7 +155,15 @@ USE_L10N = True
 
 USE_TZ = True
 
-
+ASGI_APPLICATION = 'tutorSearch.asgi.application'
+CHANNEL_LAYERS = {
+    'default': {
+        'BACKEND': 'channels_redis.core.RedisChannelLayer',
+        'CONFIG': {
+            "hosts": [('127.0.0.1', 6379)],
+        },
+    },
+}
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
 
