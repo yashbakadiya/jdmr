@@ -14,7 +14,8 @@ from json import loads
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from math import radians, sin, cos, asin, sqrt
 from geopy.geocoders import Nominatim
-
+import datetime  
+from datetime import date 
 
 # Create your views here.
 
@@ -195,7 +196,14 @@ def institutecalendar(request):
     
     return render(request,'Institute/institutecalendar.html',{'template':template})
 
+@login_required()
+def instCalendar(request):
+    if request.session['type']=="Institute":
+        template = 'dashboard/institute-dashboard.html'
+    
+    return render(request,'Institute/instCalendar.html',{'template':template})
 
+@login_required()
 def dateandbatch(request):
     if request.session['type']=='Institute':
         user = User.objects.get(username=request.session['user'])
@@ -206,22 +214,27 @@ def dateandbatch(request):
             dat = (date.split('/'))
             month = dat[0]        
             day = int(dat[1])
-            year =dat[2]       
-            
-            if day == 0 :
-                obj = BatchTiming.objects.filter( days__icontains ='Sunday')                   
-            elif day == 1:
-                obj = BatchTiming.objects.filter( days__icontains ='Monday')                 
-            elif day == 2:
-                obj = BatchTiming.objects.filter( days__icontains ='Tuesday')               
-            elif day == 3:
-                obj = BatchTiming.objects.filter( days__icontains ='Wednesday')
-            elif day == 4:
-                obj = BatchTiming.objects.filter( days__icontains ='Thrusday')
-            elif day == 5:
-                obj = BatchTiming.objects.filter( days__icontains ='Friday')
-            elif day == 6:
-                obj = BatchTiming.objects.filter( days__icontains ='Saturday') 
+            year =dat[2]  
+            day_name = datetime.date(int(year), int(month), int(day)) 
+            week = day_name.strftime("%A")
+            print('week',week)
+            obj = BatchTiming.objects.filter( days__icontains = week ) 
+
+            print(day_name.strftime("%A"))
+            # if day == 0 :
+            #     obj = BatchTiming.objects.filter( days__icontains ='Sunday')                   
+            # elif day == 1:
+            #     obj = BatchTiming.objects.filter( days__icontains ='Monday')                 
+            # elif day == 2:
+            #     obj = BatchTiming.objects.filter( days__icontains ='Tuesday')               
+            # elif day == 3:
+            #     obj = BatchTiming.objects.filter( days__icontains ='Wednesday')
+            # elif day == 4:
+            #     obj = BatchTiming.objects.filter( days__icontains ='Thrusday')
+            # elif day == 5:
+            #     obj = BatchTiming.objects.filter( days__icontains ='Friday')
+            # elif day == 6:
+            #     obj = BatchTiming.objects.filter( days__icontains ='Saturday') 
             
       #  obj = BatchTiming.objects.filter( days__icontains ='Sunday')
 

@@ -7,4 +7,6 @@ urlpatterns = [
     path('Review/Institutes/<inst_id>',ReviewInstitute,name="reviewinstitute"),
     path('institutecalendar',institutecalendar,name="institutecalendar"),
     path('dateandbatch',dateandbatch,name="dateandbatch"),
+    path('instCalendar',instCalendar, name="instCalendar"),
+
     ]
