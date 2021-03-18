@@ -35,6 +35,13 @@ Explore
   <!-- END PAGE LEVEL PLUGINS/CUSTOM STYLES -->
   <link href="{% static 'Custum/mystyles.css' %}" rel=" stylesheet" type="text/css" />
   <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    
+<!-- date function -->
+  <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+  <link rel="stylesheet" href="/resources/demos/style.css">
+  <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+  <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+
   
   {% block extra-stylesheets %}
 
@@ -253,6 +260,27 @@ Explore
                 </div>
               </div>
             </li>
+            
+            <li class="menu">
+              <a href="{% url 'instCalendar' %}">
+                <div class="">
+                  <img src="{% static 'assets/img/card-outline.png' %}" alt="">
+                  <span>Calender modify</span>
+                </div>
+              </a>
+            </li>
+
+           
+
+            <li class="menu">
+              <a href="{% url 'institutecalendar' %}">
+                <div class="">
+                  <img src="{% static 'assets/img/card-outline.png' %}" alt="">
+                  <span>Calender</span>
+                </div>
+              </a>
+            </li>
+            
 
             <li class="menu">
               <a href="#tutors" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle collapsed">
@@ -379,8 +407,7 @@ Explore
             </li>
 
             <li class="menu">
-              <a href="{% url 'centerexamresults' %}" data-toggle="collapse" aria-expanded="false"
-                class="dropdown-toggle collapsed">
+              <a href="{% url 'centerexamresults' %}">
                 <div class="">
                   <img src="{% static 'assets/img/results.png' %}" alt="">
                   <span>Results</span>

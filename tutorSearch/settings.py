@@ -32,6 +32,8 @@ ALLOWED_HOSTS = ['jdmrischool.herokuapp.com', 'localhost']
 # Application definition
 
 INSTALLED_APPS = [
+    'channels',
+    'chat',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -92,18 +94,31 @@ WSGI_APPLICATION = 'tutorSearch.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
 
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql',
+#         'NAME': 'jdmr',
+#         'USER': 'postgres',
+#         'PASSWORD': '',
+#         'HOST':'localhost',
+#         'PORT':'5432',
+#         'HOST':'localhost',
+#     }
+# }
+
+
+
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'jdrm_backup',
-        'USER':'postgres',
-        'PASSWORD':'sunny8875',
-        'PORT':'5432',
+        'USER': 'postgres',
+        'PASSWORD': 'Rakesh@123',
         'HOST':'localhost',
-    }
+        'PORT':'5432',
+    },
 }
-
-
 
 
 
@@ -140,7 +155,15 @@ USE_L10N = True
 
 USE_TZ = True
 
-
+ASGI_APPLICATION = 'tutorSearch.asgi.application'
+CHANNEL_LAYERS = {
+    'default': {
+        'BACKEND': 'channels_redis.core.RedisChannelLayer',
+        'CONFIG': {
+            "hosts": [('127.0.0.1', 6379)],
+        },
+    },
+}
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
 

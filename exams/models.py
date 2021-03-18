@@ -312,6 +312,12 @@ class StudentMapping(models.Model):
         mapping = StudentMapping.objects.get(id=self.id)
         statues = StudentExamResult.objects.filter(student=mapping,exam = self.exam).first()
         return statues.attempted
+
+    @property
+    def PassStatus(self):
+        mapping = StudentMapping.objects.get(id=self.id)
+        statues = StudentExamResult.objects.filter(student=mapping,exam = self.exam).first()
+        return statues.pass_status
     
     @property
     def ExamName(self):

@@ -1,4 +1,4 @@
-{% extends 'tutor/dashboard.html' %}
+{% extends 'dashboard/base.html' %}
 {% load static %}
 {% block css %}
 <style media="screen">
@@ -211,61 +211,62 @@
     }
 </style>
 {% endblock %}
-{% block body %}
+{% block main-content %}
 <main>
-    <div class="container mt-4">
+    <div class="mt-5">
         <div class="card mb-4">
-            <div class="card-body">
+            <div class="card-header">
                 <!-- Grid row -->
                 <div class="row">
                     <!-- Grid column -->
                     <div class="col-md-8">
-                        <h2 class="pt-3 pb-4 text-center font-bold font-up deep-purple-text" style="color: rgb(66, 8, 8);">List of Students</h2>
+                        <h2 style="color: rgb(0, 0, 0);">List of Students</h2>
                     </div>
-
+                    
                     <div class="col-md-4">
                         <input id="searchbox" type="text" class="form-control" name='srh' placeholder="Search" required>
                     </div>
-
-                    <!-- Grid column -->
                 </div>
+                <!-- Grid column -->
+            </div>
+            <div class="card-body">
                 <!-- Grid row -->
                 <form action="" method="post">{% csrf_token %}
                     <!--Table-->
-                    <table class="table">
+                    <div class="table-responsive">
+                    <table class="table table-striped table-bordered table-hover">
                         <!--Table head-->
-                        <thead>
                             <tr>
                                 <th>Student Name</th>
-                                <th>Course</th>
+                                <th>Batch</th>
+                                <th>Exam Name</th>
                                 <th>Exam Date</th>
                                 <th>Exam Duration</th>
-                                <th>Exam Status</th>
-                                <th>Results</th>
-                                <th>Reports</th>
+                                <th class="text-center">Exam Status</th>
+                                <th class="text-center">Results</th>
+                                <th class="text-center">Reports</th>
                             </tr>
-                        </thead>
                         <!--Table head-->
                         <!--Table body-->
-                        <tbody>
-                            {% for i in students %}
+                            {% for i,batch in students %}
                             <tr>
-                            <td><p style="color: black;font-size: 14px;">{{i.student.firstName}}{{i.student.lastName}}</p></td>
-                            <td><p style="color: black;font-size: 14px;">{{i.exam.Name}}</p></td>
+                            <td>{{i.student.user.first_name}} {{i.student.user.last_name}}</td>
+                            <td>{{batch}}</td>
+                            <td>{{i.exam.Name}}</td>
                             <td>{{i.exam.exam_date}}</td>
                             <td>{{i.exam.exam_duration}}</td>
-                            {% if i.Status.pass_status %}
-                            <td><button class="btn btn-success disabled">Pass</button></td>
+                            {% if i.PassStatus %}
+                            <td class="text-center"><button class="stat btn btn-success">Pass</button></td>
                             {% else %}
-                            <td><button class="btn btn-Danger disabled">Fail</button></td>
+                            <td class="text-center"><button class="stat btn btn-Danger">Fail</button></td>
                             {% endif %}
-                            <td><a href="{% url 'studentresult' i.id i.exam.id %}" class="btn btn-primary">Result</a></td>
-                            <td><a href="{% url 'anotatePdfViewer' i.exam.id i.id %}" class="btn btn-primary">Anotate Result</a></td>
+                            <td class="text-center"><a href="{% url 'studentresult' i.id i.exam.id %}" class="btn btn-primary">Result</a></td>
+                            <td class="text-center"><a href="{% url 'anotatePdfViewer' i.exam.id i.id %}" class="btn btn-primary">Anotate Result</a></td>
                             </tr>
                             {% endfor %}
-                        </tbody>
                         <!--Table body-->
                     </table>
+                </div>
                     <!--Table-->
                 </form>
                 <br>
@@ -300,6 +301,10 @@
             }
 
         });
+
+        $('.stat').on('click', (e)=>{
+            e.preventDefault();
+        })
 
     </script>
     {% endblock %}

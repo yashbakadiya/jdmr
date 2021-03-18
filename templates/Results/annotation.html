@@ -1,7 +1,7 @@
-{% extends 'tutor/dashboard.html' %} 
+{% extends 'dashboard/base.html' %} 
 {% load static %}
 
-{% block body %}
+{% block main-content %}
 
 
 <!-- Import WebViewer as a script tag -->
@@ -13,7 +13,7 @@
       path: '{% static "WebViewer/lib" %}', // path to the PDFTron 'lib' folder on your server
       licenseKey: 'Insert commercial license key here after purchase',
      // initialDoc: '{% static "login/samples/60004180064_A3.pdf" %}',
-      initialDoc: '{% url 'anotate' id pk %}',
+      initialDoc: '{% url "anotate" 24 3 %}',
       // initialDoc: '/path/to/my/file.pdf',  // You can also use documents on your server
     }, document.getElementById('viewer'))
     .then(instance => {
@@ -36,4 +36,4 @@
   </script>
 
 
-{%endblock%}
+{% endblock %}
