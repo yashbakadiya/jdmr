@@ -66,9 +66,12 @@
                         </div>
                         <div class="col-md-3 col-12">
                             <button value="{{i.id}}" id="appointmenttutor" type="button"
-                                class="btn btn-sm btn-info mb-3" data-toggle="modal" data-target="#appointmentModal"
+                                class="mx-1 btn btn-sm btn-info mb-3" data-toggle="modal" data-target="#appointmentModal"
                                 aria-hidden="true" name="button" style="font-size:smaller; float:left;">Schedule
                                 Class</button>
+                                {% with id=request.user.id|slugify %}
+                                <a class="mx-1 btn btn-success" style="font-size:smaller;" href='{% url "room" i.user.username "Teacher" i.user.username|add:"_"|add:id %}'>Chat</a>
+                                {% endwith %}
                         </div>
                     </div>
                     <br>

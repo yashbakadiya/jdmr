@@ -122,6 +122,9 @@
                                         <button type="button" data-toggle="modal" data-target="#tutorModal{{i.id}}"
                                             class="btn btn-info">View</button>
                                         <a href="{% url 'reviewtutor' i.id %}" class="btn btn-primary">Review</a>
+                                        {% with id=request.user.id|slugify %}
+                                        <a class="btn btn-success" href='{% url "room" i.username "Teacher" i.username|add:"_"|add:id %}'>Chat</a>
+                                        {% endwith %}
                                     </div>
                                 </div>
                             </div>
@@ -157,7 +160,11 @@
                                 <button value="{{i.id}}" id="appointmenttutor" type="button" onclick="newModal(this)"
                                     class="btn btn-sm btn-info createAppointment" data-toggle="modal"
                                     data-target="#appointmentModal" aria-hidden="true" name="button"
-                                    style="font-size:smaller;">Schedule Class</button>
+                                    style="width: 65%; font-size:smaller;">Schedule Class</button>
+                                    
+                        {% with id=request.user.id|slugify %}
+                        <a class="mt-2 btn btn-success" style="width: 65%;" href='{% url "room" i.username "Teacher" i.username|add:"_"|add:id %}'>Chat</a>
+                        {% endwith %}
                             </div>
                         </div>
                         <div class="col-sm-9 col-12">

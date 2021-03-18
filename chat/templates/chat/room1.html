@@ -125,6 +125,33 @@
     
             {% endif %}
 
+            {% if b %}
+
+            {% for i in b %}
+
+            {% if i.ts == "Student" %}
+            <div id="boxedr" >
+                <h3>{{ i.message }}</h3>
+                <h10>{{ i.dtime }}</h10><br>
+                From:{{ i.ts }}
+                </div>
+                <br>
+            {% else %}
+            
+            <div id="boxeds" >
+                <h3>{{ i.message }}</h3>
+                <h10>{{ i.dtime }}</h10><br>
+                From:{{ i.ts }}
+                </div>
+                <br>
+
+            {% endif %}
+
+            {% endfor %}
+    
+            {% endif %}
+
+
             
 
   
