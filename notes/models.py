@@ -9,10 +9,11 @@ class NotesInstitute(models.Model):
     subject = models.CharField(max_length=3000)
     forclass = models.CharField(max_length=150, default="")
     description = models.TextField(max_length=150)
-        
+    price = models.IntegerField(default=0)
+
     def __str__(self):
-        return f"notes"
-    
+        return self.title
+
     @property
     def View_pdf(self):
         return reverse('viewpdfinstitute', args=(self.id,))
@@ -23,10 +24,12 @@ class NotesTutor(models.Model):
     notes = models.FileField(upload_to="notes/Institute")
     title = models.CharField(max_length=2000)
     subject = models.CharField(max_length=3000)
+    forclass = models.CharField(max_length=150, default="")
     description = models.TextField(max_length=150)
-        
+    price = models.IntegerField(default=0)
+
     def __str__(self):
-        return f"notes"
+        return self.title
 
     @property
     def View_pdf(self):
