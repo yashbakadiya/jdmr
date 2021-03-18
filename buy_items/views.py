@@ -4,14 +4,14 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 
 from accounts.models import Student
-from notes.models import NotesInstitute
+from notes.models import NotesInstitute, NotesTutor
 from tutorials.models import TutorialInstitute
-from .models import BuyNotes, BuyTutorial
+from .models import BuyInstituteNotes,BuyTutorNotes, BuyTutorial
 
 
-# buy notes
+# buy institute notes
 login_required(login_url='login')
-def buyNotes(request,id):
+def buyInstituteNotes(request,id):
     errors = []
     if request.session['type'] == "student":
         if request.method == "GET":
@@ -21,14 +21,41 @@ def buyNotes(request,id):
             student = Student.objects.get(user=user)
             if request.method == "POST":
                 status = request.POST.get("status")
-                amount = int(request.POST['amount'])
                 note = NotesInstitute.objects.get(id=id)
-                if (note and status and amount):
-                    data = BuyNotes.objects.create(
+                if (note and status):
+                    data = BuyInstituteNotes.objects.create(
                         note = note,
                         status = status,
-                        student = student,
-                        amount= amount
+                        student = student
+                    )
+                    try:
+                        data.save()
+                        return redirect('')
+                    except:
+                        errors.append("Some error Occured! Try Again")
+                        context['errors'] = errors
+            return render(request,'',context)
+    return HttpResponse("You are Not Authenticated for this page")
+
+
+# buy tutor notes
+login_required(login_url='login')
+def buyTutorNotes(request,id):
+    errors = []
+    if request.session['type'] == "student":
+        if request.method == "GET":
+            return render(request, '')
+        else:
+            user = User.objects.get(username=request.session['user'])
+            student = Student.objects.get(user=user)
+            if request.method == "POST":
+                status = request.POST.get("status")
+                note = NotesTutor.objects.get(id=id)
+                if (note and status):
+                    data = BuyTutorNotes.objects.create(
+                        note = note,
+                        status = status,
+                        student = student
                     )
                     try:
                         data.save()
@@ -52,14 +79,12 @@ def buyTutorial(request, id):
             student = Student.objects.get(user=user)
             if request.method == "POST":
                 status = request.POST.get("status")
-                amount = int(request.POST['amount'])
                 tutorial = TutorialInstitute.objects.get(id=id)
-                if (tutorial and status and amount):
+                if (tutorial and status):
                     data = BuyNotes.objects.create(
                         note = note,
                         status = status,
-                        student = student,
-                        amount= amount
+                        student = student
                     )
                     try:
                         data.save()

@@ -8,6 +8,8 @@ from teacher.models import enrollTutors
 from batches.models import BatchTiming
 from students.models import *
 from itertools import chain
+from buy_items.models import BuyInstituteNotes,BuyTutorNotes, BuyTutorial
+from students.models import AddStudentInst
 # Create your views here.
 
 
@@ -324,15 +326,27 @@ def AllNotesStudent(request):
         student = Student.objects.get(user=user)
         context = {}
         if AddStudentInst.objects.filter(student=student).exists():
-            INSTstudent = AddStudentInst.objects.get(student=student)
-            institute = NotesInstitute.objects.filter(institute=INSTstudent.institute)
-            tutor = NotesTutor.objects.all()
-            if tutor:
-                all = Combine_two_models(institute,tutor)
-            else:
-                all  = institute
-            print(all)
-            context['notes'] = all
+            #institute
+            #buy institute notes list
+            buy_institute_notes = BuyInstituteNotes.objects.filter(student=student)
+            buy_institute_notes_list = [buy.note.id for buy in buy_institute_notes]
+            bought_institute_notes = NotesInstitute.objects.filter(id__in=buy_institute_notes_list).order_by("-id")
+            #not bought institute notes list
+            not_bought_institute_notes = NotesInstitute.objects.all().exclude(id__in=buy_institute_notes_list).order_by("-id")
+
+            #tutor
+            #buy tutor notes list
+            buy_tutor_notes = BuyTutorNotes.objects.filter(student=student)
+            buy_tutor_note_list = [buy.note.id for buy in buy_tutor_notes]
+            bought_tutor_notes = NotesTutor.objects.filter(id__in=buy_tutor_note_list).order_by("-id")
+            #not bought tutor notes list
+            not_bought_tutor_notes = NotesTutor.objects.all().exclude(id__in=buy_tutor_note_list).order_by("-id")
+
+            context['bought_institute_notes'] = bought_institute_notes
+            context['not_bought_institute_notes'] = not_bought_institute_notes
+            context['bought_tutor_notes'] = bought_tutor_notes
+            context['not_bought_tutor_notes'] = not_bought_tutor_notes
+
             context['template'] = 'dashboard/student-dashboard.html'
         return render(request,'Notes/allnotes.html',context)
     return HttpResponse('You are not Authenticated for this page')
