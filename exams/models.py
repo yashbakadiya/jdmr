@@ -375,7 +375,96 @@ class StudentAnswer(models.Model):
     question = models.TextField(null=True)
     section = models.CharField(max_length=10, default='A')
     input_ans = models.TextField(default='Not Answered')
-    #rish added image field
+    input_ans_Image = models.ImageField(upload_to='input_ans_images/', null=True, blank=True) 
+    correct_ans = models.TextField()
+    marks = models.FloatField()
+    check = models.CharField(max_length=100, default='Not Answered')
+    level = models.CharField(max_length=100, default='medium')
+    marks_given = models.FloatField(default=0)
+    time = models.FloatField(default=0)
+    extra_time = models.FloatField(default=0)
+    negative_marks = models.FloatField()
+
+    def __str__(self):
+        return self.question
+
+class TutorStudentMapping(models.Model):
+    student = models.ForeignKey(Student, related_name='student_tutor_mapping',
+                                on_delete=models.CASCADE)
+    exam = models.ForeignKey(TutorExam,related_name='student_exam',on_delete=models.CASCADE)
+    courseName = models.CharField(max_length=100,default="")
+
+    def __str__(self):
+        return str(self.student)
+    
+    @property
+    def Status(self):
+        mapping = TutorStudentMapping.objects.get(id=self.id)
+        statues = TutorStudentExamResult.objects.filter(student=mapping,exam = self.exam).first()
+        return statues.attempted
+
+    @property
+    def PassStatus(self):
+        mapping = TutorStudentMapping.objects.get(id=self.id)
+        statues = TutorStudentExamResult.objects.filter(student=mapping,exam = self.exam).first()
+        return statues.pass_status
+    
+    @property
+    def ExamName(self):
+        return self.exam.Name
+    
+    @property
+    def ExamCourse(self):
+        return self.exam.courseName
+
+    @property
+    def ExamDate(self):
+        return self.exam.exam_date
+
+    @property
+    def ExamDuration(self):
+        return self.exam.exam_duration
+
+    @property
+    def total_questions(self):
+        return self.exam.question_count
+
+
+class TutorStudentExamResult(models.Model):
+    student = models.ForeignKey(
+        TutorStudentMapping, on_delete=models.CASCADE)
+    exam = models.ForeignKey(TutorExam, on_delete=models.CASCADE)
+    marks_scored = models.FloatField(default=0)
+    total_marks = models.FloatField(default=0)
+    total_questions = models.IntegerField(default=0)
+    attempted = models.BooleanField(default=False)
+    percentage = models.CharField(max_length=10, default="10")
+    pass_status = models.BooleanField(default=False)
+    time_taken = models.CharField(max_length=100, default=0)
+
+    def __str__(self):
+        return self.exam.Name
+
+    @property
+    def ExamName(self):
+        return self.exam.Name
+    
+    @property
+    def ExamCourse(self):
+        return self.exam.courseName
+
+    @property
+    def ExamDate(self):
+        return self.exam.exam_date
+
+class TutorStudentAnswer(models.Model):
+    student = models.ForeignKey(
+        TutorStudentMapping, on_delete=models.CASCADE, blank=True, null=True)
+    exam = models.ForeignKey(TutorExam, on_delete=models.CASCADE)
+    qtype = models.CharField(max_length=100)
+    question = models.TextField(null=True)
+    section = models.CharField(max_length=10, default='A')
+    input_ans = models.TextField(default='Not Answered')
     input_ans_Image = models.ImageField(upload_to='input_ans_images/', null=True, blank=True) 
     correct_ans = models.TextField()
     marks = models.FloatField()
