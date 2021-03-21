@@ -23,9 +23,9 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = '1zqb-ml)1hbr6+5+jpm89c_hwi(qx(+m8*$xn+)8)_klm1^eiw'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = ['jdmrischool.herokuapp.com', 'localhost']
+ALLOWED_HOSTS = ['jdmr.herokuapp.com','jdmrischool.herokuapp.com', 'localhost']
 # ALLOWED_HOSTS = []
 
 
