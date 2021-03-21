@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <meta http-equiv="refresh" content="10">
+    <meta http-equiv="refresh" content="15">
     <meta charset="utf-8"/>
     <title>Chat Room</title>
 </head>
@@ -53,7 +53,7 @@
     width: 400px;
     border-radius: 25px;
     padding: 20px;
-    
+    text-align: right;
   }
 
   #heading{ 
@@ -70,7 +70,7 @@
     width: 400px;
     border-radius: 25px;
     padding: 20px;
-    
+    text-align: left;
   }
 
   
@@ -103,6 +103,8 @@
 
             {% for i in a %}
 
+            {% if i.chatroom ==  case1  or i.chatroom ==  case2  %}
+
             {% if i.ts == "Student" %}
             <div id="boxedr" >
                 <h3>{{ i.message }}</h3>
@@ -118,6 +120,8 @@
                 From:{{ i.ts }}
                 </div>
                 <br>
+
+            {% endif %}
 
             {% endif %}
 

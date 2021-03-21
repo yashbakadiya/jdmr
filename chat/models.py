@@ -7,6 +7,7 @@ class ChatApplication(models.Model):
     room = models.CharField(max_length=30)
     fl = models.IntegerField(max_length=2)
     ts = models.CharField(max_length=30)
+    chatroom = models.CharField(max_length=30,default='Welcome')
     def __str__(self):
         return self.message
         

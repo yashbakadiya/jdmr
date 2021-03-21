@@ -23,17 +23,21 @@ def index(request,name,ts):
 def room(request,name,room_name,ts):
     a=[]
     l=[]
-    a=ChatApplication.objects.filter(room=room_name,names=name).order_by('dtime')
-    b=ChatApplication.objects.filter(room=name,names=room_name).order_by('dtime')
+    a=ChatApplication.objects.all().order_by('dtime')
     if ts == "Teacher":
 
         return render(request, 'chat/room1.html', {
-            'room': room_name, 'a' :a
+            'room': room_name, 'a' :a, 'case1':room_name+name,'case2':name+room_name
         })
     elif ts == "Student":
          return render(request, 'chat/room2.html', {
-            'room': room_name, 'a' :a,'b':b
+            'room': room_name, 'a' :a, 'case1':room_name+name,'case2':name+room_name
         })
+
+
+
+
+
 
 def send(request,name,room_name,ts):
     try:
@@ -54,6 +58,7 @@ def send(request,name,room_name,ts):
             c.room="{0}".format(room_name)
             c.ts="{0}".format(ts)
             c.fl="0"
+            c.chatroom="{0}".format(name+room_name)
             c.save()
 
        
@@ -64,14 +69,16 @@ def send(request,name,room_name,ts):
 
     a=[]
     l=[]
+    case1=room_name + name
+    case2=name + room_name
     # a=list(datadb.find())
-    a=ChatApplication.objects.filter(room=room_name,names=name).order_by('dtime')
-   
+    # a=ChatApplication.objects.filter(room=room_name,names=name).order_by('dtime')
+    a=ChatApplication.objects.all().order_by('dtime')
     l.append(a)
     
 
 
-    return render(request,'chat/room1.html',{'a':a})
+    return render(request,'chat/room1.html',{'a':a,'case1':room_name+name,'case2':name+room_name})
 
 
 def send2(request,name,room_name,ts):
@@ -92,6 +99,7 @@ def send2(request,name,room_name,ts):
             c2.room="{0}".format(room_name)
             c2.ts="{0}".format(ts)
             c2.fl="0"
+            c.chatroom="{0}".format(name+room_name)
             c2.save()
 
        
@@ -103,13 +111,13 @@ def send2(request,name,room_name,ts):
     a=[]
     l=[]
     # a=list(datadb.find())
-    a=ChatApplication.objects.filter(room=room_name,names=name).order_by('dtime')
-   
+    # a=ChatApplication.objects.filter(room=room_name,names=name).order_by('dtime')
+    a=ChatApplication.objects.all().order_by('dtime')
     l.append(a)
     
 
 
-    return render(request,'chat/room2.html',{'a':a})
+    return render(request,'chat/room2.html',{'a':a,'case1':room_name+name,'case2':name+room_name})
 
 
 

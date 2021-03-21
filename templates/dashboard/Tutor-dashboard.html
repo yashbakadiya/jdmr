@@ -99,6 +99,15 @@
         </a>
       {% endif %}
       </li>
+
+      <li class="nav-item dropdown notification-dropdown ml-3 mr-lg-4 align-self-center">
+        {% if request.session.type  == "Teacher" %}
+          <a href="{% url 'index' request.user.username 'Teacher' %}">
+            <span class="icon flaticon-chat-3"></span>
+          </a>
+        {% endif %}
+      </li>
+
       <li class="nav-item dropdown user-profile-dropdown pl-4 pr-lg-0 pr-2 ml-lg-2 mr-lg-4  align-self-center">
         <a href="javascript:void(0);" class="nav-link dropdown-toggle user">
           <div class="user-profile d-lg-block d-none">
