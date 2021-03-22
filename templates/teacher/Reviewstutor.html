@@ -66,9 +66,10 @@
                         </div>
                         <div class="col-md-3 col-12">
                             <button value="{{i.id}}" id="appointmenttutor" type="button"
-                                class="btn btn-sm btn-info mb-3" data-toggle="modal" data-target="#appointmentModal"
+                                class="mx-1 btn btn-sm btn-info mb-3" data-toggle="modal" data-target="#appointmentModal"
                                 aria-hidden="true" name="button" style="font-size:smaller; float:left;">Schedule
                                 Class</button>
+                                <a class="mx-1 btn btn-success" style="font-size:smaller;" href='{% url "room" request.user.username "Student" i.user.username %}'>Chat</a>
                         </div>
                     </div>
                     <br>

@@ -12,6 +12,10 @@
                     </div>
                 </div>
                 {% if results %}
+                <div class="mt-2 col-lg-12 col-sm-12 mb-3">
+                    <label class="form-check-label" for="defaultCheck1">
+                        Institute Exams
+                    </label></div>
                 <form action="" method="post">{% csrf_token %}
                 <div class="widget-content widget-content-area">
                     <div class="table-responsive">
@@ -48,6 +52,47 @@
                     </div>
                 </div>
                 {% endif %}
+                    {% if tutorresults %}
+                    <div class="mt-2 col-lg-12 col-sm-12 mb-3">
+                        <label class="form-check-label" for="defaultCheck1">
+                            Paid Exams
+                        </label></div>
+                    <form action="" method="post">{% csrf_token %}
+                    <div class="widget-content widget-content-area">
+                        <div class="table-responsive">
+                            <table id="htmlgrid" class="testgrid table table-striped table-bordered table-hover mb-4">
+                                <tr>
+                                    <th>#</th>
+                                    <th>Exam Name</th>
+                                    <th>Course</th>
+                                    <th>Exam Date</th>
+                                    <th>Total Questions</th>
+                                    <th>Percentage</th>
+                                    <th>Status</th>
+                                    <th>Report</th>
+                                </tr>
+                                {% for i in tutorresults %}
+                                {% if i.attempted %}
+                                <tr>
+                                    <td>{{forloop.counter}}</td>
+                                    <td>{{i.exam.Name}}</td>
+                                    <td>{{i.exam.courseName}}</td>
+                                    <td>{{i.exam.exam_date}}</td>
+                                    <td>{{i.total_questions}}</td>
+                                    <td>{{i.percentage}} %</td>
+                                    {% if i.pass_status %}
+                                    <td><a class="btn btn-success">Pass</a></td>
+                                    {% else %}
+                                    <td><a class="btn btn-danger" style="color: white;">Fail</a></td>
+                                    {% endif %}
+                                    <td><a href="{% url 'tutor_detailed_report' i.id %}" class="btn btn-success">Report</a></td>                     
+                                </tr>
+                                {% endif %}
+                                {% endfor %}
+                            </table>
+                        </div>
+                    </div>
+                    {% endif %}
             </div>
     </main>
     <script type="text/javascript">

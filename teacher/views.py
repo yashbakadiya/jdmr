@@ -315,9 +315,11 @@ def enrolledTutorsObjectToDict(obj):
     courseID = list(set(courseID))
     courses = []
     for i in courseID:
-        course = Courses.objects.get(id = i)
-        courses.append(course.courseName)
-
+        try:
+            course = Courses.objects.get(id = i)
+            courses.append(course.courseName)
+        except:
+            pass
     data['courseName']=courses
     return data
 

@@ -6,25 +6,32 @@ import pymysql
 from django.core.files.storage import FileSystemStorage
 from django.core.files.storage import default_storage
 from chat.models import ChatApplication
+from django.db.models import Q
 
 
+def index(request,name,ts):
+    a=[]
+    l=[]
+    tsname=name
+    tts=ts
+    # a=ChatApplication.objects.filter(names=name).distinct('room')
+    a=ChatApplication.objects.filter(names=name).values('room').distinct()
+    b=ChatApplication.objects.filter(room=name).values('names').distinct()
+    
+    return render(request, 'chat/index.html',{'a':a,'name':tsname,'ts':tts,'b':b})
 
-def index(request):
-    return render(request, 'chat/index.html')
-
-def room(request,room_name,ts):
-    # room=request.session.get['roomname']
-    # print(room)
-    #room=request.GET['roomname']
-    #name=request.GET['ts']
+def room(request,name,room_name,ts):
+    a=[]
+    l=[]
+    a=ChatApplication.objects.all().order_by('dtime')
     if ts == "Teacher":
 
         return render(request, 'chat/room1.html', {
-            'room': room_name
+            'room': room_name, 'a' :a, 'case1':room_name+name,'case2':name+room_name
         })
     elif ts == "Student":
          return render(request, 'chat/room2.html', {
-            'room': room_name
+            'room': room_name, 'a' :a, 'case1':room_name+name,'case2':name+room_name
         })
 
 
@@ -32,7 +39,7 @@ def room(request,room_name,ts):
 
 
 
-def send(request,room_name,ts):
+def send(request,name,room_name,ts):
     try:
         message=request.POST["msg"]
         #room_name=request.POST["room"]
@@ -46,10 +53,12 @@ def send(request,room_name,ts):
         if message != "" :
             c=ChatApplication()
             c.dtime="{0}".format(dtime)
+            c.names="{0}".format(name)
             c.message="{0}".format(message)
             c.room="{0}".format(room_name)
             c.ts="{0}".format(ts)
             c.fl="0"
+            c.chatroom="{0}".format(name+room_name)
             c.save()
 
        
@@ -60,17 +69,19 @@ def send(request,room_name,ts):
 
     a=[]
     l=[]
+    case1=room_name + name
+    case2=name + room_name
     # a=list(datadb.find())
-    a=ChatApplication.objects.filter(room=room_name).order_by('dtime')
-   
+    # a=ChatApplication.objects.filter(room=room_name,names=name).order_by('dtime')
+    a=ChatApplication.objects.all().order_by('dtime')
     l.append(a)
     
 
 
-    return render(request,'chat/room1.html',{'a':a})
+    return render(request,'chat/room1.html',{'a':a,'case1':room_name+name,'case2':name+room_name})
 
 
-def send2(request,room_name,ts):
+def send2(request,name,room_name,ts):
     try:
         message=request.POST["msg"]
         #room_name=request.POST["room"]
@@ -83,10 +94,12 @@ def send2(request,room_name,ts):
         if message != "" :
             c2=ChatApplication()
             c2.dtime="{0}".format(dtime)
+            c.names="{0}".format(name)
             c2.message="{0}".format(message)
             c2.room="{0}".format(room_name)
             c2.ts="{0}".format(ts)
             c2.fl="0"
+            c.chatroom="{0}".format(name+room_name)
             c2.save()
 
        
@@ -98,13 +111,13 @@ def send2(request,room_name,ts):
     a=[]
     l=[]
     # a=list(datadb.find())
-    a=ChatApplication.objects.filter(room=room_name).order_by('dtime')
-   
+    # a=ChatApplication.objects.filter(room=room_name,names=name).order_by('dtime')
+    a=ChatApplication.objects.all().order_by('dtime')
     l.append(a)
     
 
 
-    return render(request,'chat/room2.html',{'a':a})
+    return render(request,'chat/room2.html',{'a':a,'case1':room_name+name,'case2':name+room_name})
 
 
 
@@ -131,7 +144,7 @@ def send2(request,room_name,ts):
 
 
 
-def upload1(request,room_name,ts):
+def upload1(request,name,room_name,ts):
 
     myfile = request.FILES['myfile']
     #room_name=request.POST["room"]
@@ -139,7 +152,7 @@ def upload1(request,room_name,ts):
     filename = fs.save(myfile.name, myfile)
     uploaded_file_url = fs.url(filename)
     dtime=datetime.datetime.now()
-    a=list(datadb.find())
+    #a=list(datadb.find())
     add={
     'id' : len(a)+1,
     'dtime' : dtime,
@@ -149,7 +162,8 @@ def upload1(request,room_name,ts):
     'file' : 0,
     }
     if myfile != "" and room_name != "":
-        datadb.insert_one(add)
+        pass
+        #datadb.insert_one(add)
     a=list(datadb.find())
     i=0
     j=[]
@@ -186,7 +200,7 @@ def upload1(request,room_name,ts):
 
 
 
-def upload2(request,room_name,ts):
+def upload2(request,name,room_name,ts):
 
     myfile = request.FILES['myfile']
     #room_name=request.POST["room"]

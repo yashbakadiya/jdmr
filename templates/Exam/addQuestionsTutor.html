@@ -80,7 +80,7 @@
                         <form action="" method="post">{% csrf_token %}
                         <table id="htmlgrid" class="testgrid table table-striped table-bordered table-hover mb-4">
                             <tr>
-                                <th>##</th>
+                                <th>#</th>
                                 <th>Exam Name</th>
                                 <th>Course</th>
                                 <th>Price</th>
@@ -97,7 +97,7 @@
                                   {{i.Name}}
                                 </td>
                                 <td>
-                                  {{i.course.courseName}}
+                                  {{i.courseName}}
                                 </td>
                                 <td>{{i.price}}</td>
                                 <td>{{i.exam_date}}</td>
