@@ -1,4 +1,4 @@
-{% extends template %}
+{% extends 'dashboard/student-dashboard.html' %}
 
 {% load static %}
 
@@ -127,7 +127,7 @@
                                     <td><p style="color: black;font-size: 14px;">{{note.institute.user.username}}</p></td>
                                     <td><p style="color: black;font-size: 14px;">{{note.price}}</p></td>
                                     <td style="text-align: center;">
-                                        <a class="btn btn-info" href="#" target="_blank">Buy Note</a>
+                                        <a class="btn btn-info" href="{% url 'buyInstituteNotes' note.id %}" >Buy Note</a>
                                     </td>
                                 </tr>
                                 {% endfor %}
@@ -162,7 +162,7 @@
                                     <td><p style="color: black;font-size: 14px;">{{note.tutor.user.username}}</p></td>
                                     <td><p style="color: black;font-size: 14px;">{{note.price}}</p></td>
                                     <td style="text-align: center;">
-                                        <a class="btn btn-info" href="#" target="_blank">Buy Note</a>
+                                        <a class="btn btn-info" href="{% url 'buyTutorNotes' note.id %}" >Buy Note</a>
                                     </td>
                                 </tr>
                                 {% endfor %}
