@@ -1,5 +1,4 @@
-from django.shortcuts import render
-from django.shortcuts import render,HttpResponse
+from django.shortcuts import render,HttpResponse, redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 
@@ -15,26 +14,42 @@ def buyInstituteNotes(request,id):
     errors = []
     if request.session['type'] == "student":
         if request.method == "GET":
-            return render(request, '')
-        else:
             user = User.objects.get(username=request.session['user'])
             student = Student.objects.get(user=user)
-            if request.method == "POST":
-                status = request.POST.get("status")
-                note = NotesInstitute.objects.get(id=id)
-                if (note and status):
-                    data = BuyInstituteNotes.objects.create(
-                        note = note,
-                        status = status,
-                        student = student
-                    )
-                    try:
-                        data.save()
-                        return redirect('')
-                    except:
-                        errors.append("Some error Occured! Try Again")
-                        context['errors'] = errors
-            return render(request,'',context)
+            note = NotesInstitute.objects.get(id=id)
+            if int(note.price) == 0:
+                data = BuyInstituteNotes.objects.create(
+                    student=student,
+                    status=1,
+                    note=note
+                )
+                try:
+                    data.save()
+                    return redirect('notesstudents')
+                except:
+                    errors.append("Some error Occured! Try Again")
+                    context['errors'] = errors
+                    return redirect('notesstudents')
+        
+        # else:
+        #     user = User.objects.get(username=request.session['user'])
+        #     student = Student.objects.get(user=user)
+        #     if request.method == "POST":
+        #         status = request.POST.get("status")
+        #         note = NotesInstitute.objects.get(id=id)
+        #         if (note and status):
+        #             data = BuyInstituteNotes.objects.create(
+        #                 note = note,
+        #                 status = status,
+        #                 student = student
+        #             )
+        #             try:
+        #                 data.save()
+        #                 return redirect('')
+        #             except:
+        #                 errors.append("Some error Occured! Try Again")
+        #                 context['errors'] = errors
+        #     return render(request,'',context)
     return HttpResponse("You are Not Authenticated for this page")
 
 

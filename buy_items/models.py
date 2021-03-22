@@ -1,3 +1,5 @@
+import uuid
+
 from django.db import models
 from accounts.models import Student
 from tutorials.models import TutorialInstitute
@@ -8,7 +10,7 @@ class BuyInstituteNotes(models.Model):
     note = models.ForeignKey(to=NotesInstitute, on_delete=models.SET_NULL, null=True)
     status = models.BooleanField(default=0, null=True)
     buy_at = models.DateField(auto_now_add=True)
-    order_id = models.CharField(unique=True, max_length=100, null=True, blank=True)
+    order_id = models.UUIDField(default=uuid.uuid4, unique=True, db_index=True, editable=False)
 
     class Meta:
         unique_together = [['note', 'student']]
