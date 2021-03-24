@@ -3,17 +3,17 @@
 {% load static %}
 
 {% block main-content %}
-    {% if bought_institute_notes or bought_tutor_notes %}
-        <main class="mt-5 row">
-            <div class="col-xl-12 col-md-12 col-12">
-                <div class="card widget box box-shadow">
-                    <div class="card-header">
-                        <div class="row">
-                            <div class="col-xl-12 col-md-12 col-12">
-                                <h2 style="color:black;">Your Notes</h2>
-                            </div>
-                        </div>
+<main class="mt-5 row">
+    <div class="col-xl-12 col-md-12 col-12">
+        <div class="card widget box box-shadow">
+            <div class="card-header">
+                <div class="row">
+                    <div class="col-xl-12 col-md-12 col-12">
+                        <h2 style="color:black;">Your Notes</h2>
                     </div>
+                </div>
+            </div>
+            {% if bought_institute_notes or bought_tutor_notes %}
                     <h6 style="color:black;" class="m-2 pl-2">Institute Notes</h6>
                     <div class="widget-content widget-content-area">
                         <div class="table-responsive">
@@ -78,29 +78,30 @@
                         </div>
                     </div>
                     
-                    {% comment %} <div class="widget-header">
+                    {% else %}
+                    <div class="card-header" style="background: none;">
                         <div class="row">
                             <div class="col-xl-12 col-md-12 col-12">
-                                <h4 class="p-2"><b>No Notes to show</b></h4>
+                                <h2>No Notes to show</h2>
                             </div>
                         </div>
-                    </div> {% endcomment %}
+                    </div>
+                {% endif %}
                     
                 </div>
             </div>
         </main>
-    {% endif %}
-    {% if not_bought_institute_notes or not_bought_tutor_notes%}
-        <main class="mt-5 row">
-            <div class="col-xl-12 col-md-12 col-12">
-                <div class="card widget box box-shadow">
-                    <div class="card-header">
-                        <div class="row">
-                            <div class="col-xl-12 col-md-12 col-12">
-                                <h2 style="color:black;">Available Notes</h2>
-                            </div>
+    <main class="mt-5 row">
+        <div class="col-xl-12 col-md-12 col-12">
+            <div class="card widget box box-shadow">
+                <div class="card-header">
+                    <div class="row">
+                        <div class="col-xl-12 col-md-12 col-12">
+                            <h2 style="color:black;">Available Notes</h2>
                         </div>
                     </div>
+                </div>
+                {% if not_bought_institute_notes or not_bought_tutor_notes%}
                     <h6 style="color:black;" class="m-2 pl-2">Institute Notes</h6>
                     
                     <div class="widget-content widget-content-area">
@@ -170,18 +171,19 @@
                         </div>
                     </div>
                     
-                    {% comment %} <div class="widget-header">
+                    {% else %}
+                    <div class="card-header" style="background: none;">
                         <div class="row">
                             <div class="col-xl-12 col-md-12 col-12">
-                                <h4 class="p-2"><b>No Notes to show</b></h4>
+                                <h2>No Notes to show</h2>
                             </div>
                         </div>
-                    </div> {% endcomment %}
+                    </div>
+                {% endif %}
                     
                 </div>
             </div>
         </main>
-    {% endif %}
     <script type="text/javascript">
         trlist = $("tbody>tr");
         $("body").on('input',"#searchbox",function(){

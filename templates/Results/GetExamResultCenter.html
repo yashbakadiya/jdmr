@@ -1,4 +1,4 @@
-{% extends 'dashboard/base.html' %}
+{% extends template %}
 {% load static %}
 {% block css %}
 <style media="screen">
@@ -229,6 +229,7 @@
                 </div>
                 <!-- Grid column -->
             </div>
+            {% if students %}
             <div class="card-body">
                 <!-- Grid row -->
                 <form action="" method="post">{% csrf_token %}
@@ -258,7 +259,7 @@
                             {% if i.PassStatus %}
                             <td class="text-center"><button class="stat btn btn-success">Pass</button></td>
                             {% else %}
-                            <td class="text-center"><button class="stat btn btn-Danger">Fail</button></td>
+                            <td class="text-center"><button class="stat btn btn-danger">Fail</button></td>
                             {% endif %}
                             <td class="text-center"><a href="{% url 'studentresult' i.id i.exam.id %}" class="btn btn-primary">Result</a></td>
                             <td class="text-center"><a href="{% url 'anotatePdfViewer' i.exam.id i.id %}" class="btn btn-primary">Anotate Result</a></td>
@@ -271,6 +272,15 @@
                 </form>
                 <br>
             </div>
+            {% else %}
+                <div class="card-header" style="background: none;">
+                    <div class="row">
+                        <div class="col-xl-12 col-md-12 col-12">
+                            <h2>No Students to show</h2>
+                        </div>
+                    </div>
+                </div>
+            {% endif %}
         </div>
     </main>
     <script type="text/javascript">

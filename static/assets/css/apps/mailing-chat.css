@@ -315,7 +315,7 @@
     top: -50px;
     left: 12px;
     border-radius: 50%;
-    background-image: url(../../../assets/img/profile-1.jpeg);
+    background-image: url(../../../assets/img/90x90.jpg);
     float: left;
     background-repeat: no-repeat;
     background-size: cover;
@@ -327,8 +327,8 @@
 }
 .mail-chat-system .chat-messages .message.right .text {
     margin-right: 38px;
-    background-color: #c2d5ff;
-    color: #1a73e9;
+    background-color: #816cfd;
+    color: #fff;
     border-radius: 1.875rem !important;
     border-top-right-radius: 0px !important;
     padding: 12px;
@@ -338,7 +338,7 @@
 .mail-chat-system .chat-messages .message.right .avatar {
     position: absolute;
     float: right;
-    background-image: url(../../../assets/img/profile-16.jpeg);
+    background-image: url(../../../assets/img/90x90.jpg);
     background-repeat: no-repeat;
     background-size: cover;
     right: 22px;
