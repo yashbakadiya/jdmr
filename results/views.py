@@ -36,6 +36,10 @@ def GetExamResults(request,exam_id):
     context={
 	'students':zip(students,batches)
 	}
+    if request.session['type'] == "Institute":
+        context['template']='dashboard/base.html'
+    elif request.session['type'] == "Teacher":
+        context['template']='dashboard/Tutor-dashboard.html'
     return render(request,'Results/GetExamResultCenter.html',context)
 
 @login_required(login_url="Login")
@@ -65,6 +69,11 @@ def GetStudentResults(request,student_id,exam_id):
 	'mapping':mapping
 	}
     
+    if request.session['type'] == "Institute":
+        context['template']='dashboard/base.html'
+    elif request.session['type'] == "Teacher":
+        context['template']='dashboard/Tutor-dashboard.html'
+
     return render(request,'Results/StudentResult.html',context) 
 
 @login_required(login_url="Login")
@@ -78,6 +87,12 @@ def Review_Answer(request,question_id):
         answer.marks_given = marks
         answer.save()
         return redirect('studentresult',answer.student.id,answer.exam.id)
+
+    if request.session['type'] == "Institute":
+        context['template']='dashboard/base.html'
+    elif request.session['type'] == "Teacher":
+        context['template']='dashboard/Tutor-dashboard.html'
+
     return render(request,'Results/Review_Answer.html',context)
 
 def giveMarks(marks):
@@ -121,7 +136,15 @@ def countQuestionAttributes(exam_mapping):
 
 @login_required(login_url="Login")
 def webViewerAnnotate(request, id, pk):
-    return render(request, 'Results/annotation.html',{"id":id,"pk":pk})
+
+    context={"id":id,"pk":pk}
+
+    if request.session['type'] == "Institute":
+        context['template']='dashboard/base.html'
+    elif request.session['type'] == "Teacher":
+        context['template']='dashboard/Tutor-dashboard.html'
+
+    return render(request, 'Results/annotation.html',context)
 
 @login_required(login_url="Login")
 def annotateAnswers(request, id, pk):

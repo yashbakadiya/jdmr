@@ -19,8 +19,9 @@ class TutorialInstitute(models.Model):
 
     @property
     def Discount_Validity(self):
-        if now() <= self.Validity:
-            return True
+        if self.Validity:
+            if now() <= self.Validity:
+                return True
 
     @property
     def Discounted_price(self):

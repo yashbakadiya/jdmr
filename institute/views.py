@@ -196,12 +196,64 @@ def institutecalendar(request):
     
     return render(request,'Institute/institutecalendar.html',{'template':template})
 
-@login_required()
+# @login_required()
+# def instCalendar(request):
+#     if request.session['type']=="Institute":
+#         template = 'dashboard/institute-dashboard.html'
+        
+#     return render(request,'Institute/instCalendar.html',{'template':template,})
+
 def instCalendar(request):
-    if request.session['type']=="Institute":
-        template = 'dashboard/institute-dashboard.html'
+    all_events = BatchTiming.objects.all()  
+    template = 'dashboard/institute-dashboard.html'
+    context = {
+        
+       
+        "template":template ,
+        "events":all_events
+
+    }
     
-    return render(request,'Institute/instCalendar.html',{'template':template})
+    return render(request,'Institute/instCalendar.html',context )
+
+
+
+
+def add_event(request):
+    start = request.GET.get("start", None)
+    end = request.GET.get("end", None)
+    title = request.GET.get("title", None)
+    event = Events(name=str(title), start=start, end=end)
+    event.save()
+    data = {}
+    return JsonResponse(data)
+
+def update(request):
+    start = request.GET.get("start", None)
+    end = request.GET.get("end", None)
+    title = request.GET.get("title", None)
+    id = request.GET.get("id", None)
+    event = Events.objects.get(id=id)
+    event.start = start
+    event.end = end
+    event.name = title
+    event.save()
+    data = {}
+    return JsonResponse(data)
+
+
+def remove(request):
+    id = request.GET.get("id", None)
+    event = Events.objects.get(id=id)
+    event.delete()
+    data = {}
+    return JsonResponse(data)
+
+
+
+
+
+
 
 @login_required()
 def dateandbatch(request):
