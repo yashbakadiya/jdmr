@@ -24,15 +24,16 @@
   </div>
   {% endif %}
   <div>
-    <div class="col-xl-12 col-md-12 col-12 mt-5">
-            <div class="card statbox widget box box-shadow">
-                <div class="card-header">
-                    <div class="row">
-                        <div class="col-xl-12 col-md-12 col-12">
-                            <h2 style="color:black;">List of Exams</h2>
+      <div class="col-xl-12 col-md-12 col-12 mt-5">
+          <div class="card statbox widget box box-shadow">
+              <div class="card-header">
+                  <div class="row">
+                      <div class="col-xl-12 col-md-12 col-12">
+                          <h2 style="color:black;">List of Exams</h2>
                         </div>
                     </div>
                 </div>
+                {% if exams or tutorexams %}
                 <div class="widget-content widget-content-area">
                     <div class="table-responsive">
                     {% if exams %}
@@ -80,7 +81,7 @@
                         <form action="" method="post">{% csrf_token %}
                         <table id="htmlgrid" class="testgrid table table-striped table-bordered table-hover mb-4">
                             <tr>
-                                <th>##</th>
+                                <th>#</th>
                                 <th>Exam Name</th>
                                 <th>Course</th>
                                 <th>Price</th>
@@ -97,7 +98,7 @@
                                   {{i.Name}}
                                 </td>
                                 <td>
-                                  {{i.course.courseName}}
+                                  {{i.courseName}}
                                 </td>
                                 <td>{{i.price}}</td>
                                 <td>{{i.exam_date}}</td>
@@ -111,8 +112,18 @@
                         </form>{% endif %}
                     </div>
                 </div>
+                {% else %}
+        <div class="card-header" style="background: none;">
+            <div class="row">
+                <div class="col-xl-12 col-md-12 col-12">
+                    <h2>No Exams to show</h2>
+                </div>
             </div>
         </div>
+    {% endif %}
+            </div>
+        </div>
+        
 </div>
 </div>
 {% endblock main-content %}

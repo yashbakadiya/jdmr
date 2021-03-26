@@ -23,6 +23,7 @@
                         </div>
                     </div>
                 </div>
+                {% if exams or tutorexams %}
                 <div class="widget-content widget-content-area">
                     <div class="table-responsive">
                     {% if exams %}
@@ -94,7 +95,7 @@
                             <tr>
                                 <td>{{forloop.counter}}</td>
                                 <td>{{i.Name}}</td>
-                                <td>{{i.course.courseName}}</td>
+                                <td>{{i.courseName}}</td>
                                 <td>{{i.price}}</td>
                                 <td>{{i.exam_date}}</td>
                                 <td>{{i.exam_duration}}</td>
@@ -117,6 +118,15 @@
                         </form>{% endif %}
                     </div>
                 </div>
+                {% else %}
+        <div class="card-header" style="background: none;">
+            <div class="row">
+                <div class="col-xl-12 col-md-12 col-12">
+                    <h2>No Exams to show</h2>
+                </div>
+            </div>
+        </div>
+    {% endif %}
             </div>
         </div>
 </main>

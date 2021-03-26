@@ -55,8 +55,8 @@ INSTALLED_APPS = [
     'results',
     'exams',
     'notes',
+    'buy_items',
     'django_cleanup',
-    
 ]
 
 MIDDLEWARE = [
@@ -112,9 +112,9 @@ WSGI_APPLICATION = 'tutorSearch.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'jdrm_backup',
+        'NAME': 'college_test',
         'USER': 'postgres',
-        'PASSWORD': 'Rakesh@123',
+        'PASSWORD': '',
         'HOST':'localhost',
         'PORT':'5432',
     },

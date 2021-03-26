@@ -1218,18 +1218,19 @@ def DeleteMultipleQuestions(request,question_id):
 def StudentExamsAll(request):
     student = Student.objects.get(user=request.user)
     statuses = []
+    context = {}
+
+    json_datetime=requests.get('http://worldtimeapi.org/api/ip')
+    json_datetime=json.loads(json_datetime.content)
+    match_date = re.search(r'\d{4}-\d{2}-\d{2}',json_datetime['datetime'])
+    match_time = re.search(r'\d{2}:\d{2}:\d{2}',json_datetime['datetime'])
+    datetime_obj = datetime.strptime(match_date.group()+' '+match_time.group(), '%Y-%m-%d %H:%M:%S')
+
     if AddStudentInst.objects.filter(student=student).exists():
         institutestudent = AddStudentInst.objects.get(student=student)
         institute = institutestudent.institute
         if institute:
             exams = Exam.objects.filter(institute=institute)
-
-            # internet time
-            json_datetime=requests.get('http://worldtimeapi.org/api/ip')
-            json_datetime=json.loads(json_datetime.content)
-            match_date = re.search(r'\d{4}-\d{2}-\d{2}',json_datetime['datetime'])
-            match_time = re.search(r'\d{2}:\d{2}:\d{2}',json_datetime['datetime'])
-            datetime_obj = datetime.strptime(match_date.group()+' '+match_time.group(), '%Y-%m-%d %H:%M:%S')
             
             examlist = []
 
@@ -1244,14 +1245,27 @@ def StudentExamsAll(request):
                 if((datetime.combine(i.exam_date,i.exam_time) <= datetime_obj) & (datetime_obj <= re_exam)):
                     examlist.append(i)
                 
-            context = {
-                'exams':examlist
-            }
-        return render(request,'Exam/studentExamsAll.html',context)
-    return render(request,'Exam/studentExamsAll.html')
-    
+            context['exams']=examlist
 
-@login_required(login_url="Login")
+    exams = TutorExam.objects.all()
+            
+    examlist = []
+
+    for i in exams:
+
+        if i.reexam_date:
+            re_exam = datetime.combine(i.reexam_date, datetime.max.time())
+
+        else:
+            re_exam = datetime.combine(i.exam_date,i.exam_time) + dt.timedelta(days=3)
+                
+        if((datetime.combine(i.exam_date,i.exam_time) <= datetime_obj) & (datetime_obj <= re_exam)):
+            examlist.append(i)
+                
+    context['tutorexams']=examlist    
+
+    return render(request,'Exam/studentExamsAll.html',context)
+    
 def displayQuestionList(exam):
     mq = MultipleQuestion.objects.filter(
         exam=exam).values("question", "id", "marks", "negative_marks", 'section', 'correct_ans', 'question_no')
@@ -2008,8 +2022,8 @@ def CreateQuestionsTutor(request,exam_id):
                         errors.append('Options Cannot be Empty')
                     if options:
                         for option in options:
-                            answer = MultipleAnswer(
-                                question = MultipleQuestion.objects.get(id=data.id),
+                            answer = TutorMultipleAnswer(
+                                question = TutorMultipleQuestion.objects.get(id=data.id),
                                 option = option
                                 )
                             answer.save()
@@ -2342,14 +2356,14 @@ def EditMultipleQuestionsTutor(request,question_id):
                 question.question=Question
             if Solution:
                 question.correct_ans=Solution
-            if MultipleAnswer.objects.filter(question=question).exists():
-                answers = MultipleAnswer.objects.filter(question=question)
+            if TutorMultipleAnswer.objects.filter(question=question).exists():
+                answers = TutorMultipleAnswer.objects.filter(question=question)
                 for i in range(len(options)):
                     if answers.filter(option=options[i]).exists():
                         answer = answers.get(option=options[i])
                         answer.option = options[i]
                     else:
-                        data = MultipleAnswer(
+                        data = TutorMultipleAnswer(
                             question=question,
                             option = options[i]
                             ).save()
@@ -2361,40 +2375,14 @@ def EditMultipleQuestionsTutor(request,question_id):
         return render(request,'Exam/editmultiplequestionstutor.html',context)
     return HttpResponse("You are not Authenticated for this Page")
 
-
-@login_required(login_url="Login")
-def instruction(request):
-    if request.session['type']=="Student":
-        user = User.objects.get(username=request.session['user'])
-        student = Student.objects.get(user=user)
-        statuses = []
-        studentExam = []
-        if AddStudentInst.objects.filter(student=student).exists():
-            institutestudent = AddStudentInst.objects.filter(student=student)
-            institute = Institute.objects.get(user=institutestudent[0].institute.user)
-            if institute:
-                exams = Exam.objects.filter(institute=institute)
-                for exam in exams:
-                    for cou in institutestudent:
-                        course = Courses.objects.get(id=cou.courseName)
-                        if exam.course==course:
-                            studentExam.append(exam)
-                context={
-                'exams':studentExam,
-                }
-            return render(request,'Exam/studentExamsAll.html',context)
-        return render(request,'Exam/studentExamsAll.html')
-    return HttpResponse("You are not Authenticated for this Page")
-
-
-def displayQuestionList(exam):
-    mq = MultipleQuestion.objects.filter(
+def tutordisplayQuestionList(exam):
+    mq = TutorMultipleQuestion.objects.filter(
         exam=exam).values("question", "id", "marks", "negative_marks", 'section', 'correct_ans', 'question_no')
-    lq = LongAnswerQuestion.objects.filter(
+    lq = TutorLongAnswerQuestion.objects.filter(
         exam=exam).values("question", "id", "marks", "negative_marks", 'section', 'correct_ans', 'question_no')
-    sq = ShortAnswerQuestion.objects.filter(
+    sq = TutorShortAnswerQuestion.objects.filter(
         exam=exam).values("question", "id", "marks", "negative_marks", 'section', 'correct_ans', 'question_no')
-    tof = BooleanQuestion.objects.filter(
+    tof = TutorBooleanQuestion.objects.filter(
         exam=exam).values("question", "id", "marks", "negative_marks", 'correct_ans', "option1", "option2", 'section', 'question_no')
     opts = {}
     for m in mq:
@@ -2403,7 +2391,7 @@ def displayQuestionList(exam):
         m["qmain"] = "multiple"
         m['time'] = 0
         m["extra_time"] = 0
-        options = MultipleAnswer.objects.filter(
+        options = TutorMultipleAnswer.objects.filter(
             question_id=m["id"]).values("option")
         i = 0
 
@@ -2467,11 +2455,227 @@ def displayQuestionList(exam):
     return result, section
 
 @login_required(login_url="Login")
-def instruction(request, pk):
+def tutor_instruction(request, pk):
+	exam = TutorExam.objects.get(id=pk)
+	request.session['exam_id'] = exam.id
+	if 'main' in request.GET:
+		instructions = exam.tandc
+		return render(request, 'Exam/tutor_Instruction2.html', {'exam': exam, 'instructions': instructions})
+	return render(request, 'Exam/tutor_Instruction1.html', {'exam': exam})
+
+
+@login_required(login_url="Login")
+def tutor_start_exam(request, pk):
     if request.session['type']=="Student":
-        exam = Exam.objects.get(id=pk)
-        request.session['exam_id'] = exam.id
-        if 'main' in request.GET:
-            instructions = exam.tandc
-            return render(request, 'Exam/Instruction2.html', {'exam': exam, 'instructions': instructions})
-        return render(request, 'Exam/Instruction1.html', {'exam': exam})
+        exam_mapping = TutorExam.objects.get(id=pk)
+        exam_duration = str(exam_mapping.exam_duration)
+        calc = exam_mapping.calculator
+        (result, section_count) = tutordisplayQuestionList(exam_mapping)
+        data = {}
+        data["questions"] = list(result)
+        BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+        exam_status = request.session.get('exam_status', 'start')
+        print(exam_status)
+        user = User.objects.get(username=request.session['user'])
+        student = Student.objects.get(user=user)
+        s = TutorStudentMapping.objects.get_or_create(
+            student=student, courseName=exam_mapping.courseName,exam=exam_mapping)
+        exam_duration = int(exam_duration)
+
+        if exam_status == 'start':
+            currentsession = {}
+            for q in result:
+                new = TutorStudentAnswer.objects.filter(student=s[0],exam=exam_mapping,question=q['question']).delete()
+                new = TutorStudentAnswer()
+                new.student = s[0]
+                new.exam = exam_mapping
+                new.question = q['question']
+                new.marks = q['marks']
+                new.correct_ans = q['correct_ans']
+                new.negative_marks = q['negative_marks']
+                new.qtype = q['qmain']
+                new.section = q['section']
+                new.save()
+
+            with open(os.path.join(BASE_DIR, 'static/currentsession.json'), 'w') as out:
+                json.dump(currentsession, out)
+        request.session['exam_status'] = f'in exam of {pk}'
+        with open(os.path.join(BASE_DIR, 'static/questions.json'), 'w') as out:
+            json.dump(data, out)
+        return render(request, 'Exam/tutor_quiz.html', {'data': data, 'student': student, 'exam': exam_mapping, 'exam_duration': exam_duration, 'calc': calc, 'section_count': section_count})
+    return HttpResponse("You are not Authenticated for this page")
+
+
+@login_required(login_url="Login")
+def tutor_view_questions(request, pk):
+    exam_mapping = TutorExam.objects.get(id=pk)
+    (result, section_count) = tutordisplayQuestionList(exam_mapping)
+    sectionA = 0
+    sectionB = 0
+    sectionC = 0
+    sectionD = 0
+
+    for q in result:
+        if q['section'] == 'A':
+            sectionA += 1
+            q['questionNo'] = sectionA
+        elif q['section'] == 'B':
+            sectionB += 1
+            q['questionNo'] = sectionB
+        elif q['section'] == 'C':
+            sectionC += 1
+            q['questionNo'] = sectionC
+        elif q['section'] == 'D':
+            sectionD += 1
+            q['questionNo'] = sectionD
+    return render(request, 'Exam/tutor_view_questions.html', {'questions': result, 'exam': exam_mapping})
+
+@login_required(login_url="Login")
+def tutor_submitted(request):
+	exam_status = request.session['exam_status']
+	exam_id = request.session.get('exam_id', 'kk')
+	user = User.objects.get(username=request.session['user'])
+	student = Student.objects.get(user=user)
+	exam = TutorExam.objects.get(id=exam_id)
+	s = TutorStudentMapping.objects.get(student=student, exam=exam)
+	student_answers = TutorStudentAnswer.objects.filter(student=s,exam=exam)
+	for ans in student_answers:
+		if ans.qtype == 'multiple' or ans.qtype == 'tof':
+			if ans.input_ans != 'Not Answered':
+				if ans.input_ans == re.sub(re.compile('<.*?>'),'',ans.correct_ans):
+					ans.marks_given = ans.marks
+					ans.check = 'correct'
+				else:
+					ans.marks_given = -abs(ans.negative_marks)
+					ans.check = 'incorrect'
+				ans.save()
+	TutorStudentExamResult.objects.get_or_create(exam=exam,student=s,attempted=True)
+	del request.session['exam_status']
+	return render(request, 'Exam/submitted.html')
+
+
+@login_required(login_url="Login")
+def tutor_multiple_ans(request):
+    print(request.POST)
+    q_id = request.POST.get('q_id')
+    input_ans = request.POST.get('correct')
+    check = request.POST.get('check')
+    examid = int(request.POST.get('examid'))
+    time = request.POST.get('time')
+    extra_time = request.POST.get('extra_time')
+    exam = TutorExam.objects.get(id=examid)
+    question = TutorMultipleQuestion.objects.get(id=q_id)
+    user = User.objects.get(username=request.session['user'])
+    student = Student.objects.get(user=user)
+    s = TutorStudentMapping.objects.get(student=student, exam=exam)
+    exist = TutorStudentAnswer.objects.filter(
+        qtype='multiple', question=question.question, student=s,exam=exam, marks = question.marks, negative_marks = question.negative_marks)[0]
+    if not exist:
+    	exist = StudentAnswer.objects.create(
+        qtype='multiple', question=question.question, student=s,exam=exam, marks = question.marks, negative_marks = question.negative_marks)
+    exist.input_ans = input_ans
+    exist.correct_ans = question.correct_ans
+    exist.check = check
+    exist.time = time
+    exist.extra_time = extra_time
+    exist.save()
+    return JsonResponse({'done': 'done'})
+
+@login_required(login_url="Login")
+def tutor_short_ans(request):
+    q_id = request.POST.get('q_id')
+    input_ans = request.POST.get('correct')
+    check = request.POST.get('check')
+    examid = int(request.POST.get('examid'))
+    time = request.POST.get('time')
+    extra_time = request.POST.get('extra_time')
+    (request.FILES.get('ans_Image'))
+
+    if request.FILES.get('ans_Image'):
+        ans_Image = request.FILES.get('ans_Image')
+    else:
+        ans_Image = False
+    user = User.objects.get(username=request.session['user'])
+    student = Student.objects.get(user=user)
+    question = TutorShortAnswerQuestion.objects.get(id=q_id)
+    exam = TutorExam.objects.get(id=examid)
+    s = TutorStudentMapping.objects.get(student=student, exam=exam)
+    exist = TutorStudentAnswer.objects.filter(
+        qtype='short', question=question.question, student=s,exam=exam, marks = question.marks, negative_marks = question.negative_marks)[0]
+    if not exist:
+    	exist = TutorStudentAnswer.objects.create(
+        qtype='short', question=question.question, student=s,exam=exam, marks = question.marks, negative_marks = question.negative_marks)
+    exist.check = check
+    exist.input_ans = input_ans
+    exist.correct_ans = question.correct_ans
+    if ans_Image:
+        exist.input_ans_Image = ans_Image
+
+    exist.time = time
+    exist.extra_time = extra_time
+    exist.save()
+    return JsonResponse({'done': 'done'})
+
+
+@login_required(login_url="Login")
+def tutor_long_ans(request):
+    q_id = request.POST.get('q_id')
+    input_ans = request.POST.get('correct')
+    check = request.POST.get('check')
+    examid = int(request.POST.get('examid'))
+    time = request.POST.get('time')
+    extra_time = request.POST.get('extra_time')
+
+    if request.FILES.get('ans_Image'):
+        ans_Image = request.FILES.get('ans_Image')
+    else:
+        ans_Image = False
+    user = User.objects.get(username=request.session['user'])
+    student = Student.objects.get(user=user)
+    question = TutorLongAnswerQuestion.objects.get(id=q_id)
+    exam = TutorExam.objects.get(id=examid)
+    s = TutorStudentMapping.objects.get(student=student, exam=exam)
+    exist = TutorStudentAnswer.objects.filter(
+        qtype='long', question=question.question, student=s,exam=exam, marks = question.marks, negative_marks = question.negative_marks)[0]
+    if not exist:
+    	exist = TutorStudentAnswer.objects.create(
+        qtype='long', question=question.question, student=s,exam=exam, marks = question.marks, negative_marks = question.negative_marks)
+    exist.check = check
+    exist.input_ans = input_ans
+    exist.correct_ans = question.correct_ans
+    if ans_Image:
+        exist.input_ans_Image = ans_Image
+
+    exist.time = time
+    exist.extra_time = extra_time
+    exist.save()
+    return JsonResponse({'done': 'done'})
+
+
+@login_required(login_url="Login")
+@csrf_exempt
+def tutor_tof_ans(request):
+    q_id = request.POST.get('q_id')
+    input_ans = request.POST.get('correct')
+    check = request.POST.get('check')
+    examid = int(request.POST.get('examid'))
+    time = request.POST.get('time')
+    extra_time = request.POST.get('extra_time')
+    question = TutorBooleanQuestion.objects.get(id=q_id)
+    user = User.objects.get(username=request.session['user'])
+    student = Student.objects.get(user=user)
+    exam = TutorExam.objects.get(id=examid)
+    s = TutorStudentMapping.objects.get(student=student, exam=exam)
+    exist = TutorStudentAnswer.objects.filter(
+        qtype='tof', question=question.question, student=s,exam=exam, marks = question.marks, negative_marks = question.negative_marks)[0]
+    if not exist:
+    	exist = TutorStudentAnswer.objects.create(
+        qtype='tof', question=question.question, student=s,exam=exam, marks = question.marks, negative_marks = question.negative_marks)
+    	exist = exist[0]
+    exist.check = check
+    exist.input_ans = input_ans
+    exist.correct_ans = question.correct_ans
+    exist.time = time
+    exist.extra_time = extra_time
+    exist.save()
+    return JsonResponse({'done': 'done'})

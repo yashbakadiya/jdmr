@@ -65,6 +65,15 @@ urlpatterns = [
          EditBooleanQuestionsTutor, name='booleanansedittutor'),
     path('Tutor/Exam/Questions/multiplequestions/edit/<question_id>',
          EditMultipleQuestionsTutor, name='multipleansedittutor'),
+    path('Student/Tutor/Exam/<pk>', tutor_instruction, name="tutor_instruction"),
+    path('Student/Tutor/Exam/start/<pk>', tutor_start_exam, name="tutor_start_exam"),
+    path('Student/Tutor/all/Questions/<pk>', tutor_view_questions, name="tutor_view_questions"),
+    path('student/Tutor/Exam/Submitted', tutor_submitted, name="tutor_submitted"),
+     #Saving Ans
+    path('tutor_multiple_ans/',tutor_multiple_ans, name='tutor_multiple_ans'),
+    path('tutor_short_ans/',tutor_short_ans, name='tutor_short_ans'),
+    path('tutor_long_ans/',tutor_long_ans, name='tutor_long_ans'),
+    path('tutor_tof_ans/',tutor_tof_ans, name='tutor_tof_ans'),
 
     # API-URLs
 

@@ -315,7 +315,7 @@
     top: -50px;
     left: 12px;
     border-radius: 50%;
-    background-image: url(../../../assets/img/profile-1.jpeg);
+    background-image: url(../../../assets/img/90x90.jpg);
     float: left;
     background-repeat: no-repeat;
     background-size: cover;
@@ -327,25 +327,26 @@
 }
 .mail-chat-system .chat-messages .message.right .text {
     margin-right: 38px;
-    background-color: #c2d5ff;
-    color: #1a73e9;
+    background-color: #816cfd;
+    color: #fff;
     border-radius: 1.875rem !important;
     border-top-right-radius: 0px !important;
     padding: 12px;
-    margin-top: 16px;
+    margin-top: 65px;
+    margin-bottom: 65px;
     box-shadow: 0px 0px 15px 1px rgba(113, 106, 202, 0.2);
 }
 .mail-chat-system .chat-messages .message.right .avatar {
     position: absolute;
+    top: -50px;
+    right: 12px;
+    border-radius: 50%;
+    background-image: url(../../../assets/img/90x90.jpg);
     float: right;
-    background-image: url(../../../assets/img/profile-16.jpeg);
     background-repeat: no-repeat;
     background-size: cover;
-    right: 22px;
-    top: -50px;
     height: 44px;
     width: 44px;
-    border-radius: 50%;
 }
 .mail-chat-system .chat-bottom-section {
     width: 100%;

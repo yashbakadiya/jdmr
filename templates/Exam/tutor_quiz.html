@@ -1,0 +1,1073 @@
+{% extends 'Exam/base.html' %}
+{% load static %}
+<!--  -->
+{% block content%}
+
+<script src="{% static 'js/timertutor.js' %}"></script>
+<link rel="stylesheet" href="{% static 'css/quiz/quiz.css' %}" />
+<script>
+  let distance;
+  let countDownDate;
+
+  var exam_duration = "{{exam_duration}}";
+
+  // takes value of timer if not submitted i.e in currentsession.json 
+  $.getJSON("{% static 'currentsession.json' %}", (data) => {
+    if (Object.keys(data).length !== 0) {
+      countDownDate = new Date().getTime() + parseInt(data.timer);
+    } else {
+      countDownDate = new Date().getTime() + exam_duration * 60 * 1000;
+    }
+  });
+</script>
+
+<script>
+  let count;
+  let answers = [];
+  let time = [];
+  let extra_time = [];
+  let obj;
+
+  // make null list of answers time timer and extra_time according to question.json 
+  $.getJSON("{% static 'questions.json' %}", (data) => {
+    obj = data.questions;
+    count = data.questions.length;
+    for (let i = 0; i < count; i++) {
+      answers.push(undefined);
+      time.push(0);
+      extra_time.push(0);
+    }
+  });
+
+  // fill answer according to json if page is reload
+  $.getJSON("{% static 'currentsession.json' %}", (data) => {
+    if (Object.keys(data).length !== 0) {
+      for (let i = 0; i < count; i++) {
+        if (data.ans[i] !== "" && data.ans[i] !== undefined) {
+          answers[i] = data.ans[i];
+        }
+        if (data.time !== 0) {
+          time[i] = data.time[i];
+        }
+        if (data.extra_time !== 0) {
+          extra_time[i] = data.extra_time[i];
+        }
+      }
+    }
+  });
+</script>
+
+<!-- remove nav if in pc and sidebar if in mobile -->
+<script>
+  $(document).ready(() => {
+    if ($(window).width() > 550) {
+      $("#mySidenav").remove();
+    }
+    else if ($(window).width() <= 550) {
+      $("#ot-ased-thi-sbtn").show();
+      $("#mySidebar").remove();
+    }
+  });
+
+</script>
+
+<script>
+  // count time and extra time
+
+  function countTime(c) {
+    if (answers[c - 1] === undefined) {
+      time[c - 1] = parseInt((exam_duration * 60) - (distance / 1000));
+    } else {
+      extra_time[c - 1] = parseInt((exam_duration * 60) - (distance / 1000));
+    }
+  }
+
+  // subtracts the time of the question from the question done just before i.e second max in time[] and extra_time[]
+  function true_time(c) {
+    var next_val = 0;
+    if (time[c-1]) {
+      for (let i = 0; i <= count; i++) {
+        if (time[i] < time[c-1] && time[i] > next_val) {
+          next_val = time[i];
+        }
+      }
+      for (let i = 0; i <= count; i++) {
+        if (extra_time[i] < time[c-1] && extra_time[i] > next_val) {
+          next_val = extra_time[i];
+        }
+      }
+
+      return time[c-1] - next_val;
+    }
+    return 0;
+  }
+
+  // subtracts the extra_time of the question from the question done just before i.e second max in time[] and extra_time[]
+  function true_extra_time(c) {
+    var next_val = 0;
+    if (extra_time[c-1]) {
+      for (let i = 0; i <= count; i++) {
+        if (time[i] < extra_time[c-1] && time[i] > next_val) {
+          next_val = time[i];
+        }
+      }
+      for (let i = 0; i <= count; i++) {
+        if (extra_time[i] < extra_time[c-1] && extra_time[i] > next_val) {
+          next_val = extra_time[i];
+        }
+      }
+
+      return extra_time[c-1] - next_val;
+    }
+    return 0;
+  }
+</script>
+
+<!-- Navbar -->
+<section class="mt-3 container-fluid">
+  <header>
+    <nav>
+      <span style="font-size: 30px; cursor: pointer;" class="open_btn" onclick="openNav()">&#9776;</span>
+      <b class="sub_nm mr-5 pl-2">{{exam.Name}}</b>
+      <b class="time" id="mytimer" style="font-size: large;"></b>
+      <button class="btn btn-sm btn-outline-secondary flscr" id="fullscreen__btn">
+        FullScreen
+      </button>
+      <select name="" id="" class="btn btn-sm lang" style="border: 1px solid grey; justify-self: right;">
+        <option value="">English</option>
+        <option value="">Hindi</option>
+      </select>
+    </nav>
+
+    <nav style="display: none;" id="mySidenav">
+      <div class="d-flex justify-content-between px-2 py-1" style="border-bottom: 1px solid #000">
+        <h6>Name :</h6>
+        <h6>{{student.user.first_name}} {{student.user.last_name}}</h6>
+      </div>
+      <p class="px-2 my-2">Question Pallete</p>
+      <div class="accordion" id="accordionExample" style="overflow-y: scroll; height: 47vh;">
+        <div class="card">
+          <div class="card-header" id="headingA">
+            <h2 class="mb-0">
+              <button class="btn btn-block text-left" type="button" data-toggle="collapse" data-target="#collapseA"
+                aria-expanded="true" aria-controls="collapseA">
+                SECTION A
+              </button>
+            </h2>
+          </div>
+
+          <div id="collapseA" class="collapse" aria-labelledby="headingA" data-parent="#accordionExample">
+            <div class="card-body">
+              <div class="" id="myqsA"></div>
+            </div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-header" id="headingB">
+            <h2 class="mb-0">
+              <button class="btn btn-block text-left collapsed" type="button" data-toggle="collapse"
+                data-target="#collapseB" aria-expanded="false" aria-controls="collapseB">
+                SECTION B
+              </button>
+            </h2>
+          </div>
+          <div id="collapseB" class="collapse" aria-labelledby="headingB" data-parent="#accordionExample">
+            <div class="card-body">
+              <div class="" id="myqsB"></div>
+            </div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-header" id="headingC">
+            <h2 class="mb-0">
+              <button class="btn btn-block text-left collapsed" type="button" data-toggle="collapse"
+                data-target="#collapseC" aria-expanded="false" aria-controls="collapseC">
+                SECTION C
+              </button>
+            </h2>
+          </div>
+          <div id="collapseC" class="collapse" aria-labelledby="headingC" data-parent="#accordionExample">
+            <div class="card-body">
+              <div class="" id="myqsC"></div>
+            </div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-header" id="headingD">
+            <h2 class="mb-0">
+              <button class="btn btn-block text-left collapsed" type="button" data-toggle="collapse"
+                data-target="#collapseD" aria-expanded="false" aria-controls="collapseD">
+                SECTION D
+              </button>
+            </h2>
+          </div>
+          <div id="collapseD" class="collapse" aria-labelledby="headingD" data-parent="#accordionExample">
+            <div class="card-body">
+              <div class="" id="myqsD"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- user guide -->
+      <table>
+        <tr>
+          <td>
+            <div id="flagdemo" style="padding-left: 1%;">
+              <span class="icon-stack" style="font-size: 65%;">
+                <i class="icon-circle icon-stack-base"></i>
+                <i class="icon-flag icon-light"></i>
+              </span>
+              <span>: Marked For Review</span>
+            </div>
+          </td>
+          <td>
+            <div id="ansdemo" class="pl-1">
+              <i class="icon-circle answered"></i>
+              <span class="pl-1">: Answered</span>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <div id="unansdemo">
+              <i class="icon-circle unanswered"></i>
+              <span>: Not Answered </span>
+            </div>
+          </td>
+          <td>
+            <div id="notvisiteddemo">
+              <i class="icon-circle notvisited" style="color: papayawhip;"></i>
+              <span>: Not Visited </span>
+            </div>
+          </td>
+        </tr>
+      </table>
+      <div class="btn-group d-flex justify-content-between p-2">
+        <a href="{% url 'tutor_instruction' pk=exam.id %}" class="btn mr-2 rounded" id="ibtn"
+          style="background: #FF5050;color: white">Instructions</a>
+        <a href="{% url 'tutor_view_questions' pk=exam.id %}" target="_blank" class="btn rounded" style="background: #5DB57F;color: white
+      ">View all Quiz</a>
+      </div>
+      {% if exam.calc %}
+      <div class="mx-2 my-1">
+        <a onclick="window.open('{% url 'calc' %}', 
+      'newwindow', 
+      'width=500,height=400'); 
+return false;" class="btn btn-block" style="background: #FFC727;
+      color: white">Calculator</a>
+      </div>
+      {% endif %}
+      <div class="mx-2 mb-1">
+        <a class="submitbtn btn  btn-block rounded" style="background: #0073C4;color: white;padding: 10px ">Submit the
+          Quiz</a>
+      </div>
+    </nav>
+  </header>
+
+  <!-- ########################## header end #################-->
+  <!-- main div -->
+  <div class="row page-border">
+    <div class="col-lg-9 col-sm-6 questions-container">
+      <div class="d-flex justify-content-between px-2 py-1" style="border-bottom: 1px solid #000">
+        <h6 id="qpalette">Section <span id="sectiontag">A</span> </h6>
+      </div>
+
+      <div class="que_num">
+        <div class="">
+          <div>
+            <div class="qbar d-inline" id="questionno">
+              <b>
+                Question <span id="qsno">1</span>/<span id="totalques"></span>
+                :
+              </b>
+              Correct Answer:
+              <span id="pmark"></span>,
+              Wrong Answer:
+              <span id="nmark"></span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div id="ot-ased-leftcol" style="overflow-y: scroll; height: 52vh;">
+        <div id="ot-ques-div-1" class="col-md-12 ot-ques-div">
+          <div id="ot-ased-cinst3">
+            <div id="ot-ased-inmdiv">
+              <div id="ot-ased-fpage">
+                <div id="ot-ased-ask-main" class="col-md-12 p-0">
+                  <div id="ot-ques-div-lang-1-1" class="original-class">
+                    <div id="ot-ased-ques-hh">
+                      <b>Question No. <span id="qno">1</span></b>
+                    </div>
+                    <div class="col-md-12">
+                      <div id="ot-ased-sid-pd1">
+
+                        <label id="currquestion" style="font-size: 25px;"></label>
+                        <br>
+                        <div id="ansframe"></div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-12 m-0">
+        <div class="row questionStatus">
+          <div class="col-md-6 questionStatus-left">
+            <div class="btn-group m-1">
+              <button id="markforreview" class="ot-ased-mrkbtn btn rounded m-2" style="background: #FF5050;
+       color: white">Mark for Review</button>
+              <button id="clearresponse" class="ot-ased-clrbtn btn rounded m-2"
+                style="background: #0073C4;color: white">Clear Response</button>
+            </div>
+          </div>
+          <div style="display: inline-table;" class="col-md-6 questionStatus-right">
+            <div class="btn-group m-1">
+              <button id="previous" class="ot-ased-svnbtn btn rounded m-2" style="background: #EF5E3B;
+       color: white">Previous</button>
+              <button id="next" class="ot-ased-svnbtn btn rounded m-2" style="background: #5DB57F;
+       color: white">Next</button>
+            </div>
+          </div>
+        </div>
+        <div class="section-submit-btn m-2">
+          <a class="submitbtn btn  btn-block"
+            style="display: none; background: #0073C4;color: white;padding: 10px ">Submit
+            the Quiz</a>
+        </div>
+      </div>
+    </div>
+    <!-- second column -->
+
+    <div id="mySidebar" class="col-lg-3 col-sm-6 questionsList-container">
+      <div class="d-flex justify-content-between px-2 py-1" style="border-bottom: 1px solid #000">
+        <h6>Name :</h6>
+        <h6>{{student.user.first_name}} {{student.user.last_name}}</h6>
+      </div>
+      <p class="px-2 my-2">Question Pallete</p>
+      <div class="accordion" id="accordionExample_2" style="overflow-y: scroll; height: 37vh;">
+        <div class="card">
+          <div class="card-header collapsed" id="headingA_2">
+            <h6 class="mb-0">
+              <button id='ot_current_section_name' class="btn btn-block text-left" type="button" data-toggle="collapse"
+                data-target="#collapseA_2" aria-expanded="true" aria-controls="collapseA_2">Section A
+              </button>
+            </h6>
+          </div>
+          <div id="collapseA_2" class="collapse show" aria-labelledby="headingA_2" data-parent="#accordionExample_2">
+            <div class="card-body">
+              <div class="" id="myqsA"></div>
+            </div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-header" id="headingB_2">
+            <h6 class="mb-0">
+              <button id='ot_current_section_name' class="btn btn-block collapsed text-left" type="button"
+                data-toggle="collapse" data-target="#collapseB_2" aria-expanded="false"
+                aria-controls="collapseB_2">Section B
+              </button>
+            </h6>
+          </div>
+          <div id="collapseB_2" class="collapse" aria-labelledby="headingB_2" data-parent="#accordionExample_2">
+            <div class="card-body">
+              <div class="" id="myqsB"></div>
+            </div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-header" id="headingC_2">
+            <h6 class="mb-0">
+              <button id='ot_current_section_name' class="btn btn-block collapsed text-left" type="button"
+                data-toggle="collapse" data-target="#collapseC_2" aria-expanded="false"
+                aria-controls="collapseC_2">Section C
+              </button>
+            </h6>
+          </div>
+          <div id="collapseC_2" class="collapse" aria-labelledby="headingC_2" data-parent="#accordionExample_2">
+            <div class="card-body">
+              <div class="" id="myqsC"></div>
+            </div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-header" id="headingD_2">
+            <h6 class="mb-0">
+              <button id='ot_current_section_name' class="btn btn-block collapsed text-left" type="button"
+                data-toggle="collapse" data-target="#collapseD_2" aria-expanded="false"
+                aria-controls="collapseD_2">Section D
+              </button>
+            </h6>
+          </div>
+          <div id="collapseD_2" class="collapse" aria-labelledby="headingD_2" data-parent="#accordionExample_2">
+            <div class="card-body">
+              <div class="" id="myqsD"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- user guide -->
+      <div>
+        <table style="margin-left: 20px;margin-bottom: 0px">
+          <tr id="ot-ased-ins-h35">
+            <td class="ot-ased-ques-txs">
+              <span class="icon-stack" style="font-size: 65%;">
+                <i class="icon-circle icon-stack-base"></i>
+                <i class="icon-flag icon-light"></i>
+              </span>
+              <span>: Marked For Review</span>
+            </td>
+            <td class="ot-ased-ques-txs">
+              <i class="icon-circle answered"></i>
+              <span class="pl-1">: Answered</span>
+            </td>
+          </tr>
+          <tr id="ot-ased-ins-h35">
+            <td class="ot-ased-ques-txs">
+              <i class="icon-circle unanswered"></i>
+              <span>: Not Answered </span>
+            </td>
+            <td class="ot-ased-ques-txs">
+              <i class="icon-circle notvisited" style="color: papayawhip;"></i>
+              <span>: Not Visited </span>
+            </td>
+          </tr>
+        </table>
+      </div>
+
+      <div class="btn-group d-flex justify-content-between p-2">
+        <a href="{% url 'tutor_instruction' pk=exam.id %}" class="btn mr-2 rounded" id="ibtn"
+          style="background: #FF5050;color: white">Instructions</a>
+        <a href="{% url 'tutor_view_questions' pk=exam.id %}" target="_blank" class="btn rounded" style="background: #5DB57F;color: white
+        ">View all Quiz</a>
+      </div>
+      {% if exam.calc %}
+      <div class="mx-2 my-1">
+        <a onclick="window.open('{% url 'calc' %}', 
+        'newwindow', 
+        'width=500,height=400'); 
+  return false;" class="btn btn-block" style="background: #FFC727;
+        color: white">Calculator</a>
+      </div>
+      {% endif %}
+      <div class="mx-2 mb-1">
+        <a class="submitbtn btn  btn-block rounded" style="background: #0073C4;color: white;padding: 10px ">Submit the
+          Quiz</a>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+
+
+<br /><br />
+<script>
+  $(() => {
+    //Question tracker
+    let c = 1;
+
+    // $(document).on("contextmenu",(e)=>{
+    //     return false;
+    // })
+
+    $("#" + c)
+      .parent("div")
+      .addClass("currentquestion");
+    //this answers array store the answers clicked by the user order wise(1-25)
+    //We can send this answers array to backend for marks evaluation
+    //at each index, option no. in the form of string are saved. In case user selects no answer, undefined is saved at that index.
+
+    //Rendering questions dynamically
+
+    // make circles according to answers
+    $.getJSON("{% static 'questions.json' %}", (data) => {
+      let value = data.questions[c - 1];
+      $("#totalques").append(count);
+      $("#pmark").empty();
+      $("#pmark").append("+" + value.marks);
+      $("#nmark").empty();
+      $("#nmark").append(-value.negative_marks);
+      for (let i = 1; i <= count; i++) {
+        let myid = i.toString();
+        if (answers[i - 1] !== undefined) {
+          if (i === 1) {
+            $(`#myqs${obj[i - 1].section}`).append(
+              `<span style="cursor: pointer;" onclick="clickablespan(this)" class="question green"><a class="currentquestion" id=${myid} href="#"> ${obj[i - 1].questionNo
+              }</a><i></i></span>`
+            );
+          } else if (i % 5 === 0) {
+            $(`#myqs${obj[i - 1].section}`).append(
+              `<span style="cursor: pointer;" onclick="clickablespan(this)" class="question green"><a class="" id=${myid} href="#"> ${obj[i - 1].questionNo
+              }</a><i></i></span><br>`
+            );
+          } else {
+            $(`#myqs${obj[i - 1].section}`).append(
+              `<span style="cursor: pointer;" onclick="clickablespan(this)" class="question green"><a class="" id=${myid} href="#"> ${obj[i - 1].questionNo
+              }</a><i></i></span>`
+            );
+          }
+        } else {
+          if (i === 1) {
+            $(`#myqs${obj[i - 1].section}`).append(
+              `<span style="cursor: pointer;" onclick="clickablespan(this)" class="question"><a class="currentquestion" id=${myid} href="#"> ${obj[i - 1].questionNo
+              }</a><i></i></span>`
+            );
+          } else if (i % 5 === 0) {
+            $(`#myqs${obj[i - 1].section}`).append(
+              `<span style="cursor: pointer;" onclick="clickablespan(this)" class="question"><a class="" id=${myid} href="#"> ${obj[i - 1].questionNo
+              }</a><i></i></span><br>`
+            );
+          } else {
+            $(`#myqs${obj[i - 1].section}`).append(
+              `<span style="cursor: pointer;" onclick="clickablespan(this)" class="question"><a class="" id=${myid} href="#"> ${obj[i - 1].questionNo
+              }</a><i></i></span>`
+            );
+          }
+        }
+      }
+    });
+
+    // save data of answer timer time and extra_time if user leaves page without submit
+    $(window).on("beforeunload", () => {
+      $.post(
+        "{% url 'store_data' %}",
+        {
+          "ans[]": answers,
+          "time[]": time,
+          "extra_time[]": extra_time,
+          timer: distance,
+          csrfmiddlewaretoken: "{{ csrf_token }}",
+        },
+        (data) => {
+          console.log(data);
+        }
+      );
+    });
+
+    //When user selects an objective (only single correct) answer
+
+    $(document).on("change", "input[type=radio][name=q]", (e) => {
+      let ans = e.target.id;
+      ans = ans.slice(1);
+      countTime(c);
+      answers[c - 1] = ans;
+      if (
+        $("#" + c)
+          .parent()
+          .hasClass("green") === false
+      ) {
+        $("#" + c)
+          .parent()
+          .addClass("green");
+      }
+      if (
+        $("#" + c)
+          .parent()
+          .hasClass("red") === true
+      ) {
+        $("#" + c)
+          .parent()
+          .removeClass("red");
+      }
+
+
+      options = obj[c - 1].options;
+      correct = options[`op${ans}`];
+      var q_id = obj[c - 1].id;
+      var qtype = obj[c - 1].qmain;
+      var examid = obj[c - 1].examid;
+      if (qtype == "multiple") url = `{% url 'tutor_multiple_ans' %}`;
+      else if (qtype == "tof") url = "{% url 'tutor_tof_ans' %}";
+
+      var formData = new FormData();
+      formData.append('examid', examid)
+      formData.append('time', true_time(c))
+      formData.append('extra_time', true_extra_time(c))
+      formData.append('q_id', q_id)
+      formData.append('correct', correct)
+      formData.append('check', "Answered")
+
+      $.ajax({
+        url: url,
+        type: 'POST',
+        headers: { 'X-CSRFToken': "{{csrf_token}}" },
+        data: formData,
+        processData: false,
+        contentType: false,
+        success: () => { console.log("done") }
+      });
+    });
+
+    // hide and show text and file box for subjective answer
+    $(document).on("click", ".ans-img-btn", () => {
+      $("#textans").toggle(() => {
+        if ($('#textans').is(':hidden')) {
+
+          $('.btn-light').show()
+          $('.ans-img-btn').text('Submit Text')
+
+        } else {
+          $('.btn-light').hide()
+          $('.ans-img-btn').text('Upload Image')
+
+        } $('.ans-img-btn').text('Write Answer')
+      })
+    });
+
+
+    //Save Text answer
+
+    $(document).on("click", "#savetextbtn", () => {
+      let input_text = $("#textans");
+      countTime(c);
+      answers[c - 1] = input_text.val();
+      if (
+        $("#" + c)
+          .parent()
+          .hasClass("red") === true
+      ) {
+        $("#" + c)
+          .parent()
+          .removeClass("red");
+      }
+      $("#" + c)
+        .parent()
+        .addClass("green");
+
+
+      var q_id = obj[c - 1].id;
+      var qtype = obj[c - 1].qmain;
+      var examid = obj[c - 1].examid;
+      q_ans = input_text.val();
+
+      var formData = new FormData();
+      formData.append('ans_Image', $(".btn-light")[0].files[0]);
+      formData.append('examid', examid)
+      formData.append('time', true_time(c))
+      formData.append('extra_time', true_extra_time(c))
+      formData.append('q_id', q_id)
+      formData.append('correct', q_ans)
+      formData.append('check', "Answered")
+
+      if (qtype == "short") url = "{% url 'tutor_short_ans' %}";
+      else if (qtype == "long") url = "{% url 'tutor_long_ans' %}";
+      $.ajax({
+        url: url,
+        type: 'POST',
+        headers: { 'X-CSRFToken': "{{csrf_token}}" },
+        data: formData,
+        processData: false,
+        contentType: false,
+        success: () => { console.log("done") }
+      });
+    });
+
+    //Clear Response
+
+    $(document).on("click", "#clearresponse", () => {
+      time[c - 1] = 0;
+      extra_time[c - 1] = 0;
+      if (obj[c - 1].qtype === "objective") {
+        let response = answers[c - 1];
+        if (response !== undefined) {
+          $("input[type=radio][name=q]").prop("checked", false);
+          if (
+            $("#" + c)
+              .parent()
+              .hasClass("green") === true
+          ) {
+            $("#" + c)
+              .parent()
+              .removeClass("green");
+          }
+        }
+        answers[c - 1] = undefined;
+      } else if (obj[c - 1].qtype === "subjective") {
+        answers[c - 1] = undefined;
+        $("#textans").val("");
+        if (
+          $("#" + c)
+            .parent()
+            .hasClass("green") === true
+        ) {
+          $("#" + c)
+            .parent()
+            .removeClass("green");
+        }
+      }
+
+      var q_type = obj[c - 1].qmain;
+      var q_id = obj[c - 1].id;
+      var examid = obj[c - 1].examid;
+      if (q_type == "multiple") url = "{% url 'tutor_multiple_ans' %}";
+      else if (q_type == "short") url = "{% url 'tutor_short_ans' %}";
+      else if (q_type == "long") url = "{% url 'tutor_long_ans' %}";
+      else if (q_type == "tof") url = "{% url 'tutor_tof_ans' %}";
+
+      var formData = new FormData();
+      formData.append('examid', examid)
+      formData.append('time', true_time(c))
+      formData.append('extra_time', true_extra_time(c))
+      formData.append('q_id', q_id)
+      formData.append('correct', "")
+      formData.append('check', "Not Answered")
+
+      $.ajax({
+        url: url,
+        type: 'POST',
+        headers: { 'X-CSRFToken': "{{csrf_token}}" },
+        data: formData,
+        processData: false,
+        contentType: false,
+        success: () => { console.log("done") }
+      });
+    });
+
+    //Change size of textbox dynamically
+    var baseH; // base scroll height
+
+    $("body")
+      .one("focus.textarea", "#textans", function (e) {
+        baseH = this.scrollHeight;
+      })
+      .on("input.textarea", "#textans", function (e) {
+        if (baseH < this.scrollHeight) {
+          $(this).height(0).height(this.scrollHeight);
+        } else {
+          $(this).height(0).height(baseH);
+        }
+      });
+
+    //loads quesions and answers according to json
+
+    $.getJSON("{% static 'questions.json' %}", (data) => {
+      // let key="1";
+      let value = data.questions[c - 1];
+      let qf = $("#currquestion");
+      qf.empty();
+      qf.append('<span align="center">' + value.question + "<span>");
+      $("#ansframe").empty();
+      if (value.qtype === "objective") {
+        let options = value.options;
+        let opno = 1;
+        for (const k of Object.keys(options)) {
+          $("#ansframe").append(
+            `<input type="radio" name="q" id="o${opno}">` +
+            '<span style="font-size:20px;"> ' +
+            options[k] +
+            "</span>" +
+            "<br><br><br>"
+          );
+          if (parseInt(answers[c - 1]) === opno) {
+            $("#o" + opno).prop("checked", true);
+          }
+          opno = opno + 1;
+        }
+      } else if (value.qtype === "subjective") {
+        let textlength;
+        let rows = "1";
+        let cols = "100";
+        if (value.answerlength === "short") {
+          textlength = 150;
+        } else if (value.answerlength === "long") {
+          textlength = 1000;
+        }
+        let textbox = `<textarea id="textans" maxlength=${textlength} rows=${rows} cols=${cols}></textarea><br /><input style="display:none" type="file" class="btn btn-light">`;
+        if (answers[c - 1] !== undefined) {
+          textbox.val(answers[c - 1]);
+        }
+        $("#ansframe").append(textbox);
+        $("#ansframe").append("<br><br>");
+        $("#ansframe").append(`<div align="" class=""><button class="btn btn-outline-primary" id="savetextbtn">Save Answer </button>
+                                          <button class="btn btn-warning ans-img-btn">Upload Image</button>
+                                      </div>`);
+
+
+        if (answers[c - 1] !== undefined) {
+          $("#textans").val(answers[c - 1]);
+        }
+      }
+    });
+
+    //Mark for review
+
+    $(document).on("click", "#markforreview", (e) => {
+      let qid = c.toString();
+      let element = $("#" + c);
+      if (element.next().hasClass("icon-flag")) {
+        element.next().removeClass("icon-flag");
+      } else {
+        element.next().addClass("icon-flag");
+      }
+    });
+
+    $(document).on("click", ".question>a", (e) => {
+      let qid = $(e.target).attr("id");
+      $("#" + c).removeClass("currentquestion");
+      if (answers[c - 1] === undefined) {
+        $("#" + c)
+          .parent("span")
+          .addClass("red");
+      }
+      c = parseInt(qid);
+      $("#" + c).addClass("currentquestion");
+      $.getJSON("{% static 'questions.json' %}", (data) => {
+        // let key=qid;
+        let value = data.questions[c - 1];
+        let qf = $("#currquestion");
+        qf.empty();
+        qf.append('<span align="center">' + value.question + "<span><br>");
+        $("#pmark").empty();
+        $("#pmark").append("+" + value.marks);
+        $("#nmark").empty();
+        $("#nmark").append(-value.negative_marks);
+        $("#qno").empty();
+        $("#qno").append(value.questionNo);
+        $("#qsno").empty();
+        $("#qsno").append(c);
+
+        if ($("#sectiontag").text() != value.section) {
+          $(`#heading${value.section}_2`).find('button').click();
+          $("#sectiontag").empty();
+          $("#sectiontag").append(value.section);
+        }
+        $("#ansframe").empty();
+        //render options
+        if (value.qtype === "objective") {
+          let options = value.options;
+          let opno = 1;
+          for (const k of Object.keys(options)) {
+            $("#ansframe").append(
+              `<input type="radio" name="q" id="o${opno}">` +
+              '<span style="font-size:20px;"> ' +
+              options[k] +
+              "</span>" +
+              "<br><br><br>"
+            );
+            if (parseInt(answers[c - 1]) === opno) {
+              $("#o" + opno).prop("checked", true);
+            }
+            opno = opno + 1;
+          }
+        } else if (value.qtype === "subjective") {
+          let textlength;
+          let rows;
+          let cols;
+          rows = "1";
+          cols = "100";
+          if (value.answerlength === "short") {
+            textlength = 150;
+          } else if (value.answerlength === "long") {
+            textlength = 1000;
+          }
+          let textbox = `<textarea id="textans" maxlength=${textlength} rows=${rows} cols=${cols}></textarea><br /><input style="display:none" type="file" class="btn btn-light">`;
+
+          $("#ansframe").append(textbox);
+          $("#ansframe").append("<br><br>");
+          $("#ansframe").append(`<div align="" class=""><button class="btn btn-outline-primary" id="savetextbtn">Save Answer </button>
+                                          <button class="btn btn-warning ans-img-btn">Upload Image</button>
+                                      </div>`);
+
+
+          if (answers[c - 1] !== undefined) {
+            $("#textans").val(answers[c - 1]);
+          }
+        }
+      });
+
+    });
+
+    // previous 
+    $(document).on("click", "#previous", (e) => {
+      if (c > 1) {
+        $("#" + c).removeClass("currentquestion");
+        if (answers[c - 1] === undefined) {
+          $("#" + c)
+            .parent("span")
+            .addClass("red");
+        }
+        c = c - 1;
+        $("#" + c).addClass("currentquestion");
+        let qid = c.toString();
+        $.getJSON("{% static 'questions.json' %}", (data) => {
+          // let key=qid;
+          let value = data.questions[c - 1];
+          let qf = $("#currquestion");
+          qf.empty();
+          qf.append('<span align="center">' + value.question + "<span><br>");
+          $("#pmark").empty();
+          $("#pmark").append("+" + value.marks);
+          $("#nmark").empty();
+          $("#nmark").append(-value.negative_marks);
+          $("#qno").empty();
+          $("#qno").append(value.questionNo);
+          $("#qsno").empty();
+          $("#qsno").append(c);
+          if ($("#sectiontag").text() != value.section) {
+            $(`#heading${value.section}_2`).find('button').click();
+            $("#sectiontag").empty();
+            $("#sectiontag").append(value.section);
+          }
+          $("#ansframe").empty();
+          //render options
+          let options = value.options;
+          let opno = 1;
+          if (value.qtype === "objective") {
+            for (const k of Object.keys(options)) {
+              $("#ansframe").append(
+                `<input type="radio" name="q" id="o${opno}">` +
+                '<span style="font-size:20px;"> ' +
+                options[k] +
+                "</span>" +
+                "<br><br><br>"
+              );
+              if (parseInt(answers[c - 1]) === opno) {
+                $("#o" + opno).prop("checked", true);
+              }
+              opno = opno + 1;
+            }
+          } else if (value.qtype === "subjective") {
+            let textlength;
+            let rows;
+            let cols;
+            rows = "1";
+            cols = "100";
+            if (value.answerlength === "short") {
+              textlength = 150;
+            } else if (value.answerlength === "long") {
+              textlength = 1000;
+            }
+            let textbox = `<textarea id="textans" maxlength=${textlength} rows=${rows} cols=${cols}></textarea><br /><input type="file" class="btn btn-light" style="display: none;">`;
+
+            $("#ansframe").append(textbox);
+            $("#ansframe").append("<br><br>");
+            $("#ansframe").append(`<div align="" class=""><button class="btn btn-outline-primary" id="savetextbtn">Save Answer </button>
+                                          <button class="btn btn-warning ans-img-btn">Upload Image</button>
+                                      </div>`);
+
+
+            if (answers[c - 1] !== undefined) {
+              $("#textans").val(answers[c - 1]);
+            }
+          }
+        });
+      }
+
+    });
+
+    // submit with no back button option 
+    $(document).on("click", '.submitbtn', () => {
+      window.location.replace("/exams/student/Tutor/Exam/Submitted");
+    });
+
+    // next button 
+    $(document).on("click", "#next", (e) => {
+      if (c < count) {
+        $("#" + c).removeClass("currentquestion");
+        if (answers[c - 1] === undefined) {
+          $("#" + c)
+            .parent("span")
+            .addClass("red");
+        }
+        c = c + 1;
+        $("#" + c).addClass("currentquestion");
+        let qid = c.toString();
+        $.getJSON("{% static 'questions.json' %}", (data) => {
+          // let key=qid;
+          let value = data.questions[c - 1];
+          let qf = $("#currquestion");
+          qf.empty();
+          qf.append('<span align="center">' + value.question + "<span><br>");
+          $("#pmark").empty();
+          $("#pmark").append("+" + value.marks);
+          $("#nmark").empty();
+          $("#nmark").append(-value.negative_marks);
+          $("#qno").empty();
+          $("#qno").append(value.questionNo);
+          $("#qsno").empty();
+          $("#qsno").append(c);
+          if ($("#sectiontag").text() != value.section) {
+            $(`#heading${value.section}_2`).find('button').click();
+            $("#sectiontag").empty();
+            $("#sectiontag").append(value.section);
+          }
+          $("#ansframe").empty();
+          //render options
+
+          if (value.qtype === "objective") {
+            let options = value.options;
+            let opno = 1;
+            for (const k of Object.keys(options)) {
+              $("#ansframe").append(
+                `<input type="radio" name="q" id="o${opno}">` +
+                '<span style="font-size:20px;"> ' +
+                options[k] +
+                "</span>" +
+                "<br><br><br>"
+              );
+              if (parseInt(answers[c - 1]) === opno) {
+                $("#o" + opno).prop("checked", true);
+              }
+              opno = opno + 1;
+            }
+          } else if (value.qtype === "subjective") {
+            let textlength;
+            let rows;
+            let cols;
+            rows = "1";
+            cols = "100";
+            if (value.answerlength === "short") {
+              textlength = 150;
+            } else if (value.answerlength === "long") {
+              textlength = 1000;
+            }
+            let textbox = `<textarea id="textans" maxlength=${textlength} rows=${rows} cols=${cols}></textarea><br /><input type="file" style="display: none;" class="btn btn-light">`;
+
+            $("#ansframe").append(textbox);
+            $("#ansframe").append("<br><br>");
+            $("#ansframe").append(`<div align="" class=""><button class="btn btn-outline-primary" id="savetextbtn">Save Answer </button>
+                                          <button class="btn btn-warning ans-img-btn">Upload Image</button>
+                                      </div>`);
+
+
+            if (answers[c - 1] !== undefined) {
+              $("#textans").val(answers[c - 1]);
+            }
+          }
+        });
+      }
+    });
+  });
+</script>
+
+<script>
+  function openNav() {
+    if ($('#mySidenav').is(':hidden')) {
+      $('#mySidenav').show();
+    }
+    else {
+      $('#mySidenav').hide();
+    }
+  }
+
+  function clickablespan(e) {
+    e.firstChild.click();
+  }
+</script>
+
+<script>
+
+  $("#fullscreen__btn").on("click", () => {
+    document.documentElement.requestFullscreen();
+  });
+
+</script>
+
+{% endblock %}

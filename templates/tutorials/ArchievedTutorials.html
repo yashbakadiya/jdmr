@@ -235,6 +235,7 @@
                     </div>
                 </div>
                     <!-- Grid row -->
+                    {% if tutorials %}
                     <div class="card-body">
                     <form method="post" action=" ">{% csrf_token %}
                         <!--Table-->
@@ -273,6 +274,15 @@
                         <br>
                     </form>
                 </div>
+                {% else %}
+                    <div class="card-header" style="background: none;">
+                        <div class="row">
+                            <div class="col-xl-12 col-md-12 col-12">
+                                <h2>No Tutorials to show</h2>
+                            </div>
+                        </div>
+                    </div>
+                {% endif %}
             </div>
     </main>
     {% endblock %}

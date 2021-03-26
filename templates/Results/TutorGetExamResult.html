@@ -1,4 +1,4 @@
-{% extends 'dashboard/base.html' %}
+{% extends 'dashboard/Tutor-dashboard.html' %}
 {% load static %}
 {% block css %}
 <style media="screen">
@@ -220,48 +220,54 @@
                 <div class="row">
                     <!-- Grid column -->
                     <div class="col-md-8">
-                        <h2 style="color: rgb(0, 0, 0);">List of Exams</h2>
+                        <h2 style="color: rgb(0, 0, 0);">List of Students</h2>
                     </div>
                     
                     <div class="col-md-4">
-                        <input id="searchbox" type="text" class="form-control" name='srh' placeholder="Search Exam or Course" required>
+                        <input id="searchbox" type="text" class="form-control" name='srh' placeholder="Search" required>
                     </div>
                 </div>
                 <!-- Grid column -->
             </div>
-            {% if exams %}
+            {% if students %}
             <div class="card-body">
                 <!-- Grid row -->
                 <form action="" method="post">{% csrf_token %}
                     <!--Table-->
                     <div class="table-responsive">
-                    <table class="table table-striped table-bordered table-hover mb-4">
+                    <table class="table table-striped table-bordered table-hover">
                         <!--Table head-->
                             <tr>
+                                <th>Student Name</th>
+                                <th>Price</th>
                                 <th>Exam Name</th>
-                                <th>Course</th>
                                 <th>Exam Date</th>
                                 <th>Exam Duration</th>
-                                <th>Total No. of Questions</th>
-                                <th>Pass Percentage</th>
+                                <th class="text-center">Exam Status</th>
                                 <th class="text-center">Results</th>
+                                <th class="text-center">Reports</th>
                             </tr>
                         <!--Table head-->
                         <!--Table body-->
-                            {% for i in exams %}
-                            <tr class="main-row">
-                                <td>{{i.Name}}</td>
-                                <td>{{i.course.courseName}}</td>
-                                <td>{{i.exam_date}}</td>
-                                <td>{{i.exam_duration}}</td>
-                                <td>{{i.question_count}}</td>
-                                <td>{{i.pass_percentage}}</td>
-                                <td class="text-center"><a href="{% url 'getexamresults' i.id %}" class="btn btn-danger">Results</a></td>
+                            {% for i in students %}
+                            <tr>
+                            <td>{{i.student.user.first_name}} {{i.student.user.last_name}}</td>
+                            <td>{{i.exam.price}}</td>
+                            <td>{{i.exam.Name}}</td>
+                            <td>{{i.exam.exam_date}}</td>
+                            <td>{{i.exam.exam_duration}}</td>
+                            {% if i.PassStatus %}
+                            <td class="text-center"><button class="stat btn btn-success">Pass</button></td>
+                            {% else %}
+                            <td class="text-center"><button class="stat btn btn-danger">Fail</button></td>
+                            {% endif %}
+                            <td class="text-center"><a href="{% url 'tutorstudentresult' i.id i.exam.id %}" class="btn btn-primary">Result</a></td>
+                            <td class="text-center"><a href="{% url 'tutoranotatePdfViewer' i.exam.id i.id %}" class="btn btn-primary">Anotate Result</a></td>
                             </tr>
                             {% endfor %}
                         <!--Table body-->
                     </table>
-                    </div>
+                </div>
                     <!--Table-->
                 </form>
                 <br>
@@ -270,7 +276,7 @@
                 <div class="card-header" style="background: none;">
                     <div class="row">
                         <div class="col-xl-12 col-md-12 col-12">
-                            <h2>No Exams to show</h2>
+                            <h2>No Students to show</h2>
                         </div>
                     </div>
                 </div>
@@ -278,7 +284,7 @@
         </div>
     </main>
     <script type="text/javascript">
-        trlist = $(".main-row");
+        trlist = $("tbody>tr");
         $("body").on('input',"#searchbox",function(){
             trlist.hide();
             search = this.value.toLowerCase();
@@ -305,6 +311,10 @@
             }
 
         });
+
+        $('.stat').on('click', (e)=>{
+            e.preventDefault();
+        })
 
     </script>
     {% endblock %}

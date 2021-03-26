@@ -237,6 +237,7 @@
                     <!-- Grid column -->
                 </div>
             </div>
+            {% if tutor %}
                 <div class="card-body">
                     <!-- Grid row -->
                     <form action="" method="post">{% csrf_token %}
@@ -295,6 +296,15 @@
                         <br>
                     </form>
                 </div>
+                {% else %}
+                    <div class="card-header" style="background: none;">
+                        <div class="row">
+                            <div class="col-xl-12 col-md-12 col-12">
+                                <h2>No Tutors to show</h2>
+                            </div>
+                        </div>
+                    </div>
+                {% endif %}
             </div>
     </main>
     {% endblock %}

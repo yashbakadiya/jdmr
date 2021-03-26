@@ -1,57 +1,189 @@
-{% extends template %}
+{% extends 'dashboard/student-dashboard.html' %}
 
 {% load static %}
 
 {% block main-content %}
+<main class="mt-5 row">
+    <div class="col-xl-12 col-md-12 col-12">
+        <div class="card widget box box-shadow">
+            <div class="card-header">
+                <div class="row">
+                    <div class="col-xl-12 col-md-12 col-12">
+                        <h2 style="color:black;">Your Notes</h2>
+                    </div>
+                </div>
+            </div>
+            {% if bought_institute_notes or bought_tutor_notes %}
+                    <h6 style="color:black;" class="m-2 pl-2">Institute Notes</h6>
+                    <div class="widget-content widget-content-area">
+                        <div class="table-responsive">
+                            <table id="htmlgrid" class="testgrid table table-striped table-bordered table-hover mb-4">
+                                <tr>
+                                    <th>No.</th>
+                                    <th>Note Title</th>
+                                    <th>Class</th>
+                                    <th>Subject</th>
+                                    <th>Description</th>
+                                    <th>Institute</th>
+                                    <th>Price</th>
+                                    <th class="text-center">View</th>  
+                                </tr>
+                                {% for note in bought_institute_notes %}
+                                <tr>
+                                    <td>{{forloop.counter}}</td>
+                                    <td><p style="color: black;font-size: 14px;">{{note.title}}</p></td>
+                                    <td><p style="color: black;font-size: 14px;">{{note.forclass}}</p></td>
+                                    <td><p style="color: black;font-size: 14px;">{{note.subject}}</p></td>
+                                    <td>{{note.description|truncatechars:15}}</td>
+                                    <td><p style="color: black;font-size: 14px;">{{note.institute.user.username}}</p></td>
+                                    <td><p style="color: black;font-size: 14px;">{{note.price}}</p></td>
+                                    <td style="text-align: center;">
+                                    <a class="btn btn-info" href="{{note.notes.url}}" target="_blank">View Note</a>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </table>
+                        </div>
+                    </div>
+                    <h6 style="color:black;" class="m-2 pl-2">Tutor Notes</h6>
+
+                    <div class="widget-content widget-content-area">
+                        <div class="table-responsive">
+                            <table id="htmlgrid" class="testgrid table table-striped table-bordered table-hover mb-4">
+                                <tr>
+                                    <th>No.</th>
+                                    <th>Note Title</th>
+                                    <th>Class</th>
+                                    <th>Subject</th>
+                                    <th>Description</th>
+                                    <th>Teacher</th>
+                                    <th>Price</th>
+                                    <th class="text-center">View</th>  
+                                </tr>
+                                {% for note in bought_tutor_notes %}
+                                <tr>
+                                    <td>{{forloop.counter}}</td>
+                                    <td><p style="color: black;font-size: 14px;">{{note.title}}</p></td>
+                                    <td><p style="color: black;font-size: 14px;">{{note.forclass}}</p></td>
+                                    <td><p style="color: black;font-size: 14px;">{{note.subject}}</p></td>
+                                    <td>{{note.description|truncatechars:15}}</td>
+                                    <td><p style="color: black;font-size: 14px;">{{note.tutor.user.username}}</p></td>
+                                    <td><p style="color: black;font-size: 14px;">{{note.price}}</p></td>
+                                    <td style="text-align: center;">
+                                    <a class="btn btn-info" href="{{note.notes.url}}" target="_blank">View Note</a>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </table>
+                        </div>
+                    </div>
+                    
+                    {% else %}
+                    <div class="card-header" style="background: none;">
+                        <div class="row">
+                            <div class="col-xl-12 col-md-12 col-12">
+                                <h2>No Notes to show</h2>
+                            </div>
+                        </div>
+                    </div>
+                {% endif %}
+                    
+                </div>
+            </div>
+        </main>
     <main class="mt-5 row">
         <div class="col-xl-12 col-md-12 col-12">
             <div class="card widget box box-shadow">
                 <div class="card-header">
                     <div class="row">
                         <div class="col-xl-12 col-md-12 col-12">
-                            <h2 style="color:black;">Notes</h2>
+                            <h2 style="color:black;">Available Notes</h2>
                         </div>
                     </div>
                 </div>
-                {% if notes %}
-                <div class="widget-content widget-content-area">
-                    <div class="table-responsive">
-                        <table id="htmlgrid" class="testgrid table table-striped table-bordered table-hover mb-4">
-                            <tr>
-                                <th>#</th>
-                                <th>Note Title</th>
-                                <th>Class</th>
-                                <th>Subject</th>
-                                <th>Description</th>
-                                <th class="text-center">View</th>  
-                            </tr>
-                            {% for i in notes %}
-                            <tr>
-                                <td>{{forloop.counter}}</td>
-                                <td><p style="color: black;font-size: 14px;">{{i.title}}</p></td>
-                                <td><p style="color: black;font-size: 14px;">{{i.forclass}}</p></td>
-                                <td><p style="color: black;font-size: 14px;">{{i.subject}}</p></td>
-                                <td>{{i.description}}</td>
-                                <td style="text-align: center;">
-                                   <a class="btn btn-info" href="{{i.notes.url}}" target="_blank">View Note</a>
-                                </td>
-                            </tr>
-                            {% endfor %}
-                        </table>
-                    </div>
-                </div>
-                {% else %}
-                <div class="widget-header">
-                    <div class="row">
-                        <div class="col-xl-12 col-md-12 col-12">
-                            <h4 class="p-2"><b>No Notes to show</b></h4>
+                {% if not_bought_institute_notes or not_bought_tutor_notes%}
+                    <h6 style="color:black;" class="m-2 pl-2">Institute Notes</h6>
+                    
+                    <div class="widget-content widget-content-area">
+                        <div class="table-responsive">
+                            <table id="htmlgrid" class="testgrid table table-striped table-bordered table-hover mb-4">
+                                <tr>
+                                    <th>No.</th>
+                                    <th>Note Title</th>
+                                    <th>Class</th>
+                                    <th>Subject</th>
+                                    <th>Description</th>
+                                    <th>Institute</th>
+                                    <th>Price</th>
+                                    <th class="text-center">Buy</th>  
+                                </tr>
+
+                                {% for note in not_bought_institute_notes %}
+                                <tr>
+                                    <td>{{forloop.counter}}</td>
+                                    <td><p style="color: black;font-size: 14px;">{{note.title}}</p></td>
+                                    <td><p style="color: black;font-size: 14px;">{{note.forclass}}</p></td>
+                                    <td><p style="color: black;font-size: 14px;">{{note.subject}}</p></td>
+                                    <td>{{note.description|truncatechars:15}}</td>
+                                    <td><p style="color: black;font-size: 14px;">{{note.institute.user.username}}</p></td>
+                                    <td><p style="color: black;font-size: 14px;">{{note.price}}</p></td>
+                                    <td style="text-align: center;">
+                                        <a class="btn btn-info" href="{% url 'buyInstituteNotes' note.id %}" >Buy Note</a>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+
+                            </table>
                         </div>
                     </div>
-                </div>
+                    <h6 style="color:black;" class="m-2 pl-2">Tutor Notes</h6>
+
+                    <div class="widget-content widget-content-area">
+                        <div class="table-responsive">
+                            <table id="htmlgrid" class="testgrid table table-striped table-bordered table-hover mb-4">
+                                <tr>
+                                    <th>No.</th>
+                                    <th>Note Title</th>
+                                    <th>Class</th>
+                                    <th>Subject</th>
+                                    <th>Description</th>
+                                    <th>Teacher</th>
+                                    <th>Price</th>
+                                    <th class="text-center">Buy</th>  
+                                </tr>
+
+
+                                {% for note in not_bought_tutor_notes %}
+                                <tr>
+                                    <td>{{forloop.counter}}</td>
+                                    <td><p style="color: black;font-size: 14px;">{{note.title}}</p></td>
+                                    <td><p style="color: black;font-size: 14px;">{{note.forclass}}</p></td>
+                                    <td><p style="color: black;font-size: 14px;">{{note.subject}}</p></td>
+                                    <td>{{note.description|truncatechars:15}}</td>
+                                    <td><p style="color: black;font-size: 14px;">{{note.tutor.user.username}}</p></td>
+                                    <td><p style="color: black;font-size: 14px;">{{note.price}}</p></td>
+                                    <td style="text-align: center;">
+                                        <a class="btn btn-info" href="{% url 'buyTutorNotes' note.id %}" >Buy Note</a>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </table>
+                        </div>
+                    </div>
+                    
+                    {% else %}
+                    <div class="card-header" style="background: none;">
+                        <div class="row">
+                            <div class="col-xl-12 col-md-12 col-12">
+                                <h2>No Notes to show</h2>
+                            </div>
+                        </div>
+                    </div>
                 {% endif %}
+                    
+                </div>
             </div>
-        </div>
-    </main>
+        </main>
     <script type="text/javascript">
         trlist = $("tbody>tr");
         $("body").on('input',"#searchbox",function(){
@@ -82,4 +214,4 @@
         });
 
     </script>
-    {% endblock main-content %}
+{% endblock main-content %}

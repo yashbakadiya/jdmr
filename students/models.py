@@ -12,6 +12,9 @@ class AddStudentInst(models.Model):
     installments = models.IntegerField(default=2)
     archieved = models.BooleanField(default=False)
 
+    class Meta:
+        unique_together = [['student', 'institute']] 
+
 
 class School(models.Model):
     name = models.CharField(max_length=150,default="")

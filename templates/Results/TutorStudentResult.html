@@ -1,4 +1,4 @@
-{% extends template %}
+{% extends 'dashboard/Tutor-dashboard.html' %}
 {% load static %}
 {% block main-content %}
 
@@ -28,7 +28,7 @@
       </form>
       <a
         class="btn btn-secondary"
-        href="{% url 'anotatePdfViewer' exam.id mapping.id %}"
+        href="{% url 'tutoranotatePdfViewer' exam.id mapping.id %}"
         >View Report</a
       >
     </div>
@@ -56,7 +56,7 @@
                 </div>
                 {% if question.qtype == 'short' or question.qtype == 'long' %}
                 
-                <form style="display: none; width: 210px;" class="check-form" method="POST" action="{% url 'check_answer' question.id %}">
+                <form style="display: none; width: 210px;" class="check-form" method="POST" action="{% url 'tutorcheck_answer' question.id %}">
                   {% csrf_token %}
                   <div class="input-group">
                   <input
@@ -78,7 +78,7 @@
                   <button class="btn btn-success" onclick="check(this)"> {% if question.marks_given %} Recheck {% else %} Check {% endif %}</button>
                   {% if question.input_ans_Image %}
                   <a
-                    href="{% url 'check_answer' question.id %}"
+                    href="{% url 'tutorcheck_answer' question.id %}"
                     class="ml-1  btn btn-secondary"
                     >View Image</a>
                   {% endif %}  
