@@ -5,7 +5,9 @@ from django.contrib.auth.models import User
 from accounts.models import Student
 from notes.models import NotesInstitute, NotesTutor
 from tutorials.models import TutorialInstitute, TutorialTutors
-from .models import BuyInstituteNotes,BuyTutorNotes, BuyTutorTutorial, BuyInstituteTutorial
+from .models import BuyInstituteNotes,BuyTutorNotes, BuyTutorTutorial, BuyInstituteTutorial,BuyTutorExam
+from exams.models import TutorExam
+
 
 login_required(login_url='login')
 def check(request):
@@ -171,4 +173,47 @@ def buyInstituteTutorial(request, id):
                 return redirect('searchcourses')
         return HttpResponse("Unknown error")
     return HttpResponse("You are Not Authenticated for this page")
+
+
+
+
+login_required(login_url='login')
+def buyTutorExam(request, id):
+    errors = []
+    if request.session['type'] == 'Student':
+        user = User.objects.get(username=request.session['user'])
+        student = Student.objects.get(user=user)
+        exam = TutorExam.objects.get(id=id)
+        if request.method == "GET":
+            if int(exam.price) == 0:
+                data = BuyTutorExam.objects.create(
+                    student=student,
+                    status=1,
+                    exam=exam
+                )
+                try:
+                    data.save()
+                    return redirect('studentexams')
+                except:
+                    errors.append("Some error Occured! Try Again")
+                    context['errors'] = errors
+                    return redirect('studentexams')
+            else:
+                return render(request, 'buy/buy_Tutor_Exam.html', context={'exam':exam})
+        elif request.method == "POST":
+            data = BuyTutorExam.objects.create(
+                    student=student,
+                    status=1,
+                    exam=exam
+                )
+            try:
+                data.save()
+                return redirect('studentexams')
+            except:
+                errors.append("Some error Occured! Try Again")
+                context['errors'] = errors
+                return redirect('studentexams')
+        return HttpResponse("Unknown error")
+    return HttpResponse("You are Not Authenticated for this page")
+
 

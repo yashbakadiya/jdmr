@@ -34,10 +34,6 @@ def addTutorialsInstitute(request):
             feeDisc = request.POST.get("feeDisc","")
             unit = request.POST.get("unit","0")
             discValidity = request.POST.get("discValidity")
-<<<<<<< HEAD
-
-=======
->>>>>>> 71f73055a4206fee777c12e9686e95868e53fc11
             if unit=="1":
                 if fees:
                     if feeDisc:
