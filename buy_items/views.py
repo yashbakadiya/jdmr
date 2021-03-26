@@ -4,8 +4,10 @@ from django.contrib.auth.models import User
 
 from accounts.models import Student
 from notes.models import NotesInstitute, NotesTutor
-from tutorials.models import TutorialInstitute
-from .models import BuyInstituteNotes,BuyTutorNotes, BuyTutorial
+from tutorials.models import TutorialInstitute, TutorialTutors
+from .models import BuyInstituteNotes,BuyTutorNotes, BuyTutorTutorial, BuyInstituteTutorial,BuyTutorExam
+from exams.models import TutorExam
+
 
 login_required(login_url='login')
 def check(request):
@@ -34,7 +36,7 @@ def buyInstituteNotes(request,id):
                     context['errors'] = errors
                     return redirect('notesstudents')
             else:
-                return render(request, 'Notes/buy_institute_note.html', context={'note':note})
+                return render(request, 'buy/buy_institute_note.html', context={'note':note})
         elif request.method == "POST":
             data = BuyInstituteNotes.objects.create(
                     student=student,
@@ -74,7 +76,7 @@ def buyTutorNotes(request,id):
                     context['errors'] = errors
                     return redirect('notesstudents')
             else:
-                return render(request, 'Notes/buy_tutor_note.html', context={'note':note})
+                return render(request, 'buy/buy_tutor_note.html', context={'note':note})
         elif request.method == "POST":
             data = BuyTutorNotes.objects.create(
                     student=student,
@@ -92,60 +94,126 @@ def buyTutorNotes(request,id):
     return HttpResponse("You are Not Authenticated for this page")
 
 
-# # buy tutorial
-# login_required(login_url='login')
-# def buyTutorial(request, id):
-#     errors = []
-#     if request.session['type'] == "student":
-#         if request.method == "GET":
-#             return render(request, '')
-#         else:
-#             user = User.objects.get(username=request.session['user'])
-#             student = Student.objects.get(user=user)
-#             if request.method == "POST":
-#                 status = request.POST.get("status")
-#                 tutorial = TutorialInstitute.objects.get(id=id)
-#                 if (tutorial and status):
-#                     data = BuyNotes.objects.create(
-#                         note = note,
-#                         status = status,
-#                         student = student
-#                     )
-#                     try:
-#                         data.save()
-#                         return redirect('')
-#                     except:
-#                         errors.append("Some error Occured! Try Again")
-#                         context['errors'] = errors
-#             return render(request,'',context)
-#     return HttpResponse("You are Not Authenticated for this page")
+login_required(login_url='login')
+def buyTutorTutorial(request, id):
+    errors = []
+    if request.session['type'] == 'Student':
+        user = User.objects.get(username=request.session['user'])
+        student = Student.objects.get(user=user)
+        tutorial = TutorialTutors.objects.get(id=id)
+        if request.method == "GET":
+            if int(tutorial.Fees) == 0:
+                data = BuyTutorTutorial.objects.create(
+                    student=student,
+                    status=1,
+                    tutorial=tutorial
+                )
+                try:
+                    data.save()
+                    return redirect('searchcourses')
+                except:
+                    errors.append("Some error Occured! Try Again")
+                    context['errors'] = errors
+                    return redirect('searchcourses')
+            else:
+                return render(request, 'buy/buy_tutor_tutorial.html', context={'tutorial':tutorial})
+        elif request.method == "POST":
+            data = BuyTutorTutorial.objects.create(
+                    student=student,
+                    status=1,
+                    tutorial=tutorial
+                )
+            try:
+                data.save()
+                return redirect('searchcourses')
+            except:
+                errors.append("Some error Occured! Try Again")
+                context['errors'] = errors
+                return redirect('searchcourses')
+        return HttpResponse("Unknown error")
+    return HttpResponse("You are Not Authenticated for this page")
 
 
-# # list student buyed notes
-# login_required(login_url='login')
-# def StudentBuyNotesList(request):
-#     if request.session['type'] == "Student":
-#         user = User.objects.get(username=request.session['user'])
-#         student = Student.objects.get(user=user)
-#         notes = BuyNotes.objects.filter(student=student).filter(status=1)
-#         context = {
-#             "notes":notes,
-#         }
-#         return render(request, "", context=context)
-#     else:
-#         return HttpResponse("you can not access this page")
+
+login_required(login_url='login')
+def buyInstituteTutorial(request, id):
+    errors = []
+    if request.session['type'] == 'Student':
+        user = User.objects.get(username=request.session['user'])
+        student = Student.objects.get(user=user)
+        tutorial = TutorialInstitute.objects.get(id=id)
+        if request.method == "GET":
+            if int(tutorial.Fees) == 0:
+                data = BuyInstituteTutorial.objects.create(
+                    student=student,
+                    status=1,
+                    tutorial=tutorial
+                )
+                try:
+                    data.save()
+                    return redirect('searchcourses')
+                except:
+                    errors.append("Some error Occured! Try Again")
+                    context['errors'] = errors
+                    return redirect('searchcourses')
+            else:
+                return render(request, 'buy/buy_Institute_tutorial.html', context={'tutorial':tutorial})
+        elif request.method == "POST":
+            data = BuyInstituteTutorial.objects.create(
+                    student=student,
+                    status=1,
+                    tutorial=tutorial
+                )
+            try:
+                data.save()
+                return redirect('searchcourses')
+            except:
+                errors.append("Some error Occured! Try Again")
+                context['errors'] = errors
+                return redirect('searchcourses')
+        return HttpResponse("Unknown error")
+    return HttpResponse("You are Not Authenticated for this page")
 
 
-# # list student buyed tutorials
-# login_required(login_url='login')
-# def StudentBuyTutorialList(request):
-#     if request.session['type'] == "Student":
-#         user = User.objects.get(username=request.session['user'])
-#         student = Student.objects.get(user=user)
-#         tutorials = BuyTutorial.objects.filter(student=student).filter(status=1)
-#         context = {
-#             "tutorials" = tutorials,
-#         }
-#         return render(request, "", context=context)
-#     else:
-#         return HttpResponse("you can not access this page")
+
+
+login_required(login_url='login')
+def buyTutorExam(request, id):
+    errors = []
+    if request.session['type'] == 'Student':
+        user = User.objects.get(username=request.session['user'])
+        student = Student.objects.get(user=user)
+        exam = TutorExam.objects.get(id=id)
+        if request.method == "GET":
+            if int(exam.price) == 0:
+                data = BuyTutorExam.objects.create(
+                    student=student,
+                    status=1,
+                    exam=exam
+                )
+                try:
+                    data.save()
+                    return redirect('studentexams')
+                except:
+                    errors.append("Some error Occured! Try Again")
+                    context['errors'] = errors
+                    return redirect('studentexams')
+            else:
+                return render(request, 'buy/buy_Tutor_Exam.html', context={'exam':exam})
+        elif request.method == "POST":
+            data = BuyTutorExam.objects.create(
+                    student=student,
+                    status=1,
+                    exam=exam
+                )
+            try:
+                data.save()
+                return redirect('studentexams')
+            except:
+                errors.append("Some error Occured! Try Again")
+                context['errors'] = errors
+                return redirect('studentexams')
+        return HttpResponse("Unknown error")
+    return HttpResponse("You are Not Authenticated for this page")
+
+

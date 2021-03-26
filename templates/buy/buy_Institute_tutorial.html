@@ -1,0 +1,23 @@
+{% extends 'dashboard/student-dashboard.html' %}
+
+{% load static %}
+
+{% block main-content %}
+    <main class="mt-5 row">
+        <div class="col-xl-12 col-md-12 col-12">
+            <div class="card p-20">
+                <div class="card-body">
+                    <h4 class="text-black" >Tutorial Title : {{tutorial.Title}}</h4>
+                    <h4 class="text-black" >Duration : {{tutorial.Duration}}</h4>
+                    <h4 class="text-black" >Description : {{tutorial.description}}</h4>
+                    <h4 class="text-black" >Price : {{tutorial.Fees}}</h4>
+                    <h4 class="text-black" >Discount : {{tutorial.Discount}}</h4>
+                    <form method='post' action=''>
+                        {% csrf_token %}
+                        <button class="btn btn-lg btn-info mt-2"><a href="{% url 'buyInstituteTutorial' tutorial.id %}">Pay<a/></button> 
+                    </form>
+                </div>
+            </div>
+        </div>
+    </main>
+{% endblock main-content %}

@@ -14,92 +14,131 @@
                     </div>
                     </div>
                 </div>
-                {% if exams or tutorexams %}
-                {% if exams %}
-                <div class="widget-content widget-content-area">
-                    <div class="col-lg-12 col-sm-12 mb-3">
-                        <label class="form-check-label" for="defaultCheck1">
-                            Institute Exams
-                        </label></div>
-                    <div class="table-responsive">
-                        <table id="htmlgrid" class="testgrid table table-striped table-bordered table-hover mb-4">
-                            <tr>
-                                <th>#</th>
-                                <th>Exam Name</th>
-                                <th>Course</th>
-                                <th>Exam Date</th>
-                                <th>Duration</th>
-                                <th>Total Questions</th>
-                                <th class="text-center">Status</th>  
-                            </tr>
-                            {% for exam in exams reversed %}
-                            <tr class="main-row">
-                                <td>{{forloop.counter}}</td>
-                                <td>{{exam.Name}}</td>
-                                <td>{{exam.course.courseName}}</td>
-                                <td>{{exam.exam_date}}</td>
-                                <td>{{exam.exam_duration}}</td>
-                                <td>{{exam.question_count}}</td>
-                                {% if exam.active %}
-                                <td class="text-center"><a class="btn btn-success">Submitted</a></td>
-                                {% else %}
-                                <td class="text-center"><a href="{% url 'instruction' exam.id %}" class="btn btn-info">Start Exam</a></td>
-                                {% endif %}                              
-                            </tr>
-                            {% endfor %}
-                        </table>
-                    </div>
-                </div>
-                {% endif %}
-                
-                {% if tutorexams %}
-                <div class="widget-content widget-content-area">
-                    <div class="col-lg-12 col-sm-12 mb-3">
-                        <label class="form-check-label" for="defaultCheck1">
-                            Paid Exams
-                        </label></div>
-                    <div class="table-responsive">
-                        <table id="htmlgrid" class="testgrid table table-striped table-bordered table-hover mb-4">
-                            <tr>
-                                <th>#</th>
-                                <th>Exam Name</th>
-                                <th>Course</th>
-                                <th>Exam Date</th>
-                                <th>Duration</th>
-                                <th>Total Questions</th>
-                                <th>Price</th>
-                                <th class="text-center">Status</th>  
-                            </tr>
-                            
-                            {% for exam in tutorexams reversed %}
-                            <tr class="main-row">
-                                <td>{{forloop.counter}}</td>
-                                <td>{{exam.Name}}</td>
-                                <td>{{exam.courseName}}</td>
-                                <td>{{exam.exam_date}}</td>
-                                <td>{{exam.exam_duration}}</td>
-                                <td>{{exam.question_count}}</td>
-                                <td>{{exam.price}}</td>
-                                {% if exam.active %}
-                                <td class="text-center"><a class="btn btn-success">Submitted</a></td>
-                                {% else %}
-                                <td class="text-center"><a href="{% url 'tutor_instruction' exam.id %}" class="btn btn-info">Start Exam</a></td>
-                                {% endif %}                              
-                            </tr>
-                            {% endfor %}
-                        </table>
-                    </div>
-                </div>
-                {% endif %}
-
-                {% else %}
-                <div class="card-header" style="background: none;">
-                    <div class="row">
-                        <div class="col-xl-12 col-md-12 col-12">
-                            <h2>No Exams to show</h2>
+                {% if exams or boughtTutorExams or notboughtTutorExams %}
+                    {% if exams %}
+                    <div class="widget-content widget-content-area">
+                        <div class="col-lg-12 col-sm-12 mb-3">
+                            <label class="form-check-label" for="defaultCheck1">
+                                Institute Exams
+                            </label></div>
+                        <div class="table-responsive">
+                            <table id="htmlgrid" class="testgrid table table-striped table-bordered table-hover mb-4">
+                                <tr>
+                                    <th>#</th>
+                                    <th>Exam Name</th>
+                                    <th>Course</th>
+                                    <th>Exam Date</th>
+                                    <th>Duration</th>
+                                    <th>Total Questions</th>
+                                    <th class="text-center">Status</th>  
+                                </tr>
+                                {% for exam in exams reversed %}
+                                <tr class="main-row">
+                                    <td>{{forloop.counter}}</td>
+                                    <td>{{exam.Name}}</td>
+                                    <td>{{exam.course.courseName}}</td>
+                                    <td>{{exam.exam_date}}</td>
+                                    <td>{{exam.exam_duration}}</td>
+                                    <td>{{exam.question_count}}</td>
+                                    {% if exam.active %}
+                                    <td class="text-center"><a class="btn btn-success">Submitted</a></td>
+                                    {% else %}
+                                    <td class="text-center"><a href="{% url 'instruction' exam.id %}" class="btn btn-info">Start Exam</a></td>
+                                    {% endif %}                              
+                                </tr>
+                                {% endfor %}
+                            </table>
                         </div>
                     </div>
-                </div>
+                    {% endif %}
+                    
+                    {% if boughtTutorExams %}
+                    <div class="widget-content widget-content-area">
+                        <div class="col-lg-12 col-sm-12 mb-3">
+                            <label class="form-check-label" for="defaultCheck1">
+                                Your Exams
+                            </label></div>
+                        <div class="table-responsive">
+                            <table id="htmlgrid" class="testgrid table table-striped table-bordered table-hover mb-4">
+                                <tr>
+                                    <th>#</th>
+                                    <th>Exam Name</th>
+                                    <th>Course</th>
+                                    <th>Exam Date</th>
+                                    <th>Duration</th>
+                                    <th>Total Questions</th>
+                                    <th>Price</th>
+                                    <th class="text-center">Status</th>  
+                                </tr>
+                                
+                                {% for exam in boughtTutorExams reversed %}
+                                <tr class="main-row">
+                                    <td>{{forloop.counter}}</td>
+                                    <td>{{exam.Name}}</td>
+                                    <td>{{exam.courseName}}</td>
+                                    <td>{{exam.exam_date}}</td>
+                                    <td>{{exam.exam_duration}}</td>
+                                    <td>{{exam.question_count}}</td>
+                                    <td>{{exam.price}}</td>
+                                    {% if exam.active %}
+                                    <td class="text-center"><a class="btn btn-success">Submitted</a></td>
+                                    {% else %}
+                                    <td class="text-center"><a href="{% url 'tutor_instruction' exam.id %}" class="btn btn-info">Start Exam</a></td>
+                                    {% endif %}                              
+                                </tr>
+                                {% endfor %}
+                            </table>
+                        </div>
+                    </div>
+                    {% endif %}
+                    {% if notboughtTutorExams %}
+                    <div class="widget-content widget-content-area">
+                        <div class="col-lg-12 col-sm-12 mb-3">
+                            <label class="form-check-label" for="defaultCheck1">
+                                Paid Exams
+                            </label></div>
+                        <div class="table-responsive">
+                            <table id="htmlgrid" class="testgrid table table-striped table-bordered table-hover mb-4">
+                                <tr>
+                                    <th>#</th>
+                                    <th>Exam Name</th>
+                                    <th>Course</th>
+                                    <th>Exam Date</th>
+                                    <th>Duration</th>
+                                    <th>Total Questions</th>
+                                    <th>Price</th>
+                                    <th class="text-center">Status</th>  
+                                </tr>
+                                
+                                {% for exam in notboughtTutorExams reversed %}
+                                <tr class="main-row">
+                                    <td>{{forloop.counter}}</td>
+                                    <td>{{exam.Name}}</td>
+                                    <td>{{exam.courseName}}</td>
+                                    <td>{{exam.exam_date}}</td>
+                                    <td>{{exam.exam_duration}}</td>
+                                    <td>{{exam.question_count}}</td>
+                                    <td>{{exam.price}}</td>
+                                    {% if exam.active %}
+                                    <td class="text-center"><a class="btn btn-success">Submitted</a></td>
+                                    {% else %}
+                                    <td class="text-center"><a href="{% url 'buyTutorExam' exam.id %}" class="btn btn-info">Buy Exam</a></td>
+                                    {% endif %}                              
+                                </tr>
+                                {% endfor %}
+                            </table>
+                        </div>
+                    </div>
+                    {% endif %}
+
+                {% else %}
+                    <div class="card-header" style="background: none;">
+                        <div class="row">
+                            <div class="col-xl-12 col-md-12 col-12">
+                                <h2>No Exams to show</h2>
+                            </div>
+                        </div>
+                    </div>
                 {% endif %}
             </div>
         </div>  

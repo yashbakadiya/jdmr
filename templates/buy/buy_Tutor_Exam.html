@@ -1,0 +1,49 @@
+{% extends 'dashboard/student-dashboard.html' %}
+
+{% load static %}
+
+tutor = models.ForeignKey(
+        Teacher, related_name='teacher', on_delete=models.CASCADE)
+    courseName = models.CharField(max_length=100,default="")
+    forclass = models.CharField(max_length=255,default="")
+    Name = models.CharField(max_length=200)
+    price = models.IntegerField()
+    exam_date = models.DateField()
+    exam_time = models.TimeField(blank=True, null=True)
+    exam_duration = models.IntegerField(default=0)
+    timezone = models.CharField(max_length=200)
+    pass_percentage = models.IntegerField()
+    reexam_date = models.DateField(blank=True, null=True)
+    calculator = models.BooleanField(default=False)
+    imgupload = models.BooleanField(default=False)
+    negative_marking = models.BooleanField(
+        default=False, blank=True, null=True)
+    negative_marks = models.FloatField(blank=True, null=True)
+    tandc = models.TextField()
+    status = models.BooleanField(default=False)
+    resultonmail = models.BooleanField(default=False, blank=True, null=True)
+    
+
+
+{% block main-content %}
+    <main class="mt-5 row">
+        <div class="col-xl-12 col-md-12 col-12">
+            <div class="card p-20">
+                <div class="card-body">
+                    <h4 class="text-black" >Name : {{exam.Name}}</h4>
+                    <h4 class="text-black" >courseName : {{exam.courseName}}</h4>
+                    <h4 class="text-black" >forclass : {{exam.forclass}}</h4>
+                    <h4 class="text-black" >Exam Duration : {{exam.exam_duration}}</h4>
+                    <h4 class="text-black" >Exam Date : {{exam.exam_date}}</h4>
+                    <h4 class="text-black" >Exam Time : {{exam.exam_time}}</h4>
+                    <h4 class="text-black" >Price : {{exam.price}}</h4>
+                    <h4 class="text-black" >Passing Percentage : {{exam.pass_percentage}}</h4>
+                    <form method='post' action=''>
+                        {% csrf_token %}
+                        <button class="btn btn-lg btn-info mt-2"><a href="{% url 'buyTutorExam' exam.id %}">Pay<a/></button> 
+                    </form>
+                </div>
+            </div>
+        </div>
+    </main>
+{% endblock main-content %}

@@ -8,7 +8,7 @@ from teacher.models import enrollTutors
 from batches.models import BatchTiming
 from students.models import *
 from itertools import chain
-from buy_items.models import BuyInstituteNotes,BuyTutorNotes, BuyTutorial
+from buy_items.models import BuyInstituteNotes,BuyTutorNotes
 from students.models import AddStudentInst
 # Create your views here.
 
