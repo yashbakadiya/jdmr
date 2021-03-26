@@ -27,9 +27,10 @@ def addTutorialsInstitute(request):
             fees = request.POST.get('fees',"")
             duration = request.POST.get("duration","")
             course = request.POST.get("course","")
-            forclass = request.POST.get("forclass","")
+            foclass = request.POST.get("forclass","")
             feeDisc = request.POST.get("feeDisc","")
             unit = request.POST.get("unit","0")
+            discValidity = request.POST.get("discValidity")
             if unit=="1":
                 if fees:
                     if feeDisc:
@@ -38,7 +39,7 @@ def addTutorialsInstitute(request):
             data = TutorialInstitute(
                 Title = title,
                 Course = Courses.objects.get(intitute=inst,courseName=course),
-                forclass = forclass,
+                forclass = foclass,
                 Fees = fees,
                 Duration = duration,
                 Description = description,
