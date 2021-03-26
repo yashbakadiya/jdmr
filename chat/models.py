@@ -1,7 +1,8 @@
 from django.db import models
+from datetime import datetime
 
 class ChatApplication(models.Model):
-    dtime = models.CharField(max_length=30)
+    dtime = models.DateTimeField(default=datetime.now)
     message = models.CharField(max_length=60)
     names = models.CharField(max_length=60,default='Welcome')
     room = models.CharField(max_length=30)
