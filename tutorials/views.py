@@ -36,6 +36,12 @@ def addTutorialsInstitute(request):
                     if feeDisc:
                         feeDisc = float(feeDisc)/float(fees)
                         feeDisc=feeDisc*100
+            
+            # if discValidity:
+            #     discValidity = datetime.strptime(discValidity,'%Y-%m-%d')
+            #     data.Validity = discValidity
+
+
             data = TutorialInstitute(
                 Title = title,
                 Course = Courses.objects.get(intitute=inst,courseName=course),
@@ -43,12 +49,10 @@ def addTutorialsInstitute(request):
                 Fees = fees,
                 Duration = duration,
                 Description = description,
+                Validity = discValidity,
                 Discount = feeDisc,
+                
                 )
-            if discValidity:
-                discValidity = datetime.strptime(discValidity,'%Y-%m-%d')
-                data.Validity = discValidity
-
             data.save()
             return redirect('addplaylist',data.id)
         return render(request,'tutorials/addTutorialsInstitute.html',context)
