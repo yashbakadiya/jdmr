@@ -20,6 +20,7 @@ import json
 from django.contrib.sites import requests
 import re
 import requests
+from buy_items.models import BuyTutorExam
 # Create your views here.
 
 @login_required(login_url="Login")
@@ -1261,8 +1262,21 @@ def StudentExamsAll(request):
                 
         if((datetime.combine(i.exam_date,i.exam_time) <= datetime_obj) & (datetime_obj <= re_exam)):
             examlist.append(i)
-                
-    context['tutorexams']=examlist    
+    boughtExam = []
+    notBoughtExam = []
+    if examlist:
+        boughtExamObj = BuyTutorExam.objects.filter(student=student)
+        boughtExamList = [buy.exam.id for buy in boughtExamObj]
+        for exam in examlist:
+            if exam.id in boughtExamList:
+                boughtExam.append(exam)
+            else:
+                notBoughtExam.append(exam)
+
+
+
+    context['boughtTutorExams']=boughtExam    
+    context['notboughtTutorExams']=notBoughtExam    
 
     return render(request,'Exam/studentExamsAll.html',context)
     

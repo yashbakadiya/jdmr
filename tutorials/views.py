@@ -9,7 +9,10 @@ from .models import *
 from datetime import datetime,timedelta
 import json
 from operator import or_
+from json import loads
 from functools import reduce
+from itertools import chain
+from buy_items.models import BuyInstituteTutorial, BuyTutorTutorial
 # Create your views here.
 
 @login_required(login_url="Login")
@@ -504,73 +507,142 @@ def ArchiveTutorialsTutor(request):
     return HttpResponse("You Are not Authenticated User for this Page")
 
 
+
 @login_required(login_url="Login")
 def SearchCourses(request):
-    courses = Courses.objects.all()
-    tutorials={}
-    extra={}
-    prefill = {}
-    if request.method=='POST':
-        duration = request.POST.get('duration','')
-        fees = request.POST.get('fees','')
-        courseName = request.POST.get('cn'),
-        forclass = request.POST.get('ctn')
-        tutorials = TutorialTutors.objects.all()
-        extra  = TutorialInstitute.objects.all()
+    
+    if request.session['type']=="Student":
+        courses = Courses.objects.all()
+        data = loads(open('cc.txt','r').read())
+        tutorials_ins_item = {}
+        tutorials_tutor_item = {}
 
-        prefill = {
-            "duration":duration,
-            "fees":fees,
-            "course":courseName[0],
-            "class":forclass
-        }
+        user = User.objects.get(username=request.session['user'])
+        student = Student.objects.get(user=user)
+        
+        if request.method=='POST':
+            duration = request.POST.get('duration','')
+            fees = request.POST.get('fees','')
+            courseName = request.POST.get('cn'),
+            forclass = request.POST.get('ctn')
+            if fees:
+                fees = list(map(int, fees.split('-')))
+            print(fees)
 
-        if duration:
-            duration = duration[0]
-            if extra.exists():
-                extra = extra.filter(Duration=duration)
-            if tutorials.exists():
-                tutorials = tutorials.filter(Duration=duration)
-        if fees:
-            if fees[0]=="l":
-                fees = "0-1000"
+            if courseName[0] == 'All Subjects':
+                course = ""
+            else:
+                course = courseName[0]
+            print('----------->',fees)
+
+            prefill = {
+                "duration":duration,
+                "fees":fees,
+                "course":courseName[0],
+                "class":forclass
+            }
+
+            if fees:
+                if course:
+                    if duration:
+                        tutorials_ins_item = TutorialInstitute.objects.filter(
+                            Q(Duration__icontains=duration) & 
+                            Q(Fees__gte=fees[0]) & Q(Fees__lte=fees[1]) &
+                            Q(forclass__icontains=forclass) &
+                            Q(Course__courseName__icontains=course)
+                        )
+                    else:
+                        tutorials_ins_item = TutorialInstitute.objects.filter(
+                            Q(Fees__gte=fees[0]) & Q(Fees__lte=fees[1]) &
+                            Q(forclass__icontains=forclass) &
+                            Q(Course__courseName__icontains=course)
+                        )
+                else:
+                    if duration:
+                        tutorials_ins_item = TutorialInstitute.objects.filter(
+                            Q(Duration__icontains=duration) & 
+                            Q(Fees__gte=fees[0]) & Q(Fees__lte=fees[1]) &
+                            Q(forclass__icontains=forclass) 
+                        )
+                    else:
+                        tutorials_ins_item = TutorialInstitute.objects.filter(
+                            Q(Fees__gte=fees[0]) & Q(Fees__lte=fees[1]) &
+                            Q(forclass__icontains=forclass) 
+                        )
+                if duration:
+                    tutorials_tutor_item = TutorialTutors.objects.filter(
+                        Q(Duration__icontains=duration) &
+                        Q(Fees__gte=fees[0]) & Q(Fees__lte=fees[1]) &
+                        Q(Tutor__forclass__icontains=forclass) 
+                    )
+                else:
+                    tutorials_tutor_item = TutorialTutors.objects.filter(
+                        Q(Fees__gte=fees[0]) & Q(Fees__lte=fees[1]) &
+                        Q(Tutor__forclass__icontains=forclass) 
+                    )
+            else:
+                if course:
+                    if duration:
+                        tutorials_ins_item = TutorialInstitute.objects.filter(
+                            Q(Duration__icontains=int(duration)) &
+                            Q(forclass__icontains=forclass) &
+                            Q(Course__courseName__icontains=course)
+                        )
+                    else:
+                        tutorials_ins_item = TutorialInstitute.objects.filter(
+                            Q(forclass__icontains=forclass) &
+                            Q(Course__courseName__icontains=course)
+                        )
+                else:
+                    if duration:
+                        tutorials_ins_item = TutorialInstitute.objects.filter(
+                            Q(Duration__icontains=int(duration)) &
+                            Q(forclass__icontains=forclass) 
+                        )
+                    else:
+                        tutorials_ins_item = TutorialInstitute.objects.filter(
+                            Q(forclass__icontains=forclass) 
+                        )
+                if duration:
+                    tutorials_tutor_item = TutorialTutors.objects.filter(
+                        Q(Duration__icontains=int(duration)) &
+                        Q(Tutor__forclass__icontains=forclass) 
+                    )
+                else:
+                    tutorials_tutor_item = TutorialTutors.objects.filter(
+                        Q(Tutor__forclass__icontains=forclass) 
+                    )
+    
+            # Institute
+            # bought institute tutorial objects
+            buyInstituteTutorial = BuyInstituteTutorial.objects.filter(student=student)
+            buyInstituteTutorialList = [buy.tutorial.id for buy in buyInstituteTutorial]
+            boughtInstituteTutorial = tutorials_ins_item.filter(id__in=buyInstituteTutorialList)
+            print("----------->",boughtInstituteTutorial)
+            # not bought intitute tutorial objects
+            notBoughtInstituteTutorial = tutorials_ins_item.exclude(id__in=buyInstituteTutorialList)
+
+            # Tutor 
+            # bought tutor tutorial objects
+            buyTutorTutorial = BuyTutorTutorial.objects.filter(student=student)
+            buyTutorTutorialList = [buy.tutorial.id for buy in buyTutorTutorial]
+            boughtTutorTutorial = tutorials_tutor_item.filter(id__in=buyTutorTutorialList)
+            # not bought intitute tutorial objects
+            notBoughtTutorTutorial = tutorials_tutor_item.exclude(id__in=buyTutorTutorialList)
+            bought = chain(boughtInstituteTutorial,boughtTutorTutorial)
+            notBought = chain(notBoughtInstituteTutorial,notBoughtTutorTutorial)
+
+            context = {
+                'bought': bought,
+                'notBought': notBought,
+                'courses':courses,
+                "data":data,
+                "prefill":prefill
+            }
             
-            elif fees[0]=="7":
-                fees = "7000-50000"
-
-            fees = fees.split('-')
-            if extra.exists():
-                extra = extra.filter(Q(Fees__gte=fees[0]) & Q(Fees__lte=fees[1]))
-            if tutorials.exists():
-                tutorials = tutorials.filter(Q(Fees__gte=fees[0]) & Q(Fees__lte=fees[1]))
-
-        if courseName[0]:
-            if extra.exists():
-                extra =extra.filter(Q(Title__icontains = courseName[0]) or Q(Description__icontains = courseName[0]))
-            if tutorials.exists():
-                tutorials = tutorials.filter(Q(Title__icontains = courseName[0]) or Q(Description__icontains = courseName[0]))          
-
-        if forclass:
-            if extra.exists():
-                    extra = extra.filter(Q(Description__icontains = forclass) or Q(Title__icontains = forclass))
-            if tutorials.exists():
-                tutorials = tutorials.filter(Q(Description__icontains = forclass) or Q(Title__icontains = forclass))
-
-        tutorials = tutorials.order_by('Title')
-        extra = extra.order_by('Title')
-            
-
-    with open('cc.txt', 'r') as f:
-        data = json.loads(f.read())
-
-    context = {
-    'tutor':tutorials,
-    'institute':extra,
-    'courses':courses,
-    "data":data,
-    "prefill":prefill
-    }
-    return render(request,'tutorials/SearchCourses.html',context)
+            return render(request,'tutorials/SearchCourses.html',context)
+        return render(request,'tutorials/SearchCourses.html',context={'data':data,'courses':courses,})
+    return HttpResponse("you are not authenticated to view this page")
 
 
 @login_required(login_url="Login")
