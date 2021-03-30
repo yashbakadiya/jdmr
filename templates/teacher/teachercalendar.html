@@ -51,11 +51,10 @@
 
 
                         events: [
-
                     {% for event in makepoint %}
 
                         {
-                    title: "{{ event.tutor}}",
+                    title: "{{ event.student}}",
                     start: '{{ event.utcDateTime|date:"Y-m-d" }}',
                     // start: '{{ event.startTime|time:"H:i" }}',
                     end: '{{ event.dateTime|date:"Y-m-d"  }}',

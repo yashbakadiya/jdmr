@@ -39,6 +39,9 @@ def addTutors(request):
     if request.session['type'] == "Institute":
         user = User.objects.get(username=request.session['user'])
         inst = Institute.objects.get(user=user)
+        cours = Courses.objects.all()
+        teach=TeachingType.objects.all()
+
         if request.method == "POST":
             print(request.POST)
             firstName = request.POST.get('firstName', '')
@@ -93,11 +96,9 @@ def addTutors(request):
         # processed_data = {}
         # for x in data:
         #     processed_data[x[0]] = [x[1].split(", "),x[2].split("\n")]
-        return render(
-            request,
-            'teacher/addTutors.html',
+        return render(request,'teacher/addTutors.html',
             {
-                "data":TeachingType.objects.filter(course__intitute=inst).values_list('forclass').distinct(),
+                "data":TeachingType.objects.filter(course__intitute=inst).values_list('forclass').distinct(),"cours":cours,"teach":teach,
             }
         )
     return HttpResponse("You Are Not Authenticated for this view")
@@ -339,6 +340,7 @@ def haversine(lon1, lat1, lon2, lat2):
 @login_required(login_url="Login")
 def enrolledTutors(request):
     jsonLocalData = loads(open('cc.txt','r').read())
+    
     prefill = {}
     if request.method == "POST":
         className = request.POST.get('className','')
@@ -730,3 +732,10 @@ def viewAssignmentTutor(request):
             currentS = currentS.filter(Q(courseName__icontains=courseName))
     jsonLocalData = loads(open('cc.txt','r').read())
     return render(request,'teacher/viewAssignmentTutor.html',{'allData':currentS,'jsonLocalData':jsonLocalData, 'prefill':prefill})
+
+@login_required()
+def teacherCalendar(request):   
+    if request.session['type']=="Teacher":
+        template = 'dashboard/Tutor-dashboard.html'    
+    makepoint = MakeAppointment.objects.all()
+    return render(request,'teacher/teachercalendar.html',{'template':template,'makepoint':makepoint})

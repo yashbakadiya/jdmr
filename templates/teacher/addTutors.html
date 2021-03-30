@@ -261,10 +261,10 @@
                             <label class="control-label col-sm-5 col-5 mt-2" style="color:black;" for="cn">Class
                                 Name</label>
                             <select name="cn" class="cn custom-select form-control"
-                                required="required" onchange="selectclass(this)">
+                                required="required" >
                                 <option disabled selected value="">Select an option</option>
-                                {% for x in data %}
-                                <option value="{{ x.0 }}">{{ x.0 }}</option>
+                                {% for x in cours %}
+                                <option value="{{ x.courseName }}">{{ x.forclass }}</option>
                                 {% endfor %}
                             </select>
                         </div>
@@ -272,8 +272,11 @@
                             <label class="control-label col-sm-5 col-5 mt-2" style="color:black;" for="ctn">Course
                                 Taught</label>
                             <select name="ctn" class="ctn custom-select form-control"
-                                required="required" onclick="selectcourse(this)">
+                                required="required" >
                                 <option disabled selected value="">Select an option</option>
+                                {% for x in cours %}
+                                <option value="{{ x.forclass }}">{{ x.courseName }}</option>
+                                {% endfor %}
                             </select>
                         </div>
                         <div class="col-md-6 col-lg-4 col-12 input-group form-group">
@@ -283,6 +286,9 @@
                             <select name="ttn" class="ttn custom-select form-control"
                                 required="required">
                                 <option disabled selected value="">Select an option</option>
+                                {% for x in teach %}
+                                <option value="{{ x.courseName }}">{{ x.teachType }}</option>
+                                {% endfor %}
                             </select>
                             
                         </div>

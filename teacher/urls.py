@@ -16,6 +16,7 @@ urlpatterns = [
     path('enrolledTutors/', enrolledTutors, name='enrolledTutors'),
     path('Review/Tutor/<tutor_id>', ReviewTutors, name="reviewtutor"),
     path('makeAppointment/',makeAppointment, name='makeAppointment'),
+    path('teacherCalendar/', teacherCalendar, name='teacherCalendar'),
     # API Urls
     path('tutor-api', TutorAPI, name="tutor-api"),
     path('searc-tutor-api', SearchTutorAPI, name="search-tutor-api"),

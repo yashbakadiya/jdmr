@@ -206,6 +206,7 @@ def institutecalendar(request):
 def instCalendar(request):
     all_events = BatchTiming.objects.all()  
     template = 'dashboard/institute-dashboard.html'
+    
     context = {      
         "template":template ,
         "events":all_events   }
