@@ -223,14 +223,15 @@
             </div>
         </div>
     </div>
+
     <!-- appointment modal -->
     <div class="modal fade" id="appointmentModal{{i.id}}" tabindex="-1" role="dialog" aria-labelledby="{{i.id}}"
         aria-hidden="true">
         <div class="modal-dialog modal-lg" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="col-sm-12 col-12 text-center">Schedule Class</h5>
-                </div>
+                    <h5 class="col-sm-12 col-12 text-center">Schedule Class</h5>  
+                </div>  
                 <form id="createAppointmentForm" action="" method="post">{% csrf_token %}
                     <div class="modal-body">
                         <div class="row">
