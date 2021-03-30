@@ -38,7 +38,7 @@
                                     <td><p style="color: black;font-size: 14px;">{{note.institute.user.username}}</p></td>
                                     <td><p style="color: black;font-size: 14px;">{{note.price}}</p></td>
                                     <td style="text-align: center;">
-                                    <a class="btn btn-info" href="{{note.notes.url}}" target="_blank">View Note</a>
+                                    <a class="btn btn-info" href="{% url 'viewinstitutenotespdf' note.id %}" target="_blank">View Note</a>
                                     </td>
                                 </tr>
                                 {% endfor %}
@@ -70,7 +70,7 @@
                                     <td><p style="color: black;font-size: 14px;">{{note.tutor.user.username}}</p></td>
                                     <td><p style="color: black;font-size: 14px;">{{note.price}}</p></td>
                                     <td style="text-align: center;">
-                                    <a class="btn btn-info" href="{{note.notes.url}}" target="_blank">View Note</a>
+                                    <a class="btn btn-info" href="{% url 'viewtutornotespdf' note.id %}" target="_blank">View Note</a>
                                     </td>
                                 </tr>
                                 {% endfor %}

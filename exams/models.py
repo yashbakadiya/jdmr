@@ -351,6 +351,7 @@ class StudentExamResult(models.Model):
     percentage = models.CharField(max_length=10, default="10")
     pass_status = models.BooleanField(default=False)
     time_taken = models.CharField(max_length=100, default=0)
+    annotated_copies = models.FileField(upload_to='annotated_pdf',blank=True,null=True)
 
     def __str__(self):
         return self.exam.Name
@@ -441,6 +442,7 @@ class TutorStudentExamResult(models.Model):
     percentage = models.CharField(max_length=10, default="10")
     pass_status = models.BooleanField(default=False)
     time_taken = models.CharField(max_length=100, default=0)
+    annotated_copies = models.FileField(upload_to='annotated_pdf',blank=True,null=True)
 
     def __str__(self):
         return self.exam.Name

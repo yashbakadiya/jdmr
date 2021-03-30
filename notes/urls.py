@@ -21,6 +21,9 @@ urlpatterns = [
     path('Student/Tutor/<note_id>',ViewpdfTutor,name="viewpdftutor"),
     path('getsubjects',subjects,name="subjects"),
 
+    path('Institute/view/<int:pk>',viewInstituteNotesPDF,name="viewinstitutenotespdf"),
+    path('Tutor/view/<int:pk>',viewTutorNotesPDF,name="viewtutornotespdf"),
+
     # API URLs
     path('notes-tutor-api',
          NotesInstituteAPI, name="notes-tutor-api"),

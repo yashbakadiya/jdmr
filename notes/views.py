@@ -402,3 +402,9 @@ def subjects(request):
 			courses = jsonLocalData[classname]
 			data["categories"] = courses
 	return JsonResponse(data,safe=False)
+
+def viewInstituteNotesPDF(request,pk):
+    return render(request,'Notes/notesview.html',{'note':NotesInstitute.objects.get(id=pk)})
+
+def viewTutorNotesPDF(request,pk):
+    return render(request,'Notes/notesview.html',{'note':NotesTutor.objects.get(id=pk)})

@@ -16,6 +16,7 @@ urlpatterns = [
     path('Center/Result/Review/Answer/<question_id>',Review_Answer,name="check_answer"),
     path('Center/Result/Anotate/<id>/<pk>',webViewerAnnotate,name="anotatePdfViewer"),
     path('Center/Result/Anotate/pdf/<id>/<pk>',annotateAnswers,name="anotate"),
+    path('Center/Result/Anotate/pdf/checked/<id>/<pk>',checked_copies_upload,name="checked_copies"),
 
     path('Tutor/Exams/Result/All',TutorResultStudent,name="tutorexamresults"),
     path('Tutor/Exams/Result/Exam/<exam_id>',TutorGetExamResults,name="tutorgetexamresults"),
@@ -23,5 +24,6 @@ urlpatterns = [
     path('Tutor/Result/Review/Answer/<question_id>',TutorReview_Answer,name="tutorcheck_answer"),
     path('Tutor/Result/Anotate/<id>/<pk>',TutorwebViewerAnnotate,name="tutoranotatePdfViewer"),
     path('Tutor/Result/Anotate/pdf/<id>/<pk>',TutorannotateAnswers,name="tutoranotate"),
+    path('Tutor/Result/Anotate/pdf/checked/<id>/<pk>',Tutorchecked_copies_upload,name="checked_copies_tutor"),
 ]
 

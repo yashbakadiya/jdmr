@@ -1,0 +1,21 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <title>Coaching</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" type="image/x-icon" href="{% static 'assets/img/favicon.ico' %}" />
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+</head>
+
+<body style="overflow: hidden;">
+  <div style="height: 100vh">
+    {% with 'plugins/pdfjs/lib/web/viewer.html?file='|add:note.notes.url as static_url %}
+    <iframe height="100%" width=100% src='{% static static_url %}'></iframe>
+    {% endwith %}
+  </div>
+</body>
+
+</html>
