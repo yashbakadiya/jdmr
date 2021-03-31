@@ -48,11 +48,13 @@
                         <div class="table-responsive">
                             <table id="htmlgrid" class="testgrid table table-striped table-bordered table-hover mb-4">
                                 <tr>
+                                    <th>S.No</th>
                                     <th>Year</th>
                                     <th>Revenue</th>
                                 </tr>
                                 {% for date,price in yearly_earnings %}
                                 <tr>
+                                    <td>{{forloop.counter}}</td>
                                     <td>{{date|date:"Y"}}</td>
                                     <td>{{price.price__sum}}</td>
                                 </tr>
@@ -68,11 +70,13 @@
                         <div class="table-responsive">
                             <table id="htmlgrid" class="testgrid table table-striped table-bordered table-hover mb-4">
                                 <tr>
+                                    <th>S.No</th>
                                     <th>Month</th>
                                     <th>Revenue</th>
                                 </tr>
                                 {% for date,price in monthly_earnings %}
                                 <tr>
+                                    <td>{{forloop.counter}}</td>
                                     <td>{{date|date:"F Y"}}</td>
                                     <td>{{price.price__sum}}</td>
                                     </t>
@@ -88,6 +92,7 @@
                         <div class="table-responsive">
                             <table id="htmlgrid" class="testgrid table table-striped table-bordered table-hover mb-4">
                                 <tr>
+                                    <th>S.No</th>
                                     <th>Date</th>
                                     <th>Customer</th>
                                     <th>Product Category</th>
@@ -96,6 +101,7 @@
                                 </tr>
                                 {% for i in daily_earnings %}
                                 <tr>
+                                    <td>{{forloop.counter}}</td>
                                     <td>{{i.date|date:"F d, Y"}}</td>
                                     <td>{{i.customer}}</td>
                                     <td>{{i.category}}</td>
