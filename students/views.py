@@ -17,6 +17,7 @@ from math import radians, sin, cos, asin, sqrt
 from geopy.geocoders import Nominatim
 from get_notice import notice
 from batches.models import Notice
+from teacher.models import MakeAppointment
 # Create your views here.
 
 
@@ -372,8 +373,17 @@ def StudentCalendar(request):
     if request.session['type']=="Student":
         template = 'dashboard/student-dashboard.html'
     elif request.session['type']=="Teacher":
-        template = 'dashboard/Tutor-dashboard.html'
-    return render(request,'students/studentcalendar.html',{'template':template})
+        template = 'dashboard/Tutor-dashboard.html'    
+    makepoint = MakeAppointment.objects.all()
+    return render(request,'students/studentcalendar.html',{'template':template,'makepoint':makepoint})
+
+@login_required()
+def TeacherCalendar(request):   
+    if request.session['type']=="Teacher":
+        template = 'dashboard/Tutor-dashboard.html'    
+    makepoint = MakeAppointment.objects.all()
+    return render(request,'teacher/teachercalendar.html',{'template':template,'makepoint':makepoint})
+
 
 
 @login_required(login_url="Login")

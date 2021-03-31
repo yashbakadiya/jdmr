@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import buyInstituteNotes,buyTutorNotes, buyInstituteTutorial, buyTutorTutorial,buyTutorExam
+from .views import *
 
 
 urlpatterns = [
@@ -8,4 +8,7 @@ urlpatterns = [
     path('buyTutorExam/<int:id>', buyTutorExam, name='buyTutorExam'),
     path('buyInstituteTutorial/<int:id>', buyInstituteTutorial ,name='buyInstituteTutorial'),
     path('buyTutorTutorial/<int:id>', buyTutorTutorial ,name='buyTutorTutorial'),
+
+    #show revenue
+    path('Earnings', revenueShow ,name='earnings'),
 ]

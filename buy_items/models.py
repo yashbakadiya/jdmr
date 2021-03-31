@@ -1,6 +1,8 @@
 import uuid
 
 from django.db import models
+from django.contrib.auth.models import User
+from django.utils import timezone
 from accounts.models import Student
 from tutorials.models import TutorialInstitute, TutorialTutors
 from notes.models import NotesInstitute, NotesTutor
@@ -73,3 +75,11 @@ class BuyTutorExam(models.Model):
     def __str__(self):
         return str(self.exam.courseName) + str(self.student.id)
 
+
+class Revenue(models.Model):
+    owner = models.ForeignKey(User,on_delete=models.CASCADE,related_name='owner')
+    customer = models.ForeignKey(User,on_delete=models.CASCADE,related_name='customer')
+    date = models.DateTimeField(default=timezone.now)
+    price = models.FloatField(default=0)
+    product = models.CharField(max_length=100)
+    category = models.CharField(max_length=100)

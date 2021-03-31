@@ -7,7 +7,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, shrink-to-fit=no">
   <title>
     {% block head-title %}
-    Coaching
+    Tutor Dashboard
     {% endblock head-title %}
   </title>
   <link rel="icon" type="image/x-icon" href="{% static 'assets/img/favicon.ico' %}" />
@@ -158,7 +158,7 @@
             </li>
 
             <li class="menu">
-              <a href="{% url 'StudentCalendar' %}">
+              <a href="{% url 'teacherCalendar' %}">
                 <div class="">
                   <img src="{% static 'assets/img/card-outline.png' %}" alt="">
                   <span>Calender</span>
@@ -250,6 +250,16 @@
                 </div>
               </a>
             </li>
+
+            <li class="menu">
+              <a href="{% url 'earnings' %}">
+                <div class="">
+                  <img src="{% static 'assets/img/earn.png' %}" alt="">
+                  <span>Revenue</span>
+                </div>
+              </a>
+            </li>
+
           </ul>
         </nav>
       </div>

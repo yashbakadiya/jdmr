@@ -48,6 +48,25 @@
                           center: 'title',
                           right: 'dayGridMonth,timeGridWeek,timeGridDay'
                         },
+
+
+                        events: [
+
+                    {% for event in makepoint %}
+
+                        {
+                    title: "{{ event.tutor}}",
+                    start: '{{ event.utcDateTime|date:"Y-m-d" }}',
+                    // start: '{{ event.startTime|time:"H:i" }}',
+                    end: '{{ event.dateTime|date:"Y-m-d"  }}',
+                    id: '{{ event.id }}',
+                },
+                {% endfor %}
+                ],
+                
+
+
+
         });
         calendar.render();
       });

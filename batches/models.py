@@ -19,7 +19,6 @@ class BatchTiming(models.Model):
     def __str__(self):
         return self.batchName
     
-
 class BatchTimingTutor(models.Model):
     sno             = models.AutoField(primary_key=True)
     batchName       = models.CharField(max_length=255,default="")
