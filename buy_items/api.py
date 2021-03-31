@@ -22,18 +22,21 @@ from .serializers import (
 from notes.models import NotesInstitute, NotesTutor
 from tutorials.models import TutorialInstitute, TutorialTutors
 from exams.models import TutorExam
+from accounts.models import Institute, Teacher, Student
+
 
 @api_view(['POST', 'GET'])
-def buyInstituteNotes(request,id):
+def buyInstituteNotesAPI(request,id):
     if request.session['type'] == "Student":
         user = User.objects.get(username=request.user)
         student = Student.objects.get(user=user)
         note = NotesInstitute.objects.get(id=id)
-        data = request.data
-        data['student'] = student.id
-        data['note'] = note.id
-        data['status'] = 1
+        
         if request.method == "GET":
+            data = {}
+            data['student'] = student.id
+            data['note'] = note.id
+            data['status'] = 1
             if int(note.price) == 0:
                 buyData = BuyInstituteNotesSerializer(data=data)
                 if buyData.is_valid():
@@ -41,18 +44,22 @@ def buyInstituteNotes(request,id):
                     data['success'] = "Notes Bought Successfully!"
                 else:
                     data['error'] = "something error!"
-                    return redirect('notes-tutor-api')
+                    return redirect('notesstudents')
             else:
                 return Response(data)
                 
         elif request.method == "POST":
+            data = request.data
+            data['student'] = student.id
+            data['note'] = note.id
+            data['status'] = 1
             buyData = BuyInstituteNotesSerializer(data=data)
             if buyData.is_valid():
                 buyData.save()
                 data['success'] = "Notes Bought Successfully!"
             else:
                 data['error'] = "something error!"
-            return redirect('notes-tutor-api')
+            return redirect('notesstudents')
         return HttpResponse("method not found")
     return HttpResponse("You are Not Authenticated for this page")
 
@@ -61,36 +68,40 @@ def buyInstituteNotes(request,id):
 
 
 @api_view(['POST', 'GET'])
-def buyInstituteTutorial(request,id):
+def buyInstituteTutorialAPI(request,id):
     if request.session['type'] == "Student":
         user = User.objects.get(username=request.user)
         student = Student.objects.get(user=user)
         tutorial = TutorialInstitute.objects.get(id=id)
-        data = request.data
-        data['student'] = student.id
-        data['tutorial'] = tutorial.id
-        data['status'] = 1
+
         if request.method == "GET":
-            if int(note.price) == 0:
+            data = {}
+            data['student'] = student.id
+            data['tutorial'] = tutorial.id
+            data['status'] = 1
+            if int(tutorial.Fees) == 0:
                 buyData = BuyInstituteTutorialSerializer(data=data)
                 if buyData.is_valid():
                     buyData.save()
                     data['success'] = "Notes Bought Successfully!"
                 else:
                     data['error'] = "something error!"
-                    return redirect('view-tutorial-tutor-api')
+                    return redirect('searchcourses')
             else:
                 return Response(data)
 
-        
         elif request.method == "POST":
+            data = request.data
+            data['student'] = student.id
+            data['tutorial'] = tutorial.id
+            data['status'] = 1
             buyData = BuyInstituteTutorialSerializer(data=data)
             if buyData.is_valid():
                 buyData.save()
                 data['success'] = "Notes Bought Successfully!"
             else:
                 data['error'] = "something error!"
-            return redirect('view-tutorial-tutor-api')
+            return redirect('searchcourses')
         return HttpResponse("method not found")
     return HttpResponse("You are Not Authenticated for this page")
 
@@ -99,53 +110,58 @@ def buyInstituteTutorial(request,id):
 
 
 @api_view(['POST', 'GET'])
-def buyTutorExam(request,id):
+def buyTutorExamAPI(request,id):
     if request.session['type'] == "Student":
         user = User.objects.get(username=request.user)
         student = Student.objects.get(user=user)
         exam = TutorExam.objects.get(id=id)
-        data = request.data
-        data['student'] = student.id
-        data['exam'] = exam.id
-        data['status'] = 1
+        
         if request.method == "GET":
-            if int(note.price) == 0:
+            data = {}
+            data['student'] = student.id
+            data['exam'] = exam.id
+            data['status'] = 1
+            if int(exam.price) == 0:
                 buyData = BuyTutorExamSerializer(data=data)
                 if buyData.is_valid():
                     buyData.save()
                     data['success'] = "Notes Bought Successfully!"
                 else:
                     data['error'] = "something error!"
-                    return redirect('viewexamstutor')
+                    return redirect('studentexams')
             else:
                 return Response(data)
         
         elif request.method == "POST":
+            data = request.data
+            data['student'] = student.id
+            data['exam'] = exam.id
+            data['status'] = 1
             buyData = BuyTutorExamSerializer(data=data)
             if buyData.is_valid():
                 buyData.save()
                 data['success'] = "Notes Bought Successfully!"
             else:
                 data['error'] = "something error!"
-            return redirect('viewexamstutor')
+            return redirect('studentexams')
         return HttpResponse("method not found")
     return HttpResponse("You are Not Authenticated for this page")
 
 
 
 
-
 @api_view(['POST', 'GET'])
-def buyTutorNotes(request,id):
+def buyTutorNotesAPI(request,id):
     if request.session['type'] == "Student":
         user = User.objects.get(username=request.user)
         student = Student.objects.get(user=user)
         note = NotesTutor.objects.get(id=id)
-        data = request.data
-        data['student'] = student.id
-        data['note'] = note.id
-        data['status'] = 1
+        
         if request.method == "GET":
+            data = {}
+            data['student'] = student.id
+            data['note'] = note.id
+            data['status'] = 1
             if int(note.price) == 0:
                 buyData = BuyTutorNotesSerializer(data=data)
                 if buyData.is_valid():
@@ -153,52 +169,61 @@ def buyTutorNotes(request,id):
                     data['success'] = "Notes Bought Successfully!"
                 else:
                     data['error'] = "something error!"
-                    return redirect('notes-tutor-api')
+                    return redirect('notesstudents')
             else:
                 return Response(data)
       
         elif request.method == "POST":
+            data = request.data
+            data['student'] = student.id
+            data['note'] = note.id
+            data['status'] = 1
             buyData = BuyTutorNotesSerializer(data=data)
             if buyData.is_valid():
                 buyData.save()
                 data['success'] = "Notes Bought Successfully!"
             else:
                 data['error'] = "something error!"
-            return redirect('notes-tutor-api')
+            return redirect('notesstudents')
         return HttpResponse("method not found")
     return HttpResponse("You are Not Authenticated for this page")
 
 
 @api_view(['POST', 'GET'])
-def buyTutorTutorial(request,id):
+def buyTutorTutorialAPI(request,id):
     if request.session['type'] == "Student":
         user = User.objects.get(username=request.user)
         student = Student.objects.get(user=user)
         tutorial = TutorialTutors.objects.get(id=id)
-        data = request.data
-        data['student'] = student.id
-        data['tutorial'] = tutorial.id
-        data['status'] = 1
+        
         if request.method == "GET":
-            if int(note.price) == 0:
+            data = {}
+            data['student'] = student.id
+            data['tutorial'] = tutorial.id
+            data['status'] = 1
+            if int(tutorial.Fees) == 0:
                 buyData = BuyTutorTutorialSerializer(data=data)
                 if buyData.is_valid():
                     buyData.save()
                     data['success'] = "Notes Bought Successfully!"
                 else:
                     data['error'] = "something error!"
-                    return redirect('view-tutorial-tutor-api')
+                    return redirect('searchcourses')
             else:
                 return Response(data)
       
         elif request.method == "POST":
+            data = request.data
+            data['student'] = student.id
+            data['tutorial'] = tutorial.id
+            data['status'] = 1
             buyData = BuyTutorTutorialSerializer(data=data)
             if buyData.is_valid():
                 buyData.save()
                 data['success'] = "Notes Bought Successfully!"
             else:
                 data['error'] = "something error!"
-            return redirect('view-tutorial-tutor-api')
+            return redirect('searchcourses')
         return HttpResponse("method not found")
     return HttpResponse("You are Not Authenticated for this page")
 
