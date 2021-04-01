@@ -1,5 +1,6 @@
 
-from django.shortcuts import render
+from django.shortcuts import render,redirect
+from django.http import HttpResponse
 from pymongo import MongoClient
 import datetime
 import pymysql
@@ -9,44 +10,48 @@ from chat.models import ChatApplication
 from django.db.models import Q
 from accounts.models import *
 
+def only_owner(func):
+    def wrap(request, *args, **kwargs):
+        if request.user.is_authenticated:
+            if request.user.username==kwargs['name']:
+                return func(request, *args, **kwargs)
+            else:
+                return HttpResponse('You Are not Authorized')
+        else:
+            return redirect('Login')
+    return wrap
+
+@only_owner
 def index(request, name, ts):
-    a = []
-    l = []
-    tsname = name
-    tts = ts
-    photosa=[]
-    photosb=[]
-    # a=ChatApplication.objects.filter(names=name).distinct('room')
-    a = ChatApplication.objects.filter(names=name).values('room','ts').distinct()
-    b = ChatApplication.objects.filter(room=name).values('names','ts').distinct()
+        latest_outgoing = ChatApplication.objects.filter(names=name)
+        latest_incoming = ChatApplication.objects.filter(room=name)
 
-    for i in a:
-        user = User.objects.get(username=i['room'])
-        if i['ts'] == "Teacher":
-            photosa.append(Student.objects.get(user=user).photo)
-        elif i['ts'] == "Student":
-            photosa.append(Teacher.objects.get(user=user).photo)
+        if (latest_incoming.exists()==True and latest_outgoing.exists()==True):
+            if(latest_incoming.latest('dtime').dtime<latest_outgoing.latest('dtime').dtime):
+                latest=latest_outgoing.latest('dtime').room
 
-    for i in b:
-        user = User.objects.get(username=i['names'])
-        if i['ts'] == "Teacher":
-            photosb.append(Teacher.objects.get(user=user).photo)
-        elif i['ts'] == "Student":
-            photosb.append(Student.objects.get(user=user).photo)
-    
-    context = {'a': zip(a,photosa), 'name': tsname, 'ts': tts, 'b': zip(b,photosb)}
+            else:
+                latest=latest_incoming.latest('dtime').names
 
-    if ts=="Teacher":
-        context['template'] = 'dashboard/Tutor-dashboard.html'
-    elif ts=="Student":
-        context['template'] = 'dashboard/student-dashboard.html'
+            return redirect('room',name,ts,latest)  
 
-    return render(request, 'chat/index.html', context)
+        elif(latest_incoming.exists()==True and latest_outgoing.exists()==False):
+            latest=latest_incoming.latest('dtime').names
+            return redirect('room',name,ts,latest)  
 
+        elif(latest_incoming.exists()==False and latest_outgoing.exists()==True):
+            latest=latest_outgoing.latest('dtime').room
+            return redirect('room',name,ts,latest)  
 
+        else:
+            if ts == "Teacher":
+                return render(request,'chat/index.html',{'template':'dashboard/Tutor-dashboard.html'})
+            elif ts == "Student":
+                return render(request,'chat/index.html',{'template':'dashboard/student-dashboard.html'})
+
+@only_owner
 def room(request, name, room_name, ts):
     a = []
-    l = []
     a = ChatApplication.objects.all().order_by('dtime')
     photos=[]
     photos_all=[]
@@ -90,14 +95,12 @@ def room(request, name, room_name, ts):
             'room': room_name, 'a': zip(a,photos), 'c': zip(c,photos_all), 'case1': room_name+name, 'case2': name+room_name
         })
 
-
+@only_owner
 def send(request, name, room_name, ts):
     try:
         message = request.POST["msg"]
         # room_name=request.POST["room"]
         dtime = datetime.datetime.now()
-
-        print(message)
 
         if message != "":
             c = ChatApplication()
@@ -113,26 +116,9 @@ def send(request, name, room_name, ts):
     except:
         pass
 
-    a = []
-    l = []
-    case1 = room_name + name
-    case2 = name + room_name
-    # a=list(datadb.find())
-    # a=ChatApplication.objects.filter(room=room_name,names=name).order_by('dtime')
-    a = ChatApplication.objects.all().order_by('dtime')
-    photos=[]
-    for i in a:
-        user = User.objects.get(username=i.names)
-        if i.ts == "Teacher":
-            photos.append(Teacher.objects.get(user=user).photo)
-        elif i.ts == "Student":
-            photos.append(Student.objects.get(user=user).photo)
+    return redirect('room',name,ts,room_name)
 
-    l.append(a)
-
-    return render(request, 'chat/room1.html', {'room': room_name, 'a': zip(a,photos), 'case1': room_name+name, 'case2': name+room_name})
-
-
+@only_owner
 def send2(request, name, room_name, ts):
     try:
         message = request.POST["msg"]
@@ -153,25 +139,9 @@ def send2(request, name, room_name, ts):
     except:
         pass
 
-    a = []
-    l = []
-    # a=list(datadb.find())
-    # a=ChatApplication.objects.filter(room=room_name,names=name).order_by('dtime')
-    a = ChatApplication.objects.all().order_by('dtime')
-    photos=[]
+    return redirect('room',name,ts,room_name)
 
-    for i in a:
-        user = User.objects.get(username=i.names)
-        if i.ts == "Teacher":
-            photos.append(Teacher.objects.get(user=user).photo)
-        elif i.ts == "Student":
-            photos.append(Student.objects.get(user=user).photo)
-
-    l.append(a)
-
-    return render(request, 'chat/room2.html', {'room': room_name, 'a': zip(a,photos), 'case1': room_name+name, 'case2': name+room_name})
-
-
+@only_owner
 def upload1(request, name, room_name, ts):
 
     myfile = request.FILES['myfile']
@@ -223,7 +193,7 @@ def upload1(request, name, room_name, ts):
 
     return render(request, 'chat/room1.html', m)
 
-
+@only_owner
 def upload2(request, name, room_name, ts):
 
     myfile = request.FILES['myfile']

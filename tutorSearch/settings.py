@@ -113,9 +113,9 @@ WSGI_APPLICATION = 'tutorSearch.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'jdrm_backup',
+        'NAME': 'college_test',
         'USER': 'postgres',
-        'PASSWORD': 'Rakesh@123',
+        'PASSWORD': 'sunny8875',
         'HOST':'localhost',
         'PORT':'5432',
     },
@@ -194,12 +194,17 @@ django_heroku.settings(locals())
 #         'knox.auth.TokenAuthentication',
 #     ]
 # }
-
 REST_FRAMEWORK = {
-    "DEFAULT_PERMISSION_CLASSES": [
-        "rest_framework_api_key.permissions.HasAPIKey",
-    ],
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.IsAuthenticated',
+    ]
 }
+
+# REST_FRAMEWORK = {
+#     "DEFAULT_PERMISSION_CLASSES": [
+#         "rest_framework_api_key.permissions.HasAPIKey",
+#     ],
+# }
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'

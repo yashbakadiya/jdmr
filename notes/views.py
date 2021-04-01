@@ -8,7 +8,7 @@ from teacher.models import enrollTutors
 from batches.models import BatchTiming
 from students.models import *
 from itertools import chain
-from buy_items.models import BuyInstituteNotes,BuyTutorNotes, BuyTutorial
+from buy_items.models import BuyInstituteNotes,BuyTutorNotes
 from students.models import AddStudentInst
 # Create your views here.
 
@@ -402,3 +402,9 @@ def subjects(request):
 			courses = jsonLocalData[classname]
 			data["categories"] = courses
 	return JsonResponse(data,safe=False)
+
+def viewInstituteNotesPDF(request,pk):
+    return render(request,'Notes/notesview.html',{'note':NotesInstitute.objects.get(id=pk)})
+
+def viewTutorNotesPDF(request,pk):
+    return render(request,'Notes/notesview.html',{'note':NotesTutor.objects.get(id=pk)})

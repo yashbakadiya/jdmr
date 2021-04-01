@@ -1,4 +1,4 @@
-from django.shortcuts import render,HttpResponse,redirect
+from django.shortcuts import render,HttpResponse,redirect,HttpResponseRedirect
 from django.contrib.auth.decorators import login_required
 from accounts.models import Institute,Teacher,Student
 from exams.models import *
@@ -159,18 +159,16 @@ def annotateAnswers(request, id, pk):
         pdf = render_to_pdf('Results/annotatable_pdf.html', {'student_results': student_results, 'one': one, 'name': name, 'status': True})
         return HttpResponse(pdf,content_type="application/pdf")
     except:
-        pdf = render_to_pdf('xyz.html', {'status': False})
+        pdf = render_to_pdf('Results/xyz.html', {'status': False})
         return HttpResponse(pdf,content_type="application/pdf")
 
 def checked_copies_upload(request, id, pk):
-    if request.POST:
-        print("yes")
-        print(id,pk)
-        s = StudentExamResult.objects.filter(exam=id,student=pk)
-        s[0].annotated_copies = request.FILES['coppies']
+    if request.method=='POST':
+        s = StudentExamResult.objects.filter(exam=id,student=pk)[0]
+        s.annotated_copies = request.FILES['coppies']
         s.save()
 
-    return HttpResponseRedirect(reverse('result'))
+    return HttpResponse('')
 
 # teacher result 
 @login_required(login_url="Login")
@@ -304,18 +302,16 @@ def TutorannotateAnswers(request, id, pk):
         pdf = render_to_pdf('Results/annotatable_pdf.html', {'student_results': student_results, 'one': one, 'name': name, 'status': True})
         return HttpResponse(pdf,content_type="application/pdf")
     except:
-        pdf = render_to_pdf('xyz.html', {'status': False})
+        pdf = render_to_pdf('Results/xyz.html', {'status': False})
         return HttpResponse(pdf,content_type="application/pdf")
 
 def Tutorchecked_copies_upload(request, id, pk):
-    if request.POST:
-        print("yes")
-        print(id,pk)
-        s = TutorStudentExamResult.objects.filter(exam=id,student=pk)
-        s[0].annotated_copies = request.FILES['coppies']
+    if request.method=='POST':
+        s = TutorStudentExamResult.objects.filter(exam=id,student=pk)[0]
+        s.annotated_copies = request.FILES['coppies']
         s.save()
 
-    return HttpResponseRedirect(reverse('result'))
+    return HttpResponse('')
 
 # student result 
 @login_required(login_url="Login")

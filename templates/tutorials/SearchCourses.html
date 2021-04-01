@@ -56,7 +56,7 @@
                                         <label class="control-label col-sm-3 col-4 mt-2 mx-3"
                                             style="display:block; color:black;">Course</label>
                                         <select id="cn" name="cn"
-                                            class="custom-select form-control w-100 col-sm-8 col-6" required="required">
+                                            class="custom-select form-control w-100 col-sm-8 col-6" " >
                                             {% if prefill.course %}
                                             <option disabled selected value="{{prefill.course}}">
                                                 {{prefill.course}}</option>
@@ -77,12 +77,12 @@
                                             {% else %}
                                             <option disabled selected value="">Duration</option>
                                             {% endif %}
-                                            <option value="1 Month">1 Month</option>
-                                            <option value="2 Months">2 Months</option>
-                                            <option value="3 Months">3 Months</option>
-                                            <option value="4 Months">4 Months</option>
-                                            <option value="5 Months">5 Months</option>
-                                            <option value="6 Months">6 Months</option>
+                                            <option value="1">1 Month</option>
+                                            <option value="2">2 Months</option>
+                                            <option value="3">3 Months</option>
+                                            <option value="4">4 Months</option>
+                                            <option value="5">5 Months</option>
+                                            <option value="6">6 Months</option>
                                         </select>
                                     </div>
                                     <div class="col-md-5 col-lg-5 col-12 mt-3 row">
@@ -95,11 +95,11 @@
                                             {% else %}
                                             <option disabled selected value="">Fees in Rs.</option>
                                             {% endif %}
-                                            <option value="less than 1000">less than 1000</option>
+                                            <option value="0-1000">less than 1000</option>
                                             <option value="1000-2000">1000-2000</option>
                                             <option value="2000-5000">2000-5000</option>
                                             <option value="5000-7000">5000-7000</option>
-                                            <option value="7000 and above">7000 and above</option>
+                                            <option value="7000-99999999">7000 and above</option>
                                         </select>
                                     </div>
                                     <div class="col-lg-2 col-md-2 mt-3 h-100 col-12 d-flex justify-content-end">
@@ -115,97 +115,107 @@
     </div>
     {% if prefill %}
     <div class="row">
-        {% if tutor %}
-        {% for tutorial in tutor%}
-        <div class="col-md-4 col-12 layout-spacing">
-            <div class="widget-content widget-content-area h-100">
-                <div class="top-seller-container">
-                    <div class="top-seller-header h-100">
-                        <div class="row">
-                            <div class="col-md-12 col-sm-12 col-12">
-                                <video class="col-md-12 col-12" playsinline style="pointer-events: none;" controls="">
-                                    <source src="{{tutorial.First}}">
-                                </video>
+        {% if bought or notBought %}
+            {% if bought %}
+                {% for tutorial in bought %}
+                <div class="col-md-4 col-12 layout-spacing">
+                    <div class="widget-content widget-content-area h-100">
+                        <div class="top-seller-container">
+                            <div class="top-seller-header h-100">
+                                <div class="row">
+                                    <div class="col-md-12 col-sm-12 col-12">
+                                        <video class="col-md-12 col-12" playsinline style="pointer-events: none;" controls="">
+                                            <source src="{{tutorial.First}}">
+                                        </video>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="top-seller-body container mt-2">
+                            <div class="row mt-2">
+                                <div class="col-md-6 col-6">
+                                    <b>{{tutorial.Title}}</b>
+                                </div>
+                                <div class="col-md-6 col-6 row">
+                                    <b class="col-md-4 col-4">Fees</b>
+                                    {% if tutorial.Discount_Validity %}
+                                    <p class="col-md-8 col-8">
+                                        {{tutorial.Discounted_price}}&nbsp;<del>{{tutorial.Fees}}</del>
+                                    </p>
+                                    {% else %}
+                                    <p class="col-md-8 col-8">{{tutorial.Fees}}</p>
+                                    {% endif %}
+                                </div>
+
+                                <div class="col-md-6 col-6 row">
+                                    <b class="col-md-8 col-8">Duration</b>
+                                    <p class="col-md-4 col-4">{{tutorial.Duration}}</p>
+                                </div>
+
+                                <div class="col-md-6 col-12">
+                                    <a href="{% url 'watchTutorcourse' tutorial.id %}" class="ml-4 btn btn-info">Watch</a>
+                                </div>
+
                             </div>
                         </div>
                     </div>
                 </div>
-                <div class="top-seller-body container mt-2">
-                    <div class="row mt-2">
-                        <div class="col-md-6 col-6">
-                            <b>{{tutorial.Title}}</b>
-                        </div>
-                        <div class="col-md-6 col-6 row">
-                            <b class="col-md-4 col-4">Fees</b>
-                            {% if tutorial.Discount_Validity %}
-                            <p class="col-md-8 col-8">
-                                {{tutorial.Discounted_price}}&nbsp;<del>{{tutorial.Fees}}</del>
-                            </p>
-                            {% else %}
-                            <p class="col-md-8 col-8">{{tutorial.Fees}}</p>
-                            {% endif %}
-                        </div>
+                {% endfor %}
+            {% endif %}
+            {% if notBought %}
+                {% for tutorial in notBought %}
+                    <div class="col-md-4 col-12 layout-spacing">
+                        <div class="widget-content widget-content-area h-100">
+                            <div class="top-seller-container">
+                                <div class="top-seller-header h-100">
+                                    <div class="row">
+                                        <div class="col-md-12 col-sm-12 col-12">
+                                            <video class="col-md-12 col-12" playsinline style="pointer-events: none;" controls="">
+                                                <source src="{{tutorial.First}}">
+                                            </video>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="top-seller-body mt-2">
+                                <div class="row mt-2">
+                                    <div class="col-md-6 col-6">
+                                        <b>{{tutorial.Title}}</b>
+                                    </div>
+                                    <div class="col-md-6 col-6 row">
+                                        <b class="col-md-4 col-4">Fees</b>
+                                        {% if tutorial.Discount_Validity %}
+                                        <p class="col-md-8 col-8">
+                                            {{tutorial.Discounted_price}}&nbsp;<del>{{tutorial.Fees}}</del>
+                                        </p>
+                                        {% else %}
+                                        <p class="col-md-8 col-8">{{tutorial.Fees}}</p>
+                                        {% endif %}
+                                    </div>
 
-                        <div class="col-md-6 col-6 row">
-                            <b class="col-md-8 col-8">Duration</b>
-                            <p class="col-md-4 col-4">{{tutorial.Duration}}</p>
-                        </div>
-                        <div class="col-md-6 col-12">
-                            <a href="{% url 'watchTutorcourse' tutorial.id %}" class="ml-4 btn btn-info">Watch</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        {% endfor %}
-        {% elif institute %}
-        {% for tutorial in institute %}
-        <div class="col-md-4 col-12 layout-spacing">
-            <div class="widget-content widget-content-area h-100">
-                <div class="top-seller-container">
-                    <div class="top-seller-header h-100">
-                        <div class="row">
-                            <div class="col-md-12 col-sm-12 col-12">
-                                <video class="col-md-12 col-12" playsinline style="pointer-events: none;" controls="">
-                                    <source src="{{tutorial.First}}">
-                                </video>
+                                    <div class="col-md-6 col-6 row">
+                                        <b class="col-md-8 col-8">Duration</b>
+                                        <p class="col-md-4 col-4">{{tutorial.Duration}}</p>
+                                    </div>
+                                    {% if tutorial.Tutor %}
+                                        <div class="col-md-6 col-12">
+                                            <a href="{% url 'buyTutorTutorial' tutorial.id %}" class="ml-4 btn btn-info">Buy</a>
+                                        </div>
+                                    {% else %}
+                                        <div class="col-md-6 col-12">
+                                            <a href="{% url 'buyInstituteTutorial' tutorial.id %}" class="ml-4 btn btn-info">Buy</a>
+                                        </div>
+                                    {% endif %}
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
-                <div class="top-seller-body mt-2">
-                    <div class="row mt-2">
-                        <div class="col-md-6 col-6">
-                            <b>{{tutorial.Title}}</b>
-                        </div>
-                        <div class="col-md-6 col-6 row">
-                            <b class="col-md-4 col-4">Fees</b>
-                            {% if tutorial.Discount_Validity %}
-                            <p class="col-md-8 col-8">
-                                {{tutorial.Discounted_price}}&nbsp;<del>{{tutorial.Fees}}</del>
-                            </p>
-                            {% else %}
-                            <p class="col-md-8 col-8">{{tutorial.Fees}}</p>
-                            {% endif %}
-                        </div>
-
-                        <div class="col-md-6 col-6 row">
-                            <b class="col-md-8 col-8">Duration</b>
-                            <p class="col-md-4 col-4">{{tutorial.Duration}}</p>
-                        </div>
-                        <div class="col-md-6 col-12">
-                            <a href="{% url 'watchInstitutecourse' tutorial.id %}" class="ml-4 btn btn-info">Watch</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        {% endfor %}
-
+                {% endfor %}
+            {% endif %}
         {% else %}
-        <div class="card w-100 mx-3">
-            <h5 class="mt-2 mb-2 p-2">No Data Found</h5>
-        </div>
+            <div class="card w-100 mx-3">
+                <h5 class="mt-2 mb-2 p-2">No Data Found</h5>
+            </div>
         {% endif %}
     </div>
     {% endif %}
