@@ -44,12 +44,23 @@
 
 
         </div>
+
         <div class="col">
           <label for="validationCustom01"><strong>Select Course<span class="red">*</span></strong></label>
+          <input type="text" name="courseName" list="cn" style="width: 100%" class="js-example-basic-single form-control"/>
+          <datalist id="cn"  >
+            <option>Select Course</option>
+          </datalist>
+        </div>
+
+        <!-- <div class="col">
+          
+          <label for="validationCustom01"><strong>Select Course<span class="red">*</span></strong></label>
+          <input type="text" list="cn" />
           <select id="cn" name="courseName" style="width: 100%" class="js-example-basic-single form-control">
             <option class="form-control form-control-lg" selected disabled value="">Select Course</option>
           </select>
-        </div>
+        </div> -->
 
 
       </div>
@@ -115,11 +126,6 @@
             </td>
 
             <td>
-
-
-
-
-
               <!-- <div class="btn-group">
                   <button type="button" data-toggle="modal" data-target="#edit-{{i.pk}}" href="#edit-{{i.pk}}"
                     class="btn btn-secondary btn-sm"><i
@@ -201,10 +207,10 @@
       name="negative_marks"
       value="0"
       required
-    />
-    <div class="invalid-feedback">
+       />
+      <div class="invalid-feedback">
       Enter a valid No.
-    </div>`;
+        </div>`;
       } else {
         output = "";
       }
@@ -252,6 +258,21 @@
         "info": "Showing page _PAGE_ of _PAGES_"
       }
     });
+  </script>
+
+
+  <script>
+
+    function insertValue() {
+      var select = document.getElementById("select"),
+        txtVal = document.getElementById("val").value,
+        newOption = document.createElement("OPTION"),
+        newOptionVal = document.createTextNode(txtVal);
+
+      newOption.appendChild(newOptionVal);
+      select.insertBefore(newOption, select.firstChild);
+    }
+
   </script>
 
 </div>

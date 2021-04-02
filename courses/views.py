@@ -54,23 +54,45 @@ def courses(request):
             institute = Institute.objects.get(user=user)
             count = (Courses.objects.all().count())+1 
             course_ID = courseName[:3] + str("%03d" % count)
-            if  not Courses.objects.filter(courseName=request.POST['courseName']).exists():
-                if not Courses.objects.filter(forclass=request.POST['forclass']).exists():
-                    
-                    print('if else coursename',courseName)  
-                    print('if else for class',forclass)  
-                    Courses(courseName=courseName,
+            print('if else coursename',courseName)  
+            print('if else for class',forclass) 
+
+            if forclass == 'Other':
+                with open('cc.txt',mode='r+',encoding='utf-8') as f:
+                    data = f.read()
+                    data = json.loads(data)
+                    f.close()
+                    a=[]
+                    for i in data:
+                        if i == 'Other':
+                            a.append(data[i])
+                    b=a[0]
+                    b.append(courseName)
+
+                    unique_list = []
+                    for x in b:
+                        if x not in unique_list:
+                            unique_list.append(x)                    
+
+                    data['Other'] = unique_list
+                    data =json.dumps(data)
+                with open('cc.txt',mode='w',encoding='utf-8') as fw:
+                    fw.write(data)
+                    fw.close()
+
+
+
+
+
+
+            Courses(courseName=courseName,
                      forclass=forclass,
                      intitute=institute,                     
                      courseID=course_ID).save()
-                    messages.success(request, 'Course Has been added successfully.')
-                    return redirect('courses')
+            messages.success(request, 'Course Has been added successfully.')
+            return redirect('courses')
                     
-                else:
-                    messages.warning(request, 'class Number Already Exists!!! ',extra_tags = 'alert alert-warning alert-dismissible show')
-            else:
-                messages.warning(request, 'Course Already Exists!!! ',extra_tags = 'alert alert-warning alert-dismissible show')            
-   
+                
 
         return render(request, 'courses-2/courses.html', params)
     return HttpResponse("You Are Not Authenticated for this Page")
