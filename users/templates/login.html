@@ -1,0 +1,142 @@
+{% extends "code2learn_app/base.html" %} {% load static %} {% block css %}
+<link
+  href="{% static 'code2learn_app/css/version7/registerPage/register.css' %}"
+  rel="stylesheet"
+/>
+
+{% endblock css %} {% block js_up %}
+<script src="{% static 'code2learn_app/js/version7/navbar/script.js' %}"></script>
+{% endblock js_up %} {% block title %} Login {% endblock title %} 
+{% block content %}
+
+<section id="registration-form">
+  <div class="container pt-2">
+    <div class="row">
+      <div class="col-md-6 col-sm-12 pt-5">
+        <div class="card" style="border: none">
+          <img
+            id="registerimg"
+            src="{% static 'code2learn_app/images/version7/registerPage/signin.png' %}"
+            class="card-img-top"
+            alt="Register"
+            width="100%"
+            height="auto"
+          />
+        </div>
+      </div>
+      <div class="col-md-6 col-sm-12 form pt-3 pb-3">
+        <h1 class="heading1">Log In</h1>
+
+        {% if error %}
+        <div
+          class="alert alert-danger alert-dismissible fade show text-center"
+          role="alert"
+        >
+          {{error}}
+          <button
+            type="button"
+            class="close"
+            data-dismiss="alert"
+            aria-label="Close"
+          >
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        {% endif %}
+        {% if message %}
+        <div
+          class="alert alert-success alert-dismissible fade show text-center"
+          role="alert"
+        >
+          {{message}}
+          <button
+            type="button"
+            class="close"
+            data-dismiss="alert"
+            aria-label="Close"
+          >
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        {% endif %}
+
+        <form action="{% url 'login' %}" method="POST" id="loginForm">
+          {% csrf_token %}
+          <div class="form-group">
+            <label for="email">Email</label>
+            <input
+              type="email"
+              class="form-control"
+              name="email"
+              placeholder="Email"
+              id="email"
+              required
+            />
+          </div>
+          <div
+            class="emailFeedBackArea invalid-feedback"
+            style="display: none"
+          ></div>
+          <div class="form-group">
+            <label for="password">Password</label>
+            <input
+              type="password"
+              class="form-control"
+              name="password"
+              placeholder="Password"
+              id="password"
+              required
+            />
+          </div>
+          <!-- <input
+            type="button"
+            name="btn"
+            value="Login"
+            
+            class="btn btn-lg btn-block"
+          /> -->
+
+          <button type="submit" class="btn btn-primary btn-lg btn-block" id="submitBtn">Login</button>
+        </form>
+        <br />
+        <label for="" style="margin-top:10px; float: right;">
+          <a href="{% url 'forgot_password' %}"> Forgot Password?</a>
+        </label>
+       <label for="" style="margin-top: 10px; float: left;">
+         <a href="{% url 'register' %}">New User?</a>
+       </label>
+      </div>
+    </div>
+  </div>
+</section>
+
+{% endblock content %} {% block js_down %}
+<script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js"></script>
+
+<script src="{% static 'code2learn_app/js/version7/registerPage/login.js' %}"></script>
+<script>
+  $("#submitBtn").click(function () {
+    // Storing Field Values In Variables
+
+    var email = document.getElementById("email").value;
+    var password = document.getElementById("password").value;
+
+    // Regular Expression For Email
+    var emailReg = /.+@[^@]+\.[^@]{2,}$/;
+    // Conditions
+    if (email != "" && password != "") {
+      if (!email.match(emailReg)) {
+        // alert("Invalid Email Address...!!!");
+        Swal.fire("Error", "Invalid Email Address!", "error");
+        return false;
+      }
+    } else {
+      // alert("All fields are required.....!");
+      Swal.fire("Error", "All fields are required!", "error");
+      return false;
+    }
+  });
+</script>
+
+{% endblock js_down%}

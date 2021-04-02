@@ -1,0 +1,230 @@
+{% extends "code2learn_app/base.html" %} 
+{% load custom_template_tags %}
+{% load static %}
+
+
+{% block css %}
+<link href="{% static 'code2learn_app/css/version7/blogPageViews/blogpageviews.css' %}" rel="stylesheet" />
+<link href="{% static 'code2learn_app/css/version7/blogPageViews/comments.css' %}" rel="stylesheet" />
+{% endblock css %}
+
+{% block title %} {{post.title}} {% endblock title %}
+
+{% block content %}
+<section id="blog-section">
+  <div class="container-fliud">
+    <img
+      src="{{post.thumbnail.url}}"
+      alt="banner-image"
+    />
+  </div>
+  <div class="container">
+    <h1>
+      {{post.title}}
+    </h1>
+    <p>Posted {{post.timestamp|timesince|upto:','}} ago | By {{post.author}}</p>
+  </div>
+</section>
+<section id="blog-content">
+  <div class="container paragraph1">
+    {{post.content|safe}}
+  </div>
+
+  <div class="container">
+    <div class="tags">
+      <p class="mr-auto">Tags : 
+        {% for tag in post.tag.all %}
+        {% if not forloop.last %}
+          {{tag}},
+        {% else %}
+          {{tag}}  
+        {% endif %}
+        
+      {% endfor %}</p>
+      <i class="fa fa-eye" aria-hidden="true"> {{post.views}}</i>
+      <i class="fa fa-heart-o"></i>
+      <i class="fa fa-share-alt"></i>
+    </div>
+  </div>
+</section>
+<section id="form">
+  <div class="container">
+
+    {% if comments %}
+   
+
+    <div class="row">
+		<div class="col-md-12">
+		    <div class="blog-comment">
+				<h3 class="text-dark">Comments</h3>
+                <hr/>
+				<ul class="comments">
+          {% for comment in comments %}
+				<li class="clearfix">
+				  <div class="post-comments">
+				      <p class="meta">{{comment.0.timestamp|timesince|upto:','}} ago | <a href="#">{{comment.0.user}}</a> said : <i class="pull-right"><small id="{{comment.0.id}}"><button data-toggle="modal" data-target="#ModalLoginForm" onclick="ReplyForm('{{comment.0.id}}')" class="btn btn-outline-light register-btn" style="color:black; font-size: 15px;">Reply</button></p></i></small>
+				      <p>
+				          {{comment.0.message}}
+				      </p>
+				  </div>
+				  <ul class="comments">
+            {% for reply in comment.1 %}
+				      <li class="clearfix">
+				          <div class="post-comments">
+				              <p class="meta">{{reply.timestamp|timesince|upto:','}} ago | <a href="#">{{reply.user}}</a> replied : <i class="pull-right"></i></p>
+				              <p>
+				                  {{reply.message}}
+				              </p>
+				          </div>
+				      </li>
+              {% endfor %}
+				  </ul>
+				</li>
+        {% endfor %}
+				</ul>
+			</div>
+		</div>
+	</div>
+     
+    {% endif %}
+
+    <h1>Add a Comment</h1>
+    <p style="font-size:medium; color:red;">Your Email Address will be not Published.</p>
+    <form action="{% url 'blog_single' post.slug %}" class="needs-validation" method="POST" novalidate>
+      {% csrf_token %}
+      <div class="form-row">
+        <div class="col left-col">
+          <div class="form-group">
+            <label for="name" class="label-name">Name</label>
+            <input
+              type="text"
+              class="form-control"
+              id="name"
+              name="name"
+              required
+            />
+            <div class="invalid-feedback">Please fill out this field.</div>
+          </div>
+        </div>
+        <div class="col right-col">
+          <div class="form-group">
+            <label for="email" class="label-name">Email</label>
+            <input
+              type="email"
+              class="form-control"
+              id="email"
+              name="email"
+              required
+            />
+            <div class="invalid-feedback">Please fill out this field.</div>
+          </div>
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="comment" class="label-name">Comment</label>
+        <textarea
+          class="form-control"
+          rows="4"
+          id="comment"
+          name="comment"
+          required
+        ></textarea>
+        <div class="invalid-feedback">Please fill out this field.</div>
+      </div>
+      <div class="d-flex justify-content-center my-5">
+        <button type="submit" class="form-submit">Submit</button>
+      </div>
+    </form>
+  </div>
+</section>
+
+{% endblock content %} {% block js_down %}
+
+<!-- For reply -->
+<script type="text/javascript">
+  function ReplyForm(id){
+    let elem = `
+            <div id="ModalLoginForm" class="modal fade">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-body">
+                <form role="form" method="POST" action="">
+                  {% csrf_token %}
+                    <div class="form-group">
+            <label for="name" class="label-name">Name</label>
+            <input
+              type="text"
+              class="form-control"
+              id="name"
+              name="name"
+              required
+            />
+            <div class="invalid-feedback">Please fill out this field.</div>
+          </div>
+          <div class="form-group">
+            <label for="email" class="label-name">Email</label>
+            <input
+              type="email"
+              class="form-control"
+              id="email"
+              name="email"
+              required
+            />
+            <div class="invalid-feedback">Please fill out this field.</div>
+          </div>
+              <div class="form-group">
+                <input type="text" value="${id}" name="comm_id" style="display:none;" readonly/>
+                <label for="message">Reply</label>
+                <textarea
+                  name="comment"
+                  id="message"
+                  cols="30"
+                  rows="3"
+                  class="form-control"
+                ></textarea>
+              </div>
+              <div class="form-group">
+                <input
+                  type="submit"
+                  value="Post Reply"
+                  class="btn btn-outline-light register-btn"
+                  style="color:black;"
+                />
+              </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+            `
+            document.getElementById(id).innerHTML = elem;
+  }
+</script>
+
+<!-- End reply -->
+<script>
+  (function () {
+    "use strict";
+    window.addEventListener(
+      "load",
+      function () {
+        var forms = document.getElementsByClassName("needs-validation");
+        var validation = Array.prototype.filter.call(forms, function (form) {
+          form.addEventListener(
+            "submit",
+            function (event) {
+              if (form.checkValidity() === false) {
+                event.preventDefault();
+                event.stopPropagation();
+              }
+              form.classList.add("was-validated");
+            },
+            false
+          );
+        });
+      },
+      false
+    );
+  })();
+</script>
+{% endblock js_down %}

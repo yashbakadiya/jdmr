@@ -1,0 +1,54 @@
+  html,
+    body {
+      height: 100vh;
+    }
+
+    @media print {
+      @page {
+        size: landscape
+      }
+
+      html,
+      body {
+        width: 50%;
+        height: 50%;
+      }
+
+      .back {
+        /* background: url("{% static 'certificate/images/certificatebackground.png' %}");
+            background-repeat: no-repeat;
+            background-size:100% ; */
+        border: .5rem solid transparent;
+        border-radius: 1rem;
+
+        border-image: url("../../../images/version7/certificatePage/certificatebackground.png") 30 stretch;
+      }
+
+      .back1 {
+        /* background: url("{% static 'certificate/images/certificatebackground.png' %}");
+            background-repeat: no-repeat;
+            background-size:100% ; */
+        border: .2rem solid transparent;
+        border-radius: 1rem;
+        border-image: url("../../../images/version7/certificatePage/certificatebackground.png") 30 stretch;
+      }
+    }
+
+    .back {
+      /* background: url("{% static 'certificate/images/certificatebackground.png' %}");
+          background-repeat: no-repeat;
+          background-size:100% ; */
+      border: .5rem solid transparent;
+      border-radius: 1rem;
+
+      border-image: url("../../../images/version7/certificatePage/certificatebackground.png") 30 stretch;
+    }
+
+    .back1 {
+      /* background: url("{% static 'certificate/images/certificatebackground.png' %}");
+          background-repeat: no-repeat;
+          background-size:100% ; */
+      border: .2rem solid transparent;
+      border-radius: 1rem;
+      border-image: url("../../../images/version7/certificatePage/certificatebackground.png") 30 stretch;
+    }

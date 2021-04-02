@@ -1,0 +1,417 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	
+  <title>Choachizz</title>
+  <meta charset="UTF-8">
+  <meta name="description" content="Choachizz offers local tutors, online teachers, and teachers to help with tutoring, coaching, assignments, academic projects">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.4.0/jquery.easing.min.js"></script>
+
+	
+    <!-- Font-awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+   
+    <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;400;700&display=swap" rel="stylesheet">
+ <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@100;400;700&display=swap" rel="stylesheet">
+
+  <link href='{% static "assets/css/navbar.css" %}' rel="stylesheet">
+  <link href='{% static "assets/css/styles.css" %}' rel="stylesheet">
+  <link href='{% static "assets/css/footer.css" %}' rel="stylesheet">
+
+
+	<script src='{% static "assets/js/script.js" %}'></script>
+	<script src='{% static "assets/js/slider.js" %}'></script>
+
+
+</head>
+<body>
+<section>
+  
+  <!-- header -->
+  <header>	
+
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark navbar-custom fixed-top">
+
+        <!-- Image Logo -->
+        <a class="navbar-brand logo-image" href="{% url 'home' %}"><img src='{% static "assets/img/1.png" %}' alt="alternative" ></a>
+        
+        <!-- Mobile Menu Toggle Button -->
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
+              <span class="navbar-toggler-icon"></span>
+        </button>
+        <!-- end of mobile menu toggle button -->
+
+        <div class="collapse navbar-collapse" id="navbarsExampleDefault">
+            <ul class="navbar-nav ml-auto">
+              <!-- Dropdown Menu -->          
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle page-scroll" href="#Find Tutors" id="navbarDropdown" role="button" aria-haspopup="true" aria-expanded="false">Find Tutors</a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <a class="dropdown-item" href="terms-conditions.html"><span class="item-text">TERMS CONDITIONS</span></a>
+                        <div class="dropdown-items-divide-hr"></div>
+                        <a class="dropdown-item" href="privacy-policy.html"><span class="item-text">PRIVACY POLICY</span></a>
+                    </div>
+                </li>
+                <!-- end of dropdown menu -->
+				
+				<!-- Dropdown Menu -->          
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle page-scroll" href="#Find Tutors Jobs" id="navbarDropdown" role="button" aria-haspopup="true" aria-expanded="false">Find Tutors Jobs</a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <a class="dropdown-item" href="terms-conditions.html"><span class="item-text">TERMS CONDITIONS</span></a>
+                        <div class="dropdown-items-divide-hr"></div>
+                        <a class="dropdown-item" href="privacy-policy.html"><span class="item-text">PRIVACY POLICY</span></a>
+                    </div>
+                </li>
+                <!-- end of dropdown menu -->
+
+                <!-- Dropdown Menu -->          
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle page-scroll" href="#Institute" id="navbarDropdown" role="button" aria-haspopup="true" aria-expanded="false">Institute</a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <a class="dropdown-item" href="terms-conditions.html"><span class="item-text">TERMS CONDITIONS</span></a>
+                        <div class="dropdown-items-divide-hr"></div>
+                        <a class="dropdown-item" href="privacy-policy.html"><span class="item-text">PRIVACY POLICY</span></a>
+                    </div>
+                </li>
+                <!-- end of dropdown menu -->
+
+            </ul>
+			<span style="padding-left:15px">
+			<span>
+             <a href="{% url 'Signup' %}" class="btn  signup-btn" type="submit">Sign Up</a>
+			</span>
+			<span>
+             <a href="{% url 'Login' %}" class="btn login-btn" type="submit">Log In</a>
+			</span>
+            </span>
+        </div>
+    </nav> <!-- end of navbar -->
+    <!-- end of navbar -->	
+	
+<div id="banner">
+        <div class="row">
+          <div class="col-md-8">
+            <h1 class="banner-heading">Prepare for <br>takeoff</h1>
+            <p class="banner-subtitle">You can find local tutors, online teachers, and <br> teachers to help with tutoring, coaching, <br>assignments, academic projects</p>
+			  
+		<div class="card-deck" id="find-tutors">
+        <div class="card one text-center p-3">
+        <a href="{% url 'StudentPage' %}" class="btn  tutors-btn" type="submit">FIND TUTORS</a>
+
+		<p class="card-text mt-3"><small class="text-muted">Transform your career</small></p>
+
+        </div>
+        <div class="card two text-center p-3">
+        <a href="{% url 'TutorPage' %}" class="btn  tutors-btn" type="submit">FIND TUTORS JOBS</a>
+
+		<p class="card-text mt-3"><small class="text-muted">Transform your career</small></p>
+
+        </div>
+        <div class="card three text-center p-3">
+        <a href="{% url 'InstitutePage' %}" class="btn  tutors-btn" type="submit">INSTITUTIONS</a>
+
+	    <p class="card-text mt-3"><small class="text-muted">Transform your career</small></p>
+
+        </div>
+      </div>
+			  
+      </div>
+
+          <div class="col-md-4">
+           <img src='{% static "assets/img/Designer-cuate.png" %}' width="100%"  alt="Telecommuting"/>
+          </div>
+        </div>
+	</div>
+</header>
+</section>
+<section id="WhyChoachizz">
+  <div class="row choachizz-offer">
+	<div class="col-md-5  p-2 order-md-1 order-2">
+      <img src='{% static "assets/img/Accept%20terms-cuate.png" %}' width="100%"  alt="Kids Studying"/>
+    </div>
+    <div class="col-md-7  p-2 order-md-2 order-1">
+		<span style='font-size:100px;color: #1DA1F2;'>&#8212;</span>
+	  <h1 class="heading1">Why Choachizz</h1>
+      <p class="paragraph1">You can find local tutors, online teachers, and teachers to help with tutoring, coaching, assignments, academic projects</p>
+	  <a href="#" class="btn try-out-btn">Try it Out</a>
+  </div>
+    </div>
+	<div class="WhyChoachizz-sub">
+	 <div class="row choachizz-offer">
+    <div class="col-md-7  p-2">
+		<span style='font-size:100px;color: #1DA1F2;'>&#8212;</span>
+	  <h1 class="heading1">Institute</h1>
+      <p class="paragraph1">You can find local tutors, online teachers, and teachers to help with tutoring, coaching, assignments, academic projects</p>
+	  <a href="#" class="btn try-out-btn">Institute Management</a>
+  </div>
+	<div class="col-md-5  p-2">
+      <img src='{% static "assets/img/Online%20world-amico.png" %}'  alt="Online world" width="100%"/>
+    </div>
+    </div>
+		
+	<div class="row choachizz-offer">
+    <div class="col-md-7  p-2">
+		<span style='font-size:100px;color: #1DA1F2;'>&#8212;</span>
+	  <h1 class="heading1">Find Tutors Jobs</h1>
+      <p class="paragraph1">You can find local tutors, online teachers, and teachers to help with tutoring, coaching, assignments, academic projects</p>
+	  <a href="#" class="btn try-out-btn">Find Tutors Jobs</a>
+  </div>
+	<div class="col-md-5  p-2">
+      <img src='{% static "assets/img/Teacher-pana.png" %}'  alt="Teacher pana" width="100%"/>	
+    </div>
+    </div>
+		
+	<div class="row choachizz-offer">
+    <div class="col-md-7  p-2">
+		<span style='font-size:100px;color: #1DA1F2;'>&#8212;</span>
+	  <h1 class="heading1">Find Tutors</h1>
+      <p class="paragraph1">You can find local tutors, online teachers, and teachers to help with tutoring, coaching, assignments, academic projects</p>
+	  <a href="#" class="btn try-out-btn">Find Tutor</a>
+  </div>
+	<div class="col-md-5  p-2">
+      <img src='{% static "assets/img/Learning-pana.png" %}' alt="Learning pana" width="100%"/>
+    </div>
+    </div>
+	</div>
+</section>
+
+<section id="slide-wrapper">
+    <div class="container-fluid">
+	    <div id="tutorCarousel" class="carousel slide" data-ride="carousel">
+            <!-- Indicators -->
+            <ul class="carousel-indicators">
+                <li data-target="#tutorCarousel" data-slide-to="0" class="active"></li>
+                <li data-target="#tutorCarousel" data-slide-to="1"></li>
+                <li data-target="#tutorCarousel" data-slide-to="2"></li>
+            </ul>
+
+            <!-- Wrapper for slides -->
+            <div class="carousel-inner">
+                <div class="carousel-item active">
+					<div class="flex-container fill container" >
+  					<div class="flex-item-left">
+					<span style='font-size:100px;color: #1DA1F2'>&#8212;</span>
+	  <h1 class="heading2">Institute</h1>
+      <p class="paragraph2">You can find local tutors, online teachers, and teachers to help with tutoring, coaching, assignments, academic projects</p>	
+						 <a href="{% url 'Signup' %}" class="btn  tutor-btn" type="submit">Institute Management</a>
+						</div>
+  					<div class="flex-item-right">
+					<img src='{% static "assets/img/Online%20world-amico.png" %}'  alt="Online world"/>	
+						</div>
+					</div>
+                </div>
+                <div class="carousel-item">
+                    <div class="flex-container fill container" >
+  					<div class="flex-item-left">
+					<span style='font-size:100px;color: #1DA1F2'>&#8212;</span>
+	  <h1 class="heading2">Find Tutors Jobs</h1>
+      <p class="paragraph2">You can find local tutors, online teachers, and teachers to help with tutoring, coaching, assignments, academic projects</p>
+						 <a href="{% url 'Signup' %}" class="btn  tutor-btn" type="submit">Find Tutors Jobs</a>
+						</div>
+  					<div class="flex-item-right">
+					<img src='{% static "assets/img/Teacher-pana.png" %}'  alt="Teacher pana"/>	
+						</div>
+					</div>
+                </div>
+                <div class="carousel-item">
+                    <div class="flex-container fill container" >
+  					<div class="flex-item-left">
+					<span style='font-size:100px;color: #1DA1F2'>&#8212;</span>
+	  <h1 class="heading2">Find Tutors</h1>
+      <p class="paragraph2">You can find local tutors, online teachers, and teachers to help with tutoring, coaching, assignments, academic projects</p>
+						 <a href="{% url 'Signup' %}" class="btn  tutor-btn" type="submit">Find Tutor</a>
+						</div>
+  					<div class="flex-item-right">
+					<img src='{% static "assets/img/Learning-pana.png" %}' alt="Learning pana"/>	
+						</div>
+					</div>
+                </div>
+            </div>
+        
+
+        </div>
+    </div>
+</section>
+
+<section id="footer">		
+	 <div class="row mb-3 py-5">
+	<div class="col-lg-7">
+<div style="color: white;float: left;" id="details">
+	   <span>
+	    <i class="fa fa-phone icons"></i>
+		<ul class="list-unstyled address">
+		<li>9999999999</li>
+        <li>8989898989</li>
+		</ul>
+		</span>
+	    <span>
+		<i class="fa fa-map-marker icons"></i>
+		<ul class="list-unstyled address">
+		<li>Example address,</li>
+		<li>Example Road,</li>
+		<li>India</li>
+		</ul>
+		</span>
+	    <span>
+	    <i class="fa fa-envelope icons"></i>
+		<ul class="list-unstyled address">
+		<li>example@gmail.com</li>
+		</ul>
+	    </span>
+	<ul class="list-inline mt-4 social-links">
+             <li class="list-inline-item">
+			 <a href="https://www.facebook.com/Code2Learn-103306408351004" target="_blank" title="facebook"><i class="fa fa-facebook"></i></a></li>
+            <li class="list-inline-item"><a href="#" target="_blank" title="twitter"><i class="fa fa-twitter"></i></a></li>
+            <li class="list-inline-item"><a href="https://www.instagram.com/codee2learn/" target="_blank" title="instagram"><i class="fa fa-instagram"></i></a></li>
+          </ul>
+</div>
+		<img src='{% static "assets/img/Contact%20us-amico.png" %}' width="100%" height="100%"  alt="Contact Us" id="contact-image"/>
+  </div>
+	<div class="col-lg-5">
+	  <form>
+      <h2 class="heading1"> Start your journey here</h2>
+    <div class="form-group form-row">
+      <div class="col">
+        <input type="text" class="form-control" id="email" placeholder="First Name" name="name" required>
+		<div class="valid-feedback">Valid.</div>
+      <div class="invalid-feedback">Please fill out this field.</div>
+      </div>
+      <div class="col">
+        <input type="text" class="form-control" placeholder="Last Name" name="name" required>
+		 <div class="valid-feedback">Valid.</div>
+      <div class="invalid-feedback">Please fill out this field.</div>
+      </div>
+    </div>
+	 <div class="form-group">
+      <input type="email" class="form-control" id="email" placeholder="Email Address" name="email" required>
+      <div class="valid-feedback">Valid.</div>
+      <div class="invalid-feedback">Please fill out this field.</div>
+    </div>
+    <div class="form-group">
+      <input type="text" class="form-control" id="cnum" placeholder="Contact Number" name="cnum" required>
+      <div class="valid-feedback">Valid.</div>
+      <div class="invalid-feedback">Please fill out this field.</div>
+	</div>
+	<div class="form-group">
+      <textarea class="form-control" rows="3" id="comment" name="comment" placeholder="Enter your message"></textarea>
+    </div>
+      <button type="submit" class="btn btn-block">Send</button>
+
+  </form>
+    </div>
+    </div>
+		
+      <div class="row">
+        <div class="col-lg-4 col-md-6 mb-4">
+			<h2 class="mb-3 logo-heading">CHOACHIZZ</h2>
+		  <ul class="footer-term list-unstyled mb-0">
+          <li class="mb-2">© 2010 — 2020</li>
+		  <li class="mb-2">Privacy — Terms</li>
+			</ul>
+        </div>
+		 <div class="col-lg-4 col-md-6 mb-4">
+		<div class="row">
+        <div class="col-6">
+          <h6 class="footer-headings mb-3">For Students</h6>
+          <ul class="footer-links list-unstyled mb-0">
+            <li class="mb-2"><a href="{% url 'all_posts' %}">Blogs</a></li>
+            <li class="mb-2"><a href="{% url 'view_certificate' %}">Certificates</a></li>
+            <li class="mb-2"><a href="#">Product</a></li>
+          </ul>
+        </div>
+        <div class="col-6">
+          <h6 class="footer-headings mb-3">For Teachers</h6>
+          <ul class="footer-links list-unstyled mb-0">
+            <li class="mb-2"><a href="#">Feature</a></li>
+            <li class="mb-2"><a href="#">Feature</a></li>
+            <li class="mb-2"><a href="#">Feature</a></li>
+          </ul>
+        </div>
+		</div> 
+		</div>
+        <div class="col-lg-4 col-md-6">
+          	<div class="row">
+        <div class="col-6">
+          <h6 class="footer-headings mb-3">For Institues</h6>
+          <ul class="footer-links list-unstyled mb-0">
+            <li class="mb-2"><a href="#">Resource</a></li>
+            <li class="mb-2"><a href="#">Resource</a></li>
+            <li class="mb-2"><a href="#">Resource</a></li>
+          </ul>
+        </div>
+        <div class="col-6">
+          <h6 class="footer-headings mb-3">Feedback</h6>
+          <ul class="footer-links list-unstyled mb-0">
+            <li class="mb-2"><a href="#">Company</a></li>
+            <li class="mb-2"><a href="#">Company</a></li>
+            <li class="mb-2"><a href="#">Company</a></li>
+          </ul>
+        </div>
+		</div>
+        </div>
+      </div>
+	 
+   <!-- Go to Top Link -->
+    <a href="body" class="back-to-top page-scroll">
+      <i class="fa fa-angle-up"></i>
+    </a>
+	
+  <!-- End -->    
+</section>
+<script>
+$(document).ready(function(){
+// invoke the carousel
+    $('#tutorCarousel').carousel({
+      interval:3000
+    });
+
+// scroll slides on mouse scroll 
+$('#tutorCarousel').on('mousewheel', function(e){
+
+        if(e.originalEvent.wheelDelta > 0 || e.originalEvent.detail < 0) {
+            $(this).carousel('prev');
+			
+        }
+        else{
+            $(this).carousel('next');
+			
+        }
+    });
+
+//scroll slides on swipe for touch enabled devices 
+
+ 	$("#tutorCarousel").on("touchstart", function(event){
+ 
+        var yClick = event.originalEvent.touches[0].pageY;
+    	$(this).one("touchmove", function(event){
+
+        var yMove = event.originalEvent.touches[0].pageY;
+        if( Math.floor(yClick - yMove) > 1 ){
+            $(".carousel").carousel('next');
+        }
+        else if( Math.floor(yClick - yMove) < -1 ){
+            $(".carousel").carousel('prev');
+        }
+    });
+    $(".carousel").on("touchend", function(){
+            $(this).off("touchmove");
+    });
+});
+    
+});
+
+
+</script>
+</body>
+</html>

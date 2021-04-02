@@ -16,7 +16,6 @@ from teacher.models import MakeAppointment
 from json import dumps, loads
 import json
 
-
 @login_required(login_url='Login')
 def dashboard2(request):
     if request.session['type'] == "Institute":
@@ -42,7 +41,6 @@ def dashboard(request):
         template = 'dashboard/student-dashboard.html' 
         makepoint = MakeAppointment.objects.all()
         return render(request,'students/studentcalendar.html',{'template':template,'makepoint':makepoint})
-
 
 @login_required(login_url='Login')
 def profileUpdate(request):
