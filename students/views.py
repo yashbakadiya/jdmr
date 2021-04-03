@@ -371,20 +371,9 @@ def AddalreadyExistsStudent(request,id):
 @login_required()
 def StudentCalendar(request):
     if request.session['type']=="Student":
-        template = 'dashboard/student-dashboard.html'
-    elif request.session['type']=="Teacher":
-        template = 'dashboard/Tutor-dashboard.html'    
+        template = 'dashboard/student-dashboard.html' 
     makepoint = MakeAppointment.objects.all()
     return render(request,'students/studentcalendar.html',{'template':template,'makepoint':makepoint})
-
-@login_required()
-def TeacherCalendar(request):   
-    if request.session['type']=="Teacher":
-        template = 'dashboard/Tutor-dashboard.html'    
-    makepoint = MakeAppointment.objects.all()
-    return render(request,'teacher/teachercalendar.html',{'template':template,'makepoint':makepoint})
-
-
 
 @login_required(login_url="Login")
 def postAssignment(request):

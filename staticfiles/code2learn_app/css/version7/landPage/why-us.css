@@ -1,0 +1,131 @@
+#whyUs .heading1{
+    font-family: Quicksand;
+	font-weight: bold;
+	font-size: 40px;
+	color: #000000;
+	margin-bottom: 30px;
+}
+
+#whyUs .paragraph1{
+	font-family: Quicksand;
+	font-weight: 500;
+	font-size: 22px;
+	letter-spacing: 0.04em;
+	color: #000000;
+}
+
+#whyUs .heading2{
+    font-family: Quicksand;
+    font-weight: bold;
+    font-size: 40px;
+    text-align: center;
+    letter-spacing: 0.04em;
+    color: #000000;
+    margin: 15px 0 50px 0;
+}
+
+#whyUs .card-deck{
+    margin:30px 20px;
+}
+
+#whyUs .card{
+    max-height: 238px;
+    max-width: 284px;
+    border-radius: 25px;
+    padding: 10px;    
+    box-sizing: border-box;
+    box-shadow: 0px 12px 28px rgba(167, 167, 167, 0.18);
+}
+
+#whyUs .card img{   
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    max-height: 60px;
+    max-width: 60px;
+    border-radius: 0px;
+    margin-top: 25px;
+    margin-bottom: 10px;
+}
+#whyUs .card-title{
+    font-family: Poppins;
+    font-weight: 500;
+    font-size: 15px;
+    color: #000000;
+}
+#whyUs .card .card-body{
+    margin: 0px;
+    padding: 0px;
+    text-align: center;
+}
+
+@media only screen and (max-width: 565px) { 
+	 #whyUs .heading1{
+       	font-family: Quicksand;
+	   	font-weight: bold;
+		font-size: 30px;
+		color: #000000;
+		margin-bottom: 20px;
+		 text-align: center;
+    }
+	#whyUs .paragraph1{
+	font-family: Quicksand;
+	font-weight: 500;
+	font-size: 18px;
+	letter-spacing: 0.04em;
+	color: #000000;
+	text-align: justify;
+	margin: 20px;
+}
+    #whyUs .heading2{
+       	font-family: Quicksand;
+		font-weight: bold;
+		font-size: 32px;
+		color: #000000;
+		margin-bottom: 40px;
+    }
+   #whyUs .card-deck{
+    display: none;
+}
+	#whyUsCarousel{
+		margin: auto;
+	}
+
+   #whyUsCarousel .carousel-item .card{
+    width: 264px;
+	height: 180px;
+    border-radius: 25px;
+    padding: 15px; 
+	margin: auto;
+    box-sizing: border-box;
+    box-shadow: 0px 12px 28px rgba(167, 167, 167, 0.18);
+}
+
+ #whyUsCarousel .card img{   
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    max-height: 70px;
+    max-width: 70px;
+    border-radius: 0px;
+    margin-top: 15px;
+    margin-bottom: 10px;
+}
+ #whyUsCarousel .card-title{
+    font-family: Poppins;
+    font-weight: 500;
+    font-size: 15px;
+    color: #000000;
+}
+ #whyUsCarousel .card .card-body{
+    margin: 0px;
+    padding: 0px;
+    text-align: center;
+}
+}
+
+@media only screen and (min-width:768px){
+	#whyUsCarousel{
+		display: none;
+	}
+}

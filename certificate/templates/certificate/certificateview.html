@@ -1,0 +1,124 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="description" content="Choachizz offers local tutors, online teachers, and teachers to help with tutoring, coaching, assignments, academic projects">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>View Certificate | Choachizz</title>
+
+    <!-- Favicons -->
+    <link rel="icon" type="image/x-icon" href="{% static 'assets/img/favicon.ico' %}" />
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+    <!-- Font-awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+   
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;700&display=swap" rel="stylesheet">
+
+    <link href='{% static "assets/css/navbar.css" %}' rel="stylesheet">
+    
+    <link href="{% static 'code2learn_app/css/version7/certificatePage/certificateview.css' %}" rel="stylesheet">
+    <link href='{% static "assets/css/footer.css" %}' rel="stylesheet">
+
+</head>
+<body>
+	<section>
+  
+  <!-- header -->
+  <header>
+      
+      <!-- Navbar -->
+      <nav class="navbar navbar-expand-lg navbar-dark navbar-custom fixed-top">
+
+        <!-- Image Logo -->
+        <a class="navbar-brand logo-image" href="{% url 'home' %}"><img src='{% static "assets/img/1.png" %}' alt="alternative" ></a>
+        
+        <!-- Mobile Menu Toggle Button -->
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
+              <span class="navbar-toggler-icon"></span>
+        </button>
+        <!-- end of mobile menu toggle button -->
+
+        <div class="collapse navbar-collapse" id="navbarsExampleDefault">
+            <ul class="navbar-nav ml-auto">
+              <!-- Dropdown Menu -->          
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle page-scroll" href="#Find Tutors" id="navbarDropdown" role="button" aria-haspopup="true" aria-expanded="false">Find Tutors</a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <a class="dropdown-item" href="terms-conditions.html"><span class="item-text">TERMS CONDITIONS</span></a>
+                        <div class="dropdown-items-divide-hr"></div>
+                        <a class="dropdown-item" href="privacy-policy.html"><span class="item-text">PRIVACY POLICY</span></a>
+                    </div>
+                </li>
+                <!-- end of dropdown menu -->
+				
+				<!-- Dropdown Menu -->          
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle page-scroll" href="#Find Tutors Jobs" id="navbarDropdown" role="button" aria-haspopup="true" aria-expanded="false">Find Tutors Jobs</a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <a class="dropdown-item" href="terms-conditions.html"><span class="item-text">TERMS CONDITIONS</span></a>
+                        <div class="dropdown-items-divide-hr"></div>
+                        <a class="dropdown-item" href="privacy-policy.html"><span class="item-text">PRIVACY POLICY</span></a>
+                    </div>
+                </li>
+                <!-- end of dropdown menu -->
+
+                <!-- Dropdown Menu -->          
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle page-scroll" href="#Institute" id="navbarDropdown" role="button" aria-haspopup="true" aria-expanded="false">Institute</a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <a class="dropdown-item" href="terms-conditions.html"><span class="item-text">TERMS CONDITIONS</span></a>
+                        <div class="dropdown-items-divide-hr"></div>
+                        <a class="dropdown-item" href="privacy-policy.html"><span class="item-text">PRIVACY POLICY</span></a>
+                    </div>
+                </li>
+                <!-- end of dropdown menu -->
+
+            </ul>
+			<span style="padding-left:15px">
+			<span>
+             <a href="{% url 'Signup' %}" class="btn  signup-btn" type="submit">Sign Up</a>
+			</span>
+			<span>
+             <a href="{% url 'Login' %}" class="btn login-btn" type="submit">Log In</a>
+			</span>
+            </span>
+        </div>
+    </nav>
+</header>
+</section>
+<section id="certificate-form">
+<div class="container">
+	<div>
+		<h1 class="heading1">Search Certificate</h1>
+	</div>
+     <div>
+      <form class="row form ">
+        <div class="col-lg-8">
+          <input type="text" name="number" class="form-control form-control-lg" placeholder="ENTER CERTIFICATE NUMBER">
+        </div>
+        <div class="col-lg-4 text-center">
+          <button type="submit" name="button" class="btn btn-lg">Search Certificate</button>
+        </div>
+      </form>
+	</div> 
+    </div>
+</section>
+<section id="footer">
+<footer>
+    <!-- Copyright -->
+    <div class="footer-copyright">© 2021 Copyright :
+        <a href="{% url 'home' %}"> Choachizz</a>
+    </div>
+</footer>
+</section>
+</body>
+</html>

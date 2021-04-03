@@ -1,0 +1,198 @@
+{% extends "code2learn_app/base.html" %}
+{% load static %}
+{% block title %} Career {% endblock title %}
+
+{% block css %}
+<link
+  href="{% static 'code2learn_app/css/version7/registerPage/register.css' %}"
+  rel="stylesheet"
+/>
+<link href="{% static 'code2learn_app/css/version7/careerPage/career.css' %}" rel="stylesheet">
+<link href="{% static 'code2learn_app/css/version7/footer/footer.css' %}" rel="stylesheet" >
+{% endblock css %}
+{% block js_up %}
+<script src="{% static 'code2learn_app/js/version7/navbar/script.js' %}"></script>
+{% endblock js_up %}
+
+{% block content %}
+
+<section id="career-section">
+<div class="container">
+<img src="{% static 'code2learn_app/images/version7/careerPage/Rectangle-347.png' %}" alt="banner-image">
+<div class="image-overlay container">
+<h1 class="heading1">DO WHAT YOU LOVE EVERYDAY</h1>
+<p class="paragraph1">Does your friend get insecure due to your social game, seeing you juggling in societies and clubs, if you want some extra stars on your resume that to by working in fun-filled way, then campus ambassador program is for you?</p>
+</div>
+</div>
+ </section>
+    
+ <section id="campus-benefits">
+<div class="container">
+<h1 class="heading2">BENEFITS OF BEING CAMPUS<br> AMBASSADOR</h1>
+   <div class="card-deck justify-content-between py-5">
+        <div class="card">
+          <img class="card-img-top" src="{% static 'code2learn_app/images/version7/careerPage/Frame.png' %}" alt="Certificate">
+          <div class="card-body">
+            <p class="card-title">A certificate and letter of recommendation from us that you can add to your profile</p>
+          </div>
+        </div>
+        <div class="card">
+          <img class="card-img-top" src="{% static 'code2learn_app/images/version7/careerPage/Frame-2.png' %}" alt="rewards">
+          <div class="card-body">
+            <p class="card-title">Rewards</p>
+          </div>
+      </div>
+        <div class="card">
+          <img class="card-img-top" src="{% static 'code2learn_app/images/version7/careerPage/leadership.png' %}" alt="leadership">
+          <div class="card-body">
+            <p class="card-title">Develop leadership quality</p>
+          </div>
+        </div>
+        <div class="card">
+          <img class="card-img-top" src="{% static 'code2learn_app/images/version7/careerPage/relax.png' %}" alt="relax">
+          <div class="card-body">
+            <p class="card-title">An exposure of working with a start-up</p>
+          </div>
+        </div>
+    </div>  
+	<!--- for mobile-view-->
+<div id="campusBenifitCarousel">
+<div class="carousel slide" data-ride="carousel" data-interval="2000">
+    <div class="carousel-inner">
+      <div class="carousel-item active">
+        <div class="card">
+          <img class="card-img-top" src="{% static 'code2learn_app/images/version7/careerPage/Frame.png' %}" alt="Certificate">
+          <div class="card-body">
+            <p class="card-title">A certificate and letter of recommendation from us that you can add to your profile</p>
+          </div>
+        </div>
+      </div>
+      <div class="carousel-item">
+        <div class="card">
+          <img class="card-img-top" src="{% static 'code2learn_app/images/version7/careerPage/Frame-2.png' %}" alt="rewards">
+          <div class="card-body">
+            <p class="card-title">Rewards</p>
+          </div>
+      </div>
+      </div>
+	 <div class="carousel-item">
+        <div class="card">
+          <img class="card-img-top" src="{% static 'code2learn_app/images/version7/careerPage/leadership.png' %}" alt="leadership">
+          <div class="card-body">
+            <p class="card-title">Develop leadership quality</p>
+          </div>
+        </div>
+      </div>
+		<div class="carousel-item">
+         <div class="card">
+          <img class="card-img-top" src="{% static 'code2learn_app/images/version7/careerPage/relax.png' %}" alt="relax">
+          <div class="card-body">
+            <p class="card-title">An exposure of working with a start-up</p>
+          </div>
+        </div>
+      </div>
+	
+    </div>
+    </div>	
+</div>	
+
+</div>
+</section>
+	
+
+
+ <section id="todo-programmes">
+<div class="container">
+<h1 class="heading3">WHAT YOU HAVE<br> TO DO</h1>
+ <div class="card-deck justify-content-between py-5">
+        <div class="card">
+          <img class="card-img-top" src="{% static 'code2learn_app/images/version7/careerPage/face-recognition.png' %}" alt="face-recognition">
+          <div class="card-body">
+            <p class="card-title">Our face in your college</p>
+          </div>
+        </div>
+        <div class="card">
+          <img class="card-img-top" src="{% static 'code2learn_app/images/version7/careerPage/promotion.png' %}" alt="promotion">
+          <div class="card-body">
+            <p class="card-title">Promote our activities, courses, workshops, etc.</p>
+          </div>
+      </div>
+        <div class="card">
+          <img class="card-img-top" src="{% static 'code2learn_app/images/version7/careerPage/social-care.png' %}" alt="social-care">
+          <div class="card-body">
+            <p class="card-title">Help in organizing activities</p>
+          </div>
+        </div>
+        <div class="card">
+          <img class="card-img-top" src="{% static 'code2learn_app/images/version7/careerPage/conversation.png' %}" alt="conversation">
+          <div class="card-body">
+            <p class="card-title">Tell your college mates about us, spread the word</p>
+          </div>
+        </div>
+    </div> 
+	
+	<!--- for mobile-view-->
+<div id="toDoCarousel">
+<div class="carousel slide" data-ride="carousel" data-interval="2400">
+    <div class="carousel-inner">
+      <div class="carousel-item active">
+        <div class="card">
+          <img class="card-img-top" src="{% static 'code2learn_app/images/version7/careerPage/face-recognition.png' %}" alt="face-recognition">
+          <div class="card-body">
+            <p class="card-title">Our face in your college</p>
+          </div>
+        </div>
+      </div>
+      <div class="carousel-item">
+        <div class="card">
+          <img class="card-img-top" src="{% static 'code2learn_app/images/version7/careerPage/promotion.png' %}" alt="promotion">
+          <div class="card-body">
+            <p class="card-title">Promote our activities, courses, workshops, etc.</p>
+          </div>
+      </div>
+      </div>
+	 <div class="carousel-item">
+        <div class="card">
+          <img class="card-img-top" src="{% static 'code2learn_app/images/version7/careerPage/social-care.png' %}" alt="social-care">
+          <div class="card-body">
+            <p class="card-title">Help in organizing activities</p>
+          </div>
+        </div>
+      </div>
+		<div class="carousel-item">
+         <div class="card">
+          <img class="card-img-top" src="{% static 'code2learn_app/images/version7/careerPage/conversation.png' %}" alt="conversation">
+          <div class="card-body">
+            <p class="card-title">Tell your college mates about us, spread the word</p>
+          </div>
+        </div>
+      </div>
+	
+    </div>
+    </div>	
+</div>	
+</div>
+</section>
+ 
+{% endblock content %}
+
+{% block js_down %}
+
+<script>
+(function() {
+  'use strict';
+  window.addEventListener('load', function() {
+    var forms = document.getElementsByClassName('needs-validation');
+    var validation = Array.prototype.filter.call(forms, function(form) {
+      form.addEventListener('submit', function(event) {
+        if (form.checkValidity() === false) {
+          event.preventDefault();
+          event.stopPropagation();
+        }
+        form.classList.add('was-validated');
+      }, false);
+    });
+  }, false);
+})();
+</script>  
+{% endblock js_down %}

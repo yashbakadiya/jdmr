@@ -21,7 +21,8 @@ from django.conf.urls.static import static
 urlpatterns = [
     path('chat/', include('chat.urls')),
     path('admin/', admin.site.urls),
-    path('', include('dashboard.urls')),
+    path('', include('code2learn_app.urls')),
+    path('dashboard/', include('dashboard.urls')),
     path('courses/', include('courses.urls')),
     path('batches/', include('batches.urls')),
     path('teacher/', include('teacher.urls')),
@@ -34,4 +35,9 @@ urlpatterns = [
     path('fees/', include('fees.urls')),
     path('accounts/', include('accounts.urls')),
     path('buy/', include('buy_items.urls')),
+    
+    path('certificate/', include('certificate.urls')),
+    path('auth/', include('users.urls')),
+    path('blog/', include('blog.urls')),
+    path('ckeditor/', include('ckeditor_uploader.urls')),
 ]+static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

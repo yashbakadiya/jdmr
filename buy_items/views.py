@@ -12,6 +12,7 @@ from dateutil.relativedelta import *
 import json
 import re
 import requests
+from django.http import JsonResponse
 
 login_required(login_url='login')
 def check(request):
@@ -288,6 +289,9 @@ def revenueShow(request):
     monthly_earnings = []
     yearly_earnings = []
 
+    if request.method=='POST':
+        daily_earnings = daily_earnings.filter(date__range=[request.POST['start_date'],request.POST['end_date']])
+        
     if daily_earnings:
         start_month = daily_earnings.earliest('date').date.strftime('%m')
         end_month = daily_earnings.latest('date').date.strftime('%m')
@@ -314,6 +318,9 @@ def revenueShow(request):
             yearly = daily_earnings.filter(date__year=year)
             if yearly:
                 yearly_earnings.append([yearly[0].date,yearly.aggregate(Sum('price'))])
+
+    if request.method=='POST':
+        return render(request,'buy/earnings_table.html',{'daily_earnings':daily_earnings,'monthly_earnings': monthly_earnings,'yearly_earnings': yearly_earnings})
 
     if request.session['type']=="Institute":
         return render(request,'buy/earnings.html',{'template':'dashboard/base.html','daily_earnings':daily_earnings,'monthly_earnings': monthly_earnings,'yearly_earnings': yearly_earnings})

@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title>Error 404</title>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script>
+    <style media="screen">
+    *{
+        transition: all 0.6s;
+    }
+
+    html {
+        height: 100%;
+    }
+
+    body{
+        font-family: 'Lato', sans-serif;
+        color: #888;
+        margin: 0;
+    }
+
+    #main{
+        display: table;
+        width: 100%;
+        height: 100vh;
+        text-align: center;
+    }
+
+    .fof{
+    	  display: table-cell;
+    	  vertical-align: middle;
+    }
+
+    .fof h1{
+    	  font-size: 50px;
+    	  display: inline-block;
+    	  padding-right: 12px;
+    	  animation: type .5s alternate infinite;
+    }
+
+    @keyframes type{
+    	  from{box-shadow: inset -3px 0px 0px #888;}
+    	  to{box-shadow: inset -3px 0px 0px transparent;}
+    }
+    </style>
+  </head>
+  <body></body>
+  <script>
+      Swal.fire({
+        icon: 'error',
+        title: '{{title}}',
+        text: '{{error}}',
+        footer: `<a href="{% url 'home' %}">Return to Home</a>`
+    })
+  </script>
+</html>

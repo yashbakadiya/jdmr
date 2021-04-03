@@ -448,13 +448,6 @@ def ReviewTutors(request,tutor_id):
     return HttpResponse("You are not Authenticated for this page")    
 
 @login_required(login_url="Login")
-def tutorCalendar(request):
-    if request.session['type']=="Teacher":
-	    return render(request,"teacher/tutorCalendar.html",{})
-    return HttpResponse("You are not Authenticated for this page")    
-
-
-@login_required(login_url="Login")
 def ChatTutor(request,tutor_id):
 	try:
 		tutor = Teacher.objects.get(id=tutor_id)

@@ -12,6 +12,8 @@ https://docs.djangoproject.com/en/3.0/ref/settings/
 
 import os
 import django_heroku
+from decouple import config
+from ckeditor.configs import DEFAULT_CONFIG
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -25,7 +27,7 @@ SECRET_KEY = '1zqb-ml)1hbr6+5+jpm89c_hwi(qx(+m8*$xn+)8)_klm1^eiw'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['jdmrischool.herokuapp.com', 'localhost']
+ALLOWED_HOSTS = ['jdmr.herokuapp.com', 'localhost']
 # ALLOWED_HOSTS = []
 
 
@@ -57,6 +59,15 @@ INSTALLED_APPS = [
     'notes',
     'buy_items',
     'django_cleanup',
+
+    'code2learn_app',
+    'import_export',
+    'rangefilter',
+    'certificate',
+    'users',
+    'blog',
+    'ckeditor',
+    'ckeditor_uploader',
 ]
 
 MIDDLEWARE = [
@@ -74,7 +85,7 @@ ROOT_URLCONF = 'tutorSearch.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': ['templates'],
+        'DIRS': ['templates',],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -109,13 +120,12 @@ WSGI_APPLICATION = 'tutorSearch.wsgi.application'
 
 
 
-
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'jdrm_backup',
+        'NAME': 'jdmr',
         'USER': 'postgres',
-        'PASSWORD': 'Rakesh@123',
+        'PASSWORD': '',
         'HOST':'localhost',
         'PORT':'5432',
     },
@@ -208,7 +218,7 @@ REST_FRAMEWORK = {
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
-EMAIL_HOST_USER = 'gkdevtest777@gmail.com'
+EMAIL_HOST_USER = ''
 EMAIL_MAIL_SUBJECT = "COACHING OTP"
 EMAIL_HOST_PASSWORD = ''
 EMAIL_PAGE_DOMAIN = 'localhost'
@@ -216,4 +226,59 @@ EMAIL_USE_TLS = True
 EMAIL_USE_SSL = False
 EMAIL_MODEL_ADMIN = False
 
+# paytm crads
+# MERCHANT_KEY = config("PYTM_SECRET")
+# MID = config("PYTM_ID")
+MERCHANT_KEY = 'C&So29O%S3JYTS8A'
+MID = 'sAxWIA43891172965346'
 
+# razorpay
+
+# KEY_ID = config("RZP_KEY_ID")
+# KEY_SECRET = config("RZP_KEY_SECRET")
+KEY_ID='rzp_live_knSYzxPqUNGQaL'
+KEY_SECRET = 'Dy5B7Y2cTVLBnWkLi1mRlehH'
+
+# CkEditor Configs
+CKEDITOR_UPLOAD_PATH = "blog/uploads/"
+CKEDITOR_IMAGE_BACKEND = "pillow"
+# CKEDITOR_THUMBNAIL_SIZE = (300, 300)
+CKEDITOR_IMAGE_QUALITY = 40
+CKEDITOR_BROWSE_SHOW_DIRS = True
+CKEDITOR_ALLOW_NONIMAGE_FILES = True
+
+CUSTOM_TOOLBAR = [
+    {
+        "name": "document",
+        "items": [
+            "Styles", "Format", "Bold", "Italic", "Underline", "Strike", "-",
+            "TextColor", "BGColor",  "-",
+            "JustifyLeft", "JustifyCenter", "JustifyRight", "JustifyBlock",
+        ],
+    },
+    {
+        "name": "widgets",
+        "items": [
+            "Undo", "Redo", "-",
+            "NumberedList", "BulletedList", "-",
+            "Outdent", "Indent", "-",
+            "Link", "Unlink", "-",
+            "Image", "CodeSnippet", "Table", "HorizontalRule", "Smiley", "SpecialChar", "-",
+            "Blockquote", "-",
+            "ShowBlocks", "Maximize",
+        ],
+    },
+]
+
+CKEDITOR_CONFIGS = {
+    "default": DEFAULT_CONFIG,
+    "my-custom-toolbar": {
+        "skin": "moono-lisa",
+        "toolbar": CUSTOM_TOOLBAR,
+        "toolbarGroups": None,
+        "extraPlugins": ",".join(["image2", "codesnippet"]),
+        "removePlugins": ",".join(["image"]),
+        "codeSnippet_theme": "xcode",
+        "image2_alignClasses": ['align-left','align-center','align-right']
+    },
+}

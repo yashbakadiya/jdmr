@@ -1,0 +1,199 @@
+#training{	
+    padding-top: 70px;
+	padding-bottom: 50px;
+    background: #9B7BE5;
+
+}
+
+#training h1{
+    font-family: Quicksand;
+    font-weight: bold;
+    font-size: 40px;
+    text-align: center;
+    letter-spacing: 0.08em;
+    color: #FFFFFF;
+    padding-bottom: 20px;
+}
+#training p{
+    font-family: Quicksand;
+    font-weight: 500;
+    font-size: 20px;
+    text-align: center;
+    line-height: 25px;    
+    color: #FFFFFF;
+}
+#training .card{
+    max-height:348px;
+    max-width: 325px;
+    border-radius: 30px;
+    margin: 50px;
+}
+
+
+#training .card-title{
+    font-family: Poppins;
+    font-weight: 600;
+    font-size: 20px;
+    text-align: center;
+    color: #000000;
+}
+
+#training .card-text{
+    font-family: Poppins;
+    font-weight: 500;
+    font-size: 12px;
+    text-align: center;
+    color: #000000;
+}
+
+/* Testimonials */
+
+#testimonials{
+    padding: 50px 0;
+}
+
+#testimonials h1{
+    font-family: Quicksand;
+    font-weight: bold;
+    font-size: 40px;
+    text-align: center;
+    letter-spacing: 0.08em;
+    color: #000000;
+}
+
+#testimonials p{
+    font-family: Quicksand;
+    font-weight: 500;
+    font-size: 20px;
+    text-align: center;
+    color: #000000;
+}
+#testimonials .card{
+    text-align: center;
+    border: none;
+}
+#testimonials .card-title{
+    font-family: Poppins;
+    font-weight: 500;
+    font-size: 30px;
+    text-align: center;
+    color: #000000;
+}
+
+#testimonials .card-text{
+    font-family: Poppins;
+    font-weight: 500;
+    font-size: 21px;
+    text-align: center;
+    letter-spacing: 0.025em;
+    color: #686868;
+}
+
+
+@media only screen and (max-width: 565px) {
+	#training h1{
+		font-family: Quicksand;
+    	font-weight: bold;
+    	font-size: 30px;
+    	text-align: center;
+    	letter-spacing: 0.08em;
+    	color: #FFFFFF;
+    	padding-bottom: 20px;
+	}
+	#training p{
+    	font-family: Quicksand;
+    	font-weight: 500;
+    	font-size: 20px;
+    	text-align: center;
+    	line-height: 25px;    
+    	color: #FFFFFF;
+    }
+	#training .card-deck{
+		display: none;
+	}
+	
+	#trainingCarousel {
+		margin: auto;
+	}
+	
+	#trainingCarousel .card{
+		height:338px;
+    	width: 285px;
+    	border-radius: 30px;
+    	margin:auto;
+	}
+
+	#trainingCarousel .card-title{
+    	font-family: Poppins;
+    	font-weight: 600;
+    	font-size: 18px;
+    	text-align: center;
+    	color: #000000;
+	}
+
+	#trainingCarousel .card-text{
+    	font-family: Poppins;
+    	font-weight: 500;
+    	font-size: 12px;
+    	text-align: center;
+    	color: #000000;
+	}
+	#testimonials h1{
+    font-family: Quicksand;
+    font-weight: bold;
+    font-size: 30px;
+    text-align: center;
+    letter-spacing: 0.08em;
+    color: #000000;
+}
+
+#testimonials p{
+    font-family: Quicksand;
+    font-weight: 500;
+    font-size: 20px;
+    text-align: center;
+    color: #000000;
+}
+#testimonials .card{
+    text-align: center;
+    border: none;
+}
+#testimonials .card-title{
+    font-family: Poppins;
+    font-weight: 500;
+    font-size: 20px;
+    text-align: center;
+    color: #000000;
+}
+
+#testimonials .card-text{
+    font-family: Poppins;
+    font-weight: 500;
+    font-size: 15px;
+    text-align: center;
+    letter-spacing: 0.025em;
+    color: #686868;
+}
+
+}
+
+@media only screen and (min-width:768px) {
+	#trainingCarousel{
+		display: none;
+	}
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -23,105 +23,65 @@
     <div class="col-xl-12 col-md-12 col-12 mt-5">
         <div class="card statbox widget box box-shadow">
             <div class="accordion" id="accordionExample">
-            <div class="card-header">
+                <div class="card-header">
+                    <div class="row">
+                        <div class="col-sm-8">
+                            <h2 style="color:black;">Revenue Earned</h2>
+                        </div>
+                        <div class="col-sm-4 form-inline justify-content-end">
+                            <button class="year-btn btn btn-dark m-1" data-toggle="collapse" data-target="#day"
+                                aria-expanded="true" aria-controls="day">Daily</button>
+                            <button class="mon-btn btn btn-dark m-1" data-toggle="collapse" data-target="#mon"
+                                aria-expanded="true" aria-controls="mon">Monthy</button>
+                            <button class="day-btn btn btn-dark m-1" data-toggle="collapse" data-target="#year"
+                                aria-expanded="true" aria-controls="year">Yearly</button>
+                        </div>
+                    </div>
+                </div>
+
+                {% if daily_earnings %}
                 <div class="row">
-                    <div class="col-sm-8">
-                        <h2 style="color:black;">Revenue Earned</h2>
-                    </div>
-                    <div class="col-sm-4 form-inline justify-content-end">
-                    <button class="year-btn btn btn-dark m-1" data-toggle="collapse"
-                    data-target="#day" aria-expanded="true" aria-controls="day">Daily</button>
-                    <button class="mon-btn btn btn-dark m-1" data-toggle="collapse"
-                    data-target="#mon" aria-expanded="true" aria-controls="mon">Monthy</button>
-                    <button class="day-btn btn btn-dark m-1" data-toggle="collapse"
-                    data-target="#year" aria-expanded="true" aria-controls="year">Yearly</button>
-                </div>
-                </div>
-            </div>
-
-            {% if daily_earnings %}
-            <div class="widget-content widget-content-area px-5">
-
-                <!-- Yearly -->
-                <div id="year" class="collapse" data-parent="#accordionExample">
-                    <div class="row d-flex justify-content-center">
-                        <div class="table-responsive">
-                            <table id="htmlgrid" class="testgrid table table-striped table-bordered table-hover mb-4">
-                                <tr>
-                                    <th>Year</th>
-                                    <th>Revenue</th>
-                                </tr>
-                                {% for date,price in yearly_earnings %}
-                                <tr>
-                                    <td>{{date|date:"Y"}}</td>
-                                    <td>{{price.price__sum}}</td>
-                                </tr>
-                                {% endfor %}
-                            </table>
+                    <div class="col-lg-12 col-md-12 cms-search">
+                        <div style="display: flex; justify-content: space-evenly;" class="form-inline mt-2 mb-3">
+                            <div class="col-md-6 col-lg-6 col-12 mt-2 row">
+                                <label class="control-label col-sm-3 col-5 mt-3"
+                                    style="display:block; color:black;">Start Date</label>
+                                <input type="date" class="earn-date form-control my-2 w-100 col-sm-8 col-7">
+                            </div>
+                            <div class="col-md-6 col-lg-6 col-12 mt-2 row">
+                                <label class="control-label col-sm-3 col-5 mt-3" style="display:block; color:black;">End
+                                    Date</label>
+                                <input type="date" class="earn-date form-control my-2 w-100 col-sm-8 col-7">
+                            </div>
                         </div>
                     </div>
                 </div>
-
-                <!-- Monthly -->
-                <div id="mon" class="collapse" data-parent="#accordionExample">
-                    <div class="row d-flex justify-content-center">
-                        <div class="table-responsive">
-                            <table id="htmlgrid" class="testgrid table table-striped table-bordered table-hover mb-4">
-                                <tr>
-                                    <th>Month</th>
-                                    <th>Revenue</th>
-                                </tr>
-                                {% for date,price in monthly_earnings %}
-                                <tr>
-                                    <td>{{date|date:"F Y"}}</td>
-                                    <td>{{price.price__sum}}</td>
-                                    </t>
-                                    {% endfor %}
-                            </table>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Daily -->
-                <div id="day" class="collapse show" data-parent="#accordionExample">
-                    <div class="row d-flex justify-content-center">
-                        <div class="table-responsive">
-                            <table id="htmlgrid" class="testgrid table table-striped table-bordered table-hover mb-4">
-                                <tr>
-                                    <th>Date</th>
-                                    <th>Customer</th>
-                                    <th>Product Category</th>
-                                    <th>Product</th>
-                                    <th>Revenue</th>
-                                </tr>
-                                {% for i in daily_earnings %}
-                                <tr>
-                                    <td>{{i.date|date:"F d, Y"}}</td>
-                                    <td>{{i.customer}}</td>
-                                    <td>{{i.category}}</td>
-                                    <td>{{i.product}}</td>
-                                    <td>{{i.price}}</td>
-                                </tr>
-                                {% endfor %}
-                            </table>
-                        </div>
-                    </div>
-                </div>
+                {% endif %}
+                
+                {% include 'buy/earnings_table.html' %}
 
             </div>
-
-            {% else %}
-        <div class="card-header" style="background: none;">
-            <div class="row">
-                <div class="col-xl-12 col-md-12 col-12">
-                    <h2>No Revenue Earned</h2>
-                </div>
-            </div>
-        </div>
-    {% endif %}
-        </div>
         </div>
     </div>
 
 </div>
+
+<script>
+    $('.earn-date').on('change', () => {
+        var start_date = $('.earn-date')[0].value;
+        var end_date = $('.earn-date')[1].value;
+
+        if (start_date && end_date) {
+            $.ajax({
+                url: '{% url "earnings" %}',
+                type: 'POST',
+                headers: { 'X-CSRFToken': "{{csrf_token}}" },
+                data: { 'start_date': start_date, 'end_date': end_date },
+                success: (response) => { $('.widget-content').html(response); }
+            });
+
+
+        }
+    })
+</script>
 {% endblock main-content %}

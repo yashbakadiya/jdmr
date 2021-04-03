@@ -12,9 +12,9 @@ from django.core.mail import EmailMessage
 from django.contrib import messages
 from accounts.models import *
 from courses.models import *
+from teacher.models import MakeAppointment
 from json import dumps, loads
 import json
-
 
 @login_required(login_url='Login')
 def dashboard2(request):
@@ -32,10 +32,15 @@ def dashboard(request):
         if teacher.course == "None" or teacher.qualification == "None" or teacher.experiance == -1:
             return redirect("signupTutorContinued", teacher.id)
         else:
-            return render(request, "dashboard/Tutor-dashboard.html")
+            # return render(request, "dashboard/Tutor-dashboard.html")
+            template = 'dashboard/Tutor-dashboard.html'    
+            makepoint = MakeAppointment.objects.all()
+            return render(request,'teacher/teachercalendar.html',{'template':template,'makepoint':makepoint})
     elif request.session['type'] == "Student":
-        return render(request, "dashboard/student-dashboard.html")
-
+        # return render(request, "dashboard/student-dashboard.html")
+        template = 'dashboard/student-dashboard.html' 
+        makepoint = MakeAppointment.objects.all()
+        return render(request,'students/studentcalendar.html',{'template':template,'makepoint':makepoint})
 
 @login_required(login_url='Login')
 def profileUpdate(request):

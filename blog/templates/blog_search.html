@@ -1,0 +1,83 @@
+{% extends "code2learn_app/base.html" %}
+{% load custom_template_tags %}
+{% load static %}
+
+{% block title %} {{search_query}} {% endblock title %}
+
+{% block content %}
+<section id="blog">
+  <div class="container">
+    <div class="row justify-content-center mb-5">
+                        <div class="col-12 col-md-10 col-lg-8">
+                            <form action="{% url 'search' %}" method="GET">
+                                <div class="row no-gutters align-items-center">
+                                    <div class="col-auto">
+                                        
+                                    </div>
+                                    <!--end of col-->
+                                    <div class="col">
+                                        <input class="form-control form-control-lg form-control-borderless" type="search" placeholder="Search blogs" name="search-query">
+                                        
+                                    </div>
+                                    <!--end of col-->
+                                    <div class="col-auto">
+                                        <button class="btn btn-lg btn-dark" style="margin-left: 20px;"  type="submit"><span class="fa fa-search"></span></button>
+                                    </div>
+                                    <!--end of col-->
+                                </div>
+                            </form>
+                        </div>
+                        <!--end of col-->
+                    </div>
+
+    {% if search_results|length > 0 %}
+    
+    <div class="section-title text-center">
+          <h2>Search results for <em>{{search_query}}</em></h2>
+        </div>
+    {% for post in search_results %}
+      <div class="blog_post">
+      <div class="blog_img">
+        <img
+          src="{{post.thumbnail.url}}"
+          alt="blogpost_image"
+          width="100%"
+          height="100%"
+        />
+      </div>
+      <div class="blog_info">
+        <div>
+          <ul class="blog_links">
+            <li>Posted {{post.timestamp|timesince|upto:','}} ago | By {{post.author}}</li>
+          </ul>
+          <p><a href="{% url 'blog_single' post.slug %}" target="_self" style="color: black;"
+            >{{post.title}}</a></p>
+        </div>
+
+        <div class="link-icon">
+          <a href="{% url 'blog_single' post.slug %}" target="_self"
+            ><i class="fa fa-angle-right btn"></i
+          ></a>
+        </div>
+      </div>
+    </div>
+    {% if not forloop.last %}
+      <hr style="border: 1px solid rgba(0, 0, 0, 0.5); margin: 50px 0" />
+    {% endif %}
+    {% endfor %}
+    
+    {% else %}
+    
+    <div class="section-title text-center">
+          <h2>Your search- <em><strong>{{search_query}}</strong></em> did not match any blog post...</h2>
+            <br>
+          <h3>Make sure that all words are spelled correctly or Try different keywords.</h3>
+        </div>
+    
+    
+    {% endif %}
+    
+    
+  </div>
+</section>
+{% endblock content %}
