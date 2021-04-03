@@ -25,7 +25,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = '1zqb-ml)1hbr6+5+jpm89c_hwi(qx(+m8*$xn+)8)_klm1^eiw'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ['jdmr.herokuapp.com', 'localhost']
 # ALLOWED_HOSTS = []
@@ -125,7 +125,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'jdmr',
         'USER': 'postgres',
-        'PASSWORD': '',
+        'PASSWORD': 'Yashkul@205',
         'HOST':'localhost',
         'PORT':'5432',
     },
@@ -218,9 +218,9 @@ REST_FRAMEWORK = {
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
-EMAIL_HOST_USER = ''
+EMAIL_HOST_USER = 'yashkulkarni205@gmail.com'
 EMAIL_MAIL_SUBJECT = "COACHING OTP"
-EMAIL_HOST_PASSWORD = ''
+EMAIL_HOST_PASSWORD = 'hlaliaitgolylcmd'
 EMAIL_PAGE_DOMAIN = 'localhost'
 EMAIL_USE_TLS = True
 EMAIL_USE_SSL = False
