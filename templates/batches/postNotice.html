@@ -4,44 +4,43 @@
 <style>
 	@import url('https://fonts.googleapis.com/css?family=Numans');
 
-	.container{
+	.container {
 		align-content: center;
 	}
 
-	.card{
+	.card {
 		margin-top: auto;
 		margin-bottom: auto;
 		width: 90%;
 		background-color: white;
 	}
 
-	.card-header h3{
+	.card-header h3 {
 		color: white;
 	}
 
-	input:focus{
-		outline: 0 0 0 0  !important;
+	input:focus {
+		outline: 0 0 0 0 !important;
 		box-shadow: 0 0 0 0 !important;
 
 	}
 
-	.remember{
+	.remember {
 		color: white;
 	}
 
-	.remember input
-	{
+	.remember input {
 		width: 19px;
 		height: 19px;
 		margin-left: 15px;
 		margin-right: 5px;
 	}
 
-	.links{
+	.links {
 		color: white;
 	}
 
-	.links a{
+	.links a {
 		margin-left: 4px;
 	}
 
@@ -50,57 +49,56 @@
 		font-size: 20px;
 	}
 
-	.social_icon span{
+	.social_icon span {
 		font-size: 60px;
 		margin-left: 10px;
 		color: #FFC312;
 	}
 
-	.social_icon span:hover{
+	.social_icon span:hover {
 		color: white;
 		cursor: pointer;
 	}
 
-	.card-header h3{
+	.card-header h3 {
 		color: white;
 	}
 
-	.social_icon{
+	.social_icon {
 		position: absolute;
 		right: 20px;
 		top: -45px;
 	}
 
-	.input-group-prepend span{
+	.input-group-prepend span {
 		width: 50px;
 		background-color: #FFC312;
 		color: black;
-		border:0 !important;
+		border: 0 !important;
 	}
 
-	input:focus{
-		outline: 0 0 0 0  !important;
+	input:focus {
+		outline: 0 0 0 0 !important;
 		box-shadow: 0 0 0 0 !important;
 
 	}
 
-	.remember{
+	.remember {
 		color: white;
 	}
 
-	.remember input
-	{
+	.remember input {
 		width: 20px;
 		height: 20px;
 		margin-left: 15px;
 		margin-right: 5px;
 	}
 
-	.links{
+	.links {
 		color: white;
 	}
 
-	.links a{
+	.links a {
 		margin-left: 4px;
 	}
 
@@ -108,71 +106,56 @@
 		color: rgb(66, 8, 8);
 		font-size: 20px;
 	}
-	.input-group{
+
+	.input-group {
 		margin-bottom: 2rem;
 	}
 </style>
 {% endblock %}
 {% block main-content %}
-<div class="container">
+<div class="mt-5">
 	{% if messages %}
-    {% for k in messages%}
-    <div class="alert alert-{{k.tags}} alert-dismissible fade show" role="alert">
-        <b>{{ k }} !</b>
-        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-        </button>
-    </div>
-    {% endfor %}
-    {% endif %}
-	<div class="d-flex justify-content-center h-100">
-		<div class="card">
-			<div class="card-header">
-				<div class="row">
-					<div class="col-sm-10"><h2 style="color: rgb(66, 8, 8);">Add Tuition</h2></div>
+	{% for k in messages%}
+	<div class="alert alert-{{k.tags}} alert-dismissible fade show" role="alert">
+		<b>{{ k }} !</b>
+		<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+			<span aria-hidden="true">&times;</span>
+		</button>
+	</div>
+	{% endfor %}
+	{% endif %}
+	<div class="card" style="color: black;">
+		<div class="card-header">
+			<h3 style="align-items: center;text-align: center;">Add Tuition</h3>
+		</div>
+		<form id="frm" class="mb-4 mt-4" method="post">{% csrf_token %}
+			<div class="mx-2 row" id="INSTBATCH">
+				<div class="col">
+					<label for="validationCustom01"><strong>Select Batch <span class="red">*</span></strong></label>
+
+					<select id=" batch" name="batch" class="custom-select form-control" required="required">
+						<option disabled selected value>Select an option</option>
+						{% for batch in batches %}
+						<option value="{{ batch.batchName }}">{{ batch.batchName }}</option>
+						{% endfor %}
+					</select>
+				</div>
+				<div class="col">
+					<label for="validationCustom01"><strong>Title<span class="red">*</span></strong></label>
+					<input type="text" class="form-control" name="title" value="">
 				</div>
 			</div>
-			<div class="card-body container">
-				<form id='submitForm' method='post' action=''>{% csrf_token %}
+			<div class="mx-2 row mt-4">
+				<div class="col">
+					<label for="validationCustom01"><strong>Description <span class="red">*</span></strong></label>
 
-					<div class="input-group form-group">
-						<label class="control-label col-sm-4">Batch<span class="text-danger">*</span></label>
-						<div class="input-group-prepend">
-							<span class="input-group-text"><i class="far fa-sticky-note"></i></span>
-						</div>
-						<select id=" batch" name="batch" class="custom-select form-control" required="required">
-							<option disabled selected value>Select an option</option>
-							{% for batch in batches %}
-							<option value="{{ batch.batchName }}">{{ batch.batchName }}</option>
-							{% endfor %}
-						</select>
-					</div>
-
-					<div class="input-group form-group">
-						<label class="control-label col-sm-4">Title<span class="text-danger">*</span></label>
-						<div class="input-group-prepend">
-							<span class="input-group-text"><i class="fas fa-book"></i></span>
-						</div>
-						<input type="text" class="form-control" name="title" value="">
-					</div>
-
-					<div class="input-group form-group">
-						<label class="control-label col-sm-4">Description<span class="text-danger">*</span></label>
-						<div class="input-group-prepend">
-							<span class="input-group-text"><i class="fas fa-book"></i></span>
-						</div>
-						<textarea rows="8" class="form-control" cols="80" name="description"> </textarea>
-					</div>
-
-					<div class="row container d-flex justify-content-end">
-						<div class="col-sm-2 sm-ml-1">
-							<button id='submitBtn' name="submit" type="submit" class="btn btn-warning">Post</button>
-
-						</div>
-					</div>
-				</form>
+					<textarea rows="8" class="form-control" cols="80" name="description"> </textarea>
+				</div>
+			</div><br>
+			<div class="text-center">
+				<button type="submit" class="btn btn-primary"> Post </button>
 			</div>
-		</div>
+		</form>
 	</div>
 </div>
 {% endblock %}

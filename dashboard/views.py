@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
-from accounts.models import Institute, Teacher, Student
+from accounts.models import Institute, Teacher, Student, Tutorid
 from django.core.files.base import ContentFile
 from django.http import HttpResponse, JsonResponse, HttpResponseRedirect
 from .models import OTP
@@ -190,6 +190,9 @@ def signupTutorContinued(request, id):
         if(request.method == 'POST'):
             # base signup class
             teacher = Teacher.objects.get(id=id)
+            print('id',id)
+            print("teacher",teacher)
+            teacherid = Tutorid.objects.all()
             # creating data object
             forclass = request.POST.getlist('cn_combined')
             forclass = ";".join(forclass)
@@ -197,18 +200,33 @@ def signupTutorContinued(request, id):
             courseName = ";".join(courseName)
             availability = request.POST.getlist('availability')
             availability = ", ".join(availability)
+            panaadhar=request.POST.get('idcard')
+            panaadharid=request.POST.get('idnum')   
+            idphoto = request.FILES.get('photo')   
+            
             image = request.POST.get('photo')
             teacher.availability = availability
             teacher.experiance = request.POST.get('experience')
             teacher.gender = request.POST.get('gender')
             teacher.qualification = request.POST.get('qualification')
             teacher.course = courseName
-            teacher.forclass = forclass
+            teacher.forclass = forclass            
             teacher.fees = int(request.POST.get('fees', 1))
             teacher.democlass = request.POST.get('fda', 0)
             if(image):
                 teacher.photo = image
             teacher.save()
+            print("teacher save")
+          
+            Tutorid(teacherid=id,
+                    teachername=teacher,
+                    panaadhar=panaadhar,
+                    panaadharnumber=panaadharid,
+                    photoid =idphoto,
+
+            ).save()
+            print("tutorid")
+
             return redirect('dashboard')
         # teaching type data
         data = TeachingType.objects.values_list(

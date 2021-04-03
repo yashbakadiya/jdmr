@@ -230,8 +230,8 @@ def postNotice(request):
             messages.success(request, "Notice Sent Successfully!!")
             return redirect("postNotice")
         user = User.objects.get(username=request.session['user'])
-        context['batches'] = Institute.objects.get(user=user).BatchTiming.all()
-        return render(request, 'batches/postNotice.html', context)
+        batches = BatchTiming.objects.all()
+        return render(request, 'batches/postNotice.html', {'batches':batches})
     return HttpResponse("You Are not Authenticated for this Page")
 
 
