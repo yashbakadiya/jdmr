@@ -1,0 +1,228 @@
+#communication .heading1{
+    font-family: Quicksand;
+    font-weight: bold;
+    font-size: 35px;
+    color: #000000;
+}
+
+#explore-programmes{
+	padding-top: 50px;
+	padding-bottom: 50px;
+    background: #9B7BE5;
+}
+
+#explore-programmes .heading1{
+    font-family: Quicksand;
+    font-weight: bold;
+    font-size: 40px;
+    letter-spacing: 0.04em;
+    color: #FFFFFF;
+    padding: 30px 0px;
+    text-align: center;
+}
+.tabs-navigation{
+    text-align: center;
+}
+
+.tabs-navigation .nav-item{
+    margin: 20px;
+    font-family: Quicksand;
+    font-weight: bold;
+    font-size: 18px; 
+}
+
+.nav-pills  .nav-link:not(.active) {
+    background-color: transparent;
+    color: #FFFFFF;
+    border: 1px solid #FFFFFF;
+    border-radius: 15px;
+}
+.nav-pills .nav-link.active, 
+.nav-pills .nav-link.active:hover,
+.nav-pills .nav-link.active:focus{
+    background-color: #FFFFFF;
+    color: #000000;
+    border: 1px solid #FFFFFF;
+    border-radius: 15px;
+}
+#tab1 .card-deck{
+   margin: 40px;
+}
+#tab1 .card{
+   max-width: 300px;
+   margin: 0px;
+   padding: 0px;
+   border-radius: 20px;
+   border: none;
+}
+
+#tab1 .card-img-overlay .btn{
+    padding:  0px 5px;
+    font-family: Poppins;
+    font-weight: 500;
+    font-size: 15px;
+}
+
+#tab2 .card-deck{
+   margin: 40px;
+}
+#tab2 .card{
+   max-width: 300px;
+   margin: 0px;
+   padding: 0px;
+   border-radius: 20px;
+   border: none;
+}
+
+#tab2 .card-img-overlay .btn{
+    padding:  0px 5px;
+    font-family: Poppins;
+    font-weight: 500;
+    font-size: 15px;
+}
+
+#tab3 .card-deck{
+   margin: 40px;
+}
+#tab3 .card{
+   max-width: 300px;
+   margin: 0px;
+   padding: 0px;
+   border-radius: 20px;
+   border: none;
+}
+
+#tab3 .card-img-overlay .btn{
+    padding:  0px 5px;
+    font-family: Poppins;
+    font-weight: 500;
+    font-size: 15px;
+}
+
+#tab4 .card-deck{
+   margin: 40px;
+}
+#tab4 .card{
+   max-width: 300px;
+   margin: 0px;
+   padding: 0px;
+   border-radius: 20px;
+   border: none;
+}
+
+#tab4 .card-img-overlay .btn{
+    padding:  0px 5px;
+    font-family: Poppins;
+    font-weight: 500;
+    font-size: 15px;
+}
+
+#tab5 .card-deck{
+   margin: 40px;
+}
+#tab5 .card{
+   max-width: 300px;
+   margin: 0px;
+   padding: 0px;
+   border-radius: 20px;
+   border: none;
+}
+
+#tab5 .card-img-overlay .btn{
+    padding:  0px 5px;
+    font-family: Poppins;
+    font-weight: 500;
+    font-size: 15px;
+}
+@media only screen and (max-width: 565px) {
+    #communication .heading1{
+       font-family: Quicksand;
+       font-weight: bold;
+       font-size: 26px;
+       color: #000000;
+    }
+    #explore-programmes .heading1{
+        font-family: Quicksand;
+        font-weight: bold;
+        font-size: 26px;
+        letter-spacing: 0.04em;
+        color: #FFFFFF;
+    }
+	.tabs-navigation .nav-item{
+    	margin: 10px;
+    	font-family: Quicksand;
+    	font-weight: bold;
+    	font-size: 12px; 
+	}
+    #tab1 .card-deck{
+       display: none;
+    }
+	#carouselForTab1{
+		margin: auto;
+	} 
+	#carouselForTab1 .carousel-item .card{
+       margin: auto;
+	}
+    #tab2 .card-deck{
+       display: none;
+    }
+	#carouselForTab2{
+		margin: auto;
+	} 
+	#carouselForTab2 .carousel-item .card{
+       margin: auto;
+	}
+    #tab3 .card-deck{
+       display: none;
+    }
+	#carouselForTab3{
+		margin: auto;
+	} 
+	#carouselForTab3 .carousel-item .card{
+       margin: auto;
+	}
+    #tab4 .card-deck{
+       display: none;
+    }
+	#carouselForTab4{
+		margin: auto;
+	} 
+	#carouselForTab4 .carousel-item .card{
+       margin: auto;
+	}
+    #tab5 .card-deck{
+       display: none;
+    }
+	#carouselForTab5{
+		margin: auto;
+	} 
+	#carouselForTab5 .carousel-item .card{
+       margin: auto;
+	}
+}
+
+@media only screen and (min-width: 768px) {
+	#carouselForTab1{
+		display: none;
+	}
+	#carouselForTab2{
+		display: none;
+	}
+	#carouselForTab3{
+		display: none;
+	}
+	#carouselForTab4{
+		display: none;
+	}
+	#carouselForTab5{
+		display: none;
+	}
+}
+
+
+
+
+
+
+
+

@@ -1,0 +1,42 @@
+  html,
+    body {
+      height: 100vh;
+    }
+
+    @media print {
+      @page {
+        size: landscape
+      }
+
+      html,
+      body {
+        width: 50%;
+        height: 50%;
+      }
+
+      .back {
+        border: .5rem solid transparent;
+        border-radius: 1rem;
+
+        border-image: url("../../../images/version7/certificatePage/certificatebackground.7f6d06898ee1.png") 30 stretch;
+      }
+
+      .back1 {
+        border: .2rem solid transparent;
+        border-radius: 1rem;
+        border-image: url("../../../images/version7/certificatePage/certificatebackground.7f6d06898ee1.png") 30 stretch;
+      }
+    }
+
+    .back {
+      border: .5rem solid transparent;
+      border-radius: 1rem;
+
+      border-image: url("../../../images/version7/certificatePage/certificatebackground.7f6d06898ee1.png") 30 stretch;
+    }
+
+    .back1 {
+      border: .2rem solid transparent;
+      border-radius: 1rem;
+      border-image: url("../../../images/version7/certificatePage/certificatebackground.7f6d06898ee1.png") 30 stretch;
+    }
