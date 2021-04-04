@@ -1,0 +1,44 @@
+
+/* Footer */
+
+#footer{
+    background: linear-gradient(102.67deg, #0E0E0E 0%, #303581 39.9%, #6B43A8 70.26%, #AF41C5 100%);
+}
+
+#footer .footer-description{
+    font-family: Poppins;
+    font-weight: 500;
+    font-size: 15px;
+    color: #FFFFFF;
+    text-align: justify;
+}
+.footer-social-links .fa{
+    font-size: 18px;
+    color: white;
+    margin-right: 10px;
+}
+
+.footer-headings {
+    font-family: Quicksand;
+    font-weight: bold;
+    font-size: 20px;
+    color: #FFFFFF;
+}
+.footer-links a{
+    font-family: Poppins;
+    font-weight: 500;
+    font-size: 15px;
+    color: #FFFFFF;
+    text-decoration: none
+}
+
+#Copyrights p{
+    font-family: Poppins;
+    font-weight: 500;
+    font-size: 15px;
+    color: #FFFFFF;
+	cursor: pointer;
+}
+#Copyrights p:hover{
+	text-decoration: underline;
+}
