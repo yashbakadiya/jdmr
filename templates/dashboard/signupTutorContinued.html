@@ -252,8 +252,8 @@
 
           <div class="modal-body">
             <br>
-            <form id='submitForm' onsubmit="validateForm()" class="d-flex justify-content-center" method='post' action=''
-              enctype='multipart/form-data'>{% csrf_token %}
+            <form id='submitForm' onsubmit="validateForm()" class="d-flex justify-content-center" method='post'
+              action='' enctype='multipart/form-data'>{% csrf_token %}
 
               <div class="formdata" id="page1">
                 <div class="">
@@ -390,6 +390,7 @@
                     <div class="col-sm-3" style="padding-left: 0px;">
                       <input id="idnum" name="idnum" type="text" placeholder="Enter ID number"
                         class="custom-select form-control">
+                      <span class="error_form" id="fname_error_message" ></span>
                       <!-- <select id="idnum" name="idnum" class="custom-select form-control" required>
                       <option disabled selected>Select an option</option>
                       <option value="Pan">PAN</option>
@@ -487,7 +488,7 @@
     }
   </script>
   <script>
-    
+
     function clear_all() {
       var x = document.getElementsByClassName("form-control");
       for (var i = 0; i < x.length; i++) {
@@ -638,7 +639,118 @@
     });
 
 
-    
+
+    $(function () {
+      $("#fname_error_message").hide();
+
+      var error_fname = false;
+
+      
+       
+
+      $("#idnum").focusout(function () {
+        var idtype = $("#idcard").val();
+        alert(idtype)
+        if (idtype == "PAN")
+        {  check_fname();
+        }
+        else if (idtype == "Aadhar")
+        {
+          check_aadhar();
+        }
+        else if (idtype == "Passport")
+        {
+          check_passport();
+        }
+        else if (idtype == "Voter_ID")
+        {
+          check_voter_id();
+        }
+        else if (idtype == "Driving_licence")
+        {
+          check_driving_licence();
+        }
+        
+      });
+
+
+
+      function check_fname() {
+           
+        var panval = $("#idnum").val();
+        var pattern = /^([a-zA-Z]){5}([0-9]){4}([a-zA-Z]){1}?$/; 
+
+        if (pattern.test(panval) && panval !== '') {
+          $("#fname_error_message").hide();
+          $("#form_fname").css("border-bottom", "2px solid #34F458");
+        } else {
+          $("#fname_error_message").html("Should contain only Characters and Not greater then 10 digits");
+          $("#fname_error_message").show();
+          $("#form_fname").css("border-bottom", "2px solid #F90A0A");
+          error_fname = true;
+        }
+      }
+
+
+      function check_aadhar() {
+        var pattern = /^[0-9]{12}*$/;
+        var fname = $("#idnum").val();
+        if (pattern.test(fname) && fname !== '') {
+          $("#fname_error_message").hide();
+          $("#form_fname").css("border-bottom", "2px solid #34F458");
+        } else {
+          $("#fname_error_message").html("Should contain only Number and not greater then 12 digits");
+          $("#fname_error_message").show();
+          $("#form_fname").css("border-bottom", "2px solid #F90A0A");
+          error_fname = true;
+        }
+      }
+
+      function check_passwort() {
+        var pattern = /^[0-9]{8}*$/;
+        var fname = $("#idnum").val();
+        if (pattern.test(fname) && fname !== '') {
+          $("#fname_error_message").hide();
+          $("#form_fname").css("border-bottom", "2px solid #34F458");
+        } else {
+          $("#fname_error_message").html("Should contain only Number and not greater then 8 digits");
+          $("#fname_error_message").show();
+          $("#form_fname").css("border-bottom", "2px solid #F90A0A");
+          error_fname = true;
+        }
+      }
+
+      function check_voter_id() {
+        var pattern = /^[A-Z0-9]*$/;
+        var fname = $("#idnum").val();
+        if (pattern.test(fname) && fname !== '') {
+          $("#fname_error_message").hide();
+          $("#form_fname").css("border-bottom", "2px solid #34F458");
+        } else {
+          $("#fname_error_message").html("Should contain only Characters");
+          $("#fname_error_message").show();
+          $("#form_fname").css("border-bottom", "2px solid #F90A0A");
+          error_fname = true;
+        }
+      }
+
+      function check_driving_licence() {
+        var pattern = /^[A-Z0-9]*$/;
+        var fname = $("#idnum").val();
+        if (pattern.test(fname) && fname !== '') {
+          $("#fname_error_message").hide();
+          $("#form_fname").css("border-bottom", "2px solid #34F458");
+        } else {
+          $("#fname_error_message").html("Should contain only Characters");
+          $("#fname_error_message").show();
+          $("#form_fname").css("border-bottom", "2px solid #F90A0A");
+          error_fname = true;
+        }
+      }
+
+    });
+
+
 
   </script>
 </body>
