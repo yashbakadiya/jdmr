@@ -50,7 +50,7 @@ def instituteTutor(request):
                 return render(request,"Institute/institute.html",{"batches":batches,'student':student,"INST":INST[0],"template":"dashboard/student-dashboard.html"})
             else:
                 messages.warning(request,"Not Found")
-                return render(request,"Institute/institute.html",{"template":"student-dashboard.html"})
+                return render(request,"Institute/institute.html",{"template":"dashboard/student-dashboard.html"})
     return HttpResponse("You are not Authenticated for this Page")
 
 def haversine(lon1, lat1, lon2, lat2):
