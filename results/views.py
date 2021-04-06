@@ -323,9 +323,19 @@ def ViewExamsResult(request):
         tutorresults=[]
         for mapping in StudentMapping.objects.filter(student=student):
             results+=StudentExamResult.objects.filter(student=mapping)
+            ans = StudentAnswer.objects.get(student=mapping,exam=mapping.exam)
+            res = StudentExamResult.objects.get(student=mapping)
+            if ans:
+                if res:
+                    calculate(ans,res)
             
         for mapping in TutorStudentMapping.objects.filter(student=student):
             tutorresults+=TutorStudentExamResult.objects.filter(student=mapping)
+            ans = TutorStudentAnswer.objects.get(student=mapping,exam=mapping.exam)
+            res = TutorStudentExamResult.objects.get(student=mapping)
+            if ans:
+                if res:
+                    calculate(ans,res)
 
         context = { 'results': results,
                     'tutorresults': tutorresults
