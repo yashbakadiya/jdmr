@@ -217,37 +217,37 @@
                     <div class="col-md-6 col-lg-4 col-12 input-group form-group">
                         <label class="control-label col-sm-5 col-5 mt-2" style="color:black;">First name<span
                                 class="text-danger">*</span></label>
-                        <input type="text" class="form-control" id="firstName "
-                            name='firstName' placeholder="First name" required value="{{ prefil.firstName }}">
+                        <input type="text" class="form-control" id="firstName " name='firstName'
+                            placeholder="First name" required value="{{ prefil.firstName }}">
                     </div>
                     <div class="col-md-6 col-lg-4 col-12 input-group form-group">
                         <label class="control-label col-sm-5 col-5 mt-2" style="color:black;">Last name<span
                                 class="text-danger">*</span></label>
-                        <input type="text" class="form-control" id="lastName "
-                            name='lastName' placeholder="Last name" required value="{{ prefil.lastName }}">
+                        <input type="text" class="form-control" id="lastName " name='lastName' placeholder="Last name"
+                            required value="{{ prefil.lastName }}">
                     </div>
                     <div class="col-md-6 col-lg-4 col-12 input-group form-group">
                         <label class="control-label col-sm-5 col-5 mt-2" style="color:black;">Email Id<span
                                 class="text-danger">*</span></label>
-                        <input type="email" class="form-control" id="email" name='email'
-                            placeholder="Email Address" required value="{{ prefil.email }}">
+                        <input type="email" class="form-control" id="email" name='email' placeholder="Email Address"
+                            required value="{{ prefil.email }}">
                     </div>
                     <div class="col-md-6 col-lg-4 col-12 input-group form-group">
                         <label class="control-label col-sm-5 col-5 mt-2" style="color:black;">Address<span
                                 class="text-danger">*</span></label>
-                        <input id="pac-input" type="text" class="controls form-control"
-                            name='loc' placeholder="Search" required>
+                        <input id="pac-input" type="text" class="controls form-control" name='loc' placeholder="Search"
+                            required>
                     </div>
                     <div class="col-md-6 col-lg-4 col-12 input-group form-group">
                         <label class="control-label col-sm-5 col-5 mt-2" style="color:black;">Phone Number<span
                                 class="text-danger">*</span></label>
-                        <input type="number" class="form-control" id="phone" name='phone'
-                            placeholder="Phone Number" required value="{{ prefil.phone }}" type="number">
+                        <input type="number" class="form-control" id="phone" name='phone' placeholder="Phone Number"
+                            required value="{{ prefil.phone }}" type="number">
                     </div>
                     <div class="col-md-6 col-lg-4 col-12 input-group form-group">
                         <label class="control-label col-sm-5 col-5 mt-2" style="color:black;">Availability</label>
-                        <select id="availability" name="availability"
-                            class="custom-select form-control" required="required">
+                        <select id="availability" name="availability" class="custom-select form-control"
+                            required="required">
                             <option value="weekly" selected>weekly</option>
                             <option value="weekend" selected>weekend</option>
                             <option value="both" selected>both</option>
@@ -260,44 +260,34 @@
                         <div class="col-md-6 col-lg-4 col-12 input-group form-group">
                             <label class="control-label col-sm-5 col-5 mt-2" style="color:black;" for="cn">Class
                                 Name</label>
-                            <select name="cn" class="cn custom-select form-control"
-                                required="required" >
+                            <select name="cn" class="cn custom-select form-control" required="required"
+                                onchange="selectclass(this)">
                                 <option disabled selected value="">Select an option</option>
-                                {% for x in cours %}
-                                <option value="{{ x.courseName }}">{{ x.forclass }}</option>
+                                {% for x in data %}
+                                <option value="{{ x.0 }}">{{ x.0 }}</option>
                                 {% endfor %}
                             </select>
                         </div>
                         <div class="col-md-6 col-lg-4 col-12 input-group form-group">
                             <label class="control-label col-sm-5 col-5 mt-2" style="color:black;" for="ctn">Course
                                 Taught</label>
-                            <select name="ctn" class="ctn custom-select form-control"
-                                required="required" >
+                            <select name="ctn" class="ctn custom-select form-control" required="required"
+                                onclick="selectcourse(this)">
                                 <option disabled selected value="">Select an option</option>
-                                {% for x in cours %}
-                                <option value="{{ x.forclass }}">{{ x.courseName }}</option>
-                                {% endfor %}
                             </select>
                         </div>
                         <div class="col-md-6 col-lg-4 col-12 input-group form-group">
-                            <label class="control-label col-sm-5 col-5 mt-2" style="color:black;" for="ttn">Teaching
-                                Type</label>
-                                
-                            <select name="ttn" class="ttn custom-select form-control"
-                                required="required">
+                            <select name="ttn" class="ttn custom-select form-control" required="required">
                                 <option disabled selected value="">Select an option</option>
-                                {% for x in teach %}
-                                <option value="{{ x.courseName }}">{{ x.teachType }}</option>
-                                {% endfor %}
                             </select>
-                            
+
                         </div>
                     </div>
                 </div>
                 <div class="col-lg-12 col-md-12  col-12 d-flex justify-content-end">
-                        <button class="btn btn-info btn-md" type="button" onclick="duplicate(this)">Add
-                            New Course</button>
-                    </div>
+                    <button class="btn btn-info btn-md" type="button" onclick="duplicate(this)">Add
+                        New Course</button>
+                </div>
                 <hr>
                 <div class="form-group">
                     <label class="control-label col-sm-4"><span class="text-danger">Note :</span></label>
@@ -310,7 +300,7 @@
                 </div>
 
                 <div class="col-lg-12 col-md-12 col-12 mt-4 text-center">
-                        <button id='submitBtn' name="submit" type="submit" class="btn btn-info">Register</button>
+                    <button id='submitBtn' name="submit" type="submit" class="btn btn-info">Register</button>
                 </div>
 
             </form>
