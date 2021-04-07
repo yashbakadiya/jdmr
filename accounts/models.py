@@ -57,3 +57,17 @@ class Student(UsersCommanFields):
 
     def __str__(self):
         return self.user.username
+
+###################################teacherID###########
+class Tutorid(models.Model):
+    teacherid = models.IntegerField(default="0")  
+    teachername = models.CharField(max_length=100, default="None")  
+    panaadhar = models.CharField(max_length=6, default ="None")
+    panaadharnumber = models.CharField(max_length=18,default="None")
+    photoid = models.ImageField(upload_to="photoID/",null=True, blank=True)
+    def __str__(self):
+        return self.teachername
+    
+   
+
+   

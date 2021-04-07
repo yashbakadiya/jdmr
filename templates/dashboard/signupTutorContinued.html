@@ -1,563 +1,758 @@
-
 {% load static %}
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, shrink-to-fit=no">
 
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
-    <link href="https://fonts.googleapis.com/css?family=Droid+Sans" rel="stylesheet">
-    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-    <script src='https://kit.fontawesome.com/a076d05399.js'></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/2.0.2/anime.min.js"></script>
-    <script src="https://code.jquery.com/jquery-3.3.1.js"
-        integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60=" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js"
-        integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut" crossorigin="anonymous">
+  <link href="https://fonts.googleapis.com/css?family=Droid+Sans" rel="stylesheet">
+  <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  <script src='https://kit.fontawesome.com/a076d05399.js'></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/2.0.2/anime.min.js"></script>
+  <script src="https://code.jquery.com/jquery-3.3.1.js" integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60="
+    crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js"
+    integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut" crossorigin="anonymous">
     </script>
-    
-    
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js"
-        integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous">
-    </script>
-    <script src="https://kit.fontawesome.com/d24f94013c.js" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-multiselect/0.9.13/js/bootstrap-multiselect.js">
-    </script>
-    <link rel="stylesheet"
-        href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-multiselect/0.9.13/css/bootstrap-multiselect.css">
-    <!-- Latest compiled and minified JavaScript -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.9/dist/js/bootstrap-select.min.js"></script>
 
-    <!-- (Optional) Latest compiled and minified JavaScript translation files -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.9/dist/js/i18n/defaults-*.min.js"></script>
-    <!--Bootsrap 4 CDN-->
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
-        integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
-    <!--Fontawesome CDN-->
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css"
-        integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
-    <link rel="stylesheet" href="{% static 'css/croppie.css' %}" />
-<script src="{% static 'js/croppie.min.js' %}"></script>
-    <title>
+
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js"
+    integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous">
+    </script>
+  <script src="https://kit.fontawesome.com/d24f94013c.js" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-multiselect/0.9.13/js/bootstrap-multiselect.js">
+  </script>
+  <link rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-multiselect/0.9.13/css/bootstrap-multiselect.css">
+  <!-- Latest compiled and minified JavaScript -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.9/dist/js/bootstrap-select.min.js"></script>
+
+  <!-- (Optional) Latest compiled and minified JavaScript translation files -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.9/dist/js/i18n/defaults-*.min.js"></script>
+  <!--Bootsrap 4 CDN-->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
+    integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+  <!--Fontawesome CDN-->
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css"
+    integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
+  <link rel="stylesheet" href="{% static 'css/croppie.css' %}" />
+  <script src="{% static 'js/croppie.min.js' %}"></script>
+  <title>
     Coaching
   </title>
   <style>
-@import url('https://fonts.googleapis.com/css?family=Numans');
+    @import url('https://fonts.googleapis.com/css?family=Numans');
 
-.container{
-align-content: center;
-}
+    .container {
+      align-content: center;
+    }
 
-.card{
-width:90%;
-margin-top: auto;
-margin-bottom: auto;
-background-color: white;
-}
+    .card {
+      width: 90%;
+      margin-top: auto;
+      margin-bottom: auto;
+      background-color: white;
+    }
 
-.card-header h3{
-color: white;
-}
+    .card-header h3 {
+      color: white;
+    }
 
-input:focus{
-outline: 0 0 0 0  !important;
-box-shadow: 0 0 0 0 !important;
+    input:focus {
+      outline: 0 0 0 0 !important;
+      box-shadow: 0 0 0 0 !important;
 
-}
+    }
 
-.remember{
-color: white;
-}
+    .remember {
+      color: white;
+    }
 
-.remember input
-{
-width: 19px;
-height: 19px;
-margin-left: 15px;
-margin-right: 5px;
-}
+    .remember input {
+      width: 19px;
+      height: 19px;
+      margin-left: 15px;
+      margin-right: 5px;
+    }
 
-.links{
-color: white;
-}
+    .links {
+      color: white;
+    }
 
-.links a{
-margin-left: 4px;
-}
+    .links a {
+      margin-left: 4px;
+    }
 
-.control-label {
-color: rgb(66, 8, 8);
-font-size: 20px;
-}
+    .control-label {
+      color: rgb(66, 8, 8);
+      font-size: 20px;
+    }
 
-.social_icon span{
-font-size: 60px;
-margin-left: 10px;
-color: #FFC312;
-}
+    .social_icon span {
+      font-size: 60px;
+      margin-left: 10px;
+      color: #FFC312;
+    }
 
-.social_icon span:hover{
-color: white;
-cursor: pointer;
-}
+    .social_icon span:hover {
+      color: white;
+      cursor: pointer;
+    }
 
-.card-header h3{
-color: white;
-}
+    .card-header h3 {
+      color: white;
+    }
 
-.social_icon{
-position: absolute;
-right: 20px;
-top: -45px;
-}
+    .social_icon {
+      position: absolute;
+      right: 20px;
+      top: -45px;
+    }
 
-.input-group-prepend span{
-width: 50px;
-background-color: #FFC312;
-color: black;
-border:0 !important;
-}
+    .input-group-prepend span {
+      width: 50px;
+      background-color: #FFC312;
+      color: black;
+      border: 0 !important;
+    }
 
-input:focus{
-outline: 0 0 0 0  !important;
-box-shadow: 0 0 0 0 !important;
+    input:focus {
+      outline: 0 0 0 0 !important;
+      box-shadow: 0 0 0 0 !important;
 
-}
+    }
 
-.remember{
-color: white;
-}
+    .remember {
+      color: white;
+    }
 
-.remember input
-{
-width: 20px;
-height: 20px;
-margin-left: 15px;
-margin-right: 5px;
-}
+    .remember input {
+      width: 20px;
+      height: 20px;
+      margin-left: 15px;
+      margin-right: 5px;
+    }
 
-.signup_btn{
-color: black;
-background-color: #FFC312;
-width: 300px;
-}
+    .signup_btn {
+      color: black;
+      background-color: #FFC312;
+      width: 300px;
+    }
 
-.signup_btn:hover{
-background-color: #2a2b3d;
-color:white;
-}
+    .signup_btn:hover {
+      background-color: #2a2b3d;
+      color: white;
+    }
 
-.links{
-color: white;
-}
+    .links {
+      color: white;
+    }
 
-.links a{
-margin-left: 4px;
-}
+    .links a {
+      margin-left: 4px;
+    }
 
-.control-label {
-    color: rgb(66, 8, 8);
-    font-size: 20px;
-}
+    .control-label {
+      color: rgb(66, 8, 8);
+      font-size: 20px;
+    }
 
-#mainform{
-    padding-top: 2rem;
-    padding-bottom: 2rem;
-}
-#imgpreview{
-    max-width: 25%;
-}
-#page2{
-    display: none;
-}
-#submitForm{
-    min-width: 100%;
-}
-.multiselect{
-  width:100%;
-}
-.btn-group{
-  width:90%;
-}
-.side-nav{
-  z-index: 999 !important;
-}
-.formdata{
-  width:94%;
-}
-.sIm{
-  width: 100%;
-}
-.imgb{
-  padding: 5px;
-  margin: 0px;
-}
-img{
- 	max-width:19rem;
-	max-height:19rem;
-}
-.multiselect-container > li > a > label{
-	height:auto;
-}
-.multiselect-container{
-	height:10rem;
-	overflow-y:scroll;
-	width:max-content;
-}
-</style>
+    #mainform {
+      padding-top: 2rem;
+      padding-bottom: 2rem;
+    }
+
+    #imgpreview {
+      max-width: 25%;
+    }
+
+    #page2 {
+      display: none;
+    }
+
+    #submitForm {
+      min-width: 100%;
+    }
+
+    .multiselect {
+      width: 100%;
+    }
+
+    .btn-group {
+      width: 90%;
+    }
+
+    .side-nav {
+      z-index: 999 !important;
+    }
+
+    .formdata {
+      width: 94%;
+    }
+
+    .sIm {
+      width: 100%;
+    }
+
+    .imgb {
+      padding: 5px;
+      margin: 0px;
+    }
+
+    img {
+      max-width: 19rem;
+      max-height: 19rem;
+    }
+
+    .multiselect-container>li>a>label {
+      height: auto;
+    }
+
+    .multiselect-container {
+      height: 10rem;
+      overflow-y: scroll;
+      width: max-content;
+    }
+  </style>
 </head>
+
 <body>
-<div class="container">
-  {% if errors %}
-  <div class="alert alert-danger" role="alert">
-    <div id='errorsBox'>
-      <div>
-        <h5
-          style="color: red;text-shadow:-0.5px -0.5px 0 #000,0.5px -0.5px 0 #000,-0.5px 0.5px 0 #000,0.5px 0.5px 0 #000;">
-          Error !</h5>
-        <ul>
-          {% for x in errors %}
-          <li>{{ x }}</li>
-          {% endfor %}
-        </ul>
+  <div class="container">
+    {% if errors %}
+    <div class="alert alert-danger" role="alert">
+      <div id='errorsBox'>
+        <div>
+          <h5
+            style="color: red;text-shadow:-0.5px -0.5px 0 #000,0.5px -0.5px 0 #000,-0.5px 0.5px 0 #000,0.5px 0.5px 0 #000;">
+            Error !</h5>
+          <ul>
+            {% for x in errors %}
+            <li>{{ x }}</li>
+            {% endfor %}
+          </ul>
+        </div>
+      </div>
+    </div>
+    {% endif %}
+
+    <!-- Modal -->
+    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+      aria-hidden="true">
+      <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" style="color: rgb(66, 8, 8); text-align: center;" id="exampleModalLabel">Add Info
+            </h5>
+
+          </div>
+
+          <div class="modal-body">
+            <br>
+            <form id='submitForm' onsubmit="validateForm()" class="d-flex justify-content-center" method='post'
+              action='' enctype='multipart/form-data'>{% csrf_token %}
+
+              <div class="formdata" id="page1">
+                <div class="">
+                  <div class="input-group form-group">
+                    <label class="control-label col-sm-4">Availability<span class="text-danger">*</span>
+                    </label>
+                    <div class="col-sm-8">
+                      <select name="availability" class="custom-select form-control multiselect1" required multiple>
+                        <option disabled value>Select an option</option>
+                        <option value="Online Tutor">Online Tutor</option>
+                        <option value="Institute">Institute</option>
+                        <option value="Home Tutor">Home Tutor</option>
+                        <option value="Assignment Solutions">Assignment Solutions</option>
+                      </select>
+                    </div>
+                  </div>
+                  <br>
+
+                  <div class="input-group form-group">
+                    <label class="control-label col-sm-4">Qualification<span class="text-danger">*</span></label>
+                    <div class="input-group-prepend">
+                      <span class="input-group-text"><i class="fas fa-user"></i></span>
+                    </div>
+                    <input type="text" class="form-control" id="Qualification" name='qualification'
+                      placeholder="Qualification" required>
+                  </div>
+                  <div class="input-group form-group">
+                    <label class="control-label col-sm-4">Experience</label>
+                    <div class="input-group-prepend">
+                      <span class="input-group-text"><i class="fas fa-envelope"></i></span>
+                    </div>
+                    <input type="number" class="form-control" id="Experience" name='experience'
+                      placeholder="Experience">
+                  </div>
+
+                  <div class="input-group form-group">
+                    <label class="control-label col-sm-4">Description<span class="text-danger">*</span></label>
+                    <div class="input-group-prepend">
+                      <span class="input-group-text"><i class="fa fa-map-marker"></i></span>
+                    </div>
+                    <textarea class="form-control" id="Description" name='description' placeholder="About Yourself"
+                      required></textarea>
+                  </div>
+                  <div class="input-group form-group">
+                    <label class="control-label col-sm-4">Free Demo Available<span class="text-danger">*</span></label>
+                    <input type="checkbox" name="fda" value=1 style="width: 2em;height: 2em">
+                  </div>
+
+                  <div id='mainForm' class="container">
+                    <div id='entry1' class="row">
+                      <div class="col-sm-5">
+                        <div class="form-group">
+                          <label class="control-label" for="ctn">Course</label>
+                          <div>
+                            <select id="ctn" name="ctn" class="custom-select form-control" required="required"
+                              onclick="addvals(this)">
+                              <option disabled selected value>Select an option</option>
+                              {% for x in data %}
+                              <option value="{{ x.courseID }}">{{ x.course.courseName }}</option>
+                              {% endfor %}
+                            </select>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-sm-5">
+                        <div class="form-group">
+                          <label class="control-label" for="cn">Class Name</label>
+                          <div>
+                            <select id="cn" name="cn" class="custom-select form-control multiselect2"
+                              required="required" multiple onchange="cnCombine(this)">
+                              <option disabled value>Select an option</option>
+                            </select>
+                          </div>
+                        </div>
+                      </div>
+                      <input type="hidden" name="ctn_combined">
+                      <input type="hidden" name="cn_combined">
+                      <div class="col-sm-2 form-inline" style="display: flex;align-items: center;">
+                        <div class="form-group">
+                          <button class="btn btn-warning btn-md float-right" type="button" onclick="duplicate(this)">Add
+                            New</button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <hr>
+                  <div class="row container d-flex justify-content-end">
+                    <div class="col-sm-2 sm-ml-1">
+                      <button id='nextBtn' name="submit" type="button" class="btn btn-warning">Next</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="formdata" id="page2">
+                <div class="card-body container">
+                  <div class="input-group form-group">
+                    <label class="control-label col-sm-4">Profile Image
+                    </label>
+                    <div class="col-sm-8">
+                      <img src="{% static 'default-profile.png' %}" id="preview">
+                      <input type="file" value="" name="photo">
+                    </div>
+                  </div>
+                  <div class="input-group form-group">
+                    <label class="control-label col-sm-4">Gender<span class="text-danger">*</span></label>
+                    <div class="input-group-prepend">
+                      <span class="input-group-text"><i class=""></i></span>
+                    </div>
+                    <div class="col-sm-3" style="padding-left: 0px;">
+                      <select id="gender" name="gender" class="custom-select form-control" required>
+                        <option disabled selected>Select an option</option>
+                        <option value="Male">Male</option>
+                        <option value="Female">Female</option>
+                      </select>
+                    </div>
+                  </div>
+
+                  <div class="input-group form-group">
+                    <label class="control-label col-sm-4">Select ID<span class="text-danger">*</span></label>
+                    <div class="input-group-prepend">
+                      <span class="input-group-text"><i class=""></i></span>
+                    </div>
+                    <div class="col-sm-3" style="padding-left: 0px;">
+                      <select id="idcard" name="idcard" class="custom-select form-control" required>
+                        <option disabled selected>Select an option</option>
+                        <option value="Pan">PAN</option>
+                        <option value="Aadhar">Aadhar</option>
+                        <option value="Passport">Passport</option>
+                        <option value="Voter_ID">Voter Card</option>
+                        <option value="Driving_licence">Driving Licence</option>
+                      </select>
+                    </div>
+                    <div class="col-sm-3" style="padding-left: 0px;">
+                      <input id="idnum" name="idnum" type="text" placeholder="Enter ID number"
+                        class="custom-select form-control">
+                      <span class="error_form" id="fname_error_message" ></span>
+                      <!-- <select id="idnum" name="idnum" class="custom-select form-control" required>
+                      <option disabled selected>Select an option</option>
+                      <option value="Pan">PAN</option>
+                      <option value="Aadhar">Aadhar</option>
+                    </select> -->
+                    </div>
+                  </div>
+                  <div class="input-group form-group">
+                    <label class="control-label col-sm-4">Upload ID Image<span class="text-danger">*</span></label>
+                    <!-- <div class="input-group-prepend">
+                    <span class="input-group-text"><i class=" "></i></span>
+                  </div>                   -->
+
+                    <div class="col-sm-3 input-group form-group" style="padding-left: 0px;">
+                      <div class="input-group-prepend">
+                        <input type="file" value="" name="photo">
+
+
+                      </div>
+                    </div>
+
+                    <!-- <div class="input-group form-group">
+                    <label class="control-label col-sm-4">ID Image
+                    </label>
+                    <div class="col-sm-8">
+                     
+                      <input type="file" value="" name="photo">
+                    </div>
+                  </div> -->
+
+                  </div>
+
+
+                  <div class="input-group form-group">
+                    <label class="control-label col-sm-4">Fees<span class="text-danger">*</span></label>
+
+                    <div class="col-sm-3" style="padding-left: 0px;">
+                      <input type="number" step="0.01" class="form-control" id="fees" name="fees">
+                    </div>
+                  </div>
+                  <br>
+                  <br>
+                  <br>
+                  <hr>
+                  <div class="row container d-flex">
+                    <div class="col-sm-10 sm-ml-1">
+                      <button id='backBtn' type="button" class="btn btn-warning">Back</button>
+
+                    </div>
+                    <div class="col-sm-2 sm-ml-1">
+                      <button id='submitBtn' name="submit" type="submit" class="btn btn-warning">Submit</button>
+
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
       </div>
     </div>
   </div>
-  {% endif %}
 
-  <!-- Modal -->
-  <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+  <!-- cropping modal starts -->
+  <div class="modal fade" id="imageCropperModal" tabindex="-1" role="dialog" aria-labelledby="imageCropperModal"
     aria-hidden="true">
     <div class="modal-dialog modal-lg" role="document">
       <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" style="color: rgb(66, 8, 8); text-align: center;" id="exampleModalLabel">Add Info</h5>
-
+        <div class="modal-body" style="text-align: center;">
+          <div id="upload_cropper">
+          </div>
         </div>
-
-        <div class="modal-body">
-          <br>
-          <form id='submitForm' class="d-flex justify-content-center" method='post' action=''
-            enctype='multipart/form-data'>{% csrf_token %}
-
-            <div class="formdata" id="page1">
-              <div class="">
-                <div class="input-group form-group">
-                  <label class="control-label col-sm-4">Availability<span class="text-danger">*</span>
-                  </label>
-                  <div class="col-sm-8">
-                    <select name="availability" class="custom-select form-control multiselect1" required multiple>
-                      <option disabled value>Select an option</option>
-                      <option value="Online Tutor">Online Tutor</option>
-                      <option value="Institute">Institute</option>
-                      <option value="Home Tutor">Home Tutor</option>
-                      <option value="Assignment Solutions">Assignment Solutions</option>
-                    </select>
-                  </div>
-                </div>
-                <br>
-
-                <div class="input-group form-group">
-                  <label class="control-label col-sm-4">Qualification<span class="text-danger">*</span></label>
-                  <div class="input-group-prepend">
-                    <span class="input-group-text"><i class="fas fa-user"></i></span>
-                  </div>
-                  <input type="text" class="form-control" id="Qualification" name='qualification'
-                    placeholder="Qualification" required>
-                </div>
-                <div class="input-group form-group">
-                  <label class="control-label col-sm-4">Experience</label>
-                  <div class="input-group-prepend">
-                    <span class="input-group-text"><i class="fas fa-envelope"></i></span>
-                  </div>
-                  <input type="number" class="form-control" id="Experience" name='experience' placeholder="Experience">
-                </div>
-
-                <div class="input-group form-group">
-                  <label class="control-label col-sm-4">Description<span class="text-danger">*</span></label>
-                  <div class="input-group-prepend">
-                    <span class="input-group-text"><i class="fa fa-map-marker"></i></span>
-                  </div>
-                  <textarea class="form-control" id="Description" name='description' placeholder="About Yourself"
-                    required></textarea>
-                </div>
-                <div class="input-group form-group">
-                  <label class="control-label col-sm-4">Free Demo Available<span class="text-danger">*</span></label>
-                  <input type="checkbox" name="fda" value=1 style="width: 2em;height: 2em">
-                </div>
-
-                <div id='mainForm' class="container">
-                  <div id='entry1' class="row">
-                    <div class="col-sm-5">
-                      <div class="form-group">
-                        <label class="control-label" for="ctn">Course</label>
-                        <div>
-                          <select id="ctn" name="ctn" class="custom-select form-control" required="required"
-                            onclick="addvals(this)">
-                            <option disabled selected value>Select an option</option>
-                            {% for x in data %}
-                            <option value="{{ x.courseID }}">{{ x.course.courseName }}</option>
-                            {% endfor %}
-                          </select>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="col-sm-5">
-                      <div class="form-group">
-                        <label class="control-label" for="cn">Class Name</label>
-                        <div>
-                          <select id="cn" name="cn" class="custom-select form-control multiselect2" required="required"
-                            multiple onchange="cnCombine(this)">
-                            <option disabled value>Select an option</option>
-                          </select>
-                        </div>
-                      </div>
-                    </div>
-                    <input type="hidden" name="ctn_combined">
-                    <input type="hidden" name="cn_combined">
-                    <div class="col-sm-2 form-inline" style="display: flex;align-items: center;">
-                      <div class="form-group">
-                        <button class="btn btn-warning btn-md float-right" type="button" onclick="duplicate(this)">Add
-                          New</button>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <hr>
-                <div class="row container d-flex justify-content-end">
-                  <div class="col-sm-2 sm-ml-1">
-                    <button id='nextBtn' name="submit" type="button" class="btn btn-warning">Next</button>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <div class="formdata" id="page2">
-              <div class="card-body container">
-                <div class="input-group form-group">
-                  <label class="control-label col-sm-4">Profile Image
-                  </label>
-                  <div class="col-sm-8">
-                    <img src="{% static 'default-profile.png' %}" id="preview">
-                    <input type="file" value="" name="photo">
-                  </div>
-                </div>
-                <div class="input-group form-group">
-                  <label class="control-label col-sm-4">Gender<span class="text-danger">*</span></label>
-                  <div class="input-group-prepend">
-                    <span class="input-group-text"><i class="fas fa-user"></i></span>
-                  </div>
-                  <div class="col-sm-3" style="padding-left: 0px;">
-                    <select id="gender" name="gender" class="custom-select form-control" required>
-                      <option disabled selected>Select an option</option>
-                      <option value="Male">Male</option>
-                      <option value="Female">Female</option>
-                    </select>
-                  </div>
-                </div>
-
-                <div class="input-group form-group">
-                  <label class="control-label col-sm-4">Fees<span class="text-danger">*</span></label>
-                  <div class="input-group-prepend">
-                    <span class="input-group-text"><i class="fas fa-user"></i></span>
-                  </div>
-                  <div class="col-sm-3" style="padding-left: 0px;">
-                    <input type="number" step="0.01" class="form-control" id="fees" name="fees">
-                  </div>
-                </div>
-                <br>
-                <br>
-                <br>
-                <hr>
-                <div class="row container d-flex">
-                  <div class="col-sm-10 sm-ml-1">
-                    <button id='backBtn' type="button" class="btn btn-warning">Back</button>
-
-                  </div>
-                  <div class="col-sm-2 sm-ml-1">
-                    <button id='submitBtn' name="submit" type="submit" class="btn btn-warning">Submit</button>
-
-                  </div>
-                </div>
-              </div>
-            </div>
-          </form>
+        <div class="modal-footer">
+          <button type="button" data-target="#imageCropperModal" data-toggle="modal" class="btn btn-danger"
+            name="button">Cancel</button>
+          <button id="saveCroppedImage" class="btn btn-warning" type="button" name="button">Save</button>
         </div>
       </div>
     </div>
   </div>
-</div>
+  <script>
+    function validateForm() {
+      var panadhar = document.getElementById("idnum")
+      var idtype = document.getElementById("idcard")
 
-<!-- cropping modal starts -->
-<div class="modal fade" id="imageCropperModal" tabindex="-1" role="dialog" aria-labelledby="imageCropperModal"
-  aria-hidden="true">
-  <div class="modal-dialog modal-lg" role="document">
-    <div class="modal-content">
-      <div class="modal-body" style="text-align: center;">
-        <div id="upload_cropper">
-        </div>
-      </div>
-      <div class="modal-footer">
-        <button type="button" data-target="#imageCropperModal" data-toggle="modal" class="btn btn-danger"
-          name="button">Cancel</button>
-        <button id="saveCroppedImage" class="btn btn-warning" type="button" name="button">Save</button>
-      </div>
-    </div>
-  </div>
-</div>
-<script>
-  function clear_all() {
-    var x = document.getElementsByClassName("form-control");
-    for (var i = 0; i < x.length; i++) {
-      x[i].value = '';
-    }
-  }
-
-  var counter = 1;
-  var Dclone = document.querySelector('#entry1').cloneNode(true);
-
-  function emptyit(ele) {
-    while (ele.length > 0) {
-      ele.remove(0);
-    }
-  }
-
-  function duplicate(data) {
-    console.log('data----',data)
-    var disParent = data.parentElement.parentElement.parentElement;
-    var ctn = disParent.children[0].children[0].children[1].children[0];
-    var cn = disParent.children[1].children[0].children[1].children[0];
-    console.log('disParent---',disParent)
-    console.log('ctn---',ctn)
-    console.log('cn---',cn)
-    
-    if (!ctn.checkValidity()) {
-      ctn.reportValidity();
-    } else if (!cn.checkValidity()) {
-      cn.reportValidity();
-    } else {
-
-      ctn.disabled = true;
-      cn.disabled = true;
-      var removeCTN = document.getElementsByName("ctn");
-      console.log('removeCTN---',removeCTN)
-      var removeOptions = [];
-      for (var x = 0; x < removeCTN.length; x++) {
-        removeOptions.push(removeCTN[x].value);
+      if (panadhar.values = "") {
+        alert("Please Enter the ID number");
       }
-      console.log('removeOptions---',removeOptions)
-      var clone = Dclone.cloneNode(true);
-      counter += 1;
-      clone.setAttribute('id', 'entry' + counter);
-      var ctnNode = clone.children[0].children[0].children[1].children[0];
-      var cnNode = clone.children[1].children[0].children[1].children[0];
-      console.log('ctnNode---',ctnNode)
-      console.log('cnNode---',cnNode)
-      $(cn).multiselect('disable');
-      $(cnNode).multiselect();
-      var oldData = [];
-      for (var x = 1; x < ctnNode.length; x++) {
-        oldData.push({value:ctnNode[x].value,txt:ctnNode[x].innerText})
-      }
-      console.log('oldData---',oldData)
 
-      emptyit(ctnNode);
-      for (var x in oldData) {
-        if (!removeOptions.includes(oldData[x]['value'])) {
-          addoption2(ctnNode, oldData[x]);
+      //       "Pan">PAN</option>
+      // <option value="Aadhar">Aadhar</option>
+      // <option value="Passport">Passport</option>
+      // <option value="Voter_ID">Voter Card</option>
+      // <option value="Driving_licence
+    }
+  </script>
+  <script>
+
+    function clear_all() {
+      var x = document.getElementsByClassName("form-control");
+      for (var i = 0; i < x.length; i++) {
+        x[i].value = '';
+      }
+    }
+
+    var counter = 1;
+    var Dclone = document.querySelector('#entry1').cloneNode(true);
+
+    function emptyit(ele) {
+      while (ele.length > 0) {
+        ele.remove(0);
+      }
+    }
+
+    function duplicate(data) {
+      console.log('data----', data)
+      var disParent = data.parentElement.parentElement.parentElement;
+      var ctn = disParent.children[0].children[0].children[1].children[0];
+      var cn = disParent.children[1].children[0].children[1].children[0];
+      console.log('disParent---', disParent)
+      console.log('ctn---', ctn)
+      console.log('cn---', cn)
+
+      if (!ctn.checkValidity()) {
+        ctn.reportValidity();
+      } else if (!cn.checkValidity()) {
+        cn.reportValidity();
+      } else {
+
+        ctn.disabled = true;
+        cn.disabled = true;
+        var removeCTN = document.getElementsByName("ctn");
+        console.log('removeCTN---', removeCTN)
+        var removeOptions = [];
+        for (var x = 0; x < removeCTN.length; x++) {
+          removeOptions.push(removeCTN[x].value);
+        }
+        console.log('removeOptions---', removeOptions)
+        var clone = Dclone.cloneNode(true);
+        counter += 1;
+        clone.setAttribute('id', 'entry' + counter);
+        var ctnNode = clone.children[0].children[0].children[1].children[0];
+        var cnNode = clone.children[1].children[0].children[1].children[0];
+        console.log('ctnNode---', ctnNode)
+        console.log('cnNode---', cnNode)
+        $(cn).multiselect('disable');
+        $(cnNode).multiselect();
+        var oldData = [];
+        for (var x = 1; x < ctnNode.length; x++) {
+          oldData.push({ value: ctnNode[x].value, txt: ctnNode[x].innerText })
+        }
+        console.log('oldData---', oldData)
+
+        emptyit(ctnNode);
+        for (var x in oldData) {
+          if (!removeOptions.includes(oldData[x]['value'])) {
+            addoption2(ctnNode, oldData[x]);
+          }
+        }
+        document.querySelector('#mainForm').appendChild(clone);
+      }
+    }
+    function addoption2(ele, val) {
+      var opt = document.createElement('option');
+      opt.value = val['value'];
+      opt.innerHTML = val['txt'];
+      ele.appendChild(opt);
+    }
+    function addoption(ele, val) {
+      var opt = document.createElement('option');
+      opt.value = val;
+      opt.innerHTML = val;
+      ele.appendChild(opt);
+    }
+
+    function addoptions(ele, ar) {
+      for (var x in ar) {
+        addoption(ele, ar[x]);
+      }
+    }
+
+    function addvals(data) {
+      console.log('data--', data)
+      var mainParentNode = data.parentElement.parentElement.parentElement.parentElement;
+      var cn = mainParentNode.children[1].children[0].children[1].children[0];
+      var currentval = data.value;
+      var alldata = JSON.parse("{{jsdata|escapejs}}");
+      emptyit(cn);
+      addoptions(cn, alldata[currentval][0])
+
+      $(cn).multiselect("rebuild");
+
+      var saveVal = mainParentNode.children[2]
+      saveVal.value = data.value;
+      console.log(saveVal.value)
+    }
+
+    function cnCombine(data) {
+      var mainParentNode = data.parentElement.parentElement.parentElement.parentElement;
+      var cn = mainParentNode.children[3];
+      var result = [];
+      var options = data && data.options;
+      var opt;
+      for (var i = 0, iLen = options.length; i < iLen; i++) {
+        opt = options[i];
+        if (opt.selected) {
+          result.push(opt.value || opt.text);
         }
       }
-      document.querySelector('#mainForm').appendChild(clone);
+      cn.value = result.join(', ');
     }
-  }
-  function addoption2(ele, val) {
-    var opt = document.createElement('option');
-    opt.value = val['value'];
-    opt.innerHTML = val['txt'];
-    ele.appendChild(opt);
-  }
-  function addoption(ele, val) {
-    var opt = document.createElement('option');
-    opt.value = val;
-    opt.innerHTML = val;
-    ele.appendChild(opt);
-  }
 
-  function addoptions(ele, ar) {
-    for (var x in ar) {
-      addoption(ele, ar[x]);
-    }
-  }
 
-  function addvals(data) {
-    console.log('data--',data)
-    var mainParentNode = data.parentElement.parentElement.parentElement.parentElement;
-    var cn = mainParentNode.children[1].children[0].children[1].children[0];
-    var currentval = data.value;
-    var alldata = JSON.parse("{{jsdata|escapejs}}");
-    emptyit(cn);
-    addoptions(cn, alldata[currentval][0])
-    
-    $(cn).multiselect("rebuild");
+    $("#nextBtn").on("click", function () {
+      var f = document.getElementById('submitForm');
+      $("#gender").removeAttr("required");
+      if (!f.checkValidity()) {
+        f.reportValidity();
+      } else {
+        $("#gender").attr("required", "required");
+        $("#page1").hide();
+        $("#page2").show();
 
-    var saveVal = mainParentNode.children[2]
-    saveVal.value = data.value;
-    console.log(saveVal.value)
-  }
-
-  function cnCombine(data) {
-    var mainParentNode = data.parentElement.parentElement.parentElement.parentElement;
-    var cn = mainParentNode.children[3];
-    var result = [];
-    var options = data && data.options;
-    var opt;
-    for (var i = 0, iLen = options.length; i < iLen; i++) {
-      opt = options[i];
-      if (opt.selected) {
-        result.push(opt.value || opt.text);
       }
-    }
-    cn.value = result.join(', ');
-  }
+
+    });
+
+    $("#backBtn").on("click", function () {
+      $("#gender").removeAttr("required");
+      $("#page2").hide();
+      $("#page1").show();
+
+    });
+    $(".multiselect1").multiselect();
+    $(".multiselect2").multiselect();
+
+    $('.modal').on('hidden.bs.modal', function () {
+      if ($(".modal").hasClass('show')) {
+        $('body').addClass('modal-open');
+      }
+    });
+
+    $("#exampleModal").modal({
+      backdrop: 'static',
+      keyboard: false
+    });
 
 
-  $("#nextBtn").on("click", function () {
-    var f = document.getElementById('submitForm');
-    $("#gender").removeAttr("required");
-    if (!f.checkValidity()) {
-      f.reportValidity();
-    } else {
-      $("#gender").attr("required", "required");
-      $("#page1").hide();
-      $("#page2").show();
 
-    }
+    $(function () {
+      $("#fname_error_message").hide();
 
-  });
+      var error_fname = false;
 
-  $("#backBtn").on("click", function () {
-    $("#gender").removeAttr("required");
-    $("#page2").hide();
-    $("#page1").show();
+      
+       
 
-  });
-  $(".multiselect1").multiselect();
-  $(".multiselect2").multiselect();
+      $("#idnum").focusout(function () {
+        var idtype = $("#idcard").val();
+        alert(idtype)
+        if (idtype == "PAN")
+        {  check_fname();
+        }
+        else if (idtype == "Aadhar")
+        {
+          check_aadhar();
+        }
+        else if (idtype == "Passport")
+        {
+          check_passport();
+        }
+        else if (idtype == "Voter_ID")
+        {
+          check_voter_id();
+        }
+        else if (idtype == "Driving_licence")
+        {
+          check_driving_licence();
+        }
+        
+      });
 
-  $('.modal').on('hidden.bs.modal', function () {
-    if ($(".modal").hasClass('show')) {
-      $('body').addClass('modal-open');
-    }
-  });
 
-  $("#exampleModal").modal({
-    backdrop: 'static',
-    keyboard: false
-  });
 
-</script>
+      function check_fname() {
+           
+        var panval = $("#idnum").val();
+        var pattern = /^([a-zA-Z]){5}([0-9]){4}([a-zA-Z]){1}?$/; 
+
+        if (pattern.test(panval) && panval !== '') {
+          $("#fname_error_message").hide();
+          $("#form_fname").css("border-bottom", "2px solid #34F458");
+        } else {
+          $("#fname_error_message").html("Should contain only Characters and Not greater then 10 digits");
+          $("#fname_error_message").show();
+          $("#form_fname").css("border-bottom", "2px solid #F90A0A");
+          error_fname = true;
+        }
+      }
+
+
+      function check_aadhar() {
+        var pattern = /^[0-9]{12}*$/;
+        var fname = $("#idnum").val();
+        if (pattern.test(fname) && fname !== '') {
+          $("#fname_error_message").hide();
+          $("#form_fname").css("border-bottom", "2px solid #34F458");
+        } else {
+          $("#fname_error_message").html("Should contain only Number and not greater then 12 digits");
+          $("#fname_error_message").show();
+          $("#form_fname").css("border-bottom", "2px solid #F90A0A");
+          error_fname = true;
+        }
+      }
+
+      function check_passwort() {
+        var pattern = /^[0-9]{8}*$/;
+        var fname = $("#idnum").val();
+        if (pattern.test(fname) && fname !== '') {
+          $("#fname_error_message").hide();
+          $("#form_fname").css("border-bottom", "2px solid #34F458");
+        } else {
+          $("#fname_error_message").html("Should contain only Number and not greater then 8 digits");
+          $("#fname_error_message").show();
+          $("#form_fname").css("border-bottom", "2px solid #F90A0A");
+          error_fname = true;
+        }
+      }
+
+      function check_voter_id() {
+        var pattern = /^[A-Z0-9]*$/;
+        var fname = $("#idnum").val();
+        if (pattern.test(fname) && fname !== '') {
+          $("#fname_error_message").hide();
+          $("#form_fname").css("border-bottom", "2px solid #34F458");
+        } else {
+          $("#fname_error_message").html("Should contain only Characters");
+          $("#fname_error_message").show();
+          $("#form_fname").css("border-bottom", "2px solid #F90A0A");
+          error_fname = true;
+        }
+      }
+
+      function check_driving_licence() {
+        var pattern = /^[A-Z0-9]*$/;
+        var fname = $("#idnum").val();
+        if (pattern.test(fname) && fname !== '') {
+          $("#fname_error_message").hide();
+          $("#form_fname").css("border-bottom", "2px solid #34F458");
+        } else {
+          $("#fname_error_message").html("Should contain only Characters");
+          $("#fname_error_message").show();
+          $("#form_fname").css("border-bottom", "2px solid #F90A0A");
+          error_fname = true;
+        }
+      }
+
+    });
+
+
+
+  </script>
 </body>
+
 </html>

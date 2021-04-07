@@ -79,12 +79,6 @@ def courses(request):
                 with open('cc.txt',mode='w',encoding='utf-8') as fw:
                     fw.write(data)
                     fw.close()
-
-
-
-
-
-
             Courses(courseName=courseName,
                      forclass=forclass,
                      intitute=institute,                     
