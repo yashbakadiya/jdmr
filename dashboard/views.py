@@ -118,6 +118,7 @@ def profileUpdate(request):
                         request.session["type"] = "Institute"
                     elif request.session['type'] == "Teacher":
                         qualification = request.POST.get('qualification')
+                        experience = request.POST.get('experience')
                         subject = request.POST.get('subject')
                         obj = Teacher.objects.get(user=user)
                         if(oldPassword != obj.user.password):
@@ -129,6 +130,7 @@ def profileUpdate(request):
                         user.save()
                         obj.user = user
                         obj.phone = phone
+                        obj.experiance = experience
                         obj.qualification = qualification
                         obj.subject = subject
                         obj.address = address
@@ -140,6 +142,7 @@ def profileUpdate(request):
                         request.session["type"] = "Teacher"
                     elif request.session['type'] == "Student":
                         schoolName = request.POST.get('schoolName')
+                        qualification = request.POST.get('qualification')
                         obj = Student.objects.get(user=user)
                         if(oldPassword != obj.user.password):
                             messages.warning(
@@ -150,6 +153,7 @@ def profileUpdate(request):
                         user.save()
                         obj.user = user
                         obj.phone = phone
+                        obj.qualification = qualification
                         obj.schoolName = schoolName
                         obj.address = address
                         if image:

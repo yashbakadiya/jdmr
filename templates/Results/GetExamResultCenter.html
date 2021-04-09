@@ -251,7 +251,7 @@
                         <!--Table body-->
                             {% for i,batch in students %}
                             <tr>
-                            <td>{{i.student.user.first_name}} {{i.student.user.last_name}}</td>
+                            <td>{{i.student.user.username}}</td>
                             <td>{{batch}}</td>
                             <td>{{i.exam.Name}}</td>
                             <td>{{i.exam.exam_date}}</td>
