@@ -9,5 +9,7 @@ urlpatterns = [
     path('dateandbatch',dateandbatch,name="dateandbatch"),
     path('instCalendar',instCalendar, name="instCalendar"),
 
+    path('insShowAllNotice/', insShowAllNotice, name='insShowAllNotice'),
+    path('insShowNotice/<int:id>', insShowNotice, name='insShowNotice'),
    
     ]

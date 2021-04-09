@@ -16,8 +16,20 @@ from math import radians, sin, cos, asin, sqrt
 from geopy.geocoders import Nominatim
 import datetime  
 from datetime import date 
+from get_notice import notice
+from batches.models import Notice
 
 # Create your views here.
+
+@login_required(login_url="Login")
+def insShowAllNotice(request):
+    notices = notice(request)
+    return render(request, "batches/ins_showAllNotice.html", context={"notices":notices})
+
+@login_required(login_url="Login")
+def insShowNotice(request, id):
+    notice = Notice.objects.get(id=id)
+    return render(request, "batches/ins_showNotice.html", context={"notice":notice})
 
 @login_required(login_url="Login")
 def instituteTutor(request):

@@ -105,6 +105,10 @@
           <a href="{% url 'stuShowAllNotice' %}">
             <span class="icon flaticon-bell-4"></span>
           </a>
+        {% elif request.session.type  == "Institute" %}
+          <a href="{% url 'insShowAllNotice' %}">
+            <span class="icon flaticon-bell-4"></span>
+          </a>
         {% endif %}
       </li>
       <li class="nav-item dropdown user-profile-dropdown pl-4 pr-lg-0 pr-2 ml-lg-2 mr-lg-4  align-self-center">
