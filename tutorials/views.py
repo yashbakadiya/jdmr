@@ -533,7 +533,6 @@ def SearchCourses(request):
                 course = ""
             else:
                 course = courseName[0]
-            print('----------->',fees)
 
             prefill = {
                 "duration":duration,
