@@ -80,7 +80,7 @@ def addFeesC(request):
                     extra_charge = ','.join(extra_charge1)
                     extra_charge1 = [float(x) for x in extra_charge1]
                 except Exception as e:
-                    return HttpResponse(f"Wrong Data Type! - {e}")
+                    return HttpResponse(f"Wrong Data Type! - {e}" )
                 finalValue = 0
                 if(extraChargeType):
                     finalValue = final_amt + sum(extra_charge1)
@@ -88,7 +88,16 @@ def addFeesC(request):
                     extra_charge1 = [((fee_amt*x)/100) for x in extra_charge1]
                     feeCalc = fee_amt + sum(extra_charge1)
                     finalValue = feeCalc + ((feeCalc*tax)/100)
-                finalValue -= feeDisc
+                
+                try:
+                    discount = int(finalValue/feeDisc)
+                except Exception as e:
+                    return HttpResponse(f"Wrong Data Type! - {e}")
+
+
+                
+                    
+                finalValue = finalValue - discount
                 addFees = AddFeesC(
                     course = course,
                     intitute=inst,
@@ -202,19 +211,27 @@ def editFee(request, id):
                 no_of_installment1 = request.POST.getlist('no_of_installment')
                 no_of_installment = ','.join(no_of_installment1)
                 no_of_installment1 = [int(x) for x in no_of_installment1]
-                extra_charge1 = request.POST.getlist('echarge')
-                extra_charge = ','.join(extra_charge1)
-                extra_charge1 = [float(x) for x in extra_charge1]
+                extra_charge = request.POST.getlist('echarge')
+                # extra_charge = ','.join(extra_charge1)
+                # extra_charge1 = [float(x) for x in extra_charge1]
             except Exception as e:
                 return HttpResponse(f"Wrong Data Type! - {e}")
             finalValue = 0
-            if(extraChargeType):
-                finalValue = final_amt + sum(extra_charge1)
-            else:
-                extra_charge1 = [((fee_amt*x)/100) for x in extra_charge1]
-                feeCalc = fee_amt + sum(extra_charge1)
-                finalValue = feeCalc + ((feeCalc*tax)/100)
-            finalValue -= feeDisc
+
+            a = final_amt
+            print("final_aamt",a)
+            b = a - int(a/feeDisc)  
+            print("after discount", b)  
+            c =b + int(extra_charge) 
+            print("after extra chage",c)
+            finalValue = c
+            # if(extraChargeType):
+            #     finalValue = final_amt + int(extra_charge)
+            # else:
+            #     extra_charge1 = [((fee_amt*x)/100) for x in extra_charge]
+            #     feeCalc = fee_amt + sum(extra_charge1)
+            #     finalValue = feeCalc + ((feeCalc*tax)/100)
+            
             AddFeesC.objects.filter(id=id).update(
                 courseName=courseName,
                 forclass=forclass,
@@ -269,14 +286,22 @@ def editFeef(request, id):
         extra_charge1 = request.POST.getlist('echarge') 
         extra_charge = ','.join(extra_charge1)
 
-            
-        if(extraChargeType):
-            finalValue = final_amt 
-        else:
-            extra_charge1 = [((fee_amt*x)/100) for x in extra_charge1]
-            feeCalc = fee_amt + sum(extra_charge1)
-            finalValue = feeCalc + ((feeCalc*tax)/100)
-            finalValue -= feeDisc
+
+        a = final_amt
+        print("final_aamt",a)
+        b = a - int(a/feeDisc)  
+        print("after discount", b)  
+        c =b + int(extra_charge) 
+        print("after extra chage",c)
+        finalValue = c
+        # if(extraChargeType):
+        #     finalValue = final_amt 
+        # else:
+        #     extra_charge1 =((fee_amt*x)/100) 
+        #     feeCalc = fee_amt + sum(extra_charge1)
+        #     finalValue = feeCalc + ((feeCalc*tax)/100)
+        #     afterfeesdic = finalValue
+        #     finalValue -= feeDisc
 
         
         qry.courseName = courseName
