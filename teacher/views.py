@@ -657,7 +657,8 @@ def teaMakeAppointment(request,id):
                         student     = student,
                         utcDateTime = utcDateTime,
                         utcEndingDate=utcEndingdate,
-                        daysDump     = json.dumps(daysDump, cls=DjangoJSONEncoder)
+                        daysDump     = json.dumps(daysDump, cls=DjangoJSONEncoder),
+                        created_by  = 1
                     )
                 try:
                     appointmentObj.save()

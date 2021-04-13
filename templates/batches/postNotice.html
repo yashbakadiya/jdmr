@@ -1,7 +1,10 @@
 {% extends 'dashboard/base.html' %}
 {% load static %}
 {% block css %}
+{% endblock %}
+{% block main-content %}
 <style>
+<<<<<<< HEAD
 	@import url('https://fonts.googleapis.com/css?family=Numans');
 
 	.container {
@@ -12,9 +15,38 @@
 		margin-top: auto;
 		margin-bottom: auto;
 		width: 90%;
+=======
+	#card {
+>>>>>>> a56d3e25cef24313bbcb558987098276ae8347b5
 		background-color: white;
+		padding-bottom: 3rem;
+		padding-top: 3rem;
+		color: black;
 	}
+</style>
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/css/select2.min.css" rel="stylesheet" />
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/js/select2.min.js"></script>
+<div class="mt-5">
+	{% if messages %}
+	{% for k in messages%}
+	<div class="alert alert-{{k.tags}} alert-dismissible fade show" role="alert">
+		<b>{{ k }} !</b>
+		<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+			<span aria-hidden="true">&times;</span>
+		</button>
+	</div>
+	{% endfor %}
+	{% endif %}
+	<div class="card" style="color: black;">
+		<div class="card-header">
+			<h3 style="align-items: center;text-align: center;">Post Notice</h3>
+		</div>
+		<form id="submitForm" class="mb-4 mt-4" method="post">{% csrf_token %}
+			<div class="mx-2 row" id="INSTBATCH">
+				<div class="col">
+					<label for="validationCustom01"><strong>Batch <span class="red">*</span></strong></label>
 
+<<<<<<< HEAD
 	.card-header h3 {
 		color: white;
 	}
@@ -80,9 +112,34 @@
 	input:focus {
 		outline: 0 0 0 0 !important;
 		box-shadow: 0 0 0 0 !important;
+=======
 
-	}
+					<select id=" batch" name="batch" class="custom-select form-control" required="required">
+						<option disabled selected value>Select an option</option>
+						{% for batch in batches %}
+						<option value="{{ batch.batchName }}">{{ batch.batchName }}</option>
+						{% endfor %}
+					</select>
 
+
+				</div>
+				<div class="col">
+					<label for="validationCustom01"><strong>Title<span class="red">*</span></strong></label>
+					<input type="text" class="form-control" name="title" value="">
+				</div>
+
+
+			</div>
+			<br>
+			<div class="mx-2 row mt-4">
+
+				<div class="col" style="text-align: left;">
+>>>>>>> a56d3e25cef24313bbcb558987098276ae8347b5
+
+					<label for="validationCustom01"><strong>Description<span class="red">*</span></strong></label>
+					<textarea rows="8" class="form-control" cols="80" name="description"> </textarea>
+
+<<<<<<< HEAD
 	.remember {
 		color: white;
 	}
@@ -157,5 +214,21 @@
 			</div>
 		</form>
 	</div>
+=======
+				</div>
+
+
+
+
+			</div>
+			<br>
+			<div class="text" style="margin-left: 2%;" >
+				<button  id='submitBtn' name="submit" type="submit" class="btn btn-primary"> Post </button>
+			</div>
+
+		</form>
+	</div>	
+
+>>>>>>> a56d3e25cef24313bbcb558987098276ae8347b5
 </div>
 {% endblock %}
