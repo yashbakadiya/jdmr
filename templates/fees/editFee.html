@@ -26,14 +26,12 @@
     {% endif %}
     <div class="card" style="color: black;">
         <div class="card-header">
-            <h3 style="align-items: center;text-align: center;">Update Fees</h3>
+            <h3 style="align-items: center;text-align: center;">Add Course Fees</h3>
         </div>
-        <form  class="mb-4 mt-4" method="post">{% csrf_token %}
+        <form id="frm" class="mb-4 mt-4" method="post">{% csrf_token %}
             <div class="mx-2 row" id="INSTBATCH">
                 <div class="col">
                     <label for="validationCustom01"><strong>Select Class <span class="red">*</span></strong></label>
-
-
                     <select id="forclass" name='forclass' style="width: 100%;"
                         class="js-example-basic-single form-control" onchange="selectclass()">
                         <option class="form-control" selected disabled value="">Select Class</option>
@@ -41,7 +39,6 @@
                         <option class="form-control form-control-lg" value="{{ i.0 }}">{{i.0}} </option>
                         {% endfor %}
                     </select>
-
                 </div>
                 <div class="col">
                     <label for="validationCustom01"><strong>Select Course<span class="red">*</span></strong></label>
@@ -60,19 +57,14 @@
                         {% endfor %}
                     </select>
                 </div>
-
             </div>
             <div class="mx-2 row mt-4">
+              
 
-
-            
                 <div class="col">
                     <label for="validationCustom01"><strong> Course Fees <span class="red">*</span></strong></label>
                     <input class="form-control finalcalc" type='text' id="feeamt" name='feeamt' placeholder="Course Fee" required>
-                    
-                   
                 </div>
-
                 <div class="col">
                     <label for="validationCustom01"><strong> Tax </strong></label>
                     <input class="form-control finalcalc" type='text' id="tax" name='tax' placeholder="Tax %" required /><br />
@@ -85,17 +77,12 @@
                         Select a valid Time!
                     </div>
                 </div>
-
             </div>
-
             <div class="mx-2 row">
-
                 <div class="col">
                     <label for="validationCustom01"><strong>Installment<span class="red">*</span></strong></label>
-
                     <div>
-                        <select class="form-control " data-actions-box="true" id="no_of_installment" class="multiselect"
-                            name='no_of_installment' required>
+                        <select class="form-control " id="no_of_installment" class="multiselect" name='no_of_installment'  required>
                             <option value="1">1</option>
                             <option value="2">2</option>
                             <option value="3">3</option>
@@ -104,45 +91,36 @@
                             <option value="6">6</option>
                         </select>
                     </div>
-                </div>
-
-
-               
+                </div> 
 
                 <div class="col">
                     <label for="validationCustom01" for="chargeType1"><strong>Charge Type <span
                                 class="red">*</span></strong></label>
-
                     <div class="col">
                         <label for="chargeType1" class="control-label">Amount </label> &nbsp;&nbsp;&nbsp;&nbsp;
                         <input id="chargeType1" type="radio" name="chargeType" value="1">
-
-
                         <label for="chargeType2" class="control-label">Percent</label>&nbsp;&nbsp;&nbsp;&nbsp;
                         <input id="chargeType2" type="radio" name="chargeType" value="0">
                     </div>
-
-
                 </div>
-
             </div>
             <div class=" mx-2 row mt-4">
                 <div id="echarges" class="input-group form-group">
                     <!-- <label class="control-label col-sm-4">Extra Charges (Each Installment)<span class="text-danger">*</span></label> -->
-                    <label for="validationCustom01" for="chargeType2"><strong>Extra Charges (Each Installment) <span
-                                class="red">*</span></strong></label>
+                    <label for="validationCustom01" for="chargeType2"><strong>Extra Charges (Each Installment) <span class="red">*</span></strong></label>
                     <!-- <input type="text" class="form-control col-sm-1" id="echarge1" name='echarge' placeholder="1" disabled="disabled"> -->
-                    <input type="text" class="form-control col-sm-1" id="echarge2" name='echarge' placeholder="2"
-                        disabled="disabled" value="2">
-                    <input type="text" class="form-control col-sm-1" id="echarge3" name='echarge' placeholder="3"
-                        disabled="disabled" value="3">
-                    <input type="text" class="form-control col-sm-1" id="echarge4" name='echarge' placeholder="4"
-                        disabled="disabled" value="4">
-                    <input type="text" class="form-control col-sm-1" id="echarge5" name='echarge' placeholder="5"
-                        disabled="disabled" value="5">
-                    <input type="text" class="form-control col-sm-1" id="echarge6" name='echarge' placeholder="6"
-                        disabled="disabled" value="6">
+                    <input type="text" class="form-control col-sm-1" id="echarge2" name='echarge' placeholder="2" disabled="disabled" value="2">
+                    <input type="text" class="form-control col-sm-1" id="echarge3" name='echarge' placeholder="3" disabled="disabled" value="3">
+                    <input type="text" class="form-control col-sm-1" id="echarge4" name='echarge' placeholder="4" disabled="disabled" value="4">
+                    <input type="text" class="form-control col-sm-1" id="echarge5" name='echarge' placeholder="5" disabled="disabled" value="5">
+                    <input type="text" class="form-control col-sm-1" id="echarge6" name='echarge' placeholder="6" disabled="disabled" value="6">
                 </div>
+
+
+
+
+               
+
 
                 <div class="col-md-4 mb-3 ">
                     <label for="validationCustom01" for="chargeType2"><strong>Discount <span
@@ -165,32 +143,26 @@
             </div>
         </form>
     </div>
+
+
+
     <script>
         function checkbox() {
             var value = $("#negativecheck").is(":checked");
-            negative = document.getElementById("negative");
-            var output;
-            if (value) {
-                output = `<input
-          type="number"
-          class="mt-2 form-control"
-          placeholder="Enter Negative Marks"
-          name="negative_marks"
-          value="0"
-          required
-        />
-        <div class="invalid-feedback">
-          Enter a valid No.
-        </div>`;
+             negative = document.getElementById("negative");
+             var output;
+             if (value) {
+                output = `<input type="number" class="mt-2 form-control"  placeholder="Enter Negative Marks" name="negative_marks" value="0" required />
+                 <div class="invalid-feedback">
+                   Enter a valid No.
+                 </div>`;
             } else {
                 output = "";
             }
             negative.innerHTML = output;
         }
         // In your Javascript (external .js resource or <script> tag)
-        $(document).ready(function () {
-            $('.js-example-basic-single').select2();
-        });
+      
 
         function selectclass() {
             var selected = $("#forclass").val();
@@ -220,75 +192,80 @@
             frm[0].reset();
         });
     </script>
-    <script>
+   
 
-        console.log("this is jquery")
-            function Enableddl(install)
+
+
+
+   <script>
+
+    console.log("this is jquery")
+        function Enableddl(install)
+        {
+            var ddl=document.getElementById("no_of_installment");
+            ddl.disabled=install.checked ? false : true;
+            if(!ddl.disabled)
             {
-                var ddl=document.getElementById("no_of_installment");
-                ddl.disabled=install.checked ? false : true;
-                if(!ddl.disabled)
-                {
-                    ddl.focus();
-                }
+                ddl.focus();
             }
-        
-            $(function() {
-                $("#no_of_installment").on("change", function() {
-                    $("#echarges input").prop("disabled",true);
-                    var selected = $("option:selected", this).map(function() {
-                        return $(this).text();
-                    }).toArray();
-                    var i;
-                    for (i = 0; i < selected.length; ++i)
+        }
+    
+        $(function() {
+            $("#no_of_installment").on("change", function() {
+                $("#echarges input").prop("disabled",true);
+                var selected = $("option:selected", this).map(function() {
+                    return $(this).text();
+                }).toArray();
+                var i;
+                for (i = 0; i < selected.length; ++i)
+                {
+                    if(selected[i]==2)
+                    // {
+                    //     $('#echarge1').prop( "disabled", false );
+                    // }
+                    // else if(selected[i]==2)
                     {
-                        if(selected[i]==2)
-                        // {
-                        //     $('#echarge1').prop( "disabled", false );
-                        // }
-                        // else if(selected[i]==2)
-                        {
-                            $('#echarge2').prop( "disabled", false );
-                        }
-                        else if(selected[i]==3)
-                        {
-                            $('#echarge3').prop( "disabled", false );
-                        }
-                        else if(selected[i]==4)
-                        {
-                            $('#echarge4').prop( "disabled", false );
-                        }
-                        else if(selected[i]==5)
-                        {
-                            $('#echarge5').prop( "disabled", false );
-                        }
-                        else if(selected[i]==6)
-                        {
-                            $('#echarge6').prop( "disabled", false );
-                        }
+                        $('#echarge2').prop( "disabled", false );
                     }
-                });
+                    else if(selected[i]==3)
+                    {
+                        $('#echarge3').prop( "disabled", false );
+                    }
+                    else if(selected[i]==4)
+                    {
+                        $('#echarge4').prop( "disabled", false );
+                    }
+                    else if(selected[i]==5)
+                    {
+                        $('#echarge5').prop( "disabled", false );
+                    }
+                    else if(selected[i]==6)
+                    {
+                        $('#echarge6').prop( "disabled", false );
+                    }
+                }
             });
-        
-        
-            $(document).ready(function() {
-                $('#no_of_installment').multiselect({
-                    includeSelectAllOption: true,
-                });
+        });
+    
+    
+        $(document).ready(function() {
+            $('#no_of_installment').multiselect({
+                includeSelectAllOption: true,
             });
-        
-            $(".finalcalc").on("change",function(){
-                var a,b,c;
-                a=Number(document.getElementById("feeamt").value);
-                b=Number(document.getElementById("tax").value);
-                if(a==undefined){a = 0;}
-                if(b==undefined){b = 0;}
-                c= a + (b/100)*a;
-                $('#final').val(c);
-                event.preventDefault()
-            });
-        
-        </script>
+        });
+    
+        $(".finalcalc").on("change",function(){
+            var a,b,c;
+            a=Number(document.getElementById("feeamt").value);
+            b=Number(document.getElementById("tax").value);
+            if(a==undefined){a = 0;}
+            if(b==undefined){b = 0;}
+            c= a + (b/100)*a;
+            $('#final').val(c);
+            event.preventDefault()
+        });
+    
+    </script>
 
 
 
