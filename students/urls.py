@@ -18,6 +18,7 @@ urlpatterns = [
     path('delete-Assignment/<int:sno>/', delete_Assignment, name='Delete_Assignment'),
     path('delete-Tution/<int:sno>/', delete_Tution, name='Delete_Tution'),
     path('enrolledStudents/',enrolledStudents, name='enrolledStudents'),
+    path('stuMakeAppointment/<int:id>',stuMakeAppointment, name='stuMakeAppointment'),
 
     # API URLs
     path('add-student-inst-api', AddStudentInstAPI, name='add-student-inst-api'),

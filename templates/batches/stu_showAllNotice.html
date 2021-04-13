@@ -1,4 +1,4 @@
-{% extends 'dashboard/base.html' %}
+{% extends 'dashboard/student-dashboard.html' %}
 {% load static %}
 {% block main-content %}
 <div class="mt-5">
@@ -15,16 +15,20 @@
                 <div class="widget-content widget-content-area">
                     <div class="table-responsive">
                         <table  class="testgrid table table-striped table-bordered table-hover mb-4">
-                            {% for notice in notices %}
-                                <tr>
-                                    <td>
-                                        <a href="{% url 'stuShowNotice' notice.id %}"><h6 style="color:black;">{{notice.title}}</h6></a>
-                                    </td>
-                                    <td>
-                                        <p class="text-info float-right">{{notice.createdAt}}</p>
-                                    </td>
-                                </tr>
-                            {% endfor %}
+                            {% if notices %}
+                                {% for notice in notices %}
+                                    <tr>
+                                        <td>
+                                            <a href="{% url 'stuShowNotice' notice.id %}"><h6 style="color:black;">{{notice.title}}</h6></a>
+                                        </td>
+                                        <td>
+                                            <p class="text-info float-right">{{notice.createdAt}}</p>
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                            {% else %}
+                                <p>No Notice</p>
+                            {% endif %}
                         </table>
                         {% comment %} <div class="widget-content widget-content-area text-center">
                             <ul class="pagination pagination-style-1 justify-content-center">

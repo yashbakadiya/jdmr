@@ -15,6 +15,7 @@
                 <div class="widget-content widget-content-area">
                     <div class="table-responsive">
                         <table  class="testgrid table table-striped table-bordered table-hover mb-4">
+                        {% if notices %}
                             {% for notice in notices %}
                                 <tr>
                                     <td>
@@ -25,6 +26,9 @@
                                     </td>
                                 </tr>
                             {% endfor %}
+                        {% else %}
+                         <p>No Notice </p>
+                        {% endif %}
                         </table>
                         {% comment %} <div class="widget-content widget-content-area text-center">
                             <ul class="pagination pagination-style-1 justify-content-center">

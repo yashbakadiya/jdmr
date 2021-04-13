@@ -15,7 +15,7 @@ urlpatterns = [
     path('viewAssignmentTutor/',viewAssignmentTutor, name='viewAssignmentTutor'),
     path('enrolledTutors/', enrolledTutors, name='enrolledTutors'),
     path('Review/Tutor/<tutor_id>', ReviewTutors, name="reviewtutor"),
-    path('makeAppointment/',makeAppointment, name='makeAppointment'),
+    path('teaMakeAppointment/<int:id>',teaMakeAppointment, name='teaMakeAppointment'),
     path('teacherCalendar/', teacherCalendar, name='teacherCalendar'),
     # API Urls
     path('tutor-api', TutorAPI, name="tutor-api"),
