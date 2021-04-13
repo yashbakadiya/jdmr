@@ -23,7 +23,7 @@ def notice(request):
         teacher_courses = set()
         for i in teacher_enroll:
             teacher_courses.add(i.courseName)
-        notice = Notice.objects.filter(batch__course__courseName__in=list(teacher_courses)).order_by('-id')
+        notice = Notice.objects.filter(batch__course__in=list(teacher_courses)).order_by('-id')
         return notice
     elif request.session['type'] == 'Institute':
         user = User.objects.get(username=request.session['user'])

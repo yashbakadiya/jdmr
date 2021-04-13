@@ -27,13 +27,38 @@ allTimezones = pytz.all_timezones
 
 @login_required(login_url="Login")
 def stuShowAllNotice(request):
-    notices = notice(request)
-    return render(request, "batches/stu_showAllNotice.html", context={"notices":notices})
+    if request.session['type'] == "Student":
+        user = User.objects.get(username=request.session['user'])
+        student = Student.objects.get(user=user)
+        appointments = MakeAppointment.objects.filter(created_by=True, student=student, accepted=False)
+        notices = notice(request)
+        return render(request, "batches/stu_showAllNotice.html", context={"notices":notices, 'appointments':appointments})
+    return HttpResponse("You are not Authenticated for This Page")
+
 
 @login_required(login_url="Login")
 def stuShowNotice(request, id):
     notice = Notice.objects.get(id=id)
     return render(request, "batches/stu_showNotice.html", context={"notice":notice})
+
+
+@login_required(login_url="Login")
+def rejectAppointment(request, pk):
+    if request.session['type'] == "Student":
+        appointment = MakeAppointment.objects.get(pk=pk)
+        appointment.delete()
+        return redirect('stuShowAllNotice')
+    return HttpResponse("You are not Authenticated for This Page")
+
+
+@login_required(login_url="Login")
+def acceptAppointment(request, pk):
+    if request.session['type'] == "Student":
+        appointment = MakeAppointment.objects.get(pk=pk)
+        appointment.accepted = True
+        appointment.save()
+        return redirect('stuShowAllNotice')
+    return HttpResponse("You are not Authenticated for This Page")
 
 
 @login_required(login_url="Login")

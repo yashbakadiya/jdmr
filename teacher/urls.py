@@ -16,6 +16,10 @@ urlpatterns = [
     path('enrolledTutors/', enrolledTutors, name='enrolledTutors'),
     path('Review/Tutor/<tutor_id>', ReviewTutors, name="reviewtutor"),
     path('teaMakeAppointment/<int:id>',teaMakeAppointment, name='teaMakeAppointment'),
+
+    path('rejectTeaAppointment/<int:pk>',rejectAppointment, name='rejectTeaAppointment'),
+    path('acceptTeaAppointment/<int:pk>',acceptAppointment, name='acceptTeaAppointment'),
+
     path('teacherCalendar/', teacherCalendar, name='teacherCalendar'),
     # API Urls
     path('tutor-api', TutorAPI, name="tutor-api"),

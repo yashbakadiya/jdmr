@@ -4,20 +4,7 @@
 {% endblock %}
 {% block main-content %}
 <style>
-<<<<<<< HEAD
-	@import url('https://fonts.googleapis.com/css?family=Numans');
-
-	.container {
-		align-content: center;
-	}
-
-	.card {
-		margin-top: auto;
-		margin-bottom: auto;
-		width: 90%;
-=======
 	#card {
->>>>>>> a56d3e25cef24313bbcb558987098276ae8347b5
 		background-color: white;
 		padding-bottom: 3rem;
 		padding-top: 3rem;
@@ -46,73 +33,6 @@
 				<div class="col">
 					<label for="validationCustom01"><strong>Batch <span class="red">*</span></strong></label>
 
-<<<<<<< HEAD
-	.card-header h3 {
-		color: white;
-	}
-
-	input:focus {
-		outline: 0 0 0 0 !important;
-		box-shadow: 0 0 0 0 !important;
-
-	}
-
-	.remember {
-		color: white;
-	}
-
-	.remember input {
-		width: 19px;
-		height: 19px;
-		margin-left: 15px;
-		margin-right: 5px;
-	}
-
-	.links {
-		color: white;
-	}
-
-	.links a {
-		margin-left: 4px;
-	}
-
-	.control-label {
-		color: rgb(66, 8, 8);
-		font-size: 20px;
-	}
-
-	.social_icon span {
-		font-size: 60px;
-		margin-left: 10px;
-		color: #FFC312;
-	}
-
-	.social_icon span:hover {
-		color: white;
-		cursor: pointer;
-	}
-
-	.card-header h3 {
-		color: white;
-	}
-
-	.social_icon {
-		position: absolute;
-		right: 20px;
-		top: -45px;
-	}
-
-	.input-group-prepend span {
-		width: 50px;
-		background-color: #FFC312;
-		color: black;
-		border: 0 !important;
-	}
-
-	input:focus {
-		outline: 0 0 0 0 !important;
-		box-shadow: 0 0 0 0 !important;
-=======
 
 					<select id=" batch" name="batch" class="custom-select form-control" required="required">
 						<option disabled selected value>Select an option</option>
@@ -134,87 +54,10 @@
 			<div class="mx-2 row mt-4">
 
 				<div class="col" style="text-align: left;">
->>>>>>> a56d3e25cef24313bbcb558987098276ae8347b5
 
 					<label for="validationCustom01"><strong>Description<span class="red">*</span></strong></label>
 					<textarea rows="8" class="form-control" cols="80" name="description"> </textarea>
 
-<<<<<<< HEAD
-	.remember {
-		color: white;
-	}
-
-	.remember input {
-		width: 20px;
-		height: 20px;
-		margin-left: 15px;
-		margin-right: 5px;
-	}
-
-	.links {
-		color: white;
-	}
-
-	.links a {
-		margin-left: 4px;
-	}
-
-	.control-label {
-		color: rgb(66, 8, 8);
-		font-size: 20px;
-	}
-
-	.input-group {
-		margin-bottom: 2rem;
-	}
-</style>
-{% endblock %}
-{% block main-content %}
-<div class="mt-5">
-	{% if messages %}
-	{% for k in messages%}
-	<div class="alert alert-{{k.tags}} alert-dismissible fade show" role="alert">
-		<b>{{ k }} !</b>
-		<button type="button" class="close" data-dismiss="alert" aria-label="Close">
-			<span aria-hidden="true">&times;</span>
-		</button>
-	</div>
-	{% endfor %}
-	{% endif %}
-	<div class="card" style="color: black;">
-		<div class="card-header">
-			<h3 style="align-items: center;text-align: center;">Add Tuition</h3>
-		</div>
-		<form id="frm" class="mb-4 mt-4" method="post">{% csrf_token %}
-			<div class="mx-2 row" id="INSTBATCH">
-				<div class="col">
-					<label for="validationCustom01"><strong>Select Batch <span class="red">*</span></strong></label>
-
-					<select id=" batch" name="batch" class="custom-select form-control" required="required">
-						<option disabled selected value>Select an option</option>
-						{% for batch in batches %}
-						<option value="{{ batch.batchName }}">{{ batch.batchName }}</option>
-						{% endfor %}
-					</select>
-				</div>
-				<div class="col">
-					<label for="validationCustom01"><strong>Title<span class="red">*</span></strong></label>
-					<input type="text" class="form-control" name="title" value="">
-				</div>
-			</div>
-			<div class="mx-2 row mt-4">
-				<div class="col">
-					<label for="validationCustom01"><strong>Description <span class="red">*</span></strong></label>
-
-					<textarea rows="8" class="form-control" cols="80" name="description"> </textarea>
-				</div>
-			</div><br>
-			<div class="text-center">
-				<button type="submit" class="btn btn-primary"> Post </button>
-			</div>
-		</form>
-	</div>
-=======
 				</div>
 
 
@@ -229,6 +72,5 @@
 		</form>
 	</div>	
 
->>>>>>> a56d3e25cef24313bbcb558987098276ae8347b5
 </div>
 {% endblock %}

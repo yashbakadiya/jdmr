@@ -23,15 +23,42 @@ from batches.models import Notice
 
 allTimezones = pytz.all_timezones
 
+
 @login_required(login_url="Login")
 def teaShowAllNotice(request):
-    notices = notice(request)
-    return render(request, "batches/tea_showAllNotice.html", context={"notices":notices})
+    if request.session['type'] == "Teacher":
+        user = User.objects.get(username=request.session['user'])
+        teacher = Teacher.objects.get(user=user)
+        appointments = MakeAppointment.objects.filter(created_by=False, tutor=teacher , accepted=False)
+        notices = notice(request)
+        return render(request, "batches/tea_showAllNotice.html", context={"notices":notices, 'appointments':appointments})
+    return HttpResponse("You are not Authenticated for This Page")
+
 
 @login_required(login_url="Login")
 def teaShowNotice(request, id):
     notice = Notice.objects.get(id=id)
     return render(request, "batches/tea_showNotice.html", context={"notice":notice})
+
+
+@login_required(login_url="Login")
+def rejectAppointment(request, pk):
+    if request.session['type'] == "Teacher":
+        appointment = MakeAppointment.objects.get(pk=pk)
+        appointment.delete()
+        return redirect('teaShowAllNotice')
+    return HttpResponse("You are not Authenticated for This Page")
+
+
+@login_required(login_url="Login")
+def acceptAppointment(request, pk):
+    if request.session['type'] == "Teacher":
+        appointment = MakeAppointment.objects.get(pk=pk)
+        appointment.accepted = True
+        appointment.save()
+        return redirect('teaShowAllNotice')
+    return HttpResponse("You are not Authenticated for This Page")
+
 
 @login_required(login_url="Login")
 def addTutors(request):
