@@ -36,48 +36,64 @@
                 <div class="col">
                     <label for="validationCustom01"><strong> Batch Name<span class="red">*</span></strong></label>
                     <input type="text" class="form-control" id="batchName" name='batchName' placeholder="Batch Name"
-                    value="{{batchObj.batchName}}">
+                        value="{{batchObj.batchName}}">
 
                 </div>
 
 
                 <div class="col">
-                    <label for="validationCustom01"><strong>Select Class <span class="red">*</span></strong></label>
-                    
+                    <label for="validationCustom01"><strong>Select Class<span class="red">*</span></strong></label>
+                   
+                    <select id="forclass" name="forclass" style="width: 100%"
+                        class="js-example-basic-single form-control">
+                        <!-- <option value="">{{batchObj.courseName}}</option>
+                         -->
 
-
-                    <select id="forclass" name='forclass' style="width: 100%;"  class="js-example-basic-single form-control" onchange="selectclass()">
-                        <option class="form-control" selected disabled value="{{batchObj.Class}}">{{batchObj.Class}}</option>
-                        {% for i in classes %}
-                        <option class="form-control form-control-lg" value="{{ i.0 }}">{{i.0}} </option>
-                        {% endfor %}
+                         {% for i in cours %}
+                         <option class="form-control form-control-lg" value="{{ i.forclass }}">{{i.forclass}} </option>
+                         {% endfor %}
                     </select>
-                    
-                    <!-- <select id="class_select" name="class" style="width: 100%;" class="js-example-basic-single form-control" onchange="selectclass()">
-                        <option class="form-control" selected disabled value="{{exam.Class}}">{{exam.Class}}</option>
-                        {% for class in classes %}
-                        <option class="form-control" value="{{class.0}}">{{class.0}}</option>
-                        {% endfor %}
-                      </select> -->
-
+                   
 
                 </div>
+
+
+                
+
                 <div class="col">
                     <label for="validationCustom01"><strong>Select Course<span class="red">*</span></strong></label>
                     <select id="courseName" name="courseName" style="width: 100%"
                         class="js-example-basic-single form-control">
-                        <option class="form-control form-control-lg" selected disabled value="{{batchObj.course.id}}">{{batchObj.course.courseName}}</option>
+                        <!-- <option value="">{{batchObj.courseName}}</option>
+                         -->
+
+                         {% for i in cours %}
+                         <option class="form-control form-control-lg" value="{{ i.courseName }}">{{i.courseName}} </option>
+                         {% endfor %}
                     </select>
                 </div>
-                
+
             </div>
             <div class="mx-2 row mt-4">
 
 
                 <div class="col">
+                    <label for="validationCustom01"><strong>Teaching Type <span class="red">*</span></strong></label>           
+                     <select id="teachingtype" name='teaching'  style="width: 100%;"
+                        class="js-example-basic-single form-control ">
+                        <option value="Online">Online</option>
+                        <option value="ClassRoom">Class Room</option>
+                      
+                      </select>          
+                  </div>
+                  
+
+
+                <div class="col">
                     <label for="validationCustom01"><strong>Start Time <span class="red">*</span></strong></label>
-                    <input class="form-control" type="time" placeholder="" name="startTime"  value="{{batchObj.startTime|date:'H:i'}}" /><br />
-                    
+                    <input class="form-control" type="time" placeholder="" name="startTime"
+                        value="{{batchObj.startTime|date:'H:i'}}" /><br />
+
                     <div class="invalid-feedback">
                         Select a valid Time!
                     </div>
@@ -85,7 +101,8 @@
 
                 <div class="col">
                     <label for="validationCustom01"><strong>End Time <span class="red">*</span></strong></label>
-                    <input class="form-control" type="time" placeholder="" name="endTime" value="{{batchObj.endtime|date:'H:i'}}" /><br />
+                    <input class="form-control" type="time" placeholder="" name="endTime"
+                        value="{{batchObj.endtime|date:'H:i'}}" /><br />
                     <div class="invalid-feedback">
                         Select a valid Time!
                     </div>
@@ -95,7 +112,8 @@
                     <label for="validationCustom01"><strong>Select Days <span class="red">*</span></strong></label>
 
                     <div>
-                        <select class="form-control " data-actions-box="true" id="days" name='fordays' value="{{batchObj.days}}" >
+                        <select class="form-control " data-actions-box="true" id="days" name='fordays'
+                            value="{{batchObj.days}}">
                             <option value="disabled">Day</option>
                             <option value="Sunday">Sunday</option>
                             <option value="Monday">Monday</option>

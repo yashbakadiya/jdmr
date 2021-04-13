@@ -49,28 +49,47 @@ def courses(request):
             forclass = request.POST.get('forclass')           
            # forclass = ', '.join(forclass)            
            # courseName = ','.join(forclass)
+
             print('courseName',courseName)           
             user = User.objects.get( username=request.session['user'])            
             institute = Institute.objects.get(user=user)
             count = (Courses.objects.all().count())+1 
             course_ID = courseName[:3] + str("%03d" % count)
-            if  not Courses.objects.filter(courseName=request.POST['courseName']).exists():
-                if not Courses.objects.filter(forclass=request.POST['forclass']).exists():
-                    
-                    print('if else coursename',courseName)  
-                    print('if else for class',forclass)  
-                    Courses(courseName=courseName,
-                     forclass=forclass,
-                     intitute=institute,                     
-                     courseID=course_ID).save()
-                    messages.success(request, 'Course Has been added successfully.')
-                    return redirect('courses')
-                    
-                else:
-                    messages.warning(request, 'class Number Already Exists!!! ',extra_tags = 'alert alert-warning alert-dismissible show')
+            print('if else coursename',courseName)  
+            print('if else for class',forclass) 
+            if not Courses.objects.filter(forclass=request.POST['forclass']).exists():
+                 if forclass == 'Other':
+                     with open('cc.txt',mode='r+',encoding='utf-8') as f:
+                         data = f.read()
+                         data = json.loads(data)
+                         f.close()
+                         a=[]
+                         for i in data:
+                             if i == 'Other':
+                                 a.append(data[i])
+                         b=a[0]
+                         b.append(courseName)
+                         unique_list = []
+                         for x in b:
+                             if x not in unique_list:
+                                 unique_list.append(x)                    
+
+                         data['Other'] = unique_list
+                         data =json.dumps(data)
+                     with open('cc.txt',mode='w',encoding='utf-8') as fw:
+                         fw.write(data)
+                         fw.close()
+                 Courses(courseName=courseName,
+                        forclass=forclass,
+                        intitute=institute,                     
+                       courseID=course_ID).save()
+                 messages.success(request, 'Course Has been added successfully.')
+                 return redirect('courses')
             else:
-                messages.warning(request, 'Course Already Exists!!! ',extra_tags = 'alert alert-warning alert-dismissible show')            
-   
+                messages.warning(request, 'class Number Already Exists!!! ',extra_tags = 'alert alert-warning alert-dismissible show')
+        
+                    
+                
 
         return render(request, 'courses-2/courses.html', params)
     return HttpResponse("You Are Not Authenticated for this Page")
@@ -199,13 +218,13 @@ def teachingType2(request):
                                                          timePeriod = timePeriod)
 
 
-            if(alreadyExists):
-                return HttpResponse("""
-						<script>
-							alert('Teach Type already exists');
-							window.location.href = "/teachingType2";
-						</script>
-					""")     
+            # if(alreadyExists):
+            #     return HttpResponse("""
+			# 			<script>
+			# 				alert('Teach Type already exists');
+			# 				window.location.href = "/teachingType2";
+			# 			</script>
+			# 		""")     
             #course = Courses.objects.get(id = int(courseID[0]))
             course = Courses.objects.get(id = courseID)
                        
@@ -219,6 +238,7 @@ def teachingType2(request):
             teachingtype.save()
             messages.success(request, "Teaching type Added Successfully")
             return redirect('teaching-type-2')
+
         return render(request, 'courses-2/teaching-type.html', params)
     return HttpResponse("You Are Not Authenticated for this Page")
 
@@ -364,8 +384,9 @@ def deleteCourse(request, id):
     if request.session['type'] == "Institute":
         user = User.objects.get(username=request.session['user'])
         inst = Institute.objects.get(user=user)
-        course = Courses.objects.get(id=id, intitute=inst)
+        course = Courses.objects.get(id=id, intitute=inst)        
         course.delete()
+              
         messages.success(request, "Course Deleted Succssfully")
         return redirect("courses")
     return HttpResponse("You Are Not Authenticated for this Page")
@@ -385,8 +406,10 @@ def deleteteaching(request, id):
 
 
 def editCourse(request, id):
+    with open('cc.txt') as f:
+        data = f.read()         
+    data = json.loads(data)
     if request.session['type'] == "Institute":
-
         try:
             cour = Courses.objects.get(id=id)
         except:
@@ -396,10 +419,10 @@ def editCourse(request, id):
         inst = Institute.objects.get(user=user)
         #course = Courses.objects.get(id=id, intitute=inst)
         courses = Courses.objects.filter(intitute = inst,id=id, archieved=False)
+        coursesup = Courses.objects.filter(intitute = inst,id=id, archieved=False)
+        print('id',id)
         forclass = Courses.objects.filter(intitute=inst).values_list('forclass').distinct()
-       
-
-        params = {'course': courses,'classes':forclass,'cour':cour}
+        params = {'course': courses,'classes':forclass,'cour':cour,'data':data}
 
         # params = {'course': course.courseName, 'class': classes}
 
@@ -413,13 +436,14 @@ def editCourse(request, id):
             course_ID = courseName[:3] + str("%03d" % count)
             if  not Courses.objects.filter(courseName=request.POST['courseName']).exists():
                 if not Courses.objects.filter(forclass=request.POST['forclass']).exists():
-                    
                     print('if else coursename',courseName)  
-                    print('if else for class',forclass)  
-                    Courses(courseName=courseName,
-                     forclass=forclass,
-                     intitute=institute,                     
-                     courseID=course_ID).save()
+                    print('if else for class',forclass) 
+                    courses = Courses.objects.get(id=id)
+                    courses.courseName = courseName
+                    courses.forclass = forclass
+                    courses.intitute= institute 
+                    courses.course_ID = course_ID
+                    courses.save()
                     messages.success(request, 'Course Has been Update successfully.')
                     return redirect('courses')
                     

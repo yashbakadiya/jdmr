@@ -35,7 +35,6 @@
 
           <select id="class_select" name="forclass" class="js-example-basic-single form-control"
             placeholder="Select class" onchange="addoptions(this)">
-            <option class="form-control" selected disabled value="">No selection</option>
 
             {% for x,y in data.items %}
             <option value="{{ x }}">{{ x }}</option>
@@ -43,15 +42,54 @@
           </select>
 
 
+
         </div>
+        <!-- {% if  cn == "Other" %}
         <div class="col">
           <label for="validationCustom01"><strong>Select Course<span class="red">*</span></strong></label>
+          <input type="text" list="cn" />
+          <select id="cn" name="courseName" style="width: 100%" class="js-example-basic-single form-control">
+            
+          
+          </select>
+        </div>
+
+        {% else %}
+        <div class="col">
+          <label for="validationCustom01"><strong>Select Course<span class="red">*</span></strong></label>
+          <input type="text" name="courseName" list="cn" style="width: 100%"
+            class="js-example-basic-single form-control" />
+          <datalist id="cn">
+            <option>Select Course</option>
+          </datalist>
+        </div>
+        {% endif %} -->
+
+        <div class="col" id="selectclass" >
+          <label for="validationCustom01"><strong>Select Course<span class="red">*</span></strong></label>
+          
+          
           <select id="cn" name="courseName" style="width: 100%" class="js-example-basic-single form-control">
             <option class="form-control form-control-lg" selected disabled value="">Select Course</option>
           </select>
         </div>
 
-
+        <div class="col" id="other" style="display: none;">  
+          <label for="validationCustom01"><strong>Select Course<span class="red">*</span></strong></label>       
+          <input type="text" name="courseName" list="cn" style="width: 100%"
+            class="js-example-basic-single form-control" />
+          <datalist id="cn">            
+          </datalist>
+          
+        </div>
+        <!-- <div class="col">
+          
+          <label for="validationCustom01"><strong>Select Course<span class="red">*</span></strong></label>
+          <input type="text" list="cn" />
+          <select id="cn" name="courseName" style="width: 100%" class="js-example-basic-single form-control">
+            <option class="form-control form-control-lg" selected disabled value="">Select Course</option>
+          </select>
+        </div> -->
       </div>
       <br>
       <div class="text-center">
@@ -60,8 +98,6 @@
     </form>
   </div>
   <br>
-
-
   <div class="card mb-4">
     <div class="card-header">
       <!-- Grid row -->
@@ -85,6 +121,7 @@
       <!-- <form action="" method="post">{% csrf_token %} -->
       <!--Table-->
       <div class="table-responsive">
+        
         <table class="table table-striped">
           <!--Table head-->
           <tr>
@@ -109,65 +146,8 @@
                   style="font-size:medium;"></i></a>
               <a class="btn btn-dark" href="{% url 'courseArchivefirst' i.id %}"><i class="flaticon-delete-fill"
                   style="font-size:medium;"></i></a>
-            </td>
-            <td class="text-center">
-
-            </td>
-
-            <td>
-
-
-
-
-
-              <!-- <div class="btn-group">
-                  <button type="button" data-toggle="modal" data-target="#edit-{{i.pk}}" href="#edit-{{i.pk}}"
-                    class="btn btn-secondary btn-sm"><i
-                      class="flaticon-edit  bg-success p-1 text-white br-6 mb-1"></i>Edit</button>
-                  <button type="button" class="btn btn-secondary btn-sm dropdown-toggle dropdown-toggle-split"
-                    id="dropdownMenuReference1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
-                    data-reference="parent">
-                    <span class="sr-only">Toggle Dropdown</span>
-                  </button>
-                  <div class="dropdown-menu" aria-labelledby="dropdownMenuReference1">
-                    <button class="btn btn-secondary btn-sm dropdown-item" data-toggle="modal"
-                      data-target="#delete-{{i.pk}}" href="#delete-{{i.pk}}" title="Delete"><i
-                        class="flaticon-delete  bg-danger p-1 text-white br-6 mb-1"></i>Delete</button>
-                
-                    <button class="btn btn-warning btn-sm dropdown-item" data-toggle="modal" name="undo"
-                      data-target="#archive-{{i.pk}}" href="#archive-{{i.pk}}" title="Archive"><i
-                        class="flaticon-delete  bg-warning p-1 text-white br-6 mb-1"></i>Archive</button>
-
-                  </div>
-                </div> -->
-            </td>
-          </tr>
-
-
-
-
-          <!-- <tr class="main-row">
-              <td>{{i.Name}}</td>
-              <td>{{i.course.courseName}}</td>
-              <td>{{i.Batch}}</td>
-              <td>{{i.exam_date}}</td>
-              <td>{{i.exam_duration}}</td>
-              <td>{{i.question_count}}</td>
-              <td>{{i.pass_percentage}}</td>
-              {% if i.status %}
-              <td class="text-center"><a href="{% url 'toggle' i.id %}" class="btn btn-danger p-1">Deactivate</a></td>
-              {% else %}
-              <td class="text-center"><a href="{% url 'toggle' i.id %}" class="btn btn-primary p-1">Activate</a></td>
-              {% endif %}
-              <td class="text-center">
-                <a class="btn btn-warning" href="{% url 'EditExam' i.id %}"><i class="flaticon-pencil-line"
-                    style="font-size:medium;"></i></a>
-              </td>
-              <td class="text-center">
-                <a class="btn btn-danger" href="{% url 'DeleteExam' i.id %}"><i class="flaticon-delete-fill"
-                    style="font-size:medium;"></i></a>
-              </td>
-            </tr> -->
+            </td>                     
+          </tr>   
 
           {% endfor %}
           <!--Table body-->
@@ -187,7 +167,6 @@
     </div>
     {% endif %}
   </div>
-
   <script>
     function checkbox() {
       var value = $("#negativecheck").is(":checked");
@@ -201,10 +180,10 @@
       name="negative_marks"
       value="0"
       required
-    />
-    <div class="invalid-feedback">
+       />
+      <div class="invalid-feedback">
       Enter a valid No.
-    </div>`;
+        </div>`;
       } else {
         output = "";
       }
@@ -220,18 +199,38 @@
       frm[0].reset();
     });
   </script>
-
   <script>
 
     function addoptions(el) {
       var data = JSON.parse("{{ data|escapejs }}".replaceAll("'", "\""));
-      var items = data[el.value];
+     
+      var items = data[el.value]; 
+      
+      alert(el.value)
+      alert(items)
+      if (el.value == 'Other')
+      {
+      $('#other').show()
+      $('#selectclass').hide()
+      }
+      else
+      {
+      //   $('#other').hide()
+      // $('#selectclass').show()
+
+      }
+         
+
+
+
 
       html1 = "";
       for (i = 0; i < items.length; i++) {
         html1 += "<option value=\"" + items[i] + "\">" + items[i] + "</option> ";
       }
+      
       $("#cn").html(html1);
+
     };
 
     $('#html5-extension').DataTable({
@@ -252,6 +251,21 @@
         "info": "Showing page _PAGE_ of _PAGES_"
       }
     });
+  </script>
+
+
+  <script>
+
+    function insertValue() {
+      var select = document.getElementById("select"),
+        txtVal = document.getElementById("val").value,
+        newOption = document.createElement("OPTION"),
+        newOptionVal = document.createTextNode(txtVal);
+
+      newOption.appendChild(newOptionVal);
+      select.insertBefore(newOption, select.firstChild);
+    }
+
   </script>
 
 </div>

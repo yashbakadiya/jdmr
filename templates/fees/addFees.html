@@ -32,8 +32,6 @@
             <div class="mx-2 row" id="INSTBATCH">
                 <div class="col">
                     <label for="validationCustom01"><strong>Select Class <span class="red">*</span></strong></label>
-
-
                     <select id="forclass" name='forclass' style="width: 100%;"
                         class="js-example-basic-single form-control" onchange="selectclass()">
                         <option class="form-control" selected disabled value="">Select Class</option>
@@ -41,7 +39,6 @@
                         <option class="form-control form-control-lg" value="{{ i.0 }}">{{i.0}} </option>
                         {% endfor %}
                     </select>
-
                 </div>
                 <div class="col">
                     <label for="validationCustom01"><strong>Select Course<span class="red">*</span></strong></label>
@@ -60,12 +57,9 @@
                         {% endfor %}
                     </select>
                 </div>
-
             </div>
             <div class="mx-2 row mt-4">
-
-
-                <div class="col">
+                <!-- <div class="col">
                     <label for="validationCustom01"><strong>Course Duration <span class="red">*</span></strong></label>
                     <div>
                         <select class="form-control " data-actions-box="true" id="duration" name="duration" required>
@@ -75,22 +69,17 @@
                             <option value="4">4</option>
                             <option value="5">5</option>
                             <option value="6">6</option>
-                            <!-- {% for dura in durations %}
-                            <option value="{{ dura }}">{{ 1 }}</option>
-                            {% endfor %} -->
+                           
                         </select>
                     </div>
-                </div>
+                </div> -->
 
                 <div class="col">
                     <label for="validationCustom01"><strong> Course Fees <span class="red">*</span></strong></label>
                     <input class="form-control finalcalc" type='text' id="feeamt" name='feeamt' placeholder="Course Fee" required>
-                    
-                   
                 </div>
-
                 <div class="col">
-                    <label for="validationCustom01"><strong> Tax <span class="red">*</span></strong></label>
+                    <label for="validationCustom01"><strong> Tax </strong></label>
                     <input class="form-control finalcalc" type='text' id="tax" name='tax' placeholder="Tax %" required /><br />
                 </div>
 
@@ -101,14 +90,10 @@
                         Select a valid Time!
                     </div>
                 </div>
-
             </div>
-
             <div class="mx-2 row">
-
                 <div class="col">
                     <label for="validationCustom01"><strong>Installment<span class="red">*</span></strong></label>
-
                     <div>
                         <select class="form-control " data-actions-box="true" id="no_of_installment" class="multiselect"
                             name='no_of_installment' required>
@@ -120,37 +105,18 @@
                             <option value="6">6</option>
                         </select>
                     </div>
-                </div>
-
-
-                <!-- <div class="input-group form-group">
-                    <label class="control-label col-sm-4">Charge Type<span class="text-danger">*</span></label>
-                    <div class="col-sm-3 form-inline">
-                        <label for="chargeType1" class="control-label">Amount</label>&nbsp;&nbsp;&nbsp;&nbsp;
-                        <input id="chargeType1" type="radio" name="chargeType" value="1">
-                    </div>
-                    <div class="col-sm-3 form-inline">
-                        <label for="chargeType2" class="control-label">Percent</label>&nbsp;&nbsp;&nbsp;&nbsp;
-                        <input id="chargeType2" type="radio" name="chargeType" value="0">
-                    </div>
-                </div> -->
+                </div>              
 
                 <div class="col">
                     <label for="validationCustom01" for="chargeType1"><strong>Charge Type <span
                                 class="red">*</span></strong></label>
-
                     <div class="col">
                         <label for="chargeType1" class="control-label">Amount </label> &nbsp;&nbsp;&nbsp;&nbsp;
                         <input id="chargeType1" type="radio" name="chargeType" value="1">
-
-
                         <label for="chargeType2" class="control-label">Percent</label>&nbsp;&nbsp;&nbsp;&nbsp;
                         <input id="chargeType2" type="radio" name="chargeType" value="0">
                     </div>
-
-
                 </div>
-
             </div>
             <div class=" mx-2 row mt-4">
                 <div id="echarges" class="input-group form-group">

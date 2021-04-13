@@ -250,7 +250,7 @@ width: 35%;
                                 <th>Teaching Type</th>
                                 <th>Duration</th>
                                 <th>Time Period</th>
-                                <th>Edit</th>
+                                <!-- <th>Edit</th> -->
                             </tr>
                         </thead>
                         <!--Table head-->
@@ -260,12 +260,12 @@ width: 35%;
                             <tr class="tr">
                                 <td>{{i.course.courseName}} </td>
                                 <td>{{i.forclass}} </td>
-                                <td>online</td>
+                                <td>{{i.teachType|linebreaksbr}}</td>
                                 <!-- <td>{{i.teachType|linebreaksbr}} </td> -->
                                 <td>{{i.duration|linebreaksbr}} </td>
                                 <td>{{i.timePeriod|linebreaksbr}}</td>
-                                <td><a href="{% url 'editTeachingType' i.id %}" class="btn btn-danger">EDIT</a>
-                                </td>
+                                <!-- <td><a href="{% url 'editTeachingType' i.id %}" class="btn btn-danger">EDIT</a>
+                                </td> -->
                             </tr>
                             {% endfor %}
                         </tbody>

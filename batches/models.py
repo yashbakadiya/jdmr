@@ -13,8 +13,9 @@ class BatchTiming(models.Model):
     createdAt       = models.DateTimeField(auto_now_add=True)
     updatedAt       = models.DateTimeField(auto_now=True)
     institute       = models.ForeignKey(Institute,on_delete=models.CASCADE,related_name='BatchTiming')
-    course          = models.ForeignKey(Courses,on_delete=models.CASCADE,related_name="BatchCourse")
+    course          = models.CharField(max_length=150,default="")
     forclass        = models.CharField(max_length=150,default="")
+    teachingtype    = models.CharField(max_length=150,default="")
 
     def __str__(self):
         return self.batchName
