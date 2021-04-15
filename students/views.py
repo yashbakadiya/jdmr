@@ -13,6 +13,7 @@ import json
 from django.db.models import Q
 from json import dumps,loads 
 import os
+from datetime import datetime
 from math import radians, sin, cos, asin, sqrt
 from geopy.geocoders import Nominatim
 from get_notice import notice
@@ -75,13 +76,6 @@ def addStudents(request):
             else:
                 school = School(name=schoolName)
                 school.save()
-            # ctn = request.POST.getlist('ctn_combined')
-            # cn = request.POST.getlist('cn_combined')
-            # ttn = request.POST.getlist('ttn_combined')
-            # ttn = [x.replace("\r","") for x in ttn]
-            # batchName = request.POST.getlist('batchN_combined')
-            # feeDis = request.POST.getlist('feedis_combined')
-            # installments = request.POST.getlist('noi_combined')
 
             ctn = request.POST.getlist('ctn')
             cn = request.POST.getlist('cn')
@@ -93,29 +87,22 @@ def addStudents(request):
                 try:
                     temp = float(feeDis[x])
                 except:
-                    try:
-                        temp = int(feeDis[x])
-                    except:
-                        temp = 0
-                addstudent = AddStudentInst(
-                        student=student,
-                        institute=inst,
-                        courseName = ctn[x] ,
-                        forclass = cn[x] ,
-                        teachType = ttn[x] ,
-                        batch = batchName[x],
-                        feeDisc = temp,
-                        installments=installments[x]
-                    )
+                    temp = 0
+                try:
+                    insttemp = float(installments[x])
+                except:
+                    insttemp = 0
+                
+                addstudent = AddStudentInst.objects.get_or_create(student=student,institute=inst,courseName = ctn[x],forclass = cn[x],teachType = ttn[x])[0]
+                addstudent.batch = batchName[x]
+                addstudent.feeDisc = temp
+                addstudent.installments=insttemp
                 addstudent.save()
+            messages.success(request,"Student Added Successfully")
             return redirect('viewStudents')
+
         schools = School.objects.all()
         school_list = list(map(str,schools))
-        # data = TeachingType.objects.filter(course__intitute__user=user).values_list('courseID','forclass','teachType','course')
-        # print('data--',data)
-        # processed_data = {}
-        # for x in data:
-        #     processed_data[x[0]] = [x[1].split(", "),x[2].split("\n")]
         return render(
             request,
             'students/addStudents.html',
@@ -127,66 +114,70 @@ def addStudents(request):
         )
     return HttpResponse("You are not Authenticated for This Page")
 
-
-
 @login_required(login_url="Login")
 def viewStudents(request):
     if request.session["type"] == "Institute" :
         user = User.objects.get(username=request.session['user'])
         inst = Institute.objects.get(user=user)
+        students = set([x.student for x in AddStudentInst.objects.filter(institute=inst,archieved=False)])
+        courses = []
+        forclass = []
+        teachType = []
+
+        for student in students:
+            courses.append(','.join([x[0] for x in AddStudentInst.objects.filter(institute=inst,archieved=False,student=student).values_list('courseName').distinct()]))
+            forclass.append(','.join([x[0] for x in AddStudentInst.objects.filter(institute=inst,archieved=False,student=student).values_list('forclass').distinct()]))
+            teachType.append(','.join([x[0] for x in AddStudentInst.objects.filter(institute=inst,archieved=False,student=student).values_list('teachType').distinct()]))
+        
+        students = zip(students,courses,forclass,teachType)
+        params = {'students':students,"size":len(courses)}
+
         if request.method == "POST":
             check = request.POST.getlist('check')
             for x in check:
-                arStudent = AddStudentInst.objects.get(id = int(x))
-                arStudent.archieved = True
-                arStudent.save()
+                for arStudent in AddStudentInst.objects.filter(student=Student.objects.get(id = int(x))):
+                    arStudent.archieved = True
+                    arStudent.save()
             messages.success(request,"Student Added To Archieve Successfully")
             return redirect('viewStudents')
-        students = AddStudentInst.objects.filter(institute=inst,archieved=False)
-        courses = []
-        for student in students:
-            course = Courses.objects.get(courseName=student.courseName)
-            courses.append(course)
-        students = zip(students,courses)
-        params = {'students':students}
         return render(request, 'students/viewStudents.html', params)
     return HttpResponse("You are not Authenticated for This Page")
-
-
 
 @login_required(login_url="Login")
 def deleteStudent(request,id):
     if request.session['type'] == "Institute":
-        try:
-            delStu = AddStudentInst.objects.get(id=id)
-            delStu.delete()
-            messages.warning(request,"Student Deleted Successfully")
-            return redirect("viewStudents")
-        except:
-            messages.warning(request,"Student Id Does Not Exist")
-            return redirect("viewStudents")
+        delStu = AddStudentInst.objects.get(student=Student.objects.filter(id = id)).delete()
+        messages.warning(request,"Student Deleted Successfully")
+        return redirect("viewStudents")
     return HttpResponse("You are not Authenticated for This Page")
-
-
 
 def archiveStudentList(request):
     if request.session['type'] == "Institute":
         user = User.objects.get(username=request.session["user"])
         inst = Institute.objects.get(user=user)
+        students = set([x.student for x in AddStudentInst.objects.filter(institute=inst,archieved=True)])
+        courses = []
+        forclass = []
+        teachType = []
+
+        for student in students:
+            courses.append(','.join([x[0] for x in AddStudentInst.objects.filter(institute=inst,archieved=True,student=student).values_list('courseName').distinct()]))
+            forclass.append(','.join([x[0] for x in AddStudentInst.objects.filter(institute=inst,archieved=True,student=student).values_list('forclass').distinct()]))
+            teachType.append(','.join([x[0] for x in AddStudentInst.objects.filter(institute=inst,archieved=True,student=student).values_list('teachType').distinct()]))
+        
+        students = zip(students,courses,forclass,teachType)
+        params = {'students':students,"size":len(courses)}
+
         if request.method == "POST":
             check = request.POST.getlist('check')
             for x in check:
-                arStudent = AddStudentInst.objects.get(id = int(x))
-                arStudent.archieved = False
-                arStudent.save()
-            messages.success(request,"Student Removed From Archieve Successfully")
-            return redirect('archiveStudentList')
-        students = AddStudentInst.objects.filter(institute=inst,archieved=True)
-        print(students)
-        return render(request,'students/archiveStudentList.html',{'students':students})
+                for arStudent in AddStudentInst.objects.filter(student=Student.objects.get(id = int(x))):
+                    arStudent.archieved = False
+                    arStudent.save()
+            messages.success(request,"Student Added To Archieve Successfully")
+            return redirect('viewStudents')
+        return render(request,'students/archiveStudentList.html',params)
     return HttpResponse("You are not Authenticated for This Page")
-
-
 
 @login_required(login_url="Login")
 def editStudent(request,id):
@@ -195,101 +186,51 @@ def editStudent(request,id):
         inst = Institute.objects.get(user=user)
         schools = School.objects.all()
         school_list = list(map(str,schools))
-        # data = TeachingType.objects.filter(course__intitute__user=user).values_list('courseID','forclass','teachType','course')
-        # processed_data = {}
-        # for x in data:
-        #     processed_data[x[0]] = [x[1].split(", "),x[2].split("\n")]
-        student = AddStudentInst.objects.get(id=id)
-        courses = Courses.objects.filter(intitute=inst)
-        params = {
-            'stfname':student.student.user.first_name,
-            'stlname':student.student.user.last_name,
-            'stemail':student.student.user.email,
-            'stphone':student.student.phone,
-            'address':student.student.address,
-            'schoolName':student.student.schoolName,
-            'courses':courses,
-            'qry':student,
-            "data":TeachingType.objects.filter(course__intitute=inst).values_list('forclass').distinct(),
-            "school_list":school_list,
-            'batch':BatchTiming.objects.filter(institute=inst),
-            }
+        student = Student.objects.get(id=id)
+        editStudentObj = AddStudentInst.objects.filter(student=student)
         if request.method=="POST":
             phone = request.POST.get('phone', '')
             schoolName = request.POST.get('schoolName', '')
-            # ctn = request.POST.getlist('ctn_combined')
-            # cn = request.POST.getlist('cn_combined')
-            # ttn = request.POST.getlist('ttn_combined')
-            # ttn = [x.replace("\r","") for x in ttn]
-            # print('tnn--',ttn)
-            # batchName = request.POST.getlist('batchN_combined')
-            # feeDis = request.POST.getlist('feedis_combined')
-            # installments = request.POST.getlist('noi_combined')
-
             ctn = request.POST.getlist('ctn')
             cn = request.POST.getlist('cn')
             ttn = request.POST.getlist('ttn')
             batchName = request.POST.getlist('batchN')
             feeDis = request.POST.getlist('feedis')
             installments = request.POST.getlist('noi')
-
-            user = User.objects.get(username=student.student.user.username)
-            studentOBJ = Student.objects.get(user=user)
-            user.password = phone
-            user.save()
-            studentOBJ.user = user
-            studentOBJ.phone = phone
-            studentOBJ.address = request.POST.get("loc")
-            studentOBJ.schoolName = schoolName
-            studentOBJ.save()
             
-            if ctn:
-                student.courseName = ctn[0]
-            if cn:
-                student.forclass = cn[0]
-            if ttn:
-                student.teachType = ttn[0]
-            if batchName:
-                student.batch = batchName[0]
-            if feeDis:
-                try:
-                    temp = float(feeDis[0])
-                except:
-                    try:
-                        temp = int(feeDis[0])
-                    except:
-                        temp = 0
-                student.feeDisc = temp
-            if installments:
-                student.installments=installments[0]
-            student.student = studentOBJ
+            user = User.objects.get(username=student.user.username)
+            student.address = request.POST.get("loc")
+            student.schoolName = schoolName
             student.save()
 
-            for x in range(1,len(ttn)):
-                try:
-                    temp = float(feeDis[x])
-                except:
+            if ttn:
+                editStudentObj.delete()
+
+                for x in range(len(ttn)):
                     try:
-                        temp = int(feeDis[x])
+                        temp = float(feeDis[x])
                     except:
                         temp = 0
+                    try:
+                        insttemp = float(installments[x])
+                    except:
+                        insttemp = 0
 
-                addstudent = AddStudentInst(
-                        student=studentOBJ,
-                        institute=inst,
-                        courseName = ctn[x] ,
-                        forclass = cn[x] ,
-                        teachType = ttn[x] ,
-                        batch = batchName[x],
-                        feeDisc = temp,
-                        installments=installments[x]
-                    )
+                    addstudent = AddStudentInst.objects.get_or_create(student=student,institute=inst,courseName = ctn[x],forclass = cn[x],teachType = ttn[x])[0]
+                    addstudent.batch = batchName[x]
+                    addstudent.feeDisc = temp
+                    addstudent.installments=insttemp
+                    addstudent.save()
 
             messages.success(request,"Student Updated Successfully")
             return redirect("viewStudents")
-        return render(request, 'students/editStudent.html', params)
+        return render(request, 'students/editStudent.html', {
+            "studentBaseData":student,
+            "data":TeachingType.objects.filter(course__intitute=inst).values_list('forclass').distinct(),
+            "school_list":school_list,
+            "editStudent":editStudentObj
+            })
     return HttpResponse("You are not Authenticated for This Page")
-
 
 @login_required(login_url="Login")
 def searchUserStudent(request):
@@ -298,7 +239,7 @@ def searchUserStudent(request):
             print(request.POST)
             srch = request.POST.get('srh', '')
             if srch:
-                match = Student.objects.filter(Q(phone=srch) | Q(user__email=srch))
+                match = Student.objects.filter(Q(phone=srch) | Q(user__email=srch) | Q(user__username=srch))
                 if len(match):
                     return render(request,'students/searchUserStudent.html', {'sr':match})
                 else:
@@ -313,15 +254,12 @@ def AddalreadyExistsStudent(request,id):
         student = Student.objects.get(id=id)
         user = User.objects.get(username=request.session['user'])
         inst = Institute.objects.get(user=user)
-        if request.method=="POST":
-            # ctn = request.POST.getlist('ctn_combined')
-            # cn = request.POST.getlist('cn_combined')
-            # ttn = request.POST.getlist('ttn_combined')
-            # ttn = [x.replace("\r","") for x in ttn]
-            # batchName = request.POST.getlist('batchN_combined')
-            # feeDis = request.POST.getlist('feedis_combined')
-            # installments = request.POST.getlist('noi_combined')
 
+        if AddStudentInst.objects.filter(institute=inst,student=student):
+            messages.warning(request,"Student Already Added")
+            return redirect("viewStudents")
+
+        if request.method=="POST":
             ctn = request.POST.getlist('ctn')
             cn = request.POST.getlist('cn')
             ttn = request.POST.getlist('ttn')
@@ -332,29 +270,22 @@ def AddalreadyExistsStudent(request,id):
                 try:
                     temp = float(feeDis[x])
                 except:
-                    try:
-                        temp = int(feeDis[x])
-                    except:
-                        temp = 0
-                addstudent = AddStudentInst(
-                        student=student,
-                        institute=inst,
-                        courseName = ctn[x] ,
-                        forclass = cn[x] ,
-                        teachType = ttn[x] ,
-                        batch = batchName[x],
-                        feeDisc = temp,
-                        installments=installments[x]
-                    )
+                    temp = 0
+                try:
+                    insttemp = float(installments[x])
+                except:
+                    insttemp = 0
+                
+                addstudent = AddStudentInst.objects.get_or_create(student=student,institute=inst,courseName = ctn[x],forclass = cn[x],teachType = ttn[x])[0]
+                addstudent.batch = batchName[x]
+                addstudent.feeDisc = temp
+                addstudent.installments=insttemp
                 addstudent.save()
-                messages.success(request,"Student Added Successfully")
+            messages.success(request,"Student Added Successfully")
             return redirect('viewStudents')
+
         schools = School.objects.all()
         school_list = list(map(str,schools))
-        # data = TeachingType.objects.filter(course__intitute__user=user).values_list('courseID','forclass','teachType','course')
-        # processed_data = {}
-        # for x in data:
-        #     processed_data[x[0]] = [x[1].split(", "),x[2].split("\n")]
         return render(
             request,
             'students/addAlreadyExistsStudent.html',
@@ -380,24 +311,21 @@ def postAssignment(request):
     if request.session['type']=="Student":
         user = User.objects.get(username=request.session['user'])
         student = Student.objects.get(user=user)
-        if(request.method=='POST'):
-            # saving data
-            classlist = ['I','II','III','IV','V','VI','VII','VIII','IX','X','XI','XII','Others','Nursery']
+        if request.method=='POST':
+            deadline = request.POST.get('deadline')
             forclass = request.POST.get('ctn')
-            try:
-                if int(forclass):
-                    forclass = classlist[int(forclass)-1]
-            except:
-                forclass = forclass
+
             postAssigObj = PostAssignment(
                     student = student,
                     courseName = request.POST.get('cn'),
                     forclass = forclass,
                     description = request.POST.get('description'),
                     descriptionFile = request.FILES.get('file'),
-                    requirement = request.POST.get('requirement'),
                     budget = request.POST.get('budget'),
                 )
+
+            if deadline:
+                postAssigObj.deadline = datetime.strptime(deadline,'%Y-%m-%d')
             postAssigObj.save()
 
         with open('cc.txt', 'r') as f:
@@ -413,6 +341,17 @@ def postAssignment(request):
         )
     return HttpResponse("You are not Authenticated for this Page")
 
+@login_required(login_url="Login")
+def extendDeadline(request,id):
+    if request.session['type']=="Student":
+        if request.method=='POST':
+            extend = request.POST.get('extend')
+            if extend:
+                postAssigObj = postAssignment.objects.get(id=id)
+                postAssigObj.deadline = datetime.strptime(extend,"%Y-%m-%d")
+                postAssigObj.save()
+        return redirect('postAssignment')
+    return HttpResponse("You are not Authenticated for this Page")
 
 @login_required(login_url="Login")
 def postTution(request):
@@ -505,67 +444,97 @@ def haversine(lon1, lat1, lon2, lat2):
 
 @login_required(login_url="Login")
 def enrolledStudents(request):
-    prefill={}
     if request.session['type']=="Teacher":
+        user = User.objects.get(username=request.session['user'])
+        tutor = Teacher.objects.get(user=user)
         currentS = []
-        if(request.method=='POST'):
+        prefill={}
+
+        data={}
+        class_list = tutor.forclass.split(',')
+        unique_class = list(set(class_list))
+        course_list = tutor.course.split(',')
+
+        for i in range(len(class_list)):
+            currentS.extend(PostTution.objects.filter(forclass = class_list[i], subject = course_list[i]))
+
+        for i in  range(len(unique_class)):
+            courses_of_class =[]
+            for j in range(len(class_list)):
+                if class_list[j] == unique_class[i]:
+                    courses_of_class.append(course_list[j])
+            data[unique_class[i]] = courses_of_class
+
+        if request.method=='POST':
             className = request.POST.get('className','')
             subject = request.POST.get('subject','')
             distance = request.POST.get('distance','')
-            address = request.POST.get('loc')
+            address = request.POST.get('loc','')
             teachtype = request.POST.get('teachtype','')
-            classlist = ['I','II','III','IV','V','VI','VII','VIII','IX','X','XI','XII','Others','Nursery']
 
             prefill = {
                     "address":address,
                     "distance":distance,
                     "class":className,
-                    "subject":subject,
+                    "course":subject,
                     "type":teachtype
             }
 
-            try:
-                if int(className):
-                    className = classlist[int(className)-1]
-            except:
-                className = className
+            tutions=[]
 
-            if distance=="":
-                distance=0
+            if address:
+                if distance:
+                    distance = float(distance)
+                
+                else:
+                    distance = 0
+
+                geolocator = Nominatim(user_agent="inst")
+
+                city = geolocator.geocode(address, timeout=None)
+                if city:
+                    cityLat = city.latitude
+                    cityLng = city.longitude
+
+                else:
+                    cityLat = float(request.POST.get('cityLat',''))
+                    cityLng = float(request.POST.get('cityLng',''))
+
+
+                for tut in currentS:
+                    std = tut.student
+                    location = geolocator.geocode(std.address, timeout=None)
+                    if location:
+                        Lat = location.latitude
+                        Lng = location.longitude
+                        if haversine(Lng,Lat,cityLng,cityLat) <=distance:
+                            if tut not in currentS:
+                                tutions.append(tut)
+                currentS = tutions
+            currentS = [x.pk for x in currentS]
+            currentS = PostTution.objects.filter(pk__in=currentS)
+            print(currentS,address)
+
+            if subject:
+                currentS = currentS.filter(subject=subject)
+                print(currentS,subject)
+            if className:
+                currentS = currentS.filter(forclass=className)
+                print(currentS,className)
+            if teachtype:
+                currentS = currentS.filter(teachingMode=teachtype)
+                print(currentS,teachtype)
+
+        
+        context = {
+            'classes':sorted(unique_class,key=lambda a:int(a)),
+            'data':data,
+            'allData':currentS,
+            'prefill':prefill,
+            'types':['Online Tutor','Group','Home Tutor']
+            }
             
-            distance = float(distance)
-
-            geolocator = Nominatim(user_agent="inst")
-
-            city = geolocator.geocode(address, timeout=None)
-            if city:
-                cityLat = city.latitude
-                cityLng = city.longitude
-
-            else:
-                cityLat = float(request.POST.get('cityLat',''))
-                cityLng = float(request.POST.get('cityLng',''))
-            
-            tutions = PostTution.objects.all()
-
-            if(subject):
-                tutions = tutions.filter(Q(subject=subject))
-            if(className):
-                tutions = tutions.filter(Q(forclass=className))
-            if(teachtype):
-                tutions = tutions.filter(Q(teachingMode=teachtype))
-
-            for tut in tutions:
-                std = tut.student
-                location = geolocator.geocode(std.address, timeout=None)
-                if location:
-                    Lat = location.latitude
-                    Lng = location.longitude
-                    if haversine(Lng,Lat,cityLng,cityLat) <=distance:
-                        if tut not in currentS:
-                            currentS.append(tut)
-        jsonLocalData = loads(open('cc.txt','r').read())
-        return render(request, "students/enrolledStudents.html",{'allData':currentS,'jsonLocalData':jsonLocalData,'prefill':prefill})
+        return render(request, "students/enrolledStudents.html",context)
     return HttpResponse("You are not Authenticated for this Page")
 
 

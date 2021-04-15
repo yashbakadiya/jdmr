@@ -5,6 +5,16 @@
 {% block main-content %}
 <script src="{% static 'js/tinymce/tinymce.min.js' %}"></script>
 <div class="container card mt-5">
+  {% if messages %}
+  {% for k in messages%}
+  <div class="alert alert-{{k.tags}} alert-dismissible fade show" role="alert">
+    <b>{{ k }} !</b>
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  {% endfor %}
+  {% endif %}
   {% if errors %}
   <div class="alert alert-danger" role="alert">
     <div id='errorsBox'>

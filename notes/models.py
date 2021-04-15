@@ -1,6 +1,7 @@
 from django.db import models
 from accounts.models import Institute,Teacher,Student
 from django.urls import reverse
+from datetime import datetime
 # Create your models here.
 class NotesInstitute(models.Model):
     institute = models.ForeignKey(Institute,related_name='centernotes',on_delete=models.CASCADE)
@@ -10,6 +11,8 @@ class NotesInstitute(models.Model):
     forclass = models.CharField(max_length=150, default="")
     description = models.TextField(max_length=150)
     price = models.IntegerField(default=0)
+    freeEnrolled = models.BooleanField(default=False)
+    date = models.DateTimeField(default=datetime.now, blank=True)
 
     def __str__(self):
         return self.title
@@ -27,6 +30,7 @@ class NotesTutor(models.Model):
     forclass = models.CharField(max_length=150, default="")
     description = models.TextField(max_length=150)
     price = models.IntegerField(default=0)
+    date = models.DateTimeField(default=datetime.now, blank=True)
 
     def __str__(self):
         return self.title

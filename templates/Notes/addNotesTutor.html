@@ -2,18 +2,19 @@
 {% load static %}
 
 {% block main-content %}
-<div>
+<div class="mt-5">
     {% if messages %}
-    <div class="alert alert-warning" role="alert">
-        <ul class="messages">
-            {% for k in messages %}
-            <li style="color: darkred;">{{ k }}</li>
-            {% endfor %}
-        </ul>
+    {% for k in messages%}
+    <div class="alert alert-{{k.tags}} alert-dismissible fade show" role="alert">
+        <b>{{ k }} !</b>
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
     </div>
+    {% endfor %}
     {% endif %}
 </div>
-<div class="mt-5 row">
+<div class="row">
     <div class="col-md-12 col-12">
         <div class="card">
             <div class="card-header">
@@ -25,59 +26,70 @@
                 </div>
             </div>
             <div class="card-body">
-                <form id='submitForm' method='post' action='' enctype='multipart/form-data'>{% csrf_token %}
+                <form id='submitForm' method='post' action='' enctype='multipart/form-data'>
+                    {% csrf_token %}
                     <div class="row">
+                        <div class="col-md-6 col-lg-5 col-12 input-group form-group">
+                            <label class="control-label col-sm-5 col-5 mt-2" style="color:black;">Select Class<span
+                                    class="text-danger">*</span></label>
 
-                        <div class="col-lg-4 col-md-6 col-12 input-group form-group">
-                            <label class="control-label col-sm-4 col-5 mt-2"
-                                style="color: black;">Title</label>
-                            <input type="text" step="0.01" class="form-control w-100 col-sm-8 col-7"
-                                id="title" name="title" placeholder="Enter Note Title" required>
-                        </div>
-
-                        <div class="col-lg-4 col-md-6 col-12 input-group form-group">
-                            <label class="control-label col-sm-4 col-5 mt-2"
-                                style="color: black;">Course</label>
-                            <select id="course" name="course"
-                                class="custom-select form-control w-100 col-sm-8 col-7" required>
-                                <option disabled selected value>Course</option>
-                                {% for course in courses %}
-                                <option value="{{course.courseName}}">{{course.courseName}}</option>
+                            <select class="form-control" id="class_select" name="forclass" onchange="selectclass(this)" required>
+                                <option selected disabled value="">Select Class</option>
+                                {% for class in classes %}
+                                <option value="{{class}}">{{class}}</option>
                                 {% endfor %}
                             </select>
                         </div>
+                        <div class="col-md-6 col-lg-5 col-12 input-group form-group">
+                            <label class="control-label col-sm-5 col-5 mt-2" style="color:black;">Select Course<span
+                                    class="text-danger">*</span></label>
 
-                        <div class="col-lg-4 col-md-6 col-12 input-group form-group">
-                            <label class="file-box control-label col-sm-4 col-5 mt-2" style="color: black;">Choose File</label>
-                            <div class="w-100 col-sm-8 col-7">
-                            <input type="file" class="custom-file-input" id="file" name="note" required onchange="addfile(this)">
-                            <label class="custom-file-label" >Choose file...</label>
+                            <select class="form-control" id="select_course" name="course" required>
+                                <option selected disabled value="">Select Course</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="outside">
+                        <div class="row entry">
+                            <div class="col-md-6 col-lg-5 col-12 input-group form-group">
+                                <label class="control-label col-sm-5 col-5 mt-2" style="color:black;">Note Title<span
+                                        class="text-danger">*</span></label>
+                                <input type="text" class="form-control" name='title' placeholder="Note Title"
+                                    required="">
+                            </div>
+
+                            <div class="col-md-6 col-lg-5 col-12 input-group form-group">
+                                <label class="control-label col-sm-5 col-5 mt-2" style="color:black;">Description<span
+                                        class="text-danger">*</span></label>
+                                <input type="text" class="form-control" name='description'
+                                    placeholder="Note Description" required>
+                            </div>
+                            <div class="col-md-6 col-lg-5 col-12 input-group form-group">
+                                <label class="control-label col-sm-5 col-5 mt-2" style="color:black;">Price<span
+                                        class="text-danger">*</span></label>
+                                <input type="number" min="0" class="form-control" name='price' required>
+                            </div>
+                            <div class="col-lg-5 col-md-6 col-12 input-group form-group">
+                                <label class="control-label col-sm-5 col-5 mt-2" style="color: black;">Choose File<span
+                                        class="text-danger">*</span></label>
+                                <div class="file-box w-100 col-sm-7 col-7">
+                                    <input type="file" class="custom-file-input" required onchange="addfile(this)"
+                                        name="note" accept="application/pdf">
+                                    <label class="custom-file-label" for="validatedCustomFile">Choose file...</label>
+                                    <div class="invalid-feedback">Invalid File Format ( Valid Formats are .pdf only )
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="col-lg-12 col-md-12  col-12 d-flex justify-content-end">
+                                <button class="btn btn-success btn-md" type="button" onclick="duplicate(this)">Add
+                                    File</button>
                             </div>
                         </div>
-                        <div class="col-lg-4 col-md-6 col-12 input-group form-group">
-                            <label class="control-label col-sm-4 col-5 mt-2"
-                                style="color: black;">Class</label>
-                            <input type="text" step="0.01" class="form-control w-100 col-sm-8 col-7"
-                                id="class" name="forclass" placeholder="class" required>
-                        </div>
-                        <div class="col-lg-4 col-md-6 col-12 input-group form-group">
-                            <label class="control-label col-sm-4 col-5 mt-2"
-                                style="color: black;">Price</label>
-                            <input type="text" step="0.01" class="form-control w-100 col-sm-8 col-7"
-                                id="price" name="price" placeholder="0" required>
-                        </div>
-                        <div class="col-lg-12 col-md-12  col-12 d-flex justify-content-end">
-                            <button class="btn btn-info btn-md" type="button" onclick="duplicate(this)">Add File</button>
-                        </div>
-
-                        <div class="col-md-12 col-lg-12 col-12 input-group form-group">
-                            <textarea class="form-control my-2 w-100" name='description'
-                                placeholder="Note Description"></textarea>
-                        </div>
-
-                        <div class="col-lg-12 col-md-12 col-12 text-center">
-                            <button id='submitBtn' name="submit" type="submit" class="btn btn-info">Add Note</button>
-                        </div>
+                    </div>
+                    <div class="col-lg-12 col-md-12 col-12 text-center">
+                        <button id='submitBtn' name="submit" type="submit" class="btn btn-info">Add
+                            Note</button>
                     </div>
                 </form>
             </div>
@@ -101,20 +113,30 @@
                         <tr>
                             <th>#</th>
                             <th>Note Title</th>
+                            <th>Class</th>
                             <th>Subject</th>
+                            <th>Description</th>
+                            <th>Price</th>
+                            <th>Last Updated</th>
                             <th class="text-center">Action</th>
                         </tr>
                         {% for i in notes %}
                         <tr>
                             <td>{{forloop.counter}}</td>
                             <td>
-                                <p style="color: black;font-size: 14px;">{{i.title}}</p>
+                                {{i.title}}
                             </td>
                             <td>
-                                <p style="color: black;font-size: 14px;">{{i.subject}}</p>
+                                {{i.forclass}}
                             </td>
+                            <td>
+                                {{i.subject}}
+                            </td>
+                            <td>{{i.description}}</td>
+                            <td>{% if i.price %} {{i.price}} {% else %} Free {% endif %}</td>
+                            <td>{{i.date|date:'F d,Y'}}</td>
                             <td class="d-flex justify-content-center">
-                                <a class="btn btn-info mx-2" href="{{i.notes.url}}" target="_blank"><i
+                                <a class="btn btn-info mx-2" href="{% url 'viewtutornotespdf' i.id %}" target="_blank"><i
                                         class="flaticon-view" style="font-size:large;"></i></a>
                                 <a class="btn btn-warning mx-2" href="{% url 'editnotetutor' i.id %}"><i
                                         class="flaticon-pencil-line" style="font-size:large;"></i></a>
@@ -130,9 +152,31 @@
         </div>
     </div>
 </div>
-{% endblock main-content %}
-
 <script>
+    function selectclass(el) {
+        var data = {{ data| safe }};
+        courses = data[el.value];
+
+        $("#select_course").empty().trigger("change");
+        var newOption = new Option(
+            "Select Course",
+            "",
+            false,
+            false
+        );
+        $("#select_course").append(newOption).trigger("change");
+
+        for (i = 0; i < courses.length; i++) {
+            var newOption = new Option(
+                courses[i],
+                courses[i],
+                false,
+                false
+            );
+            $("#select_course").append(newOption).trigger("change");
+        }
+    }
+
     function addfile(el) {
         var file = $(el).val();
         var exts = ['pdf'];
@@ -156,12 +200,49 @@
     }
 
     function duplicate(el) {
-        $(el).parent().before(`<div class="col-lg-4 col-md-6 col-12 input-group form-group">
-                            <label class="file-box control-label col-sm-4 col-5 mt-2" style="color: black;">Choose File</label>
-                            <div class="w-100 col-sm-8 col-7">
-                            <input type="file" class="custom-file-input" id="file" name="note" required onchange="addfile(this)">
-                            <label class="custom-file-label" >Choose file...</label>
+        $('.outside').append(`<div class="row entry"> <div class="col-md-6 col-lg-5 col-12 input-group form-group">
+                            <label class="control-label col-sm-5 col-5 mt-2" style="color:black;">Note Title<span
+                                    class="text-danger">*</span></label>
+                            <input type="text" class="form-control" name='title' placeholder="Note Title" required="">
+                        </div>
+                        
+                        <div class="col-md-6 col-lg-5 col-12 input-group form-group">
+                            <label class="control-label col-sm-5 col-5 mt-2" style="color:black;">Description<span
+                                class="text-danger">*</span></label>
+                            <input type="text" class="form-control" name='description'
+                                placeholder="Note Description" required>
+                        </div>
+                        <div class="col-md-6 col-lg-5 col-12 input-group form-group">
+                            <label class="control-label col-sm-5 col-5 mt-2" style="color:black;">Price<span
+                                    class="text-danger">*</span></label>
+                            <input type="number" min="0" class="form-control" name='price' required>
+                        </div>
+                        <div class="col-lg-5 col-md-6 col-12 input-group form-group">
+                            <label class="control-label col-sm-5 col-5 mt-2" style="color: black;">Choose File<span
+                                    class="text-danger">*</span></label>
+                            <div class="file-box w-100 col-sm-7 col-7">
+                                <input type="file" class="custom-file-input" required onchange="addfile(this)"
+                                    name="note" accept="application/pdf">
+                                <label class="custom-file-label" for="validatedCustomFile">Choose file...</label>
+                                <div class="invalid-feedback">Invalid File Format ( Valid Formats are .pdf only )
+                                </div>
                             </div>
+                        </div>
+                        <div class="col-lg-12 col-md-12  col-12 d-flex justify-content-end">
+                            <button class="btn btn-success" type="button" onclick="removeduplicate(this)">Remove</button>
+                        </div>
                         </div>`)
-                    }
+    }
+
+    function removeduplicate(el) {
+        $(el).closest(".entry").empty().trigger("change");
+    }
+
+    $(document).on('ready', () => {
+        if (performance.navigation.type == 2) {
+            location.reload();
+        }
+    });
+
 </script>
+{% endblock main-content %}

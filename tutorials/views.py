@@ -20,9 +20,9 @@ def addTutorialsInstitute(request):
     if request.session["type"] == "Institute":
         user = User.objects.get(username=request.session['user'])
         inst = Institute.objects.get(user=user)
-        forclass = Courses.objects.filter(intitute=inst,archieved=False).values_list('forclass').distinct()
+        Classes = Courses.objects.filter(intitute=inst,archieved=False).values_list('forclass').distinct()
         context = {
-        'data':forclass
+        'data':Classes
         }
         if request.method == "POST":
             title = request.POST.get('title',"")
@@ -30,32 +30,37 @@ def addTutorialsInstitute(request):
             fees = request.POST.get('fees',"")
             duration = request.POST.get("duration","")
             course = request.POST.get("course","")
-            foclass = request.POST.get("forclass","")
+            forclass = request.POST.get("forclass","")
             feeDisc = request.POST.get("feeDisc","")
             unit = request.POST.get("unit","0")
             discValidity = request.POST.get("discValidity")
+            freeEnrolled = request.POST.get('enr',"0")
+
+            if freeEnrolled == "1":
+                freeEnrolled = True
+            else:
+                freeEnrolled = False
+
             if unit=="1":
                 if fees:
                     if feeDisc:
                         feeDisc = float(feeDisc)/float(fees)
-                        feeDisc=feeDisc*100
-            
-            # if discValidity:
-            #     discValidity = datetime.strptime(discValidity,'%Y-%m-%d')
-            #     data.Validity = discValidity
-
+                        feeDisc=round(feeDisc*100,2)
 
             data = TutorialInstitute(
                 Title = title,
-                Course = Courses.objects.get(intitute=inst,courseName=course),
-                forclass = foclass,
+                Course = Courses.objects.filter(intitute=inst,courseName=course,forclass=forclass).first(),
+                forclass = forclass,
                 Fees = fees,
                 Duration = duration,
                 Description = description,
-                Validity = discValidity,
-                Discount = feeDisc,
-                
+                freeEnrolled = freeEnrolled
                 )
+            if feeDisc:
+                data.Discount = feeDisc
+            if discValidity:
+                discValidity = datetime.strptime(discValidity,'%Y-%m-%d')
+                data.Validity = discValidity
             data.save()
             return redirect('addplaylist',data.id)
         return render(request,'tutorials/addTutorialsInstitute.html',context)
@@ -68,6 +73,7 @@ def ViewTutorials(request):
         user = User.objects.get(username=request.session['user'])
         inst = Institute.objects.get(user=user)
         courses = Courses.objects.filter(intitute=inst,archieved=False)
+        date=[]
         tutorials = []
         try:
             for i in courses:
@@ -76,8 +82,14 @@ def ViewTutorials(request):
         except:
             tutorials=[]
 
+        for i in tutorials:
+            if i.playlist.last():
+                date.append(i.playlist.last().date)
+            else:
+                date.append(datetime.now)
         context = {
-        'tutorials':tutorials
+        'tutorials':zip(tutorials,date),
+        'size':len(tutorials)
         }
         if request.method == "POST":
             ids = request.POST.getlist('ids')
@@ -88,6 +100,7 @@ def ViewTutorials(request):
                     tutorial = TutorialInstitute.objects.get(id=int(i))
                     tutorial.Archived = True
                     tutorial.save()
+            messages.success(request,'Tutorial Archived Successfully')
             return redirect('archivetutorials')
         return render(request,'tutorials/viewTutorials.html',context)
     return HttpResponse("You Are not Authenticated User for this Page")
@@ -100,12 +113,23 @@ def ArchiveTutorials(request):
         inst = Institute.objects.get(user=user)
         courses = Courses.objects.filter(intitute= inst)
         tutorials = []
+        date =[]
+
         for i in courses:
             if TutorialInstitute.objects.filter(Course=i).exists():
                 tutorials.extend(TutorialInstitute.objects.filter(Q(Course=i) & Q(Archived=True)))
+        
+        for i in tutorials:
+            if i.playlist.last():
+                date.append(i.playlist.last().date)
+            else:
+                date.append(datetime.now)
+
         context = {
-        'tutorials':tutorials
+        'tutorials':zip(tutorials,date),
+        'size':len(tutorials)
         }
+
         if request.method == "POST":
             ids = request.POST.getlist('ids')
             if len(ids)<1:
@@ -115,6 +139,7 @@ def ArchiveTutorials(request):
                     tutorial = TutorialInstitute.objects.get(id=int(i))
                     tutorial.Archived = False
                     tutorial.save()
+            messages.success(request,'Tutorial Removed from Archive Successfully')
             return redirect('viewtutorials')
         return render(request,'tutorials/ArchievedTutorials.html',context)
     return HttpResponse("You Are not Authenticated User for this Page")
@@ -152,18 +177,16 @@ def DeleteTutorialsInstitute(request,course_id):
         return redirect('viewtutorials')
     return HttpResponse("You Are not Authenticated User for this Page")
 
-
-
 @login_required(login_url="Login")
 def EditTutorialsInstitute(request,course_id):
     if request.session['type'] == "Institute":
         user = User.objects.get(username=request.session['user'])
         inst = Institute.objects.get(user=user)
-        forclass = Courses.objects.filter(intitute=inst).values_list('forclass').distinct()
+        Classes = Courses.objects.filter(intitute=inst).values_list('forclass').distinct()
         tutorial = TutorialInstitute.objects.get(id=course_id)
         context = {
         'tutorial':tutorial,
-        'data':forclass
+        'data':Classes
         }
         if request.method == "POST":
             title = request.POST.get('title',"")
@@ -174,11 +197,19 @@ def EditTutorialsInstitute(request,course_id):
             forclass = request.POST.get("forclass","")
             feeDisc = request.POST.get("feeDisc","")
             unit = request.POST.get("unit","0")
+            freeEnrolled = request.POST.get('enr',"0")
+
+            if freeEnrolled == "1":
+                freeEnrolled = True
+            else:
+                freeEnrolled = False
+
             if unit=="1":
                 if fees:
                     if feeDisc:
                         feeDisc = float(feeDisc)/float(fees)
-                        feeDisc=feeDisc*100
+                        feeDisc=round(feeDisc*100,2)
+                        
             discValidity = request.POST.get("discValidity","")
             if title:
                 tutorial.Title = title
@@ -188,15 +219,17 @@ def EditTutorialsInstitute(request,course_id):
                 tutorial.Fees = fees
             if duration:
                 tutorial.Duration = duration
-            if course:
-                tutorial.Course = AddCourses.objects.get(s_num=course)
             if forclass:
                 tutorial.forclass = forclass
+            if course:
+                tutorial.Course = Courses.objects.filter(intitute=inst,courseName=course,forclass=forclass).first()
             if feeDisc:
                 tutorial.Discount = feeDisc
             if discValidity:
                 discValidity = datetime.strptime(discValidity,'%Y-%m-%d')
                 tutorial.Validity = discValidity
+            if freeEnrolled:
+                tutorial.freeEnrolled = freeEnrolled
             tutorial.save()
             messages.success(request,"Tutorial Updated Successfully")
             return redirect('viewtutorials')
@@ -211,7 +244,6 @@ def WatchTutorialsInstitute(request,course_id):
         inst = Institute.objects.get(user=user)
         courses = Courses.objects.filter(intitute=inst,archieved=False)
         tutorial = TutorialInstitute.objects.get(id=course_id)
-        print('tutorial--',tutorial)
         if request.session.has_key(f"Watching{course_id}"):
             start = request.session[f"Watching{course_id}"]
         else:
@@ -226,12 +258,14 @@ def WatchTutorialsInstitute(request,course_id):
         total_length = f"{total_length} min"
         context = {
         'tutorial':tutorial,
-        'start':start,
         'total_length':total_length
         }
+        try:
+            context['start'] = start
+        except:
+            pass
         return render(request,'tutorials/watchTutorial.html',context)
     return HttpResponse("You Are not Authenticated User for this Page")
-
 
 @login_required(login_url="Login")
 def DeleteTutorialsInstituteVideos(request,playlist_id):
@@ -244,7 +278,6 @@ def DeleteTutorialsInstituteVideos(request,playlist_id):
             return redirect('addplaylist',tutorial.id)
         return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
 
-
 @login_required(login_url="Login")
 def EditTutorialsInstituteVideos(request,playlist_id):
     if request.session['type']=="Institute":
@@ -253,7 +286,7 @@ def EditTutorialsInstituteVideos(request,playlist_id):
         'tutorial':tutorial,
         }
         if request.method == "POST":
-            video = request.POST.get('video','')
+            video = request.FILES.get('video','')
             title = request.POST.get('title',"")
             description = request.POST.get('description',"")
             if title:
@@ -262,38 +295,55 @@ def EditTutorialsInstituteVideos(request,playlist_id):
                 tutorial.Description = description
             if video:
                 tutorial.Video = video
+            tutorial.date = datetime.now()
             tutorial.save()
             return redirect('viewtutorial',tutorial.tutorial.id)
         return render(request,'tutorials/editTutorialVideos.html',context)
-
 
 @login_required(login_url="Login")
 def addTutorialsTutor(request):
     if request.session['type']=="Teacher":
         user = User.objects.get(username=request.session['user'])
         tutor = Teacher.objects.get(user=user)
-        context = {}
+        class_list = tutor.forclass.split(',')
+        unique_class = list(set(class_list))
+        course_list = tutor.course.split(',')
+        data = {}
+
+        for i in  range(len(unique_class)):
+            courses_of_class =[]
+            for j in range(len(class_list)):
+                if class_list[j] == unique_class[i]:
+                    courses_of_class.append(course_list[j])
+            data[unique_class[i]] = courses_of_class
+
+        context = {'data':data, 'classes':sorted(unique_class,key=lambda a:int(a))}
         if request.method == "POST":
             title = request.POST.get('title',"")
             description = request.POST.get('description',"")
             fees = request.POST.get('fees',"")
             duration = request.POST.get("duration","")
+            course = request.POST.get("course","")
+            forclass = request.POST.get("forclass","")
             feeDisc = request.POST.get("feeDisc","")
             unit = request.POST.get("unit","0")
             if unit=="1":
                 if fees:
                     if feeDisc:
                         feeDisc = float(feeDisc)/float(fees)
-                        feeDisc=feeDisc*100
+                        feeDisc=round(feeDisc*100,2)
             discValidity = request.POST.get("discValidity","")
             data = TutorialTutors(
                 Title = title,
+                Course = course,
+                forclass = forclass,
                 Tutor = tutor,
                 Fees = fees,
                 Duration = duration,
                 Description = description,
-                Discount = feeDisc,
                 )
+            if feeDisc:
+                data.Discount = feeDisc
             if discValidity:
                 discValidity = datetime.strptime(discValidity,'%Y-%m-%d')
                 data.Validity = discValidity
@@ -301,7 +351,6 @@ def addTutorialsTutor(request):
             return redirect('addvideosTutor',data.id)
         return render(request,'tutorials/addTutorialsTutor.html',context)
     return HttpResponse("You Are not Authenticated User for this Page")
-
 
 @login_required(login_url="Login")
 def addTutorialsTutorVideos(request,course_id):
@@ -314,7 +363,6 @@ def addTutorialsTutorVideos(request,course_id):
             video = request.FILES.getlist("video")
             title = request.POST.getlist("title")
             description = request.POST.getlist("description")
-            print(video,title)
             try:
                 for item in range(len(title)):
                     data = TutorialTutorsPlaylist(
@@ -330,17 +378,25 @@ def addTutorialsTutorVideos(request,course_id):
         return render(request,'tutorials/AddTutorCourseVideos.html',{'template':'dashboard/Tutor-dashboard.html'})
     return HttpResponse("You Are not Authenticated User for this Page")
 
-
-
 @login_required(login_url="Login")
 def ViewTutorialsTutor(request):
     if request.session['type']=="Teacher":
         user = User.objects.get(username=request.session['user'])
         tutor = Teacher.objects.get(user=user)
         tutorials = TutorialTutors.objects.filter(Q(Tutor=tutor) & Q(Archived=False))
+        date=[]
+
+        for i in tutorials:
+            if i.tutorplaylist.last():
+                date.append(i.tutorplaylist.last().date)
+            else:
+                date.append(datetime.now)
+
         context = {
-        'tutorials':tutorials
+        'tutorials':zip(tutorials,date),
+        'size':len(tutorials)
         }
+
         if request.method == "POST":
             ids = request.POST.getlist('ids')
             if len(ids)<1:
@@ -350,7 +406,7 @@ def ViewTutorialsTutor(request):
                     tutorial = TutorialTutors.objects.get(id=int(i))
                     tutorial.Archived = True
                     tutorial.save()
-                print('yes')
+            messages.success(request,'Tutorial Archived Successfully')
             return redirect('viewtutorialstutor')
         return render(request,'tutorials/viewTutorialsTutor.html',context)
     return HttpResponse("You Are not Authenticated User for this Page")
@@ -387,16 +443,14 @@ def WatchTutorialsTutor(request,course_id):
         return render(request,'tutorials/watchTutorialTutor.html',context)
     return HttpResponse("You Are not Authenticated User for this Page")
 
-
-
 @login_required(login_url="Login")
 def DeleteTutorialsTutor(request,course_id):
     if request.session['type']=="Teacher":
         data = TutorialTutors.objects.get(id=course_id)
         data.delete()
+        messages.warning(request,'Tutorial Deleted Successfully')
         return redirect('viewtutorialstutor')
     return HttpResponse("You Are not Authenticated User for this Page")
-
 
 @login_required(login_url="Login")
 def DeleteTutorialsTutorVideos(request,playlist_id):
@@ -433,22 +487,36 @@ def EditTutorialsTutorVideos(request,playlist_id):
         return render(request,'tutorials/editTutorialVideosTutor.html',context)
     return HttpResponse("You Are not Authenticated User for this Page")
 
-
-
 @login_required(login_url="Login")
 def EditTutorialsTutor(request,course_id):
     if request.session['type']=="Teacher":
         user = User.objects.get(username=request.session['user'])
         tutor = Teacher.objects.get(user=user)
         tutorial = TutorialTutors.objects.get(id=course_id)
+        class_list = tutor.forclass.split(',')
+        unique_class = list(set(class_list))
+        course_list = tutor.course.split(',')
+        data = {}
+
+        for i in  range(len(unique_class)):
+            courses_of_class =[]
+            for j in range(len(class_list)):
+                if class_list[j] == unique_class[i]:
+                    courses_of_class.append(course_list[j])
+            data[unique_class[i]] = courses_of_class
+            
         context = {
         'tutorial':tutorial,
+        'data':data, 
+        'classes':sorted(unique_class,key=lambda a:int(a))
         }
         if request.method == "POST":
             title = request.POST.get('title',"")
             description = request.POST.get('description',"")
             fees = request.POST.get('fees',"")
             duration = request.POST.get("duration","")
+            course = request.POST.get("course","")
+            forclass = request.POST.get("forclass","")
             feeDisc = request.POST.get("feeDisc","")
             discValidity = request.POST.get("discValidity","")
             unit = request.POST.get("unit","0")
@@ -456,7 +524,7 @@ def EditTutorialsTutor(request,course_id):
                 if fees:
                     if feeDisc:
                         feeDisc = float(feeDisc)/float(fees)
-                        feeDisc=feeDisc*100
+                        feeDisc=round(feeDisc*100,2)
             discValidity = request.POST.get("discValidity","")
             if title:
                 tutorial.Title = title
@@ -470,6 +538,12 @@ def EditTutorialsTutor(request,course_id):
             if duration:
                 tutorial.Duration = duration
 
+            if forclass:
+                tutorial.forclass = forclass
+
+            if course:
+                tutorial.Course = course
+
             if feeDisc:
                 tutorial.Discount = feeDisc
 
@@ -478,11 +552,10 @@ def EditTutorialsTutor(request,course_id):
                 tutorial.Validity = discValidity
 
             tutorial.save()
+            messages.success(request,'Tutorial Updated Successfully')
             return redirect('viewtutorialstutor')
         return render(request,'tutorials/editTutorialTutor.html',context)
     return HttpResponse("You Are not Authenticated User for this Page")
-
-
 
 @login_required(login_url="Login")
 def ArchiveTutorialsTutor(request):
@@ -490,9 +563,19 @@ def ArchiveTutorialsTutor(request):
         user = User.objects.get(username=request.session['user'])
         tutor = Teacher.objects.get(user=user)
         tutorials = TutorialTutors.objects.filter(Q(Tutor=tutor) & Q(Archived=True))
+        date=[]
+
+        for i in tutorials:
+            if i.tutorplaylist.last():
+                date.append(i.tutorplaylist.last().date)
+            else:
+                date.append(datetime.now)
+
         context = {
-        'tutorials':tutorials
+        'tutorials':zip(tutorials,date),
+        'size':len(tutorials)
         }
+        
         if request.method == "POST":
             ids = request.POST.getlist('ids')
             if len(ids)<1:
@@ -502,11 +585,10 @@ def ArchiveTutorialsTutor(request):
                     tutorial = TutorialTutors.objects.get(id=int(i))
                     tutorial.Archived = False
                     tutorial.save()
+            messages.success(request,'Tutorial Removed from Archive Successfully')
             return redirect('Archivetutorialstutor')
         return render(request,'tutorials/ArchievedTutorialsTutor.html',context)
     return HttpResponse("You Are not Authenticated User for this Page")
-
-
 
 @login_required(login_url="Login")
 def SearchCourses(request):

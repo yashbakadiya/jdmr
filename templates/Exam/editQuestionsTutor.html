@@ -4,7 +4,17 @@
 {% block main-content %}
 </style>
 <script src="{% static 'js/tinymce/tinymce.min.js' %}"></script>
-<div class="container">
+<div class="container mt-5">
+  {% if messages %}
+  {% for k in messages%}
+  <div class="alert alert-{{k.tags}} alert-dismissible fade show" role="alert">
+    <b>{{ k }} !</b>
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  {% endfor %}
+  {% endif %}
   {% if errors %}
   <div class="alert alert-danger" role="alert">
     <div id='errorsBox'>
@@ -21,7 +31,7 @@
     </div>
   </div>
   {% endif %}
-  <div class="container card mt-5">
+  <div class="container card">
     <div class="col ml-2 mt-0">
       <div class="row">
         <div class="col">
@@ -48,7 +58,7 @@
         <div class="col p-0 m-0 pl-2">
           {{i.question|safe}}
         </div>
-        <a href="{{i.Edit_Tutor}}" class="text-right text-dark ml-0 pr-1"><i class="flaticon-pencil-line" style="font-size:medium;"></i></a>
+        <a href="{{i.Edit_url}}" class="text-right text-dark ml-0 pr-1"><i class="flaticon-pencil-line" style="font-size:medium;"></i></a>
         &nbsp;&nbsp;&nbsp;
         <a href="{{i.Delete_url}}" class="text-right text-dark ml-0 pr-1 mr-2"><i class="flaticon-delete-fill" style="font-size:medium;"></i></a>
       </div>
@@ -85,7 +95,7 @@
         <div class="col p-0 m-0 pl-2">
           {{i.question|safe}}
         </div>
-        <a href="{{i.Edit_Tutor}}" class="text-right text-dark ml-0 pr-1"><i class="flaticon-pencil-line" style="font-size:medium;"></i></a>
+        <a href="{{i.Edit_url}}" class="text-right text-dark ml-0 pr-1"><i class="flaticon-pencil-line" style="font-size:medium;"></i></a>
         &nbsp;&nbsp;&nbsp;
         <a href="{{i.Delete_url}}" class="text-right text-dark ml-0 pr-1 mr-2"><i class="flaticon-delete-fill" style="font-size:medium;"></i></a>
       </div>
@@ -123,7 +133,7 @@
         <div class="col p-0 m-0 pl-2">
           {{i.question|safe}}
         </div>
-        <a href="{{i.Edit_Tutor}}" class="text-right text-dark ml-0 pr-1"><i class="flaticon-pencil-line" style="font-size:medium;"></i></a>
+        <a href="{{i.Edit_url}}" class="text-right text-dark ml-0 pr-1"><i class="flaticon-pencil-line" style="font-size:medium;"></i></a>
         &nbsp;&nbsp;&nbsp;
         <a href="{{i.Delete_url}}" class="text-right text-dark ml-0 pr-1 mr-2"><i class="flaticon-delete-fill" style="font-size:medium;"></i></a>
       </div>
@@ -160,7 +170,7 @@
         <div class="col p-0 m-0 pl-2">
           {{i.question|safe}}
         </div>
-        <a href="{{i.Edit_Tutor}}" class="text-right text-dark ml-0 pr-1"><i class="flaticon-pencil-line" style="font-size:medium;"></i></a>
+        <a href="{{i.Edit_url}}" class="text-right text-dark ml-0 pr-1"><i class="flaticon-pencil-line" style="font-size:medium;"></i></a>
         &nbsp;&nbsp;&nbsp;
         <a href="{{i.Delete_url}}" class="text-right text-dark ml-0 pr-1 mr-2"><i class="flaticon-delete-fill" style="font-size:medium;"></i></a>
       </div>

@@ -43,7 +43,6 @@ def addTutors(request):
         teach=TeachingType.objects.all()
 
         if request.method == "POST":
-            print(request.POST)
             firstName = request.POST.get('firstName', '')
             lastName = request.POST.get('lastName', '')
             email = request.POST.get('email', '')
@@ -68,10 +67,6 @@ def addTutors(request):
                 user2.save()
                 teacher = Teacher(user=user2,address=location,phone=phone)
                 teacher.save()
-                # ctn = request.POST.getlist('ctn_combined')
-                # cn = request.POST.getlist('cn_combined')
-                # ttn = request.POST.getlist('ttn_combined')
-                # ttn = [x.replace("\r","") for x in ttn]
 
                 ctn = request.POST.getlist('ctn')
                 cn = request.POST.getlist('cn')
@@ -87,15 +82,12 @@ def addTutors(request):
                 else:
                     availability="not available"
                 for x in range(len(ttn)):
-                    addTeacher = enrollTutors(forclass=cn[x],teachType=ttn[x],courseName=ctn[x],institute=inst,teacher=teacher,availability=availability)
+                    addTeacher = enrollTutors.objects.get_or_create(forclass=cn[x],teachType=ttn[x],courseName=ctn[x],institute=inst,teacher=teacher)[0]
+                    addTeacher.availability=availability
                     addTeacher.save()
                 messages.success(request,"Teacher Added Successfully")
                 return redirect("viewTutors")
 
-        # data = TeachingType.objects.values_list('courseID','forclass','teachType','course')
-        # processed_data = {}
-        # for x in data:
-        #     processed_data[x[0]] = [x[1].split(", "),x[2].split("\n")]
         return render(request,'teacher/addTutors.html',
             {
                 "data":TeachingType.objects.filter(course__intitute=inst).values_list('forclass').distinct(),"cours":cours,"teach":teach,
@@ -109,34 +101,38 @@ def viewTutors(request):
     if request.session['type'] == "Institute":
         user = User.objects.get(username=request.session['user'])
         inst = Institute.objects.get(user=user)
-        tutors = enrollTutors.objects.filter(institute=inst,archieved=False)
-        courses = Courses.objects.filter(intitute=inst,archieved=False)
-        courselist = []
-        for course in courses:
-            for tutor in tutors:
-                if tutor.courseName:
-                    if tutor.courseName==course.courseName:
-                        courselist.append(course.courseName)
-        tutors = zip(tutors,courselist)
-        params = {'tutors':tutors}
+        tutors = set([x.teacher for x in enrollTutors.objects.filter(institute=inst,archieved=False)])
+        courses = []
+        forclass = []
+        teachType = []
+        availability = []
+
+        for tut in tutors:
+            courses.append(','.join([x[0] for x in enrollTutors.objects.filter(institute=inst,archieved=False,teacher=tut).values_list('courseName').distinct()]))
+            forclass.append(','.join([x[0] for x in enrollTutors.objects.filter(institute=inst,archieved=False,teacher=tut).values_list('forclass').distinct()]))
+            teachType.append(','.join([x[0] for x in enrollTutors.objects.filter(institute=inst,archieved=False,teacher=tut).values_list('teachType').distinct()]))
+            availab = ','.join([x[0] for x in enrollTutors.objects.filter(institute=inst,archieved=False,teacher=tut).values_list('availability').distinct()])
+            availability.append(','.join(set(availab.split(','))))
+        
+        tutors = zip(tutors,courses,forclass,teachType,availability)
+        params = {'tutors':tutors,"size":len(courses)}
+
         if request.method=="POST":
             check = request.POST.getlist('check')
             for x in check:
-                arTutor = enrollTutors.objects.get(id = int(x))
-                arTutor.archieved = True
-                arTutor.save()
+                for arTutor in enrollTutors.objects.filter(teacher = Teacher.objects.get(id=int(x))):
+                    arTutor.archieved = True
+                    arTutor.save()
             messages.success(request,"Teacher Added To Archieve Successfully")
             return redirect('viewTutors')
         return render(request, 'teacher/viewTutors.html', params)
     return HttpResponse("You Are Not Authenticated for this view")
 
 
-
 @login_required(login_url="Login")
 def deleteTutor(request,id):
     if request.session['type'] == "Institute":
-        delobj = enrollTutors.objects.get(id=id)
-        delobj.delete()
+        enrollTutors.objects.filter(teacher = Teacher.objects.get(id=id)).delete()
         messages.warning(request,"Teacher Deleted Successfully")
         return redirect("viewTutors")
     return HttpResponse("You Are Not Authenticated for this view")
@@ -148,16 +144,9 @@ def editTutor(request,id):
     if request.session['type'] == "Institute":
         user = User.objects.get(username=request.session['user'])
         inst = Institute.objects.get(user=user)
-        editTutorObj = enrollTutors.objects.get(id = id)
-        teacher = Teacher.objects.get(user__username=editTutorObj.teacher.user.username)
-        # data = TeachingType.objects.values_list('courseID','forclass','teachType','course')
-        # processed_data = {}
-        # for x in data:
-        #     processed_data[x[0]] = [x[1].split(", "),x[2].split("\n")]
+        teacher = Teacher.objects.get(id=id)
+        editTutorObj = enrollTutors.objects.filter(teacher=teacher)
         if request.method == "POST":
-            # ctn = request.POST.get('ctn_combined')
-            # cn = request.POST.get('cn_combined')
-            # ttn = request.POST.get('ttn_combined')
             ctn = request.POST.getlist('ctn')
             cn = request.POST.getlist('cn')
             ttn = request.POST.getlist('ttn')
@@ -173,31 +162,15 @@ def editTutor(request,id):
             NewUsername = request.POST.get("NewUsername")
             NewEmail = request.POST.get("NewEmail")
             NewPhone = request.POST.get("NewPhone")
-            teacher.name = NewUsername
-            teacher.email = NewEmail
-            teacher.password = NewPhone
-            teacher.phone = NewPhone
             teacher.save()
-            user = User.objects.get(username=editTutorObj.teacher.user.username)
-            user.username = NewUsername
-            user.password = NewPhone
-            user.email = NewEmail
-            user.save()
-            inst = Institute.objects.get(user=User.objects.get(username=request.session['user']))
-
-            if ctn:    
-                editTutorObj.courseName = ctn[0]
-            if cn:
-                editTutorObj.forclass = cn[0]
+            
             if ttn:
-                editTutorObj.teachType = ttn[0]
-            editTutorObj.teacher = teacher
-            editTutorObj.availability = availability
-            editTutorObj.save()
+                editTutorObj.delete()
 
-            for x in range(1,len(ttn)):
-                addTeacher = enrollTutors(forclass=cn[x],teachType=ttn[x],courseName=ctn[x],institute=inst,teacher=teacher,availability=availability)
-                addTeacher.save()
+                for x in range(len(ttn)):
+                    addTeacher = enrollTutors.objects.get_or_create(forclass=cn[x],teachType=ttn[x],courseName=ctn[x],institute=inst,teacher=teacher)[0]
+                    addTeacher.availability=availability
+                    addTeacher.save()
                 
             messages.success(request,"Teacher Updated Successfully")
             return redirect("viewTutors")
@@ -208,27 +181,37 @@ def editTutor(request,id):
             })
     return HttpResponse("You Are Not Authenticated for this view")
 
-
-
 @login_required(login_url="Login")
 def archiveTutorList(request):
     if request.session['type'] == "Institute":
         user = User.objects.get(username=request.session['user'])
         inst = Institute.objects.get(user=user)
-        if request.method == "POST":
+        tutors = set([x.teacher for x in enrollTutors.objects.filter(institute=inst,archieved=True)])
+        courses = []
+        forclass = []
+        teachType = []
+        availability = []
+
+        for tut in tutors:
+            courses.append(','.join([x[0] for x in enrollTutors.objects.filter(institute=inst,archieved=True,teacher=tut).values_list('courseName').distinct()]))
+            forclass.append(','.join([x[0] for x in enrollTutors.objects.filter(institute=inst,archieved=True,teacher=tut).values_list('forclass').distinct()]))
+            teachType.append(','.join([x[0] for x in enrollTutors.objects.filter(institute=inst,archieved=True,teacher=tut).values_list('teachType').distinct()]))
+            availab = ','.join([x[0] for x in enrollTutors.objects.filter(institute=inst,archieved=True,teacher=tut).values_list('availability').distinct()])
+            availability.append(','.join(set(availab.split(','))))
+        
+        tutors = zip(tutors,courses,forclass,teachType,availability)
+        params = {'tutors':tutors,"size":len(courses)}
+
+        if request.method=="POST":
             check = request.POST.getlist('check')
             for x in check:
-                arTutor = enrollTutors.objects.get(id = int(x))
-                arTutor.archieved = False
-                arTutor.save()
-            messages.success(request,"Teacher Removed From Archieve Successfully")
-            return redirect('archiveTutorList')
-        tutor = enrollTutors.objects.filter(institute=inst,archieved=True)
-        params = {'tutor':tutor}
+                for arTutor in enrollTutors.objects.filter(teacher = Teacher.objects.get(id=x)):
+                    arTutor.archieved = False
+                    arTutor.save()
+            messages.success(request,"Teacher Removed from Archieve Successfully")
+            return redirect('viewTutors')
         return render(request, 'teacher/archiveTutorList.html', params)
     return HttpResponse("You Are Not Authenticated for this view")
-
-
 
 @login_required(login_url="Login")
 def searchUserTutor(request):
@@ -236,7 +219,7 @@ def searchUserTutor(request):
         if request.method=="POST":
             srch = request.POST.get('srh', '')
             if srch:
-                teacher = Teacher.objects.filter(Q(phone=srch) | Q(user__email=srch))
+                teacher = Teacher.objects.filter(Q(phone=srch) | Q(user__email=srch) | Q(user__username=srch))
                 if teacher:
                     return render(request,'teacher/searchUserTutor.html', {'sr':teacher})
                 else:
@@ -248,18 +231,18 @@ def searchUserTutor(request):
     return HttpResponse("You Are Not Authenticated for this page")
 
 
-
 @login_required(login_url="Login")
 def AddalreadyExistsTutor(request,id):
     if request.session['type']=="Institute":
         teacher = Teacher.objects.get(id=id)
         user = User.objects.get(username=request.session['user'])
         inst = Institute.objects.get(user=user)
+
+        if enrollTutors.objects.filter(institute=inst,teacher=teacher):
+            messages.warning(request,"Teacher Already Added")
+            return redirect("viewTutors")
+        
         if request.method=="POST":
-            # ctn = request.POST.getlist('ctn_combined')
-            # cn = request.POST.getlist('cn_combined')
-            # ttn = request.POST.getlist('ttn_combined')
-            # ttn = [x.replace("\r","") for x in ttn]
             ctn = request.POST.getlist('ctn')
             cn = request.POST.getlist('cn')
             ttn = request.POST.getlist('ttn')
@@ -273,7 +256,8 @@ def AddalreadyExistsTutor(request,id):
             else:
                 availability="not available"
             for x in range(len(ttn)):
-                addTeacher = enrollTutors(forclass=cn[x],teachType=ttn[x],courseName=ctn[x],institute=inst,teacher=teacher,availability=availability)
+                addTeacher = enrollTutors.objects.get_or_create(forclass=cn[x],teachType=ttn[x],courseName=ctn[x],institute=inst,teacher=teacher)[0]
+                addTeacher.availability=availability
                 addTeacher.save()
             messages.success(request,"Teacher Added Successfully")
             return redirect("viewTutors")
@@ -692,39 +676,61 @@ def makeAppointment(request):
 
 @login_required(login_url="Login")
 def viewAssignmentTutor(request):
-    currentS = {}
-    prefill={}
-    if request.method == "POST":
-        className = request.POST.get('className',"")
-        courseName = request.POST.get('subject',"")
-        address = request.POST.get('loc')
-        budgetVal = request.POST.get('budget')
+    if request.session['type']=="Teacher":    
+        user = User.objects.get(username=request.session['user'])
+        tutor = Teacher.objects.get(user=user)
+        currentS = []
+        prefill={}
 
-        prefill = {
-            "address":address,
-            "budget":budgetVal,
-            "class":className,
-            "subject":courseName,
+        data={}
+        class_list = tutor.forclass.split(',')
+        unique_class = list(set(class_list))
+        course_list = tutor.course.split(',')
+
+        for i in range(len(class_list)):
+            currentS.extend(PostAssignment.objects.filter(forclass = class_list[i], courseName = course_list[i]))
+
+        for i in  range(len(unique_class)):
+            courses_of_class =[]
+            for j in range(len(class_list)):
+                if class_list[j] == unique_class[i]:
+                    courses_of_class.append(course_list[j])
+            data[unique_class[i]] = courses_of_class
+        
+        if request.method == "POST":
+            className = request.POST.get('className',"")
+            courseName = request.POST.get('subject',"")
+            address = request.POST.get('loc')
+            budgetVal = request.POST.get('budget')
+
+            prefill={
+                'class':className,
+                'course':courseName,
+                'address':address,
+                'budgetVal':budgetVal,
+            }
+
+            currentS = [x.pk for x in currentS]
+            currentS = PostAssignment.objects.filter(pk__in=currentS)
+
+            if address:
+                currentS = currentS.filter(Q(student__address__icontains=address))
+            if budgetVal:
+                currentS = currentS.filter(Q(budget__gte=float(budgetVal)))
+            if className:
+                currentS = currentS.filter(forclass=className)
+            if courseName:
+                currentS = currentS.filter(courseName=courseName)
+
+        context = {
+        'classes':sorted(unique_class,key=lambda a:int(a)),
+        'data':data,
+        'allData':currentS,
+        'prefill':prefill
         }
 
-        classlist = ['I','II','III','IV','V','VI','VII','VIII','IX','X','XI','XII','Others','Nursery']
-        try:
-            if int(className):
-                className = classlist[int(className)-1]
-        except:
-            className = className
-
-        if budgetVal:
-            budgetVal = float(budgetVal)
-        else:
-            budgetVal = 100.0
-        currentS = PostAssignment.objects.filter(Q(student__address__icontains=address) or Q(budget__gte=float(budgetVal)))
-        if className:
-            currentS = currentS.filter(Q(forclass__icontains=className))
-        if courseName:
-            currentS = currentS.filter(Q(courseName__icontains=courseName))
-    jsonLocalData = loads(open('cc.txt','r').read())
-    return render(request,'teacher/viewAssignmentTutor.html',{'allData':currentS,'jsonLocalData':jsonLocalData, 'prefill':prefill})
+        return render(request,'teacher/viewAssignmentTutor.html',context)
+    return HttpResponse("You are not Authenticate for this Page")
 
 @login_required()
 def teacherCalendar(request):   

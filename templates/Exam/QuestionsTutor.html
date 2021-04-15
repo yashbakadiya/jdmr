@@ -5,31 +5,32 @@
 {% block main-content %}
 
 <script src="{% static 'js/tinymce/tinymce.min.js' %}"></script>
-<div class="container">
-   {% if messages %}
-    {% for k in messages%}
-    <div class="alert alert-{{k.tags}} alert-dismissible fade show" role="alert">
-        <b>{{ k }} !</b>
-        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-        </button>
-    </div>
-    {% endfor %}
-    {% endif %}
-    <div class="container card mt-5">
-      <div class="row">
-        <div class="col ml-2 " style="overflow: scroll;height: 1100px;">
+<div class="mt-5">
+  {% if messages %}
+  {% for k in messages%}
+  <div class="alert alert-{{k.tags}} alert-dismissible fade show" role="alert">
+    <b>{{ k }} !</b>
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  {% endfor %}
+  {% endif %}
+  <main>
+    <div class="card">
+      <div class="mx-2 row">
+        <div class="col" style="overflow: scroll;height: 1240px;">
           <div class="row">
             <div class="col">
-            <h4 class="text-center mt-2">{{exam.Name}}</h4> 
+              <h4 class="text-center mt-2">{{exam.Name}}</h4>
             </div>
           </div>
           <div class="row">
             <div class="col">
-            <p class="text-left mt-2 text-dark">Time : {{exam.exam_duration}}</p> 
+              <p class="text-left mt-2 text-dark">Time : {{exam.exam_duration}}</p>
             </div>
             <div class="col">
-            <p class="text-right mt-2 text-dark">MM : 100</p> 
+              <p class="text-right mt-2 text-dark">MM : 100</p>
             </div>
           </div>
           {% if SectionA %}
@@ -39,20 +40,20 @@
             </div>
           </div>
           {% for i in SectionA%}
-          <div class="row pl-2" >
+          <div class="row pl-2">
             Q{{i.question_no}}.
             <div class="col p-0 m-0 pl-2">
-            {{i.question|safe}} 
+              {{i.question|safe}}
             </div>
             <p class="text-right text-dark ml-0 pr-1">{{i.marks}}</p>
           </div>
           {% if i.options.all %}
           {% for option in i.options.all %}
           <div class="row">
-          <div class="col">
-             {{ forloop.counter }}. {{option.option|safe}}
+            <div class="col">
+              {{ forloop.counter }}. {{option.option|safe}}
+            </div>
           </div>
-        </div>
           {% endfor %}
           {% endif %}
           {% if i.option1 %}
@@ -75,19 +76,19 @@
           </div>
           {% for i in SectionB %}
           <div class="row pl-2">
-            Q{{i.question_no}}. 
+            Q{{i.question_no}}.
             <div class="col p-0 m-0 pl-2">
-            {{i.question|safe}} 
+              {{i.question|safe}}
             </div>
             <p class="text-right text-dark ml-0 pr-1">{{i.marks}}</p>
           </div>
           {% if i.options.all %}
           {% for option in i.options.all %}
           <div class="row">
-          <div class="col">
-             {{ forloop.counter }}. {{option.option|safe}}
+            <div class="col">
+              {{ forloop.counter }}. {{option.option|safe}}
+            </div>
           </div>
-        </div>
           {% endfor %}
           {% endif %}
           {% if i.option1 %}
@@ -111,19 +112,19 @@
           </div>
           {% for i in SectionC %}
           <div class="row pl-2">
-            Q{{i.question_no}}. 
+            Q{{i.question_no}}.
             <div class="col p-0 m-0 pl-2">
-            {{i.question|safe}} 
+              {{i.question|safe}}
             </div>
             <p class="text-right text-dark ml-0 pr-1">{{i.marks}}</p>
           </div>
           {% if i.options.all %}
           {% for option in i.options.all %}
           <div class="row">
-          <div class="col">
-            {{ forloop.counter }}. {{option.option|safe}}
+            <div class="col">
+              {{ forloop.counter }}. {{option.option|safe}}
+            </div>
           </div>
-        </div>
           {% endfor %}
           {% endif %}
           {% if i.option1 %}
@@ -148,17 +149,17 @@
           <div class="row pl-2">
             Q{{i.question_no}}.
             <div class="col p-0 m-0 pl-2">
-            {{i.question|safe}} 
+              {{i.question|safe}}
             </div>
             <p class="text-right text-dark ml-0 pr-1">{{i.marks}}</p>
           </div>
           {% if i.options.all %}
           {% for option in i.options.all %}
           <div class="row">
-          <div class="col">
-             {{ forloop.counter }}. {{option.option|safe}}
+            <div class="col">
+              {{ forloop.counter }}. {{option.option|safe}}
+            </div>
           </div>
-        </div>
           {% endfor %}
           {% endif %}
           {% if i.option1 %}
@@ -174,177 +175,207 @@
           {% endfor %}
           {% endif %}
         </div>
-  <div class="col">
-  <form method="post">{% csrf_token %}
-  <div class="row">
-    <div class="col">
-        <div class="form-group">
-    <label for="exampleFormControlSelect1">Section</label>
-    <select class="form-control" id="exampleFormControlSelect1" name="section">
-      <option value="A">Section A</option>
-      <option value="B">Section B</option>
-      <option value="C">Section C</option>
-      <option value="D">Section D</option>
-    </select>
-  </div>
-    </div>
-    <div class="col">
-        <div class="form-group">
-    <label for="exampleFormControlSelect1">Question Type</label>
-    <select class="form-control" id="question_type_select" name="question_type">
-      <option value="sq">Short Type Questions</option>
-      <option value="lq">Long Type Questions</option>
-      <option value="mc">Multiple Choice Questions</option>
-      <option value="tf">True or False</option>
-    </select>
-  </div>
-    </div>
-  </div>
-  <div class="row">
-         <div class="col mb-3">
-            <div class="custom-checkbox custom-control">
-              <input class="form-check-input" type="checkbox" onchange="checkbox()" id="negativecheck" name="nm" />
-              <label class="form-check-label" for="defaultCheck1">
-                Negative Marks
-              </label>
-              <div id="negative"></div>
+        <div class="col mt-4">
+          <form method="post">{% csrf_token %}
+            <div class="row">
+              <div class="col">
+                <div class="form-group">
+                  <label for="exampleFormControlSelect1">Section</label>
+                  <select class="form-control" id="exampleFormControlSelect1" name="section">
+                    <option value="A">Section A</option>
+                    <option value="B">Section B</option>
+                    <option value="C">Section C</option>
+                    <option value="D">Section D</option>
+                  </select>
+                </div>
+              </div>
+              <div class="col">
+                <div class="form-group">
+                  <label for="exampleFormControlSelect1">Question Type</label>
+                  <select class="form-control" onchange="addop()" id="question_type_select" name="question_type">
+                    {% if exam.negative_marking == False %}
+                    <option value="sq">Short Type Questions</option>
+                    <option value="lq">Long Type Questions</option>
+                    {% endif %}
+                    <option value="mc">Multiple Choice Questions</option>
+                    <option value="tf">True or False</option>
+                  </select>
+                </div>
+              </div>
             </div>
-            <div class="invalid-feedback">
-              Choose a value
+            {% if exam.negative_marking == False %}
+            <div class="row">
+              <div class="col mb-3">
+                <div class="custom-checkbox custom-control">
+                  <input class="form-check-input" type="checkbox" onchange="checkbox()" id="negativecheck" name="nm" />
+                  <label class="form-check-label" for="defaultCheck1">
+                    Negative Marks
+                  </label>
+                </div>
+                <div class="invalid-feedback">
+                  Choose a value
+                </div>
+              </div>
             </div>
-          </div>
-  </div>
-  <div class="row">
-    <div class="col" id="solutionbox">
-  <div class="form-group">
-    <label for="exampleFormControlSelect1">Enter Marks</label>
-<input type="number" class="form-control" placeholder="Enter Marks" name="marks" required>
-  </div>
-    </div>
-  </div>
-    <div class="row">
-    <div class="col">
-  <div class="form-group">
-    <a onclick="HindiTextareaHide()" class="btn btn-outline-success ebtn" id="englishbtn">English Editor</a>
-  </div>
-    </div>
-     <div class="col">
-  <div class="form-group">
-    <a onclick="HindiTextarea()" class="btn btn-outline-success ebtn" id="hindibtn">Hindi Editor</a>
-  </div>
-    </div>
-  </div>
-  <div class="row" id="buttons">
-      <div class="col">
-       <div class="form-group" id="textarea1">
-        <label for="exampleFormControlTextarea1" style="font-size: 20px;"> Question (Hindi)</label>
-   <script language="javascript">
-    CreateCustomHindiTextArea("hinditext", "", false);
-  $('#hinditext').addClass('form-control');
-  </script>
-  </div>
-    </div>
-  </div>
-      <div class="row mt-2" id="englisharea">
-    <div class="col">
-       <div class="form-group" id="textarea1">
-    <label for="exampleFormControlTextarea1" style="font-size: 20px;">Question</label>
-    <textarea class="form-control" id="exampleFormControlTextarea1" rows="7" name="question" required>
-    </textarea>
-  </div>
+            <div id="negative"></div>
+            {% endif %}
+            <div class="row">
+              <div class="col" id="solutionbox">
+                <div class="form-group">
+                  <label for="exampleFormControlSelect1">Enter Marks</label>
+                  <input type="number" min="0" class="form-control" placeholder="Enter Marks" name="marks" required>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col">
+                <div class="form-group">
+                  <a onclick="HindiTextareaHide()" class="btn btn-outline-success ebtn" id="englishbtn">English
+                    Editor</a>
+                </div>
+              </div>
+              <div class="col">
+                <div class="form-group">
+                  <a onclick="HindiTextarea()" class="btn btn-outline-success ebtn" id="hindibtn">Hindi Editor</a>
+                </div>
+              </div>
+            </div>
+            <div class="row mt-2" id="hindiarea1" style="display: none;">
+              <div class="col">
+                <div class="form-group" id="hinditextarea1">
+                  <label for="hindiexampleFormControlTextarea1" style="font-size: 20px;">Question (Hindi)</label>
+                  <textarea class="form-control" id="hindiexampleFormControlTextarea1" rows="7" name="question"></textarea>
+                </div>
 
-    </div>
-    </div>
-          <div class="row">
-    <div class="col">
-       <div class="form-group" id="textarea2">
-    <label for="exampleFormControlTextarea1" style="font-size: 20px;">Solution</label>
-    <textarea class="form-control" id="exampleFormControlTextarea2" rows="7" name="solution" required>
-    </textarea>
-  </div>
-    </div>
-    </div>
-    <div class="row">
-      <div class="col">
-        <button type="submit" class="btn btn-primary">Save</button>
+              </div>
+            </div>
+            <div class="row" id="hindiarea2" style="display: none;">
+              <div class="col">
+                <div class="form-group" id="hinditextarea2">
+                  <label for="hindiexampleFormControlTextarea1" style="font-size: 20px;">Solution (Hindi)</label>
+                  <textarea class="form-control" id="hindiexampleFormControlTextarea2" rows="7" name="solution"></textarea>
+                </div>
+              </div>
+            </div>
+            <div class="row mt-2" id="englisharea1">
+              <div class="col">
+                <div class="form-group" id="textarea1">
+                  <label for="exampleFormControlTextarea1" style="font-size: 20px;">Question</label>
+                  <textarea class="form-control" id="exampleFormControlTextarea1" rows="7" name="question"></textarea>
+                </div>
+
+              </div>
+            </div>
+            <div class="row" id="englisharea2">
+              <div class="col">
+                <div class="form-group" id="textarea2">
+                  <label for="exampleFormControlTextarea1" style="font-size: 20px;">Solution</label>
+                  <textarea class="form-control" id="exampleFormControlTextarea2" rows="7" name="solution"></textarea>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col">
+                <div class="text-center">
+                  <button type="submit" class="mb-3 w-100 btn btn-success">Add Question</button>
+                </div>
+              </div>
+            </div>
+          </form>
+        </div>
       </div>
-    </div>
-</form>
+      <div class="text-center">
+        <div class="col">
+          <a href="{% url 'viewexamstutor' %}" class="mb-3 btn btn-info">Save</a>
         </div>
       </div>
     </div>
 </div>
-    <script>
-function addtext(){
-  var tags = '<div class="row mb-3" id="multipleinput">'
-      tags += '<div class="col-9 pr-4 mr-3">'
-      tags += '<input type="text" class="form-control" placeholder="Enter Value" name="options" required>'
-      tags += '</div>'
-      tags +='</div>'
-      $('#solutionbox').append(tags);
-}
-tinymce.init({
-          selector: "#exampleFormControlTextarea1",
-          height: 200,
-          theme: "modern",
-          setup: function (editor) {
-            editor.on("init", function (e) {
-              editor.setContent("<p>Type Question</p>");
-            });
-          },
-          plugins: [
-            "advlist autolink lists link image charmap print preview hr anchor pagebreak",
-            "searchreplace wordcount visualblocks visualchars code fullscreen",
-            "insertdatetime media nonbreaking save table contextmenu directionality",
-            "emoticons template paste textcolor colorpicker textpattern imagetools codesample toc FMathEditor",
-          ],
-          toolbar1:
-            "undo redo | insert | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image",
-          toolbar2:
-            "print preview media | forecolor backcolor emoticons | codesample | FMathEditor",
-        });
-tinymce.init({
-          selector: "#hinditext",
-          height: 200,
-          theme: "modern",
-          setup: function (editor) {
-            editor.on("init", function (e) {
-              editor.setContent("<p></p>");
-            });
-          },
-          plugins: [
-            "advlist autolink lists link image charmap print preview hr anchor pagebreak",
-            "searchreplace wordcount visualblocks visualchars code fullscreen",
-            "insertdatetime media nonbreaking save table contextmenu directionality",
-            "emoticons template paste textcolor colorpicker textpattern imagetools codesample toc FMathEditor",
-          ],
-          toolbar1:
-            "undo redo | insert | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image",
-          toolbar2:
-            "print preview media | forecolor backcolor emoticons | codesample | FMathEditor",
-        });
-tinymce.init({
-          selector: "#exampleFormControlTextarea2",
-          height: 200,
-          theme: "modern",
-          setup: function (editor) {
-            editor.on("init", function (e) {
-              editor.setContent("<p>Type Solution</p>");
-            });
-          },
-          plugins: [
-            "advlist autolink lists link image charmap print preview hr anchor pagebreak",
-            "searchreplace wordcount visualblocks visualchars code fullscreen",
-            "insertdatetime media nonbreaking save table contextmenu directionality",
-            "emoticons template paste textcolor colorpicker textpattern imagetools codesample toc FMathEditor",
-          ],
-          toolbar1:
-            "undo redo | insert | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image",
-          toolbar2:
-            "print preview media | forecolor backcolor emoticons | codesample | FMathEditor",
-        });
+<script>
+  function addtext() {
+    var tags = '<div class="row mb-3 multipleinput">'
+    tags += '<div class="col-9 pr-4 mr-3">'
+    tags += '<input type="text" class="form-control" placeholder="Enter Value" name="options" required>'
+    tags += '</div>'
+    tags += '</div>'
+    $('#solutionbox').append(tags);
+  }
+  tinymce.init({
+    selector: "#exampleFormControlTextarea1",
+    height: 200,
+    theme: "modern",
+    setup: function (editor) {
+      editor.on("init", function (e) {
+        editor.setContent("<p>Type Question</p>");
+      });
+    },
+    plugins: [
+      "advlist autolink lists link image charmap print preview hr anchor pagebreak",
+      "searchreplace wordcount visualblocks visualchars code fullscreen",
+      "insertdatetime media nonbreaking save table contextmenu directionality",
+      "emoticons template paste textcolor colorpicker textpattern imagetools codesample toc FMathEditor",
+    ],
+    toolbar1: "undo redo | insert | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image",
+    toolbar2: "print preview media | forecolor backcolor emoticons | codesample | FMathEditor",
+  });
+  tinymce.init({
+    selector: "#hindiexampleFormControlTextarea1",
+    language: "hi_IN",
+    height: 200,
+    theme: "modern",
+    setup: function (editor) {
+      editor.on("init", function (e) {
+        editor.setContent("<p></p>");
+      });
+    },
+    plugins: [
+      "advlist autolink lists link image charmap print preview hr anchor pagebreak",
+      "searchreplace wordcount visualblocks visualchars code fullscreen",
+      "insertdatetime media nonbreaking save table contextmenu directionality",
+      "emoticons template paste textcolor colorpicker textpattern imagetools codesample toc FMathEditor",
+    ],
+    toolbar1: "undo redo | insert | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image",
+    toolbar2: "print preview media | forecolor backcolor emoticons | codesample | FMathEditor",
+  });
+  tinymce.init({
+    selector: "#hindiexampleFormControlTextarea2",
+    language: "hi_IN",
+    height: 200,
+    theme: "modern",
+    setup: function (editor) {
+      editor.on("init", function (e) {
+        editor.setContent("<p></p>");
+      });
+    },
+    plugins: [
+      "advlist autolink lists link image charmap print preview hr anchor pagebreak",
+      "searchreplace wordcount visualblocks visualchars code fullscreen",
+      "insertdatetime media nonbreaking save table contextmenu directionality",
+      "emoticons template paste textcolor colorpicker textpattern imagetools codesample toc FMathEditor",
+    ],
+    toolbar1: "undo redo | insert | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image",
+    toolbar2: "print preview media | forecolor backcolor emoticons | codesample | FMathEditor",
+  });
+  tinymce.init({
+    selector: "#exampleFormControlTextarea2",
+    height: 200,
+    theme: "modern",
+    setup: function (editor) {
+      editor.on("init", function (e) {
+        editor.setContent("<p>Type Solution</p>");
+      });
+    },
+    plugins: [
+      "advlist autolink lists link image charmap print preview hr anchor pagebreak",
+      "searchreplace wordcount visualblocks visualchars code fullscreen",
+      "insertdatetime media nonbreaking save table contextmenu directionality",
+      "emoticons template paste textcolor colorpicker textpattern imagetools codesample toc FMathEditor",
+    ],
+    toolbar1: "undo redo | insert | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image",
+    toolbar2: "print preview media | forecolor backcolor emoticons | codesample | FMathEditor",
+  });
 
-        function checkbox() {
+  function checkbox() {
     var value = $("#negativecheck").is(":checked");
     negative = document.getElementById("negative");
     var output;
@@ -352,6 +383,7 @@ tinymce.init({
       output = `<input
       type="number"
       class="mt-2 form-control"
+      min="0"
       placeholder="Enter Negative Marks"
       name="negative_marks"
       value="0"
@@ -365,67 +397,70 @@ tinymce.init({
     }
     negative.innerHTML = output;
   }
-      // In your Javascript (external .js resource or <script> tag)
-$(document).ready(function() {
+
+  $(document).ready(function () {
+    addop();
+    if (performance.navigation.type == 2) {
+      location.reload();
+    }
+  });
+  // In your Javascript (external .js resource or <script> tag)
+  $(document).ready(function () {
     $('.js-example-basic-single').select2();
-});
+  });
 
-$(document).ready(function() {
-    $('#question_type_select').change(function(){
-        var type = $(this).val();
-        if(type=='mc'){
-          var optioninput = '<div class="row mb-2" id="multipleinput">'
-              optioninput += '<div class="col">'
-        optioninput += '<input type="text" class="form-control" placeholder="Enter Value" name="options">'
-              optioninput += '</div>'
-              optioninput += '<div class="col-auto">'
-optioninput += '<a onclick="addtext()" class="btn btn-primary mb-2" style="color:white;">Add Option</a>'
-              optioninput += '</div>'
-              optioninput += '</div>'
-          $('#solutionbox').append(optioninput);
-        }
-        else{
-          $('#multipleinput').remove();
-          $('#multipleinput').remove();
-          $('#multipleinput').remove();
-          $('#multipleinput').remove();
-        }
-    });
-});
+  function addop() {
 
-$(document).ready(function() {
-    $('#question_type_select').change(function(){
-        var type = $(this).val();
-        if(type=='tf'){
-          var optioninput = '<div class="row mb-2" id="multipleinput">'
-        optioninput += '<div class="col">'
-        optioninput += '<input type="text" class="form-control" placeholder="First Value" name="options">'
-        optioninput += '</div>'
-        optioninput += '</div>'
-        var anotherinput = '<div class="row mb-2" id="multipleinput">'
-        anotherinput += '<div class="col">'
-        anotherinput += '<input type="text" class="form-control" placeholder="Second Value" name="options">'
-        anotherinput += '</div>'
-        anotherinput += '</div>'
-          $('#solutionbox').append(optioninput);
-          $('#solutionbox').append(anotherinput);
-        }
-    });
-});
-$(document).ready(function() {
-    $('#buttons').hide();
-});
+    var type = $('#question_type_select').val();
 
-function HindiTextarea(){
-  $('#buttons').show();
-  $('#englisharea').hide();
-}
-function HindiTextareaHide(){
-  $('#buttons').hide();
-  $('#englisharea').show();
-}
+    var multipleinput = $('.multipleinput')
+    for (let i = 0; i < multipleinput.length; i++) {
+      multipleinput[i].remove();
+    }
 
-    </script>
+    if (type == 'mc') {
+      var optioninput = '<div class="row mb-2 multipleinput">'
+      optioninput += '<div class="col">'
+      optioninput += '<input type="text" class="form-control" placeholder="Enter Value" name="options">'
+      optioninput += '</div>'
+      optioninput += '<div class="col-auto">'
+      optioninput += '<a onclick="addtext()" class="btn btn-primary mb-2" style="color:white;">Add Option</a>'
+      optioninput += '</div>'
+      optioninput += '</div>'
+      $('#solutionbox').append(optioninput);
+    }
+
+    if (type == 'tf') {
+      var optioninput = '<div class="row mb-2 multipleinput">'
+      optioninput += '<div class="col">'
+      optioninput += '<input type="text" class="form-control" placeholder="First Value" name="options">'
+      optioninput += '</div>'
+      optioninput += '</div>'
+      var anotherinput = '<div class="row mb-2 multipleinput">'
+      anotherinput += '<div class="col">'
+      anotherinput += '<input type="text" class="form-control" placeholder="Second Value" name="options">'
+      anotherinput += '</div>'
+      anotherinput += '</div>'
+      $('#solutionbox').append(optioninput);
+      $('#solutionbox').append(anotherinput);
+    }
+  }
+
+  function HindiTextarea() {
+    $('#hindiarea1').show();
+    $('#hindiarea2').show();
+    $('#englisharea1').hide();
+    $('#englisharea2').hide();
+  }
+
+  function HindiTextareaHide() {
+    $('#hindiarea1').hide();
+    $('#hindiarea2').hide();
+    $('#englisharea1').show();
+    $('#englisharea2').show();
+  }
+</script>
 
 </div>
+</main>
 {% endblock main-content %}

@@ -32,9 +32,13 @@ def GetExamResults(request,exam_id):
     students = StudentMapping.objects.filter(exam=exam)
     batches = []
     for std in students:
-        batches.append(AddStudentInst.objects.get(student = std.student).batch)
+        try:
+            batches.append(AddStudentInst.objects.get(student = std.student).batch)
+        except:
+            batches.append('Not Available')
     context={
-	'students':zip(students,batches)
+	'students':zip(students,batches),
+    'size':len(students)
 	}
     if request.session['type'] == "Institute":
         context['template']='dashboard/base.html'

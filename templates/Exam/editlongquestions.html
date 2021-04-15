@@ -144,6 +144,7 @@
       class="mt-2 form-control"
       placeholder="Enter Negative Marks"
       name="negative_marks"
+      min="0"
       {% if question.negative_marks %}
   value="{{question.negative_marks|floatformat}}"
   {% else %}
@@ -161,6 +162,7 @@
   }
   // In your Javascript (external .js resource or <script> tag)
   $(document).ready(function () {
+    checkbox();
     $('.js-example-basic-single').select2();
   });
 </script>

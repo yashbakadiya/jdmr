@@ -150,11 +150,13 @@
             <form id='submitForm' method='post' enctype=multipart/form-data>{% csrf_token %}
                 <div class="row">
                     <div class="col-md-6 col-lg-5 col-12 input-group form-group">
-                        <label class="control-label col-sm-5 col-5 mt-2" style="color:black;">Add Video<span
+                        <label class="control-label col-sm-5 col-5 mt-2" style="color:black;">Edit Video<span
                                 class="text-danger">*</span></label>
                         <div class="w-100 col-sm-7 col-7">
-                            <input type="file" class="custom-file-input" id="validatedCustomFile" onchange="addfile()" required name="video">
-                            <label class="custom-file-label" for="validatedCustomFile">Choose file...</label>
+                            <input type="file" class="custom-file-input" id="validatedCustomFile"
+                                onchange="addfile(this)" name="video" value="{{tutorial.Video}}">
+                            <label class="custom-file-label" for="validatedCustomFile" style="overflow: hidden;">Choose
+                                file ...</label>
                         </div>
                     </div>
 
@@ -179,16 +181,6 @@
 </div>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script type="text/javascript">
-    $(document).ready(function () {
-        $("#add").click(function () {
-            var AddVideo = "<tr>"
-            AddVideo += "<td><input class='rounded' type='file' name='video'></td>"
-            AddVideo += "<td><input type='text' name='title' class='form-control' id='exampleInputEmail1' aria-describedby='emailHelp' placeholder='Enter Video Title'></td>"
-            AddVideo += "<td><textarea type='text' rows='1' name='description' class='form-control' id='exampleInputEmail1' aria-describedby='emailHelp' placeholder='Enter Video Description'></textarea></td>"
-            AddVideo += "</tr>";
-            $("table tbody").append(AddVideo);
-        })
-    })
 
     function addfile(el) {
         var file = $(el).val();
@@ -203,5 +195,14 @@
             $(".custom-file-label").html(filename);
         }
     }
+
+    $(document).ready(() => {
+        var file = `{{tutorial.Video.name}}`;
+        if (file.length > 25) {
+            file = file.substring(0, 25) + '  ...';
+        };
+        $(".custom-file-label").html(file);
+    })
+
 </script>
 {% endblock %}

@@ -96,6 +96,10 @@
   </div>
 </div>
 <script>
+  $(document).ready(function () {
+    checkbox();
+    $('.js-example-basic-single').select2();
+  });
   tinymce.init({
     selector: "#exampleFormControlTextarea1",
     height: 200,
@@ -144,6 +148,7 @@
       class="mt-2 form-control"
       placeholder="Enter Negative Marks"
       name="negative_marks"
+      min="0"
       {% if question.negative_marks %}
   value="{{question.negative_marks|floatformat}}"
   {% else %}
@@ -160,9 +165,6 @@
     negative.innerHTML = output;
   }
   // In your Javascript (external .js resource or <script> tag)
-  $(document).ready(function () {
-    $('.js-example-basic-single').select2();
-  });
 </script>
 
 </div>

@@ -149,7 +149,7 @@ td{
             <form id='submitForm' method='post' enctype=multipart/form-data>{% csrf_token %}
                 <div class="row">
                     <div class="col-md-6 col-lg-5 col-12 input-group form-group">
-                        <label class="control-label col-sm-5 col-5 mt-2" style="color:black;">Add Video<span
+                        <label class="control-label col-sm-5 col-5 mt-2" style="color:black;">Edit Video<span
                                 class="text-danger">*</span></label>
                         <div class="w-100 col-sm-7 col-7">
                             <input type="file" class="custom-file-input" id="validatedCustomFile" onchange="addfile()" required name="video">
@@ -202,5 +202,14 @@ td{
             $(".custom-file-label").html(filename);
         }
     }
+    
+    $(document).ready(() => {
+        var file = `{{tutorial.Video.name}}`;
+        if (file.length > 25) {
+            file = file.substring(0, 25) + '  ...';
+        };
+        $(".custom-file-label").html(file);
+    })
+    
 </script>
 {% endblock %}

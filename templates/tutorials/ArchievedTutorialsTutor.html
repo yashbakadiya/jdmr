@@ -4,6 +4,16 @@
 {% block main-content %}
     <main>
         <div class="mt-5">
+        {% if messages %}
+        {% for k in messages%}
+        <div class="alert alert-{{k.tags}} alert-dismissible fade show" role="alert">
+            <b>{{ k }} !</b>
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        {% endfor %}
+        {% endif %}
         <div class="card">
             <div class="card-header">
                 <div class="row">
@@ -12,33 +22,41 @@
                     </div>
                 </div>
             </div>
-            {% if tutorials %}
+            {% if size %}
             <div class="card-body">
                 <form action="" method="post">{% csrf_token %}
                     <div id='mainForm' class="table-responsive">
                     <!--Table-->
                     <table id="htmlgrid" class="testgrid table table-striped table-bordered table-hover mb-4">
                         <!--Table head-->
-                        <thead>
                             <tr>
-                                <th style="color: black;">#</th>
-                                <th style="color: black;">Course Title</th>
-                                <th style="color: black;">Course Duration</th>
-                                <th style="color: black;">Course Fees</th>
-                                <th class="text-center" style="color: black;">Delete</th>
-                                <th style="color: black;">Remove Archive</th>
+                                <th>#</th>
+                                <th>Course Name</th>
+                                <th>Class</th>
+                                <th>Course</th>
+                                <th>Course Duration</th>
+                                <th>Course Fees</th>
+                                <th>Course Discount</th>
+                                <th>Last Updated</th>
+                                <th class="text-center">Delete</th>
+                                <th>Remove Archive</th>
                             </tr>
-                        </thead>
                         <!--Table head-->
                         <!--Table body-->
-                        <tbody>
-                            {% for i in tutorials reversed %}
+                            {% for i,date in tutorials reversed %}
                             <tr>
                                 <td>{{forloop.counter}}</td>
-                                <td><p style="color: black;">{{i.Title}}</p></td>
-                                
-                                <td>{{i.Duration}} Months</td>
-                                <td>{{i.Fees}}</td>
+                                <td>{{i.Title}}</td>
+                                <td>{{i.forclass}}</td>
+                                <td>{{i.Course.courseName}}</td>
+                                <td>{{i.Duration}}</td>
+                                <td>{% if i.Fees %} {{i.Fees}} {% else %} Free {% endif %}</td>
+                                {% if i.Discount_Validity %}
+                                <td>{{i.Discounted_price }} <del>{{i.Fees}}</del></td>
+                                {% else %}
+                                <td>Not Available</td>
+                                {% endif %}
+                                <td>{{date|date:'F d,Y'}}</td>
                                 <td class="text-center">
                                 <a class="btn btn-danger mx-2" href="{% url 'deletetutorialstutor' i.id %}"><i
                                         class="flaticon-delete-fill" style="font-size:medium;"></i></a>
@@ -48,7 +66,6 @@
                                 </td>
                             </tr>
                             {% endfor %}
-                        </tbody>
                         <!--Table body-->
                     </table>
                     <!--Table-->

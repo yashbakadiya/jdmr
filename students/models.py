@@ -12,10 +12,6 @@ class AddStudentInst(models.Model):
     installments = models.IntegerField(default=2)
     archieved = models.BooleanField(default=False)
 
-    class Meta:
-        unique_together = [['student', 'institute']] 
-
-
 class School(models.Model):
     name = models.CharField(max_length=150,default="")
     def __str__(self):
@@ -50,7 +46,7 @@ class PostAssignment(models.Model):
     forclass = models.CharField(max_length=255,default="")
     description = models.CharField(max_length=1024,default="")
     descriptionFile = models.FileField(upload_to=assignmentDescriptionFiles,null=True,blank=True)
-    requirement = models.DecimalField(max_digits=4,decimal_places=0)
+    deadline = models.DateTimeField(null=True,blank=True)
     budget = models.DecimalField(max_digits=10,decimal_places=2,default=0)
     timestamp = models.DateTimeField(auto_now_add=True)
     assigned = models.BooleanField(default=False)

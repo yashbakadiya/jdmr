@@ -3,16 +3,16 @@
 {% block main-content %}
 <main>
     <div class="mt-5">
-    {% if messages %}
-    {% for k in messages%}
-    <div class="alert alert-{{k.tags}} alert-dismissible fade show" role="alert">
-        <b>{{ k }} !</b>
-        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-        </button>
-    </div>
-    {% endfor %}
-    {% endif %}
+        {% if messages %}
+        {% for k in messages%}
+        <div class="alert alert-{{k.tags}} alert-dismissible fade show" role="alert">
+            <b>{{ k }} !</b>
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        {% endfor %}
+        {% endif %}
         <div class="card mb-4">
             <div class="card-header">
                 <!-- Grid row -->
@@ -23,36 +23,41 @@
                     </div>
 
                     <div class="col-md-4">
-                        <input id="searchbox" type="text" class="form-control" name='srh' placeholder="Search Exam or Course" required>
+                        <input id="searchbox" type="text" class="form-control" name='srh'
+                            placeholder="Search Exam or Course" required>
                     </div>
 
                     <!-- Grid column -->
                 </div>
             </div>
-            {% if exams %}
-                <div class="card-body">
+            {% if size %}
+            <div class="card-body">
                 <!-- Grid row -->
                 <form action="" method="post">{% csrf_token %}
                     <!--Table-->
                     <div class="table-responsive">
-                    <table class="table table-striped">
-                        <!--Table head-->
+                        <table class="table table-striped">
+                            <!--Table head-->
                             <tr>
+                                <th>#</th>
                                 <th>Exam Name</th>
                                 <th>Course</th>
-                                <th>Batch Timing</th>
+                                <th>Batch</th>
                                 <th>Exam Date</th>
                                 <th>Exam Duration</th>
                                 <th>Total No. of Questions</th>
                                 <th>Pass Percentage</th>
                                 <th class="text-center">Exam status</th>
                                 <th class="text-center" colspan="2">Action</th>
-                                
+                                <th class="text-center">Add Questions</th>
+                                <th class="text-center">Edit Questions</th>
+
                             </tr>
-                        <!--Table head-->
-                        <!--Table body-->
-                            {% for i in exams %}
+                            <!--Table head-->
+                            <!--Table body-->
+                            {% for i,j in exams %}
                             <tr class="main-row">
+                                <td>{{forloop.counter}}</td>
                                 <td>{{i.Name}}</td>
                                 <td>{{i.course.courseName}}</td>
                                 <td>{{i.Batch}}</td>
@@ -61,64 +66,73 @@
                                 <td>{{i.question_count}}</td>
                                 <td>{{i.pass_percentage}}</td>
                                 {% if i.status %}
-                                <td class="text-center"><a href="{% url 'toggle' i.id %}" class="btn btn-danger p-1">Deactivate</a></td>
+                                <td class="text-center"><a href="{% url 'toggle' i.id %}"
+                                        class="btn btn-danger p-1">Deactivate</a></td>
                                 {% else %}
-                                <td class="text-center"><a href="{% url 'toggle' i.id %}" class="btn btn-primary p-1">Activate</a></td>
+                                <td class="text-center"><a href="{% url 'toggle' i.id %}"
+                                        class="btn btn-primary p-1">Activate</a></td>
                                 {% endif %}
-                                <td class="text-center">
-                                    <a class="btn btn-warning" href="{% url 'EditExam' i.id %}"><i class="flaticon-pencil-line" style="font-size:medium;"></i></a>
+                                <td class="text-center" {% if j %} title="Cannot Edit Exam When Live" {% endif %}>
+                                    <a class="btn btn-warning {% if j %} disabled" aria-disabled="true" {% else %} " {% endif %} href="{% url 'EditExam' i.id %}"><i
+                                            class="flaticon-pencil-line" style="font-size:medium;"></i></a>
                                 </td>
-                                <td class="text-center">
-                                    <a class="btn btn-danger" href="{% url 'DeleteExam' i.id %}"><i class="flaticon-delete-fill" style="font-size:medium;"></i></a>
+                                <td class="text-center" {% if j %} title="Cannot Delete Exam When Live" {% endif %} >
+                                    <a class="btn btn-danger {% if j %} disabled" aria-disabled="true" {% else %} " {% endif %} href="{% url 'DeleteExam' i.id %}"><i
+                                            class="flaticon-delete-fill" style="font-size:medium;"></i></a>
+                                </td>
+                                <td class="text-center" {% if j %} title="Cannot Add Questions When Exam is Live" {% endif %} >
+                                    <a href="{% url 'questions' i.id %}" class="btn btn-info p-1 {% if j %} disabled" aria-disabled="true" {% else %} " {% endif %} >Add Questions</a>
+                                </td>
+                                <td class="text-center" {% if j %} title="Cannot Edit Questions When Exam is Live" {% endif %} >
+                                    <a class="btn btn-info p-1 {% if j %} disabled" aria-disabled="true" {% else %} " {% endif %} href="{% url 'editquestions' i.id %}">Edit Questions</a>
                                 </td>
                             </tr>
                             {% endfor %}
-                        <!--Table body-->
-                    </table>
-                </div>
+                            <!--Table body-->
+                        </table>
+                    </div>
                     <!--Table-->
                 </form>
                 <br>
             </div>
             {% else %}
-                <div class="card-header" style="background: none;">
-                    <div class="row">
-                        <div class="col-xl-12 col-md-12 col-12">
-                            <h2>No Exams to show</h2>
-                        </div>
+            <div class="card-header" style="background: none;">
+                <div class="row">
+                    <div class="col-xl-12 col-md-12 col-12">
+                        <h2>No Exams to show</h2>
                     </div>
                 </div>
-                {% endif %}
+            </div>
+            {% endif %}
         </div>
-    </main>
-    <script type="text/javascript">
-        trlist = $(".main-row");
-        $("body").on('input',"#searchbox",function(){
-            trlist.hide();
-            search = this.value.toLowerCase();
-            len = search.length;
-            for(i=0;i<trlist.length;i++){
-                if(trlist[i].children[0].textContent==""){
-                    cont = cont;
-                }
-                else{
-                    cont = trlist[i].children[0].textContent.toLowerCase();
-                }
-                if(cont.search(search)!=-1){
-                    $(trlist[i]).show();
-                }
-                if(trlist[i].children[1].textContent==""){
-                    cont2 = cont2;
-                }
-                else{
-                    cont2 = trlist[i].children[1].textContent.toLowerCase();
-                }
-                if(cont2.search(search)!=-1){
-                    $(trlist[i]).show();
-                }
+</main>
+<script type="text/javascript">
+    trlist = $(".main-row");
+    $("body").on('input', "#searchbox", function () {
+        trlist.hide();
+        search = this.value.toLowerCase();
+        len = search.length;
+        for (i = 0; i < trlist.length; i++) {
+            if (trlist[i].children[0].textContent == "") {
+                cont = cont;
             }
+            else {
+                cont = trlist[i].children[0].textContent.toLowerCase();
+            }
+            if (cont.search(search) != -1) {
+                $(trlist[i]).show();
+            }
+            if (trlist[i].children[1].textContent == "") {
+                cont2 = cont2;
+            }
+            else {
+                cont2 = trlist[i].children[1].textContent.toLowerCase();
+            }
+            if (cont2.search(search) != -1) {
+                $(trlist[i]).show();
+            }
+        }
 
-        });
-
-    </script>
-    {% endblock main-content %}
+    });
+</script>
+{% endblock main-content %}

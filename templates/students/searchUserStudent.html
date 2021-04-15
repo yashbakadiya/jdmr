@@ -47,7 +47,7 @@
             <div class="card mb-4">
                 <div class="card-header">
                     <div>
-                        <h2 style="color: rgb(0, 0, 0);">Results Are for your search</h2>
+                        <h2 style="color: rgb(0, 0, 0);">Results for searched students</h2>
                     </div>
                 </div>
 
@@ -61,10 +61,10 @@
                                                 <th>First Name</th>
                                                 <th>Last Name</th>
                                                 <th>Email Address</th>
-                                                <th>Pin Code</th>
+                                                <th>Address</th>
                                                 <th>Phone Number</th>
                                                 <th>School Name</th>
-                                                <th>Add</th>
+                                                <th class="text-center">Add</th>
                                             </tr>
                                         <!--Table head-->
                                         <!--Table body-->
@@ -74,10 +74,10 @@
                                                     <td>{{i.user.first_name}}</td>
                                                     <td>{{i.user.last_name}}</td>
                                                     <td>{{i.user.email}}</td>
-                                                    <td>{{i.pincode}}</td>
+                                                    <td>{{i.address}}</td>
                                                     <td>{{i.phone}}</td>
                                                     <td>{{i.schoolName}}</td>
-                                                    <td>
+                                                    <td class="text-center">
                                                         <a href="{% url 'AddalreadyExistsStudent' i.id %}" class="btn btn-danger">Add</a>
                                                     </td>
                                                 </tr>

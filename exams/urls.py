@@ -11,9 +11,8 @@ urlpatterns = [
     path('classes', FindCourses, name="findCourse"), #altered
     path('teachings', FindTeaching, name="findTeaching"), #altered
     path('batches', FindBatches, name="findBatch"), #altered
-    path('Questions/all/add', QuestionsSection, name="questionsection"),
+    path('fees',FindFees,name="findFees"),
     path('Questions/add/<exam_id>', CreateQuestions, name='questions'),
-    path('Questions/edit/all', EditExamQuestions, name="editexamquestions"),
     path('Questions/edit/<exam_id>', EditQuestions, name="editquestions"),
     path('Questions/shortquestions/edit/<question_id>',
          EditShortQuestions, name='shortansedit'),
@@ -49,12 +48,8 @@ urlpatterns = [
     path('Tutor/tutortoggle/<exam_id>', ToggleTutorExam, name='tutortoggle'),
     path('Tutor/delete/<exam_id>', DeleteTutorExam, name='DeleteTutorExam'),
     path('Tutor/Exam/Edit/<exam_id>', EditExamTutor, name="edittutorexams"),
-    path('Tutor/add/Question/Exam/all',
-         addQuestionsTutor, name="addquestionstutor"),
     path('Tutor/Question/<exam_id>', CreateQuestionsTutor,
          name="createquestionstutor"),
-    path('Tutor/Questions/Edit/all',
-         EditExamQuestionsTutor, name="questionalltutor"),
     path('Tutor/Question/edit/<exam_id>',
          EditQuestionsTutor, name="editquestionstutor"),
     path('Tutor/Exam/Questions/shortquestions/edit/<question_id>',
@@ -65,6 +60,16 @@ urlpatterns = [
          EditBooleanQuestionsTutor, name='booleanansedittutor'),
     path('Tutor/Exam/Questions/multiplequestions/edit/<question_id>',
          EditMultipleQuestionsTutor, name='multipleansedittutor'),
+
+     path('Tutor/Exam/Questions/shortquestions/delete/<question_id>',
+         DeleteShortQuestionsTutor, name='shortansdeletetutor'),
+    path('Tutor/Exam/Questions/longquestions/delete/<question_id>',
+         DeleteLongQuestionsTutor, name='longansdeletetutor'),
+    path('Tutor/Exam/Questions/booleanquestions/delete/<question_id>',
+         DeleteBooleanQuestionsTutor, name='booleanansdeletetutor'),
+    path('Tutor/Exam/Questions/multiplequestions/delete/<question_id>',
+         DeleteMultipleQuestionsTutor, name='multipleansdeletetutor'),
+     
     path('Student/Tutor/Exam/<pk>', tutor_instruction, name="tutor_instruction"),
     path('Student/Tutor/Exam/start/<pk>', tutor_start_exam, name="tutor_start_exam"),
     path('Student/Tutor/all/Questions/<pk>', tutor_view_questions, name="tutor_view_questions"),

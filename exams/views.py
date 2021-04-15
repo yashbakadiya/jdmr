@@ -2,6 +2,7 @@ from django.shortcuts import render,redirect,HttpResponse,HttpResponseRedirect
 from accounts.models import Institute,Student,Teacher
 from courses.models import Courses, TeachingType
 from batches.models import BatchTiming,BatchTimingTutor
+from fees.models import AddFeesC
 from exams.models import *
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
@@ -54,7 +55,11 @@ def AddExam(request):
                 negative_marks = request.POST.get('negative_marks','')
                 tc = request.POST.get('tc','')
                 status = request.POST.get('status','')
-                noquestions = request.POST.get('noquestions','')
+
+                if Exam.objects.filter(Name=name):
+                    messages.warning(request,"Exam With Same Name Already Exists")
+                    return redirect("viewexams")
+
                 data = Exam()
                 data.institute = inst
                 data.course = course
@@ -67,7 +72,6 @@ def AddExam(request):
                 data.exam_time = d
                 data.exam_duration = duration
                 data.timezone = timezone_offset
-                data.pass_percentage = pp
                 if redate:
                     data.reexam_date = redate
                 if calculator:
@@ -82,8 +86,10 @@ def AddExam(request):
                     data.status = True
                 else:
                     data.status = False
-                if noquestions:
-                    data.question_count = noquestions
+                if pp:
+                    data.pass_percentage = pp
+                else:
+                    data.pass_percentage=0
                 data.save()
                 messages.success(request,"Exam Added Successfully")
                 return redirect("viewexams")
@@ -95,61 +101,41 @@ def AddExam(request):
 
 @login_required(login_url="Login")
 def ListExams(request):
-    try:
+    # try:
         if request.session['type'] == "Institute":
             user = User.objects.get(username=request.session['user'])
             inst = Institute.objects.get(user=user)
+            live=[]
             context = {}
+
             if Exam.objects.filter(institute=inst).exists():
                 exams = Exam.objects.filter(institute=inst)
-                context['exams']=exams
+
+                try:
+                    json_datetime=requests.get('http://worldtimeapi.org/api/ip',timeout=10)
+                    json_datetime=json.loads(json_datetime.content)
+                    match_date = re.search(r'\d{4}-\d{2}-\d{2}',json_datetime['datetime'])
+                    match_time = re.search(r'\d{2}:\d{2}:\d{2}',json_datetime['datetime'])
+                    datetime_obj = datetime.strptime(match_date.group()+' '+match_time.group(), '%Y-%m-%d %H:%M:%S')
+
+                except:
+                    datetime_obj = datetime.now()
+
+                for exam in exams:
+
+                    if((datetime.combine(exam.exam_date,exam.exam_time) <= datetime_obj)):
+                        if exam.status:
+                            live.append(True)
+                        else:
+                            live.append(False)
+
+                    else:
+                        live.append(False)
+
+                context['exams']=zip(exams,live)
+                context['size']=len(exams)
             return render(request,'Exam/viewExams.html',context)
         return HttpResponse("You Are not Authenticated User for this Page")
-    except:
-        return HttpResponse("Something Unexpected")
-
-
-
-@login_required(login_url="Login")
-def QuestionsSection(request):
-    try:
-        if request.session["type"] == "Institute":
-            user = User.objects.get(username=request.session['user'])
-            inst = Institute.objects.get(user=user)
-            context = {}
-            if Exam.objects.filter(institute=inst).exists():
-                exams = Exam.objects.filter(institute=inst)
-                context['exams']=exams
-            else:
-                context['exams']=[]
-            if request.method=='POST':
-                e_id = request.POST.get('exam','')
-                if  e_id:
-                    return redirect('questions',e_id)
-            return render(request,'Exam/Questionsection.html',context)
-        return HttpResponse("You Are not Authenticated User for this Page")
-    except:
-        return HttpResponse("Something Unexpected")
-
-
-@login_required(login_url="Login")
-def EditExamQuestions(request):
-    try:
-        if request.session["type"] == "Institute":
-            user = User.objects.get(username=request.session['user'])
-            inst = Institute.objects.get(user=user)
-            context = {}
-            if Exam.objects.filter(institute=inst).exists():
-                exams = Exam.objects.filter(institute=inst)
-                context['exams']=exams
-            else:
-                context['exams']=[]
-            return render(request,'Exam/editexamquestions.html',context)
-        return HttpResponse("You Are not Authenticated User for this Page")
-    except:
-        return HttpResponse("Something Unexpected")
-
-
 
 def FindCourses(request):
     courses = []
@@ -157,8 +143,9 @@ def FindCourses(request):
 
     if forclass:
         course_obj = Courses.objects.filter(forclass=forclass)
-        for i in course_obj:
-            courses.append((i.id,i.courseName))
+        if course_obj:
+            for i in course_obj:
+                courses.append((i.id,i.courseName))
     return JsonResponse({'courses':list(set(courses))})
 
 def FindTeaching(request):
@@ -166,10 +153,10 @@ def FindTeaching(request):
     course = request.GET.get('course')
     teaching=[]
     if course:
-        courses = Courses.objects.filter(courseName = course)[0]
+        courses = Courses.objects.filter(courseName = course,forclass=forclass)
         if courses:
             if forclass:
-                teach = TeachingType.objects.filter(course=courses,forclass=forclass).values_list('teachType')
+                teach = TeachingType.objects.filter(course=courses[0],forclass=forclass).values_list('teachType')
                 for i in teach:
                     teaching.extend(i[0].split(','))
 
@@ -181,21 +168,53 @@ def FindBatches(request):
     batches=[]
 
     if course:
-        courses = Courses.objects.filter(courseName = course)[0]
+        courses = Courses.objects.filter(courseName = course,forclass=forclass)
         if courses:
             if forclass:
-                batches = BatchTiming.objects.filter(course=courses,forclass=forclass).values_list('batchName')
+                batches = BatchTiming.objects.filter(course=courses[0],forclass=forclass).values_list('batchName')
 
     return JsonResponse({'batches':list(set(batches))})
 
+def FindFees(request):
+    forclass = request.GET.get('forclass')
+    course = request.GET.get('course')
+    teach = request.GET.get('teach')
+    fees = 0
+
+    if course:
+        courses = Courses.objects.filter(courseName = course,forclass=forclass)
+        if courses:
+            if forclass:
+                fees = AddFeesC.objects.filter(course=courses[0],forclass=forclass,teachType=teach)
+                if fees:
+                    fees = fees.values_list('no_of_installment')[0][0]
+                else:
+                    fees = 0
+    return JsonResponse({'fees':fees})
+
 @login_required(login_url="Login")
 def deleteExam(request,exam_id):
-    try:
         if request.session['type']=="Institute" or request.session['type']=="Teacher":
             try:
                 exam = Exam.objects.get(id=exam_id)
             except:
                 return HttpResponse("Unable to delete")
+
+            try:
+                json_datetime=requests.get('http://worldtimeapi.org/api/ip',timeout=10)
+                json_datetime=json.loads(json_datetime.content)
+                match_date = re.search(r'\d{4}-\d{2}-\d{2}',json_datetime['datetime'])
+                match_time = re.search(r'\d{2}:\d{2}:\d{2}',json_datetime['datetime'])
+                datetime_obj = datetime.strptime(match_date.group()+' '+match_time.group(), '%Y-%m-%d %H:%M:%S')
+
+            except:
+                datetime_obj = datetime.now()
+
+            if exam.status:
+                if((datetime.combine(exam.exam_date,exam.exam_time) <= datetime_obj)):
+                    messages.warning(request,"Cannot Delete Exam When Live")
+                    return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+                    
             if request.session['type']=="Institute":
                 user = User.objects.get(username=request.session['user'])
                 inst = Institute.objects.get(user=user)
@@ -212,23 +231,15 @@ def deleteExam(request,exam_id):
                     instTutor = enrollTutors.objects.filter(teacher=tutor) #added
                     courses = [] #added
                     instituteslist = [] #added
-                    # INSTcourse = instTutor.courseName.replace(";",'')
-                    # coursesID = list(set(INSTcourse))
-                    # courses = []
-                    # for i in coursesID:
-                    #     try:
-                    #         course = Courses.objects.get(id=int(i))
-                    #         courses.append(course)
-                    #     except:
-                    #         pass
-                    for i in instTutor.values_list('courseName'): #added
-                        courses.append(i[0])
+
+                    for i in instTutor.values_list('courseName','forclass'): #added
+                        courses.append(Courses.objects.get(courseName=i[0],forclass=i[1]))
 
                     for i in instTutor.values_list('institute'): #added
                         instituteslist.append(i[0])
 
                     if exam.institute.id in instituteslist:
-                        if exam.course.courseName in courses:
+                        if exam.course in courses:
                             exam.delete()
                             messages.success(request,"Exam deleted Successfully")
                             return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
@@ -237,21 +248,31 @@ def deleteExam(request,exam_id):
                     else:
                         return HttpResponse("You Are not Authenticated User for this Action")
         return HttpResponse("You Are not Authenticated User for this Page")
-    except:
-        return HttpResponse("Something Unexpected")
-
-
-
 
 @login_required(login_url="Login")
 def Editexam(request,exam_id):
-    try:
         if request.session['type']=="Institute" or request.session['type']=="Teacher":
             user = User.objects.get(username=request.session['user'])
             try:
                 exam = Exam.objects.get(id=exam_id)
             except:
                 return HttpResponse("Unable to edit")
+
+            try:
+                json_datetime=requests.get('http://worldtimeapi.org/api/ip',timeout=10)
+                json_datetime=json.loads(json_datetime.content)
+                match_date = re.search(r'\d{4}-\d{2}-\d{2}',json_datetime['datetime'])
+                match_time = re.search(r'\d{2}:\d{2}:\d{2}',json_datetime['datetime'])
+                datetime_obj = datetime.strptime(match_date.group()+' '+match_time.group(), '%Y-%m-%d %H:%M:%S')
+
+            except:
+                datetime_obj = datetime.now()
+
+            if exam.status:
+                if((datetime.combine(exam.exam_date,exam.exam_time) <= datetime_obj)):
+                    messages.warning(request,"Cannot Edit Exam When Live")
+                    return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+
             if request.session['type']=="Institute":
                 inst = Institute.objects.get(user=user)
                 forclass = Courses.objects.filter(intitute=inst).values_list('forclass').distinct()
@@ -268,23 +289,15 @@ def Editexam(request,exam_id):
                 courses = [] #added
                 instituteslist = [] #added
                 batch=[]
-                    # INSTcourse = instTutor.courseName.replace(";",'')
-                    # coursesID = list(set(INSTcourse))
-                    # courses = []
-                    # for i in coursesID:
-                    #     try:
-                    #         course = Courses.objects.get(id=int(i))
-                    #         courses.append(course)
-                    #     except:
-                    #         pass
-                for i in instTutor.values_list('courseName'): #added
-                    courses.append(i[0])
+
+                for i in instTutor.values_list('courseName','forclass'): #added
+                    courses.append(Courses.objects.get(courseName=i[0],forclass=i[1]))
 
                 for i in instTutor.values_list('institute'): #added
-                        instituteslist.append(i[0])
+                    instituteslist.append(i[0])
 
                 if exam.institute.id in instituteslist:
-                    if exam.course.courseName in courses:
+                    if exam.course in courses:
                         for ins in instTutor:
                             batch += BatchTiming.objects.filter(institute=ins.institute)
                         context = {
@@ -314,7 +327,14 @@ def Editexam(request,exam_id):
                 negative_marks = request.POST.get('negative_marks','')
                 tc = request.POST.get('tc','')
                 status = request.POST.get('status','')
-                noquestions = request.POST.get('noquestions','')
+
+                if Exam.objects.filter(Name=name).exclude(id=exam_id):
+                    messages.warning(request,"Exam With Same Name Already Exists")
+                    if request.session['type']=="Institute":
+                        return redirect('viewexams')
+                    elif request.session['type']=="Teacher":
+                        return redirect('viewexamstutor')
+
                 if course:
                     course = Courses.objects.get(id=course)
                     exam.course = course
@@ -341,17 +361,23 @@ def Editexam(request,exam_id):
                     exam.reexam_date = redate
                 if calculator:
                     exam.calculator = True
+                else:
+                    exam.calculator = False
                 if imguplod:
                     exam.imgupload = True
+                else:
+                    exam.imgupload = False
                 if nm:
                     exam.negative_marking = True
                     exam.negative_marks = negative_marks
+                else:
+                    exam.negative_marking = False
+                    exam.negative_marks = 0.0
                 exam.tandc = tc
                 if status=="1":
                     exam.status = True
                 else:
                     exam.status = False
-                exam.question_count = noquestions
                 exam.save()
                 messages.success(request,"Exam Updated successfully")
                 if request.session['type']=="Institute":
@@ -360,10 +386,6 @@ def Editexam(request,exam_id):
                     return redirect('viewexamstutor')
             return render(request,'Exam/editExam.html',context)
         return HttpResponse("You Are not Authenticated User for this Page")
-    except:
-        return HttpResponse("Something Unexpected")
-
-
 
 @login_required(login_url="Login")
 def ToggleExam(request,exam_id):
@@ -393,23 +415,15 @@ def ToggleExam(request,exam_id):
                 instTutor = enrollTutors.objects.filter(teacher=tutor) #added
                 courses = [] #added
                 instituteslist = [] #added
-                    # INSTcourse = instTutor.courseName.replace(";",'')
-                    # coursesID = list(set(INSTcourse))
-                    # courses = []
-                    # for i in coursesID:
-                    #     try:
-                    #         course = Courses.objects.get(id=int(i))
-                    #         courses.append(course)
-                    #     except:
-                    #         pass
-                for i in instTutor.values_list('courseName'): #added
-                    courses.append(i[0])
-                
+
+                for i in instTutor.values_list('courseName','forclass'): #added
+                    courses.append(Courses.objects.get(courseName=i[0],forclass=i[1]))
+
                 for i in instTutor.values_list('institute'): #added
                     instituteslist.append(i[0])
 
                 if exam.institute.id in instituteslist:
-                    if exam.course.courseName in courses:
+                    if exam.course in courses:
                         if exam.status:
                             exam.status = False
                             messages.warning(request,"Exam Deactivated Successfully")
@@ -437,7 +451,6 @@ def CreateQuestions(request,exam_id):
             user = User.objects.get(username=request.session['user'])
             tutor = Teacher.objects.get(user=user)
             if enrollTutors.objects.filter(teacher=tutor).exists():
-                # INSTtutor = enrollTutors.objects.get(teacher=tutor)
 
                 instTutor = enrollTutors.objects.filter(teacher=tutor) #added
                 instituteslist = [] #added
@@ -452,6 +465,22 @@ def CreateQuestions(request,exam_id):
             exam = Exam.objects.get(id=exam_id)
         except:
             return HttpResponse("Unable to Add Question In this exam")
+
+        try:
+            json_datetime=requests.get('http://worldtimeapi.org/api/ip',timeout=10)
+            json_datetime=json.loads(json_datetime.content)
+            match_date = re.search(r'\d{4}-\d{2}-\d{2}',json_datetime['datetime'])
+            match_time = re.search(r'\d{2}:\d{2}:\d{2}',json_datetime['datetime'])
+            datetime_obj = datetime.strptime(match_date.group()+' '+match_time.group(), '%Y-%m-%d %H:%M:%S')
+
+        except:
+            datetime_obj = datetime.now()
+
+        if exam.status:
+            if((datetime.combine(exam.exam_date,exam.exam_time) <= datetime_obj)):
+                messages.warning(request,"Cannot Add Questions When Exam is Live")
+                return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+        
         if request.method=="POST":
             if request.session['type']=="Institute" and exam.institute == inst:
                 question_type = request.POST.get('question_type',"")
@@ -460,24 +489,24 @@ def CreateQuestions(request,exam_id):
                 marks = request.POST.get('marks',"")
                 section = request.POST.get('section',"")
                 negative_marks = request.POST.get('negative_marks',"")
-                if question_type=='sq':
-                    try:
-                        data = ShortAnswerQuestion(
-                            exam=exam,
-                            question=question,
-                            correct_ans=solution,
-                            marks=marks,
-                            section=section)
-                        if negative_marks:
-                            data.negative_marks=negative_marks
-                        else:
-                            data.negative_marks=0.0
-                        data.save()
-                    except:
-                        errors.append('Options Cannot be Empty')
 
-                elif question_type=='lq':
-                    try:
+                if exam.negative_marking:
+                    negative_marks = exam.negative_marks
+
+                try:
+                    if question_type=='sq':
+                        data = ShortAnswerQuestion(
+                                exam=exam,
+                                question=question,
+                                correct_ans=solution,
+                                marks=marks,
+                                section=section)
+                        if negative_marks:
+                            data.negative_marks = negative_marks
+                        else:
+                            data.negative_marks = 0.0
+                        data.save()
+                    elif question_type=='lq':
                         data = LongAnswerQuestion(
                             exam=exam,
                             question=question,
@@ -489,11 +518,7 @@ def CreateQuestions(request,exam_id):
                         else:
                             data.negative_marks=0.0
                         data.save()
-                    except:
-                        errors.append('Options Cannot be Empty')
-                elif question_type=='mc':
-                    try:
-
+                    elif question_type=='mc':
                         options = request.POST.getlist('options','')
                         data = MultipleQuestion(
                             exam=exam,
@@ -507,19 +532,16 @@ def CreateQuestions(request,exam_id):
                         else:
                             data.negative_marks=0.0
                         data.save()
-                    except:
-                        errors.append('Options Cannot be Empty')
-                    if options:
-                        for option in options:
-                            answer = MultipleAnswer(
-                                question = MultipleQuestion.objects.get(id=data.id),
-                                option = option
-                                )
-                            answer.save()
+                        if options:
+                            for option in options:
+                                answer = MultipleAnswer(
+                                    question = TutorMultipleQuestion.objects.get(id=data.id),
+                                    option = option
+                                    )
+                                answer.save()
+                        else:
+                            messages.warning(request,'options Cannot be Empty')
                     else:
-                        errors.append('Options Cannot be Empty')
-                else:
-                    try:
                         options = request.POST.getlist('options','')
                         bexam = BooleanQuestion(
                             exam=exam,
@@ -534,9 +556,8 @@ def CreateQuestions(request,exam_id):
                         else:
                             bexam.negative_marks=0.0
                         bexam.save()
-                    except Exception as e:
-                        print(e)
-                        errors.append('Something Went Wrong! Try Again')
+                except:
+                    messages.warning(request,'Question Already Exists')
             elif request.session['type']=="Teacher" and  exam.institute.id in instituteslist:
                 question_type = request.POST.get('question_type',"")
                 question = request.POST.get('question',"")
@@ -544,24 +565,24 @@ def CreateQuestions(request,exam_id):
                 marks = request.POST.get('marks',"")
                 section = request.POST.get('section',"")
                 negative_marks = request.POST.get('negative_marks',"")
-                if question_type=='sq':
-                    try:
-                        data = ShortAnswerQuestion(
-                            exam=exam,
-                            question=question,
-                            correct_ans=solution,
-                            marks=marks,
-                            section=section)
-                        if negative_marks:
-                            data.negative_marks=negative_marks
-                        else:
-                            data.negative_marks=0.0
-                        data.save()
-                    except:
-                        errors.append('Options Cannot be Empty')
 
-                elif question_type=='lq':
-                    try:
+                if exam.negative_marking:
+                    negative_marks = exam.negative_marks
+
+                try:
+                    if question_type=='sq':
+                        data = ShortAnswerQuestion(
+                                exam=exam,
+                                question=question,
+                                correct_ans=solution,
+                                marks=marks,
+                                section=section)
+                        if negative_marks:
+                            data.negative_marks = negative_marks
+                        else:
+                            data.negative_marks = 0.0
+                        data.save()
+                    elif question_type=='lq':
                         data = LongAnswerQuestion(
                             exam=exam,
                             question=question,
@@ -573,11 +594,7 @@ def CreateQuestions(request,exam_id):
                         else:
                             data.negative_marks=0.0
                         data.save()
-                    except:
-                        errors.append('Options Cannot be Empty')
-                elif question_type=='mc':
-                    try:
-
+                    elif question_type=='mc':
                         options = request.POST.getlist('options','')
                         data = MultipleQuestion(
                             exam=exam,
@@ -591,19 +608,16 @@ def CreateQuestions(request,exam_id):
                         else:
                             data.negative_marks=0.0
                         data.save()
-                    except:
-                        errors.append('Options Cannot be Empty')
-                    if options:
-                        for option in options:
-                            answer = MultipleAnswer(
-                                question = MultipleQuestion.objects.get(id=data.id),
-                                option = option
-                                )
-                            answer.save()
+                        if options:
+                            for option in options:
+                                answer = MultipleAnswer(
+                                    question = TutorMultipleQuestion.objects.get(id=data.id),
+                                    option = option
+                                    )
+                                answer.save()
+                        else:
+                            messages.warning(request,'options Cannot be Empty')
                     else:
-                        errors.append('Options Cannot be Empty')
-                else:
-                    try:
                         options = request.POST.getlist('options','')
                         bexam = BooleanQuestion(
                             exam=exam,
@@ -618,9 +632,8 @@ def CreateQuestions(request,exam_id):
                         else:
                             bexam.negative_marks=0.0
                         bexam.save()
-                    except Exception as e:
-                        print(e)
-                        errors.append('Something Went Wrong! Try Again')
+                except:
+                    messages.warning(request,'Question Already Exists')
 
         shortquestions = ShortAnswerQuestion.objects.filter(exam=exam_id)
         booleanquestions = BooleanQuestion.objects.filter(exam=exam_id)
@@ -662,10 +675,11 @@ def CreateQuestions(request,exam_id):
                 item.save()
                 context[f'Section{i}'].append(item)
                 x+=1
+
+        exam.question_count = x-1
+        exam.save()
         return render(request,'Exam/Questions.html',context)
     return HttpResponse("You Are not Authenticated User for this Page")
-
-
 
 @login_required(login_url="Login")
 def EditQuestions(request,exam_id):
@@ -675,6 +689,22 @@ def EditQuestions(request,exam_id):
             exam = Exam.objects.get(id=exam_id)
         except:
             return HttpResponse("Unable To Edit")
+
+        try:
+            json_datetime=requests.get('http://worldtimeapi.org/api/ip',timeout=10)
+            json_datetime=json.loads(json_datetime.content)
+            match_date = re.search(r'\d{4}-\d{2}-\d{2}',json_datetime['datetime'])
+            match_time = re.search(r'\d{2}:\d{2}:\d{2}',json_datetime['datetime'])
+            datetime_obj = datetime.strptime(match_date.group()+' '+match_time.group(), '%Y-%m-%d %H:%M:%S')
+
+        except:
+            datetime_obj = datetime.now()
+
+        if exam.status:
+            if((datetime.combine(exam.exam_date,exam.exam_time) <= datetime_obj)):
+                messages.warning(request,"Cannot Edit Questions When Exam is Live")
+                return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+        
         user = User.objects.get(username=request.session['user'])
         if request.session['type']=="Institute":
             inst = Institute.objects.get(user=user)
@@ -725,7 +755,6 @@ def EditQuestions(request,exam_id):
             tutor = Teacher.objects.get(user=user)
             if enrollTutors.objects.filter(teacher=tutor).exists():
                 if enrollTutors.objects.filter(teacher=tutor).exists():
-                # INSTtutor = enrollTutors.objects.get(teacher=tutor)
 
                     instTutor = enrollTutors.objects.filter(teacher=tutor) #added
                     instituteslist = [] #added
@@ -777,10 +806,10 @@ def EditQuestions(request,exam_id):
                     return HttpResponse("You Are Not Authenticated for this Page")
             else:
                 return HttpResponse("You are not Authenticated for this Page")
+        exam.question_count = x-1
+        exam.save()
         return render(request,'Exam/editquestions.html',context)
     return HttpResponse("You Are not Authenticated User for this Page")
-
-
 
 @login_required(login_url="Login")
 def EditShortQuestions(request,question_id):
@@ -838,7 +867,7 @@ def EditShortQuestions(request,question_id):
             try:
                 question.save()
             except:
-                errors.append('Error Occured! Try Again')
+                messages.warning(request,'Question Already Exists')
 
             context={
             'question':question,
@@ -942,7 +971,7 @@ def EditLongQuestions(request,question_id):
             try:
                 question.save()
             except:
-                errors.append('Error Occured! Try Again')
+                messages.warning(request,'Question Already Exists')
             context={
             'question':question,
             'errors':errors
@@ -1014,7 +1043,7 @@ def EditBooleanQuestions(request,question_id):
             try:
                 question.save()
             except:
-                errors.append('Error Occured! Try Again')
+                messages.warning(request,'Question Already Exists')
             context={
             'question':question,
             'errors':errors
@@ -1093,7 +1122,7 @@ def EditMultipleQuestions(request,question_id):
             try:
                 question.save()
             except:
-                errors.append('Error Occured! Try Again')
+                messages.warning(request,'Question Already Exists')
             context={
             'question':question,
             'errors':errors
@@ -1221,11 +1250,15 @@ def StudentExamsAll(request):
     statuses = []
     context = {}
 
-    json_datetime=requests.get('http://worldtimeapi.org/api/ip')
-    json_datetime=json.loads(json_datetime.content)
-    match_date = re.search(r'\d{4}-\d{2}-\d{2}',json_datetime['datetime'])
-    match_time = re.search(r'\d{2}:\d{2}:\d{2}',json_datetime['datetime'])
-    datetime_obj = datetime.strptime(match_date.group()+' '+match_time.group(), '%Y-%m-%d %H:%M:%S')
+    try:
+        json_datetime=requests.get('http://worldtimeapi.org/api/ip',timeout=10)
+        json_datetime=json.loads(json_datetime.content)
+        match_date = re.search(r'\d{4}-\d{2}-\d{2}',json_datetime['datetime'])
+        match_time = re.search(r'\d{2}:\d{2}:\d{2}',json_datetime['datetime'])
+        datetime_obj = datetime.strptime(match_date.group()+' '+match_time.group(), '%Y-%m-%d %H:%M:%S')
+
+    except:
+        datetime_obj = datetime.now()     
 
     if AddStudentInst.objects.filter(student=student).exists():
         institutestudent = AddStudentInst.objects.get(student=student)
@@ -1604,52 +1637,35 @@ def tof_ans(request):
     exist.save()
     return JsonResponse({'done': 'done'})
 
-
-
 @login_required(login_url="Login")
 def ExamTutor(request):
-    classlist = ['I','II','III','IV','V','VI','VII','VIII','IX','X','XI','XII','Others','Nursery']
     if request.session['type']=="Teacher":    
         user = User.objects.get(username=request.session['user'])
         tutor = Teacher.objects.get(user=user)
-        courses = []
-        batch = []
-        # INSTtutor = []
-        # if enrollTutors.objects.filter(teacher=tutor).exists():
-        #     INSTtutor = enrollTutors.objects.get(teacher=tutor)
-        #     INSTcourse = INSTtutor.courseName.replace(";",'')
-        #     Tutorcourse = tutor.course.replace(";",'')
-        #     coursesID = INSTcourse+Tutorcourse
-        #     coursesID = list(set(coursesID))
-        #     for i in coursesID:
-        #         try:
-        #             course = Courses.objects.get(id=int(i))
-        #             courses.append(course)
-        #         except:
-        #             pass
-        #     batch = BatchTiming.objects.filter(institute=INSTtutor.institute)
+        INSTtutor = []
         forclass = []
         if enrollTutors.objects.filter(teacher=tutor).exists(): #added
             INSTtutor = enrollTutors.objects.filter(teacher=tutor)
             for x in enrollTutors.objects.filter(teacher=tutor):
-                batch += BatchTiming.objects.filter(institute=x.institute)
-                forclass+=Courses.objects.filter(intitute=x.institute).values_list('forclass').distinct()
-                
-        else:
-            Tutorcourse = tutor.course.replace(";",'')
-            coursesID = list(set(Tutorcourse))
-            for i in coursesID:
-                try:
-                    course = Courses.objects.get(id=int(i))
-                    courses.append(course)
-                except:
-                    pass
+                forclass+=Courses.objects.filter(intitute=x.institute).values_list('forclass').distinct()        
+           
+        data={}
+        class_list = tutor.forclass.split(',')
+        unique_class = list(set(class_list))
+        course_list = tutor.course.split(',')
+
+        for i in  range(len(unique_class)):
+            courses_of_class =[]
+            for j in range(len(class_list)):
+                if class_list[j] == unique_class[i]:
+                    courses_of_class.append(course_list[j])
+            data[unique_class[i]] = courses_of_class
 
         context = {
         'INSTtutor':INSTtutor,
-        'classes':forclass,
-        'courses':courses,
-        'batch':batch,
+        'classesInst':forclass,
+        'classes':sorted(unique_class,key=lambda a:int(a)),
+        'data':data
         }
         if request.method == "POST":
             course = request.POST.get('course','')
@@ -1669,7 +1685,6 @@ def ExamTutor(request):
             negative_marks = request.POST.get('negative_marks',0)
             tc = request.POST.get('tc','')
             status = request.POST.get('status','')
-            noquestions = request.POST.get('noquestions','')
             if enrollTutors.objects.filter(teacher=tutor).exists() and check=='on':
                 course = Courses.objects.get(id=int(course))
                 Batch = request.POST.get('batch','')
@@ -1679,69 +1694,40 @@ def ExamTutor(request):
                 data.course = course
                 data.Class = Class
                 data.Batch = Batch
-                data.Name = name
-                data.exam_date = date
-                data.exam_time = exam_time
-                data.exam_duration = duration
-                data.timezone = timezone_offset
-                data.pass_percentage = pp
-                if redate:
-                    data.reexam_date = redate
-                if calculator:
-                    data.calculator = True
-                if imguplod:
-                    data.imgupload = True
-                if nm:
-                    data.negative_marking = True
-                    data.negative_marks = negative_marks
-                data.tandc = tc
-                if status=="1":
-                    data.status = True
-                else:
-                    data.status = False
-                if noquestions:
-                    data.question_count = noquestions
-                data.save()
-                messages.success(request,"Exam Added Successfully")
-                return redirect('viewexamstutor')
             else:
                 price = request.POST.get('price',0)
-                try:
-                    if int(Class):
-                        Class = classlist[int(Class)-1]
-                except:
-                    Class = Class
                 data = TutorExam()
                 data.tutor = tutor
                 data.courseName = course
                 data.forclass = Class
                 data.price = price
-                data.Name = name
-                data.exam_date = date
-                data.exam_time = exam_time
-                data.exam_duration = duration
-                data.timezone = timezone_offset
+
+            data.Name = name
+            data.exam_date = date
+            data.exam_time = exam_time
+            data.exam_duration = duration
+            data.timezone = timezone_offset
+            if redate:
+                data.reexam_date = redate
+            if calculator:
+                data.calculator = True
+            if imguplod:
+                data.imgupload = True
+            if nm:
+                data.negative_marking = True
+                data.negative_marks = negative_marks
+            data.tandc = tc
+            if status=="1":
+                data.status = True
+            else:
+                data.status = False
+            if pp:
                 data.pass_percentage = pp
-                if redate:
-                    data.reexam_date = redate
-                if calculator:
-                    data.calculator = True
-                if imguplod:
-                    data.imgupload = True
-                if nm:
-                    data.negative_marking = True
-                    data.negative_marks = negative_marks
-                data.tandc = tc
-                if status=="1":
-                    data.status = True
-                else:
-                    data.status = False
-                if noquestions:
-                    data.question_count = noquestions
-                data.save()
-                messages.success(request,"Exam Added Successfully")
-                return redirect("viewexamstutor")
-        context['data'] = json.loads(open('cc.txt','r').read())        
+            else:
+                data.pass_percentage=0
+            data.save()
+            messages.success(request,"Exam Added Successfully")
+            return redirect("viewexamstutor")      
         return render(request,'Exam/addExamTutor.html',context)
     return HttpResponse("You are not Authenticate for this Page")
 
@@ -1753,36 +1739,62 @@ def ViewExamTutor(request):
             tutor = Teacher.objects.get(user=user)
             exams = []
             tutorexams = []
+
+            try:
+                json_datetime=requests.get('http://worldtimeapi.org/api/ip',timeout=10)
+                json_datetime=json.loads(json_datetime.content)
+                match_date = re.search(r'\d{4}-\d{2}-\d{2}',json_datetime['datetime'])
+                match_time = re.search(r'\d{2}:\d{2}:\d{2}',json_datetime['datetime'])
+                datetime_obj = datetime.strptime(match_date.group()+' '+match_time.group(), '%Y-%m-%d %H:%M:%S')
+
+            except:
+                datetime_obj = datetime.now()
+
             if enrollTutors.objects.filter(teacher=tutor).exists():
                 INSTtutor = enrollTutors.objects.filter(teacher=tutor) #added
                 courses = [] #added
-                    # INSTcourse = instTutor.courseName.replace(";",'')
-                    # coursesID = list(set(INSTcourse))
-                    # courses = []
-                    # for i in coursesID:
-                    #     try:
-                    #         course = Courses.objects.get(id=int(i))
-                    #         courses.append(course)
-                    #     except:
-                    #         pass
-                for i in INSTtutor.values_list('courseName'): #added
-                    courses.append(i[0])
 
-                for i in courses: #added
-                    course = Courses.objects.get(courseName=i)
+                for i in INSTtutor.values_list('courseName','forclass'): #added
+                    courses.append([i[0],i[1]])
+
+                for i,j in courses: #added
+                    course = Courses.objects.get(courseName=i,forclass=j)
                     for ins in INSTtutor:
                         exam = Exam.objects.filter(Q(institute=ins.institute) & Q(course=course))
-                        exams.append(exam)
-                context = {
-                'INSTtutor':INSTtutor,
-                'exams':exams,
-                'tutorexams':tutorexams
-                }
+                        exams.extend(exam)
+                
+                live=[]
+                for exam in exams:
+
+                    if((datetime.combine(exam.exam_date,exam.exam_time) <= datetime_obj)):
+                        if exam.status:
+                            live.append(True)
+                        else:
+                            live.append(False)
+
+                    else:
+                        live.append(False)
+
             tutorexams = TutorExam.objects.filter(tutor=tutor)
+
+            tutorlive=[]
+            for exam in tutorexams:
+                if((datetime.combine(exam.exam_date,exam.exam_time) <= datetime_obj)):
+                    if exam.status:
+                        tutorlive.append(True)
+                    else:
+                        tutorlive.append(False)
+
+                else:
+                    tutorlive.append(False)
+
             context = {
-            'exams':exams,
-            'tutorexams':tutorexams
-            }
+                'INSTtutor':INSTtutor,
+                'exams':zip(exams,live),
+                'size':len(exams),
+                'tutorexams':zip(tutorexams,tutorlive),
+                'tutorsize':len(tutorexams)
+                }
             return render(request,'Exam/viewExamsTutor.html',context)
         return HttpResponse("You are not Authenticate for this Page")
 
@@ -1799,8 +1811,10 @@ def ToggleTutorExam(request,exam_id):
             if exam.tutor==tutor:
                 if exam.status:
                     exam.status=False
+                    messages.warning(request,'Exam Deactivated Successfully')
                 else:
                     exam.status=True
+                    messages.success(request,'Exam Activated Successfully')
                 exam.save()
                 return redirect('viewexamstutor')
             else:
@@ -1819,6 +1833,21 @@ def DeleteTutorExam(request,exam_id):
                 exam = TutorExam.objects.get(id=exam_id)
             except:
                 return HttpResponse("Unable to delete")
+            try:
+                json_datetime=requests.get('http://worldtimeapi.org/api/ip',timeout=10)
+                json_datetime=json.loads(json_datetime.content)
+                match_date = re.search(r'\d{4}-\d{2}-\d{2}',json_datetime['datetime'])
+                match_time = re.search(r'\d{2}:\d{2}:\d{2}',json_datetime['datetime'])
+                datetime_obj = datetime.strptime(match_date.group()+' '+match_time.group(), '%Y-%m-%d %H:%M:%S')
+
+            except:
+                datetime_obj = datetime.now()
+
+            if exam.status:
+                if((datetime.combine(exam.exam_date,exam.exam_time) <= datetime_obj)):
+                    messages.warning(request,"Cannot Delete Live Exam")
+                    return redirect('viewexamstutor')
+
             user = User.objects.get(username=request.session['user'])
             tutor = Teacher.objects.get(user=user)
             if exam.tutor==tutor:
@@ -1835,26 +1864,44 @@ def DeleteTutorExam(request,exam_id):
 
 @login_required(login_url="Login")
 def EditExamTutor(request,exam_id):
-    classlist = ['I','II','III','IV','V','VI','VII','VIII','IX','X','XI','XII','Others','Nursery']
     if request.session['type']=="Teacher":
         try:
             exam = TutorExam.objects.get(id=exam_id)
         except:
             return HttpResponse("Unable to edit")
+
+        try:
+            json_datetime=requests.get('http://worldtimeapi.org/api/ip',timeout=10)
+            json_datetime=json.loads(json_datetime.content)
+            match_date = re.search(r'\d{4}-\d{2}-\d{2}',json_datetime['datetime'])
+            match_time = re.search(r'\d{2}:\d{2}:\d{2}',json_datetime['datetime'])
+            datetime_obj = datetime.strptime(match_date.group()+' '+match_time.group(), '%Y-%m-%d %H:%M:%S')
+
+        except:
+            datetime_obj = datetime.now()
+
+        if exam.status:
+            if((datetime.combine(exam.exam_date,exam.exam_time) <= datetime_obj)):
+                messages.warning(request,"Cannot Edit Live Exam")
+                return redirect('viewexamstutor')
+
         user = User.objects.get(username=request.session['user'])
         tutor = Teacher.objects.get(user=user)
-        Tutorcourse = tutor.course.replace(";",'')
-        coursesID = list(set(Tutorcourse))
-        courses=[]
-        for i in coursesID:
-            try:
-                course = Courses.objects.get(id=int(i))
-                courses.append(course)
-            except:
-                pass
+        data={}
+        class_list = tutor.forclass.split(',')
+        unique_class = list(set(class_list))
+        course_list = tutor.course.split(',')
+
+        for i in  range(len(unique_class)):
+            courses_of_class =[]
+            for j in range(len(class_list)):
+                if class_list[j] == unique_class[i]:
+                    courses_of_class.append(course_list[j])
+            data[unique_class[i]] = courses_of_class
+
         context = {
-                'data':json.loads(open('cc.txt','r').read()),    
-                'courses':courses,
+                'classes':sorted(unique_class,key=lambda a:int(a)),
+                'data':data,
                 'exam':exam
                   }    
         if request.method == "POST":
@@ -1874,16 +1921,10 @@ def EditExamTutor(request,exam_id):
             negative_marks = request.POST.get('negative_marks','')
             tc = request.POST.get('tc','')
             status = request.POST.get('status','')
-            noquestions = request.POST.get('noquestions','')
             if course:
                 exam.courseName = course
                 exam.course = course
             if Class:
-                try:
-                    if int(Class):
-                        Class = classlist[int(Class)-1]
-                except:
-                    Class = Class
                 exam.forclass = Class
             if price:
                 exam.price = price
@@ -1911,12 +1952,14 @@ def EditExamTutor(request,exam_id):
             if nm:
                 exam.negative_marking = True
                 exam.negative_marks = negative_marks
+            else:
+                exam.negative_marking = False
+                exam.negative_marks = 0.0
             exam.tandc = tc
             if status=="1":
                 exam.status = True
             else:
                 exam.status = False
-            exam.question_count = noquestions
             exam.save()
             messages.success(request,"Exam Edited Successfully")
             return redirect('viewexamstutor')
@@ -1925,48 +1968,6 @@ def EditExamTutor(request,exam_id):
         else:
             return HttpResponse("You are Not Authenticated for this Page")
     return HttpResponse("You are Not Authenticated for this Page")
-    
-
-@login_required(login_url="Login")
-def addQuestionsTutor(request):
-    try:
-        if request.session['type']=="Teacher":
-            user = User.objects.get(username=request.session['user'])
-            tutor = Teacher.objects.get(user=user)
-            exams = []
-            tutorexams = []
-            if enrollTutors.objects.filter(teacher=tutor).exists():
-                INSTtutor = enrollTutors.objects.filter(teacher=tutor) #added
-                courses = [] #added
-                    # INSTcourse = instTutor.courseName.replace(";",'')
-                    # coursesID = list(set(INSTcourse))
-                    # courses = []
-                    # for i in coursesID:
-                    #     try:
-                    #         course = Courses.objects.get(id=int(i))
-                    #         courses.append(course)
-                    #     except:
-                    #         pass
-                for i in INSTtutor.values_list('courseName'): #added
-                    courses.append(i[0])
-
-                for i in courses:
-                    course = Courses.objects.get(courseName=i)
-                    for ins in INSTtutor:
-                        exam = Exam.objects.filter(Q(institute=ins.institute) & Q(course=course))
-                        exams.append(exam)
-            tutorexams = TutorExam.objects.filter(tutor=tutor)
-            context = {
-            'INSTtutor':INSTtutor,
-            'exams':exams,
-            'tutorexams':tutorexams
-            }
-            return render(request,'Exam/addQuestionsTutor.html',context)
-        return HttpResponse("You are not Authenticate for this Page")
-    except:
-        return HttpResponse("Something Unexpected")
-
-
 
 @login_required(login_url="Login")
 def CreateQuestionsTutor(request,exam_id):
@@ -1976,8 +1977,25 @@ def CreateQuestionsTutor(request,exam_id):
             exam = TutorExam.objects.get(id=exam_id)
         except:
             return HttpResponse("Unable to add Question")
+
+        try:
+            json_datetime=requests.get('http://worldtimeapi.org/api/ip',timeout=10)
+            json_datetime=json.loads(json_datetime.content)
+            match_date = re.search(r'\d{4}-\d{2}-\d{2}',json_datetime['datetime'])
+            match_time = re.search(r'\d{2}:\d{2}:\d{2}',json_datetime['datetime'])
+            datetime_obj = datetime.strptime(match_date.group()+' '+match_time.group(), '%Y-%m-%d %H:%M:%S')
+
+        except:
+            datetime_obj = datetime.now()
+
+        if exam.status:
+            if((datetime.combine(exam.exam_date,exam.exam_time) <= datetime_obj)):
+                messages.warning(request,"Cannot Add Questions When Exam is Live")
+                return redirect('viewexamstutor')
+
         user = User.objects.get(username=request.session['user'])
         tutor = Teacher.objects.get(user=user)
+
         if exam.tutor == tutor:
             if request.method=="POST":
                 question_type = request.POST.get('question_type',"")
@@ -1986,23 +2004,24 @@ def CreateQuestionsTutor(request,exam_id):
                 marks = request.POST.get('marks',"")
                 section = request.POST.get('section',"")
                 negative_marks = request.POST.get('negative_marks',"")
-                hindi = request.POST.get("hinditext","")
-                if hindi:
-                    question=hindi
-                if question_type=='sq':
-                    data = TutorShortAnswerQuestion(
-                            exam=exam,
-                            question=question,
-                            correct_ans=solution,
-                            marks=marks,
-                            section=section)
-                    if negative_marks:
-                        data.negative_marks = negative_marks
-                    else:
-                        data.negative_marks = 0.0
-                    data.save()
-                elif question_type=='lq':
-                    try:
+
+                if exam.negative_marking:
+                    negative_marks = exam.negative_marks
+
+                try:
+                    if question_type=='sq':
+                        data = TutorShortAnswerQuestion(
+                                exam=exam,
+                                question=question,
+                                correct_ans=solution,
+                                marks=marks,
+                                section=section)
+                        if negative_marks:
+                            data.negative_marks = negative_marks
+                        else:
+                            data.negative_marks = 0.0
+                        data.save()
+                    elif question_type=='lq':
                         data = TutorLongAnswerQuestion(
                             exam=exam,
                             question=question,
@@ -2014,11 +2033,7 @@ def CreateQuestionsTutor(request,exam_id):
                         else:
                             data.negative_marks=0.0
                         data.save()
-                    except:
-                        errors.append('Options Cannot be Empty')
-                elif question_type=='mc':
-                    try:
-
+                    elif question_type=='mc':
                         options = request.POST.getlist('options','')
                         data = TutorMultipleQuestion(
                             exam=exam,
@@ -2032,19 +2047,16 @@ def CreateQuestionsTutor(request,exam_id):
                         else:
                             data.negative_marks=0.0
                         data.save()
-                    except:
-                        errors.append('Options Cannot be Empty')
-                    if options:
-                        for option in options:
-                            answer = TutorMultipleAnswer(
-                                question = TutorMultipleQuestion.objects.get(id=data.id),
-                                option = option
-                                )
-                            answer.save()
+                        if options:
+                            for option in options:
+                                answer = TutorMultipleAnswer(
+                                    question = TutorMultipleQuestion.objects.get(id=data.id),
+                                    option = option
+                                    )
+                                answer.save()
+                        else:
+                            messages.warning(request,'options Cannot be Empty')
                     else:
-                        errors.append('Options Cannot be Empty')
-                else:
-                    try:
                         options = request.POST.getlist('options','')
                         bexam = TutorBooleanQuestion(
                             exam=exam,
@@ -2059,9 +2071,8 @@ def CreateQuestionsTutor(request,exam_id):
                         else:
                             bexam.negative_marks=0.0
                         bexam.save()
-                    except Exception as e:
-                        print(e)
-                        errors.append('Something Went Wrong! Try Again')
+                except:
+                    messages.warning(request,'Question Already Exists')
             shortquestions = TutorShortAnswerQuestion.objects.filter(exam=exam_id)
             booleanquestions = TutorBooleanQuestion.objects.filter(exam=exam_id)
             longquestions = TutorLongAnswerQuestion.objects.filter(exam=exam_id)
@@ -2101,51 +2112,11 @@ def CreateQuestionsTutor(request,exam_id):
                     item.save()
                     context[f'Section{i}'].append(item)
                     x+=1
+            exam.question_count = x-1
+            exam.save()
             return render(request,'Exam/QuestionsTutor.html',context)
         return HttpResponse("You Are Not Authenticated for this Page")
     return HttpResponse("You Are Not Authenticated for this Page")
-
-
-
-@login_required(login_url="Login")
-def EditExamQuestionsTutor(request):
-    if request.session['type']=="Teacher":
-        user = User.objects.get(username=request.session['user'])
-        tutor =Teacher.objects.get(user=user)
-        exams = []
-        try:
-            if enrollTutors.objects.filter(teacher=tutor).exists():
-                INSTtutor = enrollTutors.objects.filter(teacher=tutor) #added
-                courses = [] #added
-                    # INSTcourse = instTutor.courseName.replace(";",'')
-                    # coursesID = list(set(INSTcourse))
-                    # courses = []
-                    # for i in coursesID:
-                    #     try:
-                    #         course = Courses.objects.get(id=int(i))
-                    #         courses.append(course)
-                    #     except:
-                    #         pass
-                for i in INSTtutor.values_list('courseName'): #added
-                    courses.append(i[0])
-
-                for i in courses:
-                    course = Courses.objects.get(courseName=i)
-                    for ins in INSTtutor:
-                        exam = Exam.objects.filter(Q(institute=ins.institute) & Q(course=course))
-                        exams.append(exam)
-        except:
-            pass
-        tutorexams = TutorExam.objects.filter(tutor=tutor)
-        context = {
-            'INSTtutor':INSTtutor,
-            'exams':exams,
-            'tutorexams':tutorexams
-            }
-        return render(request,'Exam/editExamQuestionsTutor.html',context)
-    return HttpResponse("You are not Authenticated for this Page")
-
-
 
 @login_required(login_url="Login")
 def EditQuestionsTutor(request,exam_id):
@@ -2155,6 +2126,22 @@ def EditQuestionsTutor(request,exam_id):
             exam = TutorExam.objects.get(id=exam_id)
         except:
             return HttpResponse("You are not Authenticated for this Page")
+
+        try:
+            json_datetime=requests.get('http://worldtimeapi.org/api/ip',timeout=10)
+            json_datetime=json.loads(json_datetime.content)
+            match_date = re.search(r'\d{4}-\d{2}-\d{2}',json_datetime['datetime'])
+            match_time = re.search(r'\d{2}:\d{2}:\d{2}',json_datetime['datetime'])
+            datetime_obj = datetime.strptime(match_date.group()+' '+match_time.group(), '%Y-%m-%d %H:%M:%S')
+
+        except:
+            datetime_obj = datetime.now()
+
+        if exam.status:
+            if((datetime.combine(exam.exam_date,exam.exam_time) <= datetime_obj)):
+                messages.warning(request,"Cannot Edit Questions When Exam is Live")
+                return redirect('viewexamstutor')
+
         user = User.objects.get(username=request.session['user'])
         tutor = Teacher.objects.get(user=user)
         if exam.tutor == tutor:
@@ -2197,6 +2184,8 @@ def EditQuestionsTutor(request,exam_id):
                     item.save()
                     context[f'Section{i}'].append(item)
                     x+=1
+            exam.question_count=x-1
+            exam.save()
             return render(request,'Exam/editQuestionsTutor.html',context)
         else:
             return HttpResponse("You Are Not Authenticated for this Page")
@@ -2226,6 +2215,7 @@ def EditShortQuestionsTutor(request,question_id):
             negative_marks = request.POST.get("negative_marks","")
             Question = request.POST.get("question","")
             Solution = request.POST.get("solution","")
+
             if section:
                 question.section = section
             if marks:
@@ -2239,10 +2229,26 @@ def EditShortQuestionsTutor(request,question_id):
             try:
                 question.save()
             except:
-                errors.append('Error Occured! Try Again')
+                messages.warning(request,'Question Already Exists')
             return redirect('editquestionstutor',question.exam.id)	
         return render(request,'Exam/editshortquestionstutor.html',context)
     return HttpResponse("You are not Authenticated for this Page")
+
+def DeleteShortQuestionsTutor(request,question_id):
+    errors =[]
+    try:
+        question = TutorShortAnswerQuestion.objects.get(id=question_id)
+    except:
+        return HttpResponse('Error Processing Request!')
+    if request.session['type']=="Teacher":
+        user = User.objects.get(username=request.session['user'])
+        tutor = Teacher.objects.get(user=user)
+        if question.exam.tutor == tutor:
+            question.delete()
+            messages.success(request,"Question Deleted Successfully")
+            return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+    return HttpResponse("You Are not Authenticated User for this Page")
+
 
 
 @login_required(login_url="Login")
@@ -2281,11 +2287,25 @@ def EditLongQuestionsTutor(request,question_id):
             try:
                 question.save()
             except:
-                errors.append('Error Occured! Try Again')
+                messages.warning(request,'Question Already Exists')
             return redirect('editquestionstutor',question.exam.id)	
         return render(request,'Exam/editlongquestionstutor.html',context)
     return HttpResponse("You are not Authenticated for this Page")
 
+def DeleteLongQuestionsTutor(request,question_id):
+    errors =[]
+    try:
+        question = TutorLongAnswerQuestion.objects.get(id=question_id)
+    except:
+        return HttpResponse('Error Processing Request!')
+    if request.session['type']=="Teacher":
+        user = User.objects.get(username=request.session['user'])
+        tutor = Teacher.objects.get(user=user)
+        if question.exam.tutor == tutor:
+            question.delete()
+            messages.success(request,"Question Deleted Successfully")
+            return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+    return HttpResponse("You Are not Authenticated User for this Page")
 
 @login_required(login_url="Login")
 def EditBooleanQuestionsTutor(request,question_id):
@@ -2329,12 +2349,25 @@ def EditBooleanQuestionsTutor(request,question_id):
             try:
                 question.save()
             except:
-                errors.append('Error Occured! Try Again')
+                messages.warning(request,'Question Already Exists')
             return redirect('editquestionstutor',question.exam.id)
         return render(request,'Exam/editbooleanquestionstutor.html',context)
     return HttpResponse("You are not Authenticated for this Page")
 
-
+def DeleteBooleanQuestionsTutor(request,question_id):
+    errors =[]
+    try:
+        question = TutorBooleanQuestion.objects.get(id=question_id)
+    except:
+        return HttpResponse('Error Processing Request!')
+    if request.session['type']=="Teacher":
+        user = User.objects.get(username=request.session['user'])
+        tutor = Teacher.objects.get(user=user)
+        if question.exam.tutor == tutor:
+            question.delete()
+            messages.success(request,"Question Deleted Successfully")
+            return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+    return HttpResponse("You Are not Authenticated User for this Page")
 
 @login_required(login_url="Login")
 def EditMultipleQuestionsTutor(request,question_id):
@@ -2384,10 +2417,25 @@ def EditMultipleQuestionsTutor(request,question_id):
             try:
                 question.save()
             except:
-                return HttpResponse('Error Occured! Try Again')
+                messages.warning(request,'Question Already Exists')
             return redirect('editquestionstutor',question.exam.id)
         return render(request,'Exam/editmultiplequestionstutor.html',context)
     return HttpResponse("You are not Authenticated for this Page")
+
+def DeleteMultipleQuestionsTutor(request,question_id):
+    errors =[]
+    try:
+        question = TutorMultipleQuestion.objects.get(id=question_id)
+    except:
+        return HttpResponse('Error Processing Request!')
+    if request.session['type']=="Teacher":
+        user = User.objects.get(username=request.session['user'])
+        tutor = Teacher.objects.get(user=user)
+        if question.exam.tutor == tutor:
+            question.delete()
+            messages.success(request,"Question Deleted Successfully")
+            return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+    return HttpResponse("You Are not Authenticated User for this Page")
 
 def tutordisplayQuestionList(exam):
     mq = TutorMultipleQuestion.objects.filter(

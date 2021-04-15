@@ -264,7 +264,7 @@ width:max-content;
     <div class="alert alert-warning" role="alert">
         <ul class="messages">
             {% for k in messages %}
-            <li style="color: darkred;">{{ k }}</li>
+            <li style="color: rgb(0, 0, 0);">{{ k }}</li>
             {% endfor %}
         </ul>
     </div>
@@ -285,19 +285,16 @@ width:max-content;
                     {% csrf_token %}
                     <div class="row">
                         <div class="col-md-6 col-lg-5 col-12 input-group form-group">
-                            <label class="control-label col-sm-5 col-5 mt-2" style="color:black;">Note Title<span
-                                    class="text-danger">*</span></label>
-                            <input type="text" class="form-control" name='title' placeholder="Note Title" required=""
-                                value="{{note.title}}">
-                        </div>
-                        <div class="col-md-6 col-lg-5 col-12 input-group form-group">
-                            <label class="control-label col-sm-5 col-5 mt-2" style="color:black;">Select Class</label>
+                            <label class="control-label col-sm-5 col-5 mt-2" style="color:black;">Select Class<span
+                                class="text-danger">*</span></label>
 
                             <select class="form-control" id="class_select" name="forclass" onchange="selectclass()"
                                 required>
-                                <option selected disabled value="{{note.forclass}}">{{note.forclass}}</option>
+                                <option selected value="{{note.forclass}}">{{note.forclass}}</option>
                                 {% for class in classes %}
+                                {% if class.0 != note.forclass %}
                                 <option value="{{class.0}}">{{class.0}}</option>
+                                {% endif %}
                                 {% endfor %}
                             </select>
                         </div>
@@ -306,28 +303,46 @@ width:max-content;
                                     class="text-danger">*</span></label>
 
                             <select class="form-control" id="select_course" name="course" required>
-                                <option selected disabled value="{{note.subject}}">{{note.subject}}</option>
+                                <option selected value="{{note.subject}}">{{note.subject}}</option>
                             </select>
+                        </div>
+                        <div class="col-md-6 col-lg-5 col-12 input-group form-group">
+                            <label class="control-label col-sm-5 col-5 mt-2" style="color:black;">Note Title<span
+                                    class="text-danger">*</span></label>
+                            <input type="text" class="form-control" name='title' placeholder="Note Title" required=""
+                                value="{{note.title}}">
+                        </div>
+
+                        <div class="col-md-6 col-lg-5 col-12 input-group form-group">
+                            <label class="control-label col-sm-5 col-5 mt-2" style="color:black;">Description<span
+                                    class="text-danger">*</span></label>
+                            <input type="text" class="form-control" name='description' placeholder="Note Description" value="{{note.description}}">
+                        </div>
+
+                        <div class="col-md-6 col-lg-5 col-12 input-group form-group">
+                            <label class="control-label col-sm-5 col-5 mt-2" style="color:black;">Price<span
+                                    class="text-danger">*</span></label>
+                            <input type="number" min="0" class="form-control" name='price' required value="{{note.price}}">
                         </div>
 
                         <div class="col-lg-5 col-md-6 col-12 input-group form-group">
                             <label class="control-label col-sm-5 col-5 mt-2" style="color: black;">Choose File<span
-                                class="text-danger">*</span></label>
+                                    class="text-danger">*</span></label>
                             <div class="file-box w-100 col-sm-7 col-7">
-                                <input type="file" class="custom-file-input" required onchange="addfile(this)"
+                                <input type="file" class="custom-file-input" onchange="addfile(this)"
                                     name="note" accept="application/pdf">
                                 <label class="custom-file-label" for="validatedCustomFile">Choose file...</label>
                                 <div class="invalid-feedback">Invalid File Format ( Valid Formats are .pdf only )
                                 </div>
                             </div>
                         </div>
-                        <div class="col-lg-12 col-md-12  col-12 d-flex justify-content-end">
-                            <button class="btn btn-info btn-md" type="button" onclick="duplicate(this)">Add File</button>
-                        </div>
 
-                        <div class="col-md-12 col-lg-12 col-12 input-group form-group">
-                            <textarea type="text" class="form-control my-2 w-100" name='description'
-                                placeholder="Note Description">{{note.description}}</textarea>
+                        <div class="col-md-6 col-lg-5 col-12 input-group form-group">
+                            <label class="control-label col-sm-5 col-5 mt-2" style="color:black;">Free for Enrolled</label>
+                                    <select class="form-control" name="enr">
+                                        <option {% if note.freeEnrolled == False %} selected {% endif %} value="0">No</option>
+                                        <option {% if note.freeEnrolled == True %} selected {% endif %} value="1">Yes</option>
+                                    </select>
                         </div>
 
                         <div class="col-lg-12 col-md-12 col-12 text-center">
@@ -371,10 +386,17 @@ width:max-content;
             success: function (data) {
                 courses = data.courses;
                 $("#select_course").empty().trigger("change");
+                var newOption = new Option(
+                    "Select Course",
+                    courses[i][0],
+                    false,
+                    false
+                );
+                $("#select_course").append(newOption).trigger("change");
                 for (i = 0; i < courses.length; i++) {
                     var newOption = new Option(
                         courses[i][1],
-                        courses[i][0],
+                        courses[i][1],
                         false,
                         false
                     );
@@ -384,18 +406,13 @@ width:max-content;
         });
     }
 
-    function duplicate(el) {
-        $(el).parent().before(`<div class="col-lg-5 col-md-6 col-12 input-group form-group">
-                            <label class="control-label col-sm-5 col-5 mt-2" style="color: black;">Choose File<span
-                                class="text-danger">*</span></label>
-                            <div class="file-box w-100 col-sm-7 col-7">
-                                <input type="file" class="custom-file-input" required onchange="addfile(this)"
-                                    name="note" accept="application/pdf">
-                                <label class="custom-file-label" for="validatedCustomFile">Choose file...</label>
-                                <div class="invalid-feedback">Invalid File Format ( Valid Formats are .pdf only )
-                                </div>
-                            </div>
-                        </div>`)
-                    }
+    $(document).ready(() => {
+        var file = `{{note.notes.name}}`;
+        if (file.length > 25) {
+            file = file.substring(0, 25) + '  ...';
+        };
+        $(".custom-file-label").html(file);
+    })
+
 </script>
 {% endblock %}

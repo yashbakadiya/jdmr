@@ -1,74 +1,89 @@
 {% extends 'dashboard/Tutor-dashboard.html' %}
 {% load static %}
 {% block main-content %}
+<div class="mt-5">
+    {% if messages %}
+    {% for k in messages%}
+    <div class="alert alert-{{k.tags}} alert-dismissible fade show" role="alert">
+        <b>{{ k }} !</b>
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    {% endfor %}
+    {% endif %}
+</div>
 <main>
-    <div class="mt-5">
-        <div class="card">
-            <div class="card-header">
-                <div class="row">
-                    <div class="col-lg-8 col-md-8 col-sm-8 col-12">
-                        <h2 style="color: black;">Tutorials</h2>
-                    </div>
+    <div class="card">
+        <div class="card-header">
+            <div class="row">
+                <div class="col-lg-8 col-md-8 col-sm-8 col-12">
+                    <h2 style="color: black;">Tutorials</h2>
                 </div>
             </div>
-            {% if tutorials %}
-            <div class="card-body">
-                <form action="" method="post">{% csrf_token %}
-                    <div id='mainForm' class="table-responsive">
+        </div>
+        {% if size %}
+        <div class="card-body">
+            <form action="" method="post">{% csrf_token %}
+                <div id='mainForm' class="table-responsive">
                     <!--Table-->
                     <table id="htmlgrid" class="testgrid table table-striped table-bordered table-hover mb-4">
                         <!--Table head-->
-                        <thead>
-                            <tr>
-                                <th style="color: black;">#</th>
-                                <th style="color: black;">Course Title</th>
-                                <th style="color: black;">Course Duration</th>
-                                <th style="color: black;">Course Fees</th>
-                                <th style="color: black;">Course Discount</th>
-                                <th class="text-center" style="color: black;">Action</th>
-                                <th class="text-center" style="color: black;">Archive</th>
-                            </tr>
-                        </thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Course Title</th>
+                            <th>Class</th>
+                            <th>Course</th>
+                            <th>Course Duration</th>
+                            <th>Course Fees</th>
+                            <th>Course Discount</th>
+                            <th>Last Updated</th>
+                            <th class="text-center">Action</th>
+                            <th class="text-center">Archive</th>
+                        </tr>
                         <!--Table head-->
                         <!--Table body-->
-                        <tbody>
-                            {% for i in tutorials reversed %}
-                            <tr>
-                                <td>{{forloop.counter}}</td>
-                                <td>{{i.Title}}</td>
-                                <td>{{i.Duration}} Months</td>
-                                <td>{{i.Fees}}</td>
-                                {% if i.Discount_Validity %}
-                                <td>{{i.Discounted_price }} <del>{{i.Fees}}</del></td>
-                                {% else %}
-                                <td>Not Available</td>
-                                {% endif %}
-                                <td class="d-flex justify-content-center">
+                        {% for i,date in tutorials %}
+                        <tr class="main-row">
+                            <td>{{forloop.counter}}</td>
+                            <td>
+                                {{i.Title}}
+                            </td>
+                            <td>{{i.forclass}}</td>
+                            <td>{{i.Course.courseName}}</td>
+                            <td>{{i.Duration}}</td>
+                            <td>{% if i.Fees %} {{i.Fees}} {% else %} Free {% endif %}</td>
+                            {% if i.Discount_Validity %}
+                            <td>{{i.Discounted_price }} <del>{{i.Fees}}</del></td>
+                            {% else %}
+                            <td>Not Available</td>
+                            {% endif %}
+                            <td>{{date|date:'F d,Y'}}</td>
+                            <td class="d-flex justify-content-center">
                                 <a class="btn btn-info mx-2" href="{% url 'viewtutorialtutor' i.id %}"><i
                                         class="flaticon-view" style="font-size:medium;"></i></a>
                                 <a class="btn btn-warning mx-2" href="{% url 'editTutorialtutor' i.id %}"><i
                                         class="flaticon-pencil-line" style="font-size:medium;"></i></a>
                                 <a class="btn btn-danger mx-2" href="{% url 'deletetutorialstutor' i.id %}"><i
                                         class="flaticon-delete-fill" style="font-size:medium;"></i></a>
-                                </td>
-                                <td class="text-center">
-                                    <input type="checkbox" class="bigcheckbox" name="ids" value="{{i.id}}">
-                                </td>
-                            </tr>
-                            {% endfor %}
-                        </tbody>
+                            </td>
+                            <td class="text-center">
+                                <input type="checkbox" class="bigcheckbox" name="ids" value="{{i.id}}">
+                            </td>
+                        </tr>
+                        {% endfor %}
                         <!--Table body-->
                     </table>
                     <!--Table-->
                 </div>
-                    <div class="form-group">
-                        <input type="submit" value="Move to Archive" class="btn btn-danger float-right">
-                    </div>
-                    <br>
-                </form>
+                <div class="form-group">
+                    <input type="submit" value="Move to Archive" class="btn btn-danger float-right">
+                </div>
                 <br>
-            </div>
-            {% else %}
+            </form>
+            <br>
+        </div>
+        {% else %}
         <div class="card-header" style="background: none;">
             <div class="row">
                 <div class="col-xl-12 col-md-12 col-12">
@@ -76,37 +91,37 @@
                 </div>
             </div>
         </div>
-    {% endif %}
-        </div>
-    </main>
-    <script type="text/javascript">
-        trlist = $("tbody>tr");
-        $("body").on('input',"#searchbox",function(){
-            trlist.hide();
-            search = this.value.toLowerCase();
-            len = search.length;
-            for(i=0;i<trlist.length;i++){
-                if(trlist[i].children[0].textContent==""){
-                    cont = cont;
-                }
-                else{
-                    cont = trlist[i].children[0].textContent.toLowerCase();
-                }
-                if(cont.search(search)!=-1){
-                    $(trlist[i]).show();
-                }
-                if(trlist[i].children[1].textContent==""){
-                    cont2 = cont2;
-                }
-                else{
-                    cont2 = trlist[i].children[1].textContent.toLowerCase();
-                }
-                if(cont2.search(search)!=-1){
-                    $(trlist[i]).show();
-                }
+        {% endif %}
+    </div>
+</main>
+<script type="text/javascript">
+    trlist = $("tbody>tr");
+    $("body").on('input', "#searchbox", function () {
+        trlist.hide();
+        search = this.value.toLowerCase();
+        len = search.length;
+        for (i = 0; i < trlist.length; i++) {
+            if (trlist[i].children[0].textContent == "") {
+                cont = cont;
             }
+            else {
+                cont = trlist[i].children[0].textContent.toLowerCase();
+            }
+            if (cont.search(search) != -1) {
+                $(trlist[i]).show();
+            }
+            if (trlist[i].children[1].textContent == "") {
+                cont2 = cont2;
+            }
+            else {
+                cont2 = trlist[i].children[1].textContent.toLowerCase();
+            }
+            if (cont2.search(search) != -1) {
+                $(trlist[i]).show();
+            }
+        }
 
-        });
+    });
 
-    </script>
-    {% endblock main-content %}
+</script>
+{% endblock main-content %}

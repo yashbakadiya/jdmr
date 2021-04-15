@@ -238,6 +238,7 @@
                     <table class="table table-striped table-bordered table-hover">
                         <!--Table head-->
                             <tr>
+                                <th>#</th>
                                 <th>Student Name</th>
                                 <th>Price</th>
                                 <th>Exam Name</th>
@@ -251,6 +252,7 @@
                         <!--Table body-->
                             {% for i in students %}
                             <tr>
+                                <td>{{forloop.counter}}</td>
                             <td>{{i.student.user.username}}</td>
                             <td>{{i.exam.price}}</td>
                             <td>{{i.exam.Name}}</td>

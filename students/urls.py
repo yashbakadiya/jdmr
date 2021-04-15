@@ -14,6 +14,7 @@ urlpatterns = [
     path('exist/addStudents/<int:id>', AddalreadyExistsStudent,name='AddalreadyExistsStudent'),
     path('StudentCalendar/', StudentCalendar, name='StudentCalendar'),
     path('postAssignment/', postAssignment, name='postAssignment'),
+    path('extend/',extendDeadline,name="extend"),
     path('postTution/', postTution, name='postTution'),
     path('delete-Assignment/<int:sno>/', delete_Assignment, name='Delete_Assignment'),
     path('delete-Tution/<int:sno>/', delete_Tution, name='Delete_Tution'),

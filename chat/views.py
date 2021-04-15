@@ -56,6 +56,7 @@ def room(request, name, room_name, ts):
     photos=[]
     photos_all=[]
     c=[]
+    print(name,room_name)
 
     outgoing = ChatApplication.objects.filter(names=name).values('room','ts').distinct()
     incoming = ChatApplication.objects.filter(room=name).values('names','ts').distinct()
@@ -64,6 +65,7 @@ def room(request, name, room_name, ts):
         if i['room'] not in c:
             c.append(i['room'])
             user = User.objects.get(username=i['room'])
+            print(user)
             if i['ts'] == "Teacher":
                 photos_all.append(Student.objects.get(user=user).photo)
             elif i['ts'] == "Student":

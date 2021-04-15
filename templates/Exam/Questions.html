@@ -190,14 +190,17 @@
                 <div class="form-group">
                   <label for="exampleFormControlSelect1">Question Type</label>
                   <select class="form-control" onchange="addop()" id="question_type_select" name="question_type">
+                    {% if exam.negative_marking == False %}
                     <option value="sq">Short Type Questions</option>
                     <option value="lq">Long Type Questions</option>
+                    {% endif %}
                     <option value="mc">Multiple Choice Questions</option>
                     <option value="tf">True or False</option>
                   </select>
                 </div>
               </div>
             </div>
+            {% if exam.negative_marking == False %}
             <div class="row">
               <div class="col mb-3">
                 <div class="custom-checkbox custom-control">
@@ -212,11 +215,12 @@
               </div>
             </div>
             <div id="negative"></div>
+            {% endif %}
             <div class="row">
               <div class="col" id="solutionbox">
                 <div class="form-group">
                   <label for="exampleFormControlSelect1">Enter Marks</label>
-                  <input type="number" class="form-control" placeholder="Enter Marks" name="marks" required>
+                  <input type="number" min="0" class="form-control" placeholder="Enter Marks" name="marks" required>
                 </div>
               </div>
             </div>
@@ -233,40 +237,44 @@
                 </div>
               </div>
             </div>
-            <div class="row" id="buttons">
+            <div class="row mt-2" id="hindiarea1" style="display: none;">
               <div class="col">
-                <div class="form-group" id="textarea1">
-                  <label for="exampleFormControlTextarea1" style="font-size: 20px;"> Question (Hindi)</label>
-                  <script language="javascript">
-                    CreateCustomHindiTextArea("hinditext", "", false);
-                    $('#hinditext').addClass('form-control');
-                  </script>
-                </div>
-              </div>
-            </div>
-            <div class="row mt-2" id="englisharea">
-              <div class="col">
-                <div class="form-group" id="textarea1">
-                  <label for="exampleFormControlTextarea1" style="font-size: 20px;">Question</label>
-                  <textarea class="form-control" id="exampleFormControlTextarea1" rows="7" name="question" required>
-    </textarea>
+                <div class="form-group" id="hinditextarea1">
+                  <label for="hindiexampleFormControlTextarea1" style="font-size: 20px;">Question (Hindi)</label>
+                  <textarea class="form-control" id="hindiexampleFormControlTextarea1" rows="7" name="question"></textarea>
                 </div>
 
               </div>
             </div>
-            <div class="row">
+            <div class="row" id="hindiarea2" style="display: none;">
+              <div class="col">
+                <div class="form-group" id="hinditextarea2">
+                  <label for="hindiexampleFormControlTextarea1" style="font-size: 20px;">Solution (Hindi)</label>
+                  <textarea class="form-control" id="hindiexampleFormControlTextarea2" rows="7" name="solution"></textarea>
+                </div>
+              </div>
+            </div>
+            <div class="row mt-2" id="englisharea1">
+              <div class="col">
+                <div class="form-group" id="textarea1">
+                  <label for="exampleFormControlTextarea1" style="font-size: 20px;">Question</label>
+                  <textarea class="form-control" id="exampleFormControlTextarea1" rows="7" name="question"></textarea>
+                </div>
+
+              </div>
+            </div>
+            <div class="row" id="englisharea2">
               <div class="col">
                 <div class="form-group" id="textarea2">
                   <label for="exampleFormControlTextarea1" style="font-size: 20px;">Solution</label>
-                  <textarea class="form-control" id="exampleFormControlTextarea2" rows="7" name="solution" required>
-    </textarea>
+                  <textarea class="form-control" id="exampleFormControlTextarea2" rows="7" name="solution"></textarea>
                 </div>
               </div>
             </div>
             <div class="row">
               <div class="col">
                 <div class="text-center">
-                  <button type="submit" class="mb-3 w-100 btn btn-outline-dark">Add Question</button>
+                  <button type="submit" class="mb-3 w-100 btn btn-success">Add Question</button>
                 </div>
               </div>
             </div>
@@ -276,9 +284,9 @@
       <div class="text-center">
         <div class="col">
           {% if request.session.user == 'institute' %}
-          <a href="{% url 'editexamquestions' %}" class="mb-3 btn btn-info">Save</a>
+          <a href="{% url 'viewexams' %}" class="mb-3 btn btn-info">Save</a>
           {% else %}
-          <a href="{% url 'questionalltutor' %}" class="mb-3 btn btn-info">Save</a>
+          <a href="{% url 'viewexamstutor' %}" class="mb-3 btn btn-info">Save</a>
           {% endif %}
         </div>
       </div>
@@ -286,7 +294,7 @@
 </div>
 <script>
   function addtext() {
-    var tags = '<div class="row mb-3" id="multipleinput">'
+    var tags = '<div class="row mb-3 multipleinput">'
     tags += '<div class="col-9 pr-4 mr-3">'
     tags += '<input type="text" class="form-control" placeholder="Enter Value" name="options" required>'
     tags += '</div>'
@@ -312,7 +320,27 @@
     toolbar2: "print preview media | forecolor backcolor emoticons | codesample | FMathEditor",
   });
   tinymce.init({
-    selector: "#hinditext",
+    selector: "#hindiexampleFormControlTextarea1",
+    language: "hi_IN",
+    height: 200,
+    theme: "modern",
+    setup: function (editor) {
+      editor.on("init", function (e) {
+        editor.setContent("<p></p>");
+      });
+    },
+    plugins: [
+      "advlist autolink lists link image charmap print preview hr anchor pagebreak",
+      "searchreplace wordcount visualblocks visualchars code fullscreen",
+      "insertdatetime media nonbreaking save table contextmenu directionality",
+      "emoticons template paste textcolor colorpicker textpattern imagetools codesample toc FMathEditor",
+    ],
+    toolbar1: "undo redo | insert | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image",
+    toolbar2: "print preview media | forecolor backcolor emoticons | codesample | FMathEditor",
+  });
+  tinymce.init({
+    selector: "#hindiexampleFormControlTextarea2",
+    language: "hi_IN",
     height: 200,
     theme: "modern",
     setup: function (editor) {
@@ -356,6 +384,7 @@
       output = `<input
       type="number"
       class="mt-2 form-control"
+      min="0"
       placeholder="Enter Negative Marks"
       name="negative_marks"
       value="0"
@@ -369,16 +398,29 @@
     }
     negative.innerHTML = output;
   }
+
+  $(document).ready(function () {
+    addop();
+    if (performance.navigation.type == 2) {
+      location.reload();
+    }
+  });
   // In your Javascript (external .js resource or <script> tag)
   $(document).ready(function () {
     $('.js-example-basic-single').select2();
   });
 
   function addop() {
+
     var type = $('#question_type_select').val();
-    console.log(type);
+
+    var multipleinput = $('.multipleinput')
+    for (let i = 0; i < multipleinput.length; i++) {
+      multipleinput[i].remove();
+    }
+
     if (type == 'mc') {
-      var optioninput = '<div class="row mb-2" id="multipleinput">'
+      var optioninput = '<div class="row mb-2 multipleinput">'
       optioninput += '<div class="col">'
       optioninput += '<input type="text" class="form-control" placeholder="Enter Value" name="options">'
       optioninput += '</div>'
@@ -387,19 +429,15 @@
       optioninput += '</div>'
       optioninput += '</div>'
       $('#solutionbox').append(optioninput);
-    } else {
-      $('#multipleinput').remove();
-      $('#multipleinput').remove();
-      $('#multipleinput').remove();
-      $('#multipleinput').remove();
     }
+
     if (type == 'tf') {
-      var optioninput = '<div class="row mb-2" id="multipleinput">'
+      var optioninput = '<div class="row mb-2 multipleinput">'
       optioninput += '<div class="col">'
       optioninput += '<input type="text" class="form-control" placeholder="First Value" name="options">'
       optioninput += '</div>'
       optioninput += '</div>'
-      var anotherinput = '<div class="row mb-2" id="multipleinput">'
+      var anotherinput = '<div class="row mb-2 multipleinput">'
       anotherinput += '<div class="col">'
       anotherinput += '<input type="text" class="form-control" placeholder="Second Value" name="options">'
       anotherinput += '</div>'
@@ -408,18 +446,19 @@
       $('#solutionbox').append(anotherinput);
     }
   }
-  $(document).ready(function () {
-    $('#buttons').hide();
-  });
 
   function HindiTextarea() {
-    $('#buttons').show();
-    $('#englisharea').hide();
+    $('#hindiarea1').show();
+    $('#hindiarea2').show();
+    $('#englisharea1').hide();
+    $('#englisharea2').hide();
   }
 
   function HindiTextareaHide() {
-    $('#buttons').hide();
-    $('#englisharea').show();
+    $('#hindiarea1').hide();
+    $('#hindiarea2').hide();
+    $('#englisharea1').show();
+    $('#englisharea2').show();
   }
 </script>
 

@@ -44,6 +44,9 @@ class MultipleQuestion(models.Model):
     negative_marks = models.FloatField(default=0)
     section = models.CharField(max_length=10, default='A')
 
+    class Meta:
+        unique_together = ('exam', 'question',)
+
     def __str__(self):
         return self.question
 
@@ -80,6 +83,9 @@ class LongAnswerQuestion(models.Model):
     negative_marks = models.FloatField()
     section = models.CharField(max_length=10)
 
+    class Meta:
+        unique_together = ('exam', 'question',)
+
     def __str__(self):
         return self.question
 
@@ -109,6 +115,9 @@ class BooleanQuestion(models.Model):
     negative_marks = models.FloatField()
     section = models.CharField(max_length=10)
 
+    class Meta:
+        unique_together = ('exam', 'question',)
+
     def __str__(self):
         return self.question
 
@@ -135,6 +144,9 @@ class ShortAnswerQuestion(models.Model):
     level = models.CharField(max_length=100, default='medium')
     negative_marks = models.FloatField()
     section = models.CharField(max_length=10)
+
+    class Meta:
+        unique_together = ('exam', 'question',)
 
     def __str__(self):
         return self.question
@@ -190,19 +202,18 @@ class TutorMultipleQuestion(models.Model):
     negative_marks = models.FloatField(default=0)
     section = models.CharField(max_length=10, default='A')
 
+    class Meta:
+        unique_together = ('exam', 'question',)
+
     def __str__(self):
         return self.question
 
     @property
     def Delete_url(self):
-        return reverse('multipleansdelete', args=(self.id,))
+        return reverse('multipleansdeletetutor', args=(self.id,))
 
     @property
     def Edit_url(self):
-        return reverse('multipleansedit', args=(self.id,))
-
-    @property
-    def Edit_Tutor(self):
         return reverse('multipleansedittutor', args=(self.id,))
 
 
@@ -226,19 +237,18 @@ class TutorLongAnswerQuestion(models.Model):
     negative_marks = models.FloatField()
     section = models.CharField(max_length=10)
 
+    class Meta:
+        unique_together = ('exam', 'question',)
+
     def __str__(self):
         return self.question
 
     @property
     def Delete_url(self):
-        return reverse('longansdelete', args=(self.id,))
+        return reverse('longansdeletetutor', args=(self.id,))
 
     @property
     def Edit_url(self):
-        return reverse('longansedit', args=(self.id,))
-
-    @property
-    def Edit_Tutor(self):
         return reverse('longansedittutor', args=(self.id,))
 
 
@@ -255,19 +265,18 @@ class TutorBooleanQuestion(models.Model):
     negative_marks = models.FloatField()
     section = models.CharField(max_length=10)
 
+    class Meta:
+        unique_together = ('exam', 'question',)
+
     def __str__(self):
         return self.question
 
     @property
     def Delete_url(self):
-        return reverse('booleanansdelete', args=(self.id,))
+        return reverse('booleanansdeletetutor', args=(self.id,))
 
     @property
     def Edit_url(self):
-        return reverse('booleanansedit', args=(self.id,))
-
-    @property
-    def Edit_Tutor(self):
         return reverse('booleanansedittutor', args=(self.id,))
 
 
@@ -282,19 +291,18 @@ class TutorShortAnswerQuestion(models.Model):
     negative_marks = models.FloatField()
     section = models.CharField(max_length=10)
 
+    class Meta:
+        unique_together = ('exam', 'question',)
+
     def __str__(self):
         return self.question
 
     @property
     def Delete_url(self):
-        return reverse('shortansdelete', args=(self.id,))
+        return reverse('shortansdeletetutor', args=(self.id,))
 
     @property
     def Edit_url(self):
-        return reverse('shortansedit', args=(self.id,))
-
-    @property
-    def Edit_Tutor(self):
         return reverse('shortansedittutor', args=(self.id,))
 
 class StudentMapping(models.Model):

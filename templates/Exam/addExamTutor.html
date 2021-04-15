@@ -48,49 +48,46 @@
       </div>
       <div class="mx-2 row" id="INSTBATCH">
         <div class="col">
-          <label for="validationCustom01"><strong>Select Class <span class="red">*</span></strong></label>
-          <select id="class_select" name="class" style="width: 100%;" class="js-example-basic-single form-control" onchange="selectclass()">
+          <label for="validationCustom01"><strong>Select Class<span class="red">*</span></strong></label>
+          <select id="class_select" name="class" style="width: 100%;" class="js-example-basic-single form-control" onchange="selectclass()" required>
             <option class="form-control" selected disabled value="" >Select Class</option>
-            {% for class in classes %}
+            {% for class in classesInst %}
             <option class="form-control form-control-lg" value="{{class.0}}">{{class.0}} </option>
             {% endfor %}
           </select>
         </div>
         <div class="col">
           <label for="validationCustom01"><strong>Select Course<span class="red">*</span></strong></label>
-          <select id="select_course" name="course" style="width: 100%" class="js-example-basic-single form-control">
+          <select id="select_course" name="course" style="width: 100%" class="js-example-basic-single form-control" onchange="selectcourse()" required>
             <option class="form-control form-control-lg" selected disabled value="">Select Course</option>
           </select>
         </div>
         <div class="col">
           <label for="validationCustom01"><strong>Select Batch <span class="red">*</span></strong></label>
-          <select id="batch_select" name="batch" style="width: 100%;" class="js-example-basic-single form-control">
+          <select id="batch_select" name="batch" style="width: 100%;" class="js-example-basic-single form-control" required>
             <option class="form-control" selected disabled value="">Select Batch</option>
-            {% for cat in batch %}
-            <option class="form-control" value="{{cat.batchName}}">{{cat.batchName}}</option>
-            {% endfor %}
           </select>
         </div>
         {% else %}
         <div class="mx-2 row">
           <div class="col">
             <label for="validationCustom01"><strong>Select Class <span class="red">*</span></strong></label>
-            <select id="class_select" name="class" style="width: 100%;" class="js-example-basic-single form-control"onchange="addoptions(this)">
+            <select name="class" style="width: 100%;" class="cn js-example-basic-single form-control"onchange="addoptions(this)" required>
               <option class="form-control" selected disabled value="">Select Class</option>
-              {% for x,y in data.items %}
-              <option value="{{ x }}">{{ x }}</option>
+              {% for class in classes %}
+              <option value="{{ class }}">{{ class }}</option>
               {% endfor %}
             </select>
           </div>
           <div class="col">
             <label for="validationCustom01"><strong>Select Course<span class="red">*</span></strong></label>
-            <select id="cn" name="course" style="width: 100%" class="js-example-basic-single form-control">
+            <select name="course" style="width: 100%" class="ctn js-example-basic-single form-control" required>
               <option class="form-control" selected disabled value="">Select Course</option>
             </select>
           </div>
         <div class="col">
          <label for="validationCustom01"><strong>Price<span class="red">*</span></strong></label>
-          <input type="number" class="form-control" placeholder="Exam Price" name="price" required>
+          <input type="number" min="0" class="form-control" placeholder="Exam Price" name="price" required>
         </div>
         {% endif %}
       </div>
@@ -117,7 +114,7 @@
       </div>
       <div class="mx-2 row">
         <div class="col">
-          <label for="validationCustom01"><strong>Time Zone<span class="red">*</span></strong></label>
+          <label for="validationCustom01"><strong>Time Zone</strong></label>
           {% include 'tutor/timezones.html' %}
         </div>
         <div class="col-md-4 mb-3">
@@ -128,23 +125,23 @@
           </div>
         </div>
         <div class="col-md-4 mb-3 ">
-          <label for="validationCustom01"><strong>Passing Percentage <span class="red">*</span></strong></label>
-          <input class="form-control" type="number" min="0" placeholder="00" name="pp" required />
+          <label for="validationCustom01"><strong>Passing Percentage</strong></label>
+          <input class="form-control" type="number" min="0" placeholder="00" name="pp" />
           <div class="invalid-feedback">
             Enter a valid value!
           </div>
         </div>
       </div>
       <div class=" mx-2 row">
-        <div class="col-md-4 mb-3 ">
+        <!-- <div class="col-md-4 mb-3 ">
           <label for="validationCustom01"><strong>No of Questions</strong></label>
           <input class="form-control" type="number" min="0" placeholder="0" name="noquestions" />
           <div class="invalid-feedback">
             Enter a valid value!
           </div>
-        </div>
+        </div> -->
         <div class="col-md-4">
-          <label for="validationCustom01"><strong>Exam Status <span class="red">*</span></strong></label>
+          <label for="validationCustom01"><strong>Exam Status</strong></label>
           <select class="form-control" id="exampleFormControlSelect1" name="status">
             <option value="1">Activate</option>
             <option value="0">Deactivate</option>
@@ -196,6 +193,14 @@
             </label>
           </div>
         </div>
+        <div class="form-group">
+          <label class="control-label col-sm-4"><span class="text-danger">Note :</span></label>
+          <div class="col-md-12">
+              <span class="text-muted">
+                After checking Negative Marks option you will be able to create only Multiple Choice and True or False Questions with the same negative marking provided here.
+              </span>
+          </div>
+      </div>
       </div>
       <div class="text-center">
       <button type="submit" class="btn btn-primary"> Save </button>
@@ -215,6 +220,7 @@
       placeholder="Enter Negative Marks"
       name="negative_marks"
       value="0"
+      min="0"
       required
     />
     <div class="invalid-feedback">
@@ -225,6 +231,12 @@
       }
       negative.innerHTML = output;
     }
+
+    $(document).ready(() => {
+      if (performance.navigation.type == 2) {
+        location.reload();
+      }
+    });
     
     function checkinst(){
       var value = $("#instchecked").is(":checked");
@@ -233,48 +245,45 @@
        if (value){
            output = `<div class="col">
           <label for="validationCustom01"><strong>Select Class <span class="red">*</span></strong></label>
-          <select id="class_select" name="class" style="width: 100%;" class="js-example-basic-single form-control" onchange="selectclass()">
+          <select id="class_select" name="class" style="width: 100%;" class="js-example-basic-single form-control" onchange="selectclass()" required>
             <option class="form-control" selected disabled value="" >Select Class</option>
-            {% for class in classes %}
+            {% for class in classesInst %}
             <option class="form-control form-control-lg" value="{{class.0}}">{{class.0}} </option>
             {% endfor %}
           </select>
         </div>
         <div class="col">
           <label for="validationCustom01"><strong>Select Course<span class="red">*</span></strong></label>
-          <select id="select_course" name="course" style="width: 100%" class="js-example-basic-single form-control">
+          <select id="select_course" name="course" style="width: 100%" class="js-example-basic-single form-control" onchange="selectcourse()" required>
             <option class="form-control form-control-lg" selected disabled value="">Select Course</option>
           </select>
         </div>
         <div class="col">
           <label for="validationCustom01"><strong>Select Batch <span class="red">*</span></strong></label>
-          <select id="batch_select" name="batch" style="width: 100%;" class="js-example-basic-single form-control">
+          <select id="batch_select" name="batch" style="width: 100%;" class="js-example-basic-single form-control" required>
             <option class="form-control" selected disabled value="">Select Batch</option>
-            {% for cat in batch %}
-            <option class="form-control" value="{{cat.batchName}}">{{cat.batchName}}</option>
-            {% endfor %}
           </select>
         </div>`
           }
           else{
             output = `<div class="col">
               <label for="validationCustom01"><strong>Select Class <span class="red">*</span></strong></label>
-              <select id="class_select" name="class" style="width: 100%;" class="js-example-basic-single form-control"onchange="addoptions(this)">
+              <select name="class" style="width: 100%;" class="cn js-example-basic-single form-control"onchange="addoptions(this)" required>
                 <option class="form-control" selected disabled value="">Select Class</option>
-                {% for x,y in data.items %}
-                <option value="{{ x }}">{{ x }}</option>
+                {% for class in classes %}
+                <option value="{{ class }}">{{ class }}</option>
                 {% endfor %}
                 </select>
                 </div>
                 <div class="col">
                   <label for="validationCustom01"><strong>Select Course<span class="red">*</span></strong></label>
-            <select id="cn" name="course" style="width: 100%" class="js-example-basic-single form-control">
+            <select name="course" style="width: 100%" class="ctn js-example-basic-single form-control" required>
               <option class="form-control" selected disabled value="">Select Course</option>
             </select>
             </div>
             <div class="col">
           <label for="validationCustom01"><strong>Price<span class="red">*</span></strong></label>
-          <input type="number" class="form-control" placeholder="Exam Price" name="price" required>
+          <input type="number" min="0" class="form-control" placeholder="Exam Price" name="price" required>
           </div>`
         }
         INSTBATCH.innerHTML=output
@@ -290,6 +299,14 @@
       success: function (data) {
         courses = data.courses;
         $("#select_course").empty().trigger("change");
+        var newOption = new Option(
+            "Select Course",
+            "",
+            false,
+            false
+          );
+          $("#select_course").append(newOption).trigger("change");
+
         for (i = 0; i < courses.length; i++) {
           var newOption = new Option(
             courses[i][1],
@@ -302,16 +319,68 @@
       },
     });
   }
+
+  
+  function selectcourse() {
+    var selected_course = $("#select_course option:selected").text();
+    var selected_class = $("#class_select").val();
+
+    $.ajax({
+      url: "{% url 'findBatch' %}",
+      data: {
+        forclass: selected_class,
+        course: selected_course
+      },
+      success: function (data) {
+        batches = data.batches;
+        console.log(data)
+
+        $("#batch_select").empty().trigger("change");
+
+        var newOption = new Option(
+                    "Select Batch",
+                    "",
+                    false,
+                    false
+                );
+        $("#batch_select").append(newOption).trigger("change");
+
+        for (i = 0; i < batches.length; i++) {
+          var newOption = new Option(
+            batches[i][0],
+            batches[i][0],
+            false,
+            false
+          );
+          $("#batch_select").append(newOption).trigger("change");
+        }
+      },
+    });
+  }
     
     function addoptions(el) {
-      var data = JSON.parse("{{ data|escapejs }}".replaceAll("'", "\""));
-        var items = data[el.value];
-        html1 = "";
-        for (i = 0; i < items.length; i++) {
-            html1 += "<option value=\"" + items[i] + "\">" + items[i] + "</option> ";
+        var data = {{ data| safe }};
+        courses = data[el.value];
+
+        $(".ctn").empty().trigger("change");
+        var newOption = new Option(
+            "Select Course",
+            "",
+            false,
+            false
+        );
+        $(".ctn").append(newOption).trigger("change");
+
+        for (i = 0; i < courses.length; i++) {
+            var newOption = new Option(
+                courses[i],
+                courses[i],
+                false,
+                false
+            );
+            $(".ctn").append(newOption).trigger("change");
         }
-        $("#cn").html(html1);
-    };
+    }
     // In your Javascript (external .js resource or <script> tag)
     $(document).ready(function () {
       $('.js-example-basic-single').select2();

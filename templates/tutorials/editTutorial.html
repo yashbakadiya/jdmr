@@ -321,6 +321,30 @@
             <br>
             <div class="row">
                 <div class="col-md-6 col-lg-4 col-12 input-group form-group">
+                    <label class="control-label col-sm-5 col-5 mt-2" style="color:black;">Class<span
+                            class="text-danger">*</span></label>
+
+                    <select class="cn custom-select form-control" name="forclass" required onchange="selectclass(this)">
+                        <option selected value="{{tutorial.forclass}}">{{tutorial.forclass}}</option>
+                        {% for x in data %}
+                        {% if x.0 != tutorial.forclass %}
+                        <option value="{{ x.0 }}">{{ x.0 }}</option>
+                        {% endif %}
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="col-md-6 col-lg-4 col-12 input-group form-group">
+                    <label class="control-label col-sm-5 col-5 mt-2" style="color:black;">Course<span
+                            class="text-danger">*</span></label>
+
+                    <select class="ctn custom-select form-control" name="course" required>
+                        <option selected value="{{tutorial.Course.courseName}}">{{tutorial.Course.courseName}}
+                        </option>
+                    </select>
+                </div>
+
+                <div class="col-md-6 col-lg-4 col-12 input-group form-group">
                     <label class="control-label col-sm-5 col-5 mt-2" style="color:black;">Course Title<span
                             class="text-danger">*</span></label>
                     <input type="text" class="form-control" id="firstName " name='title' placeholder="Course Title"
@@ -328,74 +352,54 @@
                 </div>
 
                 <div class="col-md-6 col-lg-4 col-12 input-group form-group">
-                    <label class="control-label col-sm-5 col-5 mt-2" style="color:black;">Course Fess<span
+                    <label class="control-label col-sm-5 col-5 mt-2" style="color:black;">Course Fees<span
                             class="text-danger">*</span></label>
-                    <input type="number" class="form-control" id="firstName " name='fees' placeholder="Course Fees"
-                        required="" value="{{tutorial.Fees}}">
+                    <input type="number" min="0" class="form-control" id="cfees" name='fees'
+                        placeholder="Course Fees" required="" value="{{tutorial.Fees}}">
                 </div>
 
                 <div class="col-md-6 col-lg-4 col-12 input-group form-group">
                     <label class="control-label col-sm-5 col-5 mt-2" style="color:black;">Course Duration<span
                             class="text-danger">*</span></label>
-                    <select id="no_of_installment" class="custom-select form-control" name='duration' required>
-                        <option disabled selected value="{{tutorial.Duration}}">{{tutorial.Duration}}</option>
-                        <option value="1">1</option>
-                        <option value="2">2</option>
-                        <option value="3">3</option>
-                        <option value="4">4</option>
-                        <option value="5">5</option>
-                        <option value="6">6</option>
-                    </select>
+                    <input type="number" min="0" id="no_of_installment" class="form-control" name='duration' required
+                        placeholder="In Months" value="{{tutorial.Duration}}">
                 </div>
 
-                <div class="col-md-6 col-lg-4 col-12 input-group form-group">
-                    <label class="control-label col-sm-5 col-5 mt-2" style="color:black;">Select Class<span
-                            class="text-danger">*</span></label>
-
-                    <select class="cn custom-select form-control" name="forclass" required onchange="selectclass(this)">
-                        <option disabled selected value="{{tutorial.forclass}}">{{tutorial.forclass}}</option>
-                        {% for x in data %}
-                        <option value="{{ x.0 }}">{{ x.0 }}</option>
-                        {% endfor %}
-                    </select>
-                </div>
-
-                <div class="col-md-6 col-lg-4 col-12 input-group form-group">
-                    <label class="control-label col-sm-5 col-5 mt-2" style="color:black;">Select Course<span
-                            class="text-danger">*</span></label>
-
-                    <select class="ctn custom-select form-control" name="course" required>
-                        <option disabled selected value="{{tutorial.Course.courseName}}">{{tutorial.Course.courseName}}
-                        </option>
-                    </select>
-                </div>
 
                 <div class="col-md-6 col-lg-4 col-12 input-group form-group">
                     <label class="control-label col-sm-5 col-5 mt-2" style="color:black;">Discount Type</label>
 
-                    <select class="custom-select form-control" name="unit">
+                    <select class="custom-select form-control" name="unit" id="unit">
                         <option selected value="0">In Percentage (%)</option>
                         <option value="1">In Rupees </option>
                     </select>
                 </div>
 
                 <div class="col-md-6 col-lg-4 col-12 input-group form-group">
-                    <label class="control-label col-sm-5 col-5 mt-2" style="color:black;">Discount<span
-                            class="text-danger">*</span></label>
-                    <input type="number" step="0.01" class="form-control" id="discount" name='feeDisc'
+                    <label class="control-label col-sm-5 col-5 mt-2" style="color:black;">Discount</label>
+                    <input type="number" min="0" max="100" step="0.01" class="form-control" id="discount" name='feeDisc'
                         placeholder="Discount" value="{{tutorial.Discount}}">
                 </div>
 
                 <div class="col-md-6 col-lg-4 col-12 input-group form-group">
-                    <label class="control-label col-sm-5 col-5 mt-2" style="color:black;">Validity<span
-                            class="text-danger">*</span></label>
-                    <input type="Date" class="form-control" id="validity" name='discValidity' placeholder="Val" value="{{tutorial.Validity}}">
+                    <label class="control-label col-sm-5 col-5 mt-2" style="color:black;">Validity</label>
+                    <input type="Date" class="form-control" id="validity" name='discValidity' placeholder="Val"
+                        value="{{tutorial.Validity|date:'Y-m-d'}}" disabled>
+                </div>
+
+                <div class="col-md-6 col-lg-4 col-12 input-group form-group">
+                    <label class="control-label col-sm-5 col-5 mt-2" style="color:black;">Free for Enrolled</label>
+
+                    <select class="custom-select form-control" name="enr">
+                        <option {% if tutorial.freeEnrolled == False %} selected {% endif %} value="0">No</option>
+                        <option {% if tutorial.freeEnrolled == True %} selected {% endif %} value="1">Yes</option>
+                    </select>
                 </div>
 
                 <div class="col-md-12 col-lg-12 col-12 input-group form-group">
                     <textarea type="text" class="form-control my-2 w-100" name='description'
-                        placeholder="Course Description"
-                        value="{{tutorial.Description}}">{{tutorial.Description}}</textarea>
+                        placeholder="Course Description" value="{{tutorial.Description}}"
+                        required>{{tutorial.Description}}</textarea>
                 </div>
 
                 <div class="col-lg-12 col-md-12 col-12 text-center">
@@ -409,97 +413,38 @@
 
 </div>
 <script>
-    function Enableddl(install) {
-        var ddl = document.getElementById("no_of_installment");
-        ddl.disabled = install.checked ? false : true;
-        if (!ddl.disabled) {
-            ddl.focus();
-        }
-    }
-
-    $(function () {
-        $("#no_of_installment").on("change", function () {
-            $("#echarges input").prop("disabled", true);
-            var selected = $("option:selected", this).map(function () {
-                return $(this).text();
-            }).toArray();
-            var i;
-            for (i = 0; i < selected.length; ++i) {
-                if (selected[i] == 2)
-                // {
-                //     $('#echarge1').prop( "disabled", false );
-                // }
-                // else if(selected[i]==2)
-                {
-                    $('#echarge2').prop("disabled", false);
-                }
-                else if (selected[i] == 3) {
-                    $('#echarge3').prop("disabled", false);
-                }
-                else if (selected[i] == 4) {
-                    $('#echarge4').prop("disabled", false);
-                }
-                else if (selected[i] == 5) {
-                    $('#echarge5').prop("disabled", false);
-                }
-                else if (selected[i] == 6) {
-                    $('#echarge6').prop("disabled", false);
-                }
-            }
-        });
-    });
-
-
     $(document).ready(function () {
-        $('#no_of_installment').multiselect({
-            includeSelectAllOption: true,
-        });
+        if ($('#discount').val()==0){
+            $('#validity').prop('disabled', true);
+            $('#validity').prop('required', false);
+            $('#validity').val(null);
+        }
+        
+        else{
+            $('#validity').prop('disabled', false);
+            $('#validity').prop('required', true);
+        }
     });
 
-    $(".finalcalc").on("change", function () {
-        var a, b, c;
-        a = Number(document.getElementById("feeamt").value);
-        b = Number(document.getElementById("tax").value);
-        if (a == undefined) { a = 0; }
-        if (b == undefined) { b = 0; }
-        c = a + (b / 100) * a;
-        $('#final').val(c);
-        event.preventDefault()
-    });
 
-</script>
-<script>
-    $("#courseName").on("change", function () {
-        $.ajax({
-            type: 'POST',
-            url: '/addFees/',
-            data: {
-                'ajax_getinfo': 1,
-                "courseName": this.value,
-                csrfmiddlewaretoken: $('input[name=csrfmiddlewaretoken]').val()
-            },
-            success: function (response) {
-                console.log(response);
-                html = ""
-                for (i = 0; i < response.classes.length; i++) {
-                    html += "<option value=\"" + response.classes[i] + "\">" + response.classes[i] + "</option>";
-                }
-                $("#forclass").html(html);
-
-                html = ""
-                for (i = 0; i < response.teachings.length; i++) {
-                    html += "<option value=\"" + response.teachings[i] + "\">" + response.teachings[i] + "</option>";
-                }
-                $("#check").html(html);
-
-                html = ""
-                for (i = 0; i < response.durations.length; i++) {
-                    html += "<option value=\"" + response.durations[i] + "\">" + response.durations[i] + "</option>";
-                }
-                $("#duration").html(html);
+    $('#discount').on('change',()=>{
+        if ($('#unit').val()==1){
+            if($('#cfees').val()){
+                $('#discount').prop('max',$('#cfees').val());
             }
-        });
-    });
+        }
+
+        if ($('#discount').val()==0){
+            $('#validity').prop('disabled', true);
+            $('#validity').prop('required', false);
+            $('#validity').val(null);
+        }
+        
+        else{
+            $('#validity').prop('disabled', false);
+            $('#validity').prop('required', true);
+        }
+    })
 
     function selectclass(el) {
         var selected = el.value;
@@ -511,6 +456,14 @@
             success: function (data) {
                 courses = data.courses;
                 $(".ctn").empty().trigger("change");
+                var newOption = new Option(
+                    "Select an option",
+                    "",
+                    false,
+                    false
+                );
+                $(".ctn").append(newOption).trigger("change");
+
                 for (i = 0; i < courses.length; i++) {
                     var newOption = new Option(
                         courses[i][1],

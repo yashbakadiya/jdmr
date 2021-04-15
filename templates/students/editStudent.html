@@ -376,150 +376,72 @@
   </div>
   {% endfor %}
   {% endif %}
-    <div class="card">
-      <div class="card-header">
-        <div class="row">
-          <div class="col-sm">
-            <h2 style="color: rgb(0, 0, 0);">Add Student</h2>
-          </div>
-          <div class="col-sm-8 form-inline justify-content-end">
-            <button class="btn btn-warning btn-md" role="button">Already Exists &raquo;</button>
-            <form method="POST" action="{% url 'searchUserStudent' %}">{% csrf_token %}
-              <input id="searchbox" type="text" class="form-control" name='srh' placeholder="Search Student" required>
-              <button type="submit" class="btn btn-danger btn-md">Submit</button>
-            </form>
-          </div>
+  <div class="card">
+    <div class="card-header">
+      <div class="row">
+        <div class="col-sm">
+          <h2 style="color: rgb(0, 0, 0);">Edit Student</h2>
         </div>
       </div>
-      <div class="card-body">
-        <form id="submitForm" action="" method="post">{% csrf_token %}
-          <div class="row">
-            <div class="col-md-6 col-lg-4 col-12 input-group form-group">
-              <label class="control-label col-sm-5 col-5 mt-2" style="color:black;">First name<span
-                  class="text-danger">*</span></label>
-              <input type="text" class="form-control" id="firstName" name='firstName' placeholder="First Name"
-                value="{{stfname}}" readonly>
-            </div>
-            <div class="col-md-6 col-lg-4 col-12 input-group form-group">
-              <label class="control-label col-sm-5 col-5 mt-2" style="color:black;">Last name<span
-                  class="text-danger">*</span></label>
-              <input type="text" class="form-control" id="lastName" name='lastName' placeholder="Last Name"
-                value="{{stlname}}" readonly>
-            </div>
-            <div class="col-md-6 col-lg-4 col-12 input-group form-group">
-              <label class="control-label col-sm-5 col-5 mt-2" style="color:black;">Email Id<span
-                  class="text-danger">*</span></label>
-              <input type="email" class="form-control" id="email" name='email' placeholder="Email Address"
-                value="{{stemail}}" readonly>
-            </div>
-            <div class="col-md-6 col-lg-4 col-12 input-group form-group">
-              <label class="control-label col-sm-5 col-5 mt-2" style="color:black;">Phone Number<span
-                  class="text-danger">*</span></label>
-              <input type="tel" pattern="[0-9]{10}" class="form-control" id="phone" name='phone' value="{{stphone}}"
-                required>
-            </div>
-            <div class="col-md-6 col-lg-4 col-12 input-group form-group">
-              <label class="control-label col-sm-5 col-5 mt-2" style="color:black;">Address<span
-                  class="text-danger">*</span></label>
-              <input id="pac-input" type="text" class="controls form-control" name='loc' placeholder="Search Address"
-                value="{{address}}" required>
-              <input type="hidden" id="cityLat" name="cityLat" value="{{qry.conector.latitude}}" />
-              <input type="hidden" id="cityLng" name="cityLng" value="{{qry.conector.longitude}}" />
-            </div>
-            <div class="col-md-6 col-lg-4 col-12 input-group form-group">
-              <label class="control-label col-sm-5 col-5 mt-2" style="color:black;">School Name<span
-                  class="text-danger">*</span></label>
-              <input type="text" class="form-control" id="schoolName" name='school' placeholder="School Name"
-                value="{{schoolName}}" required>
-            </div>
-          </div>
-          <hr>
-
-          <!-- detail start -->
-          <div id='mainForm' class="outside">
-            <div class="entry row">
-              <div class="col-md-6 col-lg-4 col-12 input-group form-group">
-                <label class="control-label col-sm-5 col-5 mt-2" style="color:black;" for="cn">Class Name</label>
-                <select name="cn" class="cn custom-select form-control" required="required"
-                  onchange="selectclass(this)">
-                  {% if qry.forclass %}
-											<option disabled selected value="{{qry.forclass}}">{{qry.forclass}}</option>
-											{% else %}
-											<option disabled selected value="">Select an option</option>
-											{% endif %}
-                  {% for x in data %}
-                  <option value="{{ x.0 }}">{{ x.0 }}</option>
-                  {% endfor %}
-                </select>
-              </div>
-              <div class="col-md-6 col-lg-4 col-12 input-group form-group">
-                <label class="control-label col-sm-5 col-5 mt-2" style="color:black;" for="ctn">Course</label>
-                <select name="ctn" class="ctn custom-select form-control" required="required"
-                  onclick="selectcourse(this)">
-                  {% if qry.courseName %}
-											<option disabled selected value="{{qry.courseName}}">{{qry.courseName}}</option>
-											{% else %}
-											<option disabled selected value="">Select an option</option>
-											{% endif %}
-                </select>
-              </div>
-              <div class="col-md-6 col-lg-4 col-12 input-group form-group">
-                <label class="control-label col-sm-5 col-5 mt-2" style="color:black;" for="ttn">Teaching Type</label>
-                <select name="ttn" class="ttn custom-select form-control" required="required">
-                  {% if qry.teachType %}
-											<option disabled selected value="{{qry.teachType}}">{{qry.teachType}}</option>
-											{% else %}
-											<option disabled selected value="">Select an option</option>
-											{% endif %}
-                </select>
-              </div>
-              <div class="col-md-6 col-lg-4 col-12 input-group form-group">
-                <label class="control-label col-sm-5 col-5 mt-2" style="color:black;" for="noi">Installments</label>
-                <select id="no_of_installment" class="form-control" name="noi" id="noi" required>
-                  {% if qry.installments %}
-											<option disabled selected value="{{qry.installments}}">{{qry.installments}}</option>
-											{% else %}
-                      <option selected disabled value="">Installments</option>
-											{% endif %}
-                  <option value="1">1</option>
-                  <option value="2">2</option>
-                  <option value="3">3</option>
-                  <option value="4">4</option>
-                  <option value="5">5</option>
-                  <option value="6">6</option>
-                </select>
-              </div>
-              <div class="col-md-6 col-lg-4 col-12 input-group form-group">
-                <label class="control-label col-sm-5 col-5 mt-2" style="color:black;" for="batchN">Batch Name</label>
-                <select id="batch" class="form-control" name="batchN" id="batchN" required>
-                  {% if qry.batch %}
-											<option disabled selected value="{{qry.batch}}">{{qry.batch}}</option>
-											{% else %}
-                      <option selected disabled value="">Batch Name</option>
-											{% endif %}
-                  {% for i in batch %}
-                  <option value="{{i.batchName}}">{{i.batchName}}</option>
-                  {% endfor %}
-                </select>
-              </div>
-              <div class="col-md-6 col-lg-4 col-12 input-group form-group">
-                <label class="control-label col-sm-5 col-5 mt-2" style="color:black;" for="feedis">Fee Discount</label>
-                <input type="number" class="custom-text form-control" name="feedis" value="{{qry.feeDisc}}" id="feedis">
-              </div>
-            </div>
-          </div>
-          <div class="col-lg-12 col-md-12  col-12 d-flex justify-content-end">
-            <button class="btn btn-info btn-md" type="button" onclick="duplicate(this)">Add
-              New</button>
-          </div>
-          <hr>
-
-          <div class="col-lg-12 col-md-12 col-12 mt-4 text-center">
-            <button id='submitBtn' name="submit" type="submit" class="btn btn-info">Submit</button>
-          </div>
-        </form>
-      </div>
     </div>
+    <div class="card-body">
+      <form id="submitForm" action="" method="post">{% csrf_token %}
+        <div class="row">
+          <div class="col-md-6 col-lg-4 col-12 input-group form-group">
+            <label class="control-label col-sm-5 col-5 mt-2" style="color:black;">First name<span
+                class="text-danger">*</span></label>
+            <input type="text" class="form-control" id="firstName" name='firstName' placeholder="First Name"
+              value="{{studentBaseData.user.first_name}}" readonly required>
+          </div>
+          <div class="col-md-6 col-lg-4 col-12 input-group form-group">
+            <label class="control-label col-sm-5 col-5 mt-2" style="color:black;">Last name</label>
+            <input type="text" class="form-control" id="lastName" name='lastName' placeholder="Last Name"
+              value="{{studentBaseData.user.last_name}}" readonly>
+          </div>
+          <div class="col-md-6 col-lg-4 col-12 input-group form-group">
+            <label class="control-label col-sm-5 col-5 mt-2" style="color:black;">Email Id<span
+                class="text-danger">*</span></label>
+            <input type="email" class="form-control" id="email" name='email' placeholder="Email Address"
+              value="{{studentBaseData.user.email}}" readonly required>
+          </div>
+          <div class="col-md-6 col-lg-4 col-12 input-group form-group">
+            <label class="control-label col-sm-5 col-5 mt-2" style="color:black;">Phone Number<span
+                class="text-danger">*</span></label>
+            <input type="tel" pattern="[0-9]{10}" class="form-control" id="phone" name='phone'
+              value="{{studentBaseData.phone}}" readonly required>
+          </div>
+          <div class="col-md-6 col-lg-4 col-12 input-group form-group">
+            <label class="control-label col-sm-5 col-5 mt-2" style="color:black;">Address<span
+                class="text-danger">*</span></label>
+            <input id="pac-input" type="text" class="controls form-control" name='loc' placeholder="Search Address"
+              value="{{studentBaseData.address}}" required>
+            <input type="hidden" id="cityLat" name="cityLat" value="{{qry.conector.latitude}}" />
+            <input type="hidden" id="cityLng" name="cityLng" value="{{qry.conector.longitude}}" />
+          </div>
+          <div class="col-md-6 col-lg-4 col-12 input-group form-group">
+            <label class="control-label col-sm-5 col-5 mt-2" style="color:black;">School Name</label>
+            <input type="text" class="form-control" id="schoolName" name='school' placeholder="School Name"
+              value="{{studentBaseData.schoolName}}">
+          </div>
+        </div>
+        <hr>
+
+        <!-- detail start -->
+        <div id='mainForm' class="outside">
+
+        </div>
+        <div class="col-lg-12 col-md-12  col-12 d-flex justify-content-end">
+          <button class="btn btn-info btn-md" type="button" onclick="duplicate(this)">Add
+            New</button>
+        </div>
+        <hr>
+
+        <div class="col-lg-12 col-md-12 col-12 mt-4 text-center">
+          <button id='submitBtn' name="submit" type="submit" class="btn btn-info">Submit</button>
+        </div>
+      </form>
+    </div>
+  </div>
 </div>
 
 <script>
@@ -613,158 +535,6 @@
     autocomplete(document.getElementById("schoolName"), school_list);
   });
 
-
-  //next part
-
-  // var counter = 1;
-  // var Dclone = document.querySelector('#entry1').cloneNode(true);
-
-  // function emptyit(ele) {
-  //   while (ele.length > 0) {
-  //     ele.remove(0);
-  //   }
-  // }
-
-  // function duplicate(data) {
-  //   var f = document.getElementById('submitForm');
-  //   if (!f.checkValidity()) {
-  //     f.reportValidity();
-  //   } else {
-  //     var disParent = data.parentElement.parentElement.parentElement;
-  //     var ctn = disParent.children[0].children[0].children[1].children[0];
-  //     var cn = disParent.children[1].children[0].children[1].children[0];
-  //     var ttn = disParent.children[2].children[0].children[1].children[0];
-  //     ctn.disabled = true;
-  //     cn.disabled = true;
-  //     ttn.disabled = true;
-  //     data.disabled = true;
-  //     var removeCTN = document.getElementsByName("ctn")
-  //     var removeOptions = [];
-  //     for (var x = 0; x < removeCTN.length; x++) {
-  //       removeOptions.push(removeCTN[x].value);
-  //     }
-  //     var clone = Dclone.cloneNode(true);
-  //     counter += 1;
-  //     clone.setAttribute('id', 'entry' + counter);
-  //     var ctnNode = clone.children[0].children[0].children[1].children[0];
-  //     var cnNode = clone.children[1].children[0].children[1].children[0];
-  //     var ttnNode = clone.children[2].children[0].children[1].children[0];
-
-  //     var oldData = [];
-  //     for (var x = 1; x < ctnNode.length; x++) {
-  //       oldData.push({value:ctnNode[x].value,txt:ctnNode[x].innerText})
-  //     }
-  //     emptyit(ctnNode);
-  //     for (var x in oldData) {
-  //       if (!removeOptions.includes(oldData[x]['value'])) {
-  //         addoption2(ctnNode, oldData[x]);
-  //       }
-  //     }
-  //     console.log(disParent);
-  //     var numinstallment = disParent.children[3].children[0].children[1].children[0]
-  //     var batchName = disParent.children[7].children[0].children[1].children[0];
-  //     var feeDisc = disParent.children[8].children[0].children[1].children[0];
-  //     var numinstallmentHid = disParent.children[9]
-  //     var batchNameHid = disParent.children[10];
-  //     var feeDiscHid = disParent.children[11];
-  //     numinstallmentHid = numinstallment.value;
-  //     numinstallment.disabled = true;
-  //     batchNameHid.value = batchName.value;
-  //     batchName.disabled = true;
-  //     feeDiscHid.value = feeDisc.value;
-  //     feeDisc.disabled = true;
-  //     document.querySelector('#mainForm').appendChild(clone);
-  //   }
-  // }
-  //  function addoption2(ele, val) {
-  //   var opt = document.createElement('option');
-  //   opt.value = val['value'];
-  //   opt.innerHTML = val['txt'];
-  //   ele.appendChild(opt);
-  // }
-  // function addoption(ele, val) {
-  //   var opt = document.createElement('option');
-  //   opt.value = val;
-  //   opt.innerHTML = val;
-  //   ele.appendChild(opt);
-  // }
-
-  // function addoptions(ele, ar) {
-  //   for (var x in ar) {
-  //     addoption(ele, ar[x]);
-  //   }
-  // }
-
-  // function addvals(data) {
-  //   var mainParentNode = data.parentElement.parentElement.parentElement.parentElement;
-  //   var cn = mainParentNode.children[1].children[0].children[1].children[0];
-  //   var ttn = mainParentNode.children[2].children[0].children[1].children[0];
-  //   var currentval = data.value;
-  //   var alldata = JSON.parse("{{jsdata|escapejs}}");
-  //   emptyit(cn);
-  //   emptyit(ttn);
-  //   $(cn).append("<option disabled selected>Select an option</option>");
-  //   $(ttn).append("<option disabled selected>Select an option</option>");
-  //   addoptions(cn, alldata[currentval][0]);
-  //   addoptions(ttn, alldata[currentval][1]);
-
-
-  //   var saveVal = mainParentNode.children[6];
-  //   saveVal.value = data.value;
-  //   console.log(saveVal.value);
-  // }
-
-  // function cnCombine(data) {
-  //   console.log("cnChange run")
-  //   var mainParentNode = data.parentElement.parentElement.parentElement.parentElement;
-  //   var cn = mainParentNode.children[4];
-  //   var result = [];
-  //   var options = data && data.options;
-  //   var opt;
-  //   for (var i = 0, iLen = options.length; i < iLen; i++) {
-  //     opt = options[i];
-  //     if (opt.selected) {
-  //       result.push(opt.value || opt.text);
-  //     }
-  //   }
-  //   cn.value = result.join(', ');
-  // }
-
-  // function ttnCombine(data) {
-  //   console.log("ttnchange run")
-  //   var mainParentNode = data.parentElement.parentElement.parentElement.parentElement;
-  //   var ttn = mainParentNode.children[5];
-  //   var result = [];
-  //   var options = data && data.options;
-  //   var opt;
-  //   for (var i = 0, iLen = options.length; i < iLen; i++) {
-  //     opt = options[i];
-  //     if (opt.selected) {
-  //       result.push(opt.value || opt.text);
-  //     }
-  //   }
-  //   ttn.value = result.join('\n');
-  // }
-
-  // function noichange(data) {
-  //   var mainParentNode = data.parentElement.parentElement.parentElement.parentElement;
-  //   var noi = mainParentNode.children[9];
-  //   noi.value = data.value;
-  // }
-
-  // function bnchange(data) {
-  //   var mainParentNode = data.parentElement.parentElement.parentElement.parentElement;
-  //   var bn = mainParentNode.children[10];
-  //   bn.value = data.value;
-  // }
-
-  // function fdchange(data) {
-  //   var mainParentNode = data.parentElement.parentElement.parentElement.parentElement;
-  //   var fd = mainParentNode.children[11];
-  //   fd.value = data.value;
-  //   console.log(fd.value);
-  // }
-
   function selectclass(el) {
     var selected = el.value;
     $.ajax({
@@ -775,6 +545,15 @@
       success: function (data) {
         courses = data.courses;
         $(el).closest(".entry").find(".ctn").empty().trigger("change");
+
+        var newOption = new Option(
+          "Select an option",
+          "",
+          false,
+          false
+        );
+        $(el).closest(".entry").find(".ctn").append(newOption).trigger("change");
+
         for (i = 0; i < courses.length; i++) {
           var newOption = new Option(
             courses[i][1],
@@ -799,11 +578,20 @@
       },
       success: function (data) {
         teaching = data.teaching;
+
         $(el).closest(".entry").find(".ttn").empty().trigger("change");
+        var newOption = new Option(
+          "Select an option",
+          "",
+          false,
+          false
+        );
+        $(el).closest(".entry").find(".ttn").append(newOption).trigger("change");
+
         for (i = 0; i < teaching.length; i++) {
           var newOption = new Option(
-            teaching[i][0],
-            teaching[i][0],
+            teaching[i],
+            teaching[i],
             false,
             false
           );
@@ -811,84 +599,257 @@
         }
       },
     });
+
+    $.ajax({
+      url: "{% url 'findBatch' %}",
+      data: {
+        forclass: selected_class,
+        course: selected_course
+      },
+      success: function (data) {
+        batches = data.batches;
+
+        $(el).closest(".entry").find(".batchN").empty().trigger("change");
+
+        var newOption = new Option(
+          "Batch Name",
+          "",
+          false,
+          false
+        );
+        $(el).closest(".entry").find(".batchN").append(newOption).trigger("change");
+
+        for (i = 0; i < batches.length; i++) {
+          var newOption = new Option(
+            batches[i][0],
+            batches[i][0],
+            false,
+            false
+          );
+          $(el).closest(".entry").find(".batchN").append(newOption).trigger("change");
+        }
+      },
+    });
+  }
+
+  function selectTeach(el) {
+    var selected_teach = el.value;
+    var selected_class = $(el).closest(".entry").find(".cn").val();
+    var selected_course = $(el).closest(".entry").find(".ctn").val();
+
+    $.ajax({
+      url: "{% url 'findFees' %}",
+      data: {
+        forclass: selected_class,
+        course: selected_course,
+        teach: selected_teach
+      },
+      success: function (data) {
+        fees = parseInt(data.fees[0]);
+
+        $(el).closest(".entry").find(".noi").empty().trigger("change");
+
+        var newOption = new Option(
+          "Installments",
+          "",
+          false,
+          false
+        );
+        $(el).closest(".entry").find(".noi").append(newOption).trigger("change");
+
+        for (i = 1; i <= fees; i++) {
+          var newOption = new Option(
+            i,
+            i,
+            false,
+            false
+          );
+          $(el).closest(".entry").find(".noi").append(newOption).trigger("change");
+        }
+      },
+    });
   }
 
   function duplicate() {
-    $('.outside').append(`<div class="entry row" style="margin-bottom: 5%;padding-bottom: 2%">
-            <div class="col-sm-2">
-              <div class="form-group">
-                <label for="cn">Class Name</label>
-                <div>
-                  <select name="cn" class="cn custom-select form-control" required="required"
-                    onchange="selectclass(this)">
-                    <option disabled selected value="">Select an option</option>
-                    {% for x in data %}
-                    <option value="{{ x.0 }}">{{ x.0 }}</option>
-                    {% endfor %}
-                  </select>
-                </div>
-              </div>
-            </div>
-            <div class="col-sm-2">
-              <div class="form-group">
-                <label for="ctn">Course</label>
-                <div>
-                  <select name="ctn" class="ctn custom-select form-control" required="required" onclick="selectcourse(this)">
-                    <option disabled selected value="">Select an option</option>
-                </select>
-                </div>
-              </div>
-            </div>
-            <div class="col-sm-2">
-              <div class="form-group">
-                <label for="ttn">Teaching Type</label>
-                <div>
-                  <select name="ttn" class="ttn custom-select form-control" required="required">
-                    <option disabled selected value="">Select an option</option>
-                </select>
-                </div>
-              </div>
-            </div>
-            <div class="col-sm-2">
-              <div class="form-group">
-                <label for="noi">Installments</label>
-                <div>
-                  <select id="no_of_installment" class="form-control" name="noi" id="noi"
-                    required>
-                    <option selected disabled value="">Installments</option>
-                    <option value="1">1</option>
-                    <option value="2">2</option>
-                    <option value="3">3</option>
-                    <option value="4">4</option>
-                    <option value="5">5</option>
-                    <option value="6">6</option>
-                  </select>
-                </div>
-              </div>
-            </div>
-            <div class="col-sm-2">
-              <div class="form-group">
-                <label for="batchN">Batch Name</label>
-                <div>
-                  <select id="batch" class="form-control" name="batchN" id="batchN" required>
-                    <option selected disabled value="">Batch Name</option>
-                    {% for i in batch %}
-                    <option value="{{i.batchName}}">{{i.batchName}}</option>
-                    {% endfor %}
-                  </select>
-                </div>
-              </div>
-            </div>
-            <div class="col-sm-2">
-              <div class="form-group">
-                <label for="feedis">Fee Discount</label>
-                <div>
-                  <input type="number" class="custom-text form-control" name="feedis" id="feedis">
-                </div>
-              </div>
-            </div>
-          </div>`)
+    $('.outside').append(`<div class="entry row">
+      <div class="input-group" style="width: 92%">
+        <div class="col-md-6 col-lg-4 col-12 input-group form-group">
+          <label class="control-label col-sm-5 col-5 mt-2" style="color:black;" for="cn">Class<span
+            class="text-danger">*</span></label>
+          <select name="cn" class="cn custom-select form-control" required="required" onchange="selectclass(this)">
+            <option disabled selected value="">Select an option</option>
+            {% for x in data %}
+                  <option value="{{ x.0 }}">{{ x.0 }}</option>
+            {% endfor %}
+          </select>
+        </div>
+        <div class="col-md-6 col-lg-4 col-12 input-group form-group">
+          <label class="control-label col-sm-5 col-5 mt-2" style="color:black;" for="ctn">Course<span
+            class="text-danger">*</span></label>
+          <select name="ctn" class="ctn custom-select form-control" required="required"
+            onchange="selectcourse(this)">
+            <option disabled selected value="">Select an option</option>
+          </select>
+        </div>
+        <div class="col-md-6 col-lg-4 col-12 input-group form-group">
+          <label class="control-label col-sm-5 col-5 mt-2" style="color:black;" for="ttn">Teaching Type<span
+            class="text-danger">*</span></label>
+          <select name="ttn" class="ttn custom-select form-control" required="required" onchange="selectTeach(this)">
+            <option disabled selected value="">Select an option</option>
+          </select>
+        </div>
+        <div class="col-md-6 col-lg-4 col-12 input-group form-group">
+          <label class="control-label col-sm-5 col-5 mt-2" style="color:black;" for="noi">Installments</label>
+          <select class="noi form-control" name="noi">
+            <option selected disabled value="">Installments</option>
+          </select>
+        </div>
+        <div class="col-md-6 col-lg-4 col-12 input-group form-group">
+          <label class="control-label col-sm-5 col-5 mt-2" style="color:black;" for="batchN">Batch Name</label>
+          <select class="batchN form-control" name="batchN">
+            <option selected disabled value="">Batch Name</option>
+          </select>
+        </div>
+        <div class="col-md-6 col-lg-4 col-12 input-group form-group">
+          <label class="control-label col-sm-5 col-5 mt-2" style="color:black;" for="feedis">Fee Discount</label>
+          <input type="number" class="form-control" name="feedis" placeholder="In Percentage(%)">
+                    </div>
+        </div>
+        <div class="mx-auto">
+          <button type="button" class="btn btn-success" onclick="removeDuplicate(this)">
+            Remove
+                </button>
+        </div>
+      </div>`)
   }
-</script>
 
+
+  function removeDuplicate(el) {
+    $(el).closest(".entry").empty().trigger("change");
+  }
+
+  function prefill() {
+    {% if editStudent %}
+    {% for i in editStudent %}
+    $('.outside').append(`<div class="row entry">
+      {% if forloop.counter != 1 %}
+			<div class="input-group" style="width: 92%">
+        {% endif %}
+        <div class="col-md-6 col-lg-4 col-12 input-group form-group">
+          <label class="control-label col-sm-5 col-5 mt-2" style="color:black;" for="cn">Class<span
+            class="text-danger">*</span></label>
+          <select name="cn" class="cn custom-select form-control" required="required" onchange="selectclass(this)">
+            <option selected value="{{ i.forclass }}">{{ i.forclass }}</option>
+						{% for x in data %}
+							{% if x.0 != i.forclass %}
+								<option value="{{ x.0 }}">{{ x.0 }}</option>
+							{% endif %}
+						{% endfor %}
+          </select>
+        </div>
+        <div class="col-md-6 col-lg-4 col-12 input-group form-group">
+          <label class="control-label col-sm-5 col-5 mt-2" style="color:black;" for="ctn">Course<span
+            class="text-danger">*</span></label>
+          <select name="ctn" class="ctn custom-select form-control" required="required"
+            onchange="selectcourse(this)">
+            <option selected value="{{ i.courseName }}">{{ i.courseName }}</option>
+          </select>
+        </div>
+        <div class="col-md-6 col-lg-4 col-12 input-group form-group">
+          <label class="control-label col-sm-5 col-5 mt-2" style="color:black;" for="ttn">Teaching Type<span
+            class="text-danger">*</span></label>
+          <select name="ttn" class="ttn custom-select form-control" required="required" onchange="selectTeach(this)">
+            <option selected value="{{i.teachType}}">{{i.teachType}}</option>
+          </select>
+        </div>
+        <div class="col-md-6 col-lg-4 col-12 input-group form-group">
+          <label class="control-label col-sm-5 col-5 mt-2" style="color:black;" for="noi">Installments</label>
+          <select class="noi form-control" name="noi">
+            {% if i.installments %}
+            <option selected value="{{i.installments}}">{{i.installments}}</option>
+            {% else %}
+            <option selected disabled value="">Installments</option>
+            {% endif %}
+          </select>
+        </div>
+        <div class="col-md-6 col-lg-4 col-12 input-group form-group">
+          <label class="control-label col-sm-5 col-5 mt-2" style="color:black;" for="batchN">Batch Name</label>
+          <select class="batchN form-control" name="batchN">
+            {% if i.batch %}
+            <option selected value="{{i.batch}}">{{i.batch}}</option>
+            {% else %}
+            <option selected disabled value="">Batch Name</option>
+            {% endif %}
+          </select>
+        </div>
+        <div class="col-md-6 col-lg-4 col-12 input-group form-group">
+          <label class="control-label col-sm-5 col-5 mt-2" style="color:black;" for="feedis">Fee Discount</label>
+          <input type="number" class="form-control" name="feedis" placeholder="In Percentage(%)" value = "{{i.feeDisc}}">
+                    </div>
+          {% if forloop.counter != 1 %}
+				</div>
+        <div class="mx-auto">
+          <button type="button" class="btn btn-success" onclick="removeDuplicate(this)">
+            Remove
+					</button>
+        </div>
+        {% endif %}
+      </div>`)
+    {% endfor %}
+
+      {% else %}
+    $('.outside').append(`<div class="row entry">
+        <div class="col-md-6 col-lg-4 col-12 input-group form-group">
+          <label class="control-label col-sm-5 col-5 mt-2" style="color:black;" for="cn">Class<span
+            class="text-danger">*</span></label>
+          <select name="cn" class="cn custom-select form-control" required="required" onchange="selectclass(this)">
+            <option disabled selected value="">Select an option</option>
+            {% for x in data %}
+                  <option value="{{ x.0 }}">{{ x.0 }}</option>
+            {% endfor %}
+          </select>
+        </div>
+        <div class="col-md-6 col-lg-4 col-12 input-group form-group">
+          <label class="control-label col-sm-5 col-5 mt-2" style="color:black;" for="ctn">Course<span
+            class="text-danger">*</span></label>
+          <select name="ctn" class="ctn custom-select form-control" required="required"
+            onchange="selectcourse(this)">
+            <option disabled selected value="">Select an option</option>
+          </select>
+        </div>
+        <div class="col-md-6 col-lg-4 col-12 input-group form-group">
+          <label class="control-label col-sm-5 col-5 mt-2" style="color:black;" for="ttn">Teaching Type<span
+            class="text-danger">*</span></label>
+          <select name="ttn" class="ttn custom-select form-control" required="required" onchange="selectTeach(this)">
+            <option disabled selected value="">Select an option</option>
+          </select>
+        </div>
+        <div class="col-md-6 col-lg-4 col-12 input-group form-group">
+          <label class="control-label col-sm-5 col-5 mt-2" style="color:black;" for="noi">Installments</label>
+          <select class="noi form-control" name="noi">
+            <option selected disabled value="">Installments</option>
+          </select>
+        </div>
+        <div class="col-md-6 col-lg-4 col-12 input-group form-group">
+          <label class="control-label col-sm-5 col-5 mt-2" style="color:black;" for="batchN">Batch Name</label>
+          <select class="batchN form-control" name="batchN">
+            <option selected disabled value="">Batch Name</option>
+          </select>
+        </div>
+        <div class="col-md-6 col-lg-4 col-12 input-group form-group">
+          <label class="control-label col-sm-5 col-5 mt-2" style="color:black;" for="feedis">Fee Discount</label>
+          <input type="number" class="form-control" name="feedis" placeholder="In Percentage(%)">
+                    </div>
+        </div>`);
+    {% endif %}
+  }
+
+  $(document).on('ready', () => {
+          prefill();
+          if (performance.navigation.type == 2) {
+            location.reload();
+        }
+  });
+
+</script>
 {% endblock %}

@@ -59,10 +59,8 @@
                                 required>
                         </div>
                         <div class="col-lg-4 col-12 col-md-6 input-group form-group">
-                            <label class="control-label col-sm-4 col-5 mt-2" style="color: black;">Requirement</label>
-                            <input type="number" step="0.01" style="-moz-appearance: textfield;" min="0"
-                                class="form-control w-100 col-sm-8 col-7" id="requirement" name="requirement"
-                                placeholder="Requirement" required>
+                            <label class="control-label col-sm-4 col-5 mt-2" style="color:black;">Deadline</label>
+                            <input type="date" class="form-control w-100 col-sm-8 col-7" name="deadline" required>
                         </div>
 
                         <div class="col-lg-4 col-md-6 col-12 input-group form-group">
@@ -104,21 +102,22 @@
                             <th>#</th>
                             <th>Course</th>
                             <th>Class</th>
-                            <th>Requirement</th>
                             <th>Created</th>
                             <th>Budget</th>
+                            <th>Deadline</th>
                             <th class="text-center">Assigned</th>
                             <th class="text-center">Action</th>
                             <th class="text-center">View</th>
+                            <th class="text-center">Extend</th>
                         </tr>
                         {% for assing in student.PostAssignment.all reversed %}
                         <tr>
                             <td>{{forloop.counter}}</td>
                             <td>{{assing.courseName}}</td>
                             <td>{{assing.forclass}}</td>
-                            <td>{{assing.requirement}}</td>
-                            <td>{{assing.timestamp}}</td>
+                            <td>{{assing.timestamp|date:"F d,Y"}}</td>
                             <td>{{assing.budget}}</td>
+                            <td>{{assing.deadline|date:"F d,Y"}}</td>
                             {% if i.assigned == True %}
                             <td class="text-center"><i class="flaticon-user-check"></i></td>
                             {% else %}
@@ -128,6 +127,8 @@
                                         class="btn btn-danger flaticon-delete-4"></span></a></td>
                             <td class="text-center"><button type="button" data-toggle="modal" data-target="#tutorModal{{assing.sno}}"
                                     class="btn btn-info">View</button></td>
+                            <td class="text-center"><a href=""><span
+                                        class="btn btn-success">Extend</span></a></td>
                         </tr>
 
                         <!-- view box -->

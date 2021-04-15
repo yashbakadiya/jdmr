@@ -4,6 +4,7 @@ from accounts.models import Institute, Teacher, Student, Tutorid
 from django.core.files.base import ContentFile
 from django.http import HttpResponse, JsonResponse, HttpResponseRedirect
 from .models import OTP
+from batches.models import BatchTiming
 from django.contrib.auth.models import User
 import math
 import random
@@ -12,7 +13,8 @@ from django.core.mail import EmailMessage
 from django.contrib import messages
 from accounts.models import *
 from courses.models import *
-from teacher.models import MakeAppointment
+from teacher.models import *
+from students.models import *
 from json import dumps, loads
 import json
 
@@ -25,7 +27,18 @@ def dashboard2(request):
 @login_required(login_url='Login')
 def dashboard(request):
     if request.session['type'] == "Institute":
-        return render(request, "dashboard/institute-dashboard.html")
+        inst = Institute.objects.get(user=User.objects.get(username=request.session['user']))
+        course_count = Courses.objects.filter(intitute=inst).count()
+        tutor_count = len(enrollTutors.objects.filter(institute=inst).values_list('teacher').distinct())
+        student_count = len(AddStudentInst.objects.filter(institute=inst).values_list('student').distinct())
+        all_events = BatchTiming.objects.all()
+        
+        context = {
+            "course_count" : course_count,
+            "tutor_count" : tutor_count,
+            "student_count" : student_count,      
+            "events":all_events   }
+        return render(request, "dashboard/institute-dashboard.html",context)
     elif request.session['type'] == "Teacher":
         user = User.objects.get(username=request.session['user'])
         teacher = Teacher.objects.get(user=user)
@@ -204,11 +217,11 @@ def signupTutorContinued(request, id):
             teacherid = Tutorid.objects.all()
             # creating data object
             forclass = request.POST.getlist('cn_combined')
-            forclass = ";".join(forclass)
+            forclass = ",".join(forclass)
             courseName = request.POST.getlist('ctn_combined')
-            courseName = ";".join(courseName)
+            courseName = ",".join(courseName)
             availability = request.POST.getlist('availability')
-            availability = ", ".join(availability)
+            availability = ",".join(availability)
             panaadhar=request.POST.get('idcard')
             panaadharid=request.POST.get('idnum')   
             idphoto = request.FILES.get('photo')   
