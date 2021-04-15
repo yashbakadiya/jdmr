@@ -23,15 +23,42 @@ from batches.models import Notice
 
 allTimezones = pytz.all_timezones
 
+
 @login_required(login_url="Login")
 def teaShowAllNotice(request):
-    notices = notice(request)
-    return render(request, "batches/tea_showAllNotice.html", context={"notices":notices})
+    if request.session['type'] == "Teacher":
+        user = User.objects.get(username=request.session['user'])
+        teacher = Teacher.objects.get(user=user)
+        appointments = MakeAppointment.objects.filter(created_by=False, tutor=teacher , accepted=False)
+        notices = notice(request)
+        return render(request, "batches/tea_showAllNotice.html", context={"notices":notices, 'appointments':appointments})
+    return HttpResponse("You are not Authenticated for This Page")
+
 
 @login_required(login_url="Login")
 def teaShowNotice(request, id):
     notice = Notice.objects.get(id=id)
     return render(request, "batches/tea_showNotice.html", context={"notice":notice})
+
+
+@login_required(login_url="Login")
+def rejectAppointment(request, pk):
+    if request.session['type'] == "Teacher":
+        appointment = MakeAppointment.objects.get(pk=pk)
+        appointment.delete()
+        return redirect('teaShowAllNotice')
+    return HttpResponse("You are not Authenticated for This Page")
+
+
+@login_required(login_url="Login")
+def acceptAppointment(request, pk):
+    if request.session['type'] == "Teacher":
+        appointment = MakeAppointment.objects.get(pk=pk)
+        appointment.accepted = True
+        appointment.save()
+        return redirect('teaShowAllNotice')
+    return HttpResponse("You are not Authenticated for This Page")
+
 
 @login_required(login_url="Login")
 def addTutors(request):
@@ -486,12 +513,14 @@ def createReccurance(utcDateTime,duration,recc,pattern,repeat,days,utcEndingdate
 
 
 @login_required(login_url="Login")
-def makeAppointment(request):
-    if request.session['type']=="Student":
+def teaMakeAppointment(request,id):
+    if request.session['type']=="Teacher":
         user = User.objects.get(username=request.session['user'])
-        studentObj = Student.objects.get(user=user)
+        tutor = Teacher.objects.get(user=user)
+        student = Student.objects.get(id=id)
+        if request.method=='GET':
+            return render(request,'teacher/by_teacher_appointment.html')
         if request.method=='POST':
-            print(request.POST)
             # errors list
             errors = []
             # input date
@@ -500,7 +529,6 @@ def makeAppointment(request):
                 # date conversion
                 date = datetime.strptime(date,'%Y-%m-%d')
             except Exception as e:
-                print(e)
                 errors.append(f"Date is in wrong format > {date}")
             #input time
             time = request.POST.get('time')
@@ -508,7 +536,6 @@ def makeAppointment(request):
                 #time conversion
                 time = datetime.strptime(time,'%H:%M')
             except Exception as e:
-                print(e)
                 errors.append(f"Date is in wrong format > {date}")
             try:
                 #joining date and time
@@ -521,7 +548,6 @@ def makeAppointment(request):
                                 second=time.second
                             )
             except Exception as e:
-                print(e)
                 errors.append("Date or Time is wrong")
 
             #input duration hour
@@ -530,7 +556,6 @@ def makeAppointment(request):
                 #convert to int
                 durationHour = int(durationHour)
             except Exception as e:
-                print(e)
                 errors.append("Duration Hour should be an integer.")
 
             #input duration minute
@@ -539,14 +564,12 @@ def makeAppointment(request):
                 #convert to int
                 durationMinute = int(durationMinute)
             except Exception as e:
-                print(e)
                 errors.append("Duration Minute should be an integer.")
 
             #create single duration timedelta object
             try:
                 duration = timedelta(hours=durationHour,minutes=durationMinute)
             except Exception as e:
-                print(e)
                 errors.append("Duration minute or hour is incorrect.")
 
             #input timezone
@@ -585,7 +608,6 @@ def makeAppointment(request):
                 try:
                     repeat = int(repeat)
                 except Exception as e:
-                    print(e)
                     errors.append('Repeat should be an integer.')
 
             #days list
@@ -598,44 +620,29 @@ def makeAppointment(request):
             if(endingdate):
                 try:
                     endingdate = datetime.strptime(endingdate,'%Y-%m-%d')
-                    print('endingdate',endingdate)
                     utcEndingdate = old_timezone.localize(endingdate).astimezone(new_timezone)
-                    print('UTC herer',utcEndingdate)
                 except Exception as e:
-                    print(e)
                     errors.append(f"Date is in wrong format > {date}")
             else:
                 endingdate = dateTimeObj + duration
-                print('here',endingdate,timezone,old_timezone,new_timezone)
                 try:
                     utcEndingdate = old_timezone.localize(endingdate).astimezone(new_timezone)
                 except Exception as e:
-                    print(e)
                     errors.append(f"Date is in wrong format > {date}")
-            #tutor id
-            tutorId = request.POST.get('tutorId')
-            try:
-                #tutor object for appointment
-                tutorObj = Teacher.objects.get(id=int(tutorId))
-            except Exception as e:
-                print(e)
-                errors.append('Tutor Doesnot Exists ({tutorId})')
 
             daysDump = createReccurance(utcDateTime,duration,recc,pattern,repeat,days,utcEndingdate)
             #checking clashes for student
             try:
-                if(checkClashes(studentObj,utcDateTime,duration,recc,pattern,repeat,days,utcEndingdate,daysDump)):
+                if(checkClashes(tutor,utcDateTime,duration,recc,pattern,repeat,days,utcEndingdate,daysDump)):
                     errors.append("This appontment cannot be created as you already have an appointment during this duration.")
             except Exception as e:
-                print(e)
                 errors.append("There was an error while creating this appointment for you.")
 
             #checking clashes for tutor
             try:
-                if(checkClashes(tutorObj,utcDateTime,duration,recc,pattern,repeat,days,utcEndingdate,daysDump)):
-                    errors.append("This appontment cannot be created as this Tutor already have an appointment during this duration.")
+                if(checkClashes(student,utcDateTime,duration,recc,pattern,repeat,days,utcEndingdate,daysDump)):
+                    errors.append("This appontment cannot be created as this student already have an appointment during this duration.")
             except Exception as e:
-                print(e)
                 errors.append("There was an error whicle creating this appointment for the tutor.")
 
             print(utcEndingdate)
@@ -648,7 +655,6 @@ def makeAppointment(request):
 
             #if no error
             else:
-                print(utcEndingdate)
                 appointmentObj = MakeAppointment(
                         dateTime    = dateTimeObj,
                         duration    = duration,
@@ -658,20 +664,25 @@ def makeAppointment(request):
                         repeat      = repeat,
                         days        = days,
                         endingDate  = endingdate,
-                        tutor       = tutorObj,
-                        student     = studentObj,
+                        tutor       = tutor,
+                        student     = student,
                         utcDateTime = utcDateTime,
                         utcEndingDate=utcEndingdate,
-                        daysDump     = json.dumps(daysDump, cls=DjangoJSONEncoder)
+                        daysDump     = json.dumps(daysDump, cls=DjangoJSONEncoder),
+                        created_by  = 1
                     )
-                appointmentObj.save()
-                print('finished--',appointmentObj)
-                return JsonResponse({
-                    'status':1,
-                    'msg':appointmentObj.sno
-                    })
-        return HttpResponse("<br><h1 align='center'>¯\\_(ツ)_/¯</h1>")
+                try:
+                    appointmentObj.save()
+                    return redirect('dashboard')
+                except:
+                    errors.append("something went wrong")
+                    return render(request,'teacher/by_teacher_appointment.html')
+        return HttpResponse("<br><h1 align='center'>¯\\_(ツ)_/¯ oops something wrong</h1>")
     return HttpResponse("You are not Authenticated for this page")
+
+
+
+
 
 
 @login_required(login_url="Login")

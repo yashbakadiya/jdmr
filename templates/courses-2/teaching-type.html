@@ -32,8 +32,6 @@
       <div class="mx-2 row" id="INSTBATCH">
         <div class="col">
           <label for="validationCustom01"><strong>Select Class <span class="red">*</span></strong></label>
-
-
           <select id="forclass" name='forclass' style="width: 100%;" class="js-example-basic-single form-control"
             onchange="selectclass()">
             <option class="form-control" selected disabled value="">Select Class</option>
@@ -41,8 +39,6 @@
             <option class="form-control form-control-lg" value="{{ i.0 }}">{{i.0}} </option>
             {% endfor %}
           </select>
-
-
         </div>
         <div class="col">
           <label for="validationCustom01"><strong>Select Course<span class="red">*</span></strong></label>
@@ -50,47 +46,23 @@
             <option class="form-control form-control-lg" selected disabled value="">Select Course</option>
           </select>
         </div>
-
         <div class="col">
           <label for="validationCustom01"><strong>Teaching Type <span class="red">*</span></strong></label>
-
-          <div>
-            <select class="form-control " data-actions-box="true" id="teachingtype" name='teaching' required>
-              <option value="disabled">select</option>
+            <select id="teachingtype" name='teaching' multiple="multiple" style="width: 100%;"
+              class="js-example-basic-single form-control ">
               <option value="Online">Online</option>
               <option value="ClassRoom">Class Room</option>
               <option value="Home Tutors">Home Tutors</option>
-
-            </select>
-          </div>
+            </select>          
         </div>
-
-
-
-
       </div>
-      <div class="mx-2 row mt-4">
-
-
-        <!-- <div class="col">
-          <label for="validationCustom01"><strong>Start Time <span class="red">*</span></strong></label>
-          <input class="form-control" type="time" placeholder="" input type="text" name="startTime" required /><br />
-          <div class="invalid-feedback">
-            Select a valid Time!
-          </div>
-        </div> -->
+      <div class="mx-2 row mt-4" id="allvalue" style="display: none;">
         <div class="col">
-          <input type="radio" name="radio" class="radioInput" id="tab1" hidden />
-          <input type="radio" name="radio" class="radioInput" id="tab2" hidden />
-          <input type="radio" name="radio" class="radioInput" id="tab3" hidden />
-          <select id="check" name='check' multiple="multiple" hidden>
-            <option class="online" value="Online">Online</option>
-            <option class="hometutor" value="Home Tutors">Home Tutors</option>
-            <option class="classroom" value="Classroom">Classroom</option>
-          </select>
-
           <div class="row hideforphone">
             <div class="col">
+              <div class="form-group">
+                <label class="control-label">Teaching Type<span class="text-danger">*</span></label>
+              </div>
             </div>
             <div class="col-md-4">
               <div class="form-group">
@@ -104,7 +76,8 @@
             </div>
           </div>
 
-          <div class="row remember">
+
+          <div class="row remember" id="Online" style="display: none;">
             <div class="col-md-4">
               <label style="color: rgb(66, 8, 8);">Online </label>
             </div>
@@ -126,8 +99,10 @@
               </div>
             </div>
           </div>
+          
 
-          <div class="row remember">
+
+          <div class="row remember" id="hometutors" style="display: none;">
             <div class="col-md-4">
               <label style="color: rgb(66, 8, 8);">Home Tutors </label>
             </div>
@@ -150,7 +125,9 @@
             </div>
           </div>
 
-          <div class="row remember">
+
+
+          <div class="row remember" id="Classroom" style="display: none;">
             <div class="col-md-4">
               <label style="color: rgb(66, 8, 8);">Classroom </label>
             </div>
@@ -181,11 +158,7 @@
         <button type="submit" class="btn btn-primary"> Submit </button>
       </div>
     </form>
-  </div>
-
-  <br>
-  <br>
-
+  </div> <br> <br>
   <div class="card mb-4">
     <div class="card-header">
       <!-- Grid row -->
@@ -240,7 +213,7 @@
                 <a class="btn btn-danger" href="{% url 'deleteteaching' i.id %}"><i class="flaticon-delete-fill"
                     style="font-size:medium;"></i></a>
                 <a class="btn btn-dark" href="{% url 'teachingArchive' i.id %}"><i class="flaticon-delete-fill"
-                      style="font-size:medium;"></i></a>
+                    style="font-size:medium;"></i></a>
 
               </td>
 
@@ -286,8 +259,33 @@
     </div>
     {% endif %}
   </div>
-
-
+  <script>
+    $(document).ready(function()
+    {
+        $('#teachingtype').on('change', function() {
+          if ( this.value == 'Online')
+          {
+            $("#Online").show();
+            $("#allvalue").show();
+           
+          }
+          else if ( this.value == 'ClassRoom')
+          {
+            $("#Classroom").show();
+            $("#allvalue").show();
+            
+          }
+          else if( this.value == 'Home Tutors')
+          {
+            $("#hometutors").show();
+            $("#allvalue").show();
+           
+            
+          }
+        });
+    }
+    );
+    </script>
 
 
   <script>

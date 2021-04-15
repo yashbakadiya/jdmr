@@ -34,30 +34,44 @@
 
 
       <div class="mx-2 row" id="INSTBATCH">
-
-
         <div class="col">
           <label for="validationCustom01"><strong>Select Class <span class="red">*</span></strong></label>
 
+          <select id="class_select" name="forclass" class="js-example-basic-single form-control"
+            placeholder="Select class" onchange="addoptions(this)">
 
-
-          <select id="forclass" name='forclass' style="width: 100%;" class="js-example-basic-single form-control"
-            onchange="selectclass()">
-            <option class="form-control"  value="{{cour.Class}}">{{cour.Class}}</option>
-            {% for i in classes %}
-            <option class="form-control form-control-lg" value="{{ i.0 }}">{{i.0}} </option>
+            {% for x,y in data.items %}
+            <option value="{{ x }}">{{ x }}</option>
             {% endfor %}
+
+
           </select>
+
+
+
+
+          <!-- <select id="forclass" name='forclass' style="width: 100%;" class="js-example-basic-single form-control"
+          onchange="selectclass()">
+          <option class="form-control"  value="{{cour.Class}}">{{cour.Class}}</option>
+          {% for i in classes %}
+          <option class="form-control form-control-lg" value="{{ i.0 }}">{{i.0}} </option>
+          {% endfor %}
+         </select> -->
+
         </div>
+        
+
         <div class="col">
-          <label for="validationCustom01"><strong>Select Course<span class="red">*</span></strong></label>
-          <select id="courseName" name="courseName" style="width: 100%" class="js-example-basic-single form-control">
-            <option class="form-control form-control-lg" selected disabled value="{{course.id}}">
-              {{cour.courseName}}</option>
-          </select>
+          <label for="validationCustom01"><strong>Select Course<span class="red">*</span></strong></label>         
+          <input type="text" name="courseName" list="cn" style="width: 100%"
+            class="js-example-basic-single form-control" />
+          <datalist id="cn">
+            <option>Select Course</option>
+          </datalist>      
+
         </div>
 
-        
+       
 
       </div>
       <br>
@@ -107,11 +121,13 @@
       var data = JSON.parse("{{ data|escapejs }}".replaceAll("'", "\""));
       var items = data[el.value];
 
+
       html1 = "";
       for (i = 0; i < items.length; i++) {
         html1 += "<option value=\"" + items[i] + "\">" + items[i] + "</option> ";
       }
       $("#cn").html(html1);
+
     };
 
     $('#html5-extension').DataTable({
@@ -134,27 +150,27 @@
     });
 
     function selectclass() {
-    var selected = $("#class_select").val();
-    $.ajax({
-      url: "{% url 'findCourseclass' %}",
-      data: {
-        forclass: selected,
-      },
-      success: function (data) {
-        courses = data.courses;
-        $("#courseName").empty().trigger("change");
-        for (i = 0; i < courses.length; i++) {
-          var newOption = new Option(
-            courses[i][1],
-            courses[i][0],
-            false,
-            false
-          );
-          $("#courseName").append(newOption).trigger("change");
-        }
-      },
-    });
-  }  
+      var selected = $("#class_select").val();
+      $.ajax({
+        url: "{% url 'findCourseclass' %}",
+        data: {
+          forclass: selected,
+        },
+        success: function (data) {
+          courses = data.courses;
+          $("#courseName").empty().trigger("change");
+          for (i = 0; i < courses.length; i++) {
+            var newOption = new Option(
+              courses[i][1],
+              courses[i][0],
+              false,
+              false
+            );
+            $("#courseName").append(newOption).trigger("change");
+          }
+        },
+      });
+    }
   </script>
 
 </div>

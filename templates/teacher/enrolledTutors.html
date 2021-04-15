@@ -147,7 +147,7 @@
                         <div class="col-sm-3 col-12">
                             <div class="row d-flex justify-content-center ">
                                 {% if i.photo %}
-                                <img class="avatar rounded-circle" src="{{i.photo}}" alt="Not Found"
+                                <img class="avatar rounded-circle" src="{{i.photo.url}}" alt="Not Found"
                                     style="height:5rem;width:5rem;" />
                                 {% else %}
                                 <img id="preview" src="{% static 'default-profile.png' %}" alt="Default Not Found"
@@ -155,11 +155,8 @@
                                 {% endif %}
                             </div>
                             <div class="d-flex justify-content-center row my-2">
-                                <button value="{{i.id}}" id="appointmenttutor" type="button" onclick="newModal(this)"
-                                    class="btn btn-sm btn-info createAppointment" data-toggle="modal"
-                                    data-target="#appointmentModal" aria-hidden="true" name="button"
-                                    style="width: 65%; font-size:smaller;">Schedule Class</button>
-                        <a class="mt-2 btn btn-success" style="width: 65%;" href='{% url "room" request.user.username "Student" i.username %}'>Chat</a>
+                                <a href="{% url 'stuMakeAppointment' i.id %}"><button class="btn btn-sm btn-info" type="button" style="font-size:smaller;">Schedule Class</button>
+                                <a class="mt-2 btn btn-success" style="width: 65%;" href='{% url "room" request.user.username "Student" i.username %}'>Chat</a>
                             </div>
                         </div>
                         <div class="col-sm-9 col-12">
@@ -412,7 +409,7 @@
             var values = $(form).serialize();
             console.log('values', values)
             $.ajax({
-                url: '{% url 'makeAppointment' %}',
+                url: '{% url 'enrolledStudents' %}',
                 type: 'POST',
                 data: values,
                 success: function (response) {

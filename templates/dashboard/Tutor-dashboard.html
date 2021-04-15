@@ -89,15 +89,19 @@
       </li>
 
       <li class="nav-item dropdown notification-dropdown ml-3 mr-lg-4 align-self-center">
-      {% if request.session.type == "Teacher" %}
-        <a href="{% url 'teaShowAllNotice' %}">
-          <span class="icon flaticon-bell-4"></span>
-        </a>
-      {% elif request.session.type  == "Student" %}
-        <a href="{% url 'stuShowAllNotice' %}">
-          <span class="icon flaticon-bell-4"></span>
-        </a>
-      {% endif %}
+        {% if request.session.type == "Teacher" %}
+          <a href="{% url 'teaShowAllNotice' %}">
+            <span class="icon flaticon-bell-4"></span>
+          </a>
+        {% elif request.session.type  == "Student" %}
+          <a href="{% url 'stuShowAllNotice' %}">
+            <span class="icon flaticon-bell-4"></span>
+          </a>
+        {% elif request.session.type  == "Institute" %}
+          <a href="{% url 'insShowAllNotice' %}">
+            <span class="icon flaticon-bell-4"></span>
+          </a>
+        {% endif %}
       </li>
 
       <li class="nav-item dropdown notification-dropdown ml-3 mr-lg-4 align-self-center">

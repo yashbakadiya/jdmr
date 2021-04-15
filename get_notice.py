@@ -1,7 +1,7 @@
 from django.contrib.auth.decorators import login_required
 from batches.models import Notice
 from students.models import AddStudentInst
-from accounts.models import Teacher,Student
+from accounts.models import Teacher,Student,Institute
 from django.contrib.auth.models import User
 from teacher.models import enrollTutors
 
@@ -23,7 +23,12 @@ def notice(request):
         teacher_courses = set()
         for i in teacher_enroll:
             teacher_courses.add(i.courseName)
-        notice = Notice.objects.filter(batch__course__courseName__in=list(teacher_courses)).order_by('-id')
+        notice = Notice.objects.filter(batch__course__in=list(teacher_courses)).order_by('-id')
+        return notice
+    elif request.session['type'] == 'Institute':
+        user = User.objects.get(username=request.session['user'])
+        institute = Institute.objects.get(user=user)
+        notice = Notice.objects.filter(batch__institute=institute)
         return notice
     else:
         return None

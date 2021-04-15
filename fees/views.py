@@ -80,7 +80,7 @@ def addFeesC(request):
                     extra_charge = ','.join(extra_charge1)
                     extra_charge1 = [float(x) for x in extra_charge1]
                 except Exception as e:
-                    return HttpResponse(f"Wrong Data Type! - {e}")
+                    return HttpResponse(f"Wrong Data Type! - {e}" )
                 finalValue = 0
                 if(extraChargeType):
                     finalValue = final_amt + sum(extra_charge1)
@@ -88,7 +88,16 @@ def addFeesC(request):
                     extra_charge1 = [((fee_amt*x)/100) for x in extra_charge1]
                     feeCalc = fee_amt + sum(extra_charge1)
                     finalValue = feeCalc + ((feeCalc*tax)/100)
-                finalValue -= feeDisc
+                
+                try:
+                    discount = int(finalValue/feeDisc)
+                except Exception as e:
+                    return HttpResponse(f"Wrong Data Type! - {e}")
+
+
+                
+                    
+                finalValue = finalValue - discount
                 addFees = AddFeesC(
                     course = course,
                     intitute=inst,
@@ -111,7 +120,6 @@ def addFeesC(request):
                 return redirect("viewFees")
         return render(request, 'fees/addFees.html', params)
     return messages.error(request, "You Are not Authenticated User for this Page")
-
 
 @login_required(login_url='Login')
 def viewFees(request):
@@ -158,8 +166,18 @@ def editFee(request, id):
     params['qry'] = qry
     params['jsonqry'] = model_to_dict(qry)
     params['jsonqry'] = json.dumps(params['jsonqry'], cls=DjangoJSONEncoder)
-    courses = TeachingType.objects.all()
-    params['courses'] = courses
+ 
+    
+
+
+    user = User.objects.get(username=request.session['user'])
+    inst = Institute.objects.get(user=user)
+    teach = TeachingType.objects.filter(course__intitute=inst, course__archieved=False)
+    courses = Courses.objects.filter(intitute=inst, archieved=False)
+    forclass = Courses.objects.filter(intitute=inst).values_list('forclass').distinct()
+      
+        
+    params = {'courses': courses, 'classes':forclass,'teach':teach}
     if request.method == "POST":
         if 'ajax_getinfo' in request.POST:
             courseName = request.POST.get('courseName')
@@ -193,19 +211,27 @@ def editFee(request, id):
                 no_of_installment1 = request.POST.getlist('no_of_installment')
                 no_of_installment = ','.join(no_of_installment1)
                 no_of_installment1 = [int(x) for x in no_of_installment1]
-                extra_charge1 = request.POST.getlist('echarge')
-                extra_charge = ','.join(extra_charge1)
-                extra_charge1 = [float(x) for x in extra_charge1]
+                extra_charge = request.POST.getlist('echarge')
+                # extra_charge = ','.join(extra_charge1)
+                # extra_charge1 = [float(x) for x in extra_charge1]
             except Exception as e:
                 return HttpResponse(f"Wrong Data Type! - {e}")
             finalValue = 0
-            if(extraChargeType):
-                finalValue = final_amt + sum(extra_charge1)
-            else:
-                extra_charge1 = [((fee_amt*x)/100) for x in extra_charge1]
-                feeCalc = fee_amt + sum(extra_charge1)
-                finalValue = feeCalc + ((feeCalc*tax)/100)
-            finalValue -= feeDisc
+
+            a = final_amt
+            print("final_aamt",a)
+            b = a - int(a/feeDisc)  
+            print("after discount", b)  
+            c =b + int(extra_charge) 
+            print("after extra chage",c)
+            finalValue = c
+            # if(extraChargeType):
+            #     finalValue = final_amt + int(extra_charge)
+            # else:
+            #     extra_charge1 = [((fee_amt*x)/100) for x in extra_charge]
+            #     feeCalc = fee_amt + sum(extra_charge1)
+            #     finalValue = feeCalc + ((feeCalc*tax)/100)
+            
             AddFeesC.objects.filter(id=id).update(
                 courseName=courseName,
                 forclass=forclass,
@@ -224,6 +250,92 @@ def editFee(request, id):
             return redirect("viewFees")
     return render(request, 'fees/editFee.html', params)
 
+@login_required(login_url="Login")
+def editFeef(request, id):
+    params = {}
+    qry = AddFeesC.objects.get(id=id)
+    user = User.objects.get(username=request.session['user'])
+    inst = Institute.objects.get(user=user)
+    teach = TeachingType.objects.filter(course__intitute=inst, course__archieved=False)
+    courses = Courses.objects.filter(intitute=inst, archieved=False)
+    forclass = Courses.objects.filter(intitute=inst).values_list('forclass').distinct()
+      
+        
+    params = {'courses': courses, 'classes':forclass,'teach':teach,'qry':qry}
+    if request.method == "POST":
+        courseName = request.POST.get('courseName')
+        forclass = request.POST.get('forclass')
+        teachType = request.POST.get('teaching')
+        duration = request.POST.get('duration')        
+        fee_amt = int(request.POST.get('feeamt'))
+        tax = int(request.POST.get('tax'))
+        final_amt = request.POST.get('final')
+        
+        no_of_installment1 = request.POST.getlist('no_of_installment')
+        no_of_installment = ','.join(no_of_installment1)
+        extraChargeType = int(request.POST.get('chargeType'))
+        feeDisc = request.POST.get('feeDisc')
+        discValidity = request.POST.get('discValidity')
+        discValidity = datetime.strptime(discValidity, '%Y-%m-%d')
+
+
+        # discValidity = request.POST.get('discValidity')
+        # discValidity = datetime.strptime(discValidity, '%Y-%m-%d')
+
+        
+        extra_charge1 = request.POST.getlist('echarge') 
+        extra_charge = ','.join(extra_charge1)
+
+
+        a = final_amt
+        print("final_aamt",a)
+        b = a - int(a/feeDisc)  
+        print("after discount", b)  
+        c =b + int(extra_charge) 
+        print("after extra chage",c)
+        finalValue = c
+        # if(extraChargeType):
+        #     finalValue = final_amt 
+        # else:
+        #     extra_charge1 =((fee_amt*x)/100) 
+        #     feeCalc = fee_amt + sum(extra_charge1)
+        #     finalValue = feeCalc + ((feeCalc*tax)/100)
+        #     afterfeesdic = finalValue
+        #     finalValue -= feeDisc
+
+        
+        qry.courseName = courseName
+        qry.forclass = forclass
+        qry.teachType = teachType
+        qry.duration = duration
+        qry.fee_amt = fee_amt
+        qry.tax = tax
+        qry.final_amt = final_amt
+        qry.no_of_installment = no_of_installment
+        qry.typeOfCharge = extraChargeType
+        qry.extra_charge = extra_charge
+        qry.feeDisc = feeDisc
+        qry.discValidity = discValidity
+        qry.final_amount = finalValue
+        qry.archieved = 'False'
+
+        qry.save()
+        # AddFeesC.objects.filter(id=id).update(
+        #         courseName=courseName,
+        #         forclass=forclass,
+        #         teachType=teachType,
+        #         duration=duration,
+        #         fee_amt=fee_amt,
+        #         tax=tax,
+        #         final_amt=final_amt,
+        #         no_of_installment=no_of_installment,
+        #         extra_charge=extra_charge,
+        #         typeOfCharge=extraChargeType,
+        #         final_amount=finalValue,
+        #         discValidity=discValidity,
+        #         feeDisc=feeDisc, )
+        return redirect("viewFees")
+    return render(request, 'fees/editFee.html', params)
 
 @login_required(login_url='Login')
 def submitFee(request):
@@ -335,6 +447,34 @@ def submitFee(request):
                 newInstallment.save()
         return render(request, 'fees/submitFee.html')
     return messages.error(request, "You Are not Authenticated User for this Page")
+
+@login_required(login_url='Login')
+def archiveFeefirst(request,id):
+    if request.session['type']=='Institute':
+        user = User.objects.get(username=request.session['user'])
+        inst = Institute.objects.get(user=user)         
+        fees = AddFeesC.objects.get(id=id)
+        print('archieve id' ,id)
+        fees.archieved = True
+        fees.save()
+        messages.success(request, "Fees Archive Succssfully")
+        return redirect("archiveFeeList")
+    return HttpResponse("You Are Not Authenticated for this Page")
+
+
+@login_required(login_url='Login')
+def unarchiveFee(request,id):
+    if request.session['type']=='Institute':
+        user = User.objects.get(username=request.session['user'])
+        inst = Institute.objects.get(user=user)         
+        fees = AddFeesC.objects.get(id=id)
+        print('archieve id' ,id)
+        fees.archieved = False
+        fees.save()
+        messages.success(request, "Fees un archive fees Succssfully")
+        return redirect("archiveFeeList")
+    return HttpResponse("You Are Not Authenticated for this Page")
+
 
 
 @login_required(login_url='Login')

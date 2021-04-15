@@ -225,75 +225,86 @@
     {% endfor %}
     {% endif %}
         <div class="card mb-4">
-            <div class="card-body">
-                <!-- Grid row -->
-                <div class="row">
-                    <!-- Grid column -->
-                    <div class="col-md-8">
-                        <h2 class="pt-3 pb-4 text-center font-bold font-up deep-purple-text" style="color: rgb(66, 8, 8);">List of Enrolled Courses with Fees</h2>
-                    </div>
-                    <div class="col-md-4">
-                        <input id="searchbox" type="text" class="form-control" name='srh' placeholder="Enter Course Name or Teaching Type" required>
-                    </div>
-                    <!-- Grid column -->
+            <div class="card-header">
+              <!-- Grid row -->
+              <div class="row">
+                <!-- Grid column -->
+                <div class="col-md-8">
+                  <h2 style="color: rgb(0, 0, 0 );">List of Enrolled Courses with Fees</h2>
                 </div>
-                <!-- Grid row -->
-                <div>
-                <form action=" " method="post">{% csrf_token %}
-                    <!--Table-->
-                    <table class="table table-striped">
-                        <!--Table head-->
-                        <thead>
-                            <tr>
-                                <th>Course Name</th>
-                                <th>Teaching Type</th>
-                                <th>Duration</th>
-                                <th>Class</th>
-                                <th>Fee amount</th>
-                                <th>Number of Installments</th>
-                                <th>Final amount</th>
-                                <th>Delete</th>
-                                <th>Update</th>
-                                <th>Archive</th>
-                            </tr>
-                        </thead>
-                        <!--Table head-->
-
-                        <!--Table body-->
-                            <tbody>
-                                {% for fee in fees %}
-                                    <tr>
-                                        <td>{{fee.courseName}}</td>
-                                        <td>{{fee.teachType}}</td>
-                                        <td>{{fee.duration}}</td>
-                                        <td>{{fee.forclass}}</td>
-                                        <td>{{fee.fee_amt}}</td>
-                                        <td>{{fee.no_of_installment}}</td>
-                                        <td>{{fee.final_amount}}</td>
-                                        <td>
-                                            <a href="{% url 'deleteFee' fee.id %}" class="btn btn-danger btn-sm">DELETE</a>
-                                        </td>
-                                        <td>
-                                            <a href="{% url 'editFee' fee.id %}" class="btn btn-danger btn-sm">EDIT</a>
-                                        </td>
-                                        <td>
-                                            <input type="checkbox" class="bigcheckbox" name="check" value="{{fee.id}}">
-                                        </td>
-                                    </tr>
-                                {% endfor %}
-                            </tbody>
-                        <!--Table body-->
-                    </table>
-                    <!--Table-->
-                    <div class="form-group">
-                        <input type="submit" value="Move to Archive" class="btn btn-danger float-right">
-                    </div>
-                    <br>
-                </form>
+        
+                <div class="col-md-4">
+                  <input id="searchbox" type="text" class="form-control" name='srh' placeholder="Search Exam or Course"
+                    required>
                 </div>
-                <br>
+        
+                <!-- Grid column -->
+              </div>
             </div>
-        </div>
+            {% if fees %}
+            <div class="card-body">
+              <!-- Grid row -->
+              <!-- <form action="" method="post">{% csrf_token %} -->
+              <!--Table-->
+              <div class="table-responsive">
+                
+                <table class="table table-striped">
+                  <!--Table head-->
+                  <tr>
+                      <th>Sr No.</th>
+                    <th>Class</th>
+                    <th>Course Name</th>
+                    <th>Teaching Type</th>         
+                   
+                    <th>Fee amount</th>
+                    <th>Number of Installments</th>
+                    <th>Final amount</th>
+                    <th style="text-align: center;">Action</th>
+                    
+                </tr>
+                  <!--Table head-->
+                  <!--Table body-->
+                  {% for fee in fees %}
+                  <tr >
+                    <td>{{ forloop.counter }}</td>
+                    <td>{{fee.course.forclass}}</td>
+                    <td>{{fee.course.courseName}}</td>
+                    <td>{{fee.teachType}}</td>
+                    
+                    
+                    <td>{{fee.fee_amt}}</td>
+                    <td>{{fee.no_of_installment}}</td>
+                    <td>{{fee.final_amount}}</td>
+                    <td>
+                        <a class="btn btn-warning" href="{% url 'editFeef' fee.id %}"><i class="flaticon-pencil-line"
+                            style="font-size:medium;"></i></a>
+                        <a class="btn btn-danger" href="{% url 'deleteFee' fee.id %}"><i class="flaticon-delete-fill"
+                            style="font-size:medium;"></i></a>
+                        <a class="btn btn-dark" href="{% url 'archiveFeefirst' fee.id %}"><i class="flaticon-delete-fill"
+                            style="font-size:medium;"></i></a>
+                        
+                    </td>                    
+                  </tr>   
+        
+                  {% endfor %}
+                  <!--Table body-->
+                </table>
+              </div>
+              <!--Table-->
+              <!-- </form> -->
+              <br>
+            </div>
+            {% else %}
+            <div class="card-header" style="background: none;">
+              <div class="row">
+                <div class="col-xl-12 col-md-12 col-12">
+                  <h2>No Enrolled Courses with Fees</h2>
+                </div>
+              </div>
+            </div>
+            {% endif %}
+          </div>
+
 </main>
 <script type="text/javascript">
             trlist = $("tbody>tr");

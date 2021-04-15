@@ -12,9 +12,9 @@ class AddFeesC(models.Model):
     courseName = models.CharField(max_length=100, default="")
     forclass = models.CharField(max_length=255, default="")
     teachType = models.CharField(max_length=255, default="")
-    duration = models.CharField(max_length=255, default="")
+    duration = models.CharField(max_length=255, default="",null=True)
     fee_amt = models.CharField(max_length=100, default="")
-    tax = models.CharField(max_length=100, default="")
+    tax = models.CharField(max_length=100, default="",null=True)
     final_amt = models.CharField(max_length=100, default="")
     no_of_installment = models.CharField(max_length=100, default="")
     typeOfCharge = models.DecimalField(

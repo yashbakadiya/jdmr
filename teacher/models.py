@@ -48,6 +48,7 @@ class MakeAppointment(models.Model):
     rating          = models.DecimalField(max_digits=1,decimal_places=0,default=0)
     sno             = models.AutoField(primary_key=True)
     uid             = models.CharField(max_length=50,default="")
+    created_by      = models.BooleanField(default=False, null=True, blank=True)  #False-> by_student, True->by_teacher
 
     def save(self, *args, **kwargs):
         self.uid = token_urlsafe(50)[:50]

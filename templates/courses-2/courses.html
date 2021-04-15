@@ -35,7 +35,6 @@
 
           <select id="class_select" name="forclass" class="js-example-basic-single form-control"
             placeholder="Select class" onchange="addoptions(this)">
-            <option class="form-control" selected disabled value="">No selection</option>
 
             {% for x,y in data.items %}
             <option value="{{ x }}">{{ x }}</option>
@@ -43,7 +42,9 @@
           </select>
 
 
+
         </div>
+<<<<<<< HEAD
 
         <div class="col">
           <label for="validationCustom01"><strong>Select Course<span class="red">*</span></strong></label>
@@ -56,13 +57,54 @@
         <!-- <div class="col">
           
           <label for="validationCustom01"><strong>Select Course<span class="red">*</span></strong></label>
+=======
+        <!-- {% if  cn == "Other" %}
+        <div class="col">
+          <label for="validationCustom01"><strong>Select Course<span class="red">*</span></strong></label>
+>>>>>>> a56d3e25cef24313bbcb558987098276ae8347b5
+          <input type="text" list="cn" />
+          <select id="cn" name="courseName" style="width: 100%" class="js-example-basic-single form-control">
+            
+          
+          </select>
+        </div> -->
+
+        {% else %}
+        <div class="col">
+          <label for="validationCustom01"><strong>Select Course<span class="red">*</span></strong></label>
+          <input type="text" name="courseName" list="cn" style="width: 100%"
+            class="js-example-basic-single form-control" />
+          <datalist id="cn">
+            <option>Select Course</option>
+          </datalist>
+        </div>
+        {% endif %} -->
+
+        <div class="col" id="selectclass" >
+          <label for="validationCustom01"><strong>Select Course<span class="red">*</span></strong></label>
+          
+          
+          <select id="cn" name="courseName" style="width: 100%" class="js-example-basic-single form-control">
+            <option class="form-control form-control-lg" selected disabled value="">Select Course</option>
+          </select>
+        </div>
+
+        <div class="col" id="other" style="display: none;">  
+          <label for="validationCustom01"><strong>Select Course<span class="red">*</span></strong></label>       
+          <input type="text" name="courseName" list="cn" style="width: 100%"
+            class="js-example-basic-single form-control" />
+          <datalist id="cn">            
+          </datalist>
+          
+        </div>
+        <!-- <div class="col">
+          
+          <label for="validationCustom01"><strong>Select Course<span class="red">*</span></strong></label>
           <input type="text" list="cn" />
           <select id="cn" name="courseName" style="width: 100%" class="js-example-basic-single form-control">
             <option class="form-control form-control-lg" selected disabled value="">Select Course</option>
           </select>
         </div> -->
-
-
       </div>
       <br>
       <div class="text-center">
@@ -71,8 +113,6 @@
     </form>
   </div>
   <br>
-
-
   <div class="card mb-4">
     <div class="card-header">
       <!-- Grid row -->
@@ -96,6 +136,7 @@
       <!-- <form action="" method="post">{% csrf_token %} -->
       <!--Table-->
       <div class="table-responsive">
+        
         <table class="table table-striped">
           <!--Table head-->
           <tr>
@@ -120,6 +161,7 @@
                   style="font-size:medium;"></i></a>
               <a class="btn btn-dark" href="{% url 'courseArchivefirst' i.id %}"><i class="flaticon-delete-fill"
                   style="font-size:medium;"></i></a>
+<<<<<<< HEAD
             </td>
             <td class="text-center">
 
@@ -174,6 +216,10 @@
                     style="font-size:medium;"></i></a>
               </td>
             </tr> -->
+=======
+            </td>                     
+          </tr>   
+>>>>>>> a56d3e25cef24313bbcb558987098276ae8347b5
 
           {% endfor %}
           <!--Table body-->
@@ -193,7 +239,6 @@
     </div>
     {% endif %}
   </div>
-
   <script>
     function checkbox() {
       var value = $("#negativecheck").is(":checked");
@@ -226,18 +271,38 @@
       frm[0].reset();
     });
   </script>
-
   <script>
 
     function addoptions(el) {
       var data = JSON.parse("{{ data|escapejs }}".replaceAll("'", "\""));
-      var items = data[el.value];
+     
+      var items = data[el.value]; 
+      
+      alert(el.value)
+      alert(items)
+      if (el.value == 'Other')
+      {
+      $('#other').show()
+      $('#selectclass').hide()
+      }
+      else
+      {
+      //   $('#other').hide()
+      // $('#selectclass').show()
+
+      }
+         
+
+
+
 
       html1 = "";
       for (i = 0; i < items.length; i++) {
         html1 += "<option value=\"" + items[i] + "\">" + items[i] + "</option> ";
       }
+      
       $("#cn").html(html1);
+
     };
 
     $('#html5-extension').DataTable({

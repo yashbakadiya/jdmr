@@ -52,120 +52,117 @@
 					</select>
 				</div>
 
-
-			</div>
-			<div class="mx-2 row mt-4">
-
-
-				<!-- <div class="col">
-          <label for="validationCustom01"><strong>Start Time <span class="red">*</span></strong></label>
-          <input class="form-control" type="time" placeholder="" input type="text" name="startTime" required /><br />
-          <div class="invalid-feedback">
-            Select a valid Time!
-          </div>
-        </div> -->
 				<div class="col">
-					<input type="radio" name="radio" class="radioInput" id="tab1" checked hidden />
-					<input type="radio" name="radio" class="radioInput" id="tab2" hidden />
-					<input type="radio" name="radio" class="radioInput" id="tab3" hidden />
-					<select id="check" name='check' multiple="multiple" hidden>
-						<option class="online" value="Online">Online</option>
-						<option class="hometutor" value="Home Tutors">Home Tutors</option>
-						<option class="classroom" value="Classroom">Classroom</option>
-					</select>
+					<label for="validationCustom01"><strong>Teaching Type <span class="red">*</span></strong></label>
 
-					<div class="row hideforphone">
-						<div class="col">
-						</div>
-						<div class="col-md-4">
-							<div class="form-group">
-								<label class="control-label">Course Duration<span class="text-danger">*</span></label>
-							</div>
-						</div>
-						<div class="col-md-4">
-							<div class="input-group form-group">
-								<label class="control-label">How many hours/weeks/months?<span
-										class="text-danger">*</span></label>
-							</div>
-						</div>
-					</div>
-
-					<div class="row remember">
-						<div class="col-md-4">
-							<label style="color: rgb(66, 8, 8);">Online </label>
-						</div>
-						<div class="col-md-4">
-							<div class="form-group">
-								<div style="display: inline-block;">
-									<select id="DDL" name="duration" class="form-control col-sm-12">
-										<option value="" selected Disabled>Course Duration</option>
-										<option>Hourly</option>
-										<option>Weekly</option>
-										<option>Monthly</option>
-									</select>
-								</div>
-							</div>
-						</div>
-						<div class="col-md-4">
-							<div class="input-group form-group">
-								<input type="text" class="form-control" id="time" name='time'
-									placeholder="No. of Hours/Weeks/Months">
-							</div>
-						</div>
-					</div>
-
-					<div class="row remember">
-						<div class="col-md-4">
-							<label style="color: rgb(66, 8, 8);">Home Tutors </label>
-						</div>
-						<div class="col-md-4">
-							<div class="form-group">
-								<div style="display: inline-block;">
-									<select id="DDL1" name="duration" class="form-control col-sm-12">
-										<option value="" selected Disabled>Course Duration</option>
-										<option>Hourly</option>
-										<option>Weekly</option>
-										<option>Monthly</option>
-									</select>
-								</div>
-							</div>
-						</div>
-						<div class="col-md-4">
-							<div class="input-group form-group">
-								<input type="text" class="form-control" id="time1" name='time'
-									placeholder="No. of Hours/Weeks/Months">
-							</div>
-						</div>
-					</div>
-
-					<div class="row remember">
-						<div class="col-md-4">
-							<label style="color: rgb(66, 8, 8);">Classroom </label>
-						</div>
-						<div class="col-md-4">
-							<div class="form-group">
-								<div style="display: inline-block;">
-									<select id="DDL2" name="duration" class="form-control col-sm-12">
-										<option value="" selected Disabled>Course Duration</option>
-										<option>Hourly</option>
-										<option>Weekly</option>
-										<option>Monthly</option>
-									</select>
-								</div>
-							</div>
-						</div>
-						<div class="col-md-4">
-							<div class="input-group form-group">
-								<input type="text" class="form-control" id="time2" name='time'
-									placeholder="No. of Hours/Weeks/Months">
-							</div>
-						</div>
-					</div>
-
-				</div>
+					  <select id="teachingtype" name='teaching' multiple="multiple" style="width: 100%;"
+						class="js-example-basic-single form-control ">
+						<option value="Online">Online</option>
+						<option value="ClassRoom">Class Room</option>
+						<option value="Home Tutors">Home Tutors</option>
+					  </select>          
+				  </div>
 
 
 			</div>
+			<div class="mx-2 row mt-4" id="allvalue" style="display: none;">
+				<div class="col">
+				  <div class="row hideforphone">
+					<div class="col">
+					  <div class="form-group">
+						<label class="control-label">Teaching Type<span class="text-danger">*</span></label>
+					  </div>
+					</div>
+					<div class="col-md-4">
+					  <div class="form-group">
+						<label class="control-label">Course Duration<span class="text-danger">*</span></label>
+					  </div>
+					</div>
+					<div class="col-md-4">
+					  <div class="input-group form-group">
+						<label class="control-label">How many hours/weeks/months?<span class="text-danger">*</span></label>
+					  </div>
+					</div>
+				  </div>
+		
+		
+				  <div class="row remember" id="Online" style="display: none;">
+					<div class="col-md-4">
+					  <label style="color: rgb(66, 8, 8);">Online </label>
+					</div>
+					<div class="col-md-4">
+					  <div class="form-group">
+						<div style="display: inline-block;">
+						  <select id="DDL" name="duration" class="form-control col-sm-12">
+							<option value="" selected Disabled>Course Duration</option>
+							<option>Hourly</option>
+							<option>Weekly</option>
+							<option>Monthly</option>
+						  </select>
+						</div>
+					  </div>
+					</div>
+					<div class="col-md-4">
+					  <div class="input-group form-group">
+						<input type="text" class="form-control" id="time" name='time' placeholder="No. of Hours/Weeks/Months">
+					  </div>
+					</div>
+				  </div>
+				  
+		
+		
+				  <div class="row remember" id="hometutors" style="display: none;">
+					<div class="col-md-4">
+					  <label style="color: rgb(66, 8, 8);">Home Tutors </label>
+					</div>
+					<div class="col-md-4">
+					  <div class="form-group">
+						<div style="display: inline-block;">
+						  <select id="DDL1" name="duration" class="form-control col-sm-12">
+							<option value="" selected Disabled>Course Duration</option>
+							<option>Hourly</option>
+							<option>Weekly</option>
+							<option>Monthly</option>
+						  </select>
+						</div>
+					  </div>
+					</div>
+					<div class="col-md-4">
+					  <div class="input-group form-group">
+						<input type="text" class="form-control" id="time1" name='time' placeholder="No. of Hours/Weeks/Months">
+					  </div>
+					</div>
+				  </div>
+		
+		
+		
+				  <div class="row remember" id="Classroom" style="display: none;">
+					<div class="col-md-4">
+					  <label style="color: rgb(66, 8, 8);">Classroom </label>
+					</div>
+					<div class="col-md-4">
+					  <div class="form-group">
+						<div style="display: inline-block;">
+						  <select id="DDL2" name="duration" class="form-control col-sm-12">
+							<option value="" selected Disabled>Course Duration</option>
+							<option>Hourly</option>
+							<option>Weekly</option>
+							<option>Monthly</option>
+						  </select>
+						</div>
+					  </div>
+					</div>
+					<div class="col-md-4">
+					  <div class="input-group form-group">
+						<input type="text" class="form-control" id="time2" name='time' placeholder="No. of Hours/Weeks/Months">
+					  </div>
+					</div>
+				  </div>
+		
+				</div>
+		
+		
+			  </div>
 			<div class="text-center">
 				<button type="submit" class="btn btn-primary"> Update </button>
 			</div>
@@ -175,10 +172,29 @@
 	<br>
 	<br>
 
-
-
-
-
+	<script>
+		$(document).ready(function()
+		{
+			$('#teachingtype').on('change', function() {
+			  if ( this.value == 'Online')
+			  {
+				$("#Online").show();
+				$("#allvalue").show();			   
+			  }
+			  else if ( this.value == 'ClassRoom')
+			  {
+				$("#Classroom").show();
+				$("#allvalue").show();				
+			  }
+			  else if( this.value == 'Home Tutors')
+			  {
+				$("#hometutors").show();
+				$("#allvalue").show();				
+			  }
+			});
+		}
+		);
+    </script>
 	<script>
 		function checkbox() {
 			var value = $("#negativecheck").is(":checked");
