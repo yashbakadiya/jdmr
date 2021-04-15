@@ -1661,10 +1661,27 @@ def ExamTutor(request):
                     courses_of_class.append(course_list[j])
             data[unique_class[i]] = courses_of_class
 
+        other = False
+        nursery = False
+
+        if 'Other' in unique_class:
+            unique_class.remove('Other')
+            other = True
+        if 'Nursery' in unique_class:
+            unique_class.remove('Nursery')
+            nursery = True
+        
+        classes = sorted(unique_class,key=lambda a:int(a))
+
+        if other:
+            classes.append('Other')
+        if nursery:
+            classes.insert(0,'Nursery')
+
         context = {
+        'classes':classes,
         'INSTtutor':INSTtutor,
         'classesInst':forclass,
-        'classes':sorted(unique_class,key=lambda a:int(a)),
         'data':data
         }
         if request.method == "POST":
@@ -1899,8 +1916,25 @@ def EditExamTutor(request,exam_id):
                     courses_of_class.append(course_list[j])
             data[unique_class[i]] = courses_of_class
 
+        other = False
+        nursery = False
+
+        if 'Other' in unique_class:
+            unique_class.remove('Other')
+            other = True
+        if 'Nursery' in unique_class:
+            unique_class.remove('Nursery')
+            nursery = True
+        
+        classes = sorted(unique_class,key=lambda a:int(a))
+
+        if other:
+            classes.append('Other')
+        if nursery:
+            classes.insert(0,'Nursery')
+
         context = {
-                'classes':sorted(unique_class,key=lambda a:int(a)),
+                'classes':classes,
                 'data':data,
                 'exam':exam
                   }    

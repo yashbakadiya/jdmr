@@ -46,7 +46,7 @@ class PostAssignment(models.Model):
     forclass = models.CharField(max_length=255,default="")
     description = models.CharField(max_length=1024,default="")
     descriptionFile = models.FileField(upload_to=assignmentDescriptionFiles,null=True,blank=True)
-    deadline = models.DateTimeField(null=True,blank=True)
+    deadline = models.DateField(null=True,blank=True)
     budget = models.DecimalField(max_digits=10,decimal_places=2,default=0)
     timestamp = models.DateTimeField(auto_now_add=True)
     assigned = models.BooleanField(default=False)

@@ -37,14 +37,14 @@ class Institute(UsersCommanFields):
 class Teacher(UsersCommanFields):
     dob = models.DateField(blank=True, default="2020-12-1")
     gender = models.CharField(max_length=6, default="Male")
-    forclass = models.CharField(max_length=30, default="None")
+    forclass = models.TextField()
     desc = models.TextField(default="None")
-    course = models.CharField(max_length=150, default="None")
+    course = models.TextField()
     qualification = models.CharField(max_length=100, default="None")
     experiance = models.IntegerField(default=-1)
     fees = models.IntegerField(default=1000)
     democlass = models.BooleanField(default=False)
-    availability = models.CharField(max_length=30, default="None")
+    availability = models.CharField(max_length=200, default="None")
 
     def __str__(self):
         return self.user.username

@@ -37,32 +37,13 @@ def instituteTutor(request):
         if request.session['type']=="Teacher":
             user = User.objects.get(username=request.session['user'])
             tutor = Teacher.objects.get(user=user)
-            if enrollTutors.objects.filter(teacher=tutor).exists():
-                INST = enrollTutors.objects.filter(teacher=tutor)
-                courses = []
-                for ins in INST:
-                    if ins.courseName:
-                        course = Courses.objects.get(courseName= ins.courseName)
-                        courses.append(course)
-                batches = zip(INST,courses)
-                return render(request,"Institute/institute.html",{"INST":INST[0],"batches":batches,"template":"dashboard/Tutor-dashboard.html"})
-            else:
-                messages.warning(request,"Not Found")
-                return render(request,"Institute/institute.html",{"template":"dashboard/Tutor-dashboard.html"})
+            INST = enrollTutors.objects.filter(teacher=tutor)
+            return render(request,"Institute/institute.html",{"Institute":INST,"template":"dashboard/Tutor-dashboard.html"})
         elif request.session['type']=="Student":
             user = User.objects.get(username=request.session['user'])
             student = Student.objects.get(user=user)
-            if AddStudentInst.objects.filter(student=student).exists():
-                INST = AddStudentInst.objects.filter(student=student)
-                batches = []
-                for ins in INST:
-                    if ins.batch:
-                        batch = BatchTiming.objects.get(batchName= ins.batch)
-                        batches.append(batch)
-                return render(request,"Institute/institute.html",{"batches":batches,'student':student,"INST":INST[0],"template":"dashboard/student-dashboard.html"})
-            else:
-                messages.warning(request,"Not Found")
-                return render(request,"Institute/institute.html",{"template":"dashboard/student-dashboard.html"})
+            INST = AddStudentInst.objects.filter(student=student)
+            return render(request,"Institute/institute.html",{"Institute":INST,"template":"dashboard/student-dashboard.html"})
     return HttpResponse("You are not Authenticated for this Page")
 
 def haversine(lon1, lat1, lon2, lat2):

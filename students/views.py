@@ -265,7 +265,6 @@ def editStudent(request,id):
 def searchUserStudent(request):
     if request.session['type']=="Institute":
         if request.method=="POST":
-            print(request.POST)
             srch = request.POST.get('srh', '')
             if srch:
                 match = Student.objects.filter(Q(phone=srch) | Q(user__email=srch) | Q(user__username=srch))
@@ -354,7 +353,7 @@ def postAssignment(request):
                 )
 
             if deadline:
-                postAssigObj.deadline = datetime.strptime(deadline,'%Y-%m-%d')
+                postAssigObj.deadline = datetime.strptime(deadline,'%Y-%m-%d').date()
             postAssigObj.save()
 
         with open('cc.txt', 'r') as f:
@@ -387,7 +386,6 @@ def postTution(request):
     if request.session['type']=="Student":
         jsonLocalData = loads(open('cc.txt','r').read())
         if(request.method=='POST'):
-            print(request.POST)
             user = User.objects.get(username=request.session['user'])
             student = Student.objects.get(user=user)
             classlist = ['I','II','III','IV','V','VI','VII','VIII','IX','X','XI','XII','Others','Nursery']
@@ -476,10 +474,8 @@ def checkClashes(person,utcDateTime,duration,recc,pattern,repeat,days,utcEndingd
 	appointments = person.MakeAppointment.all()
 	for appointment in appointments:
 		for x in json.loads(appointment.daysDump):
-			print(x,appointment.duration)
 			dts = parser.parse(x)
 			for y in daysDump:
-				print(y,duration)
 				if(dts<=y<=dts+appointment.duration or dts<=y+duration<=dts+appointment.duration):
 					return 1
 	return 0
@@ -740,21 +736,33 @@ def enrolledStudents(request):
                 currentS = tutions
             currentS = [x.pk for x in currentS]
             currentS = PostTution.objects.filter(pk__in=currentS)
-            print(currentS,address)
 
             if subject:
                 currentS = currentS.filter(subject=subject)
-                print(currentS,subject)
             if className:
                 currentS = currentS.filter(forclass=className)
-                print(currentS,className)
             if teachtype:
                 currentS = currentS.filter(teachingMode=teachtype)
-                print(currentS,teachtype)
 
+        other = False
+        nursery = False
+
+        if 'Other' in unique_class:
+            unique_class.remove('Other')
+            other = True
+        if 'Nursery' in unique_class:
+            unique_class.remove('Nursery')
+            nursery = True
         
+        classes = sorted(unique_class,key=lambda a:int(a))
+
+        if other:
+            classes.append('Other')
+        if nursery:
+            classes.insert(0,'Nursery')
+
         context = {
-            'classes':sorted(unique_class,key=lambda a:int(a)),
+            'classes':classes,
             'data':data,
             'allData':currentS,
             'prefill':prefill,

@@ -426,7 +426,7 @@
 */
 .profile-sidebar {
     position: fixed;
-    top: 91px;
+    top: 86px;
     padding: 10px 4px;
     display: flex;
     height: 100vh;
@@ -629,7 +629,7 @@
     position: fixed;
     background-color: #181818;
     padding: 0;
-    top: 91px;
+    top: 86px;
     width: 125px;
     z-index: 1030;
     left: 0;
@@ -1036,6 +1036,7 @@
         left: -185px;
     }
     .modernSidebar-nav.header { top: 91px; }
+    .profile-sidebar { top: 91px; }
     .modernSidebar-nav.header nav#modernSidebar ul.menu-categories li.menu .submenu { top: 91px; }
     #content {
         margin-top: 91px;
@@ -1062,4 +1063,6 @@
     .modernSidebar-nav.header nav#modernSidebar ul.menu-categories li.menu .submenu {
         width: 190px;
     }
+    .modernSidebar-nav.header { top: 77px; }
+    .profile-sidebar { top: 77px; }
 }

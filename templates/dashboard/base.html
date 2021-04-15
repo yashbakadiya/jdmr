@@ -40,13 +40,9 @@
   {% endblock extra-stylesheets %}
 
   <style>
-    {
-      % block extra-style %
-    }
+    {% block extra-style %}
 
-      {
-      % endblock extra-style %
-    }
+      {% endblock extra-style %}
   </style>
 </head>
 
@@ -63,16 +59,16 @@
       <a href="javascript:void(0);" class="nav-link sidebarCollapse d-inline-block mr-sm-5" data-placement="bottom">
         <i class="flaticon-menu-line-3"></i>
       </a>
-      <a href="{% url 'home' %}" class=""> <img src="{% static 'assets/img/1.png' %}" class="img-fluid" alt="logo"></a>
+      <a href="{% url 'dashboard' %}" class=""> <img src="{% static 'assets/img/1.png' %}" class="img-fluid" alt="logo"></a>
     </div>
-    <ul class="navbar-nav flex-row mr-auto">
+    <!-- <ul class="navbar-nav flex-row mr-auto">
       <li class="nav-item d-lg-block d-none">
         <form class="form-inline form-inline search animated-search" role="search">
           <i class="flaticon-search-1 d-lg-none d-block"></i>
           <input type="text" class="form-control search-form-control" placeholder="Search here...">
         </form>
       </li>
-    </ul>
+    </ul> -->
 
     <ul class="navbar-nav flex-row ml-lg-auto">
       <li class="nav-item dropdown message-dropdown ml-lg-4 mr-lg-4 d-sm-block d-none align-self-center">
@@ -104,7 +100,6 @@
 
       <li class="nav-item dropdown notification-dropdown ml-3 mr-lg-4 align-self-center">
         {% if request.session.type == "Teacher" %}
-<<<<<<< HEAD
           <a href="{% url 'teaShowAllNotice' %}">
             <span class="icon flaticon-bell-4"></span>
           </a>
@@ -116,15 +111,6 @@
           <a href="{% url 'insShowAllNotice' %}">
             <span class="icon flaticon-bell-4"></span>
           </a>
-=======
-        <a href="{% url 'teaShowAllNotice' %}">
-          <span class="icon flaticon-bell-4"></span>
-        </a>
-        {% elif request.session.type == "Student" %}
-        <a href="{% url 'stuShowAllNotice' %}">
-          <span class="icon flaticon-bell-4"></span>
-        </a>
->>>>>>> a56d3e25cef24313bbcb558987098276ae8347b5
         {% endif %}
       </li>
       <li class="nav-item dropdown user-profile-dropdown pl-4 pr-lg-0 pr-2 ml-lg-2 mr-lg-4  align-self-center">
@@ -154,7 +140,7 @@
               <a href="{% url 'dashboard' %}">
                 <div class="">
                   <i class="flaticon-computer-6"></i>
-                  <span>Dashboard</span>
+                  <span style="max-width: 95px;">Dashboard</span>
                 </div>
               </a>
             </li>
@@ -162,7 +148,7 @@
               <a href="#courses" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle collapsed">
                 <div class="">
                   <img src="{% static 'assets/img/home.png' %}" alt="">
-                  <span>Courses</span>
+                  <span style="max-width: 95px;">Courses</span>
                 </div>
               </a>
               <div class="submenu list-unstyled collapse eq-animated eq-fadeInUp" id="courses"
@@ -188,7 +174,7 @@
               <a href="#teaching-type" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle collapsed">
                 <div class="">
                   <img src="{% static 'assets/img/teaching-type.png' %}" alt="">
-                  <span>Teaching Type</span>
+                  <span style="max-width: 95px;">Teaching Type</span>
                 </div>
               </a>
               <div class="submenu list-unstyled collapse eq-animated eq-fadeInUp" id="teaching-type"
@@ -217,7 +203,7 @@
               <a href="#batch-timing" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle collapsed">
                 <div class="">
                   <img src="{% static 'assets/img/stopwatch-outline.png' %}" alt="">
-                  <span>Batch Timing</span>
+                  <span style="max-width: 95px;">Batch Timing</span>
                 </div>
               </a>
               <div class="submenu list-unstyled collapse eq-animated eq-fadeInUp" id="batch-timing"
@@ -246,7 +232,7 @@
               <a href="#fees" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle collapsed">
                 <div class="">
                   <img src="{% static 'assets/img/card-outline.png' %}" alt="">
-                  <span>Fees</span>
+                  <span style="max-width: 95px;">Fees</span>
                 </div>
               </a>
               <div class="submenu list-unstyled collapse eq-animated eq-fadeInUp" id="fees" data-parent="#topAccordion">
@@ -275,7 +261,7 @@
               <a href="{% url 'instCalendar' %}">
                 <div class="">
                   <img src="{% static 'assets/img/card-outline.png' %}" alt="">
-                  <span>Calender</span>
+                  <span style="max-width: 95px;">Calender</span>
 
                 </div>
               </a>
@@ -287,7 +273,7 @@
               <a href="{% url 'institutecalendar' %}">
                 <div class="">
                   <img src="{% static 'assets/img/card-outline.png' %}" alt="">
-                  <span>Calender</span>
+                  <span style="max-width: 95px;">Calender</span>
                 </div>
               </a>
             </li> -->
@@ -297,7 +283,7 @@
               <a href="#tutors" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle collapsed">
                 <div class="">
                   <img src="{% static 'assets/img/tutor.png' %}" alt="">
-                  <span>Tutors</span>
+                  <span style="max-width: 95px;">Tutors</span>
                 </div>
               </a>
               <div class="submenu list-unstyled collapse eq-animated eq-fadeInUp" id="tutors"
@@ -325,7 +311,7 @@
               <a href="#students" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle collapsed">
                 <div class="">
                   <img src="{% static 'assets/img/student.png' %}" alt="">
-                  <span>Students</span>
+                  <span style="max-width: 95px;">Students</span>
                 </div>
               </a>
               <div class="submenu list-unstyled collapse eq-animated eq-fadeInUp" id="students"
@@ -354,7 +340,7 @@
               <a href="#tutorials" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle collapsed">
                 <div class="">
                   <img src="{% static 'assets/img/tutorials.png' %}" alt="">
-                  <span>Tutorials</span>
+                  <span style="max-width: 95px;">Tutorials</span>
                 </div>
               </a>
               <div class="submenu list-unstyled collapse eq-animated eq-fadeInUp" id="tutorials"
@@ -382,7 +368,7 @@
               <a href="#exams" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle collapsed">
                 <div class="">
                   <img src="{% static 'assets/img/exams.png' %}" alt="">
-                  <span>Exams</span>
+                  <span style="max-width: 95px;">Exams</span>
                 </div>
               </a>
               <div class="submenu list-unstyled collapse eq-animated eq-fadeInUp" id="exams"
@@ -408,7 +394,7 @@
               <a href="{% url 'addnotes' %}">
                 <div class="">
                   <img src="{% static 'assets/img/notes.png' %}" alt="">
-                  <span>Notes</span>
+                  <span style="max-width: 95px;">Notes</span>
                 </div>
               </a>
             </li>
@@ -417,7 +403,7 @@
               <a href="{% url 'centerexamresults' %}">
                 <div class="">
                   <img src="{% static 'assets/img/results.png' %}" alt="">
-                  <span>Results</span>
+                  <span style="max-width: 95px;">Results</span>
                 </div>
               </a>
             </li>
@@ -426,7 +412,7 @@
               <a href="{% url 'earnings' %}">
                 <div class="">
                   <img src="{% static 'assets/img/earn.png' %}" alt="">
-                  <span>Revenue</span>
+                  <span style="max-width: 95px;">Revenue</span>
                 </div>
               </a>
             </li>

@@ -142,10 +142,27 @@ def AddNotesTutor(request):
                 if class_list[j] == unique_class[i]:
                     courses_of_class.append(course_list[j])
             data[unique_class[i]] = courses_of_class
-            
+
+        other = False
+        nursery = False
+
+        if 'Other' in unique_class:
+            unique_class.remove('Other')
+            other = True
+        if 'Nursery' in unique_class:
+            unique_class.remove('Nursery')
+            nursery = True
+        
+        classes = sorted(unique_class,key=lambda a:int(a))
+
+        if other:
+            classes.append('Other')
+        if nursery:
+            classes.insert(0,'Nursery')
+
         context = {
+        'classes':classes,
         'data':data, 
-        'classes':sorted(unique_class,key=lambda a:int(a)),
         'notes':notes
         }
         if request.method == "POST":
@@ -200,10 +217,27 @@ def EditNoteTutor(request,note_id):
                 if class_list[j] == unique_class[i]:
                     courses_of_class.append(course_list[j])
             datalist[unique_class[i]] = courses_of_class
-            
+
+        other = False
+        nursery = False
+
+        if 'Other' in unique_class:
+            unique_class.remove('Other')
+            other = True
+        if 'Nursery' in unique_class:
+            unique_class.remove('Nursery')
+            nursery = True
+        
+        classes = sorted(unique_class,key=lambda a:int(a))
+
+        if other:
+            classes.append('Other')
+        if nursery:
+            classes.insert(0,'Nursery')
+
         context = {
+        'classes':classes,
         'data':datalist, 
-        'classes':sorted(unique_class,key=lambda a:int(a)),
         'note':data
         }
 

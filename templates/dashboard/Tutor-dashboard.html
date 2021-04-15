@@ -49,16 +49,16 @@
       <a href="javascript:void(0);" class="nav-link sidebarCollapse d-inline-block mr-sm-5" data-placement="bottom">
         <i class="flaticon-menu-line-3"></i>
       </a>
-      <a href="{% url 'home' %}" class=""> <img src="{% static 'assets/img/1.png' %}" class="img-fluid" alt="logo"></a>
+      <a href="{% url 'dashboard' %}" class=""> <img src="{% static 'assets/img/1.png' %}" class="img-fluid" alt="logo"></a>
     </div>
-    <ul class="navbar-nav flex-row mr-auto">
+    <!-- <ul class="navbar-nav flex-row mr-auto" style="visibility: hidden;">
       <li class="nav-item d-lg-block d-none">
         <form class="form-inline form-inline search animated-search" role="search">
           <i class="flaticon-search-1 d-lg-none d-block"></i>
           <input type="text" class="form-control search-form-control" placeholder="Search here...">
         </form>
       </li>
-    </ul>
+    </ul> -->
 
     <ul class="navbar-nav flex-row ml-lg-auto">
       <li class="nav-item dropdown message-dropdown ml-lg-4 mr-lg-4 d-sm-block d-none align-self-center">
@@ -139,7 +139,7 @@
               <a href="{% url 'dashboard' %}">
                 <div class="">
                   <i class="flaticon-computer-6"></i>
-                  <span>Dashboard</span>
+                  <span style="max-width: 95px;">Dashboard</span>
                 </div>
               </a>
             </li>
@@ -147,7 +147,7 @@
               <a href="{% url 'EndrolledInstitute' %}">
                 <div class="">
                   <img src="{% static 'assets/img/home.png' %}" alt="">
-                  <span>Institute enrolled</span>
+                  <span style="max-width: 95px;">Institute enrolled</span>
                 </div>
               </a>
             </li>
@@ -156,7 +156,7 @@
               <a href="{% url 'enrolledStudents' %}">
                 <div class="">
                   <img src="{% static 'assets/img/tutor.png' %}" alt="">
-                  <span>Search Students</span>
+                  <span style="max-width: 95px;">Search Students</span>
                 </div>
               </a>
             </li>
@@ -165,7 +165,7 @@
               <a href="{% url 'teacherCalendar' %}">
                 <div class="">
                   <img src="{% static 'assets/img/card-outline.png' %}" alt="">
-                  <span>Calender</span>
+                  <span style="max-width: 95px;">Calender</span>
                 </div>
               </a>
             </li>
@@ -174,7 +174,7 @@
               <a href="{% url 'viewAssignmentTutor' %}">
                 <div class="">
                   <img src="{% static 'assets/img/teaching-type.png' %}" alt="">
-                  <span>Search Assignment</span>
+                  <span style="max-width: 95px;">Search Assignment</span>
                 </div>
               </a>
             </li>
@@ -183,7 +183,7 @@
               <a href="#tutorials" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle collapsed">
                 <div class="">
                   <img src="{% static 'assets/img/tutorials.png' %}" alt="">
-                  <span>Tutorials</span>
+                  <span style="max-width: 95px;">Tutorials</span>
                 </div>
               </a>
               <div class="submenu list-unstyled collapse eq-animated eq-fadeInUp" id="tutorials"
@@ -211,7 +211,7 @@
               <a href="#exams" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle collapsed">
                 <div class="">
                   <img src="{% static 'assets/img/exams.png' %}" alt="">
-                  <span>Exams</span>
+                  <span style="max-width: 95px;">Exams</span>
                 </div>
               </a>
               <div class="submenu list-unstyled collapse eq-animated eq-fadeInUp" id="exams"
@@ -237,7 +237,7 @@
               <a href="{% url 'addnotestutor' %}">
                 <div class="">
                   <img src="{% static 'assets/img/notes.png' %}" alt="">
-                  <span>Notes</span>
+                  <span style="max-width: 95px;">Notes</span>
                 </div>
               </a>
             </li>
@@ -246,7 +246,7 @@
               <a href="{% url 'tutorexamresults' %}">
                 <div class="">
                   <img src="{% static 'assets/img/results.png' %}" alt="">
-                  <span>Results</span>
+                  <span style="max-width: 95px;">Results</span>
                 </div>
               </a>
             </li>
@@ -255,7 +255,7 @@
               <a href="{% url 'earnings' %}">
                 <div class="">
                   <img src="{% static 'assets/img/earn.png' %}" alt="">
-                  <span>Revenue</span>
+                  <span style="max-width: 95px;">Revenue</span>
                 </div>
               </a>
             </li>

@@ -71,7 +71,7 @@
                 <div class="col-lg-4 col-md-6  col-12 mt-2 row">
                   <label class="control-label col-sm-3 col-md-4 col-5 mt-3"
                     style="display:block; color:black;">Class</label>
-                  <select name="className" class="cn custom-select form-control w-100 col-md-7 col-7"
+                  <select name="className" class="cn custom-select form-control w-100 my-2 col-md-7 col-7"
                     onchange="selectclass(this)">
                     {% if prefill.class %}
                     <option selected value="{{prefill.class}}">{{prefill.class}}</option>
@@ -90,7 +90,7 @@
                 <div class="col-lg-4 col-md-6  col-12 mt-2 row">
                   <label class="control-label col-sm-3 col-md-4 mt-3 col-5"
                     style="display:block; color:black;">Course</label>
-                  <select name="subject" class="ctn custom-select form-control w-100 col-md-7 col-7">
+                  <select name="subject" class="ctn custom-select form-control w-100 my-2 col-md-7 col-7">
                     {% if prefill.course %}
                   <option selected value="{{prefill.course}}">{{prefill.course}}</option>
                   {% else %}
@@ -136,6 +136,14 @@
                   <div class="col-md-12 mt-1 text-center" style="color: black;">
                     <div class="row">
                       <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                        <b>Class:</b>
+                        <span class="t-s-car-sold-number mb-0 ml-1">{{i.forclass}}</span>
+                      </div>
+                      <div class="col-xl-12 mt-2 col-lg-12 col-md-12 col-sm-12 col-12">
+                        <b>Course:</b>
+                        <span class="t-s-car-sold-number mb-0 ml-1">{{i.subject}}</span>
+                      </div>
+                      <div class="col-xl-12 mt-2 col-lg-12 col-md-12 col-sm-12 col-12">
                         <b>TeachType:</b>
                         <span class="t-s-car-sold-number mb-0 ml-1">{{i.teachingMode}}</span>
                       </div>
@@ -148,6 +156,7 @@
                   <div class="col-xl-12 text-center mt-2 mb-2 card-bottom-section">
                     <button type="button" data-toggle="modal" data-target="#StuModal{{i.sno}}"
                       class="btn btn-info">View</button>
+                      <a class="btn btn-success" href='{% url "room" request.user.username "Teacher" i.student.user.username %}'>Chat</a>
                   </div>
                 </div>
               </div>
@@ -181,9 +190,10 @@
               {% endif %}
             </div>
             <div class="d-flex justify-content-center row my-2">
-              <button value="{{i.sno}}" id="appointmenttutor" type="button" onclick="newModal(this)"
-                class="btn btn-sm btn-info createAppointment" data-toggle="modal" data-target="#appointmentModal"
-                aria-hidden="true" name="button" style="font-size:smaller;">Schedule Class</button>
+              <a href="{% url 'teaMakeAppointment' i.student.id %}" id="sc" class="btn btn-sm btn-info" style="font-size:smaller; width: 130px;">Schedule Class</a>
+            </div>
+            <div class="d-flex justify-content-center row my-2">
+              <a class="btn-sm btn btn-success" style="font-size:smaller; width: 130px;" id="ch" href='{% url "room" request.user.username "Teacher" i.student.user.username %}'>Chat</a>
             </div>
           </div>
           <div class="col-sm-9 col-12">
@@ -209,15 +219,20 @@
             <div class="col-md-12">
               <div class="row">
                 <div class="col-md-6 col-sm-6 col-12">
-                  <b>Subject:</b>
-                  <span class="ml-1">{{i.subject}}</span>
-                </div>
-                <div class="d-flex justify-content-center row my-2">
-                  <a href="{% url 'teaMakeAppointment' i.student.id %}"><button class="btn btn-sm btn-info" type="button" style="font-size:smaller;">Schedule Class</button>
-                </div>
-                <div class="col-md-6 col-sm-6 col-12">
                   <b>Class:</b>
                   <span class="ml-1">{{i.forclass}}</span>
+                </div>
+                <div class="col-md-6 col-sm-6 col-12">
+                  <b>Course:</b>
+                  <span class="ml-1">{{i.subject}}</span>
+                </div>
+                <div class="col-md-6 col-sm-6 col-12 ">
+                  <b>Teaching Type:</b>
+                  <span class="ml-1">{{i.teachingMode}}</span>
+                </div>
+                <div class="col-md-6 col-sm-6 col-12 ">
+                  <b>Gender Preference:</b>
+                  <span class="ml-1">{{i.genderPreference}}</span>
                 </div>
                 <div class="col-md-6 col-sm-6 col-12 ">
                   <b>Start Date:</b>
@@ -226,7 +241,7 @@
                   </span>
                 </div>
                 <div class="col-md-6 col-sm-6 col-12 ">
-                  <b>Months:</b>
+                  <b>No. of Sessions:</b>
                   <span class="ml-1">
                     {{i.numberOfSessions}}
                   </span>
@@ -246,18 +261,12 @@
         <br>
       </div>
     </div>
-    
-    {% endfor %}
-    {% else %}
-    <div class="card w-100 h-25 mx-3">
-      <h5 class="mt-2 mb-2 p-2">No Data Found</h5>
-    </div>
   </div>
 </div>
 {% endfor %}
 {% else %}
 <div class="card w-100 h-25 mx-3">
-  <h5 class="mt-2 mb-2 p-2">No Data Found</h5>
+  <h5 class="mt-2 mb-2 p-2">No Student Found</h5>
 </div>
 {% endif %}
 </div>
@@ -308,10 +317,5 @@
         }
     }
 
-  function newModal(el) {
-    $(`#StuModal${el.value}`).modal('hide');
-    $(`#appointmentModal${el.value}`).modal('show');
-
-  }
 </script>
 {% endblock main-content %}

@@ -447,7 +447,6 @@ def ReviewTutors(request,tutor_id):
         if request.method == "POST" and not(TutorRatings.objects.filter(Q(Student=student) and Q(Tutor=tutor)).exists()):
             rating =request.POST.get("rating","")
             comment = request.POST.get("comment","")
-            print(rating,comment)
             data = TutorRatings(
                 Tutor = tutor,
                 Student=student,
@@ -488,10 +487,8 @@ def checkClashes(person,utcDateTime,duration,recc,pattern,repeat,days,utcEndingd
 	appointments = person.MakeAppointment.all()
 	for appointment in appointments:
 		for x in json.loads(appointment.daysDump):
-			print(x,appointment.duration)
 			dts = parser.parse(x)
 			for y in daysDump:
-				print(y,duration)
 				if(dts<=y<=dts+appointment.duration or dts<=y+duration<=dts+appointment.duration):
 					return 1
 	return 0
@@ -680,16 +677,23 @@ def teaMakeAppointment(request,id):
         return HttpResponse("<br><h1 align='center'>¯\\_(ツ)_/¯ oops something wrong</h1>")
     return HttpResponse("You are not Authenticated for this page")
 
-
-
-
-
-
 @login_required(login_url="Login")
 def viewAssignmentTutor(request):
     if request.session['type']=="Teacher":    
         user = User.objects.get(username=request.session['user'])
         tutor = Teacher.objects.get(user=user)
+
+        try:
+            json_datetime=requests.get('http://worldtimeapi.org/api/ip',timeout=10)
+            json_datetime=json.loads(json_datetime.content)
+            match_date = re.search(r'\d{4}-\d{2}-\d{2}',json_datetime['datetime'])
+            datetime_obj = datetime.strptime(match_date.group(), '%Y-%m-%d')
+
+        except:
+            datetime_obj = dt.date.today()
+
+        initial = PostAssignment.objects.filter(deadline__gte=datetime_obj, assigned=False)
+
         currentS = []
         prefill={}
 
@@ -699,7 +703,7 @@ def viewAssignmentTutor(request):
         course_list = tutor.course.split(',')
 
         for i in range(len(class_list)):
-            currentS.extend(PostAssignment.objects.filter(forclass = class_list[i], courseName = course_list[i]))
+            currentS.extend(initial.filter(forclass = class_list[i], courseName = course_list[i]))
 
         for i in  range(len(unique_class)):
             courses_of_class =[]
@@ -733,8 +737,25 @@ def viewAssignmentTutor(request):
             if courseName:
                 currentS = currentS.filter(courseName=courseName)
 
+        other = False
+        nursery = False
+
+        if 'Other' in unique_class:
+            unique_class.remove('Other')
+            other = True
+        if 'Nursery' in unique_class:
+            unique_class.remove('Nursery')
+            nursery = True
+        
+        classes = sorted(unique_class,key=lambda a:int(a))
+
+        if other:
+            classes.append('Other')
+        if nursery:
+            classes.insert(0,'Nursery')
+
         context = {
-        'classes':sorted(unique_class,key=lambda a:int(a)),
+        'classes':classes,
         'data':data,
         'allData':currentS,
         'prefill':prefill

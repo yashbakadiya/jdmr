@@ -40,7 +40,7 @@
               </div>
               <div class="col-lg-5 col-md-6 col-12 mt-2 row">
                 <label class="control-label col-sm-3 col-5 mt-3" style="display: block; color:black;">Class</label>
-                <select name="className" class="cn custom-select form-control w-100 col-sm-8 col-7"
+                <select name="className" class="cn custom-select my-2 form-control w-100 col-sm-8 col-7"
                   onchange="selectclass(this)">
                   {% if prefill.class %}
                   <option selected value="{{prefill.class}}">{{prefill.class}}</option>
@@ -57,7 +57,7 @@
               </div>
               <div class="col-lg-5 col-md-6  col-12 mt-2 row">
                 <label class="control-label col-sm-3 mt-3 col-5" style="display: block; color:black;">Course</label>
-                <select name="subject" class="ctn custom-select form-control w-100 col-sm-8 col-7">
+                <select name="subject" class="ctn custom-select my-2 form-control w-100 col-sm-8 col-7">
                   {% if prefill.course %}
                   <option selected value="{{prefill.course}}">{{prefill.course}}</option>
                   {% else %}
@@ -109,6 +109,10 @@
                                       <b>Budget:</b>
                                       <span class="t-s-car-sold-number mb-0 ml-1">{{assing.budget}}</span>
                                   </div>
+                                  <div class="col-xl-12 mt-2 col-lg-12 col-md-12 col-sm-12 col-12">
+                                    <b>Deadline:</b>
+                                    <span class="t-s-car-sold-number mb-0 ml-1">{{assing.deadline|date:'F d,Y'}}</span>
+                                </div>
                                   </div>
                               </div>
                               <div class="col-xl-12 text-center mt-2 mb-2 card-bottom-section">
@@ -125,8 +129,8 @@
 </div>
 {% endfor %}
 {% else %}
-    <div class="card w-100 mx-3">
-        <h5 class="mt-2 mb-2 p-2">No Data Found</h5>
+    <div class="card w-100">
+        <h5 class="mt-2 mb-2 p-2">No Assignments Found</h5>
     </div>
 {% endif %}
 </div>

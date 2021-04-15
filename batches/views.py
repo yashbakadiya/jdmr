@@ -63,7 +63,7 @@ def batchTiming2(request):
                     print(e)
                 days = request.POST.getlist('fordays')
                 days = ", ".join(days)
-                course = Courses.objects.get(id = courseID)
+                course = Courses.objects.get(id = courseID).courseName
                 batchObj = BatchTiming(
                     #course=Courses.objects.get(id=int(courseID[0])),
                     course = course,
