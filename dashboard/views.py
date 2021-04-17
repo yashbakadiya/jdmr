@@ -67,7 +67,6 @@ def profileUpdate(request):
             my_template = 'dashboard/Tutor-dashboard.html'
             obj = Teacher.objects.get(user=user)
             combinedZip = list(zip(obj.forclass.split(','),obj.course.split(','),obj.teachType.split(','),obj.fees.split(',')))
-            print(combinedZip)
         else:
             if request.session['type'] == "Student":
                 my_template = 'dashboard/student-dashboard.html'
