@@ -737,25 +737,8 @@ def viewAssignmentTutor(request):
             if courseName:
                 currentS = currentS.filter(courseName=courseName)
 
-        other = False
-        nursery = False
-
-        if 'Other' in unique_class:
-            unique_class.remove('Other')
-            other = True
-        if 'Nursery' in unique_class:
-            unique_class.remove('Nursery')
-            nursery = True
-        
-        classes = sorted(unique_class,key=lambda a:int(a))
-
-        if other:
-            classes.append('Other')
-        if nursery:
-            classes.insert(0,'Nursery')
-
         context = {
-        'classes':classes,
+        'classes':unique_class,
         'data':data,
         'allData':currentS,
         'prefill':prefill

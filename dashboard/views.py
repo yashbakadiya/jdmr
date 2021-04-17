@@ -59,12 +59,15 @@ def dashboard(request):
 def profileUpdate(request):
     if request.session['type'] == 'Institute' or request.session['type'] == 'Teacher' or request.session['type'] == 'Student':
         user = User.objects.get(username=request.session['user'])
+        combinedZip = []
         if request.session['type'] == "Institute":
             my_template = 'dashboard/base.html'
             obj = Institute.objects.get(user=user)
         elif request.session['type'] == "Teacher":
             my_template = 'dashboard/Tutor-dashboard.html'
             obj = Teacher.objects.get(user=user)
+            combinedZip = list(zip(obj.forclass.split(','),obj.course.split(','),obj.teachType.split(','),obj.fees.split(',')))
+            print(combinedZip)
         else:
             if request.session['type'] == "Student":
                 my_template = 'dashboard/student-dashboard.html'
@@ -177,7 +180,7 @@ def profileUpdate(request):
                         request.session["type"] = "Student"
                     messages.success(request, "Profile Upated Succsefully")
         responce = render(request, "dashboard/profileCoachingCentre.html",
-                          {'centre': obj, 'my_template': my_template})
+                          {'centre': obj, 'my_template': my_template,'combinedZip':combinedZip})
         return responce
     return HttpResponse("Sorry you are an Anonymous User")
 
@@ -205,70 +208,82 @@ def getOTP(request):
         else:
             return JsonResponse({'status': 0})
 
+def mapClassCourse(classList, courseList, teachList, feesList):
+    five_subj = ["English", "Maths", "Science", "Evs", "Hindi"]
+
+    feesList = [x for x in feesList if x != ""]
+
+    combinedList = list(set(zip(classList,courseList,teachList,feesList)))
+    Other = []
+    Nursery = []
+    combinedSet = []
+
+    for i in range(len(combinedList)):
+        if combinedList[i][0]=='Other':
+            Other.append(combinedList[i])
+
+        elif combinedList[i][0]=='Nursery' and combinedList[i][1]=='All Subjects':
+            for j in range(len(five_subj)):
+                Nursery.append((combinedList[i][0],five_subj[j],combinedList[i][2],combinedList[i][3])) 
+
+        elif combinedList[i][0]=='Nursery' and combinedList[i][1]!='All Subjects':
+            Nursery.append(combinedList[i])
+
+        elif combinedList[i][0]!='Nursery' and combinedList[i][1]=='All Subjects':
+            for j in range(len(five_subj)):
+                combinedSet.append((combinedList[i][0],five_subj[j],combinedList[i][2],combinedList[i][3]))  
+
+        else:
+            combinedSet.append(combinedList[i])
+
+    combinedList = combinedSet
+    combinedList = sorted(list(set(combinedList)),key = lambda x: int(x[0]))
+    OtherList = sorted(list(set(Other)),key = lambda x: x[1])
+    NurseryList = sorted(list(set(Nursery)),key = lambda x: x[1])
+
+    classList,courseList,teachList,feesList = list(zip(*(NurseryList + combinedList + OtherList)))
+    classList,courseList,teachList,feesList = ','.join(classList),','.join(courseList),','.join(teachList),','.join(feesList)
+    
+    return classList,courseList,teachList,feesList
 
 @login_required(login_url="Login")
 def signupTutorContinued(request, id):
     if request.session['type'] == "Teacher":
-        print(request.GET)
-        print(request.POST)
-        print(request.FILES)
-        if(request.method == 'POST'):
-            # base signup class
+        if request.method == 'POST':
             teacher = Teacher.objects.get(id=id)
-            teacherid = Tutorid.objects.all()
-            # creating data object
-            forclass = request.POST.getlist('class')
-            courseName = request.POST.getlist('course')
-
-
-            availability = request.POST.getlist('availability')
-            availability = ",".join(availability)
-            panaadhar=request.POST.get('idcard')
-            panaadharid=request.POST.get('idnum')   
-            idphoto = request.FILES.get('photo')   
             
-            image = request.FILES.get('photo')
-            teacher.availability = availability
             teacher.experiance = request.POST.get('experience')
-            teacher.gender = request.POST.get('gender')
             teacher.qualification = request.POST.get('qualification')
-            teacher.course = courseName
-            teacher.forclass = forclass            
-            teacher.fees = int(request.POST.get('fees', 1))
-            teacher.democlass = request.POST.get('fda', 0)
-            if(image):
+            teacher.desc = request.POST.get('description')
+
+            if request.POST.get('demo')=="1":
+                teacher.democlass = True
+
+            classList,courseList,teachList,feesList = mapClassCourse(request.POST.getlist('class'), request.POST.getlist('course'), request.POST.getlist('teach'), request.POST.getlist('fees'))
+
+            teacher.forclass = classList
+            teacher.course = courseList
+            teacher.teachType = teachList
+            teacher.fees = feesList
+
+            teacher.gender = request.POST.get('gender')
+            image = request.FILES.get('photo')
+
+            if image:
                 teacher.photo = image
             teacher.save()
-            print("teacher save")
-          
-            Tutorid(teacherid=id,
-                    teachername=teacher,
-                    panaadhar=panaadhar,
-                    panaadharnumber=panaadharid,
-                    photoid =idphoto,
 
-            ).save()
-            print("tutorid")
-
+            tutorid,created = Tutorid.objects.get_or_create(teacherid=id,teachername=teacher)
+            tutorid.panaadhar = request.POST.get('idcard')
+            tutorid.panaadharnumber = request.POST.get('idnum') 
+            tutorid.photoid = request.FILES.get('idimg') 
+            tutorid.save()
             return redirect('dashboard')
-        # teaching type data
-        data = TeachingType.objects.values_list(
-            'courseID', 'forclass', 'teachType', 'course')
-        processed_data = {}
-        # processing data into usable form
-        for x in data:
-            processed_data[x[0]] = [x[1].split(", "), x[2].split("\n")]
-        # jsonLocalData = loads(open('cc.txt','r').read())
+
         with open('cc.txt') as f:
             data = f.read()         
             data = json.loads(data)
-        return render(
-            request,
-            'dashboard/signupTutorContinued.html',
-            {
-                "data": data,
-                "jsdata": dumps(processed_data),
-                # 'jsonLocalData':jsonLocalData
-            }
-        )
+            f.close()
+
+        return render(request,'dashboard/signupTutorContinued.html',{"data": data})
     return HttpResponse("You are not Authenticated for this page")

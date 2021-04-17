@@ -744,25 +744,8 @@ def enrolledStudents(request):
             if teachtype:
                 currentS = currentS.filter(teachingMode=teachtype)
 
-        other = False
-        nursery = False
-
-        if 'Other' in unique_class:
-            unique_class.remove('Other')
-            other = True
-        if 'Nursery' in unique_class:
-            unique_class.remove('Nursery')
-            nursery = True
-        
-        classes = sorted(unique_class,key=lambda a:int(a))
-
-        if other:
-            classes.append('Other')
-        if nursery:
-            classes.insert(0,'Nursery')
-
         context = {
-            'classes':classes,
+            'classes':unique_class,
             'data':data,
             'allData':currentS,
             'prefill':prefill,

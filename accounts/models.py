@@ -36,15 +36,15 @@ class Institute(UsersCommanFields):
 # ------------------------------------Teacher Singup Model-----------------------------------------------
 class Teacher(UsersCommanFields):
     dob = models.DateField(blank=True, default="2020-12-1")
-    gender = models.CharField(max_length=6, default="Male")
-    forclass = models.TextField()
-    desc = models.TextField(default="None")
-    course = models.TextField()
-    qualification = models.CharField(max_length=100, default="None")
     experiance = models.IntegerField(default=-1)
-    fees = models.IntegerField(default=1000)
+    qualification = models.CharField(max_length=100, default="None")
+    desc = models.TextField(default="None")
     democlass = models.BooleanField(default=False)
-    availability = models.CharField(max_length=200, default="None")
+    forclass = models.TextField(default="None")
+    course = models.TextField(default="None")
+    teachType = models.TextField(default="None")
+    fees = models.TextField(default="None")
+    gender = models.CharField(max_length=6, default="Male")
 
     def __str__(self):
         return self.user.username

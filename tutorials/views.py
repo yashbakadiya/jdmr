@@ -317,24 +317,7 @@ def addTutorialsTutor(request):
                     courses_of_class.append(course_list[j])
             data[unique_class[i]] = list(set(courses_of_class))
         
-        other = False
-        nursery = False
-
-        if 'Other' in unique_class:
-            unique_class.remove('Other')
-            other = True
-        if 'Nursery' in unique_class:
-            unique_class.remove('Nursery')
-            nursery = True
-        
-        classes = sorted(unique_class,key=lambda a:int(a))
-
-        if other:
-            classes.append('Other')
-        if nursery:
-            classes.insert(0,'Nursery')
-
-        context = {'data':data, 'classes':classes}
+        context = {'data':data, 'classes':unique_class}
         if request.method == "POST":
             title = request.POST.get('title',"")
             description = request.POST.get('description',"")
@@ -522,25 +505,8 @@ def EditTutorialsTutor(request,course_id):
                     courses_of_class.append(course_list[j])
             data[unique_class[i]] = list(set(courses_of_class))
 
-        other = False
-        nursery = False
-
-        if 'Other' in unique_class:
-            unique_class.remove('Other')
-            other = True
-        if 'Nursery' in unique_class:
-            unique_class.remove('Nursery')
-            nursery = True
-        
-        classes = sorted(unique_class,key=lambda a:int(a))
-
-        if other:
-            classes.append('Other')
-        if nursery:
-            classes.insert(0,'Nursery')
-
         context = {
-        'classes':classes,
+        'classes':unique_class,
         'tutorial':tutorial,
         'data':data, 
         }
