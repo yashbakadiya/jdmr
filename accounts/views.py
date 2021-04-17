@@ -59,128 +59,61 @@ def signup(request):
     prefil = {}
     if request.method == "POST":
         username = request.POST.get('username')
-       # firstname = request.POST.get('firstname')
-       # lastname = request.POST.get('lastname')
         password = request.POST.get('password')
-       # confpassword = password
         email = request.POST.get('email')
         phone = request.POST.get('phone')
-        #address = request.POST.get('address')
         user_type = request.POST['type']
         prefil = {
             'username': username,
-         #   'firstname': firstname,
-          #  'lastname': lastname,
             'password': password,
-          #  'confpassword': confpassword,
             'email': email,
             'phone': phone,
-           # 'address': address
         }
-        # if password != confpassword:
-        #     errors.append("Passwords do not match")
-        #     return render(request, "accounts/signup.html", {"errors": errors, "prefil": prefil})
+
+        try:
+            username = User.objects.get(username = username)
+            errors.append("Name Already Taken")
+            return render(request, "accounts/signup.html", {"errors": errors, "prefil": prefil})
+        except:
+            user = User(username=username, password=password)
+        try:
+            email = User.objects.get(email = email)
+            errors.append("Email Already Taken")
+            return render(request, "accounts/signup.html", {"errors": errors, "prefil": prefil})
+        except:
+            user.email=email
+
         if user_type == "Institute":
             try:
-                email = Institute.objects.get(user__email=email)
-                errors.append("Email Already Taken")
-                return render(request, "accounts/signup.html", {"errors": errors, "prefil": prefil})
-            except:
-                email = request.POST.get('email')
-            try:
                 phone = Institute.objects.get(phone=phone)
-                errors.append("phone number Already Taken")
+                errors.append("Phone Number Already Taken")
                 return render(request, "accounts/signup.html", {"errors": errors, "prefil": prefil})
             except:
-                phone = request.POST.get('phone')
-            try:
-                username = Institute.objects.get(user__username = username)
-                errors.append("Name Already Taken")
-                return render(request, "accounts/signup.html", {"errors": errors, "prefil": prefil})
-            except:
-                username = request.POST.get('username')
-            user = User(username=username, 
-                      #  first_name=firstname,
-                      #  last_name=lastname, 
-                        password=password, 
-                        email=email)
-            user.save()
-            Institute(user=user,
-                     # address=address,
-                      phone=phone).save()
-            auth.login(request, user)
-            request.session["user"] = username
-            request.session["type"] = request.POST['type']
-            return redirect("dashboard")
-
+                user.save()
+                Institute(user=user, phone=phone).save()
 
         elif user_type == "Teacher":
-
-            try:
-                email = Teacher.objects.get(user__email=email)
-                errors.append("Email Already Taken")
-                return render(request, "accounts/signup.html", {"errors": errors, "prefil": prefil})
-            except:
-                email = request.POST.get('email')
             try:
                 phone = Teacher.objects.get(phone=phone)
-                errors.append("Phone number Already Taken")
+                errors.append("Phone Number Already Taken")
                 return render(request, "accounts/signup.html", {"errors": errors, "prefil": prefil})
             except:
-                phone = request.POST.get('phone')
-            try:
-                username = Teacher.objects.get(user__username=username)
-                errors.append("Name Already Taken")
-                return render(request, "accounts/signup.html", {"errors": errors, "prefil": prefil})
-            except:
-                username = request.POST.get('username')
-            user = User(username=username, 
-                       #first_name=firstname,
-                       # last_name=lastname,
-                         password=password, 
-                         email=email)
-            user.save()
-            Teacher(user=user, 
-                    #address=address,
-                     phone=phone).save()
-            auth.login(request, user)
-            request.session["user"] = username
-            request.session["type"] = request.POST['type']
-            return redirect("dashboard")
-
+                user.save()
+                Teacher(user=user, phone=phone).save()
 
         elif user_type == "Student":
-            try:
-                email = Student.objects.get(user__email=email)
-                errors.append("Email Already Taken")
-                return render(request, "accounts/signup.html", {"errors": errors, "prefil": prefil})
-            except:
-                email = request.POST.get('email')
             try:
                 phone = Student.objects.get(phone=phone)
                 errors.append("Phone number Already Taken")
                 return render(request, "accounts/signup.html", {"errors": errors, "prefil": prefil})
             except:
-                phone = request.POST.get('phone')
-            try:
-                name = Institute.objects.get(name=name)
-                errors.append("Institute Already Registered")
-                return render(request, "accounts/signup.html", {"errors": errors, "prefil": prefil})
-            except:
-                name = request.POST.get('name')
-            user = User(username=username,
-                       # first_name=firstname,
-                       #last_name=lastname, 
-                        password=password,
-                         email=email)
-            user.save()
-            Student(user=user, 
-                  # address=address,
-                    phone=phone).save()
-            auth.login(request, user)
-            request.session["user"] = username
-            request.session["type"] = request.POST['type']
-            return redirect("dashboard")
+                user.save()
+                Student(user=user, phone=phone).save()
+            
+        auth.login(request, user)
+        request.session["user"] = username
+        request.session["type"] = user_type
+        return redirect("dashboard")
     return render(request, 'accounts/signup.html')
 
 
