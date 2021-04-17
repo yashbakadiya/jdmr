@@ -315,7 +315,7 @@ def addTutorialsTutor(request):
             for j in range(len(class_list)):
                 if class_list[j] == unique_class[i]:
                     courses_of_class.append(course_list[j])
-            data[unique_class[i]] = courses_of_class
+            data[unique_class[i]] = list(set(courses_of_class))
         
         other = False
         nursery = False
@@ -520,7 +520,7 @@ def EditTutorialsTutor(request,course_id):
             for j in range(len(class_list)):
                 if class_list[j] == unique_class[i]:
                     courses_of_class.append(course_list[j])
-            data[unique_class[i]] = courses_of_class
+            data[unique_class[i]] = list(set(courses_of_class))
 
         other = False
         nursery = False

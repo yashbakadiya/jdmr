@@ -209,24 +209,25 @@ def getOTP(request):
 @login_required(login_url="Login")
 def signupTutorContinued(request, id):
     if request.session['type'] == "Teacher":
+        print(request.GET)
+        print(request.POST)
+        print(request.FILES)
         if(request.method == 'POST'):
             # base signup class
             teacher = Teacher.objects.get(id=id)
-            print('id',id)
-            print("teacher",teacher)
             teacherid = Tutorid.objects.all()
             # creating data object
-            forclass = request.POST.getlist('cn_combined')
-            forclass = ",".join(forclass)
-            courseName = request.POST.getlist('ctn_combined')
-            courseName = ",".join(courseName)
+            forclass = request.POST.getlist('class')
+            courseName = request.POST.getlist('course')
+
+
             availability = request.POST.getlist('availability')
             availability = ",".join(availability)
             panaadhar=request.POST.get('idcard')
             panaadharid=request.POST.get('idnum')   
             idphoto = request.FILES.get('photo')   
             
-            image = request.POST.get('photo')
+            image = request.FILES.get('photo')
             teacher.availability = availability
             teacher.experiance = request.POST.get('experience')
             teacher.gender = request.POST.get('gender')
@@ -258,11 +259,14 @@ def signupTutorContinued(request, id):
         for x in data:
             processed_data[x[0]] = [x[1].split(", "), x[2].split("\n")]
         # jsonLocalData = loads(open('cc.txt','r').read())
+        with open('cc.txt') as f:
+            data = f.read()         
+            data = json.loads(data)
         return render(
             request,
             'dashboard/signupTutorContinued.html',
             {
-                "data": TeachingType.objects.all(),
+                "data": data,
                 "jsdata": dumps(processed_data),
                 # 'jsonLocalData':jsonLocalData
             }

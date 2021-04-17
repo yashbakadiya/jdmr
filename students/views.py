@@ -686,7 +686,7 @@ def enrolledStudents(request):
             for j in range(len(class_list)):
                 if class_list[j] == unique_class[i]:
                     courses_of_class.append(course_list[j])
-            data[unique_class[i]] = courses_of_class
+            data[unique_class[i]] = list(set(courses_of_class))
 
         if request.method=='POST':
             className = request.POST.get('className','')

@@ -174,14 +174,11 @@ def teachingType2(request):
         courses = Courses.objects.filter(intitute=inst)  
         forclass = Courses.objects.filter(intitute=inst).values_list('forclass').distinct()
         
-
-        
         print('courses',courses)       
         jsonCources = {}       
         for x in courses:
             jsonCources[x.id] = x.forclass.split(", ")
         print('jsonCources ',jsonCources)
-        
         
         teach = TeachingType.objects.filter(course__intitute = inst, archieved=False)
         # paginator = Paginator(teach, 10)

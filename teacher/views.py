@@ -710,7 +710,7 @@ def viewAssignmentTutor(request):
             for j in range(len(class_list)):
                 if class_list[j] == unique_class[i]:
                     courses_of_class.append(course_list[j])
-            data[unique_class[i]] = courses_of_class
+            data[unique_class[i]] = list(set(courses_of_class))
         
         if request.method == "POST":
             className = request.POST.get('className',"")
@@ -764,7 +764,15 @@ def viewAssignmentTutor(request):
         return render(request,'teacher/viewAssignmentTutor.html',context)
     return HttpResponse("You are not Authenticate for this Page")
 
-@login_required()
+@login_required(login_url="Login")
+def assign(request,pk):
+    assignobj = PostAssignment.objects.get(pk=pk)
+    assignobj.assigned = True
+    assignobj.save()
+    messages.success(request,'Assignment Successfully Assigned')
+    return redirect('viewAssignmentTutor')
+
+@login_required(login_url="Login")
 def teacherCalendar(request):   
     if request.session['type']=="Teacher":
         template = 'dashboard/Tutor-dashboard.html'    

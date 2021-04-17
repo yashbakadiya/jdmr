@@ -13,6 +13,7 @@ urlpatterns = [
     path('searchUserTutor/', searchUserTutor, name='searchUserTutor'),
     path('exist/addTutor/<int:id>', AddalreadyExistsTutor,name='AddalreadyExistsTutor'),
     path('viewAssignmentTutor/',viewAssignmentTutor, name='viewAssignmentTutor'),
+    path('assign/<int:pk>',assign,name='assign'),
     path('enrolledTutors/', enrolledTutors, name='enrolledTutors'),
     path('Review/Tutor/<tutor_id>', ReviewTutors, name="reviewtutor"),
     path('teaMakeAppointment/<int:id>',teaMakeAppointment, name='teaMakeAppointment'),
