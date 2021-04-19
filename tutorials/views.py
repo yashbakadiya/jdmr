@@ -306,7 +306,7 @@ def addTutorialsTutor(request):
         user = User.objects.get(username=request.session['user'])
         tutor = Teacher.objects.get(user=user)
         class_list = tutor.forclass.split(',')
-        unique_class = list(set(class_list))
+        unique_class = list(dict.fromkeys(class_list).keys())
         course_list = tutor.course.split(',')
         data = {}
 
@@ -315,7 +315,7 @@ def addTutorialsTutor(request):
             for j in range(len(class_list)):
                 if class_list[j] == unique_class[i]:
                     courses_of_class.append(course_list[j])
-            data[unique_class[i]] = list(set(courses_of_class))
+            data[unique_class[i]] = list(dict.fromkeys(courses_of_class).keys())
         
         context = {'data':data, 'classes':unique_class}
         if request.method == "POST":
@@ -494,7 +494,7 @@ def EditTutorialsTutor(request,course_id):
         tutor = Teacher.objects.get(user=user)
         tutorial = TutorialTutors.objects.get(id=course_id)
         class_list = tutor.forclass.split(',')
-        unique_class = list(set(class_list))
+        unique_class = list(dict.fromkeys(class_list).keys())
         course_list = tutor.course.split(',')
         data = {}
 
@@ -503,7 +503,7 @@ def EditTutorialsTutor(request,course_id):
             for j in range(len(class_list)):
                 if class_list[j] == unique_class[i]:
                     courses_of_class.append(course_list[j])
-            data[unique_class[i]] = list(set(courses_of_class))
+            data[unique_class[i]] = list(dict.fromkeys(courses_of_class).keys())
 
         context = {
         'classes':unique_class,

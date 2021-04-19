@@ -210,9 +210,16 @@ def getOTP(request):
 def mapClassCourse(classList, courseList, teachList, feesList):
     five_subj = ["English", "Maths", "Science", "Evs", "Hindi"]
 
-    feesList = [x for x in feesList if x != ""]
+    classcourseteach = []
+    combinedList = []
 
-    combinedList = list(set(zip(classList,courseList,teachList,feesList)))
+    for i in range(len(classList)):
+        x = (classList[i],courseList[i],teachList[i])
+        y = (classList[i],courseList[i],teachList[i],feesList[i])
+        if x not in classcourseteach:
+            classcourseteach.append(x)
+            combinedList.append(y)
+
     Other = []
     Nursery = []
     combinedSet = []
@@ -249,6 +256,7 @@ def mapClassCourse(classList, courseList, teachList, feesList):
 def signupTutorContinued(request, id):
     if request.session['type'] == "Teacher":
         if request.method == 'POST':
+            print(request.POST)
             teacher = Teacher.objects.get(id=id)
             
             teacher.experiance = request.POST.get('experience')

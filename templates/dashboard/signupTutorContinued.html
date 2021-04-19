@@ -129,7 +129,7 @@
                         <label class="control-label col-sm-5 col-5 mt-2" for="class">Class<span
                             class="text-danger">*</span></label>
                         <div class="controls">
-                          <select class="form-control" id="class" name="class" onchange="selectclass(this)" required>
+                          <select class="form-control class" name="class" onchange="selectclass(this)" required>
                             <option selected disabled value="">Select an option</option>
                             {% for x,y in data.items %}
                             <option value="{{x}}">{{x}}</option>
@@ -144,7 +144,7 @@
                         <label class="control-label col-sm-5 col-5 mt-2" for="course">Course<span
                             class="text-danger">*</span></label>
                         <div class="controls">
-                          <select class="form-control" id="course" name="course" required>
+                          <select class="form-control course" name="course" required>
                             <option selected disabled value="">Select an option</option>
                             <option style="display: none;">Assignment Solutions</option>
                           </select>
@@ -156,7 +156,7 @@
                         <label class="control-label col-sm-5 col-5 mt-2" for="teach">Teaching Type<span
                             class="text-danger">*</span></label>
                         <div class="controls">
-                          <select class="form-control" id="teach" name="teach" required>
+                          <select class="form-control teach" name="teach" required>
                             <option selected disabled value="">Select an option</option>
                             <option value="Online Tutor">Online Tutor</option>
                             <option value="Institute">Group</option>
@@ -171,7 +171,7 @@
                         <label class="control-label col-sm-5 col-5 mt-2" for="fees">Fees<span
                             class="text-danger">*</span></label>
                         <div class="controls">
-                          <input type="number" min="0" class="form-control" name='fees' id="fees" required
+                          <input type="number" min="0" class="form-control fees" name="fees" required
                             placeholder="Fees">
                           <p class="help-block"></p>
                         </div>
@@ -274,7 +274,7 @@
       onNext: function (tab, navigation, index) {
         var $valid = $("#f-validation").valid();
         if (!$valid) { $validator.focusInvalid(); return false; }
-        if(index==3){ $('form')[0].submit(); }
+        if(index==3){ reName(); $('form')[0].submit(); }
       },
 
       onTabChange: function (tab, navigation, index) {
@@ -364,14 +364,29 @@
 
   </script>
   <script>
+    function reName() {
+      let classAll = $('.class');
+      let courseAll = $('.course');
+      let teachAll = $('.teach');
+      let feesAll = $('.fees');
+      
+      for (let index = 0; index < $('.class').length; index++) {
+        $(classAll[index]).attr('name','class');
+        $(courseAll[index]).attr('name','course');
+        $(teachAll[index]).attr('name','teach');
+        $(feesAll[index]).attr('name','fees');
+      }
+    }
+    
     function duplicate() {
+      let no = $('.course').length;
       $('.outside').append(`<div class="row entry">
                       
                       <div class="col-md-6 col-lg-5 col-12 input-group form-group control-group">
                         <label class="control-label col-sm-5 col-5 mt-2" for="class">Class<span
                             class="text-danger">*</span></label>
                         <div class="controls">
-                          <select class="form-control" id="class" name="class" onchange="selectclass(this)" required>
+                          <select class="form-control class" name="class${no}" onchange="selectclass(this)" required>
                             <option selected disabled value="">Select an option</option>
                             {% for x,y in data.items %}
                             <option value="{{x}}">{{x}}</option>
@@ -386,7 +401,7 @@
                         <label class="control-label col-sm-5 col-5 mt-2" for="course">Course<span
                             class="text-danger">*</span></label>
                         <div class="controls">
-                          <select class="form-control" id="course" name="course" required>
+                          <select class="form-control course" name="course${no}" required>
                             <option selected disabled value="">Select an option</option>
                             <option style="display: none;">Assignment Solutions</option>
                           </select>
@@ -398,7 +413,7 @@
                         <label class="control-label col-sm-5 col-5 mt-2" for="teach">Teaching Type<span
                             class="text-danger">*</span></label>
                         <div class="controls">
-                          <select class="form-control" id="teach" name="teach" required>
+                          <select class="form-control teach" name="teach${no}" required>
                             <option selected disabled value="">Select an option</option>
                             <option value="Online Tutor">Online Tutor</option>
                             <option value="Institute">Group</option>
@@ -413,7 +428,7 @@
                         <label class="control-label col-sm-5 col-5 mt-2" for="fees">Fees<span
                             class="text-danger">*</span></label>
                         <div class="controls">
-                          <input type="number" min="0" class="form-control" name='fees' id="fees" required
+                          <input type="number" min="0" class="form-control fees" name="fees${no}" required
                             placeholder="Fees">
                           <p class="help-block"></p>
                         </div>
@@ -433,15 +448,15 @@
       var data = {{ data| safe }};
       courses = data[el.value];
 
-      $(el).closest(".entry").find("#course").empty().trigger("change");
+      $(el).closest(".entry").find(".course").empty().trigger("change");
       var newOption = new Option(
         "Select an option",
         "",
         false,
         false
       );
-      $(el).closest(".entry").find("#course").append(newOption).trigger("change");
-      $(el).closest(".entry").find("#course").append(`<option style="display: none;">Assignment Solutions</option>`).trigger("change");
+      $(el).closest(".entry").find(".course").append(newOption).trigger("change");
+      $(el).closest(".entry").find(".course").append(`<option style="display: none;">Assignment Solutions</option>`).trigger("change");
 
       for (i = 0; i < courses.length; i++) {
         var newOption = new Option(
@@ -450,10 +465,15 @@
           false,
           false
         );
-        $(el).closest(".entry").find("#course").append(newOption).trigger("change");
+        $(el).closest(".entry").find(".course").append(newOption).trigger("change");
       }
     }
   
+    $(document).ready(() => {
+      if (performance.navigation.type == 2) {
+        location.reload();
+      }
+    });
     
   </script>
 </body>

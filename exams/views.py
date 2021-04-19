@@ -1651,7 +1651,7 @@ def ExamTutor(request):
            
         data={}
         class_list = tutor.forclass.split(',')
-        unique_class = list(set(class_list))
+        unique_class = list(dict.fromkeys(class_list).keys())
         course_list = tutor.course.split(',')
 
         for i in  range(len(unique_class)):
@@ -1659,7 +1659,7 @@ def ExamTutor(request):
             for j in range(len(class_list)):
                 if class_list[j] == unique_class[i]:
                     courses_of_class.append(course_list[j])
-            data[unique_class[i]] = list(set(courses_of_class))
+            data[unique_class[i]] = list(dict.fromkeys(courses_of_class).keys())
 
         context = {
         'classes':unique_class,
@@ -1889,7 +1889,7 @@ def EditExamTutor(request,exam_id):
         tutor = Teacher.objects.get(user=user)
         data={}
         class_list = tutor.forclass.split(',')
-        unique_class = list(set(class_list))
+        unique_class = list(dict.fromkeys(class_list).keys())
         course_list = tutor.course.split(',')
 
         for i in  range(len(unique_class)):
@@ -1897,7 +1897,7 @@ def EditExamTutor(request,exam_id):
             for j in range(len(class_list)):
                 if class_list[j] == unique_class[i]:
                     courses_of_class.append(course_list[j])
-            data[unique_class[i]] = list(set(courses_of_class))
+            data[unique_class[i]] = list(dict.fromkeys(courses_of_class).keys())
 
         context = {
                 'classes':unique_class,
