@@ -2,39 +2,50 @@
 {% load static %}
 {% block css %}
 <style>
-.table-bordered.red-border, .table-bordered.red-border th, .table-bordered.red-border td {
-border: 1px solid #ff3547!important;
-}
-.table.table-bordered th {
-text-align: center;
-}
-.darken-grey-text {
-color: #2E2E2E;
-}
-.input-group.md-form.form-sm.form-2 input {
-border: 1px solid #bdbdbd;
-border-top-left-radius: 0.25rem;
-border-bottom-left-radius: 0.25rem;
-}
-.input-group.md-form.form-sm.form-2 input.purple-border {
-border: 1px solid #9e9e9e;
-}
-.input-group.md-form.form-sm.form-2 input[type=text]:focus:not([readonly]).purple-border {
-border: 1px solid #ba68c8;
-box-shadow: none;
-}
-.form-2 .input-group-addon {
-border: 1px solid #ba68c8;
-}
-.danger-text {
-color: #ff3547;
-}
-.success-text {
-color: #00C851;
-}
-.detailscol{
-text-align: center;
-}
+    .table-bordered.red-border,
+    .table-bordered.red-border th,
+    .table-bordered.red-border td {
+        border: 1px solid #ff3547 !important;
+    }
+
+    .table.table-bordered th {
+        text-align: center;
+    }
+
+    .darken-grey-text {
+        color: #2E2E2E;
+    }
+
+    .input-group.md-form.form-sm.form-2 input {
+        border: 1px solid #bdbdbd;
+        border-top-left-radius: 0.25rem;
+        border-bottom-left-radius: 0.25rem;
+    }
+
+    .input-group.md-form.form-sm.form-2 input.purple-border {
+        border: 1px solid #9e9e9e;
+    }
+
+    .input-group.md-form.form-sm.form-2 input[type=text]:focus:not([readonly]).purple-border {
+        border: 1px solid #ba68c8;
+        box-shadow: none;
+    }
+
+    .form-2 .input-group-addon {
+        border: 1px solid #ba68c8;
+    }
+
+    .danger-text {
+        color: #ff3547;
+    }
+
+    .success-text {
+        color: #00C851;
+    }
+
+    .detailscol {
+        text-align: center;
+    }
 </style>
 {% endblock %}
 {% block main-content %}
@@ -49,209 +60,313 @@ text-align: center;
     </div>
     {% endfor %}
     {% endif %}
-    <div class="card mb-4">
-        <div class="card-body">
-            <div>
-                <h2 style="color: rgb(66, 8, 8);">Search Student</h2>
-                <br>
-                <form method="POST">{% csrf_token %}
-                    <div class="form-group">
-                        <div class="col-lg-5">
-                            <input type="text" class="form-control" name='userName' placeholder="Enter Student Name"
-                                required>
-                        </div>
-                        <br>
-                        <label class="col-lg-2">
-                            <button name="userAction" value="studentSearch" type="submit"
-                                class="btn btn-warning">Search</button>
-                        </label>
-                    </div>
-                </form><br>
-                <div>
-                    {% if messages %}
-                    <ul class="messages">
-                        {% for k in messages %}
-                        <li style="color: darkred;">{{ k }}</li>
-                        {% endfor %}
-                    </ul>
-                    {% endif %}
-                </div><br>
-                <div>
-                    {% if userData %}
-                    <table class="table table-striped">
-                        <!--Table head-->
-                        <thead>
-                            <tr>
-                                <th>Student UserName</th>
-                                <th>Student Name</th>
-                                <th>Institute Name</th>
-                                <th>Action</th>
-                            </tr>
-                        </thead>
-                        <!--Table head-->
-                        <!--Table body-->
-                        {% for k in userData %}
-                        <form method="post">{% csrf_token %}
-                            <tbody>
-                                <tr>
-                                    <td>{{k.student.user.username}}</td>
-                                    <td>{{k.student.user.first_name}}</td>
-                                    <td>{{k.institute.user.username}}</td>
-                                    <td><input type="hidden" name="userAction" value="subjectSearch">
-                                        <input type="hidden" name="userId" value="{{k.id}}">
-                                        <button class="btn btn-danger"  type="submit">Submit</button></td>
-                                </tr>
-                            </tbody>
-                        </form>
 
+
+    <div class="card mb-4">
+        <div class="card-header">
+            <!-- Grid row -->
+            <div class="row">
+                <!-- Grid column -->
+                <div class="col-md-8">
+                    <h2 style="color: rgb(0, 0, 0 );">List of Student enrolled</h2>
+                </div>
+
+                <div class="col-md-4">
+                    <!-- <input id="searchbox" type="text" class="form-control" name='srh' placeholder="Search Exam or Course"
+                required> -->
+
+                    <form method="POST">{% csrf_token %}
+                        <div class="form-group">
+                            <div class="col-lg-5">
+                                <input type="text" class="form-control" name='userName'
+                                    placeholder="Search Student Name" required style="margin-bottom: -24px;">
+                            </div>
+
+                            <label class="col-lg-2">
+                                <button name="userAction" value="studentSearch" type="submit" class="btn btn-warning"
+                                    style="margin-left: 140px; margin-top: -50%;">Search</button>
+                            </label>
+                        </div>
+                    </form>
+                </div>
+                <!-- Grid column -->
+            </div>
+
+
+
+            <div>
+                {% if userData %}
+                <table class="table table-striped">
+                    <!--Table head-->
+                    <thead>
+                        <tr>
+                            <th>Student UserName</th>
+                            <th>Student Name</th>
+                            <th>Institute Name</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <!--Table head-->
+                    <!--Table body-->
+                    {% for k in userData %}
+                    <form method="post">{% csrf_token %}
+                        <tbody>
+                            <tr>
+                                <td>{{k.student.user.username}}</td>
+                                <td>{{k.student.user.first_name}}</td>
+                                <td>{{k.institute.user.username}}</td>
+                                <td><input type="hidden" name="userAction" value="subjectSearch">
+                                    <input type="hidden" name="userId" value="{{k.id}}">
+                                    <button class="btn btn-danger" type="submit">Submit</button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </form>
+
+                    {% endfor %}
+                    <!--Table body-->
+                </table>
+                <!--Table-->
+                <hr>
+                {% endif %}
+                {% if mydata %}
+                <div class="studentnames row mb-4" style="color:black;">
+                    <div class="col-sm-6 d-flex justify-content-center" style="margin-left:-7.5%;"><b>Name :
+                            {{user.student.user.username}}</b>
+                        <b class="ml-3">Phone: {{user.student.phone}}</b>
+                    </div>
+                </div>
+                <table class="table table-striped">
+                    <!--Table head-->
+                    <thead>
+                        <tr>
+                            <th>Batch</th>
+                            <th>Class</th>
+                            <th>Course Name</th>
+                            <th>Teaching type</th>
+
+                            <th>Instalments</th>
+                            <th>Total Fees</th>
+                            <th></th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <!--Table head-->
+                    <!--Table body-->
+                    <tbody>
+                        {% for student, fees in mydata%}
+                        <form method="post">{% csrf_token %}
+                            <tr>
+                                <td>{{student.batch}}</td>
+                                <td>{{student.forclass}}</td>
+                                <td>{{student.courseName}}</td>
+                                <td>{{student.teachType}}</td>
+
+                                <td>{{student.installments}}</td>
+                                <td>{{fees}}</td>
+                                <td><input type="hidden" name="userAction" value="studentFee"><button
+                                        class="btn btn-danger" name="subjectId" value="{{student.id}}" type="submit"
+                                        name="button">Pay</button></td>
+                                <!-- <td><a class="btn btn-danger" href="#">Payment-Details</a></td> -->
+                            </tr>
+                        </form>
+                        {% endfor %}
+                    </tbody>
+                    <!--Table body-->
+                </table>
+                <!--Table-->
+                <hr>
+                {% endif %}
+                {% if inputData %}
+                <div class="row d-flex justify-content-center" style="color:black;">
+                    <div class="col-sm-8">
+                        <table class="table table-striped" style="margin-left: -24%;">
+                            <tr>
+                                <td> Name : </td>
+                                <td>{{feeObj.student}}</td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    Teaching Type :
+                                </td>
+                                <td>
+                                    {{dataObj.teachType}}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    Subject :
+                                </td>
+                                <td>
+                                    {{dataObj.courseName}}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    Total Fee :
+                                </td>
+                                <td>
+                                    {{c}}
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+                {% if inputData.installmentNumber > 1 %}
+                <div class="d-flex justify-content-center" style="color:black;">
+                    <h2>Previous Payments</h2>
+                </div>
+                {% endif %}
+                <table class="table table-striped">
+                    <!--Table head-->
+                    {% if inputData.installmentNumber > 1 %}
+                    <thead>
+                        <tr>
+                            <th>Instalment No.</th>
+                            <th>Expected Amount</th>
+                            <th>Recieved Amount</th>
+                            <th>Date</th>
+                        </tr>
+                    </thead>
+                    <!--Table head-->
+                    <!--Table body-->
+                    <tbody>
+                        {% for k in installmentsDone %}
+                        <tr>
+                            <td>{{k.instalmentNum}}</td>
+                            <td>{{k.paymentExp}}</td>
+                            <td>{{k.paymentDone}}</td>
+                            <td>{{k.timeStamp}}</td>
+                        </tr>
                         {% endfor %}
                         <!--Table body-->
-                    </table>
-                    <!--Table-->
-                    <hr>
-                    {% endif %}
-                    {% if mydata %}
-                    <div class="studentnames row mb-4" style="color:black;">
-                        <div class="col-sm-6 d-flex justify-content-center"><b>Name : {{user.student.user.username}}</b>
-                        <b class="ml-3">Phone: {{user.student.phone}}</b></div>
-                    </div>
-                    <table class="table table-striped">
-                        <!--Table head-->
-                        <thead>
-                            <tr>
-                                <th>Course Name</th>
-                                <th>Teaching type</th>
-                                <th>Class</th>
-                                <th>Batch</th>
-                                <th>Instalments</th>
-                                <th>Total Fees</th>
-                                <th></th>
-                                <th></th>
-                            </tr>
-                        </thead>
-                        <!--Table head-->
-                        <!--Table body-->
-                        <tbody>
-                            {% for student, fees in mydata%}
-                            <form method="post">{% csrf_token %}
-                                <tr>
-                                    <td>{{student.courseName}}</td>
-                                    <td>{{student.teachType}}</td>
-                                    <td>{{student.forclass}}</td>
-                                    <td>{{student.batch}}</td>
-                                    <td>{{student.installments}}</td>
-                                    <td>{{fees}}</td>
-                                    <td><input type="hidden" name="userAction" value="studentFee"><button
-                                            class="btn btn-danger" name="subjectId" value="{{student.id}}" type="submit"
-                                            name="button">Pay</button></td>
-                                    <td><a class="btn btn-danger" href="#">Payment-Details</a></td>
-                                </tr>
-                            </form>
-                            {% endfor %}
-                        </tbody>
-                        <!--Table body-->
-                    </table>
-                    <!--Table-->
-                    <hr>
-                    {% endif %}
-                    {% if inputData %}
-                    <div class="row d-flex justify-content-center" style="color:black;">
-                        <div class="col-sm-8">
-                            <table class="table table-striped">
-                                <tr>
-                                    <td> Name : </td>
-                                    <td>{{feeObj.username.username.username}}</td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        Teaching Type :
-                                    </td>
-                                    <td>
-                                        {{feeObj.username.teachType}}
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        Subject :
-                                    </td>
-                                    <td>
-                                        {{feeObj.subject}}
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        Total Fee :
-                                    </td>
-                                    <td>
-                                        {{feeObj.totalFee}}
-                                    </td>
-                                </tr>
-                            </table>
-                        </div>
-                    </div>
-                    {% if inputData.installmentNumber > 1 %}
-                    <div class="d-flex justify-content-center" style="color:black;">
-                        <h2>Previous Payments</h2>
-                    </div>
-                    {% endif %}
-                    <table class="table table-striped">
-                        <!--Table head-->
-                        {% if inputData.installmentNumber > 1 %}
+                        {% endif %}
+                        {% if installmentnotcomplete %}
                         <thead>
                             <tr>
                                 <th>Instalment No.</th>
                                 <th>Expected Amount</th>
-                                <th>Recieved Amount</th>
-                                <th>Date</th>
+                                <th>Submission Amount</th>
+                                <th>Submit</th>
                             </tr>
                         </thead>
-                        <!--Table head-->
-                        <!--Table body-->
-                        <tbody>
-                            {% for k in installmentsDone %}
+                        <form method="POST"> {% csrf_token %}
                             <tr>
-                                <td>{{k.instalmentNum}}</td>
-                                <td>{{k.paymentExp}}</td>
-                                <td>{{k.paymentDone}}</td>
-                                <td>{{k.timeStamp}}</td>
+                                <td>{{inputData.installmentNumber}}</td>
+                                <td>{{c}}</td>
+                                <td><input type="decimal" class="form-control" name="payed"></td>
+                                <td><input type="hidden" value="{{inputData.installmentNumber}}" name="iNum">
+                                    <input type="hidden" value="{{inputData.payment}}" name="fees">
+                                    <input type="hidden" value="{{inputData.feeId}}" name="feeId">
+                                    <button class="btn btn-danger" value="submitFee" name="userAction"
+                                        type="submit">Pay</button>
+                                </td>
                             </tr>
-                            {% endfor %}
-                            <!--Table body-->
-                            {% endif %}
-                            {% if installmentnotcomplete %}
-                            <thead>
-                                <tr>
-                                    <th>Instalment No.</th>
-                                    <th>Expected Amount</th>
-                                    <th>Submission Amount</th>
-                                    <th>Submit</th>
-                                </tr>
-                            </thead>
-                            <form method="POST"> {% csrf_token %}
-                                <tr>
-                                    <td>{{inputData.installmentNumber}}</td>
-                                    <td>{{inputData.payment}}</td>
-                                    <td><input type="decimal" class="form-control" name="payed"></td>
-                                    <td><input type="hidden" value="{{inputData.installmentNumber}}" name="iNum">
-                                        <input type="hidden" value="{{inputData.payment}}" name="fees">
-                                        <input type="hidden" value="{{inputData.feeId}}" name="feeId">
-                                        <button class="btn btn-danger" value="submitFee" name="userAction"
-                                            type="submit">Pay</button></td>
-                                </tr>
-                            </form>
-                        </tbody>
-                        {% else %}
-                        <tr>
-                            <td>All installments Completed</td>
-                        </tr>
-                        {% endif %}
-                    </table>
-                    <!--Table-->
-                    <hr>
+                        </form>
+                    </tbody>
+                    {% else %}
+                    <tr>
+                        <td>All installments Completed</td>
+                    </tr>
                     {% endif %}
-                </div>
+                </table>
+                <!--Table-->
+                <hr>
+                {% endif %}
             </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
         </div>
+        {% if stud %}
+        <div class="card-body">
+            <!-- Grid row -->
+            <!-- <form action="" method="post">{% csrf_token %} -->
+            <!--Table-->
+            <div class="table-responsive">
+
+                <table class="table table-striped">
+                    <!--Table head-->
+                    <tr>
+                        <th class="">Sr no</th>
+                        <th class="">Student</th>
+                        <th class=""> class</th>
+
+                        <th class="">Course Name</th>
+
+                        <th class=""> Teaching Type</th>
+                        <th>Total fees</th>
+                        <th>Paid fees</th>
+                        <th>Balance fees</th>
+                        <th class="text-center">Action</th>
+                        <th>Pay</th>
+                        <!-- <th class="text-center" colspan="2">Action</th> -->
+                    </tr>
+                    <!--Table head-->
+                    <!--Table body-->
+                    {% for k in submitfees %}
+                    
+                
+                    
+                    <form action="POST"> {% csrf_token %}
+                    
+                        <tr id="{{ k.pk }}">
+                            <td>{{ forloop.counter }}</td>
+                            <td>{{k.student.student}}</td>
+                            <td>{{k.student.forclass}}</td>
+                            <td>{{k.student.courseName}}</td>
+
+                            <td>{{k.student.teachType}}</td>
+                            <td>{{k.fees.final_amt}}</td>
+                            <td>{{k.feePayed}}</td>
+                            <td>{{k.balanceFee}}</td>
+
+                            <td class="text-center">
+
+                                <a class="btn btn-warning" href="{% url 'editStudent' k.id %}"><i
+                                        class="flaticon-pencil-line" style="font-size:medium;"></i></a>
+                                <a class="btn btn-danger" href="{% url 'deleteStudent' k.id %}"><i
+                                        class="flaticon-delete-fill" style="font-size:medium;"></i></a>
+
+
+
+                            <td><input type="hidden" name="userAction" value="subjectSearch">
+                                <input type="hidden" name="userId" value="{{k.id}}">
+                                <button class="btn btn-danger" type="submit">Pay</button>
+                            </td>
+                           
+                            </td>
+                        </tr>
+                    </form>
+                    {% endfor %}
+               
+                    
+                    <!--Table body-->
+                </table>
+            </div>
+            <!--Table-->
+            <!-- </form> -->
+            <br>
+        </div>
+
+        {% endif %}
     </div>
+
+
+
+
+
 </div>
 {% endblock %}

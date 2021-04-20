@@ -76,15 +76,25 @@
                                         <td class="text-center">
                                             <input type="checkbox" class="bigcheckbox" name="check" value="{{student.id}}">
                                         </td>
+
+                                        <td>
+                                            <a class="btn btn-warning" href="{% url 'editStudent' student.id %}"><i class="flaticon-pencil-line"
+                                                style="font-size:medium;"></i></a>
+                                            <a class="btn btn-danger" href="{% url 'deleteStudent' student.id %}"><i class="flaticon-delete-fill"
+                                                style="font-size:medium;"></i></a>
+                                            <a class="btn btn-dark" href=" "><i class="flaticon-delete-fill"
+                                                style="font-size:medium;"></i></a>
+                                            
+                                        </td> 
                                     </tr>
                                 {% endfor %}
                         <!--Table body-->
                     </table>
                 </div>
                     <!--Table-->
-                    <div class="form-group">
+                    <!-- <div class="form-group">
                         <input type="submit" value="Move to Archive" class="btn btn-danger float-right">
-                    </div>
+                    </div> -->
                     <br>
                 </form>
                 <br>
