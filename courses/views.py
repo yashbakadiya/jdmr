@@ -204,9 +204,9 @@ def teachingType2(request):
 
             forclass1 = request.POST.getlist('forclass', '')
             forclass = ', '.join(forclass1)            
-            teachType1 = request.POST.getlist('teaching')
+            teachType1 = request.POST.getlist('teaching','')
             print('teachTYpe1',teachType1)
-            teachType = '\n'.join(teachType1)
+            teachType = ', '.join(teachType1)
            
             duration1 = request.POST.getlist('duration', '')
             duration = '\n'.join(duration1)

@@ -75,11 +75,16 @@
         </div>
 
         <div class="col" id="other" style="display: none;">  
-          <label for="validationCustom01"><strong>Select Course<span class="red">*</span></strong></label>       
+          <label for="validationCustom01"><strong>Select Course<span class="red">*</span></strong></label> 
+                
           <input type="text" name="courseName" list="cn" style="width: 100%"
             class="js-example-basic-single form-control" />
-          <datalist id="cn">            
+            <datalist id="cn" >       
+              <option>Select Course</option>
+                       
           </datalist>
+
+         
           
         </div>
         <!-- <div class="col">
@@ -206,8 +211,7 @@
      
       var items = data[el.value]; 
       
-      alert(el.value)
-      alert(items)
+     
       if (el.value == 'Other')
       {
       $('#other').show()
@@ -215,15 +219,10 @@
       }
       else
       {
-      //   $('#other').hide()
-      // $('#selectclass').show()
+      //  $('#other').hide()
+       //$('#selectclass').show()
 
       }
-         
-
-
-
-
       html1 = "";
       for (i = 0; i < items.length; i++) {
         html1 += "<option value=\"" + items[i] + "\">" + items[i] + "</option> ";

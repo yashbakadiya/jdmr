@@ -10,7 +10,10 @@ class AddStudentInst(models.Model):
     batch = models.CharField(max_length=30,default="")
     feeDisc = models.DecimalField(max_digits=10,decimal_places=3,default=0)
     installments = models.IntegerField(default=2)
-    archieved = models.BooleanField(default=False)
+    archieved = models.BooleanField(default=False)  
+
+
+
 
     class Meta:
         unique_together = [['student', 'institute']] 

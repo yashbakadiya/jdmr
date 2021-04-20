@@ -38,48 +38,57 @@
                     <table class="table table-striped">
                         <!--Table head-->
                             <tr>
-                                <th>Student Name</th>
+                                
                                 <th>First Name</th>
                                 <th>Last Name</th>
                                 <th>Email Id</th>
-                                <th>Password</th>
+                                
                                 <th>Phone Number</th>
                                 <th>Course Enrolled</th>
                                 <th>Class</th>
-                                <th class="text-center">Delete</th>
-                                <th class="text-center">Update</th>
-                                <th class="text-center">Archive</th>
+                                <th class="text-center">Action</th>
+                                
                             </tr>
                         <!--Table head-->
                         <!--Table body-->
                                 {% for student,course in students %}
                                     <tr class="main-row">
-                                        <td>{{student.student.user.username}}</td>
+                                      
                                         <td>{{student.student.user.first_name}}</td>
                                         <td>{{student.student.user.last_name}}</td>
                                         <td>{{student.student.user.email}}</td>
-                                        <td>{{student.student.user.password}}</td>
+                                        
                                         <td>{{student.student.phone}}</td>
                                         <td>{{course.courseName}}</td>
                                         <td>{{student.forclass}}</td>
-                                        <td class="text-center">
+                                        <!-- <td class="text-center">
                                             <a href="{% url 'deleteStudent' student.id %}" class="btn btn-danger btn-sm">DELETE</a>
                                         </td>
                                         <td class="text-center">
                                             <a href="{% url 'editStudent' student.id %}" class="btn btn-danger btn-sm">EDIT</a>
-                                        </td>
-                                        <td class="text-center">
+                                        </td> -->
+                                        <!-- <td class="text-center">
                                             <input type="checkbox" class="bigcheckbox" name="check" value="{{student.id}}">
-                                        </td>
+                                        </td> -->
+
+                                        <td>
+                                            <a class="btn btn-warning" href="{% url 'editStudent' student.id %}"><i class="flaticon-pencil-line"
+                                                style="font-size:medium;"></i></a>
+                                            <a class="btn btn-danger" href="{% url 'deleteStudent' student.id %}"><i class="flaticon-delete-fill"
+                                                style="font-size:medium;"></i></a>
+                                            <a class="btn btn-dark" href=" "><i class="flaticon-delete-fill"
+                                                style="font-size:medium;"></i></a>
+                                            
+                                        </td> 
                                     </tr>
                                 {% endfor %}
                         <!--Table body-->
                     </table>
                 </div>
                     <!--Table-->
-                    <div class="form-group">
+                    <!-- <div class="form-group">
                         <input type="submit" value="Move to Archive" class="btn btn-danger float-right">
-                    </div>
+                    </div> -->
                     <br>
                 </form>
                 </div>
