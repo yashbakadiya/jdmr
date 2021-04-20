@@ -24,7 +24,10 @@
   <link href="{% static 'assets/css/default-dashboard/style.css' %}" rel=" stylesheet" type="text/css" />
   <!-- END PAGE LEVEL PLUGINS/CUSTOM STYLES -->
   <link href="{% static 'Custum/mystyles.css' %}" rel=" stylesheet" type="text/css" />
-  <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="{% static 'assets/js/libs/jquery-3.1.1.min.js' %}"></script>
+  <script src="{% static 'assets/js/loader.js' %}"></script>
+  <script src="{% static 'bootstrap/js/popper.min.js' %}"></script>
+  <script src="{% static 'bootstrap/js/bootstrap.min.js' %}"></script>
   {% block extra-stylesheets %}
 
   {% endblock extra-stylesheets %}
@@ -321,6 +324,7 @@
         <ul class="list-unstyled">
           <li><a href="#"><i class="flaticon-mail-22"></i> Inbox</a></li>
           <li><a href="{% url 'coachingprofile' %}"><i class="flaticon-user-11"></i> My Profile</a></li>
+          <li><a href="{% url 'changepass' %}"><i class="flaticon-key-2"></i> Change Password</a></li>
           <li><a href="{% url 'Logout' %}"><i class="flaticon-power-off"></i> Logout</a></li>
         </ul>
       </div>
@@ -329,10 +333,6 @@
   <!--  BEGIN PROFILE SIDEBAR  -->
 
   <!-- BEGIN GLOBAL MANDATORY SCRIPTS -->
-  <script src="{% static 'assets/js/libs/jquery-3.1.1.min.js' %}"></script>
-  <script src="{% static 'assets/js/loader.js' %}"></script>
-  <script src="{% static 'bootstrap/js/popper.min.js' %}"></script>
-  <script src="{% static 'bootstrap/js/bootstrap.min.js' %}"></script>
   <script src="{% static 'plugins/scrollbar/jquery.mCustomScrollbar.concat.min.js' %}"></script>
   <script src="{% static 'plugins/blockui/jquery.blockUI.min.js' %}"></script>
   <script src="{% static 'assets/js/app.js' %}"></script>

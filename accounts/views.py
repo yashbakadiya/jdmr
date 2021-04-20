@@ -29,6 +29,13 @@ def login(request):
     if request.method == "POST":
         username = request.POST.get('username')
         password = request.POST.get('password')
+
+        prefil = {
+            'username':username,
+            'password':password,
+            'type':request.POST['type'],
+        }
+
         try:
             user = User.objects.get(username=username, password=password)
             request.session["user"] = username
@@ -49,7 +56,7 @@ def login(request):
                 return redirect("dashboard")
         except:
             errors.append("Invalid Credencials")
-            return render(request, "accounts/loginAll.html", {'errors': errors})
+            return render(request, "accounts/loginAll.html", {'errors': errors,"prefil": prefil})
     return render(request, "accounts/loginAll.html", {'errors': errors})
 
 
@@ -68,6 +75,7 @@ def signup(request):
             'password': password,
             'email': email,
             'phone': phone,
+            'type': request.POST['type']
         }
 
         try:

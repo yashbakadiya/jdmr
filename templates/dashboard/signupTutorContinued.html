@@ -2,14 +2,15 @@
 <!DOCTYPE html>
 <html lang="en">
 
-<head>
-
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, shrink-to-fit=no">
     <title>Coachizz</title>
     <link rel="icon" type="image/x-icon" href="{% static 'assets/img/favicon.ico' %}">
+    <!-- BEGIN GOOGLE MAPS AUTOCOMPLETE SCRIPTS -->
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCBJybI10-Xa43-F5GSad1i0Y9W3yqlW6Q&libraries=places&v=3"defer></script>
+    <!-- END GOOGLE MAPS AUTOCOMPLETE SCRIPTS -->
     <!-- BEGIN GLOBAL MANDATORY STYLES -->
     <link href='{% static "assets/css/loader.css" %}' rel="stylesheet" type="text/css">
     <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,600,700" rel="stylesheet" type="text/css">
@@ -27,8 +28,17 @@
   </head>
 
   <title>
-    Coaching
+    Coachizz
   </title>
+
+<style>
+  .class,.course,.teach,.fees{
+    max-width: 208.4px;
+  }
+  label{
+    color: #000;
+  }
+</style>
 
 <body>
   <div class="container">
@@ -55,7 +65,7 @@
         <div class="widget-header border-bottom border-default">
           <div class="row">
             <div class="col-xl-12 col-md-12 col-sm-12 col-12">
-              <h4>Validation</h4>
+              <h4 class="pt-2 text-center">Teacher Info</h4>
             </div>
           </div>
         </div>
@@ -67,17 +77,17 @@
               <ul class="nav nav-tabs mb-4 justify-content-between nav-pills" id="vValidation" role="tablist">
                 <li class="nav-item">
                   <a class="nav-link nav-item active btn-rounded" id="rounded-pills-home-tab4" data-toggle="tab"
-                    href="#simple-ex-2-1" role="tab" aria-selected="false"><i class="flaticon-home-fill-1"></i>
-                    Personal</a>
+                    href="#simple-ex-2-1" role="tab" aria-selected="false"><i class="flaticon-user-7"></i> Details</a>
                 </li>
                 <li class="nav-item">
                   <a class="nav-link nav-item btn-rounded" id="rounded-pills-profile-tab4" data-toggle="tab"
-                    href="#simple-ex-2-2" role="tab" aria-selected="true"><i class="flaticon-user-7"></i> Details</a>
+                    href="#simple-ex-2-2" role="tab" aria-selected="true"><i class="flaticon-telephone"></i> Extra</a>
 
                 </li>
                 <li class="nav-item">
                   <a class="nav-link nav-item btn-rounded" id="ronded-pills-contact-tab4" data-toggle="tab"
-                    href="#simple-ex-2-3" role="tab" aria-selected="false"><i class="flaticon-telephone"></i> Extra</a>
+                    href="#simple-ex-2-3" role="tab" aria-selected="false"><i class="flaticon-home-fill-1"></i>
+                    Personal</a>
                 </li>
               </ul>
               <div class="progress progress-md">
@@ -156,10 +166,9 @@
                         <label class="control-label col-sm-5 col-5 mt-2" for="teach">Teaching Type<span
                             class="text-danger">*</span></label>
                         <div class="controls">
-                          <select class="form-control teach" name="teach" required>
-                            <option selected disabled value="">Select an option</option>
+                          <select class="form-control teach" name="teach" required multiple>
                             <option value="Online Tutor">Online Tutor</option>
-                            <option value="Institute">Group</option>
+                            <option value="Group">Group</option>
                             <option value="Home Tutor">Home Tutor</option>
                             <option value="Assignment Solutions">Assignment Solutions</option>
                           </select>
@@ -187,8 +196,9 @@
                 <div class="tab-pane fade" id="simple-ex-2-3" role="tabpanel">
                   <div class="form-group control-group mb-4">
                     <label class="control-label" for="photo">Picture</label>
-                    <div class="controls">
-                      <input type="file" class="form-control" id="photo" name="photo">
+                    <div class="controls file-box">
+                      <input type="file" class="custom-file-input" id="photo" name="photo" onchange="addfile(this)"                                        name="note" accept="application/pdf">
+                      <label class="custom-file-label" for="photo">Choose file...</label>
                       <p class="help-block"></p>
                     </div>
                   </div>
@@ -203,6 +213,17 @@
                       <p class="help-block"></p>
                     </div>
                   </div>
+
+                  <div class="form-group control-group mb-4">
+                    <label class="control-label" for="address">Address<span class="text-danger">*</span></label>
+                    <div class="controls">
+                      <input id="pac-input" name="address" type="text" placeholder="Address" class="form-control" required>
+                        <input type="hidden" id="cityLat" value="0" name="cityLat" />
+                        <input type="hidden" id="cityLng" value="0" name="cityLng" />
+                      <p class="help-block"></p>
+                    </div>
+                  </div>
+
                   <div class="form-group control-group mb-4">
                     <label class="control-label" for="idcard">Select ID<span class="text-danger">*</span></label>
                     <div class="controls">
@@ -227,8 +248,9 @@
                   </div>
                   <div class="form-group control-group mb-4">
                     <label class="control-label" for="idimg">Upload ID Image<span class="text-danger">*</span></label>
-                    <div class="controls">
-                      <input type="file" class="form-control" name="idimg" id="idimg" required>
+                    <div class="controls file-box">
+                      <input type="file" class="custom-file-input" id="idimg" name="idimg" required onchange="addfile(this)"                                        name="note" accept="application/pdf">
+                      <label class="custom-file-label" for="photo">Choose file...</label>
                       <p class="help-block"></p>
                     </div>
                   </div>
@@ -267,6 +289,39 @@
   <script src='{% static "plugins/bootstrap-wizard/jquery.bootstrap.wizard.js" %}'></script>
   <script src='{% static "plugins/bootstrap-wizard/jquery.validate.min.js" %}'></script>
   <!-- END PAGE LEVEL SCRIPTS -->
+
+  
+    <!-- BEGIN MULTISELECT SCRIPT AND CSS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-multiselect/0.9.13/js/bootstrap-multiselect.js">
+    </script>
+    <link rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-multiselect/0.9.13/css/bootstrap-multiselect.css">
+    <script>
+      $(document).ready(()=>{
+      $('.teach').multiselect({numberDisplayed: 2, nonSelectedText: 'Select Teaching Types'});
+      $('.btn-group').addClass('form-control')
+    })
+    </script>
+    <style>
+      .btn-group>.btn{
+        padding: 0;
+        background-color: transparent;
+        box-shadow: none;
+        font-size: 1rem;
+		    color: #495057;
+        text-align: left;
+      }
+      .btn-group>ul{
+        transform: none!important;
+        top: 37px!important;
+        width: 100%;
+      }
+      .btn-group>::after{
+        color: black;
+      }
+    </style>
+    <!-- END MULTISELECT SCRIPT AND CSS  -->
+
   <script>
     $('#simple-1').bootstrapWizard();
     $('#simple-2').bootstrapWizard();
@@ -319,6 +374,9 @@
         gender: {
           required: true,
         },
+        address: {
+          required: true,
+        },
         idcard: {
           required: true,
         },
@@ -354,7 +412,7 @@
         else if (idtype == "Driving License") {
           pattern = /^(([A-Z]{2}[0-9]{2})( )|([A-Z]{2}-[0-9]{2}))((19|20)[0-9][0-9])[0-9]{7}$/;
         }
-        msg = msg = "Please Enter a valid " + idtype + " Number";
+        msg = "Please Enter a valid " + idtype + " Number";
         return pattern.test(value);
     },message)
 
@@ -363,6 +421,18 @@
     }
 
   </script>
+  <script type="text/javascript">
+    $("#pac-input").on("input", function () {
+      console.log('chala')
+      var input = document.getElementById('pac-input');
+      var autocomplete = new google.maps.places.Autocomplete(input);
+      google.maps.event.addListener(autocomplete, 'place_changed', function () {
+        var place = autocomplete.getPlace();
+        document.getElementById('cityLat').value = place.geometry.location.lat();
+        document.getElementById('cityLng').value = place.geometry.location.lng();
+      });
+    });
+  </script>
   <script>
     function reName() {
       let classAll = $('.class');
@@ -370,11 +440,25 @@
       let teachAll = $('.teach');
       let feesAll = $('.fees');
       
-      for (let index = 0; index < $('.class').length; index++) {
-        $(classAll[index]).attr('name','class');
-        $(courseAll[index]).attr('name','course');
-        $(teachAll[index]).attr('name','teach');
-        $(feesAll[index]).attr('name','fees');
+      for (let i = 0; i < teachAll.length; i++) {
+        let cl = $(classAll[i]).val();
+        let co = $(courseAll[i]).val();
+        let te = $(teachAll[i]).val();
+        let fe = $(feesAll[i]).val();
+
+        for (let j = 0; j < te.length; j++) {
+          $('.outside').append(`<select class="class" name="class">
+            <option selected>${cl}</option>
+          </select>
+          <select class="course" name="course">
+            <option selected>${co}</option>
+          </select>
+          <select class="teach" name="teach">
+            <option selected>${te[j]}</option>
+          </select>
+          <input class="fees" name="fees" value="${fe}">`);
+        }
+        $(teachAll[i]).closest(".entry").empty().trigger("change");  
       }
     }
     
@@ -413,10 +497,9 @@
                         <label class="control-label col-sm-5 col-5 mt-2" for="teach">Teaching Type<span
                             class="text-danger">*</span></label>
                         <div class="controls">
-                          <select class="form-control teach" name="teach${no}" required>
-                            <option selected disabled value="">Select an option</option>
+                          <select class="form-control teach" name="teach${no}" required multiple>
                             <option value="Online Tutor">Online Tutor</option>
-                            <option value="Institute">Group</option>
+                            <option value="Group">Group</option>
                             <option value="Home Tutor">Home Tutor</option>
                             <option value="Assignment Solutions">Assignment Solutions</option>
                           </select>
@@ -438,6 +521,8 @@
                             <button class="btn btn-success" type="button" onclick="removeduplicate(this)">Remove</button>
                         </div>
                     </div>`)
+                    $('.teach').multiselect({numberDisplayed: 2, nonSelectedText: 'Select Teaching Types'})
+                    $('.btn-group').addClass('form-control')
     }
 
     function removeduplicate(el) {
@@ -467,6 +552,28 @@
         );
         $(el).closest(".entry").find(".course").append(newOption).trigger("change");
       }
+    }
+
+    function addfile(el) {
+        var file = $(el).val();
+        var exts = ['pdf'];
+        // first check if file field has any value
+        if (file) {
+            // split file name at dot
+            var get_ext = file.split('.');
+            // reverse name to check extension
+            get_ext = get_ext.reverse();
+            // check file type is valid as given in 'exts' array
+            if ($.inArray(get_ext[0].toLowerCase(), exts) > -1) {
+                var filename = file.replace(/^.*\\/, "");
+                $(el).closest(".file-box").find(".custom-file-label").html(filename);
+            } else {
+                $(el).closest(".file-box").find(".custom-file-label").html("Choose File");
+                $(el).closest(".file-box").find('.invalid-feedback').show();
+                $(el).closest(".file-box").find('#validatedCustomFile').val("");
+                $(el).closest(".file-box").find('#validatedCustomFile').val().focus();
+            }
+        }
     }
   
     $(document).ready(() => {

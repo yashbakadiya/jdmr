@@ -1,12 +1,49 @@
 {% extends my_template %}
 {% load static %}
 {% block main-content %}
-<link rel="stylesheet" href="{% static 'css/croppie.css' %}" />
+<style>
+	label{
+		color: black;
+	}
+</style>
 <script src="{% static 'js/croppie.min.js' %}"></script>
-<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<link rel="stylesheet" href="{% static 'css/croppie.css' %}" />
 
-<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCBJybI10-Xa43-F5GSad1i0Y9W3yqlW6Q&libraries=places&v=3"
-	defer></script>
+<!-- BEGIN GOOGLE MAPS AUTOCOMPLETE SCRIPTS -->
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCBJybI10-Xa43-F5GSad1i0Y9W3yqlW6Q&libraries=places&v=3"defer></script>
+<!-- END GOOGLE MAPS AUTOCOMPLETE SCRIPTS -->
+
+<!-- BEGIN MULTISELECT SCRIPT AND CSS -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-multiselect/0.9.13/js/bootstrap-multiselect.js">
+</script>
+<link rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-multiselect/0.9.13/css/bootstrap-multiselect.css">
+<script>
+	$(document).ready(()=>{
+	$('.teach').multiselect({numberDisplayed: 2, nonSelectedText: 'Select an option'});
+	$('.btn-group').addClass('form-control')
+})
+</script>
+<style>
+	.btn-group>.btn{
+		padding: 0;
+		background-color: transparent;
+		box-shadow: none;
+		font-size: 1rem;
+		color: #495057;
+		text-align: left;
+	}
+	.btn-group>ul{
+		transform: none!important;
+		top: 37px!important;
+		width: 100%;
+	}
+	.btn-group>::after{
+		color: black;
+	}
+</style>
+<!-- END MULTISELECT SCRIPT AND CSS  -->
+
 <div class="">
 	{% if messages %}
         {% for k in messages%}
@@ -24,19 +61,32 @@
             <div class="card-header">
                 <div class="row">
                     <div class="col-xl-12 col-md-12 col-sm-12 col-12">
-                        <h2 style="color:black;">{{centre.user.first_name}} {{centre.user.last_name}} Profile</b></h2>
+                        <h2 style="color:black;">Profile Details</b></h2>
                     </div>
                 </div>
             </div>
-			<div class="mt-4 col-xl-12 col-md-12 col-sm-12 col-12 d-flex justify-content-center">
+			<div class="mt-4 col-xl-12 col-md-12 col-sm-12 col-12 d-flex justify-content-center" style="flex-direction: column;align-items: center;">
 				{% if centre.photo %}
-					<img class="circle" id="preview" src="{{centre.photo.url}}" alt="Not Found" style="height:10rem;width:10rem;">
+					<img class="circle" id="preview" src="{{centre.photo.url}}" alt="Not Found" style="height:10rem;width:10rem;position: relative;">
 				{% else %}
-					<img class="circle" id="preview" src="{% static 'default-profile.png' %}" alt="Default Not Found" style="height:10rem;width:10rem;">
+					<img class="circle" id="preview" src="{% static 'default-profile.png' %}" alt="Default Not Found" style="height:10rem;width:10rem;position: relative;">
 				{% endif %}
+				<span id="edit" class="btn btn-primary py-0" style="width: 10rem;border-radius: 0;">Edit</span>
 			</div>
+
+			<form id="pic-form" enctype="multipart/form-data" method="post" action="{% url 'picChange' %}">
+			{% csrf_token %}
+			<div class="col-lg-6 col-md-6 col-12 mt-2 row" hidden>
+				<label class="control-label col-sm-3 col-md-4 col-5 mt-3" style="color:black;">Change Image</label>
+				<div class="mt-2 w-100 col-sm-9 col-md-8 col-7">
+				<input class="custom-file-input" id="pic" type="file" value="{{centre.photo}}" name="photo">
+				<label class="custom-file-label" >Choose file...</label>
+				</div>
+			</div>
+		</form>
+
             <div class="widget-content widget-content-area">
-                        <form enctype="multipart/form-data" method="post">{% csrf_token %}
+                        <form enctype="multipart/form-data" method="post">
                             {% csrf_token %}
 							<div class="row col-lg-12">
 							<div class="col-lg-6 col-md-6 col-12 mt-2 row">
@@ -48,54 +98,162 @@
 							<div class="col-lg-6 col-md-6 col-12 mt-2 row">
                                 <label class="control-label col-sm-3 col-md-4 col-5 mt-3" style="color:black;">Email</label>
                                 <input type="email" class="form-control mt-2 w-100 col-sm-9 col-md-8 col-7"
-                                    name='email' required value="{{centre.user.email}}">
+                                    name='email' required disabled value="{{centre.user.email}}">
                             </div>
 							<div class="col-lg-6 col-md-6 col-12 mt-2 row">
-                                <label class="control-label col-sm-3 col-md-4 col-5 mt-3" style="color:black;">Phone</label>
+                                <label class="control-label col-sm-3 col-md-4 col-5 mt-3" style="color:black;">Phone<span
+									class="text-danger">*</span></label>
                                 <input type="tel" class="form-control mt-2 w-100 col-sm-9 col-md-8 col-7"
-                                    name='phone' required value="{{centre.phone}}">
-                            </div>
-							<div class="col-lg-6 col-md-6 col-12 mt-2 row">
-                                <label class="control-label col-sm-3 col-md-4 col-5 mt-3" style="color:black;">Old Password</label>
-                                <input type="password" class="form-control mt-2 w-100 col-sm-9 col-md-8 col-7"
-                                    name='oldPassword' required>
-                            </div>
-							<div class="col-lg-6 col-md-6 col-12 mt-2 row">
-                                <label class="control-label col-sm-3 col-md-4 col-5 mt-3" style="color:black;">New Password</label>
-                                <input type="password" class="form-control mt-2 w-100 col-sm-9 col-md-8 col-7"
-                                    name='newPassword' required>
-                            </div>
-							<div class="col-lg-6 col-md-6 col-12 mt-2 row">
-                                <label class="control-label col-sm-3 col-md-4 col-5 mt-3" style="color:black;">Confirm Password</label>
-                                <input type="password" class="form-control mt-2 w-100 col-sm-9 col-md-8 col-7"
-                                    name='confirmPassword' required>
+                                    name='phone' required value="{{centre.phone}}" maxlength="10" pattern="\d{10}">
                             </div>
                             <div class="col-lg-6 col-md-6 col-12 mt-2 row">
-                                <label class="control-label col-sm-3 col-md-4 col-5 mt-3" style="color:black;"> Location</label>
+                                <label class="control-label col-sm-3 col-md-4 col-5 mt-3" style="color:black;">Location<span
+									class="text-danger">*</span></label>
                                 <input type="text" class="form-control mt-2 w-100 col-sm-9 col-md-8 col-7" id="pac-input" name='loc' required value="{{centre.address}}">
                                 <input type="hidden" id="cityLat" value="0" name="cityLat" />
                                 <input type="hidden" id="cityLng" value="0" name="cityLng" />
                             </div>
-                            <div class="col-lg-6 col-md-6 col-12 mt-2 row">
-                                <label class="control-label col-sm-3 col-md-4 col-5 mt-3" style="color:black;">Change Image</label>
-								<div class="mt-2 w-100 col-sm-9 col-md-8 col-7">
-                                <input class="custom-file-input" type="file" value="{{centre.photo}}" name="photo">
-								<label class="custom-file-label" >Choose file...</label>
-                            	</div>
-							</div>
+
 							{% if request.session.type == "Teacher" %}
                             <div class="col-lg-6 col-md-6 col-12 mt-2 row">
-                                <label class="control-label col-sm-3 col-md-4 col-5 mt-3" style="color:black;">Experience</label>
+                                <label class="control-label col-sm-3 col-md-4 col-5 mt-3" style="color:black;">Experience<span
+									class="text-danger">*</span></label>
                                 <input type="number" class="form-control mt-2 w-100 col-sm-9 col-md-8 col-7"
                                     style="-moz-appearance: textfield;" min="0" name="experience"
-                                    placeholder="Experience" value="{{centre.experiance}}">
+                                    placeholder="Experience" value="{{centre.experiance}}" required>
                             </div>
 							<div class="col-lg-6 col-md-6 col-12 mt-2 row">
-                                <label class="control-label col-sm-3 col-md-4 col-5 mt-3" style="color:black;">Qualification</label>
+                                <label class="control-label col-sm-3 col-md-4 col-5 mt-3" style="color:black;">Qualification<span
+									class="text-danger">*</span></label>
                                 <input type="text" class="form-control mt-2 w-100 col-sm-9 col-md-8 col-7" name="qualification"
-                                    placeholder="Qualification" value="{{centre.qualification}}">
+                                    placeholder="Qualification" value="{{centre.qualification}}" required>
                             </div>
-                            {% endif %}
+							<div class="col-lg-12 col-md-12  col-12 d-flex justify-content-center mt-5">
+                                <button type="submit" class="btn btn-info">Update</button>
+                            </div>
+							</div>
+                        	</form>
+							</div>
+            				</div>
+							
+							<div class="card statbox widget box box-shadow mt-5">
+								<div class="card-header">
+									<div class="row">
+										<div class="col-xl-12 col-md-12 col-sm-12 col-12">
+											<h2 style="color:black;">Class Details</b></h2>
+										</div>
+									</div>
+								</div>
+							<div class="widget-content widget-content-area">
+								<form id="class-form" enctype="multipart/form-data" method="post" action="{% url 'updateClasses' %}">
+									{% csrf_token %}
+										<div class="outside">
+										{% for class,course,teach,fees in combinedZip %}
+											<div class="row entry">
+											  <div class="col-md-6 col-lg-5 col-12 input-group form-group">
+												<label class="control-label col-sm-5 col-5 mt-2" for="class">Class<span
+													class="text-danger">*</span></label>
+												  <select class="form-control class" name="class" onchange="selectclass(this)" required>
+													<option selected value="{{class}}">{{class}}</option>
+													{% for x,y in data.items %}
+													{% if x != class %}
+													<option value="{{x}}">{{x}}</option>
+													{% endif %}
+													{% endfor %}
+													<option style="display: none;">Assignment Solutions</option>
+												  </select>
+											  </div>
+						
+											  <div class="col-md-6 col-lg-5 col-12 input-group form-group">
+												<label class="control-label col-sm-5 col-5 mt-2" for="course">Course<span
+													class="text-danger">*</span></label>
+												  <select class="form-control course" name="course" required>
+													<option selected value="{{course}}">{{course}}</option>
+													<option style="display: none;">Assignment Solutions</option>
+												  </select>
+											  </div>
+						
+											  <div class="col-md-6 col-lg-5 col-12 input-group form-group">
+												<label class="control-label col-sm-5 col-5 mt-2" for="teach">Teaching Type<span
+													class="text-danger">*</span></label>
+												  <select class="form-control teach" name="teach" required multiple>
+													<option {% if "Online Tutor" in teach %} selected {% endif %} value="Online Tutor">Online Tutor</option>
+													<option {% if "Group" in teach %} selected {% endif %} value="Group">Group</option>
+													<option {% if "Home Tutor" in teach %} selected {% endif %} value="Home Tutor">Home Tutor</option>
+													<option {% if "Assignment Solutions" in teach %} selected {% endif %} value="Assignment Solutions">Assignment Solutions</option>
+												  </select>
+											  </div>
+						
+											  <div class="col-md-6 col-lg-5 col-12 input-group form-group">
+												<label class="control-label col-sm-5 col-5 mt-2" for="fees">Fees<span
+													class="text-danger">*</span></label>
+												  <input type="number" min="0" class="form-control fees" name="fees" required
+													placeholder="Fees" value="{{fees}}">
+											  </div>
+											  
+											  {% if forloop.counter == 1 %}
+											  <div class="col-lg-12 col-md-12  col-12 d-flex justify-content-end">
+												<button class="btn btn-success btn-md" type="button" onclick="duplicate(this)">Add
+												  Course</button>
+											  </div>
+											  {% else %}
+											  <div class="col-lg-12 col-md-12  col-12 d-flex justify-content-end">
+												<button class="btn btn-success" type="button" onclick="removeduplicate(this)">Remove</button>
+											</div>
+											{% endif %}
+											</div>
+											{% endfor %}
+										</div>
+										
+										<div class="col-lg-12 col-md-12  col-12 d-flex justify-content-center mt-5">
+											<button type="submit" class="btn btn-info">Update</button>
+										</div>
+                        		</form>
+							</div>
+							</div>
+					
+							<div class="card statbox widget box box-shadow mt-5">
+								<div class="card-header">
+									<div class="row">
+										<div class="col-xl-12 col-md-12 col-sm-12 col-12">
+											<h2 style="color:black;">Personal Details</b></h2>
+										</div>
+									</div>
+								</div>
+								<div class="widget-content widget-content-area">
+									<form enctype="multipart/form-data" method="post" action="{% url 'updateDocs' %}">
+										{% csrf_token %}
+										<div class="row col-lg-12">
+											
+											<div class="col-lg-6 col-md-6 col-12 mt-2 row">
+												<label class="control-label col-sm-3 col-md-4 col-5 mt-3" for="idcard">Select ID<span class="text-danger">*</span></label>
+												  <select id="idcard" name="idcard" class="form-control mt-2 w-100 col-sm-9 col-md-8 col-7" required>
+													<option disabled selected value="">Select an option</option>
+													<option {% if doc.panaadhar == 'PAN' %} selected {% endif %} value="PAN">PAN</option>
+													<option {% if doc.panaadhar == 'Aadhar' %} selected {% endif %} value="Aadhar">Aadhar</option>
+													<option {% if doc.panaadhar == 'Passport' %} selected {% endif %} value="Passport">Passport</option>
+													<option {% if doc.panaadhar == 'Voter ID' %} selected {% endif %} value="Voter ID">Voter ID</option>
+													<option {% if doc.panaadhar == 'Driving License' %} selected {% endif %} value="Driving License">Driving License</option>
+												  </select>
+											  </div>
+											  <div class="col-lg-6 col-md-6 col-12 mt-2 row">
+												<label class="control-label col-sm-3 col-md-4 col-5 mt-3" for="idnum">ID Number<span class="text-danger">*</span></label>
+												  <input id="idnum" name="idnum" type="text" placeholder="Enter ID number" class="form-control mt-2 w-100 col-sm-9 col-md-8 col-7"
+													required value="{{doc.panaadharnumber}}">
+											  </div>
+											  <div class="col-lg-6 col-md-6 col-12 mt-2 row">
+												  <label class="control-label col-sm-3 col-md-4 col-5 mt-3" for="idimg">Upload ID Image<span class="text-danger">*</span></label>
+												  <div class="mt-2 w-100 col-sm-9 col-md-8 col-7 file-box">
+													  <input type="file" class="custom-file-input" id="idimg" name="idimg" onchange="addfile(this)"                                        name="note" accept="application/pdf">
+													  <label class="custom-file-label idimg" for="photo">Choose file...</label>
+													</div>
+												</div>
+												<div class="col-lg-6 col-md-6 col-12 row">
+												  <label class="control-label col-sm-3 col-md-4 col-5 mt-3"></label>
+												<span class="w-100 col-sm-9 col-md-8 col-7 text-danger" id="idnum_error_message"></span>
+												</div>
+												
+							{% endif %}
 							{% if request.session.type == "Student" %}
 							<div class="col-lg-6 col-md-6 col-12 mt-2 row">
                                 <label class="control-label col-sm-3 col-md-4 col-5 mt-3" style="color:black;">School-Name</label>
@@ -231,29 +389,189 @@
 			error: function () {}
 		});
 	});
-	$(".reveal").on('click', function () {
-			var $pwd = $(".pwd");
-			if ($pwd.attr('type') === 'password') {
-				$pwd.attr('type', 'text');
-			} else {
-				$pwd.attr('type', 'password');
-			}
-		});
-		$(".reveal1").on('click', function () {
-			var $pwd = $(".pwd1");
-			if ($pwd.attr('type') === 'password') {
-				$pwd.attr('type', 'text');
-			} else {
-				$pwd.attr('type', 'password');
-			}
-		});
-		$(".reveal2").on('click', function () {
-			var $pwd = $(".pwd2");
-			if ($pwd.attr('type') === 'password') {
-				$pwd.attr('type', 'text');
-			} else {
-				$pwd.attr('type', 'password');
-			}
-		});
 </script>
+<script>
+	$('#edit').click(()=>{
+		$('#pic').click();		
+	});
+
+	$('#pic').change(()=>{
+		$('#pic-form').submit();
+	});
+
+    $('#class-form').submit(()=> {
+      let classAll = $('.class');
+      let courseAll = $('.course');
+      let teachAll = $('.teach');
+      let feesAll = $('.fees');
+      
+      for (let i = 0; i < teachAll.length; i++) {
+        let cl = $(classAll[i]).val();
+        let co = $(courseAll[i]).val();
+        let te = $(teachAll[i]).val();
+        let fe = $(feesAll[i]).val();
+
+		$('body').hide()
+        for (let j = 0; j < te.length; j++) {
+          $('.outside').append(`<select class="class" name="class">
+            <option selected>${cl}</option>
+          </select>
+          <select class="course" name="course">
+            <option selected>${co}</option>
+          </select>
+          <select class="teach" name="teach">
+            <option selected>${te[j]}</option>
+          </select>
+          <input class="fees" name="fees" value="${fe}">`);
+        }
+        $(teachAll[i]).closest(".entry").empty().trigger("change");  
+      }
+    });
+
+	$("#idnum").on('input',function() {
+
+		var value = $('#idnum').val()
+		var idtype = $("#idcard").val();
+		var pattern;
+
+		if (idtype == "PAN") {
+			pattern = /[a-zA-z]{5}\d{4}[a-zA-Z]{1}/;
+		}
+		else if (idtype == "Aadhar") {
+			pattern = /^[0-9]{12}$/;
+		}
+		else if (idtype == "Passport") {
+			pattern = /^[A-Z][0-9]{8}$/;
+		}
+		else if (idtype == "Voter ID") {
+			pattern = /^([a-zA-Z]){3}([0-9]){7}?$/g;
+		}
+		else if (idtype == "Driving License") {
+			pattern = /^(([A-Z]{2}[0-9]{2})( )|([A-Z]{2}-[0-9]{2}))((19|20)[0-9][0-9])[0-9]{7}$/;
+		}
+		msg = "Please Enter a valid " + idtype + " Number";
+
+		if (pattern.test(value)==false){
+			$('#idnum_error_message').html(msg);
+		}
+		else{
+			$('#idnum_error_message').html('');
+		}
+		});
+    
+    function duplicate() {
+      let no = $('.course').length;
+      $('.outside').append(`<div class="row entry">
+                      
+                      <div class="col-md-6 col-lg-5 col-12 input-group form-group">
+                        <label class="control-label col-sm-5 col-5 mt-2" for="class">Class<span
+                            class="text-danger">*</span></label>
+                          <select class="form-control class" name="class${no}" onchange="selectclass(this)" required>
+                            <option selected disabled value="">Select an option</option>
+                            {% for x,y in data.items %}
+                            <option value="{{x}}">{{x}}</option>
+                            {% endfor %}
+                            <option style="display: none;">Assignment Solutions</option>
+                          </select>
+                      </div>
+
+                      <div class="col-md-6 col-lg-5 col-12 input-group form-group">
+                        <label class="control-label col-sm-5 col-5 mt-2" for="course">Course<span
+                            class="text-danger">*</span></label>
+                          <select class="form-control course" name="course${no}" required>
+                            <option selected disabled value="">Select an option</option>
+                            <option style="display: none;">Assignment Solutions</option>
+                          </select>
+                      </div>
+
+                      <div class="col-md-6 col-lg-5 col-12 input-group form-group">
+                        <label class="control-label col-sm-5 col-5 mt-2" for="teach">Teaching Type<span
+                            class="text-danger">*</span></label>
+                          <select class="form-control teach" name="teach${no}" required multiple>
+                            <option value="Online Tutor">Online Tutor</option>
+                            <option value="Group">Group</option>
+                            <option value="Home Tutor">Home Tutor</option>
+                            <option value="Assignment Solutions">Assignment Solutions</option>
+                          </select>
+                      </div>
+
+                      <div class="col-md-6 col-lg-5 col-12 input-group form-group">
+                        <label class="control-label col-sm-5 col-5 mt-2" for="fees">Fees<span
+                            class="text-danger">*</span></label>
+                          <input type="number" min="0" class="form-control fees" name="fees${no}" required
+                            placeholder="Fees">
+                      </div>
+
+                      <div class="col-lg-12 col-md-12  col-12 d-flex justify-content-end">
+                            <button class="btn btn-success" type="button" onclick="removeduplicate(this)">Remove</button>
+                        </div>
+                    </div>`)
+					$('.teach').multiselect({numberDisplayed: 2, nonSelectedText: 'Select an option'});
+					$('.btn-group').addClass('form-control')
+    }
+
+    function removeduplicate(el) {
+      $(el).closest(".entry").empty().trigger("change");
+    }
+
+    function selectclass(el) {
+      var data = {{ data| safe }};
+      courses = data[el.value];
+
+      $(el).closest(".entry").find(".course").empty().trigger("change");
+      var newOption = new Option(
+        "Select an option",
+        "",
+        false,
+        false
+      );
+      $(el).closest(".entry").find(".course").append(newOption).trigger("change");
+      $(el).closest(".entry").find(".course").append(`<option style="display: none;">Assignment Solutions</option>`).trigger("change");
+
+      for (i = 0; i < courses.length; i++) {
+        var newOption = new Option(
+          courses[i],
+          courses[i],
+          false,
+          false
+        );
+        $(el).closest(".entry").find(".course").append(newOption).trigger("change");
+      }
+    }
+
+    function addfile(el) {
+        var file = $(el).val();
+        var exts = ['pdf'];
+        // first check if file field has any value
+        if (file) {
+            // split file name at dot
+            var get_ext = file.split('.');
+            // reverse name to check extension
+            get_ext = get_ext.reverse();
+            // check file type is valid as given in 'exts' array
+            if ($.inArray(get_ext[0].toLowerCase(), exts) > -1) {
+                var filename = file.replace(/^.*\\/, "");
+                $(el).closest(".file-box").find(".custom-file-label").html(filename);
+            } else {
+                $(el).closest(".file-box").find(".custom-file-label").html("Choose File");
+                $(el).closest(".file-box").find('.invalid-feedback').show();
+                $(el).closest(".file-box").find('#validatedCustomFile').val("");
+                $(el).closest(".file-box").find('#validatedCustomFile').val().focus();
+            }
+        }
+    }
+  
+    $(document).ready(() => {
+      if (performance.navigation.type == 2) {
+        location.reload();
+      }
+	  var file = `{{doc.photoid.name}}`;
+        if (file.length > 25) {
+            file = file.substring(0, 25) + '  ...';
+        };
+        $(".idimg").html(file);
+    });
+    
+  </script>
+
 {% endblock main-content %}
