@@ -1,4 +1,5 @@
 env
+migrations
 .pycache
 tutorsearch/__pycache__
 db.sqlite3
