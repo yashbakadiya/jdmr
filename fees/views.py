@@ -350,7 +350,24 @@ def submitFee(request):
         
 
         stud = AddStudentInst.objects.filter(institute = inst)
-        submitfees = SubmitFees.objects.filter(student__institute = inst)
+        addstud=[]
+        addstufirst =[]
+        
+        for i in stud:
+            print(i.institute)
+            print(i.courseName)
+            stu = i.student.user.username
+            addstud.append(stu)
+            stufirst = i.student.user.first_name
+            addstufirst.append(stufirst)
+            
+
+        print('addstu',addstud)   
+        print('addstufirst',addstufirst)       
+        
+        
+
+        submitfees = SubmitFees.objects.filter( student__user__first_name__in = addstufirst)
         print('submitfees',submitfees)      
         addfeescourse = AddFeesC.objects.filter(intitute = inst )
         print('addfeescourse',addfeescourse)
@@ -386,26 +403,23 @@ def submitFee(request):
                     Q(student__user__username=student) & Q(institute=inst))
                 print('student--', student)
                 
-                for stu in student:
-                    
+                for stu in student:                    
                     print("stu--", stu.student)
-                    course = stu.courseName
-                    
-                    print("course--", course)
-                    
-                    
+                    course = stu.courseName                    
+                    print("course--", course)                    
                     fee = AddFeesC.objects.filter(Q(courseName=course) & Q(intitute=inst)).first()
-                    print('fees--', fee)  
-                                  
-
+                    print('fees--', fee) 
                     print('final amt',fee.final_amt)
+                    
                     print('stu.feeDisc',fee.feeDisc)                    
                     fee = (fee.final_amount-((fee.final_amount/100)*fee.feeDisc))
+                    totalfees =float(fee)                   
 
-                    print('fee--', fee)  
-                   
-                    feeslist.append(fee)
-                
+
+
+                    print('fee--', fee)
+                    feeslist.append(fee) 
+
                 print("feeslist--", feeslist)
                 mydata = zip(student, feeslist)
                 return render(request, 'fees/submitFee.html', {'mydata': mydata, "user": user})
@@ -413,39 +427,34 @@ def submitFee(request):
             elif(userAction == 'studentFee'):
                 subjectId = request.POST.get('subjectId')
                 dataObj = AddStudentInst.objects.get(id=subjectId)
+                finalfees = request.POST.get("studentfinalfee",None)
+                print('finalfees',finalfees)
                 print('dataobj',dataObj.student)
                 print('coursename',dataObj.courseName)
                 print('forclass',dataObj.forclass)
                 print('tachtype',dataObj.teachType)
 
-
                 addfess = AddFeesC.objects.all()
                 for i in addfess:
-                    print('i',i)
-                
+                    print('i',i)                
                 addFeeObj = AddFeesC.objects.filter(Q(courseName = dataObj.courseName) & Q(forclass = dataObj.forclass))
-                print('add fee Obj',addFeeObj)
-                                
+                print('add fee Obj',addFeeObj)                                
                 # addFeeObj = AddFeesC.objects.filter(Q(courseName = dataObj.courseName) & Q(forclass = dataObj.forclass) &
                 #                                      Q(teachType=dataObj.teachType))
                     # courseName=dataObj.courseName, 
                     # forclass=dataObj.forclass,
-                    # teachType=dataObj.teachType
-                
-
-                
-                
-                b=[]
-                
+                    # teachType=dataObj.teachType                 
+                b=[]                
                 for i in addFeeObj:
                     a = i.final_amt
                     b.append(a)
                     print('a',a)
                 print(b)
-                c=b[0]
-                balancesfees = 0
 
-               
+                c=float(b[0])
+                fee = float(c-((c/100)*10))
+                print('fee',fee)
+                balancesfis = 0               
                 if(addFeeObj):
                     addFeeObj = addFeeObj[0]
                 else:
@@ -453,7 +462,6 @@ def submitFee(request):
               #  feeObj = dataObj.fees.all()
                 feeObj = SubmitFees.objects.all()
                 print('feeObj',feeObj)
-
                 # if(not feeObj):
                 #     feeObjNew = SubmitFees(
                 #         username=dataObj,
@@ -466,25 +474,34 @@ def submitFee(request):
                 #     print("bs", feeObjNew.instalmentDue)
                 #     feeObjNew.save()
                 #     feeObj = dataObj.fees.all()                
-                totalinstall = 0
-                totalInstallments = 0
-                instalDue = 0
-                feeObjNew = SubmitFees(
-                        
+                                
+                instaldue = 0
+                totalinstal = 0
+
+                # feeObjNew = SubmitFees(                       
+                #         student = dataObj.student,                                           
+                #         totalFee = finalfees,
+                #         balanceFee= balancesfis ,
+                #         feePayed = finalfees,
+                #         instalmentDue = instaldue,
+                #         totalInstallments = totalinstal,                        
+                #     )                    
+                # feeObjNew.save()
+                
+                feeObjNew = SubmitFees(                       
                         student = dataObj.student,                                           
-                        totalFee = c,
-                        balanceFee= balancesfees ,
-                        instalmentDue = instalDue,
-                        totalInstallments = totalInstallments,                        
+                        totalFee = finalfees,
+                        balanceFee= balancesfis ,
+                        feePayed = finalfees,
+                        instalmentDue = instaldue,
+                        totalInstallments = totalinstal,                        
                     )                    
                 feeObjNew.save()
                 print("bs", feeObjNew.instalmentDue)
-                feeObj = SubmitFees.objects.all()
+                feeObj = SubmitFees.objects.filter( student = dataObj.student)
                 print('feeObj',feeObj)
-
                 # for i in feeObj:
                 #     print(i.fees)
-
                 feeObj = feeObj[0]
                 print('feeobj id',feeObj.id )
                 print(feeObj.instalmentDue)
@@ -505,7 +522,7 @@ def submitFee(request):
                     request,
                     'fees/submitFee.html',
                     {
-                        'inputData': inputData, 'installmentsDone': feeObj.totalInstallments - feeObj.instalmentDue, 'feeObj': feeObj, 'installmentnotcomplete': installmentnotcomplete,'dataObj':dataObj,'c':c
+                        'inputData': inputData, 'installmentsDone': feeObj.totalInstallments - feeObj.instalmentDue, 'feeObj': feeObj, 'installmentnotcomplete': installmentnotcomplete,'dataObj':dataObj,'c':balancesfis
                     }
                 )
             elif(userAction == 'submitFee'):
