@@ -100,9 +100,10 @@
                     <!--Table head-->
                     <thead>
                         <tr>
-                            <th>Student UserName</th>
+                            <th>Student Name</th>
                             <th>Student Name</th>
                             <th>Institute Name</th>
+                            <th>Course Name</th>
                             <th>Action</th>
                         </tr>
                     </thead>
@@ -115,6 +116,7 @@
                                 <td>{{k.student.user.username}}</td>
                                 <td>{{k.student.user.first_name}}</td>
                                 <td>{{k.institute.user.username}}</td>
+                                <td>{{k.courseName}}</td>
                                 <td><input type="hidden" name="userAction" value="subjectSearch">
                                     <input type="hidden" name="userId" value="{{k.id}}">
                                     <button class="btn btn-danger" type="submit">Submit</button>
@@ -163,7 +165,7 @@
                                 <td>{{student.teachType}}</td>
 
                                 <td>{{student.installments}}</td>
-                                <td>{{fees}}</td>
+                                <td ><input type="hidden" name="studentfinalfee" value="{{fees}}">{{fees}}</td>
                                 <td><input type="hidden" name="userAction" value="studentFee"><button
                                         class="btn btn-danger" name="subjectId" value="{{student.id}}" type="submit"
                                         name="button">Pay</button></td>
@@ -206,7 +208,7 @@
                                     Total Fee :
                                 </td>
                                 <td>
-                                    {{c}}
+                                    {{finalfees}}
                                 </td>
                             </tr>
                         </table>
@@ -283,13 +285,124 @@
 
 
 
-
-
-
-
-
-
         </div>
+
+
+        {% if stud %}
+        <div class="card-body">
+            <!-- Grid row -->
+            <!-- <form action="" method="post">{% csrf_token %} -->
+            <!--Table-->
+            <div class="table-responsive">
+
+                <table class="table table-striped">
+                    <!--Table head-->
+                    <tr>
+                        <th class="">Sr no</th>
+                        <th class="">Student</th>
+                        <th class=""> class</th>
+
+                        <th class="">Course Name</th>
+
+                        <th class=""> Teaching Type</th>
+                        <th>Total fees</th>
+                        <th>Paid fees</th>
+                        <th>Balance fees</th>
+                       
+                        <th>Pay</th>
+                        <th class="text-center" colspan="2">Action</th>
+                    </tr>
+                    <!--Table head-->
+                    <!--Table body-->
+                    
+                    {% for stud, submitfees in mydataf %}             
+
+                    
+                    
+                
+                    
+                    <form action="POST"> {% csrf_token %}
+                    
+                        <tr id="{{ k.pk }}">
+                            <td>{{ forloop.counter }}</td>
+                            
+                            <td>{{stud.student.user}}</td> 
+                            <td>{{stud.forclass}}</td>
+                            <td>{{stud.courseName}}</td>
+
+                            <td>{{stud.teachType}}</td>              
+                           
+
+                            
+                            <td>{{submitfees.totalFee}}</td>
+                            <td>{{submitfees.feePayed}}</td>
+                            <td>{{submitfees.balanceFee}}</td>         
+                           
+                            <td class="text-center">
+
+                                <a class="btn btn-warning" href="{% url 'editStudent' stu.id %}"><i
+                                        class="flaticon-pencil-line" style="font-size:medium;"></i></a>
+                                <a class="btn btn-danger" href="{% url 'deleteStudent' stu.id %}"><i
+                                        class="flaticon-delete-fill" style="font-size:medium;"></i></a>
+                            </td>
+
+
+                            <td><input type="hidden" name="userAction" value="subjectSearch">
+                                <input type="hidden" name="userId" value="{{k.id}}">
+                                <button class="btn btn-danger" type="submit">Pay</button>
+                            </td>
+                         
+                          
+                           
+                            
+                        </tr>
+                    </form>
+                    {% endfor %}
+                    
+               
+                    
+                    <!--Table body-->
+                </table>
+            </div>
+            <!--Table-->
+            <!-- </form> -->
+            <br>
+        </div>
+        {% endif %}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
         {% if stud %}
         <div class="card-body">
             <!-- Grid row -->
@@ -316,7 +429,10 @@
                     </tr>
                     <!--Table head-->
                     <!--Table body-->
-                    {% for k in submitfees %}
+                    {% for k in stud %}
+                    {% for j in submitfees|slice:":1" %}
+
+                    
                     
                 
                     
@@ -324,14 +440,21 @@
                     
                         <tr id="{{ k.pk }}">
                             <td>{{ forloop.counter }}</td>
-                            <td>{{k.student.student}}</td>
-                            <td>{{k.student.forclass}}</td>
-                            <td>{{k.student.courseName}}</td>
+                            
+                            <td>{{k.student.user}}</td> 
+                            <td>{{k.forclass}}</td>
+                            <td>{{k.courseName}}</td>
 
-                            <td>{{k.student.teachType}}</td>
-                            <td>{{k.fees.final_amt}}</td>
-                            <td>{{k.feePayed}}</td>
-                            <td>{{k.balanceFee}}</td>
+                            <td>{{k.teachType}}</td>
+                            
+
+                             {% if k.student.user == j.student.user %}
+                           
+
+                            
+                            <td>{{j.totalFee}}</td>
+                            <td>{{j.feePayed}}</td>
+                            <td>{{j.balanceFee}}</td>         
 
                             <td class="text-center">
 
@@ -339,17 +462,39 @@
                                         class="flaticon-pencil-line" style="font-size:medium;"></i></a>
                                 <a class="btn btn-danger" href="{% url 'deleteStudent' k.id %}"><i
                                         class="flaticon-delete-fill" style="font-size:medium;"></i></a>
-
+                            </td>
 
 
                             <td><input type="hidden" name="userAction" value="subjectSearch">
                                 <input type="hidden" name="userId" value="{{k.id}}">
                                 <button class="btn btn-danger" type="submit">Pay</button>
                             </td>
-                           
+                          {% else %}
+                          <td>{{j.totalFee}}</td>                            
+                          <td>Not Paid</td>
+                          <td>{{j.balanceFee}}</td>                 
+                            
+
+                            <td class="text-center">
+
+                                <a class="btn btn-warning" href="{% url 'editStudent' k.id %}"><i
+                                        class="flaticon-pencil-line" style="font-size:medium;"></i></a>
+                                <a class="btn btn-danger" href="{% url 'deleteStudent' k.id %}"><i
+                                        class="flaticon-delete-fill" style="font-size:medium;"></i></a>
                             </td>
+
+
+                            <td><input type="hidden" name="userAction" value="subjectSearch">
+                                <input type="hidden" name="userId" value="{{k.id}}">
+                                <button class="btn btn-danger" type="submit">Pay</button>
+                            </td>
+                            {% endif %}
+                          
+                           
+                            
                         </tr>
                     </form>
+                    {% endfor %}
                     {% endfor %}
                
                     
@@ -360,7 +505,6 @@
             <!-- </form> -->
             <br>
         </div>
-
         {% endif %}
     </div>
 

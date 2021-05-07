@@ -313,7 +313,7 @@ def enrolledTutorsObjectToDict(obj):
         'email':obj.user.email,
         'address':obj.address,
         'phone':obj.phone,
-        'availability':obj.availability,
+        'teachType':obj.teachType,
         'qualification':obj.qualification,
         'experience':obj.experiance,
         'gender':obj.gender,
