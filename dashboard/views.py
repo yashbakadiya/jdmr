@@ -227,7 +227,7 @@ def updateClasses(request):
 
 def updateDocs(request):
     teacher = Teacher.objects.get(user=User.objects.get(username=request.session['user']))
-    tutorid = Tutorid.objects.get(teacherid=teacher.id,teachername=teacher)
+    tutorid = Tutorid.objects.get(teacherid=teacher.id,teachername=teacher.user.username)
     tutorid.panaadhar = request.POST.get('idcard')
     tutorid.panaadharnumber = request.POST.get('idnum')
     photoid = request.FILES.get('idimg') 
@@ -333,7 +333,7 @@ def signupTutorContinued(request, id):
 
             teacher.gender = request.POST.get('gender')
             teacher.address = request.POST.get('address')
-            tutorid,created = Tutorid.objects.get_or_create(teacherid=id,teachername=teacher)
+            tutorid,created = Tutorid.objects.get_or_create(teacherid=id,teachername=teacher.user.username)
             tutorid.panaadhar = request.POST.get('idcard')
             tutorid.panaadharnumber = request.POST.get('idnum') 
             tutorid.photoid = request.FILES.get('idimg') 
