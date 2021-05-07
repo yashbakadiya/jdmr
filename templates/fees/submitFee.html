@@ -208,7 +208,7 @@
                                     Total Fee :
                                 </td>
                                 <td>
-                                    {{c}}
+                                    {{finalfees}}
                                 </td>
                             </tr>
                         </table>
@@ -285,13 +285,124 @@
 
 
 
-
-
-
-
-
-
         </div>
+
+
+        {% if stud %}
+        <div class="card-body">
+            <!-- Grid row -->
+            <!-- <form action="" method="post">{% csrf_token %} -->
+            <!--Table-->
+            <div class="table-responsive">
+
+                <table class="table table-striped">
+                    <!--Table head-->
+                    <tr>
+                        <th class="">Sr no</th>
+                        <th class="">Student</th>
+                        <th class=""> class</th>
+
+                        <th class="">Course Name</th>
+
+                        <th class=""> Teaching Type</th>
+                        <th>Total fees</th>
+                        <th>Paid fees</th>
+                        <th>Balance fees</th>
+                       
+                        <th>Pay</th>
+                        <th class="text-center" colspan="2">Action</th>
+                    </tr>
+                    <!--Table head-->
+                    <!--Table body-->
+                    
+                    {% for stud, submitfees in mydataf %}             
+
+                    
+                    
+                
+                    
+                    <form action="POST"> {% csrf_token %}
+                    
+                        <tr id="{{ k.pk }}">
+                            <td>{{ forloop.counter }}</td>
+                            
+                            <td>{{stud.student.user}}</td> 
+                            <td>{{stud.forclass}}</td>
+                            <td>{{stud.courseName}}</td>
+
+                            <td>{{stud.teachType}}</td>              
+                           
+
+                            
+                            <td>{{submitfees.totalFee}}</td>
+                            <td>{{submitfees.feePayed}}</td>
+                            <td>{{submitfees.balanceFee}}</td>         
+                           
+                            <td class="text-center">
+
+                                <a class="btn btn-warning" href="{% url 'editStudent' stu.id %}"><i
+                                        class="flaticon-pencil-line" style="font-size:medium;"></i></a>
+                                <a class="btn btn-danger" href="{% url 'deleteStudent' stu.id %}"><i
+                                        class="flaticon-delete-fill" style="font-size:medium;"></i></a>
+                            </td>
+
+
+                            <td><input type="hidden" name="userAction" value="subjectSearch">
+                                <input type="hidden" name="userId" value="{{k.id}}">
+                                <button class="btn btn-danger" type="submit">Pay</button>
+                            </td>
+                         
+                          
+                           
+                            
+                        </tr>
+                    </form>
+                    {% endfor %}
+                    
+               
+                    
+                    <!--Table body-->
+                </table>
+            </div>
+            <!--Table-->
+            <!-- </form> -->
+            <br>
+        </div>
+        {% endif %}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
         {% if stud %}
         <div class="card-body">
             <!-- Grid row -->
@@ -320,6 +431,8 @@
                     <!--Table body-->
                     {% for k in stud %}
                     {% for j in submitfees|slice:":1" %}
+
+                    
                     
                 
                     
@@ -335,7 +448,7 @@
                             <td>{{k.teachType}}</td>
                             
 
-                          {% if k.student.user == j.student.user %}
+                             {% if k.student.user == j.student.user %}
                            
 
                             
@@ -392,7 +505,6 @@
             <!-- </form> -->
             <br>
         </div>
-
         {% endif %}
     </div>
 

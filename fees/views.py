@@ -522,7 +522,7 @@ def submitFee(request):
                     request,
                     'fees/submitFee.html',
                     {
-                        'inputData': inputData, 'installmentsDone': feeObj.totalInstallments - feeObj.instalmentDue, 'feeObj': feeObj, 'installmentnotcomplete': installmentnotcomplete,'dataObj':dataObj,'c':balancesfis
+                        'inputData': inputData, 'installmentsDone': feeObj.totalInstallments - feeObj.instalmentDue, 'feeObj': feeObj, 'installmentnotcomplete': installmentnotcomplete,'dataObj':dataObj,'finalfees':finalfees
                     }
                 )
             elif(userAction == 'submitFee'):
