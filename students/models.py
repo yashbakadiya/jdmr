@@ -8,8 +8,8 @@ class AddStudentInst(models.Model):
     forclass = models.CharField(max_length=255,default="")
     teachType = models.CharField(max_length=255,default="")
     batch = models.CharField(max_length=30,default="")
-    feeDisc = models.DecimalField(max_digits=10,decimal_places=3,default=0)
-    installments = models.IntegerField(default=2)
+    feeDisc = models.DecimalField(max_digits=10,decimal_places=3,default=0,null=True)
+    installments = models.IntegerField(default=2,null=True)
     archieved = models.BooleanField(default=False)  
 
 

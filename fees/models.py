@@ -34,7 +34,10 @@ class AddFeesC(models.Model):
 
 class SubmitFees(models.Model):
     student = models.ForeignKey(
-        AddStudentInst, on_delete=models.CASCADE, related_name='SubmitFees',null=True )
+        Student, on_delete=models.CASCADE, related_name='fees')
+
+    # student = models.ForeignKey(
+    #     AddStudentInst, on_delete=models.CASCADE, related_name='fees',null=True )
     fees = models.ForeignKey(AddFeesC, on_delete=models.CASCADE,related_name="stu_fees",default="",null=True )
     totalFee = models.DecimalField(max_digits=10, decimal_places=2,null=True )
     feePayed = models.DecimalField(max_digits=10, decimal_places=2, default=0,null=True )
