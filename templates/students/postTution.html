@@ -135,14 +135,18 @@
                                 <td>{{tution.budgetVal}}</td>
                                 <td>{{tution.numberOfSessions}}</td>
                                 <td class="text-center">
-                                    <a class="btn btn-danger"href="{% url 'Delete_Tution' tution.sno %}">
+                                    <a href="">
+                                        <span class="btn btn-success">Update
+                                        </span>
+                                    </a>
+                                    <a class="btn btn-danger" href="{% url 'Delete_Tution' tution.sno %}">
                                         <span class="flaticon-delete-4">
                                         </span>
                                     </a>
                                 </td>
                                 <td class="text-center"><button type="button" data-toggle="modal" data-target="#tutorModal{{tution.sno}}"
                                     class="btn btn-info">View</button></td>
-                        </tr>
+                            </tr>
 
                         <!-- view box -->
                         <div class="modal fade" id="tutorModal{{tution.sno}}" tabindex="-1" role="dialog"
@@ -171,7 +175,7 @@
                                                 </div>
                                                 <div class="col-md-6 col-sm-6 col-12 mt-2">
                                                     <b>Gender Prefered:</b>
-                                                    <span class="ml-1">{{tution.whenToStart}}</span>
+                                                    <span class="ml-1">{{tution.genderPreference}}</span>
                                                 </div>
                                                 <div class="col-md-6 col-sm-6 col-12 mt-2">
                                                     <b>Start Date:</b>
