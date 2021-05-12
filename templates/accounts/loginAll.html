@@ -112,31 +112,22 @@
                     </div>
                     <div class="col-md-12">
                         <div class="input-group form-group">
-                                <label class="control-label col-sm-4">Type<span class="text-danger">*</span></label>
-                                <select name="type" class="form-control form-control-lg mr-2" style="border-radius: 25px; text-align: center;">
-                                    <option {% if prefil.type == "Institute" %}selected {% endif %} value="Institute">Institute</option>
-                                    <option {% if prefil.type == "Teacher" %}selected {% endif %} value="Teacher">Teacher</option>
-                                    <option {% if prefil.type == "Student" %}selected {% endif %} value="Student">Student</option>
-                                </select>
+                            <label class="control-label col-sm-4">Type<span class="text-danger">*</span></label>
+                            <select name="type" class="form-control form-control-lg mr-2 pl-5" style=" border-radius: 25px;">
+                                <option style="color: rgb(34, 31, 31);" {% if prefil.type == "Institute" %}selected {% endif %} value="Institute">Institute</option>
+                                <option style="color: rgb(34, 31, 31);" {% if prefil.type == "Teacher" %}selected {% endif %} value="Teacher">Teacher</option>
+                                <option style="color: rgb(34, 31, 31);" {% if prefil.type == "Student" %}selected {% endif %} value="Student">Student</option>
+                            </select>
                         </div>
                         <div class="input-group form-group">
                                 <label class="control-label col-sm-4">Username<span class="text-danger">*</span></label>
-                                <div class="input-group-prepend">
-                                    <span class="input-group-text"><i class="fas fa-user"></i></span>
-                                </div>
-                                <input type="text" class="form-control form-control-lg" name='username'
+                                <input style="border-radius: 25px; text-align: center;" type="text" class="form-control form-control-lg" name='username'
                                     placeholder="Username" value="{{prefil.username}}" required>
                         </div>
                         <div class="input-group form-group">
                             <label class="control-label col-sm-4"> Password<span class="text-danger">*</span></label>
-                            <div class="input-group-prepend">
-                                <span class="input-group-text"><i class="fas fa-key"></i></span>
-                            </div>
-                            <input type="password" name='password' class="form-control form-control-lg pwd"
+                            <input style="border-radius: 25px; text-align: center;"  type="password" name='password' class="form-control form-control-lg pwd"
                                 value="{{ prefil.password }}" placeholder="Password" required pattern=".{6,20}" title="At least 6 charcters">
-                            <div class="input-group-append">
-                                <span style="background-color:rgb(218, 218, 218);" class="reveal px-2 pt-1"><i class="fa fa-eye"></i></span>
-                            </div>
                         </div>
                         <div class="checkbox d-flex justify-content-center mt-3">
                             <div class="custom-control custom-checkbox mr-3">
