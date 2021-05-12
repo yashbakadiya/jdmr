@@ -400,7 +400,7 @@ def postTution(request):
                     subject = request.POST.get('subject'),
                     forclass = forclass,
                     teachingMode = request.POST.get('tm'),
-                    genderPreference = request.POST.get('gp'),
+                    genderPreference = request.POST.get('gp',default="Any"),
                     whenToStart = request.POST.get('sd'),
                     description = request.POST.get('description'),
                     budget = request.POST.get('budget'),
@@ -410,13 +410,14 @@ def postTution(request):
             postTutionObj.save()
         user = User.objects.get(username=request.session['user'])
         student = Student.objects.get(user=user)
-        tutions = PostTution.objects.filter(student=student)
+        tutions = PostTution.objects.filter(student=student).order_by('-forclass')
         return render(
             request,
             'students/postTution.html',
             {
                 'jsonLocalData':jsonLocalData,
-                'tutions':tutions
+                'tutions':tutions,
+                
             }
         )
     return HttpResponse("You are not Authenticated for this Page")

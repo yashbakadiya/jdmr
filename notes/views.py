@@ -5,6 +5,7 @@ from .models import NotesInstitute,NotesTutor
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from teacher.models import enrollTutors
+from django.db.models import Q
 from batches.models import BatchTiming
 from students.models import *
 from itertools import chain
@@ -279,15 +280,30 @@ def AllNotesStudent(request):
             buy_tutor_notes = BuyTutorNotes.objects.filter(student=student)
             buy_tutor_note_list = [buy.note.id for buy in buy_tutor_notes]
             bought_tutor_notes = NotesTutor.objects.filter(id__in=buy_tutor_note_list).order_by("-id")
-            #not bought tutor notes list
+            #not bought tutor notes lists
             not_bought_tutor_notes = NotesTutor.objects.all().exclude(id__in=buy_tutor_note_list).order_by("-id")
             context['bought_institute_notes'] = bought_institute_notes
             context['not_bought_institute_notes'] = not_bought_institute_notes
             context['bought_tutor_notes'] = bought_tutor_notes
             context['not_bought_tutor_notes'] = not_bought_tutor_notes
 
-        return render(request,'Notes/allnotes.html',context=context)
+        return render(request,'Notes/allnotes.html', context=context)
     return HttpResponse('You are not Authenticated for this page')
+
+@login_required(login_url="Login")
+def searchNotes(request):
+    if request.session['type']=="Student":
+        if request.method=="POST":
+            srch = request.POST.get('srh', '')
+            if srch:
+                match = NotesInstitute.objects.filter(Q(description__icontains=srch) | Q(subject__icontains=srch))
+                if len(match):
+                    return render(request,'Notes/searchNotes.html', {'founds':match})
+                else:
+                    messages.warning(request,'no result found')
+
+        return render(request, 'Notes/searchNotes.html')
+    return HttpResponse("You are not Authenticated for this view")
 
 @login_required(login_url="Login")
 def subjects(request):

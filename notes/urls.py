@@ -14,6 +14,7 @@ urlpatterns = [
          
     #Student Notes urls
     path('Student/Notes/All',AllNotesStudent,name="notesstudents"),
+    path('Student/Notes/Search',searchNotes,name="searchNotes"),
     path('getsubjects',subjects,name="subjects"),
 
     path('Institute/view/<int:pk>',viewInstituteNotesPDF,name="viewinstitutenotespdf"),

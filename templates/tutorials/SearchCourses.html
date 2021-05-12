@@ -87,13 +87,13 @@
                                     </div>
                                     <div class="col-md-5 col-lg-5 col-12 mt-3 row">
                                         <label class="control-label col-sm-3 col-4 mt-2 mx-3"
-                                            style="display:block; color:black;">Fees</label>
+                                            style="display:block; color:black;">Budget</label>
                                         <select class="custom-select form-control w-100 col-sm-8 col-6" name="fees">
                                             {% if prefill.fees %}
                                             <option disabled selected value="{{prefill.fees}}">
                                                 {{prefill.fees}}</option>
                                             {% else %}
-                                            <option disabled selected value="">Fees in Rs.</option>
+                                            <option disabled selected value="">Budget</option>
                                             {% endif %}
                                             <option value="0-1000">less than 1000</option>
                                             <option value="1000-2000">1000-2000</option>
