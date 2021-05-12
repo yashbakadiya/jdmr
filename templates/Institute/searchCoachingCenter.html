@@ -49,11 +49,7 @@
                                 <label class="control-label col-sm-3 col-5 mt-2" style="display:block; color:black;">Courses</label>
                                 <select id="subject" name="subject"
                                     class="custom-select form-control w-100 col-sm-8 col-7">
-                                    {% if prefill.course %}
-                                    <option disabled selected value="{{prefill.course}}">{{prefill.course}}</option>
-                                    {% else %}
                                     <option disabled selected value="">Course</option>
-                                    {% endif %}
                                 </select>
                             </div>
                             <div class="col-lg-2 col-md-2 col-12 mt-2 d-flex justify-content-end">
@@ -142,6 +138,7 @@
     var className = document.getElementById("className")
     var jsondata = {{ jsonLocalData| safe}}
     var prefillclass = "{{prefill.class}}"
+    var prefillCourse = "{{prefill.course}}"
     const keys = Object.keys(jsondata);
     
     if (prefillclass)
@@ -150,13 +147,20 @@
     }
     else
     {
-        var classes = `<option disabled selected value="">Class</option>`
+        var classes = `<option disabled selected value="">Select Class</option>`
     }
     for (let index = 0; index < keys.length; index++) {
         const element = keys[index];
-        classes += `<option value="${element}">${element}</option>`
+        if (element!=prefillclass){
+            classes += `<option value="${element}">${element}</option>`
+        }
     }
     className.innerHTML = classes
+    
+    if(prefillCourse!=''){
+        subjects()
+        $(`#subject option[value=${prefillCourse}]`).prop('selected',true)
+    }
 
     function subjects() {
         var className = document.getElementById("className").value

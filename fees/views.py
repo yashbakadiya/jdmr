@@ -24,86 +24,48 @@ def addFeesC(request):
         teach = TeachingType.objects.filter(course__intitute=inst, course__archieved=False)
         courses = Courses.objects.filter(intitute=inst, archieved=False)
         forclass = Courses.objects.filter(intitute=inst).values_list('forclass').distinct()
-        print('couser',courses)
-        
-        
-        # courses = []
-        # print('course_teaching',course)
-
-        # for c in course:
-        #     cou = Courses.objects.get(id=c.courseID)
-        #     courses.append(cou)
-            
         
         params = {'courses': courses, 'classes':forclass,'teach':teach}
         if request.method == "POST":
+            courseID = request.POST.get('courseName')
+                
+            course = Courses.objects.get(id = courseID)
+            courseName = course.courseName
+            
             forclass = request.POST.get('forclass')
-            print('forclas',forclass)
             teachType = request.POST.get('teaching')
-            print('teachingType',teachType)
-            if 'ajax_getinfo' in request.POST:
-                courseID = request.POST.get('courseName')
-                print('courseID',courseID)
-                qry = TeachingType.objects.filter(Q(courseID__icontains=courseID))
-                a = TeachingType.objects.filter(Q(courseID__icontains=courseID)).values('forclass', 'teachType', 'duration')
-                b = list(a)
-                c = b[0]["forclass"]
-                t = b[0]["teachType"]
-                d = b[0]["duration"]
-                classes = list(c.split(', '))
-                teachings = list(t.split('\n'))
-                durations = list(d.split('\n'))
-                param = {'classes': classes,
-                         'teachings': teachings, 'durations': durations}
-                return JsonResponse(param)
-            else:
-                courseID = request.POST.get('courseName')
-                print('courseID',courseID)
+            duration = request.POST.get('duration')
+            discValidity = request.POST.get('discValidity')
 
-                
-                course = Courses.objects.get(id = courseID)
-                courseName = course.courseName
-                
-
-                forclass = request.POST.get('forclass')
-                teachType = request.POST.get('teaching')
-                duration = request.POST.get('duration')
-                discValidity = request.POST.get('discValidity')
-                discValidity = datetime.strptime(discValidity, '%Y-%m-%d')
-
-                try:
-                    feeDisc = float(request.POST.get('feeDisc'))
-                    fee_amt = float(request.POST.get('feeamt'))
-                    tax = float(request.POST.get('tax'))
-                    final_amt = float(request.POST.get('final'))
-                    extraChargeType = int(request.POST.get('chargeType'))
-                    no_of_installment1 = request.POST.getlist(
-                        'no_of_installment')
-                    no_of_installment = ','.join(no_of_installment1)
-                    no_of_installment1 = [int(x) for x in no_of_installment1]
-                    extra_charge1 = request.POST.getlist('echarge')
-                    extra_charge = ','.join(extra_charge1)
-                    extra_charge1 = [float(x) for x in extra_charge1]
-                except Exception as e:
-                    return HttpResponse(f"Wrong Data Type! - {e}" )
-                finalValue = 0
-                if(extraChargeType):
-                    finalValue = final_amt + sum(extra_charge1)
-                else:
-                    extra_charge1 = [((fee_amt*x)/100) for x in extra_charge1]
-                    feeCalc = fee_amt + sum(extra_charge1)
-                    finalValue = feeCalc + ((feeCalc*tax)/100)
-                
-                try:
-                    discount = int(finalValue/feeDisc)
-                except Exception as e:
-                    return HttpResponse(f"Wrong Data Type! - {e}")
-
-
-                
-                    
+            try:
+                feeDisc = float(request.POST.get('feeDisc'))
+            except:
+                feeDisc = 0
+            try:
+                fee_amt = float(request.POST.get('feeamt'))
+                tax = float(request.POST.get('tax'))
+                final_amt = float(request.POST.get('final'))
+                extraChargeType = int(request.POST.get('chargeType'))
+                no_of_installment1 = request.POST.getlist('no_of_installment')
+                no_of_installment = ','.join(no_of_installment1)
+                no_of_installment1 = [int(x) for x in no_of_installment1]
+                extra_charge1 = request.POST.getlist('echarge')
+                extra_charge = ','.join(extra_charge1)
+                extra_charge1 = [float(x) if x else 0 for x in extra_charge1]
+            except Exception as e:
+                return HttpResponse(f"Wrong Data Type! - {e}" )
+            finalValue = final_amt
+            if feeDisc:
+                discount = int((finalValue*feeDisc)/100)
                 finalValue = finalValue - discount
-                addFees = AddFeesC(
+
+            if(extraChargeType):
+                finalValue = finalValue + sum(extra_charge1)
+            else:
+                extra_charge1 = [((fee_amt*x)/100) for x in extra_charge1]
+                feeCalc = finalValue + sum(extra_charge1)
+                
+            addFees = AddFeesC(
                     course = course,
                     intitute=inst,
                     courseName=courseName,
@@ -117,12 +79,13 @@ def addFeesC(request):
                     extra_charge=extra_charge,
                     typeOfCharge=extraChargeType,
                     final_amount=finalValue,
-                    discValidity=discValidity,
                     feeDisc=feeDisc,
                 )
-                addFees.save()
-                messages.success(request, "Fees Added Successfully")
-                return redirect("viewFees")
+            if feeDisc:
+                addFees.discValidity = datetime.strptime(discValidity, '%Y-%m-%d')
+            addFees.save()
+            messages.success(request, "Fees Added Successfully")
+            return redirect("viewFees")
         return render(request, 'fees/addFees.html', params)
     return messages.error(request, "You Are not Authenticated User for this Page")
 
@@ -166,181 +129,81 @@ def deleteFee(request, id):
 
 @login_required(login_url="Login")
 def editFee(request, id):
-    params = {}
     qry = AddFeesC.objects.get(id=id)
-    params['qry'] = qry
-    params['jsonqry'] = model_to_dict(qry)
-    params['jsonqry'] = json.dumps(params['jsonqry'], cls=DjangoJSONEncoder)
- 
-    
-
 
     user = User.objects.get(username=request.session['user'])
     inst = Institute.objects.get(user=user)
     teach = TeachingType.objects.filter(course__intitute=inst, course__archieved=False)
     courses = Courses.objects.filter(intitute=inst, archieved=False)
     forclass = Courses.objects.filter(intitute=inst).values_list('forclass').distinct()
-      
-        
-    params = {'courses': courses, 'classes':forclass,'teach':teach}
-    if request.method == "POST":
-        if 'ajax_getinfo' in request.POST:
-            courseName = request.POST.get('courseName')
-            qry = TeachingType.objects.filter(
-                Q(courseName__icontains=courseName))
-            a = TeachingType.objects.filter(Q(courseName__icontains=courseName)).values(
-                'forclass', 'teachType', 'duration')
-            b = list(a)
-            c = b[0]["forclass"]
-            t = b[0]["teachType"]
-            d = b[0]["duration"]
-            classes = list(c.split(', '))
-            teachings = list(t.split('\n'))
-            durations = list(d.split('\n'))
-            param = {'classes': classes,
-                     'teachings': teachings, 'durations': durations}
-            return JsonResponse(param)
-        else:
-            courseName = request.POST.get('courseName')
-            forclass = request.POST.get('forclass')
-            teachType = request.POST.get('check')
-            duration = request.POST.get('duration')
-            discValidity = request.POST.get('validity')
-            discValidity = datetime.strptime(discValidity, '%Y-%m-%d')
-            try:
-                feeDisc = float(request.POST.get('discount'))
-                fee_amt = float(request.POST.get('feeamt'))
-                tax = float(request.POST.get('tax'))
-                final_amt = float(request.POST.get('final'))
-                extraChargeType = int(request.POST.get('chargeType'))
-                no_of_installment1 = request.POST.getlist('no_of_installment')
-                no_of_installment = ','.join(no_of_installment1)
-                no_of_installment1 = [int(x) for x in no_of_installment1]
-                extra_charge = request.POST.getlist('echarge')
-                # extra_charge = ','.join(extra_charge1)
-                # extra_charge1 = [float(x) for x in extra_charge1]
-            except Exception as e:
-                return HttpResponse(f"Wrong Data Type! - {e}")
-            finalValue = 0
 
-            a = final_amt
-            print("final_aamt",a)
-            b = a - int(a/feeDisc)  
-            print("after discount", b)  
-            c =b + int(extra_charge) 
-            print("after extra chage",c)
-            finalValue = c
-            # if(extraChargeType):
-            #     finalValue = final_amt + int(extra_charge)
-            # else:
-            #     extra_charge1 = [((fee_amt*x)/100) for x in extra_charge]
-            #     feeCalc = fee_amt + sum(extra_charge1)
-            #     finalValue = feeCalc + ((feeCalc*tax)/100)
-            
-            AddFeesC.objects.filter(id=id).update(
-                courseName=courseName,
-                forclass=forclass,
-                teachType=teachType,
-                duration=duration,
-                fee_amt=fee_amt,
-                tax=tax,
-                final_amt=final_amt,
-                no_of_installment=no_of_installment,
-                extra_charge=extra_charge,
-                typeOfCharge=extraChargeType,
-                final_amount=finalValue,
-                discValidity=discValidity,
-                feeDisc=feeDisc,
-            )
-            return redirect("viewFees")
-    return render(request, 'fees/editFee.html', params)
-
-@login_required(login_url="Login")
-def editFeef(request, id):
-    params = {}
-    qry = AddFeesC.objects.get(id=id)
-    user = User.objects.get(username=request.session['user'])
-    inst = Institute.objects.get(user=user)
-    teach = TeachingType.objects.filter(course__intitute=inst, course__archieved=False)
-    courses = Courses.objects.filter(intitute=inst, archieved=False)
-    forclass = Courses.objects.filter(intitute=inst).values_list('forclass').distinct()
+    params = {
+        'qry': qry,
+        'exch':qry.extra_charge.split(','),
+        'courses': courses,
+        'classes':forclass,
+        'teach':teach
+    }
       
-        
-    params = {'courses': courses, 'classes':forclass,'teach':teach,'qry':qry}
     if request.method == "POST":
-        courseName = request.POST.get('courseName')
+        courseID = request.POST.get('courseName')
+        course = Courses.objects.get(id = courseID)
+        courseName = course.courseName
         forclass = request.POST.get('forclass')
         teachType = request.POST.get('teaching')
-        duration = request.POST.get('duration')        
-        fee_amt = int(request.POST.get('feeamt'))
-        tax = int(request.POST.get('tax'))
-        final_amt = request.POST.get('final')
-        
-        no_of_installment1 = request.POST.getlist('no_of_installment')
-        no_of_installment = ','.join(no_of_installment1)
-        extraChargeType = int(request.POST.get('chargeType'))
-        feeDisc = request.POST.get('feeDisc')
+        duration = request.POST.get('duration')
         discValidity = request.POST.get('discValidity')
-        discValidity = datetime.strptime(discValidity, '%Y-%m-%d')
+        try:
+            feeDisc = float(request.POST.get('feeDisc'))
+        except:
+            feeDisc = 0
+        try:
+            fee_amt = float(request.POST.get('feeamt'))
+            tax = float(request.POST.get('tax'))
+            final_amt = float(request.POST.get('final'))
+            extraChargeType = int(request.POST.get('chargeType'))
+            no_of_installment1 = request.POST.getlist('no_of_installment')
+            no_of_installment = ','.join(no_of_installment1)
+            no_of_installment1 = [int(x) for x in no_of_installment1]
+            extra_charge1 = request.POST.getlist('echarge')
+            extra_charge = ','.join(extra_charge1)
+            extra_charge1 = [float(x) if x else 0 for x in extra_charge1]
+        except Exception as e:
+            return HttpResponse(f"Wrong Data Type! - {e}")
+        finalValue = final_amt
+        if feeDisc:
+            discount = int((finalValue*feeDisc)/100)
+            finalValue = finalValue - discount
 
+        if(extraChargeType):
+            finalValue = finalValue + sum(extra_charge1)
+        else:
+            extra_charge1 = [((fee_amt*x)/100) for x in extra_charge1]
+            feeCalc = finalValue + sum(extra_charge1)
+            
+        addf = AddFeesC.objects.filter(id=id).update(
+            courseName=courseName,
+            forclass=forclass,
+            teachType=teachType,
+            duration=duration,
+            fee_amt=fee_amt,
+            tax=tax,
+            final_amt=final_amt,
+            no_of_installment=no_of_installment,
+            extra_charge=extra_charge,
+            typeOfCharge=extraChargeType,
+            final_amount=finalValue,
+            feeDisc=feeDisc,
+        )
 
-        # discValidity = request.POST.get('discValidity')
-        # discValidity = datetime.strptime(discValidity, '%Y-%m-%d')
+        for i in AddFeesC.objects.filter(id=id):
+            if feeDisc:
+                i.discValidity = datetime.strptime(discValidity, '%Y-%m-%d')
+            else:
+                i.discValidity = None
 
-        
-        extra_charge1 = request.POST.getlist('echarge') 
-        extra_charge = ','.join(extra_charge1)
-
-
-        a = final_amt
-        print("final_aamt",a)
-        b = a - int(a/feeDisc)  
-        print("after discount", b)  
-        c =b + int(extra_charge) 
-        print("after extra chage",c)
-        finalValue = c
-        # if(extraChargeType):
-        #     finalValue = final_amt 
-        # else:
-        #     extra_charge1 =((fee_amt*x)/100) 
-        #     feeCalc = fee_amt + sum(extra_charge1)
-        #     finalValue = feeCalc + ((feeCalc*tax)/100)
-        #     afterfeesdic = finalValue
-        #     finalValue -= feeDisc
-
-        
-        qry.courseName = courseName
-        qry.forclass = forclass
-        qry.teachType = teachType
-        qry.duration = duration
-        qry.fee_amt = fee_amt
-        qry.tax = tax
-        qry.final_amt = final_amt
-        qry.no_of_installment = no_of_installment
-        qry.typeOfCharge = extraChargeType
-        qry.extra_charge = extra_charge
-        qry.feeDisc = feeDisc
-        qry.discValidity = discValidity
-        qry.final_amount = finalValue
-        qry.archieved = 'False'
-
-        qry.save()
-        # AddFeesC.objects.filter(id=id).update(
-        #         courseName=courseName,
-        #         forclass=forclass,
-        #         teachType=teachType,
-        #         duration=duration,
-        #         fee_amt=fee_amt,
-        #         tax=tax,
-        #         final_amt=final_amt,
-        #         no_of_installment=no_of_installment,
-        #         extra_charge=extra_charge,
-        #         typeOfCharge=extraChargeType,
-        #         final_amount=finalValue,
-        #         discValidity=discValidity,
-        #         feeDisc=feeDisc, )
         return redirect("viewFees")
-    return render(request, 'fees/editFee.html', params)
+    return render(request, 'fees/editFee.html', context=params)
 
 @login_required(login_url='Login')
 def submitFee(request):
@@ -348,33 +211,21 @@ def submitFee(request):
         user = User.objects.get(username=request.session['user'])
         inst = Institute.objects.get(user=user)
         
-
         stud = AddStudentInst.objects.filter(institute = inst)
         addstud=[]
         addstufirst =[]
         
         for i in stud:
-            print(i.institute)
-            print(i.courseName)
             stu = i.student.user.username
             addstud.append(stu)
             stufirst = i.student.user.first_name
-            addstufirst.append(stufirst)
-            
-
-        print('addstu',addstud)   
-        print('addstufirst',addstufirst)       
-        
+            addstufirst.append(stufirst)    
         
 
         submitfees = SubmitFees.objects.filter( student__user__first_name__in = addstufirst)
-        print('submitfees',submitfees)      
         addfeescourse = AddFeesC.objects.filter(intitute = inst )
-        print('addfeescourse',addfeescourse)
         mydataf = zip(stud, submitfees)
         ctx ={'stud':stud,'submitfees':submitfees,'addfeescourse':addfeescourse,'mydataf':mydataf}
-       
-        
 
         if request.method == 'POST':
             user = User.objects.get(username=request.session['user'])
@@ -391,36 +242,21 @@ def submitFee(request):
                 )
                 return render(request, 'fees/submitFee.html', {'userData': data})
             elif(userAction == 'subjectSearch'):
-                print(request.POST)
                 feeslist = []
                 userId = request.POST.get('userId')
                 user = AddStudentInst.objects.get(id=userId)
                 
-                print('user',user)
                 student = user.student
-                print('student subjectSearch',student)
                 student = AddStudentInst.objects.filter(
                     Q(student__user__username=student) & Q(institute=inst))
-                print('student--', student)
                 
-                for stu in student:                    
-                    print("stu--", stu.student)
-                    course = stu.courseName                    
-                    print("course--", course)                    
-                    fee = AddFeesC.objects.filter(Q(courseName=course) & Q(intitute=inst)).first()
-                    print('fees--', fee) 
-                    print('final amt',fee.final_amt)
-                    
-                    print('stu.feeDisc',fee.feeDisc)                    
-                    fee = (fee.final_amount-((fee.final_amount/100)*fee.feeDisc))
-                    totalfees =float(fee)                   
+                for stu in student:                 
+                    course = stu.courseName                       
+                    fee = AddFeesC.objects.filter(Q(courseName=course) & Q(forclass=stu.forclass)).first()
+                    totalfees = float(fee.final_amount)
+                    print(fee)     
+                    feeslist.append(totalfees) 
 
-
-
-                    print('fee--', fee)
-                    feeslist.append(fee) 
-
-                print("feeslist--", feeslist)
                 mydata = zip(student, feeslist)
                 return render(request, 'fees/submitFee.html', {'mydata': mydata, "user": user})
 
@@ -428,93 +264,44 @@ def submitFee(request):
                 subjectId = request.POST.get('subjectId')
                 dataObj = AddStudentInst.objects.get(id=subjectId)
                 finalfees = request.POST.get("studentfinalfee",None)
-                print('finalfees',finalfees)
-                print('dataobj',dataObj.student)
-                print('coursename',dataObj.courseName)
-                print('forclass',dataObj.forclass)
-                print('tachtype',dataObj.teachType)
 
                 addfess = AddFeesC.objects.all()
-                for i in addfess:
-                    print('i',i)                
-                addFeeObj = AddFeesC.objects.filter(Q(courseName = dataObj.courseName) & Q(forclass = dataObj.forclass))
-                print('add fee Obj',addFeeObj)                                
-                # addFeeObj = AddFeesC.objects.filter(Q(courseName = dataObj.courseName) & Q(forclass = dataObj.forclass) &
-                #                                      Q(teachType=dataObj.teachType))
-                    # courseName=dataObj.courseName, 
-                    # forclass=dataObj.forclass,
-                    # teachType=dataObj.teachType                 
-                b=[]                
-                for i in addFeeObj:
-                    a = i.final_amt
-                    b.append(a)
-                    print('a',a)
-                print(b)
-
-                c=float(b[0])
-                fee = float(c-((c/100)*10))
-                print('fee',fee)
-                balancesfis = 0               
+                addFeeObj = AddFeesC.objects.filter(Q(courseName = dataObj.courseName) & Q(forclass = dataObj.forclass))     
                 if(addFeeObj):
                     addFeeObj = addFeeObj[0]
                 else:
                     return HttpResponse(f"Fees for this subject Combination doesnot Exist! <br>courseName  = {dataObj.courseName},<br>forclass = {dataObj.forclass},<br>teachType = {dataObj.teachType}")
-              #  feeObj = dataObj.fees.all()
-                feeObj = SubmitFees.objects.all()
-                print('feeObj',feeObj)
-                # if(not feeObj):
-                #     feeObjNew = SubmitFees(
-                #         username=dataObj,
-                #         subject=addFeeObj.courseName,
-                #         totalFee=addFeeObj.final_amount,
-                #         balanceFee=addFeeObj.final_amount,
-                #         totalInstallments=dataObj.instalment,
-                #         instalmentDue=dataObj.instalment
-                #     )
-                #     print("bs", feeObjNew.instalmentDue)
-                #     feeObjNew.save()
-                #     feeObj = dataObj.fees.all()                
-                                
-                instaldue = 0
-                totalinstal = 0
+                
+                if SubmitFees.objects.filter(student = dataObj.student,fees = addFeeObj):
+                    feeObj =  SubmitFees.objects.filter(student = dataObj.student,fees = addFeeObj)[0]
 
-                # feeObjNew = SubmitFees(                       
-                #         student = dataObj.student,                                           
-                #         totalFee = finalfees,
-                #         balanceFee= balancesfis ,
-                #         feePayed = finalfees,
-                #         instalmentDue = instaldue,
-                #         totalInstallments = totalinstal,                        
-                #     )                    
-                # feeObjNew.save()
-                
-                feeObjNew = SubmitFees(                       
-                        student = dataObj.student,                                           
-                        totalFee = finalfees,
-                        balanceFee= balancesfis ,
-                        feePayed = finalfees,
-                        instalmentDue = instaldue,
-                        totalInstallments = totalinstal,                        
-                    )                    
-                feeObjNew.save()
-                print("bs", feeObjNew.instalmentDue)
-                feeObj = SubmitFees.objects.filter( student = dataObj.student)
-                print('feeObj',feeObj)
-                # for i in feeObj:
-                #     print(i.fees)
-                feeObj = feeObj[0]
-                print('feeobj id',feeObj.id )
-                print(feeObj.instalmentDue)
-                payment = feeObj.balanceFee
-                # try:
-                #     payment = feeObj.balanceFee/feeObj.instalmentDue
-                # except:
-                #     payment = feeObj.balanceFee
-                # print(payment)
-                
+                else:
+                    feeObj = SubmitFees(
+                        student = dataObj.student,
+                        fees = addFeeObj,
+                        totalFee = addFeeObj.final_amount,
+                        feePayed = 0,
+                        instalmentDue = addFeeObj.no_of_installment,
+                        totalInstallments = addFeeObj.no_of_installment)                   
+                    feeObj.save()
+
+                feeamt = float(addFeeObj.fee_amt)
+                disc = float(addFeeObj.feeDisc)
+                tax = float(addFeeObj.tax)
+                no_of_i = int(addFeeObj.no_of_installment)
+                disc_fee = feeamt + float((feeamt*(tax-disc)/100))
+                i = int(feeObj.totalInstallments) - int(feeObj.instalmentDue) - 1
+                expected = disc_fee/no_of_i
+                if i>-1 and i < no_of_i-2:
+                    if(addFeeObj.typeOfCharge):
+                        expected += int(addFeeObj.extra_charge.split(',')[i])
+                    else:
+                        expected += expected * int(addFeeObj.extra_charge.split(',')[i])/100
+                if i == no_of_i-2:
+                    expected = feeObj.totalFee - feeObj.feePayed
+
                 inputData = {
-                    'installmentNumber': feeObj.totalInstallments - feeObj.instalmentDue ,
-                    'payment': payment, 
+                    'installmentNumber': int(feeObj.totalInstallments) - int(feeObj.instalmentDue) + 1,
                     'feeId': feeObj.id,
                 }
                 installmentnotcomplete = (feeObj.instalmentDue != 0)
@@ -522,7 +309,7 @@ def submitFee(request):
                     request,
                     'fees/submitFee.html',
                     {
-                        'inputData': inputData, 'installmentsDone': feeObj.totalInstallments - feeObj.instalmentDue, 'feeObj': feeObj, 'installmentnotcomplete': installmentnotcomplete,'dataObj':dataObj,'finalfees':finalfees
+                        'installmentsDone':Instalment.objects.filter(feeObj=feeObj), 'inputData': inputData, 'feeObj': feeObj, 'expected':expected, 'installmentnotcomplete': installmentnotcomplete,'dataObj':dataObj,'finalfees':feeObj.totalFee
                     }
                 )
             elif(userAction == 'submitFee'):
@@ -533,28 +320,9 @@ def submitFee(request):
                 feeId = request.POST.get('feeId')
 
                 submitObj = SubmitFees.objects.get(id = feeId)
-                a = submitObj.feePayed
-                b = a + payed
-                d = submitObj.balanceFee 
-                e =d - payed
-                f = submitObj.instalmentDue
-                g = f- 1
-
-
-
-                # print(dir(submitObj.feePayed))
-                # print(submitObj.feePayed.to_integral_value())
-                # submitObj.feePayed = F('feePayed') + payed
-                # submitObj.balanceFee = F('balanceFee') - payed
-                # submitObj.instalmentDue = F('instalmentDue') - 1
-                # submitObj.save()
-
-                
-                submitObj.feePayed = b
-                submitObj.balanceFee = e
-                submitObj.instalmentDue = g
+                submitObj.feePayed = submitObj.feePayed + payed
+                submitObj.instalmentDue = submitObj.instalmentDue - 1
                 submitObj.save()
-                print("fess payment successfully")
                 newInstallment = Instalment(
                     feeObj=submitObj,
                     instalmentNum=iNum,
@@ -571,10 +339,9 @@ def archiveFeefirst(request,id):
         user = User.objects.get(username=request.session['user'])
         inst = Institute.objects.get(user=user)         
         fees = AddFeesC.objects.get(id=id)
-        print('archieve id' ,id)
         fees.archieved = True
         fees.save()
-        messages.success(request, "Fees Archive Succssfully")
+        messages.warning(request, "Fees Added to Archive Successfully")
         return redirect("archiveFeeList")
     return HttpResponse("You Are Not Authenticated for this Page")
 
@@ -585,10 +352,9 @@ def unarchiveFee(request,id):
         user = User.objects.get(username=request.session['user'])
         inst = Institute.objects.get(user=user)         
         fees = AddFeesC.objects.get(id=id)
-        print('archieve id' ,id)
         fees.archieved = False
         fees.save()
-        messages.success(request, "Fees un archive fees Succssfully")
+        messages.success(request, "Fees Removed from Archive Successfully")
         return redirect("archiveFeeList")
     return HttpResponse("You Are Not Authenticated for this Page")
 

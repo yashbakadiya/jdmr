@@ -171,31 +171,16 @@ def teachingType2(request):
     if request.session['type'] == "Institute": 
         user = User.objects.get(username=request.session['user'])
         inst = Institute.objects.get(user=user)
-        courses = Courses.objects.filter(intitute=inst)  
         forclass = Courses.objects.filter(intitute=inst).values_list('forclass').distinct()
         
-        print('courses',courses)       
-        jsonCources = {}       
-        for x in courses:
-            jsonCources[x.id] = x.forclass.split(", ")
-        print('jsonCources ',jsonCources)
-        
         teach = TeachingType.objects.filter(course__intitute = inst, archieved=False)
-        # paginator = Paginator(teach, 10)
-        # page = request.GET.get('page', 1)
-        # try:
-        #     teach = paginator.page(page)
-        # except PageNotAnInteger:
-        #     teach = paginator.page(1)
-        # except EmptyPage:
-        #     teach = paginator.page(paginator.num_pages)
         params = {'teach': teach, 
                   'courses': courses,
                   'classes': forclass, 
                   'json': json.dumps(jsonCources)}
 
         if request.method == "POST":
-            print('requestPost',request.POST)
+            print(request.POST)
 
             courseID = request.POST.get('courseName')
 

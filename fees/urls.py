@@ -13,6 +13,6 @@ urlpatterns = [
     path('archiveFeeList/', archiveFeeList, name='archiveFeeList'),
     path('fees-api', AddFeesAPI, name='fees-api'),
     path('submitFee-api', SubmitFeesAPI, name='submitFee-api'),
-    path('editFee/<int:id>', editFee, name='editFee'),
-    path('editFeef/<int:id>',editFeef,name='editFeef'),
+    # path('editFee/<int:id>', editFee, name='editFee'),
+    path('editFeef/<int:id>',editFee,name='editFeef'),
 ]

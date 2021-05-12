@@ -87,6 +87,22 @@
         max-width: 100%;
         overflow-y: auto;
         }
+    
+        .pwd {
+            border-bottom-right-radius: 0!important;
+            border-top-right-radius: 0!important;
+        }
+
+        .form-login .input-group .input-group-append { margin-left: 0; }
+        .form-login .input-group .input-group-append .input-group-text {
+            border-bottom-right-radius: 30px;
+            border-top-right-radius: 30px;
+            background-color: rgba(230, 230, 230, 0.20);
+            color: #fff;
+            border-left: none;
+            border: none;
+        }
+
     </style>
     <body class="login" style="background-image:linear-gradient(
           rgba(0, 0, 0, 0.6), 
@@ -110,11 +126,10 @@
                     <img src="{% static "assets/img/1.png" %}" alt="">
                 </div>
                 <div class="input-group form-group">
-                    <label class="control-label col-sm-4">Type<span class="text-danger">*</span></label>
-                    <select name="type" class="form-control form-control-lg mr-2" style="border-radius: 25px; text-align: center;">
-                    <option {% if prefil.type == "Institute" %}selected {% endif %} value="Institute">Institute</option>
-                    <option {% if prefil.type == "Teacher" %}selected {% endif %} value="Teacher">Teacher</option>
-                    <option {% if prefil.type == "Student" %}selected {% endif %} value="Student">Student</option>
+                    <select hidden name="type" class="form-control form-control-lg mr-2" style="border-radius: 25px; text-align: center;">
+                        <option {% if prefil.type == "Institute" %}selected {% endif %} value="Institute">Institute</option>
+                        <option {% if prefil.type == "Teacher" %}selected {% endif %} value="Teacher">Teacher</option>
+                        <option {% if prefil.type == "Student" %}selected {% endif %} value="Student">Student</option>
                     </select>
                 </div>
                 <div class="input-group form-group">
@@ -141,9 +156,9 @@
                     </div>
                     <input type="password" name='password' class="form-control form-control-lg pwd"
                         value="{{ prefil.password }}" placeholder="Password" required pattern=".{6,20}" title="At least 6 charcters">
-                    <div class="input-group-append">
-                        <span style="background-color:rgb(218, 218, 218);" class="reveal px-2 pt-1"><i class="fa fa-eye"></i></span>
-                    </div>
+                        <div class="input-group-append">
+                            <span class="input-group-text reveal"><i class="fa fa-eye"></i></span>
+                        </div>
                 </div>
                 <div class="input-group form-group">
                     <label class="control-label col-sm-4">Phone Number<span class="text-danger">*</span></label>
@@ -232,7 +247,36 @@
 			
 			    initialize();
 			});
-			
+			</script>
+            
+            <style>
+            div.btn {
+                display: inline-block;
+                cursor: pointer;
+                border-radius : 25px;
+
+            }
+            div.btn.on {
+                background-color: #e6e2d5;
+                color: #403e37;
+                border-radius : 25px;
+            }
+        </style>
+        <script type="text/javascript">
+            var options = $("select option")
+
+            for (let index = 0; index < options.length; index++) {
+                var btn = $('<div class="btn btn-secondary btn-md m-1">'+$(options[index]).text()+'</div>');
+                if($(options[index]).is(':checked')) btn.addClass('on');
+                $('select').before(btn)
+            }
+
+            $(document).on('click', '.btn', function() {
+                $('.btn').removeClass('on');
+                $(this).addClass('on');
+                $(`select option[value='${$(this).text()}']`).prop('selected',true);
+            });
+
 			$(".reveal").on('click', function () {
 			    var $pwd = $(".pwd");
 			    if ($pwd.attr('type') === 'password') {
