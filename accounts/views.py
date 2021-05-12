@@ -27,6 +27,7 @@ def forgotpassword(request):
 def login(request):
     errors = []
     if request.method == "POST":
+        print(request.POST)
         username = request.POST.get('username')
         password = request.POST.get('password')
 

@@ -203,7 +203,7 @@ def archiveStudentList(request):
                 for arStudent in AddStudentInst.objects.filter(student=Student.objects.get(id = int(x))):
                     arStudent.archieved = False
                     arStudent.save()
-            messages.success(request,"Student Added To Archieve Successfully")
+            messages.success(request,"Student Removed from Archieve Successfully")
             return redirect('viewStudents')
         return render(request,'students/archiveStudentList.html',params)
     return HttpResponse("You are not Authenticated for This Page")

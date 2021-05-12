@@ -22,7 +22,7 @@ class AddFeesC(models.Model):
         max_digits=1, decimal_places=0, help_text='0-> percent || 1-> amount || else-> error')
     extra_charge = models.CharField(max_length=255, default="")
     feeDisc = models.DecimalField(max_digits=10, decimal_places=6, default=0)
-    discValidity = models.DateTimeField(default=now)
+    discValidity = models.DateTimeField(null=True,blank=True)
     final_amount = models.DecimalField(max_digits=10, decimal_places=2)
     feesstatus = models.CharField(max_length=10, default="Un paid",null=True)
     archieved = models.BooleanField(default=False)
@@ -35,13 +35,9 @@ class AddFeesC(models.Model):
 class SubmitFees(models.Model):
     student = models.ForeignKey(
         Student, on_delete=models.CASCADE, related_name='fees')
-
-    # student = models.ForeignKey(
-    #     AddStudentInst, on_delete=models.CASCADE, related_name='fees',null=True )
     fees = models.ForeignKey(AddFeesC, on_delete=models.CASCADE,related_name="stu_fees",default="",null=True )
     totalFee = models.DecimalField(max_digits=10, decimal_places=2,null=True )
     feePayed = models.DecimalField(max_digits=10, decimal_places=2, default=0,null=True )
-    balanceFee = models.DecimalField(max_digits=10, decimal_places=2,null=True,default=0 )
     instalmentDue = models.DecimalField(max_digits=10, decimal_places=2,null=True, default=1 )
     totalInstallments = models.DecimalField(max_digits=10, decimal_places=2,null=True )
     feesstatus = models.CharField(max_length=10, default="Un paid",null=True)
