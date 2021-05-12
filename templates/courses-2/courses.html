@@ -69,7 +69,7 @@
           <label for="validationCustom01"><strong>Select Course<span class="red">*</span></strong></label>
           
           
-          <select id="cn" name="courseName" style="width: 100%" class="js-example-basic-single form-control">
+          <select id="cn" name="selectcourse" style="width: 100%" class="js-example-basic-single form-control">
             <option class="form-control form-control-lg" selected disabled value="">Select Course</option>
           </select>
         </div>
@@ -80,13 +80,12 @@
           <input type="text" name="courseName" list="cn" style="width: 100%"
             class="js-example-basic-single form-control" />
             <datalist id="cn" >       
-              <option>Select Course</option>
+              <option selected disabled value="">Select Course</option>
                        
-          </datalist>
-
-         
+          </datalist>        
           
         </div>
+        
         <!-- <div class="col">
           
           <label for="validationCustom01"><strong>Select Course<span class="red">*</span></strong></label>
@@ -219,8 +218,8 @@
       }
       else
       {
-      //  $('#other').hide()
-       //$('#selectclass').show()
+       $('#other').hide()
+       $('#selectclass').show()
 
       }
       html1 = "";

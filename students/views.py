@@ -454,7 +454,9 @@ def delete_Tution(request,sno):
                 return HttpResponse("You are not Authenticated for this Action")
         except:
             return HttpResponse("Tutions Does Not exist")
-    return HttpResponse("You are not Authenticated fr this Action")
+    return HttpResponse("You are not Authenticated for this Action")
+
+
 
 def haversine(lon1, lat1, lon2, lat2):
    

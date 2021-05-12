@@ -15,11 +15,11 @@
         <div class="card statbox widget box box-shadow">
             <div class="card-header">
                 <div class="row">
-                        <div class="col-sm-10">
-                            <h2 style="color: black;">Search Tutors Near You</h2>
-                        </div>
-    
+                    <div class="col-sm-10">
+                        <h2 style="color: black;">Search Tutors Near You</h2>
                     </div>
+
+                </div>
             </div>
             <div class="widget-content widget-content-area">
                 <div class="row">
@@ -29,9 +29,8 @@
                             <div class="col-lg-4 col-md-6 col-12 mt-2 row">
                                 <label class="control-label col-sm-3 col-md-4 col-5 mt-3"
                                     style="display:block; color:black;">Location</label>
-                                <input type="text" class="form-control my-2 w-100 col-md-7 col-7"
-                                    id="pac-input" name='loc' placeholder="Enter Location" required
-                                    value="{{prefill.address}}">
+                                <input type="text" class="form-control my-2 w-100 col-md-7 col-7" id="pac-input"
+                                    name='loc' placeholder="Enter Location" value="{{prefill.address}}">
                                 <input type="hidden" id="cityLat" value="0" name="cityLat" />
                                 <input type="hidden" id="cityLng" value="0" name="cityLng" />
                             </div>
@@ -39,8 +38,8 @@
                                 <label class="control-label col-sm-3 col-md-4 col-5 mt-3"
                                     style="display:block; color:black;">Distance</label>
                                 <input type="number" class="form-control my-2 w-100 col-md-7 col-7"
-                                    style="-moz-appearance: textfield;" min="0" name="distance" placeholder="Distance in KM"
-                                    value={{prefill.distance}}>
+                                    style="-moz-appearance: textfield;" min="0" name="distance"
+                                    placeholder="Distance in KM" value={{prefill.distance}}>
                             </div>
                             <div class="col-lg-4 col-md-6 col-12 mt-2 row">
                                 <label class="control-label col-sm-3 col-md-5 col-5 mt-3"
@@ -53,16 +52,15 @@
                                 <label class="control-label col-sm-3 col-md-4 col-5 mt-2"
                                     style="display:block; color:black;">Class</label>
                                 <select id="className" name="className"
-                                    class="custom-select form-control w-100 col-md-7 col-7"
-                                    onchange="subjects()" placeholder="Class">
+                                    class="custom-select form-control w-100 col-md-7 col-7" onchange="subjects()"
+                                    placeholder="Class">
                                 </select>
                             </div>
                             <div class="col-lg-4 col-md-6  col-12 mt-2 row">
                                 <label class="control-label col-sm-3 col-md-4 mt-2 col-5"
                                     style="display:block; color:black;">Subject</label>
                                 <select id="subject" name="subject"
-                                    class="custom-select form-control w-100 col-md-7 col-7"
-                                    placeholder="Subject">
+                                    class="custom-select form-control w-100 col-md-7 col-7" placeholder="Subject">
                                     {% if prefill.subject %}
                                     <option disabled selected value="{{prefill.subject}}">{{prefill.subject}}</option>
                                     {% else %}
@@ -70,9 +68,20 @@
                                     {% endif %}
                                 </select>
                             </div>
-                            <div class="col-lg-2 col-md-2 col-12">
-                                <button class="btn btn-info">Search</button>
-                                </div>
+                            <div class="col-lg-4 col-md-6  col-12 mt-2 row">
+                                <label class="control-label col-sm-3 col-md-5 col-5 mt-3" style="display:block; color:black;">Teaching Mode</label>
+                                <select name="tm" class="custom-select form-control w-100 col-md-7 col-7" required="required">
+                                    <option disabled selected value>Teaching Mode</option>
+                                    <option value="Online Tutor">Online Tutor</option>
+                                    <option value="Institute">Institute</option>
+                                    <option value="Home Tutor">Home Tutor</option>
+                                </select>
+                            </div>
+
+
+                            <div class="col-lg-12 col-md-12 col-12 d-flex justify-content-center">
+                                <button class="btn btn-info btn-m">Search</button>
+                            </div>
                         </form>
                     </div>
                 </div>
@@ -103,8 +112,8 @@
                                         {% endif %}
                                     </div>
                                     <div class="col-md-12 mt-1 text-center">
-                                        <b
-                                            style="text-transform: uppercase; color: black;">{{i.firstName}} {{i.lastName}}</b>
+                                        <b style="text-transform: uppercase; color: black;">{{i.firstName}}
+                                            {{i.lastName}}</b>
                                     </div>
                                     <div class="col-md-12 mt-1 text-center" style="color: black;">
                                         <div class="row">
@@ -122,7 +131,8 @@
                                         <button type="button" data-toggle="modal" data-target="#tutorModal{{i.id}}"
                                             class="btn btn-info">View</button>
                                         <a href="{% url 'reviewtutor' i.id %}" class="btn btn-primary">Review</a>
-                                        <a class="btn btn-success" href='{% url "room" request.user.username "Student" i.username %}'>Chat</a>
+                                        <a class="btn btn-success"
+                                            href='{% url "room" request.user.username "Student" i.username %}'>Chat</a>
                                     </div>
                                 </div>
                             </div>
@@ -155,12 +165,14 @@
                                 {% endif %}
                             </div>
                             <div class="d-flex justify-content-center row my-2">
-                                <a href="{% url 'stuMakeAppointment' i.id %}"><button class="btn btn-sm btn-info" type="button" style="font-size:smaller; width: 130px;">Schedule Class</button>
-                                </div>
-                                <div class="d-flex justify-content-center row my-2">
-                                <a class="mt-2 btn btn-success" style="font-size:smaller; width: 130px;" href='{% url "room" request.user.username "Student" i.username %}'>Chat</a>
+                                <a href="{% url 'stuMakeAppointment' i.id %}"><button class="btn btn-sm btn-info"
+                                        type="button" style="font-size:smaller; width: 130px;">Schedule Class</button>
+                            </div>
+                            <div class="d-flex justify-content-center row my-2">
+                                <a class="mt-2 btn btn-success" style="font-size:smaller; width: 130px;"
+                                    href='{% url "room" request.user.username "Student" i.username %}'>Chat</a>
+                            </div>
                         </div>
-                    </div>
                         <div class="col-sm-9 col-12">
                             <div class="row">
                                 <div class="col-sm-6 col-12">
@@ -229,8 +241,8 @@
         <div class="modal-dialog modal-lg" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="col-sm-12 col-12 text-center">Schedule Class</h5>  
-                </div>  
+                    <h5 class="col-sm-12 col-12 text-center">Schedule Class</h5>
+                </div>
                 <form id="createAppointmentForm" action="" method="post">{% csrf_token %}
                     <div class="modal-body">
                         <div class="row">
@@ -319,7 +331,7 @@
                                 <br>
                                 <div class="row form-inline">
                                     <div class="col-sm-3 bold">
-                                        Recurrence 
+                                        Recurrence
                                     </div>
                                     <div class="col-sm-1">
                                         <input id="recurrenceCheck" class="form-check" type="checkbox" name="recc"
@@ -327,42 +339,43 @@
                                     </div>
                                 </div>
                                 <br>
-                                    <div class="row form-inline">
-                                        <div class="col-sm-2 bold">
-                                            Recurrence Pattern
-                                        </div>
-                                        <div class="col-sm-4">
-                                            <select style="width: 100%;" class="custom-select form-control" name="reccPattern"
-                                                required>
-                                                <option value="D">Daily</option>
-                                                <option value="W">Weekly</option>
-                                            </select>
-                                        </div>
-                                        <div class="col-sm-2 bold">
-                                            Select WeekDays
-                                          </div>
-                                          <div class="col-sm-4">
-                                            <select class="form-control multiselect4 reccWeek reccEntry w-100" name="reccWeek" multiple>
-                                              <option value="Sun">Sun</option>
-                                              <option value="Mon">Mon</option>
-                                              <option value="Tue">Tue</option>
-                                              <option value="Wed">Wed</option>
-                                              <option value="Thu">Thu</option>
-                                              <option value="Fri">Fri</option>
-                                              <option value="Sat">Sat</option>
-                                            </select>
-                                          </div>
+                                <div class="row form-inline">
+                                    <div class="col-sm-2 bold">
+                                        Recurrence Pattern
                                     </div>
-                                    <br>
-                                    <div class="row form-inline">
-                                            <div class="col-sm-2 bold">
-                                                End After
-                                            </div>
-                                            <div class="col-sm-4">
-                                            <input class="form-control" type="date" id="endingDate"
-                                                name="endingDate" value="">
-                                            </div>
+                                    <div class="col-sm-4">
+                                        <select style="width: 100%;" class="custom-select form-control"
+                                            name="reccPattern" required>
+                                            <option value="D">Daily</option>
+                                            <option value="W">Weekly</option>
+                                        </select>
                                     </div>
+                                    <div class="col-sm-2 bold">
+                                        Select WeekDays
+                                    </div>
+                                    <div class="col-sm-4">
+                                        <select class="form-control multiselect4 reccWeek reccEntry w-100"
+                                            name="reccWeek" multiple>
+                                            <option value="Sun">Sun</option>
+                                            <option value="Mon">Mon</option>
+                                            <option value="Tue">Tue</option>
+                                            <option value="Wed">Wed</option>
+                                            <option value="Thu">Thu</option>
+                                            <option value="Fri">Fri</option>
+                                            <option value="Sat">Sat</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <br>
+                                <div class="row form-inline">
+                                    <div class="col-sm-2 bold">
+                                        End After
+                                    </div>
+                                    <div class="col-sm-4">
+                                        <input class="form-control" type="date" id="endingDate" name="endingDate"
+                                            value="">
+                                    </div>
+                                </div>
                             </div>
                         </div>
                         <br>
@@ -382,120 +395,126 @@
     </div>
     {% endif %}
 </div>
-    {% endif %}
-    <script>
+{% endif %}
+<script>
 
-        //Getting Location Autofield from google places API
-        $(document).on("DOMContentLoaded", function () {
-            function initialize() {
-                var input = document.getElementById('pac-input');
-                var autocomplete = new google.maps.places.Autocomplete(input);
-                google.maps.event.addListener(autocomplete, 'place_changed', function () {
-                    var place = autocomplete.getPlace();
-                    document.getElementById('cityLat').value = place.geometry.location.lat();
-                    document.getElementById('cityLng').value = place.geometry.location.lng();
-                });
-            }
-            initialize();
-        });
-    </script>
-    <script>
-        $("#submitAppointment").on("click", function (e) {
-            e.preventDefault();
-            form = $('#createAppointmentForm')[0];
-            if (!form.checkValidity()) {
-                console.log("form error")
-                form.reportValidity();
-                return 0;
-            }
-            var values = $(form).serialize();
-            console.log('values', values)
-            $.ajax({
-                url: '{% url 'enrolledStudents' %}',
-                type: 'POST',
-                data: values,
-                success: function (response) {
-                    console.log(response)
-                    if (response.status == 1) {
-                        console.log(response.msg)
-                        window.alert("Appointment Created Successfully !!");
-                        window.location.href = "/teacher/enrolledTutors/";
-                    } else {
-                        options = "";
-                        for (i = 0; i < response.errors.length; i++) {
-                            options += "<li>" + response.errors[i] + "</li>";
-                        }
-                        console.log(options);
-                        $("#ErrorList").html(options);
-                    }
-
-                },
-                error: function (response) { }
+    //Getting Location Autofield from google places API
+    $(document).on("DOMContentLoaded", function () {
+        function initialize() {
+            var input = document.getElementById('pac-input');
+            var autocomplete = new google.maps.places.Autocomplete(input);
+            google.maps.event.addListener(autocomplete, 'place_changed', function () {
+                var place = autocomplete.getPlace();
+                document.getElementById('cityLat').value = place.geometry.location.lat();
+                document.getElementById('cityLng').value = place.geometry.location.lng();
             });
+        }
+        initialize();
+    });
+</script>
+<script>
+    $("#submitAppointment").on("click", function (e) {
+        e.preventDefault();
+        form = $('#createAppointmentForm')[0];
+        if (!form.checkValidity()) {
+            console.log("form error")
+            form.reportValidity();
+            return 0;
+        }
+        var values = $(form).serialize();
+        console.log('values', values)
+        $.ajax({
+            url: '{% url 'enrolledStudents' %}',
+            type: 'POST',
+            data: values,
+            success: function (response) {
+                console.log(response)
+                if (response.status == 1) {
+                    console.log(response.msg)
+                    window.alert("Appointment Created Successfully !!");
+                    window.location.href = "/teacher/enrolledTutors/";
+                } else {
+                    options = "";
+                    for (i = 0; i < response.errors.length; i++) {
+                        options += "<li>" + response.errors[i] + "</li>";
+                    }
+                    console.log(options);
+                    $("#ErrorList").html(options);
+                }
 
+            },
+            error: function (response) { }
         });
-        $("#recurrenceCheck").on("change", function () {
-            if (this.checked) {
-                $(".reccBox .reccEntry").removeAttr("disabled");
-                $(".reccBox .reccEntry").attr("required", "required");
-                $(".reccBox").show();
-            } else {
-                $(".reccBox .reccEntry").attr("disabled", "disabled");
-                $(".reccBox .reccEntry").removeAttr("required");
-                $(".reccBox").hide();
-            }
-            $(".reccWeek").multiselect('destroy');
-            $(".reccWeek").multiselect();
-        });
-        $(".reccPattern").on("change", function () {
-            if (this.value == "D") {
-                $(".reccWeek").attr("disabled", "disabled");
-                $(".reccWeek").removeAttr("required");
-                $(".reccWeek").hide();
-            } else {
-                $(".reccWeek").removeAttr("disabled");
-                $(".reccWeek").attr("required", "required");
-                $(".reccWeek").show();
-            }
-            $(".reccWeek").multiselect('destroy');
-            $(".reccWeek").multiselect();
-        });
-    </script>
-    <script>
-        var className = document.getElementById("className")
-        var jsondata = {{ jsonLocalData| safe}}
-        var prefillclass = "{{prefill.class}}"
-        const keys = Object.keys(jsondata);
-        
-        if (prefillclass)
-        {
-            var classes = `<option disabled selected value="${prefillclass}">${prefillclass}</option>`
+
+    });
+    $("#recurrenceCheck").on("change", function () {
+        if (this.checked) {
+            $(".reccBox .reccEntry").removeAttr("disabled");
+            $(".reccBox .reccEntry").attr("required", "required");
+            $(".reccBox").show();
+        } else {
+            $(".reccBox .reccEntry").attr("disabled", "disabled");
+            $(".reccBox .reccEntry").removeAttr("required");
+            $(".reccBox").hide();
         }
-        else
-        {
-            var classes = `<option disabled selected value="">Class</option>`
+        $(".reccWeek").multiselect('destroy');
+        $(".reccWeek").multiselect();
+    });
+    $(".reccPattern").on("change", function () {
+        if (this.value == "D") {
+            $(".reccWeek").attr("disabled", "disabled");
+            $(".reccWeek").removeAttr("required");
+            $(".reccWeek").hide();
+        } else {
+            $(".reccWeek").removeAttr("disabled");
+            $(".reccWeek").attr("required", "required");
+            $(".reccWeek").show();
         }
-        for (let index = 0; index < keys.length; index++) {
-            const element = keys[index];
+        $(".reccWeek").multiselect('destroy');
+        $(".reccWeek").multiselect();
+    });
+</script>
+<script>
+    var className = document.getElementById("className")
+    var jsondata = {{ jsonLocalData| safe}}
+    var prefillclass = "{{prefill.class}}"
+    var prefillCourse = "{{prefill.course}}"
+    const keys = Object.keys(jsondata);
+
+    if (prefillclass) {
+        var classes = `<option disabled selected value="${prefillclass}">${prefillclass}</option>`
+    }
+    else {
+        var classes = `<option disabled selected value="">Select Class</option>`
+    }
+    for (let index = 0; index < keys.length; index++) {
+        const element = keys[index];
+        if (element != prefillclass) {
             classes += `<option value="${element}">${element}</option>`
         }
-        className.innerHTML = classes
+    }
+    className.innerHTML = classes
 
-        function subjects() {
-            var className = document.getElementById("className").value
-            var subject = document.getElementById("subject")
-            var html=''
-            class_subjects = jsondata[`${className}`]
-            for (let index = 0; index < class_subjects.length; index++) {
-                const element = class_subjects[index];
-                html += `<option value="${element}">${element}</option>`
-            }
-            subject.innerHTML = html
-        }
-        function newModal(el){
-            $(`#tutorModal${el.value}`).modal('hide');
-            $(`#appointmentModal${el.value}`).modal('show');
+    if(prefillCourse!=''){
+        subjects()
+        $(`#subject option[value=${prefillCourse}]`).prop('selected',true)
+    }
 
+    function subjects() {
+        var className = document.getElementById("className").value
+        var subject = document.getElementById("subject")
+        var html = ''
+        class_subjects = jsondata[`${className}`]
+        for (let index = 0; index < class_subjects.length; index++) {
+            const element = class_subjects[index];
+            html += `<option value="${element}">${element}</option>`
         }
-    </script>
-    {% endblock main-content %}
+        subject.innerHTML = html
+    }
+    function newModal(el) {
+        $(`#tutorModal${el.value}`).modal('hide');
+        $(`#appointmentModal${el.value}`).modal('show');
+
+    }
+</script>
+{% endblock main-content %}

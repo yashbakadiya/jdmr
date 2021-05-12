@@ -134,27 +134,18 @@
                 </div>
                 <div class="input-group form-group">
                     <label class="control-label col-sm-4">Username<span class="text-danger">*</span></label>
-                    <div class="input-group-prepend">
-                        <span class="input-group-text"><i class="fas fa-user"></i></span>
-                    </div>
-                    <input type="text" class="form-control form-control-lg" name='username'
+                    <input style="border-radius: 25px; text-align: center;" type="text" class="form-control form-control-lg" name='username'
                         placeholder="Username" value="{{prefil.username}}" required>
                 </div>
                 
                 <div class="input-group form-group">
                     <label class="control-label col-sm-4">Email Id<span class="text-danger">*</span></label>
-                    <div class="input-group-prepend">
-                        <span class="input-group-text"><i class="fas fa-envelope"></i></span>
-                    </div>
-                    <input type="email" class="form-control form-control-lg" name='email'
+                    <input style="border-radius: 25px; text-align: center;" type="email" class="form-control form-control-lg" name='email'
                         placeholder="Email Address" value="{{prefil.email}}" required>
                 </div>
                 <div class="input-group form-group">
                     <label class="control-label col-sm-4">Set Password<span class="text-danger">*</span></label>
-                    <div class="input-group-prepend">
-                        <span class="input-group-text"><i class="fas fa-key"></i></span>
-                    </div>
-                    <input type="password" name='password' class="form-control form-control-lg pwd"
+                    <input style="border-radius: 25px; text-align: center;" type="password" name='password' class="form-control form-control-lg pwd"
                         value="{{ prefil.password }}" placeholder="Password" required pattern=".{6,20}" title="At least 6 charcters">
                         <div class="input-group-append">
                             <span class="input-group-text reveal"><i class="fa fa-eye"></i></span>
@@ -162,10 +153,7 @@
                 </div>
                 <div class="input-group form-group">
                     <label class="control-label col-sm-4">Phone Number<span class="text-danger">*</span></label>
-                    <div class="input-group-prepend">
-                        <span class="input-group-text"><i class="fas fa-phone"></i></span>
-                    </div>
-                    <input type="tel" class="form-control form-control-lg" name='phone'
+                    <input style="border-radius: 25px; text-align: center;" type="tel" class="form-control form-control-lg" name='phone'
                         placeholder="Phone Number" value="{{ prefil.phone }}" maxlength="10" pattern="\d{10}"
                         type="number" required>
                 </div>
@@ -248,7 +236,7 @@
 			    initialize();
 			});
 			</script>
-            
+
             <style>
             div.btn {
                 display: inline-block;

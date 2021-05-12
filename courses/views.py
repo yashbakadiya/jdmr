@@ -44,13 +44,13 @@ def courses(request):
         params = {'course': courses,'data':data}
 
         if request.method == "POST":
-            courseName = request.POST.get('courseName') 
+            courseName = request.POST.get('selectcourse') 
             print('coursename',courseName)           
             forclass = request.POST.get('forclass')           
            # forclass = ', '.join(forclass)            
            # courseName = ','.join(forclass)
 
-            print('courseName',courseName)           
+            print('forclass',forclass)           
             user = User.objects.get( username=request.session['user'])            
             institute = Institute.objects.get(user=user)
             count = (Courses.objects.all().count())+1 
@@ -87,7 +87,6 @@ def courses(request):
                  return redirect('courses')
             else:
                 messages.warning(request, 'class Number Already Exists!!! ',extra_tags = 'alert alert-warning alert-dismissible show')
-        
                     
                 
 

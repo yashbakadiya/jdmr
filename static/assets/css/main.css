@@ -1014,6 +1014,9 @@ ul.inline-ordered-list li:before {
     background-color: #00b1f4;
     border-color: #00b1f4
 }
+.btn-m{
+   margin-top: 18px;
+}
 .btn-info:hover,
 .btn-info:focus {
     color: #fff !important;
