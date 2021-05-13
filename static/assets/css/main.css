@@ -167,6 +167,13 @@ select.form-control.form-custom {
     box-shadow: none;
 }
 
+.card-header2 {
+    padding: .75rem 1.25rem;
+    margin-bottom: 12px;
+    background-color: rgba(0,0,0,.03);
+    border-bottom: 1px solid rgba(0,0,0,.125);
+}
+
 .dropdown-toggle:after {
     font-family: flaticon;
     font-weight: normal;
@@ -761,6 +768,7 @@ ul.inline-ordered-list li:before {
 .widget-content-area {
     padding: 20px;
     position: relative;
+    margin-bottom: 22px;
     background-color: #fff;
     border-bottom-left-radius: 6px;
     border-bottom-right-radius: 6px;
@@ -774,6 +782,7 @@ ul.inline-ordered-list li:before {
 .ColVis_MasterButton,
 .fc-state-default {
     padding: 0.4375rem 1.25rem;
+    margin-right: 28px;
     text-shadow: none;
     font-size: 14px;
     color: #3b3f5c;
