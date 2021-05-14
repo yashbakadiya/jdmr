@@ -171,12 +171,13 @@ def teachingType2(request):
         user = User.objects.get(username=request.session['user'])
         inst = Institute.objects.get(user=user)
         forclass = Courses.objects.filter(intitute=inst).values_list('forclass').distinct()
-        
+        jsonCources = {}
         teach = TeachingType.objects.filter(course__intitute = inst, archieved=False)
         params = {'teach': teach, 
                   'courses': courses,
                   'classes': forclass, 
                   'json': json.dumps(jsonCources)}
+
 
         if request.method == "POST":
             print(request.POST)
