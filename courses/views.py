@@ -171,6 +171,7 @@ def teachingType2(request):
         params = {'teach': teach,
                   'classes': forclass}
 
+
         if request.method == "POST":
             courseID = request.POST.get('courseName')
 

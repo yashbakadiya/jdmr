@@ -261,7 +261,30 @@ def Combine_two_models(one,two):
 	return chain(one,two)
 
 @login_required(login_url="Login")
-def AllNotesStudent(request):
+def eNotes(request):
+    if request.session['type']=="Student":
+        user = User.objects.get(username=request.session['user'])
+        student = Student.objects.get(user=user)
+        context = {}
+        if AddStudentInst.objects.filter(student=student).exists():
+            #institute
+            #buy institute notes list
+            buy_institute_notes = BuyInstituteNotes.objects.filter(student=student)
+            buy_institute_notes_list = [buy.note.id for buy in buy_institute_notes]
+            bought_institute_notes = NotesInstitute.objects.filter(id__in=buy_institute_notes_list).order_by("-id")
+            #tutor
+            #buy tutor notes list
+            buy_tutor_notes = BuyTutorNotes.objects.filter(student=student)
+            buy_tutor_note_list = [buy.note.id for buy in buy_tutor_notes]
+            bought_tutor_notes = NotesTutor.objects.filter(id__in=buy_tutor_note_list).order_by("-id")
+            context['bought_institute_notes'] = bought_institute_notes
+            context['bought_tutor_notes'] = bought_tutor_notes
+
+        return render(request,'Notes/eNotes.html', context=context)
+    return HttpResponse('You are not Authenticated for this page')
+
+@login_required(login_url="Login")
+def LibraryNotes(request):
     if request.session['type']=="Student":
         user = User.objects.get(username=request.session['user'])
         student = Student.objects.get(user=user)
@@ -282,13 +305,11 @@ def AllNotesStudent(request):
             bought_tutor_notes = NotesTutor.objects.filter(id__in=buy_tutor_note_list).order_by("-id")
             #not bought tutor notes lists
             not_bought_tutor_notes = NotesTutor.objects.all().exclude(id__in=buy_tutor_note_list).order_by("-id")
-            context['bought_institute_notes'] = bought_institute_notes
             context['not_bought_institute_notes'] = not_bought_institute_notes
-            context['bought_tutor_notes'] = bought_tutor_notes
             context['not_bought_tutor_notes'] = not_bought_tutor_notes
 
-        return render(request,'Notes/allnotes.html', context=context)
-    return HttpResponse('You are not Authenticated for this page')
+        return render(request,'Notes/libraryNotes.html', context=context)
+    return HttpResponse('You are not Authenticated for this page')    
 
 @login_required(login_url="Login")
 def searchNotes(request):
@@ -296,13 +317,14 @@ def searchNotes(request):
         if request.method=="POST":
             srch = request.POST.get('srh', '')
             if srch:
-                match = NotesInstitute.objects.filter(Q(description__icontains=srch) | Q(subject__icontains=srch))
-                if len(match):
-                    return render(request,'Notes/searchNotes.html', {'founds':match})
+                match1 = NotesInstitute.objects.filter(Q(description__icontains=srch) | Q(subject__icontains=srch)) 
+                match2 = NotesTutor.objects.filter(Q(description__icontains=srch) | Q(subject__icontains=srch))
+                if match1 or match2:
+                    return render(request,'Notes/searchNotes.html', {'founds1':match1, 'founds2':match2})
                 else:
                     messages.warning(request,'no result found')
 
-        return render(request, 'Notes/searchNotes.html')
+        return render(request, 'Notes/searchNotes.html', context=context)
     return HttpResponse("You are not Authenticated for this view")
 
 @login_required(login_url="Login")

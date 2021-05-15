@@ -13,7 +13,8 @@ urlpatterns = [
          DeleteNoteTutor, name="deletenotetutor"),
          
     #Student Notes urls
-    path('Student/Notes/All',AllNotesStudent,name="notesstudents"),
+    path('Student/Notes/E-Notes',eNotes,name="eNotes"),
+    path('Student/Notes/Library',LibraryNotes,name="libraryNotes"),
     path('Student/Notes/Search',searchNotes,name="searchNotes"),
     path('getsubjects',subjects,name="subjects"),
 
