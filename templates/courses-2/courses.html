@@ -4,267 +4,243 @@
 {% endblock %}
 {% block main-content %}
 <style>
-  #card {
+    #card {
     background-color: white;
     padding-bottom: 3rem;
     padding-top: 3rem;
     color: black;
-  }
+    }
 </style>
 <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/css/select2.min.css" rel="stylesheet" />
 <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/js/select2.min.js"></script>
 <div class="mt-5">
-  {% if messages %}
-  {% for k in messages%}
-  <div class="alert alert-{{k.tags}} alert-dismissible fade show" role="alert">
-    <b>{{ k }} !</b>
-    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-      <span aria-hidden="true">&times;</span>
-    </button>
-  </div>
-  {% endfor %}
-  {% endif %}
-  <div class="card" style="color: black;">
-    <div class="card-header">
-      <h3 style="align-items: center;text-align: center;">Add Course</h3>
+    {% if messages %}
+    {% for k in messages%}
+    <div class="alert alert-{{k.tags}} alert-dismissible fade show" role="alert">
+        <b>{{ k }} !</b>
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+        </button>
     </div>
-    <form id="frm" class="mb-4 mt-4" method="post">{% csrf_token %}
-      <div class="mx-2 row" id="INSTBATCH">
-        <div class="col">
-          <label for="validationCustom01"><strong>Select Class <span class="red">*</span></strong></label>
-
-          <select id="class_select" name="forclass" class="js-example-basic-single form-control"
-            placeholder="Select class" onchange="addoptions(this)">
-
-            {% for x,y in data.items %}
-            <option value="{{ x }}">{{ x }}</option>
-            {% endfor %}
-          </select>
-
-
-
-        </div>
-        <!-- {% if  cn == "Other" %}
-        <div class="col">
-          <label for="validationCustom01"><strong>Select Course<span class="red">*</span></strong></label>
-          <input type="text" list="cn" />
-          <select id="cn" name="courseName" style="width: 100%" class="js-example-basic-single form-control">
-            
-          
-          </select>
-        </div> -->
-
-        {% else %}
-        <div class="col">
-          <label for="validationCustom01"><strong>Select Course<span class="red">*</span></strong></label>
-          <input type="text" name="courseName" list="cn" style="width: 100%"
-            class="js-example-basic-single form-control" />
-          <datalist id="cn">
-            <option>Select Course</option>
-          </datalist>
-        </div>
-        {% endif %} -->
-
-        <div class="col" id="selectclass" >
-          <label for="validationCustom01"><strong>Select Course<span class="red">*</span></strong></label>
-          
-          
-          <select id="cn" name="selectcourse" style="width: 100%" class="js-example-basic-single form-control">
-            <option class="form-control form-control-lg" selected disabled value="">Select Course</option>
-          </select>
-        </div>
-
-        <div class="col" id="other" style="display: none;">  
-          <label for="validationCustom01"><strong>Select Course<span class="red">*</span></strong></label> 
-                
-          <input type="text" name="courseName" list="cn" style="width: 100%"
-            class="js-example-basic-single form-control" />
-            <datalist id="cn" >       
-              <option selected disabled value="">Select Course</option>
-                       
-          </datalist>        
-          
-        </div>
-        
-        <!-- <div class="col">
-          
-          <label for="validationCustom01"><strong>Select Course<span class="red">*</span></strong></label>
-          <input type="text" list="cn" />
-          <select id="cn" name="courseName" style="width: 100%" class="js-example-basic-single form-control">
-            <option class="form-control form-control-lg" selected disabled value="">Select Course</option>
-          </select>
-        </div> -->
-      </div>
-      <br>
-      <div class="text-center">
-        <button type="submit" class="btn btn-primary"> Add </button>
-      </div>
-    </form>
-  </div>
-  <br>
-  <div class="card mb-4">
-    <div class="card-header">
-      <!-- Grid row -->
-      <div class="row">
-        <!-- Grid column -->
-        <div class="col-md-8">
-          <h2 style="color: rgb(0, 0, 0 );">List of Courses</h2>
-        </div>
-
-        <div class="col-md-4">
-          <input id="searchbox" type="text" class="form-control" name='srh' placeholder="Search Exam or Course"
-            required>
-        </div>
-
-        <!-- Grid column -->
-      </div>
-    </div>
-    {% if course %}
-    <div class="card-body">
-      <!-- Grid row -->
-      <!-- <form action="" method="post">{% csrf_token %} -->
-      <!--Table-->
-      <div class="table-responsive">
-        
-        <table class="table table-striped">
-          <!--Table head-->
-          <tr>
-            <th class="">Sr no</th>
-            <th class="">CLASS</th>
-            <th class="">COURSE NAME</th>
-
-            <th class="text-center">Action</th>
-            <!-- <th class="text-center" colspan="2">Action</th> -->
-          </tr>
-          <!--Table head-->
-          <!--Table body-->
-          {% for i in course %}
-          <tr id="{{ i.pk }}">
-            <td>{{ forloop.counter }}</td>
-            <td>{{i.forclass}}</td>
-            <td>{{i.courseName}}</td>
-            <td class="text-center">
-              <a class="btn btn-warning" href="{% url 'editCourse' i.id %}"><i class="flaticon-pencil-line"
-                  style="font-size:medium;"></i></a>
-              <a class="btn btn-danger" href="{% url 'deleteCourse' i.id %}"><i class="flaticon-delete-fill"
-                  style="font-size:medium;"></i></a>
-              <a class="btn btn-dark" href="{% url 'courseArchivefirst' i.id %}"><i class="flaticon-delete-fill"
-                  style="font-size:medium;"></i></a>
-            </td>                     
-          </tr>   
-
-          {% endfor %}
-          <!--Table body-->
-        </table>
-      </div>
-      <!--Table-->
-      <!-- </form> -->
-      <br>
-    </div>
-    {% else %}
-    <div class="card-header" style="background: none;">
-      <div class="row">
-        <div class="col-xl-12 col-md-12 col-12">
-          <h2>No Course to show</h2>
-        </div>
-      </div>
-    </div>
+    {% endfor %}
     {% endif %}
-  </div>
-  <script>
-    function checkbox() {
-      var value = $("#negativecheck").is(":checked");
-      negative = document.getElementById("negative");
-      var output;
-      if (value) {
-        output = `<input
-      type="number"
-      class="mt-2 form-control"
-      placeholder="Enter Negative Marks"
-      name="negative_marks"
-      value="0"
-      required
-       />
-      <div class="invalid-feedback">
-      Enter a valid No.
-        </div>`;
-      } else {
-        output = "";
-      }
-      negative.innerHTML = output;
-    }
-    // In your Javascript (external .js resource or <script> tag)
-    $(document).ready(function () {
-      $('.js-example-basic-single').select2();
-    });
-
-    $(window).on('pageshow', () => {
-      var frm = $('#frm');
-      frm[0].reset();
-    });
-  </script>
-  <script>
-
-    function addoptions(el) {
-      var data = JSON.parse("{{ data|escapejs }}".replaceAll("'", "\""));
-     
-      var items = data[el.value]; 
-      
-     
-      if (el.value == 'Other')
-      {
-      $('#other').show()
-      $('#selectclass').hide()
-      }
-      else
-      {
-       $('#other').hide()
-       $('#selectclass').show()
-
-      }
-      html1 = "";
-      for (i = 0; i < items.length; i++) {
-        html1 += "<option value=\"" + items[i] + "\">" + items[i] + "</option> ";
-      }
-      
-      $("#cn").html(html1);
-
-    };
-
-    $('#html5-extension').DataTable({
-      dom: '<"row"<"col-md-12"<"row"<"col-md-6"B><"col-md-6"f> > ><"col-md-12"rt> <"col-md-12"<"row"<"col-md-5 mb-md-0 mb-5"i><"col-md-7"p>>> >',
-      buttons: {
-        buttons: [
-          { extend: 'copy', className: 'btn btn-default btn-rounded btn-sm mb-4' },
-          { extend: 'csv', className: 'btn btn-default btn-rounded btn-sm mb-4' },
-          { extend: 'excel', className: 'btn btn-default btn-rounded btn-sm mb-4' },
-          { extend: 'print', className: 'btn btn-default btn-rounded btn-sm mb-4' }
-        ]
-      },
-      "language": {
-        "paginate": {
-          "previous": "<i class='flaticon-arrow-left-1'></i>",
-          "next": "<i class='flaticon-arrow-right'></i>"
-        },
-        "info": "Showing page _PAGE_ of _PAGES_"
-      }
-    });
-  </script>
-
-
-  <script>
-
-    function insertValue() {
-      var select = document.getElementById("select"),
-        txtVal = document.getElementById("val").value,
-        newOption = document.createElement("OPTION"),
-        newOptionVal = document.createTextNode(txtVal);
-
-      newOption.appendChild(newOptionVal);
-      select.insertBefore(newOption, select.firstChild);
-    }
-
-  </script>
-
+    <div class="card" style="color: black;">
+        <div class="card-header">
+            <h3 style="align-items: center;text-align: center;">Add Course</h3>
+        </div>
+        <form id="frm" class="mb-4 mt-4" method="post">
+            {% csrf_token %}
+            <div class="mx-2 row" id="INSTBATCH">
+                <div class="col">
+                    <label for="validationCustom01"><strong>Select Class <span class="red">*</span></strong></label>
+                    <select id="class_select" name="forclass" class="js-example-basic-single form-control"
+                        placeholder="Select class" onchange="addoptions(this)">
+                        {% for x,y in data.items %}
+                        <option value="{{ x }}">{{ x }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <!-- {% if  cn == "Other" %}
+                    <div class="col">
+                      <label for="validationCustom01"><strong>Select Course<span class="red">*</span></strong></label>
+                      <input type="text" list="cn" />
+                      <select id="cn" name="courseName" style="width: 100%" class="js-example-basic-single form-control">
+                        
+                      
+                      </select>
+                    </div> -->
+                {% else %}
+                <div class="col">
+                    <label for="validationCustom01"><strong>Select Course<span class="red">*</span></strong></label>
+                    <input type="text" name="courseName" list="cn" style="width: 100%"
+                        class="js-example-basic-single form-control" />
+                    <datalist id="cn">
+                        <option>Select Course</option>
+                    </datalist>
+                </div>
+                {% endif %} -->
+                <div class="col" id="selectclass" >
+                    <label for="validationCustom01"><strong>Select Course<span class="red">*</span></strong></label>
+                    <select id="cn" name="selectcourse" style="width: 100%" class="js-example-basic-single form-control">
+                        <option class="form-control form-control-lg" selected disabled value="">Select Course</option>
+                    </select>
+                </div>
+                <div class="col" id="other" style="display: none;">
+                    <label for="validationCustom01"><strong>Select Course<span class="red">*</span></strong></label> 
+                    <input type="text" name="courseName" list="cn" style="width: 100%"
+                        class="js-example-basic-single form-control" />
+                    <datalist id="cn" >
+                        <option selected disabled value="">Select Course</option>
+                    </datalist>
+                </div>
+                <!-- <div class="col">
+                    <label for="validationCustom01"><strong>Select Course<span class="red">*</span></strong></label>
+                    <input type="text" list="cn" />
+                    <select id="cn" name="courseName" style="width: 100%" class="js-example-basic-single form-control">
+                      <option class="form-control form-control-lg" selected disabled value="">Select Course</option>
+                    </select>
+                    </div> -->
+            </div>
+            <br>
+            <div class="text-center">
+                <button type="submit" class="btn btn-primary"> Add </button>
+            </div>
+        </form>
+    </div>
+    <br>
+    <div class="card mb-4">
+        <div class="card-header">
+            <!-- Grid row -->
+            <div class="row">
+                <!-- Grid column -->
+                <div class="col-md-8">
+                    <h2 style="color: rgb(0, 0, 0 );">List of Courses</h2>
+                </div>
+                <div class="col-md-4">
+                    <input id="searchbox" type="text" class="form-control" name='srh' placeholder="Search Exam or Course"
+                        required>
+                </div>
+                <!-- Grid column -->
+            </div>
+        </div>
+        {% if course %}
+        <div class="card-body">
+            <!-- Grid row -->
+            <!-- <form action="" method="post">{% csrf_token %} -->
+            <!--Table-->
+            <div class="table-responsive">
+                <table class="table table-striped">
+                    <!--Table head-->
+                    <tr>
+                        <th class="">Sr no</th>
+                        <th class="">CLASS</th>
+                        <th class="">COURSE NAME</th>
+                        <th class="text-center">Action</th>
+                        <!-- <th class="text-center" colspan="2">Action</th> -->
+                    </tr>
+                    <!--Table head-->
+                    <!--Table body-->
+                    {% for i in course %}
+                    <tr id="{{ i.pk }}">
+                        <td>{{ forloop.counter }}</td>
+                        <td>{{i.forclass}}</td>
+                        <td>{{i.courseName}}</td>
+                        <td class="text-center">
+                            <a data-toggle="tooltip" title="Edit" class="btn btn-warning" href="{% url 'editCourse' i.id %}"><i class="flaticon-pencil-line"
+                                style="font-size:medium;"></i></a>
+                            <a data-toggle="tooltip" title="Delete" class="btn btn-danger" href="{% url 'deleteCourse' i.id %}"><i class="flaticon-delete-fill"
+                                style="font-size:medium;"></i></a>
+                            <a data-toggle="tooltip" title="Archive" class="btn btn-dark" href="{% url 'courseArchivefirst' i.id %}"><i class="flaticon-delete-fill"
+                                style="font-size:medium;"></i></a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                    <!--Table body-->
+                </table>
+            </div>
+            <!--Table-->
+            <!-- </form> -->
+            <br>
+        </div>
+        {% else %}
+        <div class="card-header" style="background: none;">
+            <div class="row">
+                <div class="col-xl-12 col-md-12 col-12">
+                    <h2>No Course to show</h2>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+    <script>
+        function checkbox() {
+          var value = $("#negativecheck").is(":checked");
+          negative = document.getElementById("negative");
+          var output;
+          if (value) {
+            output = `<input
+          type="number"
+          class="mt-2 form-control"
+          placeholder="Enter Negative Marks"
+          name="negative_marks"
+          value="0"
+          required
+           />
+          <div class="invalid-feedback">
+          Enter a valid No.
+            </div>`;
+          } else {
+            output = "";
+          }
+          negative.innerHTML = output;
+        }
+        // In your Javascript (external .js resource or <script> tag)
+        $(document).ready(function () {
+          $('.js-example-basic-single').select2();
+        });
+        
+        $(window).on('pageshow', () => {
+          var frm = $('#frm');
+          frm[0].reset();
+        });
+    </script>
+    <script>
+        function addoptions(el) {
+          var data = JSON.parse("{{ data|escapejs }}".replaceAll("'", "\""));
+         
+          var items = data[el.value]; 
+          
+         
+          if (el.value == 'Other')
+          {
+          $('#other').show()
+          $('#selectclass').hide()
+          }
+          else
+          {
+           $('#other').hide()
+           $('#selectclass').show()
+        
+          }
+          html1 = "";
+          for (i = 0; i < items.length; i++) {
+            html1 += "<option value=\"" + items[i] + "\">" + items[i] + "</option> ";
+          }
+          
+          $("#cn").html(html1);
+        
+        };
+        
+        $('#html5-extension').DataTable({
+          dom: '<"row"<"col-md-12"<"row"<"col-md-6"B><"col-md-6"f> > ><"col-md-12"rt> <"col-md-12"<"row"<"col-md-5 mb-md-0 mb-5"i><"col-md-7"p>>> >',
+          buttons: {
+            buttons: [
+              { extend: 'copy', className: 'btn btn-default btn-rounded btn-sm mb-4' },
+              { extend: 'csv', className: 'btn btn-default btn-rounded btn-sm mb-4' },
+              { extend: 'excel', className: 'btn btn-default btn-rounded btn-sm mb-4' },
+              { extend: 'print', className: 'btn btn-default btn-rounded btn-sm mb-4' }
+            ]
+          },
+          "language": {
+            "paginate": {
+              "previous": "<i class='flaticon-arrow-left-1'></i>",
+              "next": "<i class='flaticon-arrow-right'></i>"
+            },
+            "info": "Showing page _PAGE_ of _PAGES_"
+          }
+        });
+    </script>
+    <script>
+        function insertValue() {
+          var select = document.getElementById("select"),
+            txtVal = document.getElementById("val").value,
+            newOption = document.createElement("OPTION"),
+            newOptionVal = document.createTextNode(txtVal);
+        
+          newOption.appendChild(newOptionVal);
+          select.insertBefore(newOption, select.firstChild);
+        }
+        
+    </script>
 </div>
 {% endblock %}
