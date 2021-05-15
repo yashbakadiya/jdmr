@@ -376,37 +376,41 @@ def enrolledTutors(request):
         if experience=="":
             experience=1
 
-        if distance=="":
-            distance=0
         
-        distance = float(distance)
-
-        geolocator = Nominatim(user_agent="geoapiExercises")
-        city = geolocator.geocode(loc, timeout = None)
-        if city:
-            cityLat = city.latitude
-            cityLng = city.longitude
-
-        else:
-            cityLat = request.POST.get('cityLat','')
-            cityLng = request.POST.get('cityLng','')
+        current = Teacher.objects.all()
+        allData = []
 
         if subject:
-            searchQuery = Teacher.objects.filter(Q(course__icontains=subject))
+            searchQuery = current.filter(Q(course__icontains=subject))
 
         if className:
-            searchQuery = Teacher.objects.filter(Q(forclass__icontains=className))            
+            searchQuery = current.filter(Q(forclass__icontains=className))            
 
         if experience:
-            searchQuery = Teacher.objects.filter(Q(experiance__gte=int(experience)))
+            searchQuery = current.filter(Q(experiance__gte=int(experience)))
 
-        allData = []
+        if loc:
+            if distance=="":
+                distance=0
+
+            distance = float(distance)
+
+            geolocator = Nominatim(user_agent="geoapiExercises")
+            city = geolocator.geocode(loc, timeout = None)
+            if city:
+                cityLat = city.latitude
+                cityLng = city.longitude
+
+            else:
+                cityLat = request.POST.get('cityLat','')
+                cityLng = request.POST.get('cityLng','')
+
+            for x in current:
+                location = geolocator.geocode(x.address, timeout=None)
+                if location:
+                    if haversine(location.longitude,location.latitude,cityLng,cityLat) <= distance:
+                        allData.append(x)
         
-        for x in searchQuery:
-            location = geolocator.geocode(x.address, timeout=None)
-            if location:
-                if haversine(location.longitude,location.latitude,cityLng,cityLat) <= distance:
-                    allData.append(x)
 
         jsonData = []
         for x in allData:

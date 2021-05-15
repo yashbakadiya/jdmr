@@ -26,54 +26,32 @@
   </div>
   {% endfor %}
   {% endif %}
-  <div style="padding-top: 0;" class="class" id="card">
+  <div class="card" style="color: black;">
     <div class="card-header">
-      <h2 style="align-items: center;text-align: center;">Edit Course</h2>
+      <h3 style="align-items: center;text-align: center;">Edit Course</h3>
     </div>
     <form id="frm" class="mb-4 mt-4" method="post">{% csrf_token %}
-
-
       <div class="mx-2 row" id="INSTBATCH">
         <div class="col">
           <label for="validationCustom01"><strong>Select Class <span class="red">*</span></strong></label>
 
-          <select id="class_select" name="forclass" class="js-example-basic-single form-control"
-            placeholder="Select class" onchange="addoptions(this)">
-
+          <select id="class_select" name="forclass" class="js-example-basic-single form-control" onchange="addoptions(this)">
+            <option value="" selected disabled>Select Class</option>
             {% for x,y in data.items %}
             <option value="{{ x }}">{{ x }}</option>
             {% endfor %}
-
-
           </select>
-
-
-
-
-          <!-- <select id="forclass" name='forclass' style="width: 100%;" class="js-example-basic-single form-control"
-          onchange="selectclass()">
-          <option class="form-control"  value="{{cour.Class}}">{{cour.Class}}</option>
-          {% for i in classes %}
-          <option class="form-control form-control-lg" value="{{ i.0 }}">{{i.0}} </option>
-          {% endfor %}
-         </select> -->
-
         </div>
-        
+
 
         <div class="col">
-          <label for="validationCustom01"><strong>Select Course<span class="red">*</span></strong></label>         
-          <input type="text" name="courseName" list="cn" style="width: 100%"
-            class="js-example-basic-single form-control" />
-          <datalist id="cn">
-            <option>Select Course</option>
-          </datalist>      
-
+          <label for="validationCustom01"><strong>Select Course<span class="red">*</span></strong></label>          
+          <select id="cn" name="selectcourse" style="width: 100%" class="js-example-basic-single form-control" required>
+            <option class="form-control form-control-lg" selected disabled value="">Select Course</option>
+          </select>
         </div>
-
-       
-
       </div>
+
       <br>
       <div class="text-center">
         <button type="submit" class="btn btn-primary"> Add </button>
@@ -83,95 +61,56 @@
 
 
   <script>
-    function checkbox() {
-      var value = $("#negativecheck").is(":checked");
-      negative = document.getElementById("negative");
-      var output;
-      if (value) {
-        output = `<input
-          type="number"
-          class="mt-2 form-control"
-          placeholder="Enter Negative Marks"
-          name="negative_marks"
-          value="0"
-          required
-        />
-        <div class="invalid-feedback">
-          Enter a valid No.
-        </div>`;
-      } else {
-        output = "";
-      }
-      negative.innerHTML = output;
-    }
-    // In your Javascript (external .js resource or <script> tag)
-    $(document).ready(function () {
+  $(document).ready(function () {
       $('.js-example-basic-single').select2();
     });
 
-    $(window).on('pageshow', () => {
-      var frm = $('#frm');
-      frm[0].reset();
-    });
   </script>
 
   <script>
-
+    
     function addoptions(el) {
       var data = JSON.parse("{{ data|escapejs }}".replaceAll("'", "\""));
+     
       var items = data[el.value];
-
-
-      html1 = "";
-      for (i = 0; i < items.length; i++) {
-        html1 += "<option value=\"" + items[i] + "\">" + items[i] + "</option> ";
-      }
-      $("#cn").html(html1);
-
-    };
-
-    $('#html5-extension').DataTable({
-      dom: '<"row"<"col-md-12"<"row"<"col-md-6"B><"col-md-6"f> > ><"col-md-12"rt> <"col-md-12"<"row"<"col-md-5 mb-md-0 mb-5"i><"col-md-7"p>>> >',
-      buttons: {
-        buttons: [
-          { extend: 'copy', className: 'btn btn-default btn-rounded btn-sm mb-4' },
-          { extend: 'csv', className: 'btn btn-default btn-rounded btn-sm mb-4' },
-          { extend: 'excel', className: 'btn btn-default btn-rounded btn-sm mb-4' },
-          { extend: 'print', className: 'btn btn-default btn-rounded btn-sm mb-4' }
-        ]
-      },
-      "language": {
-        "paginate": {
-          "previous": "<i class='flaticon-arrow-left-1'></i>",
-          "next": "<i class='flaticon-arrow-right'></i>"
-        },
-        "info": "Showing page _PAGE_ of _PAGES_"
-      }
-    });
-
-    function selectclass() {
-      var selected = $("#class_select").val();
-      $.ajax({
-        url: "{% url 'findCourseclass' %}",
-        data: {
-          forclass: selected,
-        },
-        success: function (data) {
-          courses = data.courses;
-          $("#courseName").empty().trigger("change");
-          for (i = 0; i < courses.length; i++) {
-            var newOption = new Option(
-              courses[i][1],
-              courses[i][0],
-              false,
-              false
-            );
-            $("#courseName").append(newOption).trigger("change");
+      html1 = "";  
+      
+      if (el.value == 'Other')
+      {
+        $('#cn').replaceWith(`<input type="text" id="cn" name="selectcourse" list="myList" style="width: 100%"
+                                class="js-example-basic-single form-control" required placeholder="Select Course"/>`)
+                                
+                                for (i = 0; i < items.length; i++) {
+                                  html1 += `<option value="${items[i]}" />`;
+                                }
+                                
+                                $("#cn").after(`<datalist id="myList">${html1}</datalist>`);
+                                
+                              }
+                              else
+                              {
+                                $('#myList').remove()
+                                $('#cn').replaceWith(`<select id="cn" name="selectcourse" style="width: 100%" class="js-example-basic-single form-control" required>
+                                </select>`)
+                                
+          html1 += `<option value="" selected disabled>Select Course</option>`
+          for (i = 0; i < items.length; i++) {
+            html1 += `<option value="${items[i]}">${items[i]}</option>`;
           }
-        },
-      });
-    }
-  </script>
+          
+          $("#cn").html(html1);
+        }
 
+        
+      };
+
+        var cla = '{{course.forclass}}'
+        var cou = '{{course.courseName}}'
+        $(`#class_select option[value=${cla}]`).prop('selected',true)
+        addoptions(document.getElementById('class_select'))
+        
+        $(`select#cn option[value=${cou}]`).prop('selected',true)
+        $('input#cn').val(cou)
+      </script>
 </div>
 {% endblock main-content %}
