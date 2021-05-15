@@ -237,6 +237,7 @@
         </div>
         {% endif %}
     </div>
+<<<<<<< HEAD
     <script>
         $(document).ready(function()
         {
@@ -319,5 +320,111 @@
           frm[0].reset();
         });
     </script>
+=======
+    {% endif %}
+  </div>
+  <script>
+  function teachSelect(el){
+    let selected = $(el).val()
+    $('#allvalue').hide()
+    $('.remember').empty()
+
+    if (selected.length>0){
+      $('#allvalue').show()
+
+    for (let i = 0; i < selected.length; i++) {
+      $('#allvalue > .col').append(`<div class="row remember">
+            <div class="col-md-4">
+              <label style="color: rgb(66, 8, 8);">${selected[i]}</label>
+            </div>
+            <div class="col-md-4">
+              <div class="form-group">
+                <div style="display: inline-block;">
+                  <select name="duration" class="form-control col-sm-12" required>
+                    <option value="" selected disabled>Course Duration</option>
+                    <option>Hourly</option>
+                    <option>Weekly</option>
+                    <option>Monthly</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div class="input-group form-group">
+                <input type="text" class="form-control" required name='time' placeholder="No. of Hours/Weeks/Months">
+              </div>
+            </div>
+          </div>`);
+      }    
+    }
+  }
+    </script>
+
+
+  <script>
+    // In your Javascript (external .js resource or <script> tag)
+    $(document).ready(function () {
+      $('.js-example-basic-single').select2();
+    });
+
+    function selectclass() {
+      var selected = $("#forclass").val();
+      $.ajax({
+        url: "{% url 'findCourse' %}",
+        data: {
+          forclass: selected,
+        },
+        success: function (data) {
+          courses = data.courses;
+          $("#courseName").empty().trigger("change");
+				  var newOption = new Option(
+					'Select Course',
+					'',
+					true,
+					true
+				  );
+				  newOption.disabled=true
+			  	$("#courseName").append(newOption).trigger("change");
+          for (i = 0; i < courses.length; i++) {
+            var newOption = new Option(
+              courses[i][1],
+              courses[i][0],
+              false,
+              false
+            );
+            $("#courseName").append(newOption).trigger("change");
+          }
+        },
+      });
+    }
+
+    $(window).on('pageshow', () => {
+      var frm = $('#frm');
+      frm[0].reset();
+    });
+
+    trlist = $(".main-row");
+
+    $("body").on('input', "#searchbox", function () {
+        trlist.hide();
+        search = this.value.toLowerCase();
+        len = search.length;
+        for (i = 0; i < trlist.length; i++) {
+          for (let v = 0; v < 6; v++) {
+            if (trlist[i].children[v].textContent == "") {
+                cont = cont;
+            }
+            else {
+                cont = trlist[i].children[v].textContent.toLowerCase();
+            }
+            if (cont.search(search) != -1) {
+                $(trlist[i]).show();
+            }
+        }
+      }
+    });
+  </script>
+
+>>>>>>> f11d20c247867d5506f3dca3e6917d22d20a7ffa
 </div>
 {% endblock %}

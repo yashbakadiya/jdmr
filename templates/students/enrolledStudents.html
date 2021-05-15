@@ -4,7 +4,7 @@
 
 <!-- CDN for google maps Place API -->
 <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCBJybI10-Xa43-F5GSad1i0Y9W3yqlW6Q&libraries=places&v=3"
-  defer></script>
+    defer></script>
 <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 
 {% endblock extra-stylesheets %}
@@ -36,12 +36,21 @@
               <form class="form-inline mt-2 mb-5" method="POST">
                 {% csrf_token %}
                 <div class="col-lg-4 col-md-6 col-12 mt-2 row">
+<<<<<<< HEAD
+                  <label class="control-label col-sm-3 col-md-4 col-5 mt-3"
+                    style="display:block; color:black;">Location</label>
+                  <input type="text" id="pac-input" class="form-control my-2 w-100 col-md-7 col-7" name='loc'
+                    placeholder="Enter Location" {% if prefill.address %} value="{{prefill.address}}" {% endif %}>
+                  <input type="hidden" id="cityLat" value="0" name="cityLat" />
+                  <input type="hidden" id="cityLng" value="0" name="cityLng" />
+=======
                     <label class="control-label col-sm-3 col-md-4 col-5 mt-3"
                         style="display:block; color:black;">Location</label>
                     <input type="text" class="form-control my-2 w-100 col-md-7 col-7" id="pac-input"
                         name='loc' placeholder="Enter Location" value="{{prefill.address}}">
                     <input type="hidden" id="cityLat" value="0" name="cityLat" />
                     <input type="hidden" id="cityLng" value="0" name="cityLng" />
+>>>>>>> 83c82a35fa8590765a45b741c743cb6f5ce86dd5
                 </div>
                 <div class="col-lg-4 col-md-6 col-12 mt-2 row">
                   <label class="control-label col-sm-3 col-md-4 col-5 mt-3"
@@ -49,36 +58,18 @@
                   <input type="number" class="form-control my-2 w-100 col-md-7 col-7" {% if prefill.distance %} value="{{prefill.distance}}" {% endif %} style="-moz-appearance: textfield;" min="0" name="distance"
                     placeholder="Distance in KM">
                 </div>
+                
                 <div class="col-lg-4 col-md-6  col-12 mt-2 row">
                   <label class="control-label col-sm-3 col-md-4 col-5 mt-3"
-                    style="display:block; color:black;">TeachType</label>
-                  <select id="teachtype" name="teachtype" placeholder="Teaching Type"
-                    class="custom-select form-control my-2 w-100 col-md-7 col-7">
-                    {% if prefill.type %}
-                    <option selected value="{{prefill.type}}">{{prefill.type}}</option>
-                    {% else %}
-                    <option disabled selected value="">Select Teaching Type</option>
-                    {% endif %}
-
-                    {% for type in types %}
-                    {% if prefill.type != type %}
-                    <option value="{{type}}">{{type}}</option>
-                    {% endif %}
-                    {% endfor %}
-                  </select>
-                </div>
-
-                <div class="col-lg-4 col-md-6  col-12 mt-2 row">
-                  <label class="control-label col-sm-3 col-md-4 col-5 mt-3"
-                    style="display:block; color:black;">Class</label>
-                  <select name="className" class="cn custom-select form-control w-100 my-2 col-md-7 col-7"
-                    onchange="selectclass(this)">
-                    {% if prefill.class %}
-                    <option selected value="{{prefill.class}}">{{prefill.class}}</option>
+                  style="display:block; color:black;">Class</label>
+                  <select name="className" class="cn custom-select form-control w-100 my-2 col-md-7 col-7" required
+                  onchange="selectclass(this)">
+                  {% if prefill.class %}
+                  <option selected value="{{prefill.class}}">{{prefill.class}}</option>
                     {% else %}
                     <option disabled selected value="">Select Class</option>
                     {% endif %}
-
+                    
                     {% for class in classes %}
                     {% if prefill.class != class %}
                     <option value="{{class}}">{{class}}</option>
@@ -86,16 +77,34 @@
                     {% endfor %}
                   </select>
                 </div>
-
+                
                 <div class="col-lg-4 col-md-6  col-12 mt-2 row">
                   <label class="control-label col-sm-3 col-md-4 mt-3 col-5"
-                    style="display:block; color:black;">Course</label>
-                  <select name="subject" class="ctn custom-select form-control w-100 my-2 col-md-7 col-7">
+                  style="display:block; color:black;">Course</label>
+                  <select name="subject" class="ctn custom-select form-control w-100 my-2 col-md-7 col-7" required>
                     {% if prefill.course %}
-                  <option selected value="{{prefill.course}}">{{prefill.course}}</option>
-                  {% else %}
-                  <option disabled selected value="">Select Course</option>
-                  {% endif %}
+                    <option selected value="{{prefill.course}}">{{prefill.course}}</option>
+                    {% else %}
+                    <option disabled selected value="">Select Course</option>
+                    {% endif %}
+                  </select>
+                </div>
+                <div class="col-lg-4 col-md-6  col-12 mt-2 row">
+                  <label class="control-label col-sm-3 col-md-4 col-5 mt-3"
+                    style="display:block; color:black;">TeachType</label>
+                  <select id="teachtype" name="teachtype" placeholder="Teaching Type" required
+                    class="custom-select form-control my-2 w-100 col-md-7 col-7">
+                    {% if prefill.type %}
+                    <option selected value="{{prefill.type}}">{{prefill.type}}</option>
+                    {% else %}
+                    <option disabled selected value="">Select Teaching Type</option>
+                    {% endif %}
+                
+                    {% for type in types %}
+                    {% if prefill.type != type %}
+                    <option value="{{type}}">{{type}}</option>
+                    {% endif %}
+                    {% endfor %}
                   </select>
                 </div>
                 <div class="col-lg-12 col-md-12  col-12 d-flex justify-content-end">
