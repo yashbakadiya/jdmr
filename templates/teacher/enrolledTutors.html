@@ -51,7 +51,7 @@
                             <div class="col-lg-4 col-md-6  col-12 mt-2 row">
                                 <label class="control-label col-sm-3 col-md-4 col-5 mt-2"
                                     style="display:block; color:black;">Class</label>
-                                <select id="className" name="className"
+                                <select id="className" name="className" required
                                     class="custom-select form-control w-100 col-md-7 col-7" onchange="subjects()"
                                     placeholder="Class">
                                 </select>
@@ -59,7 +59,7 @@
                             <div class="col-lg-4 col-md-6  col-12 mt-2 row">
                                 <label class="control-label col-sm-3 col-md-4 mt-2 col-5"
                                     style="display:block; color:black;">Subject</label>
-                                <select id="subject" name="subject"
+                                <select id="subject" name="subject" required
                                     class="custom-select form-control w-100 col-md-7 col-7" placeholder="Subject">
                                     {% if prefill.subject %}
                                     <option selected value="{{prefill.subject}}">{{prefill.subject}}</option>
@@ -70,7 +70,7 @@
                             </div>
                             <div class="col-lg-4 col-md-6  col-12 mt-2 row">
                                 <label class="control-label col-sm-3 col-md-5 col-5 mt-3" style="display:block; color:black;">Teaching Mode</label>
-                                <select name="tm" class="form-control my-2 w-100 col-md-7 col-7" required="required">
+                                <select name="tm" class="form-control my-2 w-100 col-md-7 col-7" required>
                                     <option disabled selected value>Teaching Mode</option>
                                     <option value="Online Tutor">Online Tutor</option>
                                     <option value="Group Tutor">Group Tutor</option>

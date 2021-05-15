@@ -34,7 +34,7 @@
           <label for="validationCustom01"><strong>Select Class <span class="red">*</span></strong></label>
 
 
-          <select id="forclass" name='forclass' style="width: 100%;" class="js-example-basic-single form-control"
+          <select required id="forclass" name='forclass' style="width: 100%;" class="js-example-basic-single form-control"
             onchange="selectclass()">
             <option class="form-control" selected disabled value="">Select Class</option>
             {% for i in classes %}
@@ -46,13 +46,13 @@
         </div>
         <div class="col">
           <label for="validationCustom01"><strong>Select Course<span class="red">*</span></strong></label>
-          <select id="courseName" name="courseName" style="width: 100%" class="js-example-basic-single form-control">
+          <select required id="courseName" name="courseName" style="width: 100%" class="js-example-basic-single form-control" onchange="selectcourse(this)">
             <option class="form-control form-control-lg" selected disabled value="">Select Course</option>
           </select>
         </div>
         <div class="col">
           <label for="validationCustom01"><strong> Batch Name<span class="red">*</span></strong></label>
-          <input type="text" class="form-control" id="batchName" name='batchName' placeholder="Batch Name" required>
+          <input required type="text" class="form-control" id="batchName" name='batchName' placeholder="Batch Name" required>
         
         </div>
 
@@ -62,10 +62,9 @@
         
         <div class="col">
           <label for="validationCustom01"><strong>Teaching Type <span class="red">*</span></strong></label>           
-           <select id="teachingtype" name='teaching'  style="width: 100%;"
+           <select required id="teachingtype" name='teaching'  style="width: 100%;"
               class="js-example-basic-single form-control ">
-              <option value="Online">Online</option>
-              <option value="ClassRoom">Class Room</option>
+              <option selected disabled value="">Teaching Type</option>
             
             </select>          
         </div>
@@ -73,7 +72,7 @@
 
         <div class="col">
           <label for="validationCustom01"><strong>Start Time <span class="red">*</span></strong></label>
-          <input class="form-control" type="time" placeholder="" input type="text" name="startTime" required /><br />
+          <input required class="form-control" type="time" placeholder="" type="text" name="startTime" required /><br />
           <div class="invalid-feedback">
             Select a valid Time!
           </div>
@@ -81,7 +80,7 @@
 
         <div class="col">
           <label for="validationCustom01"><strong>End Time <span class="red">*</span></strong></label>
-          <input class="form-control" type="time" placeholder="" type="text" name="endTime" required /><br />
+          <input required class="form-control" type="time" placeholder="" type="text" name="endTime" required /><br />
           <div class="invalid-feedback">
             Select a valid Time!
           </div>
@@ -91,7 +90,7 @@
           <label for="validationCustom01"><strong>Select Days <span class="red">*</span></strong></label>
 
           <div>
-            <select class="form-control  selectpicker multiselect multiple-checkboxes" data-actions-box="true"  multiple="multiple" id="days" name='fordays' required>
+            <select required class="form-control  selectpicker multiselect multiple-checkboxes" data-actions-box="true"  multiple="multiple" id="days" name='fordays' required>
               
               <option value="Sunday">Sunday</option>
               <option value="Monday">Monday</option>
@@ -158,7 +157,7 @@
             <!--Table body-->
 
             {% for i in bat %}
-            <tr>
+            <tr class="main-row">
               <td>{{i.batchName}}</td>
               <td>{{i.course}}</td>
               <td>{{i.forclass}}</td>
@@ -210,28 +209,6 @@
     $(document).on('click', '.confirm-active', function(){
     return confirm('Are you sure you want to active this?');
     })
-    
-    function checkbox() {
-      var value = $("#negativecheck").is(":checked");
-      negative = document.getElementById("negative");
-      var output;
-      if (value) {
-        output = `<input
-      type="number"
-      class="mt-2 form-control"
-      placeholder="Enter Negative Marks"
-      name="negative_marks"
-      value="0"
-      required
-    />
-    <div class="invalid-feedback">
-      Enter a valid No.
-    </div>`;
-      } else {
-        output = "";
-      }
-      negative.innerHTML = output;
-    }
     // In your Javascript (external .js resource or <script> tag)
     $(document).ready(function () {
       $('.js-example-basic-single').select2();
@@ -247,6 +224,14 @@
         success: function (data) {
           courses = data.courses;
           $("#courseName").empty().trigger("change");
+          var newOption = new Option(
+              "Select Course",
+              '',
+              true,
+              true
+            );
+            newOption.disabled = true
+            $("#courseName").append(newOption).trigger("change");
           for (i = 0; i < courses.length; i++) {
             var newOption = new Option(
               courses[i][1],
@@ -260,9 +245,65 @@
       });
     }
 
+    function selectcourse(el) {
+        var selected_course = $("#courseName option:selected").text();
+        var selected_class = $("#forclass").val();
+        $.ajax({
+            url: "{% url 'findTeaching' %}",
+            data: {
+                forclass: selected_class,
+                course: selected_course
+            },
+            success: function (data) {
+              console.log(data,selected_class,selected_course)
+                teaching = data.teaching;
+                $("#teachingtype").empty().trigger("change");
+
+                var newOption = new Option(
+                    "Teaching Type",
+                    "",
+                    false,
+                    false
+                );
+                $("#teachingtype").append(newOption).trigger("change");
+
+                for (i = 0; i < teaching.length; i++) {
+                    var newOption = new Option(
+                        teaching[i],
+                        teaching[i],
+                        false,
+                        false
+                    );
+                    $("#teachingtype").append(newOption).trigger("change");
+                }
+            },
+        });
+    }
+    
     $(window).on('pageshow', () => {
       var frm = $('#frm');
       frm[0].reset();
+    });
+
+    trlist = $(".main-row");
+
+    $("body").on('input', "#searchbox", function () {
+        trlist.hide();
+        search = this.value.toLowerCase();
+        len = search.length;
+        for (i = 0; i < trlist.length; i++) {
+          for (let v = 0; v < 7; v++) {
+            if (trlist[i].children[v].textContent == "") {
+                cont = cont;
+            }
+            else {
+                cont = trlist[i].children[v].textContent.toLowerCase();
+            }
+            if (cont.search(search) != -1) {
+                $(trlist[i]).show();
+            }
+        }
+      }
     });
   </script>
 

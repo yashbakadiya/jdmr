@@ -35,7 +35,7 @@
 
                 <div class="col">
                     <label for="validationCustom01"><strong> Batch Name<span class="red">*</span></strong></label>
-                    <input type="text" class="form-control" id="batchName" name='batchName' placeholder="Batch Name"
+                    <input required type="text" class="form-control" id="batchName" name='batchName' placeholder="Batch Name"
                         value="{{batchObj.batchName}}">
 
                 </div>
@@ -44,14 +44,12 @@
                 <div class="col">
                     <label for="validationCustom01"><strong>Select Class<span class="red">*</span></strong></label>
                    
-                    <select id="forclass" name="forclass" style="width: 100%"
+                    <select required id="forclass" name="forclass" style="width: 100%"
                         class="js-example-basic-single form-control">
-                        <!-- <option value="">{{batchObj.courseName}}</option>
-                         -->
-
-                         {% for i in cours %}
-                         <option class="form-control form-control-lg" value="{{ i.forclass }}">{{i.forclass}} </option>
-                         {% endfor %}
+                        <option class="form-control" selected disabled value="">Select Class</option>
+                        {% for i in classes %}
+                        <option class="form-control form-control-lg" value="{{ i.0 }}">{{i.0}} </option>
+                        {% endfor %}
                     </select>
                    
 
@@ -62,14 +60,9 @@
 
                 <div class="col">
                     <label for="validationCustom01"><strong>Select Course<span class="red">*</span></strong></label>
-                    <select id="courseName" name="courseName" style="width: 100%"
-                        class="js-example-basic-single form-control">
-                        <!-- <option value="">{{batchObj.courseName}}</option>
-                         -->
-
-                         {% for i in cours %}
-                         <option class="form-control form-control-lg" value="{{ i.courseName }}">{{i.courseName}} </option>
-                         {% endfor %}
+                    <select required id="courseName" name="courseName" style="width: 100%"
+                        class="js-example-basic-single form-control" onchange="selectcourse()">
+                        <option class="form-control form-control-lg" selected disabled value="">Select Course</option>
                     </select>
                 </div>
 
@@ -79,11 +72,9 @@
 
                 <div class="col">
                     <label for="validationCustom01"><strong>Teaching Type <span class="red">*</span></strong></label>           
-                     <select id="teachingtype" name='teaching'  style="width: 100%;"
+                     <select required id="teachingtype" name='teaching'  style="width: 100%;"
                         class="js-example-basic-single form-control ">
-                        <option value="Online">Online</option>
-                        <option value="ClassRoom">Class Room</option>
-                      
+                        <option selected disabled value="">Teaching Type</option>
                       </select>          
                   </div>
                   
@@ -91,8 +82,8 @@
 
                 <div class="col">
                     <label for="validationCustom01"><strong>Start Time <span class="red">*</span></strong></label>
-                    <input class="form-control" type="time" placeholder="" name="startTime"
-                        value="{{batchObj.startTime|date:'H:i'}}" /><br />
+                    <input required class="form-control" type="time" placeholder="" name="startTime"
+                        value="{{start|date:'H:i'}}" /><br />
 
                     <div class="invalid-feedback">
                         Select a valid Time!
@@ -101,8 +92,8 @@
 
                 <div class="col">
                     <label for="validationCustom01"><strong>End Time <span class="red">*</span></strong></label>
-                    <input class="form-control" type="time" placeholder="" name="endTime"
-                        value="{{batchObj.endtime|date:'H:i'}}" /><br />
+                    <input required class="form-control" type="time" placeholder="" name="endTime"
+                        value="{{end|date:'H:i'}}" /><br />
                     <div class="invalid-feedback">
                         Select a valid Time!
                     </div>
@@ -112,16 +103,15 @@
                     <label for="validationCustom01"><strong>Select Days <span class="red">*</span></strong></label>
 
                     <div>
-                        <select class="form-control " data-actions-box="true" id="days" name='fordays'
-                            value="{{batchObj.days}}">
-                            <option value="disabled">Day</option>
-                            <option value="Sunday">Sunday</option>
-                            <option value="Monday">Monday</option>
-                            <option value="Tuesday">Tuesday</option>
-                            <option value="Wednesday">Wednesday</option>
-                            <option value="Thursday">Thursday</option>
-                            <option value="Friday">Friday</option>
-                            <option value="Saturday">Saturday</option>
+                        <select required class="form-control " data-actions-box="true" id="days" name='fordays' multiple>
+                            <option disabled>Day</option>
+                            <option {% if "Sunday" in batchObj.days %} selected {% endif %} value="Sunday">Sunday</option>
+                            <option {% if "Monday" in batchObj.days %} selected {% endif %} value="Monday">Monday</option>
+                            <option {% if "Tuesday" in batchObj.days %} selected {% endif %} value="Tuesday">Tuesday</option>
+                            <option {% if "Wednesday" in batchObj.days %} selected {% endif %} value="Wednesday">Wednesday</option>
+                            <option {% if "Thursday" in batchObj.days %} selected {% endif %} value="Thursday">Thursday</option>
+                            <option {% if "Friday" in batchObj.days %} selected {% endif %} value="Friday">Friday</option>
+                            <option {% if "Saturday" in batchObj.days %} selected {% endif %} value="Saturday">Saturday</option>
                         </select>
                     </div>
                 </div>
@@ -132,40 +122,15 @@
         </form>
     </div>
     <script>
-        function checkbox() {
-            var value = $("#negativecheck").is(":checked");
-            negative = document.getElementById("negative");
-            var output;
-            if (value) {
-                output = `<input
-  type="number"
-  class="mt-2 form-control"
-  placeholder="Enter Negative Marks"
-  name="negative_marks"
-  {% if exam.negative_marks %}
-  value="{{exam.negative_marks|floatformat}}"
-  {% else %}
-  value="0"
-  {% endif %}
-  required
-/>
-<div class="invalid-feedback">
-  Enter a valid No.
-</div>`;
-            } else {
-                output = "";
-            }
-            negative.innerHTML = output;
-        }
         // In your Javascript (external .js resource or <script> tag)
         $(document).ready(function () {
-            checkbox();
             $('.js-example-basic-single').select2();
         });
 
 
         function selectclass() {
-            var selected = $("#class_select").val();
+            var cou = '{{batchObj.course}}'
+            var selected = $("#forclass").val();
             $.ajax({
                 url: "{% url 'findCourse' %}",
                 data: {
@@ -173,8 +138,15 @@
                 },
                 success: function (data) {
                     courses = data.courses;
-                    console.log(courses)
-                    $("#select_course").empty().trigger("change");
+                    $("#courseName").empty().trigger("change");
+                    var newOption = new Option(
+                        "Select Course",
+                        '',
+                        true,
+                        true
+                    );
+                    newOption.disabled = true
+                    $("#courseName").append(newOption).trigger("change");
                     for (i = 0; i < courses.length; i++) {
                         var newOption = new Option(
                             courses[i][1],
@@ -182,11 +154,60 @@
                             false,
                             false
                         );
-                        $("#select_course").append(newOption).trigger("change");
+                        $("#courseName").append(newOption).trigger("change");
                     }
+                if(cou){
+					$(`#courseName option:contains('${cou}')`).prop('selected',true)
+				}
                 },
             });
         }
+
+        function selectcourse() {
+        var tt = '{{batchObj.teachingtype}}'
+        var selected_course = $("#courseName option:selected").text();
+        var selected_class = $("#forclass").val();
+        $.ajax({
+            url: "{% url 'findTeaching' %}",
+            data: {
+                forclass: selected_class,
+                course: selected_course
+            },
+            success: function (data) {
+                teaching = data.teaching;
+                $("#teachingtype").empty().trigger("change");
+
+                var newOption = new Option(
+                    "Teaching Type",
+                    "",
+                    false,
+                    false
+                );
+                newOption.disabled = true
+                $("#teachingtype").append(newOption).trigger("change");
+
+                for (i = 0; i < teaching.length; i++) {
+                    var newOption = new Option(
+                        teaching[i],
+                        teaching[i],
+                        false,
+                        false
+                    );
+                    $("#teachingtype").append(newOption).trigger("change");
+                }
+                if(tt){
+                    $(`#teachingtype option[value='${tt}']`).prop('selected',true)
+                }
+            },
+        });
+    }
+
+    var cla = '{{batchObj.forclass}}'
+	$(`#forclass option[value='${cla}']`).prop('selected',true)
+	selectclass()
+    setTimeout(()=>{
+        selectcourse()
+    },1000)
     </script>
 </div>
 {% endblock main-content %}

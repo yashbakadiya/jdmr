@@ -68,31 +68,14 @@
                             <td>{{i.timePeriod}}</td>
 
                             <td class="text-center">
-
+                                <a class="btn btn-warning" href="{% url 'editTeachingType' i.id %}"><i class="flaticon-pencil-line"
+                                    style="font-size:medium;"></i></a>
+                                <a class="btn btn-danger" href="{% url 'deleteteaching' i.id %}"><i class="flaticon-delete-fill"
+                                    style="font-size:medium;"></i></a>
                                 <a class="btn btn-success" href="{% url 'teach-unarchive' i.id %}"><i
                                         class="flaticon-delete-fill" style="font-size:medium;"></i></a>
 
-                            </td>
-
-
-                            <!-- <div class="btn-group">
-                                <button type="button" data-toggle="modal" data-target="#edit-{{i.pk}}"
-                                    href="#edit-{{i.pk}}" class="btn btn-secondary btn-sm"><i
-                                        class="flaticon-edit  bg-success p-1 text-white br-6 mb-1"></i>Edit</button>
-                                <button type="button"
-                                    class="btn btn-secondary btn-sm dropdown-toggle dropdown-toggle-split"
-                                    id="dropdownMenuReference1" data-toggle="dropdown" aria-haspopup="true"
-                                    aria-expanded="false" data-reference="parent">
-                                    <span class="sr-only">Toggle Dropdown</span>
-                                </button>
-                                <div class="dropdown-menu" aria-labelledby="dropdownMenuReference1">
-                                    <button class="btn btn-secondary btn-sm dropdown-item" data-toggle="modal"
-                                        data-target="#delete-{{i.pk}}" href="#delete-{{i.pk}}" title="Delete"><i
-                                            class="flaticon-delete  bg-danger p-1 text-white br-6 mb-1"></i>Delete</button>
-
-                                </div>
-                            </div> -->
-                            
+                            </td>                            
                         </tr>
 
 

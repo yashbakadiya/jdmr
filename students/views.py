@@ -707,6 +707,15 @@ def enrolledStudents(request):
             }
 
             tutions=[]
+            currentS = [x.pk for x in currentS]
+            currentS = PostTution.objects.filter(pk__in=currentS)
+
+            if subject:
+                currentS = currentS.filter(subject=subject)
+            if className:
+                currentS = currentS.filter(forclass=className)
+            if teachtype:
+                currentS = currentS.filter(teachingMode=teachtype)
 
             if address:
                 if distance:
@@ -737,15 +746,6 @@ def enrolledStudents(request):
                             if tut not in currentS:
                                 tutions.append(tut)
                 currentS = tutions
-            currentS = [x.pk for x in currentS]
-            currentS = PostTution.objects.filter(pk__in=currentS)
-
-            if subject:
-                currentS = currentS.filter(subject=subject)
-            if className:
-                currentS = currentS.filter(forclass=className)
-            if teachtype:
-                currentS = currentS.filter(teachingMode=teachtype)
 
         context = {
             'classes':unique_class,

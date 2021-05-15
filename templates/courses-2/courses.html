@@ -33,68 +33,23 @@
         <div class="col">
           <label for="validationCustom01"><strong>Select Class <span class="red">*</span></strong></label>
 
-          <select id="class_select" name="forclass" class="js-example-basic-single form-control"
-            placeholder="Select class" onchange="addoptions(this)">
-
+          <select id="class_select" name="forclass" class="js-example-basic-single form-control" onchange="addoptions(this)">
+            <option value="" selected disabled>Select Class</option>
             {% for x,y in data.items %}
             <option value="{{ x }}">{{ x }}</option>
             {% endfor %}
           </select>
-
-
-
         </div>
-        <!-- {% if  cn == "Other" %}
-        <div class="col">
-          <label for="validationCustom01"><strong>Select Course<span class="red">*</span></strong></label>
-          <input type="text" list="cn" />
-          <select id="cn" name="courseName" style="width: 100%" class="js-example-basic-single form-control">
-            
-          
-          </select>
-        </div> -->
 
-        {% else %}
-        <div class="col">
-          <label for="validationCustom01"><strong>Select Course<span class="red">*</span></strong></label>
-          <input type="text" name="courseName" list="cn" style="width: 100%"
-            class="js-example-basic-single form-control" />
-          <datalist id="cn">
-            <option>Select Course</option>
-          </datalist>
-        </div>
-        {% endif %} -->
 
-        <div class="col" id="selectclass" >
-          <label for="validationCustom01"><strong>Select Course<span class="red">*</span></strong></label>
-          
-          
-          <select id="cn" name="selectcourse" style="width: 100%" class="js-example-basic-single form-control">
+        <div class="col">
+          <label for="validationCustom01"><strong>Select Course<span class="red">*</span></strong></label>          
+          <select id="cn" name="selectcourse" style="width: 100%" class="js-example-basic-single form-control" required>
             <option class="form-control form-control-lg" selected disabled value="">Select Course</option>
           </select>
         </div>
-
-        <div class="col" id="other" style="display: none;">  
-          <label for="validationCustom01"><strong>Select Course<span class="red">*</span></strong></label> 
-                
-          <input type="text" name="courseName" list="cn" style="width: 100%"
-            class="js-example-basic-single form-control" />
-            <datalist id="cn" >       
-              <option selected disabled value="">Select Course</option>
-                       
-          </datalist>        
-          
-        </div>
-        
-        <!-- <div class="col">
-          
-          <label for="validationCustom01"><strong>Select Course<span class="red">*</span></strong></label>
-          <input type="text" list="cn" />
-          <select id="cn" name="courseName" style="width: 100%" class="js-example-basic-single form-control">
-            <option class="form-control form-control-lg" selected disabled value="">Select Course</option>
-          </select>
-        </div> -->
       </div>
+
       <br>
       <div class="text-center">
         <button type="submit" class="btn btn-primary"> Add </button>
@@ -129,9 +84,9 @@
         <table class="table table-striped">
           <!--Table head-->
           <tr>
-            <th class="">Sr no</th>
-            <th class="">CLASS</th>
-            <th class="">COURSE NAME</th>
+            <th>#</th>
+            <th>CLASS</th>
+            <th>COURSE NAME</th>
 
             <th class="text-center">Action</th>
             <!-- <th class="text-center" colspan="2">Action</th> -->
@@ -139,7 +94,7 @@
           <!--Table head-->
           <!--Table body-->
           {% for i in course %}
-          <tr id="{{ i.pk }}">
+          <tr id="{{ i.pk }}" class="main-row">
             <td>{{ forloop.counter }}</td>
             <td>{{i.forclass}}</td>
             <td>{{i.courseName}}</td>
@@ -172,27 +127,6 @@
     {% endif %}
   </div>
   <script>
-    function checkbox() {
-      var value = $("#negativecheck").is(":checked");
-      negative = document.getElementById("negative");
-      var output;
-      if (value) {
-        output = `<input
-      type="number"
-      class="mt-2 form-control"
-      placeholder="Enter Negative Marks"
-      name="negative_marks"
-      value="0"
-      required
-       />
-      <div class="invalid-feedback">
-      Enter a valid No.
-        </div>`;
-      } else {
-        output = "";
-      }
-      negative.innerHTML = output;
-    }
     // In your Javascript (external .js resource or <script> tag)
     $(document).ready(function () {
       $('.js-example-basic-single').select2();
@@ -208,26 +142,35 @@
     function addoptions(el) {
       var data = JSON.parse("{{ data|escapejs }}".replaceAll("'", "\""));
      
-      var items = data[el.value]; 
+      var items = data[el.value];
+      html1 = "";  
       
-     
       if (el.value == 'Other')
       {
-      $('#other').show()
-      $('#selectclass').hide()
+          $('#cn').replaceWith(`<input type="text" id="cn" name="selectcourse" list="myList" style="width: 100%"
+                                class="js-example-basic-single form-control" required placeholder="Select Course"/>`)
+          
+          for (i = 0; i < items.length; i++) {
+              html1 += `<option value="${items[i]}" />`;
+          }
+          
+          $("#cn").after(`<datalist id="myList">${html1}</datalist>`);
+
       }
       else
       {
-       $('#other').hide()
-       $('#selectclass').show()
+          $('#myList').remove()
+          $('#cn').replaceWith(`<select id="cn" name="selectcourse" style="width: 100%" class="js-example-basic-single form-control" required>
+                                </select>`)
+          
+          html1 += `<option value="" selected disabled>Select Course</option>`
+          for (i = 0; i < items.length; i++) {
+              html1 += `<option value="${items[i]}">${items[i]}</option>`;
+          }
 
+          $("#cn").html(html1);
       }
-      html1 = "";
-      for (i = 0; i < items.length; i++) {
-        html1 += "<option value=\"" + items[i] + "\">" + items[i] + "</option> ";
-      }
-      
-      $("#cn").html(html1);
+
 
     };
 
@@ -254,15 +197,52 @@
 
   <script>
 
-    function insertValue() {
-      var select = document.getElementById("select"),
-        txtVal = document.getElementById("val").value,
-        newOption = document.createElement("OPTION"),
-        newOptionVal = document.createTextNode(txtVal);
+    trlist = $(".main-row");
 
-      newOption.appendChild(newOptionVal);
-      select.insertBefore(newOption, select.firstChild);
-    }
+    $("body").on('input', "#searchbox", function () {
+        trlist.hide();
+        search = this.value.toLowerCase();
+        len = search.length;
+        for (i = 0; i < trlist.length; i++) {
+            if (trlist[i].children[0].textContent == "") {
+                cont = cont;
+            }
+            else {
+                cont = trlist[i].children[0].textContent.toLowerCase();
+            }
+            if (cont.search(search) != -1) {
+                $(trlist[i]).show();
+            }
+            if (trlist[i].children[1].textContent == "") {
+                cont2 = cont2;
+            }
+            else {
+                cont2 = trlist[i].children[1].textContent.toLowerCase();
+            }
+            if (cont2.search(search) != -1) {
+                $(trlist[i]).show();
+            }
+            if (trlist[i].children[0].textContent == "") {
+                cont = cont;
+            }
+            else {
+                cont = trlist[i].children[0].textContent.toLowerCase();
+            }
+            if (cont.search(search) != -1) {
+                $(trlist[i]).show();
+            }
+            if (trlist[i].children[2].textContent == "") {
+                cont2 = cont2;
+            }
+            else {
+                cont2 = trlist[i].children[2].textContent.toLowerCase();
+            }
+            if (cont2.search(search) != -1) {
+                $(trlist[i]).show();
+            }
+        }
+
+    });
 
   </script>
 

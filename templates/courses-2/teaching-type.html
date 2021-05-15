@@ -33,7 +33,7 @@
         <div class="col">
           <label for="validationCustom01"><strong>Select Class <span class="red">*</span></strong></label>
           <select id="forclass" name='forclass' style="width: 100%;" class="js-example-basic-single form-control"
-            onchange="selectclass()">
+            onchange="selectclass()" required>
             <option class="form-control" selected disabled value="">Select Class</option>
             {% for i in classes %}
             <option class="form-control form-control-lg" value="{{ i.0 }}">{{i.0}} </option>
@@ -42,13 +42,13 @@
         </div>
         <div class="col">
           <label for="validationCustom01"><strong>Select Course<span class="red">*</span></strong></label>
-          <select id="courseName" name="courseName" style="width: 100%" class="js-example-basic-single form-control">
+          <select id="courseName" name="courseName" style="width: 100%" required class="js-example-basic-single form-control">
             <option class="form-control form-control-lg" selected disabled value="">Select Course</option>
           </select>
         </div>
         <div class="col">
           <label for="validationCustom01"><strong>Teaching Type <span class="red">*</span></strong></label>
-            <select id="teachingtype" name='teaching' multiple="multiple" style="width: 100%;"
+            <select id="teachingtype" name='teaching' multiple style="width: 100%;" required onchange="teachSelect(this)"
               class="js-example-basic-single form-control ">
               <option value="Online">Online</option>
               <option value="ClassRoom">Class Room</option>
@@ -75,81 +75,6 @@
               </div>
             </div>
           </div>
-
-
-          <div class="row remember" id="Online" style="display: none;">
-            <div class="col-md-4">
-              <label style="color: rgb(66, 8, 8);">Online </label>
-            </div>
-            <div class="col-md-4">
-              <div class="form-group">
-                <div style="display: inline-block;">
-                  <select id="DDL" name="duration" class="form-control col-sm-12">
-                    <option value="" selected Disabled>Course Duration</option>
-                    <option>Hourly</option>
-                    <option>Weekly</option>
-                    <option>Monthly</option>
-                  </select>
-                </div>
-              </div>
-            </div>
-            <div class="col-md-4">
-              <div class="input-group form-group">
-                <input type="text" class="form-control" id="time" name='time' placeholder="No. of Hours/Weeks/Months">
-              </div>
-            </div>
-          </div>
-          
-
-
-          <div class="row remember" id="hometutors" style="display: none;">
-            <div class="col-md-4">
-              <label style="color: rgb(66, 8, 8);">Home Tutors </label>
-            </div>
-            <div class="col-md-4">
-              <div class="form-group">
-                <div style="display: inline-block;">
-                  <select id="DDL1" name="duration" class="form-control col-sm-12">
-                    <option value="" selected Disabled>Course Duration</option>
-                    <option>Hourly</option>
-                    <option>Weekly</option>
-                    <option>Monthly</option>
-                  </select>
-                </div>
-              </div>
-            </div>
-            <div class="col-md-4">
-              <div class="input-group form-group">
-                <input type="text" class="form-control" id="time1" name='time' placeholder="No. of Hours/Weeks/Months">
-              </div>
-            </div>
-          </div>
-
-
-
-          <div class="row remember" id="Classroom" style="display: none;">
-            <div class="col-md-4">
-              <label style="color: rgb(66, 8, 8);">Classroom </label>
-            </div>
-            <div class="col-md-4">
-              <div class="form-group">
-                <div style="display: inline-block;">
-                  <select id="DDL2" name="duration" class="form-control col-sm-12">
-                    <option value="" selected Disabled>Course Duration</option>
-                    <option>Hourly</option>
-                    <option>Weekly</option>
-                    <option>Monthly</option>
-                  </select>
-                </div>
-              </div>
-            </div>
-            <div class="col-md-4">
-              <div class="input-group form-group">
-                <input type="text" class="form-control" id="time2" name='time' placeholder="No. of Hours/Weeks/Months">
-              </div>
-            </div>
-          </div>
-
         </div>
 
 
@@ -199,7 +124,7 @@
             <!--Table body-->
 
             {% for i in teach %}
-            <tr id="{{ i.pk }}">
+            <tr id="{{ i.pk }}" class="main-row">
               <td>{{ forloop.counter }}</td>
               <td>{{i.course.courseName}}</td>
               <td>{{ i.course.forclass }}</td>
@@ -217,23 +142,6 @@
 
               </td>
 
-
-              <!-- <div class="btn-group">
-                  <button type="button" data-toggle="modal" data-target="#edit-{{i.pk}}" href="#edit-{{i.pk}}"
-                    class="btn btn-secondary btn-sm"><i
-                      class="flaticon-edit  bg-success p-1 text-white br-6 mb-1"></i>Edit</button>
-                  <button type="button" class="btn btn-secondary btn-sm dropdown-toggle dropdown-toggle-split"
-                    id="dropdownMenuReference1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
-                    data-reference="parent">
-                    <span class="sr-only">Toggle Dropdown</span>
-                  </button>
-                  <div class="dropdown-menu" aria-labelledby="dropdownMenuReference1">
-                    <button class="btn btn-secondary btn-sm dropdown-item" data-toggle="modal"
-                      data-target="#delete-{{i.pk}}" href="#delete-{{i.pk}}" title="Delete"><i
-                        class="flaticon-delete  bg-danger p-1 text-white br-6 mb-1"></i>Delete</button>
-
-                  </div>
-                </div> -->
               </td>
             </tr>
 
@@ -260,56 +168,44 @@
     {% endif %}
   </div>
   <script>
-    $(document).ready(function()
-    {
-        $('#teachingtype').on('change', function() {
-          if ( this.value == 'Online')
-          {
-            $("#Online").show();
-            $("#allvalue").show();
-           
-          }
-          else if ( this.value == 'ClassRoom')
-          {
-            $("#Classroom").show();
-            $("#allvalue").show();
-            
-          }
-          else if( this.value == 'Home Tutors')
-          {
-            $("#hometutors").show();
-            $("#allvalue").show();
-           
-            
-          }
-        });
+  function teachSelect(el){
+    let selected = $(el).val()
+    $('#allvalue').hide()
+    $('.remember').empty()
+
+    if (selected.length>0){
+      $('#allvalue').show()
+
+    for (let i = 0; i < selected.length; i++) {
+      $('#allvalue > .col').append(`<div class="row remember">
+            <div class="col-md-4">
+              <label style="color: rgb(66, 8, 8);">${selected[i]}</label>
+            </div>
+            <div class="col-md-4">
+              <div class="form-group">
+                <div style="display: inline-block;">
+                  <select name="duration" class="form-control col-sm-12" required>
+                    <option value="" selected disabled>Course Duration</option>
+                    <option>Hourly</option>
+                    <option>Weekly</option>
+                    <option>Monthly</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div class="input-group form-group">
+                <input type="text" class="form-control" required name='time' placeholder="No. of Hours/Weeks/Months">
+              </div>
+            </div>
+          </div>`);
+      }    
     }
-    );
+  }
     </script>
 
 
   <script>
-    function checkbox() {
-      var value = $("#negativecheck").is(":checked");
-      negative = document.getElementById("negative");
-      var output;
-      if (value) {
-        output = `<input
-      type="number"
-      class="mt-2 form-control"
-      placeholder="Enter Negative Marks"
-      name="negative_marks"
-      value="0"
-      required
-    />
-    <div class="invalid-feedback">
-      Enter a valid No.
-    </div>`;
-      } else {
-        output = "";
-      }
-      negative.innerHTML = output;
-    }
     // In your Javascript (external .js resource or <script> tag)
     $(document).ready(function () {
       $('.js-example-basic-single').select2();
@@ -318,13 +214,21 @@
     function selectclass() {
       var selected = $("#forclass").val();
       $.ajax({
-        url: "{% url 'findbatch' %}",
+        url: "{% url 'findCourse' %}",
         data: {
           forclass: selected,
         },
         success: function (data) {
           courses = data.courses;
           $("#courseName").empty().trigger("change");
+				  var newOption = new Option(
+					'Select Course',
+					'',
+					true,
+					true
+				  );
+				  newOption.disabled=true
+			  	$("#courseName").append(newOption).trigger("change");
           for (i = 0; i < courses.length; i++) {
             var newOption = new Option(
               courses[i][1],
@@ -341,6 +245,27 @@
     $(window).on('pageshow', () => {
       var frm = $('#frm');
       frm[0].reset();
+    });
+
+    trlist = $(".main-row");
+
+    $("body").on('input', "#searchbox", function () {
+        trlist.hide();
+        search = this.value.toLowerCase();
+        len = search.length;
+        for (i = 0; i < trlist.length; i++) {
+          for (let v = 0; v < 6; v++) {
+            if (trlist[i].children[v].textContent == "") {
+                cont = cont;
+            }
+            else {
+                cont = trlist[i].children[v].textContent.toLowerCase();
+            }
+            if (cont.search(search) != -1) {
+                $(trlist[i]).show();
+            }
+        }
+      }
     });
   </script>
 
