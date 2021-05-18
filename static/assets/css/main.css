@@ -142,6 +142,10 @@ span.red {
 .form-control {
     height: auto;
 }
+.cl{
+    width: 375px;
+}
+
 select.form-control.form-custom {
     display: inline-block;
     width: 100%;
@@ -170,8 +174,8 @@ select.form-control.form-custom {
 .card-header2 {
     padding: .75rem 1.25rem;
     margin-bottom: 12px;
-    background-color: rgba(0,0,0,.03);
-    border-bottom: 1px solid rgba(0,0,0,.125);
+    color: #434343a8;
+    border-bottom: none;
 }
 
 .dropdown-toggle:after {
@@ -782,7 +786,7 @@ ul.inline-ordered-list li:before {
 .ColVis_MasterButton,
 .fc-state-default {
     padding: 0.4375rem 1.25rem;
-    margin-right: 28px;
+    margin-right: 13px;
     text-shadow: none;
     font-size: 14px;
     color: #3b3f5c;
