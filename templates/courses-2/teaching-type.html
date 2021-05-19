@@ -4,6 +4,25 @@
 {% endblock %}
 {% block main-content %}
 <style>
+	.btn-group>.btn{
+		padding: 0;
+		background-color: transparent;
+		box-shadow: none;
+		font-size: 1rem;
+		color: #495057;
+		text-align: left;
+	}
+	.btn-group>ul{
+		transform: none!important;
+		top: 37px!important;
+		width: 100%;
+	}
+	.btn-group>::after{
+		color: black;
+	}
+</style>
+<style>
+  
   #card {
     background-color: white;
     padding-bottom: 3rem;
@@ -11,6 +30,10 @@
     color: black;
   }
 </style>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-multiselect/0.9.13/js/bootstrap-multiselect.js">
+</script>
+<link rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-multiselect/0.9.13/css/bootstrap-multiselect.css">
 <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/css/select2.min.css" rel="stylesheet" />
 <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/js/select2.min.js"></script>
 <div class="mt-5">
@@ -49,7 +72,7 @@
         <div class="col">
           <label for="validationCustom01"><strong>Teaching Type <span class="red">*</span></strong></label>
             <select id="teachingtype" name='teaching' multiple style="width: 100%;" required onchange="teachSelect(this)"
-              class="js-example-basic-single form-control ">
+              class="js-example-basic-single form-control multiselect">
               <option value="Online">Online</option>
               <option value="ClassRoom">Class Room</option>
               <option value="Home Tutors">Home Tutors</option>
@@ -112,8 +135,8 @@
 
             <tr>
               <th>Sr No</th>
-              <th>Course Name</th>
               <th>Class</th>
+              <th>Course</th>
               <th>Teaching Type</th>
               <th>Duration</th>
               <th>Time Period</th>
@@ -126,11 +149,11 @@
             {% for i in teach %}
             <tr id="{{ i.pk }}" class="main-row">
               <td>{{ forloop.counter }}</td>
-              <td>{{i.course.courseName}}</td>
               <td>{{ i.course.forclass }}</td>
-              <td>{{i.teachType}}</td>
-              <td>{{i.duration}}</td>
-              <td>{{i.timePeriod}}</td>
+              <td>{{i.course.courseName}}</td>
+              <td class="br">{{i.teachType}}</td>
+              <td class="br">{{i.duration}}</td>
+              <td class="br">{{i.timePeriod}}</td>
 
               <td class="text-center">
                 <a class="btn btn-warning" href="{% url 'editTeachingType' i.id %}"><i class="flaticon-pencil-line"
@@ -161,7 +184,7 @@
     <div class="card-header" style="background: none;">
       <div class="row">
         <div class="col-xl-12 col-md-12 col-12">
-          <h2>No Exams to show</h2>
+          <h2>No Teaching Types to show</h2>
         </div>
       </div>
     </div>
@@ -207,7 +230,14 @@
 
   <script>
     // In your Javascript (external .js resource or <script> tag)
+      $('#teachingtype').multiselect({numberDisplayed: 2, nonSelectedText: 'Select Teaching Types'});
+      $('.btn-group').addClass('form-control')
     $(document).ready(function () {
+      let val = $('.br')
+      for (let i = 0; i < val.length; i++) {
+        $(val[i]).html($(val[i]).html().split(',').join(`<br>`))
+        
+      }
       $('.js-example-basic-single').select2();
     });
 

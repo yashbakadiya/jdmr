@@ -4,6 +4,25 @@
 {% endblock %}
 {% block main-content %}
 <style>
+	.btn-group>.btn{
+		padding: 0;
+		background-color: transparent;
+		box-shadow: none;
+		font-size: 1rem;
+		color: #495057;
+		text-align: left;
+	}
+	.btn-group>ul{
+		transform: none!important;
+		top: 37px!important;
+		width: 100%;
+	}
+	.btn-group>::after{
+		color: black;
+	}
+</style>
+
+<style>
 	#card {
 		background-color: white;
 		padding-bottom: 3rem;
@@ -13,6 +32,10 @@
 </style>
 <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/css/select2.min.css" rel="stylesheet" />
 <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/js/select2.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-multiselect/0.9.13/js/bootstrap-multiselect.js">
+</script>
+<link rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-multiselect/0.9.13/css/bootstrap-multiselect.css">
 <div class="mt-5">
 	{% if messages %}
 	{% for k in messages%}
@@ -88,6 +111,7 @@
 	<br>
 
 	<script>
+
 		function teachSelect(){
 		  let selected = $('#teachingtype').val()
 		  var dur = '{{teach.duration}}'.split(',')
@@ -223,6 +247,9 @@
 				}
 			}
 		  }
+
+		  $('#teachingtype').multiselect({numberDisplayed: 2, nonSelectedText: 'Select Teaching Types'});
+      	$('.btn-group').addClass('form-control')
 		</script>
 	  
 	  </div>
