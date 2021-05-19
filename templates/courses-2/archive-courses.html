@@ -108,10 +108,10 @@ Institute Dashboard
             <div class="table-responsive">
               <table class="table table-bordered table-hover table-striped mb-4">
                   <tr>
-                    <th style="color: #000000;" class="">#</th>
-                    <th style="color: #000000;" class="">Class</th>
-                    <th style="color: #000000;" class="">Course</th>
-                    <th style="color: #000000;" class="text-center">Actions</th>
+                    <th class="">Sr No</th>
+                    <th class="">Class</th>
+                    <th class="">Course</th>
+                    <th class="text-center">Actions</th>
                   </tr>
 
                   {% for i in course %}
@@ -120,12 +120,10 @@ Institute Dashboard
                     <td>{{i.forclass}}</td>
                     <td>{{i.courseName}}</td>
                     <td class="text-center">
-                      <a class="btn btn-warning" href="{% url 'editCourse' i.id %}"><i class="flaticon-pencil-line"
-                        style="font-size:medium;"></i></a>
-                      <a class="btn btn-danger" href="{% url 'deleteCourse' i.id %}"><i class="flaticon-delete-fill"
-                        style="font-size:medium;"></i></a>
-                      <a class="btn btn-success" href="{% url 'course-unarchive' i.id %}"><i class="flaticon-delete-fill"
+                      <a data-toggle="tooltip" title="Delete" class="btn btn-danger"  href="{% url 'deleteCourse' i.id %}"><i class="flaticon-delete-fill"
                           style="font-size:medium;"></i></a>
+                      <a data-toggle="tooltip" title="Unarchive" class="btn btn-success" href="{% url 'course-unarchive' i.id %}"><i class="flaticon-log-4"
+                                    style="font-size:medium; transform: rotate(90deg);"></i></a>
                     </td>
 
                     <!-- <td class="text-center">

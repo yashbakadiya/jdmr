@@ -4,6 +4,7 @@
 {% endblock %}
 {% block main-content %}
 <style>
+<<<<<<< HEAD
 	.btn-group>.btn{
 		padding: 0;
 		background-color: transparent;
@@ -24,11 +25,14 @@
 <style>
   
   #card {
+=======
+    #card {
+>>>>>>> 1420bb32e3613bdf605a3ad90fe91058db08bd1b
     background-color: white;
     padding-bottom: 3rem;
     padding-top: 3rem;
     color: black;
-  }
+    }
 </style>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-multiselect/0.9.13/js/bootstrap-multiselect.js">
 </script>
@@ -37,20 +41,15 @@ href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-multiselect/0.9.13/css/bo
 <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/css/select2.min.css" rel="stylesheet" />
 <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/js/select2.min.js"></script>
 <div class="mt-5">
-  {% if messages %}
-  {% for k in messages%}
-  <div class="alert alert-{{k.tags}} alert-dismissible fade show" role="alert">
-    <b>{{ k }} !</b>
-    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-      <span aria-hidden="true">&times;</span>
-    </button>
-  </div>
-  {% endfor %}
-  {% endif %}
-  <div class="card" style="color: black;">
-    <div class="card-header">
-      <h3 style="align-items: center;text-align: center;">Add Teaching Type</h3>
+    {% if messages %}
+    {% for k in messages%}
+    <div class="alert alert-{{k.tags}} alert-dismissible fade show" role="alert">
+        <b>{{ k }} !</b>
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+        </button>
     </div>
+<<<<<<< HEAD
     <form id="frm" class="mb-4 mt-4" method="post">{% csrf_token %}
       <div class="mx-2 row" id="INSTBATCH">
         <div class="col">
@@ -77,52 +76,134 @@ href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-multiselect/0.9.13/css/bo
               <option value="ClassRoom">Class Room</option>
               <option value="Home Tutors">Home Tutors</option>
             </select>          
+=======
+    {% endfor %}
+    {% endif %}
+    <div class="card" style="color: black;">
+        <div class="card-header">
+            <h3 style="align-items: center;text-align: center;">Add Teaching Type</h3>
+>>>>>>> 1420bb32e3613bdf605a3ad90fe91058db08bd1b
         </div>
-      </div>
-      <div class="mx-2 row mt-4" id="allvalue" style="display: none;">
-        <div class="col">
-          <div class="row hideforphone">
-            <div class="col">
-              <div class="form-group">
-                <label class="control-label">Teaching Type<span class="text-danger">*</span></label>
-              </div>
+        <form id="frm" class="mb-4 mt-4" method="post">
+            {% csrf_token %}
+            <div class="mx-2 row" id="INSTBATCH">
+                <div class="col">
+                    <label for="validationCustom01"><strong>Select Class <span class="red">*</span></strong></label>
+                    <select id="forclass" name='forclass' style="width: 100%;" class="js-example-basic-single form-control"
+                        onchange="selectclass()" required>
+                        <option class="form-control" selected disabled value="">Select Class</option>
+                        {% for i in classes %}
+                        <option class="form-control form-control-lg" value="{{ i.0 }}">{{i.0}} </option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col">
+                    <label for="validationCustom01"><strong>Select Course<span class="red">*</span></strong></label>
+                    <select id="courseName" name="courseName" style="width: 100%" class="js-example-basic-single form-control" required>
+                        <option class="form-control form-control-lg" selected disabled value="">Select Course</option>
+                    </select>
+                </div>
+                <div class="col">
+                    <label for="validationCustom01"><strong>Teaching Type <span class="red">*</span></strong></label>
+                    <select id="teachingtype" multiple="multiple" name='teaching' style="width: 100%;"
+                        class="js-example-basic-single form-control " required>
+                        <option value="Online">Online</option>
+                        <option value="ClassRoom">Class Room</option>
+                        <option value="Home Tutors">Home Tutors</option>
+                    </select>
+                </div>
             </div>
-            <div class="col-md-4">
-              <div class="form-group">
-                <label class="control-label">Course Duration<span class="text-danger">*</span></label>
-              </div>
+            <div class="mx-2 row mt-4" id="allvalue" style="display: none;">
+                <div class="col">
+                    <div class="row hideforphone">
+                        <div class="col">
+                            <div class="form-group">
+                                <label class="control-label">Teaching Type<span class="text-danger">*</span></label>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label class="control-label">Course Duration<span class="text-danger">*</span></label>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="input-group form-group">
+                                <label class="control-label">How many hours/weeks/months?<span class="text-danger">*</span></label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row remember" id="Online" style="display: none;">
+                        <div class="col-md-4">
+                            <label style="color: rgb(66, 8, 8);">Online </label>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <div style="display: inline-block;">
+                                    <select id="DDL" name="duration" class="form-control col-sm-12">
+                                        <option value="" selected Disabled>Course Duration</option>
+                                        <option>Hourly</option>
+                                        <option>Weekly</option>
+                                        <option>Monthly</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="input-group form-group">
+                                <input type="text" class="form-control" id="time" name='time' placeholder="No. of Hours/Weeks/Months">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row remember" id="hometutors" style="display: none;">
+                        <div class="col-md-4">
+                            <label style="color: rgb(66, 8, 8);">Home Tutors </label>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <div style="display: inline-block;">
+                                    <select id="DDL1" name="duration" class="form-control col-sm-12">
+                                        <option value="" selected Disabled>Course Duration</option>
+                                        <option>Hourly</option>
+                                        <option>Weekly</option>
+                                        <option>Monthly</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="input-group form-group">
+                                <input type="text" class="form-control" id="time1" name='time' placeholder="No. of Hours/Weeks/Months">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row remember" id="Classroom" style="display: none;">
+                        <div class="col-md-4">
+                            <label style="color: rgb(66, 8, 8);">Classroom </label>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <div style="display: inline-block;">
+                                    <select id="DDL2" name="duration" class="form-control col-sm-12">
+                                        <option value="" selected Disabled>Course Duration</option>
+                                        <option>Hourly</option>
+                                        <option>Weekly</option>
+                                        <option>Monthly</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="input-group form-group">
+                                <input type="text" class="form-control" id="time2" name='time' placeholder="No. of Hours/Weeks/Months">
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
-            <div class="col-md-4">
-              <div class="input-group form-group">
-                <label class="control-label">How many hours/weeks/months?<span class="text-danger">*</span></label>
-              </div>
+            <div class="text-center">
+                <button type="submit" class="btn btn-primary mt-5"> Submit </button>
             </div>
-          </div>
-        </div>
-
-
-      </div>
-      <div class="text-center">
-        <button type="submit" class="btn btn-primary"> Submit </button>
-      </div>
-    </form>
-  </div> <br> <br>
-  <div class="card mb-4">
-    <div class="card-header">
-      <!-- Grid row -->
-      <div class="row">
-        <!-- Grid column -->
-        <div class="col-md-8">
-          <h2 style="color: rgb(0, 0, 0 );">List of Teaching Type</h2>
-        </div>
-
-        <div class="col-md-4">
-          <input id="searchbox" type="text" class="form-control" name='srh' placeholder="Search Exam or Course"
-            required>
-        </div>
-
-        <!-- Grid column -->
-      </div>
+        </form>
     </div>
     {% if teach %}
     <div class="card-body">
@@ -186,36 +267,14 @@ href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-multiselect/0.9.13/css/bo
         <div class="col-xl-12 col-md-12 col-12">
           <h2>No Teaching Types to show</h2>
         </div>
-      </div>
-    </div>
-    {% endif %}
-  </div>
-  <script>
-  function teachSelect(el){
-    let selected = $(el).val()
-    $('#allvalue').hide()
-    $('.remember').empty()
-
-    if (selected.length>0){
-      $('#allvalue').show()
-
-    for (let i = 0; i < selected.length; i++) {
-      $('#allvalue > .col').append(`<div class="row remember">
-            <div class="col-md-4">
-              <label style="color: rgb(66, 8, 8);">${selected[i]}</label>
-            </div>
-            <div class="col-md-4">
-              <div class="form-group">
-                <div style="display: inline-block;">
-                  <select name="duration" class="form-control col-sm-12" required>
-                    <option value="" selected disabled>Course Duration</option>
-                    <option>Hourly</option>
-                    <option>Weekly</option>
-                    <option>Monthly</option>
-                  </select>
+        {% else %}
+        <div class="card-header" style="background: none;">
+            <div class="row">
+                <div class="col-xl-12 col-md-12 col-12">
+                    <h2>No Exams to show</h2>
                 </div>
-              </div>
             </div>
+<<<<<<< HEAD
             <div class="col-md-4">
               <div class="input-group form-group">
                 <input type="text" class="form-control" required name='time' placeholder="No. of Hours/Weeks/Months">
@@ -240,64 +299,101 @@ href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-multiselect/0.9.13/css/bo
       }
       $('.js-example-basic-single').select2();
     });
+=======
+        </div>
+        {% endif %}
+    </div>
+    <script>
+        $(document).ready(function()
+        {
+            $('#teachingtype').on('change', function() {
+                var selected = [];
+                    for (var option of document.getElementById('teachingtype').options)
+                    {
+                        if (option.selected) {
+                            selected.push(option.value);
+                        }
+                    }
+                
+                $("#Online").hide();
+                $("#allvalue").hide();
+                $("#Classroom").hide();
+                $("#hometutors").hide();
+>>>>>>> 1420bb32e3613bdf605a3ad90fe91058db08bd1b
 
-    function selectclass() {
-      var selected = $("#forclass").val();
-      $.ajax({
-        url: "{% url 'findCourse' %}",
-        data: {
-          forclass: selected,
-        },
-        success: function (data) {
-          courses = data.courses;
-          $("#courseName").empty().trigger("change");
-				  var newOption = new Option(
-					'Select Course',
-					'',
-					true,
-					true
-				  );
-				  newOption.disabled=true
-			  	$("#courseName").append(newOption).trigger("change");
-          for (i = 0; i < courses.length; i++) {
-            var newOption = new Option(
-              courses[i][1],
-              courses[i][0],
-              false,
-              false
-            );
-            $("#courseName").append(newOption).trigger("change");
-          }
-        },
-      });
-    }
-
-    $(window).on('pageshow', () => {
-      var frm = $('#frm');
-      frm[0].reset();
-    });
-
-    trlist = $(".main-row");
-
-    $("body").on('input', "#searchbox", function () {
-        trlist.hide();
-        search = this.value.toLowerCase();
-        len = search.length;
-        for (i = 0; i < trlist.length; i++) {
-          for (let v = 0; v < 6; v++) {
-            if (trlist[i].children[v].textContent == "") {
-                cont = cont;
-            }
-            else {
-                cont = trlist[i].children[v].textContent.toLowerCase();
-            }
-            if (cont.search(search) != -1) {
-                $(trlist[i]).show();
-            }
+                for (var i of selected){
+                    if ( i == 'Online')
+                        {
+                            $("#Online").show();
+                        }
+                        else if ( i == 'ClassRoom')
+                        {
+                            $("#Classroom").show();
+                        }
+                        else if( i == 'Home Tutors')
+                        {
+                            $("#hometutors").show();
+                        }
+                    }
+                    $("#allvalue").show();
+                });
         }
-      }
-    });
-  </script>
-
+        );
+    </script>
+    <script>
+        function checkbox() {
+          var value = $("#negativecheck").is(":checked");
+          negative = document.getElementById("negative");
+          var output;
+          if (value) {
+            output = `<input
+          type="number"
+          class="mt-2 form-control"
+          placeholder="Enter Negative Marks"
+          name="negative_marks"
+          value="0"
+          required
+        />
+        <div class="invalid-feedback">
+          Enter a valid No.
+        </div>`;
+          } else {
+            output = "";
+          }
+          negative.innerHTML = output;
+        }
+        // In your Javascript (external .js resource or <script> tag)
+        $(document).ready(function () {
+          $('.js-example-basic-single').select2();
+        });
+        
+        function selectclass() {
+          var selected = $("#forclass").val();
+          $.ajax({
+            url: "{% url 'findbatch' %}",
+            data: {
+              forclass: selected,
+            },
+            success: function (data) {
+              courses = data.courses;
+              $("#courseName").empty().trigger("change");
+              for (i = 0; i < courses.length; i++) {
+                var newOption = new Option(
+                  courses[i][1],
+                  courses[i][0],
+                  false,
+                  false
+                );
+                $("#courseName").append(newOption).trigger("change");
+              }
+            },
+          });
+        }
+        
+        $(window).on('pageshow', () => {
+          var frm = $('#frm');
+          frm[0].reset();
+        });
+    </script>
 </div>
 {% endblock %}
