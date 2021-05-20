@@ -59,11 +59,13 @@ def batchTiming2(request):
                 try:
                     startTime = ampm(startTime)
                     endTime = ampm(endTime)
+
                 except Exception as e:
                     print(e)
                 days = request.POST.getlist('fordays')
                 days = ", ".join(days)
                 course = Courses.objects.get(id = courseID).courseName
+                print(course)
                 if not BatchTiming.objects.filter(forclass=forclass,course=course,startTime=startTime,endTime=endTime):
                     batchObj = BatchTiming(
                     #course=Courses.objects.get(id=int(courseID[0])),
@@ -100,7 +102,7 @@ def batchTiming2(request):
 def batchTimingEdit(request, id):
     if request.session['type'] == "Institute":
         user = User.objects.get(username=request.session['user'])
-        inst = Institute.objects.get(user=user)
+        inst = Institute.objects.get(user=user) 
         batchObj = BatchTiming.objects.get(id=id, institute=inst)
         forclass_sel = Courses.objects.filter(intitute=inst).values_list('forclass').distinct()
 
