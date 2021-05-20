@@ -54,6 +54,8 @@ def batchTiming2(request):
                 batchName = request.POST.get('batchName')
                 startTime = request.POST.get('startTime')
                 endTime = request.POST.get('endTime')
+                startDate = request.POST.get('startDate')
+                endDate = request.POST.get('endDate')
                 teachingtype = request.POST.get('teaching')
                 original = startTime+","+endTime
                 try:
@@ -66,7 +68,7 @@ def batchTiming2(request):
                 days = ", ".join(days)
                 course = Courses.objects.get(id = courseID).courseName
                 print(course)
-                if not BatchTiming.objects.filter(forclass=forclass,course=course,startTime=startTime,endTime=endTime):
+                if not BatchTiming.objects.filter(forclass=forclass,course=course,startTime=startTime,endTime=endTime,startDate=startDate,endDate=endDate):
                     batchObj = BatchTiming(
                     #course=Courses.objects.get(id=int(courseID[0])),
                     course = course,
@@ -74,6 +76,8 @@ def batchTiming2(request):
                     batchName = batchName,
                     startTime = startTime,
                     endTime = endTime,
+                    startDate = startDate,
+                    endDate = endDate,
                     institute = institute,
                     days = days,
                     original24time = original,

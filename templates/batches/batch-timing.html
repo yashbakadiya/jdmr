@@ -53,13 +53,8 @@
         <div class="col">
           <label for="validationCustom01"><strong> Batch Name<span class="red">*</span></strong></label>
           <input required type="text" class="form-control" id="batchName" name='batchName' placeholder="Batch Name" required>
-        
         </div>
 
-      </div>
-      <div class="mx-2 row mt-4"> 
-        
-        
         <div class="col">
           <label for="validationCustom01"><strong>Teaching Type <span class="red">*</span></strong></label>           
            <select required id="teachingtype" name='teaching'  style="width: 100%;"
@@ -69,6 +64,27 @@
             </select>          
         </div>
 
+      </div>
+      <div class="mx-2 row mt-4"> 
+        
+        
+
+
+        <div class="col">
+          <label for="validationCustom01"><strong>Start Date <span class="red">*</span></strong></label>
+          <input type="date" class="form-control w-100 col-sm-8 col-7" name="startDate" required><br />
+          <div class="invalid-feedback">
+            Select a valid Date!
+          </div>
+        </div>
+
+        <div class="col">
+          <label for="validationCustom01"><strong>End Date <span class="red">*</span></strong></label>
+          <input type="date" class="form-control w-100 col-sm-8 col-7" name="endDate" required><br />
+          <div class="invalid-feedback">
+            Select a valid Date!
+          </div>
+        </div>
 
 
         <div class="col">
@@ -148,6 +164,8 @@
               <th>Class</th>
               <th>Start Time</th>
               <th>End Time</th>
+              <th>Start Date</th>
+              <th>End Date</th>
               <th>Days</th>
               <th>Teaching Type</th>
               <th class='text-center'>Action</th>
@@ -164,6 +182,8 @@
               <td>{{i.forclass}}</td>
               <td>{{i.startTime}}</td>
               <td>{{i.endTime}}</td>
+              <td>{{i.startDate}}</td>
+              <td>{{i.endDate}}</td>
               <td>{{i.days}}</td>
               <td>{{i.teachingtype}}</td>
 

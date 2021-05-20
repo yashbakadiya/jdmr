@@ -54,13 +54,13 @@
 
                     {% for event in events %}
 
-                        {
-                    title: "{{ event.batchName}}",
-                    start: '{{ event.createdAt|date:"Y-m-d" }}',
-                    // start: '{{ event.startTime|time:"H:i" }}',
-                    end: '{{ event.endTime|time:"H:i" }}',
-                    id: '{{ event.id }}',
-                },
+                    {
+                        //start: '{{ event.createdAt|date:"Y-m-d" }}',
+                        title: "{{ event.batchName }}",
+                        start: '{{ event.startDate|date:"Y-m-d" }}',
+                        end: '{{ event.endDate|date:"Y-m-d" }}',
+                        id: '{{ event.id }}',
+                        },
                 {% endfor %}
                 ],
                 
