@@ -119,6 +119,8 @@ def batchTimingEdit(request, id):
             batchName = request.POST.get('batchName')
             startTime = request.POST.get('startTime')
             endTime = request.POST.get('endTime')
+            startDate = request.POST.get('startDate')
+            endDate = request.POST.get('endDate')
             teachingtype = request.POST.get('teaching')
             original = startTime+","+endTime
             try:
@@ -134,6 +136,8 @@ def batchTimingEdit(request, id):
             #batchObj.course = Courses.objects.get(id = courseID)
             batchObj.forclass = forclass
             batchObj.endTime = endTime
+            batchObj.startDate = startDate
+            batchObj.endDate = endDate
             batchObj.days = days
             batchObj.teachingtype = teachingtype
             batchObj.original24time = original

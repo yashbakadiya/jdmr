@@ -159,9 +159,10 @@
           <table class="table table-striped">
             <!--Table head-->
             <tr>
+              <th>#</th>
               <th>Batch Name</th>
-              <th>Course Name</th>
               <th>Class</th>
+              <th>Course Name</th>
               <th>Start Time</th>
               <th>End Time</th>
               <th>Start Date</th>
@@ -177,9 +178,10 @@
 
             {% for i in bat %}
             <tr class="main-row">
+              <td>{{forloop.counter}}</td>
               <td>{{i.batchName}}</td>
-              <td>{{i.course}}</td>
               <td>{{i.forclass}}</td>
+              <td>{{i.course}}</td>
               <td>{{i.startTime}}</td>
               <td>{{i.endTime}}</td>
               <td>{{i.startDate}}</td>
