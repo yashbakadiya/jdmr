@@ -340,10 +340,10 @@ def searchNotes(request):
                 match22 = LibraryNotes.not_bought_tutor_notes.filter(
                     Q(description__icontains=srch) | Q(subject__icontains=srch))
                 if match1 or match11 or match2 or match22:
-                    return render(request, 'Notes/searchNotes.html', {'founds1': match1, 'founds11': match11, 'founds2': match2, 'founds22': match22, 'srh':srch})
+                    return render(request, 'Notes/searchNotes.html', {'founds1': match1, 'founds11': match11, 'founds2': match2, 'founds22': match22, 'srh': srch})
                 else:
                     messages.warning(request, 'no result found')
-                    return render(request, 'Notes/searchNotes.html', {'srh':srch})
+                    return render(request, 'Notes/searchNotes.html', {'srh': srch})
         return render(request, 'Notes/searchNotes.html')
     return HttpResponse("You are not Authenticated for this view")
 

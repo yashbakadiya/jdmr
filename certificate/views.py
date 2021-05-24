@@ -16,9 +16,6 @@ def index(request):
 
 
 def certificatenum(request, certificate_num):
-    print(certificate_num)
-    print(type(certificate_num))
-
     try:
         certificateobj = Certificate.objects.get(
             certificate_num=certificate_num)

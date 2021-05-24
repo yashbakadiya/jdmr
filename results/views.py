@@ -1,6 +1,6 @@
-from django.shortcuts import render,HttpResponse,redirect,HttpResponseRedirect
+from django.shortcuts import render, HttpResponse, redirect, HttpResponseRedirect
 from django.contrib.auth.decorators import login_required
-from accounts.models import Institute,Teacher,Student
+from accounts.models import Institute, Teacher, Student
 from exams.models import *
 from students.models import AddStudentInst
 from teacher.models import enrollTutors
@@ -12,7 +12,9 @@ from django.core import serializers
 from .utils import render_to_pdf
 # Create your views here.
 
-# coaching result 
+# coaching result
+
+
 @login_required(login_url="Login")
 def CoachingResultStudent(request):
     context = {}
@@ -21,89 +23,100 @@ def CoachingResultStudent(request):
         inst = Institute.objects.get(user=user)
         if Exam.objects.filter(institute=inst).exists():
             exams = Exam.objects.filter(institute=inst)
-            context['exams']=exams
-        return render(request,'Results/ResultInstitute.html',context)
-        
+            context['exams'] = exams
+        return render(request, 'Results/ResultInstitute.html', context)
+
     return HttpResponse("You Are not Authenticated User for this Page")
 
+
 @login_required(login_url="Login")
-def GetExamResults(request,exam_id):
+def GetExamResults(request, exam_id):
     exam = Exam.objects.get(id=exam_id)
     students = StudentMapping.objects.filter(exam=exam)
     batches = []
     for std in students:
         try:
-            batches.append(AddStudentInst.objects.get(student = std.student).batch)
+            batches.append(AddStudentInst.objects.get(
+                student=std.student).batch)
         except:
             batches.append('Not Available')
-    context={
-	'students':zip(students,batches),
-    'size':len(students)
-	}
+    context = {
+        'students': zip(students, batches),
+        'size': len(students)
+    }
     if request.session['type'] == "Institute":
-        context['template']='dashboard/base.html'
+        context['template'] = 'dashboard/base.html'
     elif request.session['type'] == "Teacher":
-        context['template']='dashboard/Tutor-dashboard.html'
-    return render(request,'Results/GetExamResultCenter.html',context)
+        context['template'] = 'dashboard/Tutor-dashboard.html'
+    return render(request, 'Results/GetExamResultCenter.html', context)
+
 
 @login_required(login_url="Login")
-def GetStudentResults(request,student_id,exam_id):
+def GetStudentResults(request, student_id, exam_id):
     mapping = StudentMapping.objects.get(id=student_id)
     exam = Exam.objects.get(id=exam_id)
-    student_results = StudentExamResult.objects.get(student=mapping,exam=exam)
-    student_answers = StudentAnswer.objects.filter(student=mapping,exam=exam).order_by('id')
+    student_results = StudentExamResult.objects.get(student=mapping, exam=exam)
+    student_answers = StudentAnswer.objects.filter(
+        student=mapping, exam=exam).order_by('id')
     question_no_list = []
     for que in student_answers:
         if que.qtype == 'long':
-            question_no_list.append(LongAnswerQuestion.objects.get(exam=exam,question=que.question).question_no)
+            question_no_list.append(LongAnswerQuestion.objects.get(
+                exam=exam, question=que.question).question_no)
         elif que.qtype == 'short':
-            question_no_list.append(ShortAnswerQuestion.objects.get(exam=exam,question=que.question).question_no)
+            question_no_list.append(ShortAnswerQuestion.objects.get(
+                exam=exam, question=que.question).question_no)
         elif que.qtype == 'multiple':
-            question_no_list.append(MultipleQuestion.objects.get(exam=exam,question=que.question).question_no)
+            question_no_list.append(MultipleQuestion.objects.get(
+                exam=exam, question=que.question).question_no)
         elif que.qtype == 'tof':
-            question_no_list.append(BooleanQuestion.objects.get(exam=exam,question=que.question).question_no)
-            
-    if request.method=='POST':
-        calculate(student_answers,student_results)
-    context = {
-	'student_answers':zip(question_no_list,student_answers),
-	'status':student_results.attempted,
-	'result':student_results,
-	'exam':exam,
-	'mapping':mapping
-	}
-    
-    if request.session['type'] == "Institute":
-        context['template']='dashboard/base.html'
-    elif request.session['type'] == "Teacher":
-        context['template']='dashboard/Tutor-dashboard.html'
+            question_no_list.append(BooleanQuestion.objects.get(
+                exam=exam, question=que.question).question_no)
 
-    return render(request,'Results/StudentResult.html',context) 
+    if request.method == 'POST':
+        calculate(student_answers, student_results)
+    context = {
+        'student_answers': zip(question_no_list, student_answers),
+        'status': student_results.attempted,
+        'result': student_results,
+        'exam': exam,
+        'mapping': mapping
+    }
+
+    if request.session['type'] == "Institute":
+        context['template'] = 'dashboard/base.html'
+    elif request.session['type'] == "Teacher":
+        context['template'] = 'dashboard/Tutor-dashboard.html'
+
+    return render(request, 'Results/StudentResult.html', context)
+
 
 @login_required(login_url="Login")
-def Review_Answer(request,question_id):
+def Review_Answer(request, question_id):
     answer = StudentAnswer.objects.get(id=question_id)
-    context={
-	'answer':answer
-	}
+    context = {
+        'answer': answer
+    }
     if request.method == "POST":
-        marks = request.POST.get("marks",0.0)
+        marks = request.POST.get("marks", 0.0)
         answer.marks_given = marks
         answer.save()
-        return redirect('studentresult',answer.student.id,answer.exam.id)
+        return redirect('studentresult', answer.student.id, answer.exam.id)
 
     if request.session['type'] == "Institute":
-        context['template']='dashboard/base.html'
+        context['template'] = 'dashboard/base.html'
     elif request.session['type'] == "Teacher":
-        context['template']='dashboard/Tutor-dashboard.html'
+        context['template'] = 'dashboard/Tutor-dashboard.html'
 
-    return render(request,'Results/Review_Answer.html',context)
+    return render(request, 'Results/Review_Answer.html', context)
+
 
 def giveMarks(marks):
     if marks == None:
         return 0
     else:
         return marks
+
 
 def countQuestionAttributes(exam_mapping):
     for exam in exam_mapping:
@@ -138,17 +151,19 @@ def countQuestionAttributes(exam_mapping):
 
     return exam_mapping
 
+
 @login_required(login_url="Login")
 def webViewerAnnotate(request, id, pk):
 
-    context={"id":id,"pk":pk}
+    context = {"id": id, "pk": pk}
 
     if request.session['type'] == "Institute":
-        context['template']='dashboard/base.html'
+        context['template'] = 'dashboard/base.html'
     elif request.session['type'] == "Teacher":
-        context['template']='dashboard/Tutor-dashboard.html'
+        context['template'] = 'dashboard/Tutor-dashboard.html'
 
-    return render(request, 'Results/annotation.html',context)
+    return render(request, 'Results/annotation.html', context)
+
 
 @login_required(login_url="Login")
 def annotateAnswers(request, id, pk):
@@ -160,21 +175,25 @@ def annotateAnswers(request, id, pk):
     exam_mapping = countQuestionAttributes(exam_mapping)[0]
     try:
         one = student_results[0]
-        pdf = render_to_pdf('Results/annotatable_pdf.html', {'student_results': student_results, 'one': one, 'name': name, 'status': True})
-        return HttpResponse(pdf,content_type="application/pdf")
+        pdf = render_to_pdf('Results/annotatable_pdf.html', {
+                            'student_results': student_results, 'one': one, 'name': name, 'status': True})
+        return HttpResponse(pdf, content_type="application/pdf")
     except:
         pdf = render_to_pdf('Results/xyz.html', {'status': False})
-        return HttpResponse(pdf,content_type="application/pdf")
+        return HttpResponse(pdf, content_type="application/pdf")
+
 
 def checked_copies_upload(request, id, pk):
-    if request.method=='POST':
-        s = StudentExamResult.objects.filter(exam=id,student=pk)[0]
+    if request.method == 'POST':
+        s = StudentExamResult.objects.filter(exam=id, student=pk)[0]
         s.annotated_copies = request.FILES['coppies']
         s.save()
 
     return HttpResponse('')
 
-# teacher result 
+# teacher result
+
+
 @login_required(login_url="Login")
 def TutorResultStudent(request):
     context = {}
@@ -186,75 +205,87 @@ def TutorResultStudent(request):
         exams = []
         courses = []
         instituteslist = []
-        for i in instTutor.values_list('courseName'): #all courses in which teacher is enrolled
+        # all courses in which teacher is enrolled
+        for i in instTutor.values_list('courseName'):
             courses.append(i[0])
 
-        for i in instTutor.values_list('institute'): #all institute in which teacher is enrolled
+        # all institute in which teacher is enrolled
+        for i in instTutor.values_list('institute'):
             instituteslist.append(i[0])
 
         for exam in exam_filter:
-            if exam.institute.id in instituteslist: #if the exam is of the institute in which teacher is enrolled
-                if exam.course.courseName in courses: #if the exam is of course in which teacher is enrolled
+            if exam.institute.id in instituteslist:  # if the exam is of the institute in which teacher is enrolled
+                if exam.course.courseName in courses:  # if the exam is of course in which teacher is enrolled
                     exams.append(exam)
 
-        context = {     'exams':exams,
-                        'tutorexams':TutorExam.objects.filter(tutor=tutor)
-                    }
+        context = {'exams': exams,
+                   'tutorexams': TutorExam.objects.filter(tutor=tutor)
+                   }
 
-        return render(request,'Results/ResultTeacher.html',context)
-    
+        return render(request, 'Results/ResultTeacher.html', context)
+
     return HttpResponse("You Are not Authenticated User for this Page")
 
-@login_required(login_url="Login")
-def TutorGetExamResults(request,exam_id):
-    exam = TutorExam.objects.get(id=exam_id)
-    students = TutorStudentMapping.objects.filter(exam=exam)
-    context={
-	'students':students
-	}
-    return render(request,'Results/TutorGetExamResult.html',context)
 
 @login_required(login_url="Login")
-def TutorGetStudentResults(request,student_id,exam_id):
+def TutorGetExamResults(request, exam_id):
+    exam = TutorExam.objects.get(id=exam_id)
+    students = TutorStudentMapping.objects.filter(exam=exam)
+    context = {
+        'students': students
+    }
+    return render(request, 'Results/TutorGetExamResult.html', context)
+
+
+@login_required(login_url="Login")
+def TutorGetStudentResults(request, student_id, exam_id):
     mapping = TutorStudentMapping.objects.get(id=student_id)
     exam = TutorExam.objects.get(id=exam_id)
-    student_results = TutorStudentExamResult.objects.get(student=mapping,exam=exam)
-    student_answers = TutorStudentAnswer.objects.filter(student=mapping,exam=exam).order_by('id')
+    student_results = TutorStudentExamResult.objects.get(
+        student=mapping, exam=exam)
+    student_answers = TutorStudentAnswer.objects.filter(
+        student=mapping, exam=exam).order_by('id')
     question_no_list = []
     for que in student_answers:
         if que.qtype == 'long':
-            question_no_list.append(TutorLongAnswerQuestion.objects.get(exam=exam,question=que.question).question_no)
+            question_no_list.append(TutorLongAnswerQuestion.objects.get(
+                exam=exam, question=que.question).question_no)
         elif que.qtype == 'short':
-            question_no_list.append(TutorShortAnswerQuestion.objects.get(exam=exam,question=que.question).question_no)
+            question_no_list.append(TutorShortAnswerQuestion.objects.get(
+                exam=exam, question=que.question).question_no)
         elif que.qtype == 'multiple':
-            question_no_list.append(TutorMultipleQuestion.objects.get(exam=exam,question=que.question).question_no)
+            question_no_list.append(TutorMultipleQuestion.objects.get(
+                exam=exam, question=que.question).question_no)
         elif que.qtype == 'tof':
-            question_no_list.append(TutorBooleanQuestion.objects.get(exam=exam,question=que.question).question_no)
-            
-    if request.method=='POST':
-        calculate(student_answers,student_results)
+            question_no_list.append(TutorBooleanQuestion.objects.get(
+                exam=exam, question=que.question).question_no)
+
+    if request.method == 'POST':
+        calculate(student_answers, student_results)
     context = {
-	'student_answers':zip(question_no_list,student_answers),
-	'status':student_results.attempted,
-	'result':student_results,
-	'exam':exam,
-	'mapping':mapping
-	}
-    
-    return render(request,'Results/TutorStudentResult.html',context) 
+        'student_answers': zip(question_no_list, student_answers),
+        'status': student_results.attempted,
+        'result': student_results,
+        'exam': exam,
+        'mapping': mapping
+    }
+
+    return render(request, 'Results/TutorStudentResult.html', context)
+
 
 @login_required(login_url="Login")
-def TutorReview_Answer(request,question_id):
+def TutorReview_Answer(request, question_id):
     answer = TutorStudentAnswer.objects.get(id=question_id)
-    context={
-	'answer':answer
-	}
+    context = {
+        'answer': answer
+    }
     if request.method == "POST":
-        marks = request.POST.get("marks",0.0)
+        marks = request.POST.get("marks", 0.0)
         answer.marks_given = marks
         answer.save()
-        return redirect('tutorstudentresult',answer.student.id,answer.exam.id)
-    return render(request,'Results/TutorReview_Answer.html',context)
+        return redirect('tutorstudentresult', answer.student.id, answer.exam.id)
+    return render(request, 'Results/TutorReview_Answer.html', context)
+
 
 def TutorcountQuestionAttributes(exam_mapping):
     for exam in exam_mapping:
@@ -289,9 +320,11 @@ def TutorcountQuestionAttributes(exam_mapping):
 
     return exam_mapping
 
+
 @login_required(login_url="Login")
 def TutorwebViewerAnnotate(request, id, pk):
-    return render(request, 'Results/Tutorannotation.html',{"id":id,"pk":pk})
+    return render(request, 'Results/Tutorannotation.html', {"id": id, "pk": pk})
+
 
 @login_required(login_url="Login")
 def TutorannotateAnswers(request, id, pk):
@@ -299,57 +332,64 @@ def TutorannotateAnswers(request, id, pk):
     exam = exam_mapping[0]
     student = TutorStudentMapping.objects.get(id=pk)
     name = f"{student.student.user.first_name} {student.student.user.last_name}"
-    student_results = TutorStudentAnswer.objects.filter(student=student, exam=exam)
+    student_results = TutorStudentAnswer.objects.filter(
+        student=student, exam=exam)
     exam_mapping = TutorcountQuestionAttributes(exam_mapping)[0]
     try:
         one = student_results[0]
-        pdf = render_to_pdf('Results/annotatable_pdf.html', {'student_results': student_results, 'one': one, 'name': name, 'status': True})
-        return HttpResponse(pdf,content_type="application/pdf")
+        pdf = render_to_pdf('Results/annotatable_pdf.html', {
+                            'student_results': student_results, 'one': one, 'name': name, 'status': True})
+        return HttpResponse(pdf, content_type="application/pdf")
     except:
         pdf = render_to_pdf('Results/xyz.html', {'status': False})
-        return HttpResponse(pdf,content_type="application/pdf")
+        return HttpResponse(pdf, content_type="application/pdf")
+
 
 def Tutorchecked_copies_upload(request, id, pk):
-    if request.method=='POST':
-        s = TutorStudentExamResult.objects.filter(exam=id,student=pk)[0]
+    if request.method == 'POST':
+        s = TutorStudentExamResult.objects.filter(exam=id, student=pk)[0]
         s.annotated_copies = request.FILES['coppies']
         s.save()
 
     return HttpResponse('')
 
-# student result 
+# student result
+
+
 @login_required(login_url="Login")
 def ViewExamsResult(request):
-    if request.session['type']=="Student":
+    if request.session['type'] == "Student":
         user = User.objects.get(username=request.session['user'])
         student = Student.objects.get(user=user)
-        results=[]
-        tutorresults=[]
+        results = []
+        tutorresults = []
         for mapping in StudentMapping.objects.filter(student=student):
-            results+=StudentExamResult.objects.filter(student=mapping)
-            ans = StudentAnswer.objects.get(student=mapping,exam=mapping.exam)
+            results += StudentExamResult.objects.filter(student=mapping)
+            ans = StudentAnswer.objects.get(student=mapping, exam=mapping.exam)
             res = StudentExamResult.objects.get(student=mapping)
             if ans:
                 if res:
-                    calculate(ans,res)
-            
+                    calculate(ans, res)
+
         for mapping in TutorStudentMapping.objects.filter(student=student):
-            tutorresults+=TutorStudentExamResult.objects.filter(student=mapping)
-            ans = TutorStudentAnswer.objects.get(student=mapping,exam=mapping.exam)
+            tutorresults += TutorStudentExamResult.objects.filter(
+                student=mapping)
+            ans = TutorStudentAnswer.objects.get(
+                student=mapping, exam=mapping.exam)
             res = TutorStudentExamResult.objects.get(student=mapping)
             if ans:
                 if res:
-                    calculate(ans,res)
+                    calculate(ans, res)
 
-        context = { 'results': results,
-                    'tutorresults': tutorresults
-        }
-            
-        return render(request,'Results/examResultsAll.html',context)
+        context = {'results': results,
+                   'tutorresults': tutorresults
+                   }
+
+        return render(request, 'Results/examResultsAll.html', context)
     return HttpResponse("You Are not Authenticated for this page")
 
 
-def calculate(answers,result):
+def calculate(answers, result):
     student = answers[0]
 
     # Correct Question
@@ -359,7 +399,7 @@ def calculate(answers,result):
         correct_qs_marks = 0
     else:
         correct_qs_marks = correct_questions.aggregate(Sum('marks_given'))[
-        'marks_given__sum']
+            'marks_given__sum']
 
     # Incorrect Questions
     incorrect_questions = answers.filter(check='incorrect')
@@ -368,7 +408,7 @@ def calculate(answers,result):
         incorrect_qs_marks = 0
     else:
         incorrect_qs_marks = incorrect_questions.aggregate(Sum('marks_given'))[
-        'marks_given__sum']
+            'marks_given__sum']
 
     # Question Not Answered
     q_unanswered_type = answers.filter(check='Not Answered')
@@ -378,21 +418,23 @@ def calculate(answers,result):
     else:
         q_unanswered_marks = answers.filter(
             input_ans='Not Answered').aggregate(Sum('marks'))['marks__sum']
-    
+
     # Question Total
     result.total_questions = answers.all().count()
     result.total_marks = answers.all().aggregate(Sum('marks'))['marks__sum']
-    result.marks_scored = answers.all().aggregate(Sum('marks_given'))['marks_given__sum']
+    result.marks_scored = answers.all().aggregate(
+        Sum('marks_given'))['marks_given__sum']
     result.save()
 
-    #percent
-    result.percentage = round((result.marks_scored/result.total_marks) * 100,2)
+    # percent
+    result.percentage = round(
+        (result.marks_scored/result.total_marks) * 100, 2)
 
     if result.percentage >= result.exam.pass_percentage:
         result.pass_status = 1
     else:
         result.pass_status = 0
-    if result.percentage<0:
+    if result.percentage < 0:
         result.percentage = 0.0
 
     result.save()
@@ -405,9 +447,10 @@ def calculate(answers,result):
             incorrect_qs_marks, q_unanswered, q_unanswered_marks, q_answered,
             q_answered_marks, correct_questions, incorrect_questions, q_unanswered_type)
 
+
 @login_required(login_url="Login")
 def detailed_result(request, pk):
-    if request.session['type']=="Student":
+    if request.session['type'] == "Student":
         result = StudentExamResult.objects.get(id=pk)
         exam = result.exam
         student = result.student
@@ -417,13 +460,14 @@ def detailed_result(request, pk):
         answers = StudentAnswer.objects.filter(student=student, exam=exam)
         if answers:
             (correct_qs_count, correct_qs_marks, incorrect_qs_count,
-            incorrect_qs_marks, q_unanswered, q_unanswered_marks, q_answered,
-            q_answered_marks, correct_questions, incorrect_questions, q_unanswered_type) = calculate(
-                answers,result)
+             incorrect_qs_marks, q_unanswered, q_unanswered_marks, q_answered,
+             q_answered_marks, correct_questions, incorrect_questions, q_unanswered_type) = calculate(
+                answers, result)
 
             # Time Calculations
             exam_duration = str(exam.exam_duration)
-            extra, hr, mins = 0,int(exam_duration)//60,int(exam_duration)%60
+            extra, hr, mins = 0, int(
+                exam_duration)//60, int(exam_duration) % 60
             hr = int(hr)
             mins = int(mins)
             exam_duration = f'{hr}hr {mins}mins'
@@ -478,7 +522,7 @@ def detailed_result(request, pk):
                         'marks_given__sum']
                     percentage = round(
                         (section_marks_scored/section_total_marks) * 100, 2)
-                    if percentage<0:
+                    if percentage < 0:
                         percentage = 0.0
                     percentage = f'{percentage}%'
 
@@ -488,7 +532,8 @@ def detailed_result(request, pk):
                     section_incorrect_marks = 0
                 section[f'{A}_section_count'] = section_count
                 # section[f'{A}_section_question'] = section_ans
-                section[f'{A}_marks'] = section_correct_marks + section_incorrect_marks
+                section[f'{A}_marks'] = section_correct_marks + \
+                    section_incorrect_marks
                 section[f'{A}_section_correct_count'] = section_correct_count
                 section[f'{A}_section_incorrect_count'] = section_incorrect_count
                 section[f'{A}_section_correct_marks'] = section_correct_marks
@@ -497,7 +542,7 @@ def detailed_result(request, pk):
                 section[f'{A}_section_unanswered_marks'] = section_unanswered_marks
                 section[f'{A}_section_percentage'] = percentage
                 section[f'{A}_section_time'] = round(section_time, 2)
-            
+
             result.correct_qs_count = correct_qs_count
             result.correct_qs_marks = correct_qs_marks
             result.incorrect_qs_count = incorrect_qs_count
@@ -537,9 +582,9 @@ def detailed_result(request, pk):
                     topper_answers = StudentAnswer.objects.filter(
                         student=topper.student, exam=topper.exam)
                     (correct_qs_count, correct_qs_marks, incorrect_qs_count,
-                    incorrect_qs_marks, q_unanswered, q_unanswered_marks, q_answered,
-                    q_answered_marks, correct_questions, incorrect_questions, q_unanswered_type) = calculate(
-                        topper_answers,StudentExamResult.objects.filter(student=topper.student, exam=topper.exam).last())
+                     incorrect_qs_marks, q_unanswered, q_unanswered_marks, q_answered,
+                     q_answered_marks, correct_questions, incorrect_questions, q_unanswered_type) = calculate(
+                        topper_answers, StudentExamResult.objects.filter(student=topper.student, exam=topper.exam).last())
                     topper_time_taken = topper_answers.aggregate(Sum('extra_time'))[
                         'extra_time__sum'] + topper_answers.aggregate(Sum('time'))['time__sum']
                     topper.correct_qs_count = correct_qs_count
@@ -602,10 +647,11 @@ def detailed_result(request, pk):
             if 'download-pdf' in request.GET:
                 download_type = request.GET.get('download-pdf')
                 # Download
-                pdf = render_to_pdf(f'login/conversion/{download_type}.html', context)
+                pdf = render_to_pdf(
+                    f'login/conversion/{download_type}.html', context)
                 if pdf:
-                    print('hi')
-                    response = HttpResponse(pdf, content_type='application/pdf')
+                    response = HttpResponse(
+                        pdf, content_type='application/pdf')
                     filename = f"{result.student.student.Name} Report.pdf"
                     content = f"inline; filename={filename}"
                     download = request.GET.get("download")
@@ -619,9 +665,10 @@ def detailed_result(request, pk):
         return render(request, 'Results/detailed_result.html', context)
     return HttpResponse("You Are not Authenticated for this page")
 
+
 @login_required(login_url="Login")
 def tutor_detailed_result(request, pk):
-    if request.session['type']=="Student":
+    if request.session['type'] == "Student":
         result = TutorStudentExamResult.objects.get(id=pk)
         exam = result.exam
         student = result.student
@@ -631,13 +678,14 @@ def tutor_detailed_result(request, pk):
         answers = TutorStudentAnswer.objects.filter(student=student, exam=exam)
         if answers:
             (correct_qs_count, correct_qs_marks, incorrect_qs_count,
-            incorrect_qs_marks, q_unanswered, q_unanswered_marks, q_answered,
-            q_answered_marks, correct_questions, incorrect_questions, q_unanswered_type) = calculate(
-                answers,result)
+             incorrect_qs_marks, q_unanswered, q_unanswered_marks, q_answered,
+             q_answered_marks, correct_questions, incorrect_questions, q_unanswered_type) = calculate(
+                answers, result)
 
             # Time Calculations
             exam_duration = str(exam.exam_duration)
-            extra, hr, mins = 0,int(exam_duration)//60,int(exam_duration)%60
+            extra, hr, mins = 0, int(
+                exam_duration)//60, int(exam_duration) % 60
             hr = int(hr)
             mins = int(mins)
             exam_duration = f'{hr}hr {mins}mins'
@@ -692,7 +740,7 @@ def tutor_detailed_result(request, pk):
                         'marks_given__sum']
                     percentage = round(
                         (section_marks_scored/section_total_marks) * 100, 2)
-                    if percentage<0:
+                    if percentage < 0:
                         percentage = 0.0
                     percentage = f'{percentage}%'
 
@@ -702,7 +750,8 @@ def tutor_detailed_result(request, pk):
                     section_incorrect_marks = 0
                 section[f'{A}_section_count'] = section_count
                 # section[f'{A}_section_question'] = section_ans
-                section[f'{A}_marks'] = section_correct_marks + section_incorrect_marks
+                section[f'{A}_marks'] = section_correct_marks + \
+                    section_incorrect_marks
                 section[f'{A}_section_correct_count'] = section_correct_count
                 section[f'{A}_section_incorrect_count'] = section_incorrect_count
                 section[f'{A}_section_correct_marks'] = section_correct_marks
@@ -711,7 +760,7 @@ def tutor_detailed_result(request, pk):
                 section[f'{A}_section_unanswered_marks'] = section_unanswered_marks
                 section[f'{A}_section_percentage'] = percentage
                 section[f'{A}_section_time'] = round(section_time, 2)
-            
+
             result.correct_qs_count = correct_qs_count
             result.correct_qs_marks = correct_qs_marks
             result.incorrect_qs_count = incorrect_qs_count
@@ -751,9 +800,9 @@ def tutor_detailed_result(request, pk):
                     topper_answers = TutorStudentAnswer.objects.filter(
                         student=topper.student, exam=topper.exam)
                     (correct_qs_count, correct_qs_marks, incorrect_qs_count,
-                    incorrect_qs_marks, q_unanswered, q_unanswered_marks, q_answered,
-                    q_answered_marks, correct_questions, incorrect_questions, q_unanswered_type) = calculate(
-                        topper_answers,TutorStudentExamResult.objects.filter(student=topper.student, exam=topper.exam).last())
+                     incorrect_qs_marks, q_unanswered, q_unanswered_marks, q_answered,
+                     q_answered_marks, correct_questions, incorrect_questions, q_unanswered_type) = calculate(
+                        topper_answers, TutorStudentExamResult.objects.filter(student=topper.student, exam=topper.exam).last())
                     topper_time_taken = topper_answers.aggregate(Sum('extra_time'))[
                         'extra_time__sum'] + topper_answers.aggregate(Sum('time'))['time__sum']
                     topper.correct_qs_count = correct_qs_count
@@ -816,10 +865,11 @@ def tutor_detailed_result(request, pk):
             if 'download-pdf' in request.GET:
                 download_type = request.GET.get('download-pdf')
                 # Download
-                pdf = render_to_pdf(f'login/conversion/{download_type}.html', context)
+                pdf = render_to_pdf(
+                    f'login/conversion/{download_type}.html', context)
                 if pdf:
-                    print('hi')
-                    response = HttpResponse(pdf, content_type='application/pdf')
+                    response = HttpResponse(
+                        pdf, content_type='application/pdf')
                     filename = f"{result.student.student.Name} Report.pdf"
                     content = f"inline; filename={filename}"
                     download = request.GET.get("download")

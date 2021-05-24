@@ -1,5 +1,5 @@
 
-from django.shortcuts import render,redirect
+from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from pymongo import MongoClient
 import datetime
@@ -10,10 +10,11 @@ from chat.models import ChatApplication
 from django.db.models import Q
 from accounts.models import *
 
+
 def only_owner(func):
     def wrap(request, *args, **kwargs):
         if request.user.is_authenticated:
-            if request.user.username==kwargs['name']:
+            if request.user.username == kwargs['name']:
                 return func(request, *args, **kwargs)
             else:
                 return HttpResponse('You Are not Authorized')
@@ -21,51 +22,53 @@ def only_owner(func):
             return redirect('Login')
     return wrap
 
+
 @only_owner
 def index(request, name, ts):
-        latest_outgoing = ChatApplication.objects.filter(names=name)
-        latest_incoming = ChatApplication.objects.filter(room=name)
+    latest_outgoing = ChatApplication.objects.filter(names=name)
+    latest_incoming = ChatApplication.objects.filter(room=name)
 
-        if (latest_incoming.exists()==True and latest_outgoing.exists()==True):
-            if(latest_incoming.latest('dtime').dtime<latest_outgoing.latest('dtime').dtime):
-                latest=latest_outgoing.latest('dtime').room
-
-            else:
-                latest=latest_incoming.latest('dtime').names
-
-            return redirect('room',name,ts,latest)  
-
-        elif(latest_incoming.exists()==True and latest_outgoing.exists()==False):
-            latest=latest_incoming.latest('dtime').names
-            return redirect('room',name,ts,latest)  
-
-        elif(latest_incoming.exists()==False and latest_outgoing.exists()==True):
-            latest=latest_outgoing.latest('dtime').room
-            return redirect('room',name,ts,latest)  
+    if (latest_incoming.exists() == True and latest_outgoing.exists() == True):
+        if(latest_incoming.latest('dtime').dtime < latest_outgoing.latest('dtime').dtime):
+            latest = latest_outgoing.latest('dtime').room
 
         else:
-            if ts == "Teacher":
-                return render(request,'chat/index.html',{'template':'dashboard/Tutor-dashboard.html'})
-            elif ts == "Student":
-                return render(request,'chat/index.html',{'template':'dashboard/student-dashboard.html'})
+            latest = latest_incoming.latest('dtime').names
+
+        return redirect('room', name, ts, latest)
+
+    elif(latest_incoming.exists() == True and latest_outgoing.exists() == False):
+        latest = latest_incoming.latest('dtime').names
+        return redirect('room', name, ts, latest)
+
+    elif(latest_incoming.exists() == False and latest_outgoing.exists() == True):
+        latest = latest_outgoing.latest('dtime').room
+        return redirect('room', name, ts, latest)
+
+    else:
+        if ts == "Teacher":
+            return render(request, 'chat/index.html', {'template': 'dashboard/Tutor-dashboard.html'})
+        elif ts == "Student":
+            return render(request, 'chat/index.html', {'template': 'dashboard/student-dashboard.html'})
+
 
 @only_owner
 def room(request, name, room_name, ts):
     a = []
     a = ChatApplication.objects.all().order_by('dtime')
-    photos=[]
-    photos_all=[]
-    c=[]
-    print(name,room_name)
+    photos = []
+    photos_all = []
+    c = []
 
-    outgoing = ChatApplication.objects.filter(names=name).values('room','ts').distinct()
-    incoming = ChatApplication.objects.filter(room=name).values('names','ts').distinct()
+    outgoing = ChatApplication.objects.filter(
+        names=name).values('room', 'ts').distinct()
+    incoming = ChatApplication.objects.filter(
+        room=name).values('names', 'ts').distinct()
 
     for i in outgoing:
         if i['room'] not in c:
             c.append(i['room'])
             user = User.objects.get(username=i['room'])
-            print(user)
             if i['ts'] == "Teacher":
                 photos_all.append(Student.objects.get(user=user).photo)
             elif i['ts'] == "Student":
@@ -80,7 +83,6 @@ def room(request, name, room_name, ts):
             elif i['ts'] == "Student":
                 photos_all.append(Student.objects.get(user=user).photo)
 
-    
     for i in a:
         user = User.objects.get(username=i.names)
         if i.ts == "Teacher":
@@ -90,12 +92,13 @@ def room(request, name, room_name, ts):
 
     if ts == "Teacher":
         return render(request, 'chat/room1.html', {
-            'room': room_name, 'a': zip(a,photos), 'c': zip(c,photos_all), 'case1': room_name+name, 'case2': name+room_name
+            'room': room_name, 'a': zip(a, photos), 'c': zip(c, photos_all), 'case1': room_name+name, 'case2': name+room_name
         })
     elif ts == "Student":
         return render(request, 'chat/room2.html', {
-            'room': room_name, 'a': zip(a,photos), 'c': zip(c,photos_all), 'case1': room_name+name, 'case2': name+room_name
+            'room': room_name, 'a': zip(a, photos), 'c': zip(c, photos_all), 'case1': room_name+name, 'case2': name+room_name
         })
+
 
 @only_owner
 def send(request, name, room_name, ts):
@@ -118,7 +121,8 @@ def send(request, name, room_name, ts):
     except:
         pass
 
-    return redirect('room',name,ts,room_name)
+    return redirect('room', name, ts, room_name)
+
 
 @only_owner
 def send2(request, name, room_name, ts):
@@ -141,7 +145,8 @@ def send2(request, name, room_name, ts):
     except:
         pass
 
-    return redirect('room',name,ts,room_name)
+    return redirect('room', name, ts, room_name)
+
 
 @only_owner
 def upload1(request, name, room_name, ts):
@@ -194,6 +199,7 @@ def upload1(request, name, room_name, ts):
     }
 
     return render(request, 'chat/room1.html', m)
+
 
 @only_owner
 def upload2(request, name, room_name, ts):

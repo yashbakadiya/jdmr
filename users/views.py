@@ -20,7 +20,6 @@ def check_user(email):
 
 
 def create_new_user(full_name, email, password, phone_num, user_type, institution):
-    print("Hellllllllllo",user_type)
     user = User(full_name=full_name, email=email,
                 password=password, phone_num=phone_num, user_type=user_type, institution=institution)
     user.password = make_password(user.password)
@@ -35,14 +34,16 @@ def email_validation(request):
         return JsonResponse({'email_error': 'You are already registered. Please login to continue.'}, status=409)
     return JsonResponse({'email_valid': True})
 
+
 def password_validation(request):
     data = json.loads(request.body)
     password = data['password']
     pattern = '^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%&_])(?=\S+$).{8,20}$'
-    if bool(re.match(pattern,password)):
+    if bool(re.match(pattern, password)):
         return JsonResponse({'password_valid': True})
     else:
         return JsonResponse({'password_error': 'Password must be 8-20 characters long and must contain atleast one uppercase letter, one lowercase letter, one number(0-9) and one special character(@,#,$,%,&,_)'})
+
 
 def find_email(request):
     data = json.loads(request.body)
@@ -116,10 +117,8 @@ def send_otp(request):
             "Code2Learn <contact@code2learn.co>",
             [user_email]
         )
-        print("sending email")
         email.attach_alternative(html_content, "text/html")
         email.send()
-        print("Sent")
         return JsonResponse({'otp_sent': f'An OTP has been sent to {user_email}.'})
     except Exception:
         return JsonResponse({'otp_error': 'Error while sending OTP, try again'})
