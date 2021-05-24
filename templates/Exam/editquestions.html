@@ -1,27 +1,27 @@
-{% extends template %}
-{% load static %}
-{% block css %}
-{% endblock %}
-{% block main-content %}
+{% extends template %} {% load static %} {% block css %} {% endblock %} {% block
+main-content %}
 <script src="{% static 'js/tinymce/tinymce.min.js' %}"></script>
 <div class="container card mt-5">
-  {% if messages %}
-  {% for k in messages%}
+  {% if messages %} {% for k in messages%}
   <div class="alert alert-{{k.tags}} alert-dismissible fade show" role="alert">
     <b>{{ k }} !</b>
     <button type="button" class="close" data-dismiss="alert" aria-label="Close">
       <span aria-hidden="true">&times;</span>
     </button>
   </div>
-  {% endfor %}
-  {% endif %}
-  {% if errors %}
+  {% endfor %} {% endif %} {% if errors %}
   <div class="alert alert-danger" role="alert">
-    <div id='errorsBox'>
+    <div id="errorsBox">
       <div>
         <h5
-          style="color: red;text-shadow:-0.5px -0.5px 0 #000,0.5px -0.5px 0 #000,-0.5px 0.5px 0 #000,0.5px 0.5px 0 #000;">
-          Error !</h5>
+          style="
+            color: red;
+            text-shadow: -0.5px -0.5px 0 #000, 0.5px -0.5px 0 #000,
+              -0.5px 0.5px 0 #000, 0.5px 0.5px 0 #000;
+          "
+        >
+          Error !
+        </h5>
         <ul>
           {% for x in errors %}
           <li>{{ x }}</li>
@@ -35,12 +35,19 @@
     <div class="col ml-2 mt-0">
       <div class="row">
         <div class="col">
-          <h4 class="text-center font-weight-bold text-uppercase" style="font-size:30px;">{{exam.Name}}</h4>
+          <h4
+            class="text-center font-weight-bold text-uppercase"
+            style="font-size: 30px"
+          >
+            {{exam.Name}}
+          </h4>
         </div>
       </div>
       <div class="row">
         <div class="col">
-          <p class="text-left mt-2 text-dark font-weight-bold">Time : {{exam.exam_duration}}</p>
+          <p class="text-left mt-2 text-dark font-weight-bold">
+            Time : {{exam.exam_duration}}
+          </p>
         </div>
         <div class="col">
           <p class="text-right mt-2 text-dark font-weight-bold">MM : 100</p>
@@ -55,36 +62,26 @@
       {% for i in SectionA%}
       <div class="row pl-2">
         Q{{i.question_no}}.
-        <div class="col p-0 m-0 pl-2">
-          {{i.question|safe}}
-        </div>
-        <p style="margin-right:3em;">(Marks : {{i.marks}})</p>
-        <a href="{{i.Edit_url}}" class="text-right text-dark ml-0 pr-1"><i class="flaticon-pencil-line" style="font-size:medium;"></i></a>
+        <div class="col p-0 m-0 pl-2">{{i.question|safe}}</div>
+        <p style="margin-right: 3em">(Marks : {{i.marks}})</p>
+        <a href="{{i.Edit_url}}" class="text-right text-dark ml-0 pr-1"
+          ><i class="flaticon-pencil-line" style="font-size: medium"></i
+        ></a>
         &nbsp;&nbsp;&nbsp;
-        <a href="{{i.Delete_url}}" class="text-right text-dark ml-0 pr-1 mr-2"><i class="flaticon-delete-fill" style="font-size:medium;"></i></a>
+        <a href="{{i.Delete_url}}" class="text-right text-dark ml-0 pr-1 mr-2"
+          ><i class="flaticon-delete-fill" style="font-size: medium"></i
+        ></a>
       </div>
-      {% if i.options.all %}
-      {% for option in i.options.all %}
+      {% if i.options.all %} {% for option in i.options.all %}
       <div class="row">
-        <div class="col">
-          {{ forloop.counter }}. {{option.option|safe}}
-        </div>
+        <div class="col">{{ forloop.counter }}. {{option.option|safe}}</div>
       </div>
-      {% endfor %}
-      {% endif %}
-      {% if i.option1 %}
+      {% endfor %} {% endif %} {% if i.option1 %}
       <div class="row mb-2 mt-0">
-        <div class="col">
-          1. {{i.option1}}
-        </div>
-        <div class="col">
-          2. {{i.option2}}
-        </div>
+        <div class="col">1. {{i.option1}}</div>
+        <div class="col">2. {{i.option2}}</div>
       </div>
-      {% endif %}
-      {% endfor %}
-      {% endif %}
-      {% if SectionB %}
+      {% endif %} {% endfor %} {% endif %} {% if SectionB %}
       <div class="row">
         <div class="col">
           <p class="text-center text-dark font-weight-bold">Section B</p>
@@ -93,37 +90,26 @@
       {% for i in SectionB %}
       <div class="row pl-2">
         Q{{i.question_no}}.
-        <div class="col p-0 m-0 pl-2">
-          {{i.question|safe}}
-        </div>
-        <p style="margin-right:3em;">(Marks : {{i.marks}})</p>
-        <a href="{{i.Edit_url}}" class="text-right text-dark ml-0 pr-1"><i class="flaticon-pencil-line" style="font-size:medium;"></i></a>
+        <div class="col p-0 m-0 pl-2">{{i.question|safe}}</div>
+        <p style="margin-right: 3em">(Marks : {{i.marks}})</p>
+        <a href="{{i.Edit_url}}" class="text-right text-dark ml-0 pr-1"
+          ><i class="flaticon-pencil-line" style="font-size: medium"></i
+        ></a>
         &nbsp;&nbsp;&nbsp;
-        <a href="{{i.Delete_url}}" class="text-right text-dark ml-0 pr-1 mr-2"><i class="flaticon-delete-fill" style="font-size:medium;"></i></a>
+        <a href="{{i.Delete_url}}" class="text-right text-dark ml-0 pr-1 mr-2"
+          ><i class="flaticon-delete-fill" style="font-size: medium"></i
+        ></a>
       </div>
-      {% if i.options.all %}
-      {% for option in i.options.all %}
+      {% if i.options.all %} {% for option in i.options.all %}
       <div class="row">
-        <div class="col">
-          {{ forloop.counter }}. {{option.option|safe}}
-        </div>
+        <div class="col">{{ forloop.counter }}. {{option.option|safe}}</div>
       </div>
-      {% endfor %}
-      {% endif %}
-      {% if i.option1 %}
+      {% endfor %} {% endif %} {% if i.option1 %}
       <div class="row mb-2 mt-0">
-        <div class="col">
-          1. {{i.option1}}
-        </div>
-        <div class="col">
-          2. {{i.option2}}
-        </div>
+        <div class="col">1. {{i.option1}}</div>
+        <div class="col">2. {{i.option2}}</div>
       </div>
-      {% endif %}
-      {% endfor %}
-      {% endif %}
-
-      {% if SectionC %}
+      {% endif %} {% endfor %} {% endif %} {% if SectionC %}
       <div class="row">
         <div class="col">
           <p class="text-center text-dark font-weight-bold">Section C</p>
@@ -132,36 +118,26 @@
       {% for i in SectionC %}
       <div class="row pl-2">
         Q{{i.question_no}}.
-        <div class="col p-0 m-0 pl-2">
-          {{i.question|safe}}
-        </div>
-        <p style="margin-right:3em;">(Marks : {{i.marks}})</p>
-        <a href="{{i.Edit_url}}" class="text-right text-dark ml-0 pr-1"><i class="flaticon-pencil-line" style="font-size:medium;"></i></a>
+        <div class="col p-0 m-0 pl-2">{{i.question|safe}}</div>
+        <p style="margin-right: 3em">(Marks : {{i.marks}})</p>
+        <a href="{{i.Edit_url}}" class="text-right text-dark ml-0 pr-1"
+          ><i class="flaticon-pencil-line" style="font-size: medium"></i
+        ></a>
         &nbsp;&nbsp;&nbsp;
-        <a href="{{i.Delete_url}}" class="text-right text-dark ml-0 pr-1 mr-2"><i class="flaticon-delete-fill" style="font-size:medium;"></i></a>
+        <a href="{{i.Delete_url}}" class="text-right text-dark ml-0 pr-1 mr-2"
+          ><i class="flaticon-delete-fill" style="font-size: medium"></i
+        ></a>
       </div>
-      {% if i.options.all %}
-      {% for option in i.options.all %}
+      {% if i.options.all %} {% for option in i.options.all %}
       <div class="row">
-        <div class="col">
-          {{ forloop.counter }}. {{option.option|safe}}
-        </div>
+        <div class="col">{{ forloop.counter }}. {{option.option|safe}}</div>
       </div>
-      {% endfor %}
-      {% endif %}
-      {% if i.option1 %}
+      {% endfor %} {% endif %} {% if i.option1 %}
       <div class="row mb-2 mt-0">
-        <div class="col">
-          1. {{i.option1}}
-        </div>
-        <div class="col">
-          2. {{i.option2}}
-        </div>
+        <div class="col">1. {{i.option1}}</div>
+        <div class="col">2. {{i.option2}}</div>
       </div>
-      {% endif %}
-      {% endfor %}
-      {% endif %}
-      {% if SectionD %}
+      {% endif %} {% endfor %} {% endif %} {% if SectionD %}
       <div class="row">
         <div class="col">
           <p class="text-center text-dark font-weight-bold">Section D</p>
@@ -170,44 +146,36 @@
       {% for i in SectionD %}
       <div class="row pl-2">
         Q{{i.question_no}}.
-        <div class="col p-0 m-0 pl-2">
-          {{i.question|safe}}
-        </div>
-        <p style="margin-right:3em;">(Marks : {{i.marks}})</p>
-        <a href="{{i.Edit_url}}" class="text-right text-dark ml-0 pr-1"><i class="flaticon-pencil-line" style="font-size:medium;"></i></a>
+        <div class="col p-0 m-0 pl-2">{{i.question|safe}}</div>
+        <p style="margin-right: 3em">(Marks : {{i.marks}})</p>
+        <a href="{{i.Edit_url}}" class="text-right text-dark ml-0 pr-1"
+          ><i class="flaticon-pencil-line" style="font-size: medium"></i
+        ></a>
         &nbsp;&nbsp;&nbsp;
-        <a href="{{i.Delete_url}}" class="text-right text-dark ml-0 pr-1 mr-2"><i class="flaticon-delete-fill" style="font-size:medium;"></i></a>
+        <a href="{{i.Delete_url}}" class="text-right text-dark ml-0 pr-1 mr-2"
+          ><i class="flaticon-delete-fill" style="font-size: medium"></i
+        ></a>
       </div>
-      {% if i.options.all %}
-      {% for option in i.options.all %}
+      {% if i.options.all %} {% for option in i.options.all %}
       <div class="row">
-        <div class="col">
-          {{ forloop.counter }}. {{option.option|safe}}
-        </div>
+        <div class="col">{{ forloop.counter }}. {{option.option|safe}}</div>
       </div>
-      {% endfor %}
-      {% endif %}
-      {% if i.option1 %}
+      {% endfor %} {% endif %} {% if i.option1 %}
       <div class="row mb-2 mt-0">
-        <div class="col">
-          1. {{i.option1}}
-        </div>
-        <div class="col">
-          2. {{i.option2}}
-        </div>
+        <div class="col">1. {{i.option1}}</div>
+        <div class="col">2. {{i.option2}}</div>
       </div>
-      {% endif %}
-      {% endfor %}
-      {% endif %}
+      {% endif %} {% endfor %} {% endif %}
     </div>
     <script>
       function addtext() {
-        var tags = '<div class="row mb-3" id="multipleinput">'
-        tags += '<div class="col-9 pr-4 mr-3">'
-        tags += '<input type="text" class="form-control" placeholder="Enter Value" name="options" required>'
-        tags += '</div>'
-        tags += '</div>'
-        $('#solutionbox').append(tags);
+        var tags = '<div class="row mb-3" id="multipleinput">';
+        tags += '<div class="col-9 pr-4 mr-3">';
+        tags +=
+          '<input type="text" class="form-control" placeholder="Enter Value" name="options" required>';
+        tags += "</div>";
+        tags += "</div>";
+        $("#solutionbox").append(tags);
       }
       tinymce.init({
         selector: "#exampleFormControlTextarea1",
@@ -224,8 +192,10 @@
           "insertdatetime media nonbreaking save table contextmenu directionality",
           "emoticons template paste textcolor colorpicker textpattern imagetools codesample toc FMathEditor",
         ],
-        toolbar1: "undo redo | insert | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image",
-        toolbar2: "print preview media | forecolor backcolor emoticons | codesample | FMathEditor",
+        toolbar1:
+          "undo redo | insert | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image",
+        toolbar2:
+          "print preview media | forecolor backcolor emoticons | codesample | FMathEditor",
       });
 
       tinymce.init({
@@ -243,8 +213,10 @@
           "insertdatetime media nonbreaking save table contextmenu directionality",
           "emoticons template paste textcolor colorpicker textpattern imagetools codesample toc FMathEditor",
         ],
-        toolbar1: "undo redo | insert | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image",
-        toolbar2: "print preview media | forecolor backcolor emoticons | codesample | FMathEditor",
+        toolbar1:
+          "undo redo | insert | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image",
+        toolbar2:
+          "print preview media | forecolor backcolor emoticons | codesample | FMathEditor",
       });
 
       function checkbox() {
@@ -270,52 +242,55 @@
       }
       // In your Javascript (external .js resource or <script> tag)
       $(document).ready(function () {
-        $('.js-example-basic-single').select2();
+        $(".js-example-basic-single").select2();
       });
 
-
       $(document).ready(function () {
-        $('#question_type_select').change(function () {
+        $("#question_type_select").change(function () {
           var type = $(this).val();
-          if (type == 'mc') {
-            var optioninput = '<div class="row mb-2" id="multipleinput">'
-            optioninput += '<div class="col">'
-            optioninput += '<input type="text" class="form-control" placeholder="Enter Value" name="options">'
-            optioninput += '</div>'
-            optioninput += '<div class="col-auto">'
+          if (type == "mc") {
+            var optioninput = '<div class="row mb-2" id="multipleinput">';
+            optioninput += '<div class="col">';
             optioninput +=
-              '<a onclick="addtext()" class="btn btn-primary mb-2" style="color:white;">Add Option</a>'
-            optioninput += '</div>'
-            optioninput += '</div>'
-            $('#solutionbox').append(optioninput);
+              '<input type="text" class="form-control" placeholder="Enter Value" name="options">';
+            optioninput += "</div>";
+            optioninput += '<div class="col-auto">';
+            optioninput +=
+              '<a onclick="addtext()" class="btn btn-primary mb-2" style="color:white;">Add Option</a>';
+            optioninput += "</div>";
+            optioninput += "</div>";
+            $("#solutionbox").append(optioninput);
           } else {
-            $('#multipleinput').remove();
-            $('#multipleinput').remove();
-            $('#multipleinput').remove();
-            $('#multipleinput').remove();
+            $("#multipleinput").remove();
+            $("#multipleinput").remove();
+            $("#multipleinput").remove();
+            $("#multipleinput").remove();
           }
         });
       });
 
       $(document).ready(function () {
-        $('#question_type_select').change(function () {
+        $("#question_type_select").change(function () {
           var type = $(this).val();
-          if (type == 'tf') {
-            var optioninput = '<div class="row mb-2" id="multipleinput">'
-            optioninput += '<div class="col">'
-            optioninput += '<input type="text" class="form-control" placeholder="First Value" name="options">'
-            optioninput += '</div>'
-            optioninput += '</div>'
-            var anotherinput = '<div class="row mb-2" id="multipleinput">'
-            anotherinput += '<div class="col">'
-            anotherinput += '<input type="text" class="form-control" placeholder="Second Value" name="options">'
-            anotherinput += '</div>'
-            anotherinput += '</div>'
-            $('#solutionbox').append(optioninput);
-            $('#solutionbox').append(anotherinput);
+          if (type == "tf") {
+            var optioninput = '<div class="row mb-2" id="multipleinput">';
+            optioninput += '<div class="col">';
+            optioninput +=
+              '<input type="text" class="form-control" placeholder="First Value" name="options">';
+            optioninput += "</div>";
+            optioninput += "</div>";
+            var anotherinput = '<div class="row mb-2" id="multipleinput">';
+            anotherinput += '<div class="col">';
+            anotherinput +=
+              '<input type="text" class="form-control" placeholder="Second Value" name="options">';
+            anotherinput += "</div>";
+            anotherinput += "</div>";
+            $("#solutionbox").append(optioninput);
+            $("#solutionbox").append(anotherinput);
           }
         });
       });
     </script>
   </div>
   {% endblock main-content %}
+</div>

@@ -1,266 +1,263 @@
-{% extends 'dashboard/student-dashboard.html' %}
-{% load static %}
-{% block css %}
-.table-bordered.red-border, .table-bordered.red-border th, .table-bordered.red-border td {
-border: 1px solid #ff3547!important;
-}
-.table.table-bordered th {
-text-align: center;
-}
-.darken-grey-text {
-color: #2E2E2E;
-}
-.input-group.md-form.form-sm.form-2 input {
-border: 1px solid #bdbdbd;
-border-top-left-radius: 0.25rem;
-border-bottom-left-radius: 0.25rem;
-}
-.input-group.md-form.form-sm.form-2 input.purple-border {
-border: 1px solid #9e9e9e;
-}
-.input-group.md-form.form-sm.form-2 input[type=text]:focus:not([readonly]).purple-border {
-border: 1px solid #ba68c8;
-box-shadow: none;
-}
-.form-2 .input-group-addon {
-border: 1px solid #ba68c8;
-}
-.danger-text {
-color: #ff3547;
-}
-.success-text {
-color: #00C851;
-}
-{% endblock %}
-{% block main-content %}
+{% extends 'dashboard/student-dashboard.html' %} {% load static %} {% block css
+%} .table-bordered.red-border, .table-bordered.red-border th,
+.table-bordered.red-border td { border: 1px solid #ff3547!important; }
+.table.table-bordered th { text-align: center; } .darken-grey-text { color:
+#2E2E2E; } .input-group.md-form.form-sm.form-2 input { border: 1px solid
+#bdbdbd; border-top-left-radius: 0.25rem; border-bottom-left-radius: 0.25rem; }
+.input-group.md-form.form-sm.form-2 input.purple-border { border: 1px solid
+#9e9e9e; } .input-group.md-form.form-sm.form-2
+input[type=text]:focus:not([readonly]).purple-border { border: 1px solid
+#ba68c8; box-shadow: none; } .form-2 .input-group-addon { border: 1px solid
+#ba68c8; } .danger-text { color: #ff3547; } .success-text { color: #00C851; } {%
+endblock %} {% block main-content %}
 <div class="mt-5">
-    {% if messages or srh %}
-    {% for k in messages %}
-    <div class="alert alert-{{k.tags}} alert-dismissible fade show" role="alert">
-        <b>{{ k }} for <i>'<u>{{ srh }}</u>'</i> !</b>
-        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-        </button>
+  {% if messages or srh %} {% for k in messages %}
+  <div class="alert alert-{{k.tags}} alert-dismissible fade show" role="alert">
+    <b
+      >{{ k }} for <i>'<u>{{ srh }}</u>'</i> !</b
+    >
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  {% endfor %} {% endif %} {% if founds1 or founds11 or founds2 or founds22 %}
+  <div class="card-header2">
+    <div class="col-xl-12 col-md-12 col-12">
+      <h3>
+        Results searched for <i>'<u>{{ srh }}</u>'</i> :
+      </h3>
     </div>
-    {% endfor %}
-    {% endif %}
-    {% if founds1 or founds11 or founds2 or founds22 %}
-    <div class="card-header2">
-        <div class="col-xl-12 col-md-12 col-12">
-            <h3>Results searched for <i>'<u>{{ srh }}</u>'</i> :</h3>
-        </div>
-    </div>
-    {% endif %}
-    {% if founds1 or founds11 %}
-    <main class="mt-2 row">
-        <div class="col-xl-12 col-md-12 col-12">
-            <div class="card widget box box-shadow">
-                <div class="card-body">
-                <div class="card-header">
-                    <div class="row">
-                        <div class="col-xl-12 col-md-12 col-12">
-                            <h4 style="color:black;">Your Notes</h4>
-                        </div>
-                    </div>
-                </div>
-                    {% if founds1 %}
-                    <h6 style="color:black;" class="m-2 pl-2">Institute Notes</h6>
-                    <div class="table-responsive">
-                        <table class="table table-striped">
-                            <!--Table head-->
-        
-                            <tr>
-                                <th>Note Title</th>
-                                <th>Class</th>
-                                <th>Subject</th>
-                                <th>Description</th>
-                                <th>Institute</th>
-                                <th>Price</th>
-                                <th class="text-center">View</th>
-                            </tr>
-        
-                            {% for note in founds1 %}
-                            <tr>
-                                <td>
-                                    <p style="color: black;font-size: 14px;">{{note.title}}</p>
-                                </td>
-                                <td>
-                                    <p style="color: black;font-size: 14px;">{{note.forclass}}</p>
-                                </td>
-                                <td>
-                                    <p style="color: black;font-size: 14px;">{{note.subject}}</p>
-                                </td>
-                                <td>{{note.description|truncatechars:15}}</td>
-                                <td>
-                                    <p style="color: black;font-size: 14px;">{{note.institute.user.username}}</p>
-                                </td>
-                                <td>
-                                    <p style="color: black;font-size: 14px;">{{note.price}}</p>
-                                </td>
-                                <td style="text-align: center;">
-                                    <a class="btn btn-info" href="{% url 'viewinstitutenotespdf' note.id %}">View Note</a>
-                                </td>
-                            </tr>
-                            {% endfor %}
-                            <!--Table body-->
-                        </table>
-                    </div>
-                    {% endif %}
-                    {% if founds11 %}
-                    <h6 style="color:black;" class="m-2 pl-2">Tutor Notes</h6>
-                    <div class="table-responsive">
-                        <table class="table table-striped">
-                            <!--Table head-->
-        
-                            <tr>
-                                <th>Note Title</th>
-                                <th>Class</th>
-                                <th>Subject</th>
-                                <th>Description</th>
-                                <th>Teacher</th>
-                                <th>Price</th>
-                                <th class="text-center">View</th>
-                            </tr>
-        
-                            {% for note in founds11 %}
-                            <tr>
-                                <td>
-                                    <p style="color: black;font-size: 14px;">{{note.title}}</p>
-                                </td>
-                                <td>
-                                    <p style="color: black;font-size: 14px;">{{note.forclass}}</p>
-                                </td>
-                                <td>
-                                    <p style="color: black;font-size: 14px;">{{note.subject}}</p>
-                                </td>
-                                <td>{{note.description|truncatechars:15}}</td>
-                                <td>
-                                    <p style="color: black;font-size: 14px;">{{note.tutor.user.username}}</p>
-                                </td>
-                                <td>
-                                    <p style="color: black;font-size: 14px;">{{note.price}}</p>
-                                </td>
-                                <td style="text-align: center;">
-                                    <a class="btn btn-info" href="{% url 'viewinstitutenotespdf' note.id %}">View Note</a>
-                                </td>
-                            </tr>
-                            {% endfor %}
-                            <!--Table body-->
-                        </table>
-                    </div>
-                    <!--Table-->
-                    <hr>
-                    {% endif %}
-                </div>
+  </div>
+  {% endif %} {% if founds1 or founds11 %}
+  <main class="mt-2 row">
+    <div class="col-xl-12 col-md-12 col-12">
+      <div class="card widget box box-shadow">
+        <div class="card-body">
+          <div class="card-header">
+            <div class="row">
+              <div class="col-xl-12 col-md-12 col-12">
+                <h4 style="color: black">Your Notes</h4>
+              </div>
             </div>
-        </div>
-    </main>
-    {% endif %}
-    {% if founds2 or founds22 %}
-    <main class="mt-2 row">
+          </div>
+          {% if founds1 %}
+          <h6 style="color: black" class="m-2 pl-2">Institute Notes</h6>
+          <div class="table-responsive">
+            <table class="table table-striped">
+              <!--Table head-->
 
-        <div class="col-xl-12 col-md-12 col-12">
-            <div class="card widget box box-shadow">
-                <div class="card-body">
-                    <div class="card-header">
-                        <div class="row">
-                            <div class="col-xl-12 col-md-12 col-12">
-                                <h4 style="color:black;">Available Notes</h4>
-                            </div>
-                        </div>
-                    </div>
-                    {% if founds2 %}
-                    <h6 style="color:black;" class="m-2 pl-2">Institute Notes</h6>
-                    <div class="table-responsive">
-                        <table class="table table-striped">
-                            <!--Table head-->
-        
-                            <tr>
-                                <th>Note Title</th>
-                                <th>Class</th>
-                                <th>Subject</th>
-                                <th>Description</th>
-                                <th>Institute</th>
-                                <th>Price</th>
-                                <th class="text-center">View</th>
-                            </tr>
-        
-                            {% for note in founds2 %}
-                            <tr>
-                                <td>
-                                    <p style="color: black;font-size: 14px;">{{note.title}}</p>
-                                </td>
-                                <td>
-                                    <p style="color: black;font-size: 14px;">{{note.forclass}}</p>
-                                </td>
-                                <td>
-                                    <p style="color: black;font-size: 14px;">{{note.subject}}</p>
-                                </td>
-                                <td>{{note.description|truncatechars:15}}</td>
-                                <td>
-                                    <p style="color: black;font-size: 14px;">{{note.institute.user.username}}</p>
-                                </td>
-                                <td>
-                                    <p style="color: black;font-size: 14px;">{{note.price}}</p>
-                                </td>
-                                <td style="text-align: center;">
-                                    <a class="btn btn-info" href="{% url 'buyTutorNotes' note.id %}">Buy Note</a>
-                                </td>
-                            </tr>
-                            {% endfor %}
-                            <!--Table body-->
-                        </table>
-                    </div>
-                    {% endif %}
-                    {% if founds22 %}
-                    <h6 style="color:black;" class="m-2 pl-2">Tutor Notes</h6>
-                    <div class="table-responsive">
-                        <table class="table table-striped">
-                            <!--Table head-->
-        
-                            <tr>
-                                <th>Note Title</th>
-                                <th>Class</th>
-                                <th>Subject</th>
-                                <th>Description</th>
-                                <th>Teacher</th>
-                                <th>Price</th>
-                                <th class="text-center">View</th>
-                            </tr>
-        
-                            {% for note in founds22 %}
-                            <tr>
-                                <td>
-                                    <p style="color: black;font-size: 14px;">{{note.title}}</p>
-                                </td>
-                                <td>
-                                    <p style="color: black;font-size: 14px;">{{note.forclass}}</p>
-                                </td>
-                                <td>
-                                    <p style="color: black;font-size: 14px;">{{note.subject}}</p>
-                                </td>
-                                <td>{{note.description|truncatechars:15}}</td>
-                                <td>
-                                    <p style="color: black;font-size: 14px;">{{note.tutor.user.username}}</p>
-                                </td>
-                                <td>
-                                    <p style="color: black;font-size: 14px;">{{note.price}}</p>
-                                </td>
-                                <td style="text-align: center;">
-                                    <a class="btn btn-info" href="{% url 'buyTutorNotes' note.id %}">Buy Note</a>
-                                </td>
-                            </tr>
-                            {% endfor %}
-                            <!--Table body-->
-                        </table>
-                    </div>
-                    <!--Table-->
-                    <hr>
-                    {% endif %}
-                </div>
-            </div>
+              <tr>
+                <th>Note Title</th>
+                <th>Class</th>
+                <th>Subject</th>
+                <th>Description</th>
+                <th>Institute</th>
+                <th>Price</th>
+                <th class="text-center">View</th>
+              </tr>
+
+              {% for note in founds1 %}
+              <tr>
+                <td>
+                  <p style="color: black; font-size: 14px">{{note.title}}</p>
+                </td>
+                <td>
+                  <p style="color: black; font-size: 14px">{{note.forclass}}</p>
+                </td>
+                <td>
+                  <p style="color: black; font-size: 14px">{{note.subject}}</p>
+                </td>
+                <td>{{note.description|truncatechars:15}}</td>
+                <td>
+                  <p style="color: black; font-size: 14px">
+                    {{note.institute.user.username}}
+                  </p>
+                </td>
+                <td>
+                  <p style="color: black; font-size: 14px">{{note.price}}</p>
+                </td>
+                <td style="text-align: center">
+                  <a
+                    class="btn btn-info"
+                    href="{% url 'viewinstitutenotespdf' note.id %}"
+                    >View Note</a
+                  >
+                </td>
+              </tr>
+              {% endfor %}
+              <!--Table body-->
+            </table>
+          </div>
+          {% endif %} {% if founds11 %}
+          <h6 style="color: black" class="m-2 pl-2">Tutor Notes</h6>
+          <div class="table-responsive">
+            <table class="table table-striped">
+              <!--Table head-->
+
+              <tr>
+                <th>Note Title</th>
+                <th>Class</th>
+                <th>Subject</th>
+                <th>Description</th>
+                <th>Teacher</th>
+                <th>Price</th>
+                <th class="text-center">View</th>
+              </tr>
+
+              {% for note in founds11 %}
+              <tr>
+                <td>
+                  <p style="color: black; font-size: 14px">{{note.title}}</p>
+                </td>
+                <td>
+                  <p style="color: black; font-size: 14px">{{note.forclass}}</p>
+                </td>
+                <td>
+                  <p style="color: black; font-size: 14px">{{note.subject}}</p>
+                </td>
+                <td>{{note.description|truncatechars:15}}</td>
+                <td>
+                  <p style="color: black; font-size: 14px">
+                    {{note.tutor.user.username}}
+                  </p>
+                </td>
+                <td>
+                  <p style="color: black; font-size: 14px">{{note.price}}</p>
+                </td>
+                <td style="text-align: center">
+                  <a
+                    class="btn btn-info"
+                    href="{% url 'viewinstitutenotespdf' note.id %}"
+                    >View Note</a
+                  >
+                </td>
+              </tr>
+              {% endfor %}
+              <!--Table body-->
+            </table>
+          </div>
+          <!--Table-->
+          <hr />
+          {% endif %}
         </div>
-    </main>
-    {% endif %}
+      </div>
+    </div>
+  </main>
+  {% endif %} {% if founds2 or founds22 %}
+  <main class="mt-2 row">
+    <div class="col-xl-12 col-md-12 col-12">
+      <div class="card widget box box-shadow">
+        <div class="card-body">
+          <div class="card-header">
+            <div class="row">
+              <div class="col-xl-12 col-md-12 col-12">
+                <h4 style="color: black">Available Notes</h4>
+              </div>
+            </div>
+          </div>
+          {% if founds2 %}
+          <h6 style="color: black" class="m-2 pl-2">Institute Notes</h6>
+          <div class="table-responsive">
+            <table class="table table-striped">
+              <!--Table head-->
+
+              <tr>
+                <th>Note Title</th>
+                <th>Class</th>
+                <th>Subject</th>
+                <th>Description</th>
+                <th>Institute</th>
+                <th>Price</th>
+                <th class="text-center">View</th>
+              </tr>
+
+              {% for note in founds2 %}
+              <tr>
+                <td>
+                  <p style="color: black; font-size: 14px">{{note.title}}</p>
+                </td>
+                <td>
+                  <p style="color: black; font-size: 14px">{{note.forclass}}</p>
+                </td>
+                <td>
+                  <p style="color: black; font-size: 14px">{{note.subject}}</p>
+                </td>
+                <td>{{note.description|truncatechars:15}}</td>
+                <td>
+                  <p style="color: black; font-size: 14px">
+                    {{note.institute.user.username}}
+                  </p>
+                </td>
+                <td>
+                  <p style="color: black; font-size: 14px">{{note.price}}</p>
+                </td>
+                <td style="text-align: center">
+                  <a
+                    class="btn btn-info"
+                    href="{% url 'buyTutorNotes' note.id %}"
+                    >Buy Note</a
+                  >
+                </td>
+              </tr>
+              {% endfor %}
+              <!--Table body-->
+            </table>
+          </div>
+          {% endif %} {% if founds22 %}
+          <h6 style="color: black" class="m-2 pl-2">Tutor Notes</h6>
+          <div class="table-responsive">
+            <table class="table table-striped">
+              <!--Table head-->
+
+              <tr>
+                <th>Note Title</th>
+                <th>Class</th>
+                <th>Subject</th>
+                <th>Description</th>
+                <th>Teacher</th>
+                <th>Price</th>
+                <th class="text-center">View</th>
+              </tr>
+
+              {% for note in founds22 %}
+              <tr>
+                <td>
+                  <p style="color: black; font-size: 14px">{{note.title}}</p>
+                </td>
+                <td>
+                  <p style="color: black; font-size: 14px">{{note.forclass}}</p>
+                </td>
+                <td>
+                  <p style="color: black; font-size: 14px">{{note.subject}}</p>
+                </td>
+                <td>{{note.description|truncatechars:15}}</td>
+                <td>
+                  <p style="color: black; font-size: 14px">
+                    {{note.tutor.user.username}}
+                  </p>
+                </td>
+                <td>
+                  <p style="color: black; font-size: 14px">{{note.price}}</p>
+                </td>
+                <td style="text-align: center">
+                  <a
+                    class="btn btn-info"
+                    href="{% url 'buyTutorNotes' note.id %}"
+                    >Buy Note</a
+                  >
+                </td>
+              </tr>
+              {% endfor %}
+              <!--Table body-->
+            </table>
+          </div>
+          <!--Table-->
+          <hr />
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </main>
+  {% endif %}
 </div>
 {% endblock %}

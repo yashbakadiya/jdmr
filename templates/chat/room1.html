@@ -1,131 +1,174 @@
-{% extends 'dashboard/Tutor-dashboard.html' %}
-{% load static %}
+{% extends 'dashboard/Tutor-dashboard.html' %} {% load static %}
 <!-- BEGIN PAGE LEVEL STYLES -->
 {% block extra-stylesheets %}
-<link href="{% static 'assets/css/apps/mailing-chat.css' %}" rel="stylesheet" type="text/css" />
+<link
+  href="{% static 'assets/css/apps/mailing-chat.css' %}"
+  rel="stylesheet"
+  type="text/css"
+/>
 {% endblock extra-stylesheets %}
 <!-- END PAGE LEVEL STYLES -->
 {% block main-content %}
 <!-- <body style="background-image: url('https://larkaiproject1.s3.ap-south-1.amazonaws.com/background.png');"></body> -->
 <!-- <center> -->
-    <style>
-        .hi-button{
-            position: absolute;
-            top: 30%;
-            left: 50%;
-            transform: translate(-50%,-50%);
-        }
-    </style>
-    <div class="chat-section layout-spacing">
-    <div class="card mt-5">
-        <div class="card-body">
-            <div class="row">
-                <div class="col-xl-4 col-lg-5 col-md-5">
-                    <div class="status-list-section pr-md-4">
-                        <div class="mb-2 pb-4 search-form">
-                            <form class="form-inline">
-                                <input id="searchbox" class="form-control w-100" type="search" placeholder="Search"
-                                    aria-label="Search">
-                            </form>
-                        </div>
-
-                        {% if c %}
-                        <ul class="list-unstyled">
-                            {% for i,photo in c %}
-                            <a class="lis" href="{% url 'room' request.user.username 'Teacher' i %}">
-                            <li class="media online pb-4 pt-4">
-                                <div class="media-body">
-                                    <h5 class="mt-0 mb-1">{{i}}</h5>
-                                    <p class="usr-status">online</p>
-                                </div>
-                                <span class="message-badge single-value">6</span>
-                                <img class="ml-3" src="{{photo.url}}" alt="{{i}} image">
-                            </li>
-                        </a>
-                            {% endfor %}
-                        </ul>
-                        {% endif %}
-                    </div>
-                </div>
-                <div class="col-xl-8 col-lg-7 col-md-7">
-                    <div class="mail-chat-system">
-                        <div class="row top_menu">
-                            <div id="heading" style="padding-bottom:3px; width: 99%; background-color: #b2a0b991;">
-                                <h3 style="color: rgb(2, 2, 2);"> {{ room }}</h3>
-                            </div>
-                        </div>
-                        <div class="chat_window">
-
-                            {% if a %}
-
-                            <ul class="chat-messages pl-0 pt-0">
-                                {% for i,photo in a %}
-
-                                {% if i.chatroom == case1 or i.chatroom == case2 %}
-
-                                {% if i.ts == "Student" %}
-                                <div class="message left appeared">
-                                    <div class="avatar" style="background-image: url({{photo.url}});"></div>
-                                    <div class="text_wrapper">
-                                        <div class="text pb-1">{{ i.message }}<div class="text-right mr-2" style="font-size: 9px;">{{i.dtime|date:"M d, Y H:m"}}</div></div>
-                                    </div>
-                                </div>
-
-                                {% else %}
-                                <div class="message right appeared">
-                                    <div class="avatar" style="background-image: url({{photo.url}});"></div>
-                                    <div class="text_wrapper">
-                                        <div class="text pb-1">{{ i.message }}<div class="text-right mr-2" style="font-size: 9px;">{{i.dtime|date:"M d, Y H:m"}}</div></div>
-                                    </div>
-                                </div>
-
-                                {% endif %}
-
-                                {% endif %}
-
-                                {% endfor %}
-                            </ul>
-
-                            {% endif %}
-
-                            <div class="chat-bottom-section clearfix">
-                                <form class="chat-form" action="chatsend" method="post">
-                                    {% csrf_token %}
-                                    <div class="input-group mb-3 message_input_wrapper">
-                                        <div class="input-group-prepend">
-                                            <!-- <span class="input-group-text"><i class="flaticon-link-2"></i></span> -->
-                                            <!-- <span class="input-group-text"><i class="flaticon-happy-smiling"></i></span> -->
-                                        </div>
-                                        <input type="text" placeholder="Type your message here" name="msg"
-                                            class="message_input form-control">
-                                        <div class="input-group-append">
-                                            <button class="btn"
-                                                style="background-image: linear-gradient(to right, #f78ca0 0%, #f9748f 19%, #fd868c 60%, #fe9a8b 100%);"
-                                                type="submit" value="Send" name="room">
-                                                <i style="color: white;" class="flaticon-send-fill-1"></i>
-                                            </button>
-                                        </div>
-                                    </div>
-                                </form>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+<style>
+  .hi-button {
+    position: absolute;
+    top: 30%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+</style>
+<div class="chat-section layout-spacing">
+  <div class="card mt-5">
+    <div class="card-body">
+      <div class="row">
+        <div class="col-xl-4 col-lg-5 col-md-5">
+          <div class="status-list-section pr-md-4">
+            <div class="mb-2 pb-4 search-form">
+              <form class="form-inline">
+                <input
+                  id="searchbox"
+                  class="form-control w-100"
+                  type="search"
+                  placeholder="Search"
+                  aria-label="Search"
+                />
+              </form>
             </div>
+
+            {% if c %}
+            <ul class="list-unstyled">
+              {% for i,photo in c %}
+              <a
+                class="lis"
+                href="{% url 'room' request.user.username 'Teacher' i %}"
+              >
+                <li class="media online pb-4 pt-4">
+                  <div class="media-body">
+                    <h5 class="mt-0 mb-1">{{i}}</h5>
+                    <p class="usr-status">online</p>
+                  </div>
+                  <span class="message-badge single-value">6</span>
+                  <img class="ml-3" src="{{photo.url}}" alt="{{i}} image" />
+                </li>
+              </a>
+              {% endfor %}
+            </ul>
+            {% endif %}
+          </div>
         </div>
+        <div class="col-xl-8 col-lg-7 col-md-7">
+          <div class="mail-chat-system">
+            <div class="row top_menu">
+              <div
+                id="heading"
+                style="
+                  padding-bottom: 3px;
+                  width: 99%;
+                  background-color: #b2a0b991;
+                "
+              >
+                <h3 style="color: rgb(2, 2, 2)">{{ room }}</h3>
+              </div>
+            </div>
+            <div class="chat_window">
+              {% if a %}
+
+              <ul class="chat-messages pl-0 pt-0">
+                {% for i,photo in a %} {% if i.chatroom == case1 or i.chatroom
+                == case2 %} {% if i.ts == "Student" %}
+                <div class="message left appeared">
+                  <div
+                    class="avatar"
+                    style="background-image: url({{photo.url}});"
+                  ></div>
+                  <div class="text_wrapper">
+                    <div class="text pb-1">
+                      {{ i.message }}
+                      <div class="text-right mr-2" style="font-size: 9px">
+                        {{i.dtime|date:"M d, Y H:m"}}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {% else %}
+                <div class="message right appeared">
+                  <div
+                    class="avatar"
+                    style="background-image: url({{photo.url}});"
+                  ></div>
+                  <div class="text_wrapper">
+                    <div class="text pb-1">
+                      {{ i.message }}
+                      <div class="text-right mr-2" style="font-size: 9px">
+                        {{i.dtime|date:"M d, Y H:m"}}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {% endif %} {% endif %} {% endfor %}
+              </ul>
+
+              {% endif %}
+
+              <div class="chat-bottom-section clearfix">
+                <form class="chat-form" action="chatsend" method="post">
+                  {% csrf_token %}
+                  <div class="input-group mb-3 message_input_wrapper">
+                    <div class="input-group-prepend">
+                      <!-- <span class="input-group-text"><i class="flaticon-link-2"></i></span> -->
+                      <!-- <span class="input-group-text"><i class="flaticon-happy-smiling"></i></span> -->
+                    </div>
+                    <input
+                      type="text"
+                      placeholder="Type your message here"
+                      name="msg"
+                      class="message_input form-control"
+                    />
+                    <div class="input-group-append">
+                      <button
+                        class="btn"
+                        style="
+                          background-image: linear-gradient(
+                            to right,
+                            #f78ca0 0%,
+                            #f9748f 19%,
+                            #fd868c 60%,
+                            #fe9a8b 100%
+                          );
+                        "
+                        type="submit"
+                        value="Send"
+                        name="room"
+                      >
+                        <i
+                          style="color: white"
+                          class="flaticon-send-fill-1"
+                        ></i>
+                      </button>
+                    </div>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
+  </div>
 </div>
-    <!-- <textarea id="chat-log" cols="100" rows="25"></textarea><br><br> -->
-    <!-- <form action="upload1" method="post" enctype="multipart/form-data">
+<!-- <textarea id="chat-log" cols="100" rows="25"></textarea><br><br> -->
+<!-- <form action="upload1" method="post" enctype="multipart/form-data">
      {% csrf_token %}
 
     <input type="file"  name="myfile" enctype="multipart/form-data">
     <input type="submit" value="Send" name="room">
     </form> -->
-    <div>
-    {{ room_name|json_script:"room-name" }}
-    </div>
-    <!-- <script>
+<div>{{ room_name|json_script:"room-name" }}</div>
+<!-- <script>
         const roomName = JSON.parse(document.getElementById('room-name').textContent);
 
         const chatSocket = new WebSocket(
@@ -161,39 +204,42 @@
             messageInputDom.value = '';
         };
     </script> -->
-    <!-- BEGIN PAGE LEVEL PLUGINS/CUSTOM SCRIPTS -->
-    <script src="{% static 'assets/js/apps/custom-mailbox.js' %}"></script>
-    <script src="{% static 'assets/js/apps/mailbox-chat.js' %}"></script>
+<!-- BEGIN PAGE LEVEL PLUGINS/CUSTOM SCRIPTS -->
+<script src="{% static 'assets/js/apps/custom-mailbox.js' %}"></script>
+<script src="{% static 'assets/js/apps/mailbox-chat.js' %}"></script>
 
 <script type="text/javascript">
-    trlist = $(".lis");
-    $("body").on('input',"#searchbox",function(){
-        trlist.hide();
-        search = this.value.toLowerCase();
-        for(i=0;i<trlist.length;i++){
-            if(trlist[i].children[0].children[0].children[0].textContent==""){
-                cont = cont;
-            }
-            else{
-                cont = trlist[i].children[0].children[0].children[0].textContent.toLowerCase();
-            }
-            if(cont.search(search)!=-1){
-                $(trlist[i]).show();
-                console.log(trlist[i])
-            }
-        }
-
-    });
-
-    $(document).ready(()=>{
-        if($('.chat-messages').children().length<=0){
-            $('.chat-messages').append(`<button class="btn btn-success hi-button" onclick="hi()">Say "Hi"</button>`)
-        }
-    });
-
-    function hi() {
-        $('.message_input').val('Hi');
-        $('.chat-form').submit();
+  trlist = $(".lis");
+  $("body").on("input", "#searchbox", function () {
+    trlist.hide();
+    search = this.value.toLowerCase();
+    for (i = 0; i < trlist.length; i++) {
+      if (trlist[i].children[0].children[0].children[0].textContent == "") {
+        cont = cont;
+      } else {
+        cont =
+          trlist[
+            i
+          ].children[0].children[0].children[0].textContent.toLowerCase();
+      }
+      if (cont.search(search) != -1) {
+        $(trlist[i]).show();
+        console.log(trlist[i]);
+      }
     }
+  });
+
+  $(document).ready(() => {
+    if ($(".chat-messages").children().length <= 0) {
+      $(".chat-messages").append(
+        `<button class="btn btn-success hi-button" onclick="hi()">Say "Hi"</button>`
+      );
+    }
+  });
+
+  function hi() {
+    $(".message_input").val("Hi");
+    $(".chat-form").submit();
+  }
 </script>
 {% endblock %}

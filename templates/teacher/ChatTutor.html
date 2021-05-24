@@ -4,7 +4,7 @@ semicolontohtml %} {% block css %}
 <style>
   @import url("https://fonts.googleapis.com/css?family=Numans");
 
-  .my-border{
+  .my-border {
     border-width: 1rem;
   }
 
@@ -291,22 +291,54 @@ semicolontohtml %} {% block css %}
     </div>
   </div>
   {% endif %}
-  <div class="row shadow bg-white p-3 " style="min-height: 70vh;">
+  <div class="row shadow bg-white p-3" style="min-height: 70vh">
     <div class="col-3 rounded border shadow py-2" id="tutor-list">
-      <div class="nav flex-column nav-pills nav-fill" id="v-pills-tab" role="tablist" aria-orientation="vertical">
-        <a class="nav-link border-bottom my-border" style="border-bottom-width: 5px !important;" id="v-pills-settings-tab"
-          data-toggle="tab" data-id="{{tutor.user.id}}" href="#{{tutor.user.first_name}}{{tutor.user.last_name}}{{tutor.user.id}}"
-          role="tab" aria-controls="v-pills-settings" aria-selected="false">{{tutor.user.first_name}} {{tutor.user.last_name}}</a>
+      <div
+        class="nav flex-column nav-pills nav-fill"
+        id="v-pills-tab"
+        role="tablist"
+        aria-orientation="vertical"
+      >
+        <a
+          class="nav-link border-bottom my-border"
+          style="border-bottom-width: 5px !important"
+          id="v-pills-settings-tab"
+          data-toggle="tab"
+          data-id="{{tutor.user.id}}"
+          href="#{{tutor.user.first_name}}{{tutor.user.last_name}}{{tutor.user.id}}"
+          role="tab"
+          aria-controls="v-pills-settings"
+          aria-selected="false"
+          >{{tutor.user.first_name}} {{tutor.user.last_name}}</a
+        >
       </div>
     </div>
     <div class="col-9 d-flex flex-column">
-      <div class="tab-content flex-fill border rounded mb-2 shadow" id="chat-column" style="max-height: 58vh; overflow: scroll;">
-        <div class="tab-pane fade d-flex flex-column" id="{{tutor.user.first_name}}{{tutor.user.last_name}}{{tutor.user.id}}"
-        role="tabpanel" aria-labelledby="v-pills-home-tab"></div>
+      <div
+        class="tab-content flex-fill border rounded mb-2 shadow"
+        id="chat-column"
+        style="max-height: 58vh; overflow: scroll"
+      >
+        <div
+          class="tab-pane fade d-flex flex-column"
+          id="{{tutor.user.first_name}}{{tutor.user.last_name}}{{tutor.user.id}}"
+          role="tabpanel"
+          aria-labelledby="v-pills-home-tab"
+        ></div>
       </div>
       <div class="d-flex">
-        <input type="text" id="message" class="form-control w-75" placeholder="Type a message..." required/>
-        <button class="flex-fill ml-2 btn btn-primary disabled" disabled id="send_message">
+        <input
+          type="text"
+          id="message"
+          class="form-control w-75"
+          placeholder="Type a message..."
+          required
+        />
+        <button
+          class="flex-fill ml-2 btn btn-primary disabled"
+          disabled
+          id="send_message"
+        >
           Send
         </button>
       </div>

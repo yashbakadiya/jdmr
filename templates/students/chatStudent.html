@@ -1,8 +1,6 @@
-{% extends 'dashboard/dashboardTutor.html' %}
-{% load static %}
-{% block css %}
+{% extends 'dashboard/dashboardTutor.html' %} {% load static %} {% block css %}
 <style>
-  @import url('https://fonts.googleapis.com/css?family=Numans');
+  @import url("https://fonts.googleapis.com/css?family=Numans");
 
   .container {
     align-content: center;
@@ -26,7 +24,6 @@
   input:focus {
     outline: 0 0 0 0 !important;
     box-shadow: 0 0 0 0 !important;
-
   }
 
   .remember {
@@ -56,7 +53,7 @@
   .social_icon span {
     font-size: 60px;
     margin-left: 10px;
-    color: #FFC312;
+    color: #ffc312;
   }
 
   .social_icon span:hover {
@@ -76,7 +73,7 @@
 
   .input-group-prepend span {
     width: 50px;
-    background-color: #FFC312;
+    background-color: #ffc312;
     color: black;
     border: 0 !important;
   }
@@ -84,7 +81,6 @@
   input:focus {
     outline: 0 0 0 0 !important;
     box-shadow: 0 0 0 0 !important;
-
   }
 
   .remember {
@@ -100,7 +96,7 @@
 
   .signup_btn {
     color: black;
-    background-color: #FFC312;
+    background-color: #ffc312;
     width: 300px;
   }
 
@@ -210,7 +206,7 @@
     font-size: small;
   }
 
-  .multiselect-container>li>a>label {
+  .multiselect-container > li > a > label {
     height: auto;
   }
 
@@ -220,16 +216,21 @@
     width: max-content;
   }
 </style>
-{% endblock %}
-{% block body %}
+{% endblock %} {% block body %}
 <div class="container">
   {% if errors %}
   <div class="alert alert-danger" role="alert">
-    <div id='errorsBox'>
+    <div id="errorsBox">
       <div>
         <h5
-          style="color: red;text-shadow:-0.5px -0.5px 0 #000,0.5px -0.5px 0 #000,-0.5px 0.5px 0 #000,0.5px 0.5px 0 #000;">
-          Error !</h5>
+          style="
+            color: red;
+            text-shadow: -0.5px -0.5px 0 #000, 0.5px -0.5px 0 #000,
+              -0.5px 0.5px 0 #000, 0.5px 0.5px 0 #000;
+          "
+        >
+          Error !
+        </h5>
         <ul>
           {% for x in errors %}
           <li>{{ x }}</li>
@@ -239,22 +240,46 @@
     </div>
   </div>
   {% endif %}
-  <div class="row shadow bg-white p-3" style="min-height: 70vh;">
+  <div class="row shadow bg-white p-3" style="min-height: 70vh">
     <div class="col-3 rounded border shadow py-2" id="student-list">
-      <div class="nav flex-column nav-pills nav-fill " id="v-pills-tab" role="tablist" aria-orientation="vertical">
+      <div
+        class="nav flex-column nav-pills nav-fill"
+        id="v-pills-tab"
+        role="tablist"
+        aria-orientation="vertical"
+      >
         <!-- <a class="nav-link" id="v-pills-settings-tab" data-toggle="tab" data-id="2" href="#jamesshah2" role="tab"
           aria-controls="v-pills-settings" aria-selected="false">james shah</a> -->
       </div>
     </div>
     <div class="col-9 d-flex flex-column">
-      <div class="tab-content flex-fill border rounded mb-2 shadow" id="chat-column" style="max-height: 58vh; overflow: scroll;">
-        <div class="tab-pane fade  d-flex flex-column" id="jamesshah2" role="tabpanel"
-          aria-labelledby="v-pills-home-tab">
-        </div>
+      <div
+        class="tab-content flex-fill border rounded mb-2 shadow"
+        id="chat-column"
+        style="max-height: 58vh; overflow: scroll"
+      >
+        <div
+          class="tab-pane fade d-flex flex-column"
+          id="jamesshah2"
+          role="tabpanel"
+          aria-labelledby="v-pills-home-tab"
+        ></div>
       </div>
-      <div class="d-flex ">
-        <input type="text" id="message" class="form-control w-75" placeholder="Type a message..." required />
-        <button class="flex-fill ml-2 btn btn-primary disabled" disabled id="send_message">Send</button>
+      <div class="d-flex">
+        <input
+          type="text"
+          id="message"
+          class="form-control w-75"
+          placeholder="Type a message..."
+          required
+        />
+        <button
+          class="flex-fill ml-2 btn btn-primary disabled"
+          disabled
+          id="send_message"
+        >
+          Send
+        </button>
       </div>
     </div>
   </div>
@@ -289,7 +314,7 @@
           send_message.removeClass('disabled').removeAttr('disabled')
           console.log(room)
           if (!$(`#${name}${room}`).children().length) {
-            
+
             socket.emit(
               "get_past_chats",
               {

@@ -1,76 +1,87 @@
-{% extends 'dashboard/base.html' %}
-{% load static %}
-{% block css %}
-{% endblock %}
-{% block main-content %}
+{% extends 'dashboard/base.html' %} {% load static %} {% block css %} {%
+endblock %} {% block main-content %}
 <style>
-    #card {
+  #card {
     background-color: white;
     padding-bottom: 3rem;
     padding-top: 3rem;
     color: black;
-    }
+  }
 </style>
-<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/css/select2.min.css" rel="stylesheet" />
+<link
+  href="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/css/select2.min.css"
+  rel="stylesheet"
+/>
 <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/js/select2.min.js"></script>
 <div class="mt-5">
-    {% if messages %}
-    {% for k in messages%}
-    <div class="alert alert-{{k.tags}} alert-dismissible fade show" role="alert">
-        <b>{{ k }} !</b>
-        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-        <span aria-hidden="true">&times;</span>
-        </button>
-    </div>
-    {% endfor %}
-    {% endif %}
-    <div class="card mb-4">
-        <div class="card-header">
-            <!-- Grid row -->
-            <div class="row">
-                <!-- Grid column -->
-                <div class="col-md-8">
-                    <h2 style="color: rgb(0, 0, 0 );">List of Archive Teaching Type</h2>
-                </div>
-                <!-- Grid column -->
-            </div>
+  {% if messages %} {% for k in messages%}
+  <div class="alert alert-{{k.tags}} alert-dismissible fade show" role="alert">
+    <b>{{ k }} !</b>
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  {% endfor %} {% endif %}
+  <div class="card mb-4">
+    <div class="card-header">
+      <!-- Grid row -->
+      <div class="row">
+        <!-- Grid column -->
+        <div class="col-md-8">
+          <h2 style="color: rgb(0, 0, 0)">List of Archive Teaching Type</h2>
         </div>
-        {% if teach %}
-        <div class="card-body">
-            <!-- Grid row -->
-            <form action="" method="post">
-                {% csrf_token %}
-                <!--Table-->
-                <div class="table-responsive">
-                    <table class="table table-striped">
-                        <!--Table head-->
-                        <tr>
-                            <th>Sr No</th>
-                            <th>Course Name</th>
-                            <th>Class</th>
-                            <th>Teaching Type</th>
-                            <th>Duration</th>
-                            <th>Time Period</th>
-                            <th class='text-center'>Action</th>
-                        </tr>
-                        <!--Table head-->
-                        <!--Table body-->
-                        {% for i in teach %}
-                        <tr id="{{ i.pk }}">
-                            <td>{{ forloop.counter }}</td>
-                            <td>{{i.course.courseName}}</td>
-                            <td>{{ i.course.forclass }}</td>
-                            <td>{{i.teachType}}</td>
-                            <td>{{i.duration}}</td>
-                            <td>{{i.timePeriod}}</td>
-                            <td class="text-center">
-                                <a data-toggle="tooltip" title="Delete"  class="btn btn-danger" href="{% url 'deleteteaching' i.id %}"><i class="flaticon-delete-fill"
-                                    style="font-size:medium;"></i></a>
-                                <a data-toggle="tooltip" title="Unarchive" class="btn btn-success" href="{% url 'teach-unarchive' i.id %}"><i class="flaticon-log-4"
-                                    style="font-size:medium; transform: rotate(90deg);"></i></a>
-                            </td>
+        <!-- Grid column -->
+      </div>
+    </div>
+    {% if teach %}
+    <div class="card-body">
+      <!-- Grid row -->
+      <form action="" method="post">
+        {% csrf_token %}
+        <!--Table-->
+        <div class="table-responsive">
+          <table class="table table-striped">
+            <!--Table head-->
+            <tr>
+              <th>Sr No</th>
+              <th>Course Name</th>
+              <th>Class</th>
+              <th>Teaching Type</th>
+              <th>Duration</th>
+              <th>Time Period</th>
+              <th class="text-center">Action</th>
+            </tr>
+            <!--Table head-->
+            <!--Table body-->
+            {% for i in teach %}
+            <tr id="{{ i.pk }}">
+              <td>{{ forloop.counter }}</td>
+              <td>{{i.course.courseName}}</td>
+              <td>{{ i.course.forclass }}</td>
+              <td>{{i.teachType}}</td>
+              <td>{{i.duration}}</td>
+              <td>{{i.timePeriod}}</td>
+              <td class="text-center">
+                <a
+                  data-toggle="tooltip"
+                  title="Delete"
+                  class="btn btn-danger"
+                  href="{% url 'deleteteaching' i.id %}"
+                  ><i class="flaticon-delete-fill" style="font-size: medium"></i
+                ></a>
+                <a
+                  data-toggle="tooltip"
+                  title="Unarchive"
+                  class="btn btn-success"
+                  href="{% url 'teach-unarchive' i.id %}"
+                  ><i
+                    class="flaticon-log-4"
+                    style="font-size: medium; transform: rotate(90deg)"
+                  ></i
+                ></a>
+              </td>
 
-                            <!-- <div class="btn-group">
+              <!-- <div class="btn-group">
                                 <button type="button" data-toggle="modal" data-target="#edit-{{i.pk}}"
                                     href="#edit-{{i.pk}}" class="btn btn-secondary btn-sm"><i
                                         class="flaticon-edit  bg-success p-1 text-white br-6 mb-1"></i>Edit</button>
@@ -87,32 +98,32 @@
                                 
                                 </div>
                                 </div> -->
-                        </tr>
-                        {% endfor %}
-                        <!--Table body-->
-                    </table>
-                </div>
-                <!--Table-->
-            </form>
-            <br>
+            </tr>
+            {% endfor %}
+            <!--Table body-->
+          </table>
         </div>
-        {% else %}
-        <div class="card-header" style="background: none;">
-            <div class="row">
-                <div class="col-xl-12 col-md-12 col-12">
-                    <h2>No Teaching Type to show</h2>
-                </div>
-            </div>
-        </div>
-        {% endif %}
+        <!--Table-->
+      </form>
+      <br />
     </div>
-    <script>
-        function checkbox() {
-            var value = $("#negativecheck").is(":checked");
-            negative = document.getElementById("negative");
-            var output;
-            if (value) {
-                output = `<input
+    {% else %}
+    <div class="card-header" style="background: none">
+      <div class="row">
+        <div class="col-xl-12 col-md-12 col-12">
+          <h2>No Teaching Type to show</h2>
+        </div>
+      </div>
+    </div>
+    {% endif %}
+  </div>
+  <script>
+    function checkbox() {
+      var value = $("#negativecheck").is(":checked");
+      negative = document.getElementById("negative");
+      var output;
+      if (value) {
+        output = `<input
         type="number"
         class="mt-2 form-control"
         placeholder="Enter Negative Marks"
@@ -123,43 +134,43 @@
         <div class="invalid-feedback">
         Enter a valid No.
         </div>`;
-            } else {
-                output = "";
-            }
-            negative.innerHTML = output;
-        }
-        // In your Javascript (external .js resource or <script> tag)
-        $(document).ready(function () {
-            $('.js-example-basic-single').select2();
-        });
-        
-        function selectclass() {
-            var selected = $("#forclass").val();
-            $.ajax({
-                url: "{% url 'findbatch' %}",
-                data: {
-                    forclass: selected,
-                },
-                success: function (data) {
-                    courses = data.courses;
-                    $("#courseName").empty().trigger("change");
-                    for (i = 0; i < courses.length; i++) {
-                        var newOption = new Option(
-                            courses[i][1],
-                            courses[i][0],
-                            false,
-                            false
-                        );
-                        $("#courseName").append(newOption).trigger("change");
-                    }
-                },
-            });
-        }
-        
-        $(window).on('pageshow', () => {
-            var frm = $('#frm');
-            frm[0].reset();
-        });
-    </script>
+      } else {
+        output = "";
+      }
+      negative.innerHTML = output;
+    }
+    // In your Javascript (external .js resource or <script> tag)
+    $(document).ready(function () {
+      $(".js-example-basic-single").select2();
+    });
+
+    function selectclass() {
+      var selected = $("#forclass").val();
+      $.ajax({
+        url: "{% url 'findbatch' %}",
+        data: {
+          forclass: selected,
+        },
+        success: function (data) {
+          courses = data.courses;
+          $("#courseName").empty().trigger("change");
+          for (i = 0; i < courses.length; i++) {
+            var newOption = new Option(
+              courses[i][1],
+              courses[i][0],
+              false,
+              false
+            );
+            $("#courseName").append(newOption).trigger("change");
+          }
+        },
+      });
+    }
+
+    $(window).on("pageshow", () => {
+      var frm = $("#frm");
+      frm[0].reset();
+    });
+  </script>
 </div>
 {% endblock %}

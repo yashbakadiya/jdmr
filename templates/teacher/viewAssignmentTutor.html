@@ -1,151 +1,275 @@
-{% extends 'dashboard/Tutor-dashboard.html' %}
-{% load static %}
-{% load humanize %}
-{% block extra-stylesheets %}
+{% extends 'dashboard/Tutor-dashboard.html' %} {% load static %} {% load
+humanize %} {% block extra-stylesheets %}
 
 <!-- CDN for google maps Place API -->
-<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCBJybI10-Xa43-F5GSad1i0Y9W3yqlW6Q&libraries=places&v=3"
-  defer></script>
+<script
+  src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCBJybI10-Xa43-F5GSad1i0Y9W3yqlW6Q&libraries=places&v=3"
+  defer
+></script>
 <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 
-{% endblock extra-stylesheets %}
-{% block main-content %}
+{% endblock extra-stylesheets %} {% block main-content %}
 <div class="mt-5">
-  {% if messages %}
-    {% for k in messages%}
-    <div class="alert alert-{{k.tags}} alert-dismissible fade show" role="alert">
-        <b>{{ k }} !</b>
-        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-        </button>
-    </div>
-    {% endfor %}
-    {% endif %}
-    <div class="row">
-  <div class="col-lg-12 mb-4">
-    <div class="card statbox widget box box-shadow">
-      <div class="card-header border-bottom border-default">
-        <div class="row">
-          <div class="col-xl-12 col-md-12 col-sm-12 col-12">
-            <h2 style="color:black;">Search Assignments</h2>
+  {% if messages %} {% for k in messages%}
+  <div class="alert alert-{{k.tags}} alert-dismissible fade show" role="alert">
+    <b>{{ k }} !</b>
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  {% endfor %} {% endif %}
+  <div class="row">
+    <div class="col-lg-12 mb-4">
+      <div class="card statbox widget box box-shadow">
+        <div class="card-header border-bottom border-default">
+          <div class="row">
+            <div class="col-xl-12 col-md-12 col-sm-12 col-12">
+              <h2 style="color: black">Search Assignments</h2>
+            </div>
           </div>
         </div>
-      </div>
-      <div class="widget-content widget-content-area">
-        <div class="row">
-          <div class="col-lg-12 col-md-12 cms-search">
-            <form class="form-inline mt-2 mb-5" method="POST">
-              {% csrf_token %}
-              <div class="col-lg-5 col-md-6 col-12 mt-2 row">
-                <label class="control-label col-sm-3 col-5 mt-3" style="display: block; color:black;">Location</label>
-                <input type="text" class="form-control my-2 w-100 col-sm-8 col-7" id="pac-input" name='loc'
-                  placeholder="Enter Location" {% if prefill.address %} value="{{prefill.address}}" {% endif %} >
-                <input type="hidden" id="cityLat" value="0" name="cityLat" />
-                <input type="hidden" id="cityLng" value="0" name="cityLng" />
-              </div>
-              <div class="col-lg-5 col-md-6 col-12 mt-2 row">
-                <label class="control-label col-sm-3 col-5 mt-3" style="display: block; color:black;">Budget</label>
-                <input type="number" class="form-control my-2 w-100 col-sm-8 col-7"
-                  style="-moz-appearance: textfield;" min="0" name="budget"
-                  placeholder="Budget" {% if prefill.budgetVal %} value="{{prefill.budgetVal}}" {% endif %} >
-              </div>
-              <div class="col-lg-5 col-md-6 col-12 mt-2 row">
-                <label class="control-label col-sm-3 col-5 mt-3" style="display: block; color:black;">Class</label>
-                <select name="className" class="cn custom-select my-2 form-control w-100 col-sm-8 col-7"
-                  onchange="selectclass(this)">
-                  {% if prefill.class %}
-                  <option selected value="{{prefill.class}}">{{prefill.class}}</option>
-                  {% else %}
-                  <option disabled selected value="">Select Class</option>
-                  {% endif %}
-
-                  {% for class in classes %}
-                  {% if prefill.class != class %}
-                  <option value="{{class}}">{{class}}</option>
-                  {% endif %}
-                  {% endfor %}
-                </select>
-              </div>
-              <div class="col-lg-5 col-md-6  col-12 mt-2 row">
-                <label class="control-label col-sm-3 mt-3 col-5" style="display: block; color:black;">Course</label>
-                <select name="subject" class="ctn custom-select my-2 form-control w-100 col-sm-8 col-7">
-                  {% if prefill.course %}
-                  <option selected value="{{prefill.course}}">{{prefill.course}}</option>
-                  {% else %}
-                  <option disabled selected value="">Select Course</option>
-                  {% endif %}
-                </select>
-              </div>
-              <div class="col-lg-2 col-md-2 col-12 mt-2 d-flex justify-content-end">
-                <button class="btn btn-info">Search</button>
+        <div class="widget-content widget-content-area">
+          <div class="row">
+            <div class="col-lg-12 col-md-12 cms-search">
+              <form class="form-inline mt-2 mb-5" method="POST">
+                {% csrf_token %}
+                <div class="col-lg-5 col-md-6 col-12 mt-2 row">
+                  <label
+                    class="control-label col-sm-3 col-5 mt-3"
+                    style="display: block; color: black"
+                    >Location</label
+                  >
+                  <input
+                    type="text"
+                    class="form-control my-2 w-100 col-sm-8 col-7"
+                    id="pac-input"
+                    name="loc"
+                    placeholder="Enter Location"
+                    {%
+                    if
+                    prefill.address
+                    %}
+                    value="{{prefill.address}}"
+                    {%
+                    endif
+                    %}
+                  />
+                  <input type="hidden" id="cityLat" value="0" name="cityLat" />
+                  <input type="hidden" id="cityLng" value="0" name="cityLng" />
                 </div>
-            </form>
+                <div class="col-lg-5 col-md-6 col-12 mt-2 row">
+                  <label
+                    class="control-label col-sm-3 col-5 mt-3"
+                    style="display: block; color: black"
+                    >Budget</label
+                  >
+                  <input
+                    type="number"
+                    class="form-control my-2 w-100 col-sm-8 col-7"
+                    style="-moz-appearance: textfield"
+                    min="0"
+                    name="budget"
+                    placeholder="Budget"
+                    {%
+                    if
+                    prefill.budgetVal
+                    %}
+                    value="{{prefill.budgetVal}}"
+                    {%
+                    endif
+                    %}
+                  />
+                </div>
+                <div class="col-lg-5 col-md-6 col-12 mt-2 row">
+                  <label
+                    class="control-label col-sm-3 col-5 mt-3"
+                    style="display: block; color: black"
+                    >Class</label
+                  >
+                  <select
+                    name="className"
+                    class="
+                      cn
+                      custom-select
+                      my-2
+                      form-control
+                      w-100
+                      col-sm-8 col-7
+                    "
+                    onchange="selectclass(this)"
+                    required
+                  >
+                    {% if prefill.class %}
+                    <option selected value="{{prefill.class}}">
+                      {{prefill.class}}
+                    </option>
+                    {% else %}
+                    <option disabled selected value="">Select Class</option>
+                    {% endif %} {% for class in classes %} {% if prefill.class
+                    != class %}
+                    <option value="{{class}}">{{class}}</option>
+                    {% endif %} {% endfor %}
+                  </select>
+                </div>
+                <div class="col-lg-5 col-md-6 col-12 mt-2 row">
+                  <label
+                    class="control-label col-sm-3 mt-3 col-5"
+                    style="display: block; color: black"
+                    >Course</label
+                  >
+                  <select
+                    name="subject"
+                    class="
+                      ctn
+                      custom-select
+                      my-2
+                      form-control
+                      w-100
+                      col-sm-8 col-7
+                    "
+                    required
+                  >
+                    {% if prefill.course %}
+                    <option selected value="{{prefill.course}}">
+                      {{prefill.course}}
+                    </option>
+                    {% else %}
+                    <option disabled selected value="">Select Course</option>
+                    {% endif %}
+                  </select>
+                </div>
+                <div
+                  class="
+                    col-lg-2 col-md-2 col-12
+                    mt-2
+                    d-flex
+                    justify-content-end
+                  "
+                >
+                  <button class="btn btn-info">Search</button>
+                </div>
+              </form>
+            </div>
           </div>
         </div>
       </div>
     </div>
   </div>
-</div>
 </div>
 
 {% if allData %}
 <div class="row">
-{% for assing in allData reversed %}
-<div class="col-xl-3 col-lg-6 col-md-6 col-sm-6 layout-spacing">
-  <div class="statbox widget box box-shadow">
-      <div class="widget-content widget-content-area product-cat6  px-0 py-0">
-          <div class="row">
-              <div class="col-12">
-                  <div class="card">
-                      <div class="wrapper">
-                          <div class="row">
-                              <div class="col-md-12 mt-1 text-center">
-                                  <b
-                                      style="text-transform: uppercase; color: black;">{% if assing.studen.user.first_name %}{{assing.student.user.first_name}} {{assing.student.user.last_name}} {% else %} {{assing.student.user.username}} {% endif %}</b>
-                              </div>
-                              <div class="col-md-12 mt-1 text-center" style="color: black;">
-                                  <div class="row">
-                                      <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
-                                          <b>Class:</b>
-                                          <span class="t-s-car-sold-number mb-0 ml-1">{{assing.forclass}}</span>
-                                      </div>
-                                      <div class="col-xl-12 mt-2 col-lg-12 col-md-12 col-sm-12 col-12">
-                                          <b>Course:</b>
-                                          <span class="t-s-car-sold-number mb-0 ml-1">{{assing.courseName}}</span>
-                                      </div>
-                                      <div class="col-xl-12 mt-2 col-lg-12 col-md-12 col-sm-12 col-12">
-                                        <b>Created:</b>
-                                        <span class="t-s-car-sold-number mb-0 ml-1">{{assing.timestamp|date:'F d,Y'}}</span>
-                                    </div>
-                                    <div class="col-xl-12 mt-2 col-lg-12 col-md-12 col-sm-12 col-12">
-                                      <b>Budget:</b>
-                                      <span class="t-s-car-sold-number mb-0 ml-1">{{assing.budget}}</span>
-                                  </div>
-                                  <div class="col-xl-12 mt-2 col-lg-12 col-md-12 col-sm-12 col-12">
-                                    <b>Deadline:</b>
-                                    <span class="t-s-car-sold-number mb-0 ml-1">{{assing.deadline|date:'F d,Y'}}</span>
-                                </div>
-                                  </div>
-                              </div>
-                              <div class="col-xl-12 text-center mt-2 mb-2 card-bottom-section">
-                                  <a href="{{assing.descriptionFile.url}}" class="btn btn-info" target="_blank" class="btn btn-primary">View</a>
-                                  <a class="btn btn-success" href='{% url "room" request.user.username "Teacher" assing.student.user.username %}'>Chat</a>
-                                  <a href="{% url 'assign' assing.pk %}" class="btn btn-primary">Assign</a>
-                              </div>
-                          </div>
-                      </div>
+  {% for assing in allData reversed %}
+  <div class="col-xl-3 col-lg-6 col-md-6 col-sm-6 layout-spacing">
+    <div class="statbox widget box box-shadow">
+      <div class="widget-content widget-content-area product-cat6 px-0 py-0">
+        <div class="row">
+          <div class="col-12">
+            <div class="card">
+              <div class="wrapper">
+                <div class="row">
+                  <div class="col-md-12 mt-1 text-center">
+                    <b style="text-transform: uppercase; color: black"
+                      >{% if assing.studen.user.first_name
+                      %}{{assing.student.user.first_name}}
+                      {{assing.student.user.last_name}} {% else %}
+                      {{assing.student.user.username}} {% endif %}</b
+                    >
                   </div>
+                  <div class="col-md-12 mt-1 text-center" style="color: black">
+                    <div class="row">
+                      <div
+                        class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12"
+                      >
+                        <b>Class:</b>
+                        <span class="t-s-car-sold-number mb-0 ml-1"
+                          >{{assing.forclass}}</span
+                        >
+                      </div>
+                      <div
+                        class="
+                          col-xl-12
+                          mt-2
+                          col-lg-12 col-md-12 col-sm-12 col-12
+                        "
+                      >
+                        <b>Course:</b>
+                        <span class="t-s-car-sold-number mb-0 ml-1"
+                          >{{assing.courseName}}</span
+                        >
+                      </div>
+                      <div
+                        class="
+                          col-xl-12
+                          mt-2
+                          col-lg-12 col-md-12 col-sm-12 col-12
+                        "
+                      >
+                        <b>Created:</b>
+                        <span class="t-s-car-sold-number mb-0 ml-1"
+                          >{{assing.timestamp|date:'F d,Y'}}</span
+                        >
+                      </div>
+                      <div
+                        class="
+                          col-xl-12
+                          mt-2
+                          col-lg-12 col-md-12 col-sm-12 col-12
+                        "
+                      >
+                        <b>Budget:</b>
+                        <span class="t-s-car-sold-number mb-0 ml-1"
+                          >{{assing.budget}}</span
+                        >
+                      </div>
+                      <div
+                        class="
+                          col-xl-12
+                          mt-2
+                          col-lg-12 col-md-12 col-sm-12 col-12
+                        "
+                      >
+                        <b>Deadline:</b>
+                        <span class="t-s-car-sold-number mb-0 ml-1"
+                          >{{assing.deadline|date:'F d,Y'}}</span
+                        >
+                      </div>
+                    </div>
+                  </div>
+                  <div
+                    class="col-xl-12 text-center mt-2 mb-2 card-bottom-section"
+                  >
+                    <a
+                      href="{{assing.descriptionFile.url}}"
+                      class="btn btn-info"
+                      target="_blank"
+                      class="btn btn-primary"
+                      >View</a
+                    >
+                    <a
+                      class="btn btn-success"
+                      href='{% url "room" request.user.username "Teacher" assing.student.user.username %}'
+                      >Chat</a
+                    >
+                    <a
+                      href="{% url 'assign' assing.pk %}"
+                      class="btn btn-primary"
+                      >Assign</a
+                    >
+                  </div>
+                </div>
               </div>
+            </div>
           </div>
+        </div>
       </div>
-  </div>
-</div>
-{% endfor %}
-{% else %}
-    <div class="card w-100">
-        <h5 class="mt-2 mb-2 p-2">No Assignments Found</h5>
     </div>
-{% endif %}
+  </div>
+  {% endfor %} {% else %}
+  <div class="card w-100">
+    <h5 class="mt-2 mb-2 p-2">No Assignments Found</h5>
+  </div>
+  {% endif %}
 </div>
 <script>
   $(document).ready(() => {
@@ -180,12 +304,12 @@
 </script>
 <script type="text/javascript">
   $("#pac-input").on("input", function () {
-    var input = document.getElementById('pac-input');
+    var input = document.getElementById("pac-input");
     var autocomplete = new google.maps.places.Autocomplete(input);
-    google.maps.event.addListener(autocomplete, 'place_changed', function () {
+    google.maps.event.addListener(autocomplete, "place_changed", function () {
       var place = autocomplete.getPlace();
-      document.getElementById('cityLat').value = place.geometry.location.lat();
-      document.getElementById('cityLng').value = place.geometry.location.lng();
+      document.getElementById("cityLat").value = place.geometry.location.lat();
+      document.getElementById("cityLng").value = place.geometry.location.lng();
     });
   });
 </script>
