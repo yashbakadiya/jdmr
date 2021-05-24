@@ -30,7 +30,6 @@ endblock %} {% block main-content %}
         <div class="col-md-8">
           <h2 style="color: rgb(0, 0, 0)">List of Archive Teaching Type</h2>
         </div>
-<<<<<<< HEAD
         {% if teach %}
         <div class="card-body">
             <!-- Grid row -->
@@ -65,58 +64,6 @@ endblock %} {% block main-content %}
                                 <a data-toggle="tooltip" title="Unarchive" class="btn btn-success" href="{% url 'teach-unarchive' i.id %}"><i class="flaticon-log-4"
                                     style="font-size:medium; transform: rotate(180deg);"></i></a>
                             </td>
-=======
-        <!-- Grid column -->
-      </div>
-    </div>
-    {% if teach %}
-    <div class="card-body">
-      <!-- Grid row -->
-      <form action="" method="post">
-        {% csrf_token %}
-        <!--Table-->
-        <div class="table-responsive">
-          <table class="table table-striped">
-            <!--Table head-->
-            <tr>
-              <th>Sr No</th>
-              <th>Course Name</th>
-              <th>Class</th>
-              <th>Teaching Type</th>
-              <th>Duration</th>
-              <th>Time Period</th>
-              <th class="text-center">Action</th>
-            </tr>
-            <!--Table head-->
-            <!--Table body-->
-            {% for i in teach %}
-            <tr id="{{ i.pk }}">
-              <td>{{ forloop.counter }}</td>
-              <td>{{i.course.courseName}}</td>
-              <td>{{ i.course.forclass }}</td>
-              <td>{{i.teachType}}</td>
-              <td>{{i.duration}}</td>
-              <td>{{i.timePeriod}}</td>
-              <td class="text-center">
-                <a
-                  data-toggle="tooltip"
-                  title="Delete"
-                  class="btn btn-danger"
-                  href="{% url 'deleteteaching' i.id %}"
-                  ><i class="flaticon-delete-fill" style="font-size: medium"></i
-                ></a>
-                <a
-                  data-toggle="tooltip"
-                  title="Unarchive"
-                  class="btn btn-success"
-                  href="{% url 'teach-unarchive' i.id %}"
-                  ><i
-                    class="flaticon-log-4"
-                    style="font-size: medium; transform: rotate(90deg)"
-                  ></i
-                ></a>
-              </td>
->>>>>>> b468368945802139206b7ab8fc81cc82d1f18743
 
               <!-- <div class="btn-group">
                                 <button type="button" data-toggle="modal" data-target="#edit-{{i.pk}}"

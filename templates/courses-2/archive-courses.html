@@ -99,7 +99,6 @@ in messages%}
             <div class="col-xl-12 col-md-12 col-12">
               <h2 style="color: black">List of Archived Courses</h2>
             </div>
-<<<<<<< HEAD
             {% if course %}
           <div class="widget-content widget-content-area">
             <div class="table-responsive">
@@ -122,48 +121,6 @@ in messages%}
                       <a data-toggle="tooltip" title="Unarchive" class="btn btn-success" href="{% url 'course-unarchive' i.id %}"><i class="flaticon-log-4"
                         style="font-size:medium; transform: rotate(180deg);"></i></a>
                     </td>
-=======
-          </div>
-        </div>
-        {% if course %}
-        <div class="widget-content widget-content-area">
-          <div class="table-responsive">
-            <table class="table table-bordered table-hover table-striped mb-4">
-              <tr>
-                <th class="">Sr No</th>
-                <th class="">Class</th>
-                <th class="">Course</th>
-                <th class="text-center">Actions</th>
-              </tr>
-
-              {% for i in course %}
-              <tr id="{{ i.pk }}">
-                <td>{{ forloop.counter }}</td>
-                <td>{{i.forclass}}</td>
-                <td>{{i.courseName}}</td>
-                <td class="text-center">
-                  <a
-                    data-toggle="tooltip"
-                    title="Delete"
-                    class="btn btn-danger"
-                    href="{% url 'deleteCourse' i.id %}"
-                    ><i
-                      class="flaticon-delete-fill"
-                      style="font-size: medium"
-                    ></i
-                  ></a>
-                  <a
-                    data-toggle="tooltip"
-                    title="Unarchive"
-                    class="btn btn-success"
-                    href="{% url 'course-unarchive' i.id %}"
-                    ><i
-                      class="flaticon-log-4"
-                      style="font-size: medium; transform: rotate(90deg)"
-                    ></i
-                  ></a>
-                </td>
->>>>>>> b468368945802139206b7ab8fc81cc82d1f18743
 
                 <!-- <td class="text-center">
                       <ul class="table-controls">
