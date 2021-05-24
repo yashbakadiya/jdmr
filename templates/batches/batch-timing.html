@@ -1,8 +1,5 @@
-{% extends 'dashboard/base.html' %}
-{% load static %}
-{% block css %}
-{% endblock %}
-{% block main-content %}
+{% extends 'dashboard/base.html' %} {% load static %} {% block css %} {%
+endblock %} {% block main-content %}
 <style>
   #card {
     background-color: white;
@@ -11,87 +8,175 @@
     color: black;
   }
 </style>
-<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/css/select2.min.css" rel="stylesheet" />
+<link
+  href="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/css/select2.min.css"
+  rel="stylesheet"
+/>
 <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/js/select2.min.js"></script>
 <div class="mt-5">
-  {% if messages %}
-  {% for k in messages%}
+  {% if messages %} {% for k in messages%}
   <div class="alert alert-{{k.tags}} alert-dismissible fade show" role="alert">
     <b>{{ k }} !</b>
     <button type="button" class="close" data-dismiss="alert" aria-label="Close">
       <span aria-hidden="true">&times;</span>
     </button>
   </div>
-  {% endfor %}
-  {% endif %}
-  <div class="card" style="color: black;">
+  {% endfor %} {% endif %}
+  <div class="card" style="color: black">
     <div class="card-header">
-      <h3 style="align-items: center;text-align: center;">Add Batch</h3>
+      <h3 style="align-items: center; text-align: center">Add Batch</h3>
     </div>
-    <form id="frm" class="mb-4 mt-4" method="post">{% csrf_token %}
+    <form id="frm" class="mb-4 mt-4" method="post">
+      {% csrf_token %}
       <div class="mx-2 row" id="INSTBATCH">
         <div class="col">
-          <label for="validationCustom01"><strong>Select Class <span class="red">*</span></strong></label>
+          <label for="validationCustom01"
+            ><strong>Select Class <span class="red">*</span></strong></label
+          >
 
-
-          <select required id="forclass" name='forclass' style="width: 100%;" class="js-example-basic-single form-control"
-            onchange="selectclass()">
-            <option class="form-control" selected disabled value="">Select Class</option>
+          <select
+            required
+            id="forclass"
+            name="forclass"
+            style="width: 100%"
+            class="js-example-basic-single form-control"
+            onchange="selectclass()"
+          >
+            <option class="form-control" selected disabled value="">
+              Select Class
+            </option>
             {% for i in classes %}
-            <option class="form-control form-control-lg" value="{{ i.0 }}">{{i.0}} </option>
+            <option class="form-control form-control-lg" value="{{ i.0 }}">
+              {{i.0}}
+            </option>
             {% endfor %}
           </select>
-
-
         </div>
         <div class="col">
-          <label for="validationCustom01"><strong>Select Course<span class="red">*</span></strong></label>
-          <select required id="courseName" name="courseName" style="width: 100%" class="js-example-basic-single form-control" onchange="selectcourse(this)">
-            <option class="form-control form-control-lg" selected disabled value="">Select Course</option>
+          <label for="validationCustom01"
+            ><strong>Select Course<span class="red">*</span></strong></label
+          >
+          <select
+            required
+            id="courseName"
+            name="courseName"
+            style="width: 100%"
+            class="js-example-basic-single form-control"
+            onchange="selectcourse(this)"
+          >
+            <option
+              class="form-control form-control-lg"
+              selected
+              disabled
+              value=""
+            >
+              Select Course
+            </option>
           </select>
         </div>
         <div class="col">
-          <label for="validationCustom01"><strong> Batch Name<span class="red">*</span></strong></label>
-          <input required type="text" class="form-control" id="batchName" name='batchName' placeholder="Batch Name" required>
-        
+          <label for="validationCustom01"
+            ><strong> Batch Name<span class="red">*</span></strong></label
+          >
+          <input
+            required
+            type="text"
+            class="form-control"
+            id="batchName"
+            name="batchName"
+            placeholder="Batch Name"
+            required
+          />
         </div>
 
+        <div class="col">
+          <label for="validationCustom01"
+            ><strong>Teaching Type <span class="red">*</span></strong></label
+          >
+          <select
+            required
+            id="teachingtype"
+            name="teaching"
+            style="width: 100%"
+            class="js-example-basic-single form-control"
+          >
+            <option selected disabled value="">Teaching Type</option>
+          </select>
+        </div>
       </div>
-      <div class="mx-2 row mt-4"> 
-        
-        
+      <div class="mx-2 row mt-4">
         <div class="col">
-          <label for="validationCustom01"><strong>Teaching Type <span class="red">*</span></strong></label>           
-           <select required id="teachingtype" name='teaching'  style="width: 100%;"
-              class="js-example-basic-single form-control ">
-              <option selected disabled value="">Teaching Type</option>
-            
-            </select>          
-        </div>
-
-
-        <div class="col">
-          <label for="validationCustom01"><strong>Start Time <span class="red">*</span></strong></label>
-          <input required class="form-control" type="time" placeholder="" type="text" name="startTime" required /><br />
-          <div class="invalid-feedback">
-            Select a valid Time!
-          </div>
+          <label for="validationCustom01"
+            ><strong>Start Date <span class="red">*</span></strong></label
+          >
+          <input
+            type="date"
+            class="form-control w-100 col-sm-8 col-7"
+            name="startDate"
+            required
+          /><br />
+          <div class="invalid-feedback">Select a valid Date!</div>
         </div>
 
         <div class="col">
-          <label for="validationCustom01"><strong>End Time <span class="red">*</span></strong></label>
-          <input required class="form-control" type="time" placeholder="" type="text" name="endTime" required /><br />
-          <div class="invalid-feedback">
-            Select a valid Time!
-          </div>
+          <label for="validationCustom01"
+            ><strong>End Date <span class="red">*</span></strong></label
+          >
+          <input
+            type="date"
+            class="form-control w-100 col-sm-8 col-7"
+            name="endDate"
+            required
+          /><br />
+          <div class="invalid-feedback">Select a valid Date!</div>
         </div>
 
         <div class="col">
-          <label for="validationCustom01"><strong>Select Days <span class="red">*</span></strong></label>
+          <label for="validationCustom01"
+            ><strong>Start Time <span class="red">*</span></strong></label
+          >
+          <input
+            required
+            class="form-control"
+            type="time"
+            placeholder=""
+            type="text"
+            name="startTime"
+            required
+          /><br />
+          <div class="invalid-feedback">Select a valid Time!</div>
+        </div>
+
+        <div class="col">
+          <label for="validationCustom01"
+            ><strong>End Time <span class="red">*</span></strong></label
+          >
+          <input
+            required
+            class="form-control"
+            type="time"
+            placeholder=""
+            type="text"
+            name="endTime"
+            required
+          /><br />
+          <div class="invalid-feedback">Select a valid Time!</div>
+        </div>
+
+        <div class="col">
+          <label for="validationCustom01"
+            ><strong>Select Days <span class="red">*</span></strong></label
+          >
 
           <div>
-            <select required class="form-control  selectpicker multiselect multiple-checkboxes" data-actions-box="true"  multiple="multiple" id="days" name='fordays' required>
-              
+            <select
+              required
+              class="form-control selectpicker multiselect multiple-checkboxes"
+              data-actions-box="true"
+              id="days"
+              name="fordays"
+              required
+            >
               <option value="Sunday">Sunday</option>
               <option value="Monday">Monday</option>
               <option value="Tuesday">Tuesday</option>
@@ -102,19 +187,15 @@
             </select>
           </div>
         </div>
-
-
-        
-
       </div>
       <div class="text-center">
-        <button type="submit" class="btn btn-primary"> Submit </button>
+        <button type="submit" class="btn btn-primary">Submit</button>
       </div>
     </form>
   </div>
 
-  <br>
-  <br>
+  <br />
+  <br />
 
   <div class="card mb-4">
     <div class="card-header">
@@ -122,12 +203,18 @@
       <div class="row">
         <!-- Grid column -->
         <div class="col-md-8">
-          <h2 style="color: rgb(0, 0, 0 );">List of Batches</h2>
+          <h2 style="color: rgb(0, 0, 0)">List of Batches</h2>
         </div>
 
         <div class="col-md-4">
-          <input id="searchbox" type="text" class="form-control" name='srh' placeholder="Search Exam or Course"
-            required>
+          <input
+            id="searchbox"
+            type="text"
+            class="form-control"
+            name="srh"
+            placeholder="Search Exam or Course"
+            required
+          />
         </div>
 
         <!-- Grid column -->
@@ -136,42 +223,52 @@
     {% if bat %}
     <div class="card-body">
       <!-- Grid row -->
-      <form action="" method="post">{% csrf_token %}
+      <form action="" method="post">
+        {% csrf_token %}
         <!--Table-->
         <div class="table-responsive">
           <table class="table table-striped">
             <!--Table head-->
             <tr>
+              <th>#</th>
               <th>Batch Name</th>
-              <th>Course Name</th>
               <th>Class</th>
+              <th>Course Name</th>
               <th>Start Time</th>
               <th>End Time</th>
+              <th>Start Date</th>
+              <th>End Date</th>
               <th>Days</th>
               <th>Teaching Type</th>
-              <th class='text-center'>Action</th>
-              
-
+              <th class="text-center">Action</th>
             </tr>
             <!--Table head-->
             <!--Table body-->
 
             {% for i in bat %}
             <tr class="main-row">
+              <td>{{forloop.counter}}</td>
               <td>{{i.batchName}}</td>
-              <td>{{i.course}}</td>
               <td>{{i.forclass}}</td>
+              <td>{{i.course}}</td>
               <td>{{i.startTime}}</td>
               <td>{{i.endTime}}</td>
+              <td>{{i.startDate}}</td>
+              <td>{{i.endDate}}</td>
               <td>{{i.days}}</td>
               <td>{{i.teachingtype}}</td>
 
               <td class="text-center">
-                <a class="btn btn-warning" href="{% url 'batchTimingEdit' i.id %}"><i class="flaticon-pencil-line"
-                    style="font-size:medium;"></i></a>
-                <a class="btn btn-danger confirm-inactive"   href="{% url 'batchTimingdelete' i.id %}"><i class="flaticon-delete-fill"
-                    style="font-size:medium;"></i></a>              
-
+                <a
+                  class="btn btn-warning"
+                  href="{% url 'batchTimingEdit' i.id %}"
+                  ><i class="flaticon-pencil-line" style="font-size: medium"></i
+                ></a>
+                <a
+                  class="btn btn-danger confirm-inactive"
+                  href="{% url 'batchTimingdelete' i.id %}"
+                  ><i class="flaticon-delete-fill" style="font-size: medium"></i
+                ></a>
               </td>
               <!-- <td><a href="{% url 'batchTimingEdit' i.id %}" class="btn btn-danger">EDIT</a></td>
               <td><a href="{% url 'batchTimingdelete' i.id %}" class="btn btn-danger">Delete</a></td>
@@ -179,16 +276,15 @@
             </tr>
             {% endfor %}
 
-
             <!--Table body-->
           </table>
         </div>
         <!--Table-->
       </form>
-      <br>
+      <br />
     </div>
     {% else %}
-    <div class="card-header" style="background: none;">
+    <div class="card-header" style="background: none">
       <div class="row">
         <div class="col-xl-12 col-md-12 col-12">
           <h2>No Exams to show</h2>
@@ -198,20 +294,17 @@
     {% endif %}
   </div>
 
-
-
-
   <script>
-     $(document).on('click', '.confirm-inactive', function(){
-    return confirm('Are you sure you want to delete this?');
-    })
-     
-    $(document).on('click', '.confirm-active', function(){
-    return confirm('Are you sure you want to active this?');
-    })
+    $(document).on("click", ".confirm-inactive", function () {
+      return confirm("Are you sure you want to delete this?");
+    });
+
+    $(document).on("click", ".confirm-active", function () {
+      return confirm("Are you sure you want to active this?");
+    });
     // In your Javascript (external .js resource or <script> tag)
     $(document).ready(function () {
-      $('.js-example-basic-single').select2();
+      $(".js-example-basic-single").select2();
     });
 
     function selectclass() {
@@ -224,14 +317,9 @@
         success: function (data) {
           courses = data.courses;
           $("#courseName").empty().trigger("change");
-          var newOption = new Option(
-              "Select Course",
-              '',
-              true,
-              true
-            );
-            newOption.disabled = true
-            $("#courseName").append(newOption).trigger("change");
+          var newOption = new Option("Select Course", "", true, true);
+          newOption.disabled = true;
+          $("#courseName").append(newOption).trigger("change");
           for (i = 0; i < courses.length; i++) {
             var newOption = new Option(
               courses[i][1],
@@ -246,66 +334,54 @@
     }
 
     function selectcourse(el) {
-        var selected_course = $("#courseName option:selected").text();
-        var selected_class = $("#forclass").val();
-        $.ajax({
-            url: "{% url 'findTeaching' %}",
-            data: {
-                forclass: selected_class,
-                course: selected_course
-            },
-            success: function (data) {
-              console.log(data,selected_class,selected_course)
-                teaching = data.teaching;
-                $("#teachingtype").empty().trigger("change");
+      var selected_course = $("#courseName option:selected").text();
+      var selected_class = $("#forclass").val();
+      $.ajax({
+        url: "{% url 'findTeaching' %}",
+        data: {
+          forclass: selected_class,
+          course: selected_course,
+        },
+        success: function (data) {
+          console.log(data, selected_class, selected_course);
+          teaching = data.teaching;
+          $("#teachingtype").empty().trigger("change");
 
-                var newOption = new Option(
-                    "Teaching Type",
-                    "",
-                    false,
-                    false
-                );
-                $("#teachingtype").append(newOption).trigger("change");
+          var newOption = new Option("Teaching Type", "", false, false);
+          $("#teachingtype").append(newOption).trigger("change");
 
-                for (i = 0; i < teaching.length; i++) {
-                    var newOption = new Option(
-                        teaching[i],
-                        teaching[i],
-                        false,
-                        false
-                    );
-                    $("#teachingtype").append(newOption).trigger("change");
-                }
-            },
-        });
+          for (i = 0; i < teaching.length; i++) {
+            var newOption = new Option(teaching[i], teaching[i], false, false);
+            $("#teachingtype").append(newOption).trigger("change");
+          }
+        },
+      });
     }
-    
-    $(window).on('pageshow', () => {
-      var frm = $('#frm');
+
+    $(window).on("pageshow", () => {
+      var frm = $("#frm");
       frm[0].reset();
     });
 
     trlist = $(".main-row");
 
-    $("body").on('input', "#searchbox", function () {
-        trlist.hide();
-        search = this.value.toLowerCase();
-        len = search.length;
-        for (i = 0; i < trlist.length; i++) {
-          for (let v = 0; v < 7; v++) {
-            if (trlist[i].children[v].textContent == "") {
-                cont = cont;
-            }
-            else {
-                cont = trlist[i].children[v].textContent.toLowerCase();
-            }
-            if (cont.search(search) != -1) {
-                $(trlist[i]).show();
-            }
+    $("body").on("input", "#searchbox", function () {
+      trlist.hide();
+      search = this.value.toLowerCase();
+      len = search.length;
+      for (i = 0; i < trlist.length; i++) {
+        for (let v = 0; v < 7; v++) {
+          if (trlist[i].children[v].textContent == "") {
+            cont = cont;
+          } else {
+            cont = trlist[i].children[v].textContent.toLowerCase();
+          }
+          if (cont.search(search) != -1) {
+            $(trlist[i]).show();
+          }
         }
       }
     });
   </script>
-
 </div>
 {% endblock %}

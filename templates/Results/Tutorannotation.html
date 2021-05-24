@@ -1,72 +1,71 @@
-{% extends 'dashboard/Tutor-dashboard.html' %} 
-{% load static %}
-
-{% block main-content %}
+{% extends 'dashboard/Tutor-dashboard.html' %} {% load static %} {% block
+main-content %}
 
 <!-- Import WebViewer as a script tag -->
-<script src='WebViewer/lib/webviewer.min.js'></script>
+<script src="WebViewer/lib/webviewer.min.js"></script>
 
-  <!-- <div id='viewer' style='width: 1024px; height: 600px; margin: 0 auto;'></div> -->
+<!-- <div id='viewer' style='width: 1024px; height: 600px; margin: 0 auto;'></div> -->
 <!-- Import WebViewer as a script tag -->
 <script src='{% static "plugins/WebViewer/lib/webviewer.min.js" %}'></script>
 
-  <div id='viewer' style='height: 88vh;'></div>
-  <script>
-    WebViewer({
+<div id="viewer" style="height: 88vh"></div>
+<script>
+  WebViewer(
+    {
       path: '{% static "plugins/WebViewer/lib" %}', // path to the PDFTron 'lib' folder on your server
-      licenseKey: 'Insert commercial license key here after purchase',
-     // initialDoc: '{% static "login/samples/60004180064_A3.pdf" %}',
+      licenseKey: "Insert commercial license key here after purchase",
+      // initialDoc: '{% static "login/samples/60004180064_A3.pdf" %}',
       initialDoc: '{% url "anotate" id pk %}',
       // initialDoc: '/path/to/my/file.pdf',  // You can also use documents on your server
-    }, document.getElementById('viewer'))
-    .then(instance => {
-      const docViewer = instance.docViewer;
-      const annotManager = instance.annotManager;
-      // call methods from instance, docViewer and annotManager as needed
-  
-      // you can also access major namespaces from the instance as follows:
-      // const Tools = instance.Tools;
-      // const Annotations = instance.Annotations;
-  
-      docViewer.on('documentLoaded', () => {
-        // call methods relating to the loaded document
-      });
+    },
+    document.getElementById("viewer")
+  ).then((instance) => {
+    const docViewer = instance.docViewer;
+    const annotManager = instance.annotManager;
+    // call methods from instance, docViewer and annotManager as needed
 
-    // Add header button that will get file data on click
-      instance.setHeaderItems(header => {
-        header.push({
-          type: 'actionButton',
-          img: '{% static "img/save.png" %}',
-          onClick: async () => {
-            const doc = docViewer.getDocument();
-            const xfdfString = await annotManager.exportAnnotations();
-            const data = await doc.getFileData({
-              // saves the document with annotations in it
-              xfdfString
-            });
-            const arr = new Uint8Array(data);
-            const blob = new Blob([arr], {
-              type: 'application/pdf'
-            });
-            const data1 = new FormData();
-            data1.append('coppies', blob, 'response_sheet.pdf');
+    // you can also access major namespaces from the instance as follows:
+    // const Tools = instance.Tools;
+    // const Annotations = instance.Annotations;
 
-            $.ajax({
-              type: 'POST',
-              url: '{% url "tutor_checked_copies" id pk %}',
-              data: data1,
-              processData: false,
-              contentType: false,
-              success: function() {                
-                window.location.href = '{% url "getexamresults" id %}'
-              },
-            })
-          }
-        });
-      });
+    docViewer.on("documentLoaded", () => {
+      // call methods relating to the loaded document
     });
 
-  $('.fixed-sidebar').toggleClass('closed-sidebar');
+    // Add header button that will get file data on click
+    instance.setHeaderItems((header) => {
+      header.push({
+        type: "actionButton",
+        img: '{% static "img/save.png" %}',
+        onClick: async () => {
+          const doc = docViewer.getDocument();
+          const xfdfString = await annotManager.exportAnnotations();
+          const data = await doc.getFileData({
+            // saves the document with annotations in it
+            xfdfString,
+          });
+          const arr = new Uint8Array(data);
+          const blob = new Blob([arr], {
+            type: "application/pdf",
+          });
+          const data1 = new FormData();
+          data1.append("coppies", blob, "response_sheet.pdf");
 
-  </script>
-  {% endblock %}
+          $.ajax({
+            type: "POST",
+            url: '{% url "tutor_checked_copies" id pk %}',
+            data: data1,
+            processData: false,
+            contentType: false,
+            success: function () {
+              window.location.href = '{% url "getexamresults" id %}';
+            },
+          });
+        },
+      });
+    });
+  });
+
+  $(".fixed-sidebar").toggleClass("closed-sidebar");
+</script>
+{% endblock %}

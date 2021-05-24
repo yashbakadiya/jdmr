@@ -66,10 +66,6 @@
                     </select>
                 </div>
 
-            </div>
-            <div class="mx-2 row mt-4">
-
-
                 <div class="col">
                     <label for="validationCustom01"><strong>Teaching Type <span class="red">*</span></strong></label>           
                      <select required id="teachingtype" name='teaching'  style="width: 100%;"
@@ -77,7 +73,25 @@
                         <option selected disabled value="">Teaching Type</option>
                       </select>          
                   </div>
-                  
+
+            </div>
+            <div class="mx-2 row mt-4">
+
+                <div class="col">
+                    <label for="validationCustom01"><strong>Start Date <span class="red">*</span></strong></label>
+                    <input type="date" class="form-control w-100 col-sm-8 col-7" name="startDate" value="{{ start|date:'d-m-Y' }}" required><br />
+                    <div class="invalid-feedback">
+                      Select a valid Date!
+                    </div>
+                  </div>
+          
+                  <div class="col">
+                    <label for="validationCustom01"><strong>End Date <span class="red">*</span></strong></label>
+                    <input type="date" class="form-control w-100 col-sm-8 col-7" name="endDate" value="{{ end|date:'d-m-Y' }}" required><br />
+                    <div class="invalid-feedback">
+                      Select a valid Date!
+                    </div>
+                  </div>
 
 
                 <div class="col">

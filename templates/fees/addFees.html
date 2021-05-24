@@ -1,156 +1,290 @@
-{% extends 'dashboard/base.html' %}
-{% load static %}
-{% block css %}
-{% endblock %}
-{% block main-content %}
+{% extends 'dashboard/base.html' %} {% load static %} {% block css %} {%
+endblock %} {% block main-content %}
 <style>
-    #card {
-        background-color: white;
-        padding-bottom: 3rem;
-        padding-top: 3rem;
-        color: black;
-    }
+  #card {
+    background-color: white;
+    padding-bottom: 3rem;
+    padding-top: 3rem;
+    color: black;
+  }
 </style>
-<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/css/select2.min.css" rel="stylesheet" />
+<link
+  href="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/css/select2.min.css"
+  rel="stylesheet"
+/>
 <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/js/select2.min.js"></script>
 <div class="mt-5">
-    {% if messages %}
-    {% for k in messages%}
-    <div class="alert alert-{{k.tags}} alert-dismissible fade show" role="alert">
-        <b>{{ k }} !</b>
-        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-        </button>
+  {% if messages %} {% for k in messages%}
+  <div class="alert alert-{{k.tags}} alert-dismissible fade show" role="alert">
+    <b>{{ k }} !</b>
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  {% endfor %} {% endif %}
+  <div class="card" style="color: black">
+    <div class="card-header">
+      <h3 style="align-items: center; text-align: center">Add Course Fees</h3>
     </div>
-    {% endfor %}
-    {% endif %}
-    <div class="card" style="color: black;">
-        <div class="card-header">
-            <h3 style="align-items: center;text-align: center;">Add Course Fees</h3>
+    <form id="frm" class="mb-4 mt-4" method="post">
+      {% csrf_token %}
+      <div class="mx-2 row" id="INSTBATCH">
+        <div class="col">
+          <label for="validationCustom01"
+            ><strong>Select Class <span class="red">*</span></strong></label
+          >
+          <select
+            id="forclass"
+            name="forclass"
+            style="width: 100%"
+            required
+            class="js-example-basic-single form-control"
+            onchange="selectclass()"
+          >
+            <option class="form-control" selected disabled value="">
+              Select Class
+            </option>
+            {% for i in classes %}
+            <option class="form-control form-control-lg" value="{{ i.0 }}">
+              {{i.0}}
+            </option>
+            {% endfor %}
+          </select>
         </div>
-        <form id="frm" class="mb-4 mt-4" method="post">{% csrf_token %}
-            <div class="mx-2 row" id="INSTBATCH">
-                <div class="col">
-                    <label for="validationCustom01"><strong>Select Class <span class="red">*</span></strong></label>
-                    <select id="forclass" name='forclass' style="width: 100%;" required
-                        class="js-example-basic-single form-control" onchange="selectclass()">
-                        <option class="form-control" selected disabled value="">Select Class</option>
-                        {% for i in classes %}
-                        <option class="form-control form-control-lg" value="{{ i.0 }}">{{i.0}} </option>
-                        {% endfor %}
-                    </select>
-                </div>
-                <div class="col">
-                    <label for="validationCustom01"><strong>Select Course<span class="red">*</span></strong></label>
-                    <select id="courseName" name="courseName" style="width: 100%" onchange="selectcourse()" required
-                        class="js-example-basic-single form-control">
-                        <option class="form-control form-control-lg" selected disabled value="">Select Course</option>
-                    </select>
-                </div>
-                <div class="col">
-                    <label for="validationCustom01"><strong>Teaching Type <span class="red">*</span></strong></label>
-                    <select id="teachingtype" name="teaching" style="width: 100%;" required
-                        class="js-example-basic-single form-control">
-                        <option class="form-control" selected disabled value="">Select Teach Type</option>
-                    </select>
-                </div>
-            </div>
-            <div class="mx-2 row mt-4">
-              
+        <div class="col">
+          <label for="validationCustom01"
+            ><strong>Select Course<span class="red">*</span></strong></label
+          >
+          <select
+            id="courseName"
+            name="courseName"
+            style="width: 100%"
+            onchange="selectcourse()"
+            required
+            class="js-example-basic-single form-control"
+          >
+            <option
+              class="form-control form-control-lg"
+              selected
+              disabled
+              value=""
+            >
+              Select Course
+            </option>
+          </select>
+        </div>
+        <div class="col">
+          <label for="validationCustom01"
+            ><strong>Teaching Type <span class="red">*</span></strong></label
+          >
+          <select
+            id="teachingtype"
+            name="teaching"
+            style="width: 100%"
+            required
+            class="js-example-basic-single form-control"
+          >
+            <option class="form-control" selected disabled value="">
+              Select Teach Type
+            </option>
+          </select>
+        </div>
+      </div>
+      <div class="mx-2 row mt-4">
+        <div class="col">
+          <label for="validationCustom01"
+            ><strong> Course Fees <span class="red">*</span></strong></label
+          >
+          <input
+            type="number"
+            min="0"
+            class="form-control finalcalc"
+            id="feeamt"
+            name="feeamt"
+            placeholder="Course Fee"
+            required
+          />
+        </div>
+        <div class="col">
+          <label for="validationCustom01"><strong> Tax </strong></label>
+          <input
+            class="form-control finalcalc"
+            type="number"
+            min="0"
+            max="100"
+            id="tax"
+            name="tax"
+            placeholder="Tax %"
+            required
+          /><br />
+        </div>
 
-                <div class="col">
-                    <label for="validationCustom01"><strong> Course Fees <span class="red">*</span></strong></label>
-                    <input type="number" min="0" class="form-control finalcalc" id="feeamt" name='feeamt' placeholder="Course Fee" required>
-                </div>
-                <div class="col">
-                    <label for="validationCustom01"><strong> Tax </strong></label>
-                    <input class="form-control finalcalc" type="number" min="0" max="100" id="tax" name='tax' placeholder="Tax %" required /><br />
-                </div>
+        <div class="col">
+          <label for="validationCustom01"
+            ><strong>Final <span class="red">*</span></strong></label
+          >
+          <input
+            class="form-control"
+            type="text"
+            id="final"
+            name="final"
+            readonly
+            required
+          />
+          <div class="invalid-feedback">Select a valid Time!</div>
+        </div>
+      </div>
+      <div class="mx-2 row mt-4">
+        <div class="col-md-4 mb-3">
+          <label for="validationCustom01"
+            ><strong>Installment<span class="red">*</span></strong></label
+          >
+          <div>
+            <select
+              class="form-control"
+              id="no_of_installment"
+              class="multiselect"
+              name="no_of_installment"
+              required
+            >
+              <option value="1">1</option>
+              <option value="2">2</option>
+              <option value="3">3</option>
+              <option value="4">4</option>
+              <option value="5">5</option>
+              <option value="6">6</option>
+            </select>
+          </div>
+        </div>
 
-                <div class="col">
-                    <label for="validationCustom01"><strong>Final <span class="red">*</span></strong></label>
-                    <input class="form-control" type='text' id="final" name='final' readonly required>
-                    <div class="invalid-feedback">
-                        Select a valid Time!
-                    </div>
-                </div>
-            </div>
-            <div class="mx-2 row mt-4">
-                <div class="col-md-4 mb-3">
-                    <label for="validationCustom01"><strong>Installment<span class="red">*</span></strong></label>
-                    <div>
-                        <select class="form-control " id="no_of_installment" class="multiselect" name='no_of_installment'  required>
-                            <option value="1">1</option>
-                            <option value="2">2</option>
-                            <option value="3">3</option>
-                            <option value="4">4</option>
-                            <option value="5">5</option>
-                            <option value="6">6</option>
-                        </select>
-                    </div>
-                </div> 
+        <div class="col-md-4 mb-3">
+          <label for="validationCustom01" for="chargeType1"
+            ><strong>Charge Type <span class="red">*</span></strong></label
+          >
+          <select
+            class="form-control"
+            name="chargeType"
+            style="width: 100%"
+            required
+          >
+            <option class="form-control form-control-lg" selected value="1">
+              Amount
+            </option>
+            <option class="form-control form-control-lg" value="0">
+              Percent
+            </option>
+          </select>
+        </div>
+      </div>
+      <div class="mx-2 row mt-4">
+        <div
+          id="echarges"
+          class="input-group form-group"
+          style="margin-left: 20px"
+        >
+          <label for="validationCustom01" for="chargeType2"
+            ><strong
+              >Extra Charges (Each Installment)
+              <span class="red">*</span></strong
+            ></label
+          >
+          <input
+            type="number"
+            min="0"
+            class="form-control col-sm-1"
+            id="echarge2"
+            name="echarge"
+            placeholder="2"
+            disabled="disabled"
+          />
+          <input
+            type="number"
+            min="0"
+            class="form-control col-sm-1"
+            id="echarge3"
+            name="echarge"
+            placeholder="3"
+            disabled="disabled"
+          />
+          <input
+            type="number"
+            min="0"
+            class="form-control col-sm-1"
+            id="echarge4"
+            name="echarge"
+            placeholder="4"
+            disabled="disabled"
+          />
+          <input
+            type="number"
+            min="0"
+            class="form-control col-sm-1"
+            id="echarge5"
+            name="echarge"
+            placeholder="5"
+            disabled="disabled"
+          />
+          <input
+            type="number"
+            min="0"
+            class="form-control col-sm-1"
+            id="echarge6"
+            name="echarge"
+            placeholder="6"
+            disabled="disabled"
+          />
+        </div>
 
-                <div class="col-md-4 mb-3">
-                    <label for="validationCustom01" for="chargeType1"><strong>Charge Type <span
-                                class="red">*</span></strong></label>
-                        <select class="form-control" name="chargeType" style="width: 100%" required>
-                        <option class="form-control form-control-lg" selected value="1">Amount</option>
-                        <option class="form-control form-control-lg" value="0">Percent</option>
-                        </select>
-                </div>
-            </div>
-            <div class=" mx-2 row mt-4">
-                <div id="echarges" class="input-group form-group" style="margin-left: 20px;">
-                    <label for="validationCustom01" for="chargeType2"><strong>Extra Charges (Each Installment) <span class="red">*</span></strong></label>
-                    <input type="number" min="0" class="form-control col-sm-1" id="echarge2" name='echarge' placeholder="2" disabled="disabled">
-                    <input type="number" min="0" class="form-control col-sm-1" id="echarge3" name='echarge' placeholder="3" disabled="disabled">
-                    <input type="number" min="0" class="form-control col-sm-1" id="echarge4" name='echarge' placeholder="4" disabled="disabled">
-                    <input type="number" min="0" class="form-control col-sm-1" id="echarge5" name='echarge' placeholder="5" disabled="disabled">
-                    <input type="number" min="0" class="form-control col-sm-1" id="echarge6" name='echarge' placeholder="6" disabled="disabled">
-                </div>
+        <div class="col-md-4 mb-3">
+          <label for="validationCustom01" for="chargeType2"
+            ><strong>Discount <span class="red">*</span></strong></label
+          >
+          <input
+            class="form-control"
+            type="number"
+            min="0"
+            max="100"
+            id="discount"
+            name="feeDisc"
+            placeholder="Discount (%)"
+          />
+        </div>
 
-                <div class="col-md-4 mb-3 ">
-                    <label for="validationCustom01" for="chargeType2"><strong>Discount <span
-                                class="red">*</span></strong></label>
-                    <input class="form-control" type="number" min="0" max="100" id="discount" name='feeDisc' placeholder="Discount (%)" />
+        <div class="col-md-4 mb-3">
+          <label for="validationCustom01" for="chargeType2"
+            ><strong>Validity <span class="red">*</span></strong></label
+          >
+          <input
+            class="form-control"
+            type="Date"
+            id="validity"
+            name="discValidity"
+            placeholder="Val"
+            disabled
+          />
+        </div>
+      </div>
 
-                </div>
+      <div class="text-center">
+        <button type="submit" class="btn btn-primary">Submit</button>
+      </div>
+    </form>
+  </div>
 
-                <div class="col-md-4 mb-3 ">
-                    <label for="validationCustom01" for="chargeType2"><strong>Validity <span
-                                class="red">*</span></strong></label>
-                    <input class="form-control" type="Date" id="validity" name='discValidity' placeholder="Val" disabled />
+  <script>
+    $("#discount").on("change", () => {
+      if ($("#discount").val() == 0) {
+        $("#validity").prop("disabled", true);
+        $("#validity").prop("required", false);
+        $("#validity").val(null);
+      } else {
+        $("#validity").prop("disabled", false);
+        $("#validity").prop("required", true);
+      }
+    });
+    // In your Javascript (external .js resource or <script> tag)
 
-                </div>
-
-            </div>
-
-            <div class="text-center">
-                <button type="submit" class="btn btn-primary"> Submit </button>
-            </div>
-        </form>
-    </div>
-
-
-
-    <script>
-        
-    $('#discount').on('change',()=>{
-
-        if ($('#discount').val()==0){
-            $('#validity').prop('disabled', true);
-            $('#validity').prop('required', false);
-            $('#validity').val(null);
-        }
-        
-        else{
-            $('#validity').prop('disabled', false);
-            $('#validity').prop('required', true);
-        }
-    })
-        // In your Javascript (external .js resource or <script> tag)
-      
-            function selectclass() {
+    function selectclass() {
       var selected = $("#forclass").val();
       $.ajax({
         url: "{% url 'findCourse' %}",
@@ -160,12 +294,7 @@
         success: function (data) {
           courses = data.courses;
           $("#courseName").empty().trigger("change");
-          var newOption = new Option(
-            "Select Course",
-            "",
-            false,
-            false
-          );
+          var newOption = new Option("Select Course", "", false, false);
           $("#courseName").append(newOption).trigger("change");
           for (i = 0; i < courses.length; i++) {
             var newOption = new Option(
@@ -181,86 +310,67 @@
     }
 
     function selectcourse() {
-    var selected_class = $("#forclass").val();
-    var selected_course = $("#courseName option:selected").text();
+      var selected_class = $("#forclass").val();
+      var selected_course = $("#courseName option:selected").text();
 
-    $.ajax({
+      $.ajax({
         url: "{% url 'findTeaching' %}",
-            data: {
-                forclass: selected_class,
-                course: selected_course
-            },
-            success: function (data) {
-                teaching = data.teaching;
+        data: {
+          forclass: selected_class,
+          course: selected_course,
+        },
+        success: function (data) {
+          teaching = data.teaching;
 
-        $("#teachingtype").empty().trigger("change");
+          $("#teachingtype").empty().trigger("change");
 
-        var newOption = new Option(
-                    "Select Teach Type",
-                    "",
-                    false,
-                    false
-                );
-        $("#teachingtype").append(newOption).trigger("change");
-
-        for (i = 0; i < teaching.length; i++) {
-                    var newOption = new Option(
-                        teaching[i],
-                        teaching[i],
-                        false,
-                        false
-                    );
+          var newOption = new Option("Select Teach Type", "", false, false);
           $("#teachingtype").append(newOption).trigger("change");
-        }
-        console.log(teaching)
-      },
+
+          for (i = 0; i < teaching.length; i++) {
+            var newOption = new Option(teaching[i], teaching[i], false, false);
+            $("#teachingtype").append(newOption).trigger("change");
+          }
+          console.log(teaching);
+        },
+      });
+    }
+  </script>
+
+  <script>
+    $("#no_of_installment").on("change", function () {
+      $("#echarges input").prop("disabled", true);
+      var selected = $("#no_of_installment option:selected").text();
+      let j = parseInt(selected) + 1;
+      for (let i = j; i <= 6; i++) {
+        $(`#echarge${i}`).val("");
+      }
+
+      for (let i = 2; i <= selected; ++i) {
+        $(`#echarge${i}`).prop("disabled", false);
+      }
     });
-  }
-    </script>
-   
 
-
-
-
-   <script>
-    
-    $("#no_of_installment").on("change", function() {
-                    $("#echarges input").prop("disabled",true);
-                    var selected = $("#no_of_installment option:selected").text();
-                    let j = parseInt(selected) + 1;
-                    for (let i = j; i <= 6; i++)
-                    {
-                        $(`#echarge${i}`).val('');
-                    }
-
-                    for (let i = 2; i <= selected; ++i)
-                    {
-                        $(`#echarge${i}`).prop( "disabled", false );
-                    }
-
-                });
-    
-    
-        $(".finalcalc").on("change",function(){
-            var a,b,c;
-            a=Number(document.getElementById("feeamt").value);
-            b=Number(document.getElementById("tax").value);
-            if(a==undefined){a = 0;}
-            if(b==undefined){b = 0;}
-            c= a + (b/100)*a;
-            $('#final').val(c);
-            event.preventDefault()
-        });
-    
-        $(document).on('ready', () => {
-        if (performance.navigation.type == 2) {
-            location.reload();
-        }
+    $(".finalcalc").on("change", function () {
+      var a, b, c;
+      a = Number(document.getElementById("feeamt").value);
+      b = Number(document.getElementById("tax").value);
+      if (a == undefined) {
+        a = 0;
+      }
+      if (b == undefined) {
+        b = 0;
+      }
+      c = a + (b / 100) * a;
+      $("#final").val(c);
+      event.preventDefault();
     });
-    </script>
 
-
-
-
+    $(document).on("ready", () => {
+      if (performance.navigation.type == 2) {
+        location.reload();
+      }
+    });
+  </script>
 </div>
 {% endblock %}

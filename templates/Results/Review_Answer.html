@@ -1,47 +1,54 @@
-{% extends template %}
-{% load static %}
-{% block main-content %}
-<div class="card mt-5" style="color: black;">
+{% extends template %} {% load static %} {% block main-content %}
+<div class="card mt-5" style="color: black">
   <div class="card-body">
     <div class="float-right">
       Marks: +{{answer.marks}},
 
-      <span> {% if answer.negative_marks %}-{% endif %}{{answer.negative_marks}}</span>
+      <span>
+        {% if answer.negative_marks %}-{% endif
+        %}{{answer.negative_marks}}</span
+      >
     </div>
     <h3>{{answer.question | safe}}</h3>
     <h6>Answer Given: {{answer.input_ans | safe}}</h6>
     {% if answer.input_ans_Image %}
-    <h6><img src="/media/{{answer.input_ans_Image | safe}}" alt="answer image"></h6>
+    <h6>
+      <img src="/media/{{answer.input_ans_Image | safe}}" alt="answer image" />
+    </h6>
     {% endif %}
-    <h6>Correct Answer: <span class="edit"> {{answer.correct_ans | safe}}</span></h6>
+    <h6>
+      Correct Answer: <span class="edit"> {{answer.correct_ans | safe}}</span>
+    </h6>
     <hr />
-    <button class="btn btn-success" onclick="check(this)"> {% if answer.marks_given %} Recheck {% else %} Check {% endif %}</button>
-    <form style="display: none;" class="check-form" method="POST">
+    <button class="btn btn-success" onclick="check(this)">
+      {% if answer.marks_given %} Recheck {% else %} Check {% endif %}
+    </button>
+    <form style="display: none" class="check-form" method="POST">
       {% csrf_token %}
       <div class="input-group">
-      <input
-        required
-        max="{{answer.marks}}"
-        min="-{{answer.negative_marks}}"
-        class="form-control"
-        name="marks"
-        type="number"
-        placeholder="Enter Marks"
-        style="width: fit-content;"
-      />
-      <button class="input-group-append btn btn-success">Enter</button>
-    </div>
+        <input
+          required
+          max="{{answer.marks}}"
+          min="-{{answer.negative_marks}}"
+          class="form-control"
+          name="marks"
+          type="number"
+          placeholder="Enter Marks"
+          style="width: fit-content"
+        />
+        <button class="input-group-append btn btn-success">Enter</button>
+      </div>
     </form>
   </div>
 </div>
 
 <script>
-  $(document).ready(function(){
-    $('.edit').html($('.edit').text())
-  })
-  function check(el){
-  $(el).parent().parent().find('.check-form').css('display','block')
-  $(el).css('display','none')
-}
-  </script>
+  $(document).ready(function () {
+    $(".edit").html($(".edit").text());
+  });
+  function check(el) {
+    $(el).parent().parent().find(".check-form").css("display", "block");
+    $(el).css("display", "none");
+  }
+</script>
 {% endblock %}

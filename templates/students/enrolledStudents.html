@@ -1,32 +1,30 @@
-{% extends 'dashboard/Tutor-dashboard.html' %}
-{% load static %}
-{% block extra-stylesheets %}
+{% extends 'dashboard/Tutor-dashboard.html' %} {% load static %} {% block
+extra-stylesheets %}
 
 <!-- CDN for google maps Place API -->
-<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCBJybI10-Xa43-F5GSad1i0Y9W3yqlW6Q&libraries=places&v=3"
-    defer></script>
+<script
+  src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCBJybI10-Xa43-F5GSad1i0Y9W3yqlW6Q&libraries=places&v=3"
+  defer
+></script>
 <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 
-{% endblock extra-stylesheets %}
-{% block main-content %}
+{% endblock extra-stylesheets %} {% block main-content %}
 <div class="mt-5">
-  {% if messages %}
-  {% for k in messages%}
+  {% if messages %} {% for k in messages%}
   <div class="alert alert-{{k.tags}} alert-dismissible fade show" role="alert">
     <b>{{ k }} !</b>
     <button type="button" class="close" data-dismiss="alert" aria-label="Close">
       <span aria-hidden="true">&times;</span>
     </button>
   </div>
-  {% endfor %}
-  {% endif %}
+  {% endfor %} {% endif %}
   <div class="row layout-spacing">
     <div class="col-lg-12">
       <div class="card statbox widget box box-shadow">
         <div class="card-header border-bottom border-default">
           <div class="row">
             <div class="col-xl-12 col-md-12 col-sm-12 col-12">
-              <h2 style="color:black;">Search Students Near You</h2>
+              <h2 style="color: black">Search Students Near You</h2>
             </div>
           </div>
         </div>
@@ -44,61 +42,118 @@
                   <input type="hidden" id="cityLng" value="0" name="cityLng" />
                 </div>
                 <div class="col-lg-4 col-md-6 col-12 mt-2 row">
-                  <label class="control-label col-sm-3 col-md-4 col-5 mt-3"
-                    style="display:block; color:#000000;">Distance</label>
-                  <input type="number" class="form-control my-2 w-100 col-md-7 col-7" {% if prefill.distance %} value="{{prefill.distance}}" {% endif %} style="-moz-appearance: textfield;" min="0" name="distance"
-                    placeholder="Distance in KM">
+                  <label
+                    class="control-label col-sm-3 col-md-4 col-5 mt-3"
+                    style="display: block; color: #000000"
+                    >Distance</label
+                  >
+                  <input
+                    type="number"
+                    class="form-control my-2 w-100 col-md-7 col-7"
+                    {%
+                    if
+                    prefill.distance
+                    %}
+                    value="{{prefill.distance}}"
+                    {%
+                    endif
+                    %}
+                    style="-moz-appearance: textfield"
+                    min="0"
+                    name="distance"
+                    placeholder="Distance in KM"
+                  />
                 </div>
-                
-                <div class="col-lg-4 col-md-6  col-12 mt-2 row">
-                  <label class="control-label col-sm-3 col-md-4 col-5 mt-3"
-                  style="display:block; color:black;">Class</label>
-                  <select name="className" class="cn custom-select form-control w-100 my-2 col-md-7 col-7" required
-                  onchange="selectclass(this)">
-                  {% if prefill.class %}
-                  <option selected value="{{prefill.class}}">{{prefill.class}}</option>
+
+                <div class="col-lg-4 col-md-6 col-12 mt-2 row">
+                  <label
+                    class="control-label col-sm-3 col-md-4 col-5 mt-3"
+                    style="display: block; color: black"
+                    >Class</label
+                  >
+                  <select
+                    name="className"
+                    class="
+                      cn
+                      custom-select
+                      form-control
+                      w-100
+                      my-2
+                      col-md-7 col-7
+                    "
+                    required
+                    onchange="selectclass(this)"
+                  >
+                    {% if prefill.class %}
+                    <option selected value="{{prefill.class}}">
+                      {{prefill.class}}
+                    </option>
                     {% else %}
                     <option disabled selected value="">Select Class</option>
-                    {% endif %}
-                    
-                    {% for class in classes %}
-                    {% if prefill.class != class %}
+                    {% endif %} {% for class in classes %} {% if prefill.class
+                    != class %}
                     <option value="{{class}}">{{class}}</option>
-                    {% endif %}
-                    {% endfor %}
+                    {% endif %} {% endfor %}
                   </select>
                 </div>
-                
-                <div class="col-lg-4 col-md-6  col-12 mt-2 row">
-                  <label class="control-label col-sm-3 col-md-4 mt-3 col-5"
-                  style="display:block; color:black;">Course</label>
-                  <select name="subject" class="ctn custom-select form-control w-100 my-2 col-md-7 col-7" required>
+
+                <div class="col-lg-4 col-md-6 col-12 mt-2 row">
+                  <label
+                    class="control-label col-sm-3 col-md-4 mt-3 col-5"
+                    style="display: block; color: black"
+                    >Course</label
+                  >
+                  <select
+                    name="subject"
+                    class="
+                      ctn
+                      custom-select
+                      form-control
+                      w-100
+                      my-2
+                      col-md-7 col-7
+                    "
+                    required
+                  >
                     {% if prefill.course %}
-                    <option selected value="{{prefill.course}}">{{prefill.course}}</option>
+                    <option selected value="{{prefill.course}}">
+                      {{prefill.course}}
+                    </option>
                     {% else %}
                     <option disabled selected value="">Select Course</option>
                     {% endif %}
                   </select>
                 </div>
-                <div class="col-lg-4 col-md-6  col-12 mt-2 row">
-                  <label class="control-label col-sm-3 col-md-4 col-5 mt-3"
-                    style="display:block; color:black;">TeachType</label>
-                  <select id="teachtype" name="teachtype" placeholder="Teaching Type" required
-                    class="custom-select form-control my-2 w-100 col-md-7 col-7">
+                <div class="col-lg-4 col-md-6 col-12 mt-2 row">
+                  <label
+                    class="control-label col-sm-3 col-md-4 col-5 mt-3"
+                    style="display: block; color: black"
+                    >TeachType</label
+                  >
+                  <select
+                    id="teachtype"
+                    name="teachtype"
+                    placeholder="Teaching Type"
+                    required
+                    class="custom-select form-control my-2 w-100 col-md-7 col-7"
+                  >
                     {% if prefill.type %}
-                    <option selected value="{{prefill.type}}">{{prefill.type}}</option>
+                    <option selected value="{{prefill.type}}">
+                      {{prefill.type}}
+                    </option>
                     {% else %}
-                    <option disabled selected value="">Select Teaching Type</option>
-                    {% endif %}
-                
-                    {% for type in types %}
-                    {% if prefill.type != type %}
+                    <option disabled selected value="">
+                      Select Teaching Type
+                    </option>
+                    {% endif %} {% for type in types %} {% if prefill.type !=
+                    type %}
                     <option value="{{type}}">{{type}}</option>
-                    {% endif %}
-                    {% endfor %}
+                    {% endif %} {% endfor %}
                   </select>
                 </div>
-                <div class="col-lg-12 col-md-12  col-12 d-flex justify-content-end">
+                <div
+                  class="col-lg-12 col-md-12 col-12 d-flex justify-content-end"
+                >
                   <button class="my-2 btn btn-info">Search</button>
                 </div>
               </form>
@@ -110,11 +165,10 @@
   </div>
 </div>
 <div class="row">
-  {% if allData %}
-  {% for i in allData %}
+  {% if allData %} {% for i in allData %}
   <div class="col-xl-3 col-lg-6 col-md-6 col-sm-6 layout-spacing">
     <div class="statbox widget box box-shadow">
-      <div class="widget-content widget-content-area product-cat6  px-0 py-0">
+      <div class="widget-content widget-content-area product-cat6 px-0 py-0">
         <div class="row">
           <div class="col-12">
             <div class="card">
@@ -122,41 +176,92 @@
                 <div class="row">
                   <div class="col-md-12">
                     {% if i.student.photo %}
-                    <img src="{{i.student.photo.url}}" class="img-fluid w-100 text-center" alt="car-1"
-                      style="height:15rem;">
+                    <img
+                      src="{{i.student.photo.url}}"
+                      class="img-fluid w-100 text-center"
+                      alt="car-1"
+                      style="height: 15rem"
+                    />
                     {% else %}
-                    <img src="{% static 'default-profile.png' %}" class="img-fluid w-100 text-center" alt="car-1"
-                      style="height:15rem;">
+                    <img
+                      src="{% static 'default-profile.png' %}"
+                      class="img-fluid w-100 text-center"
+                      alt="car-1"
+                      style="height: 15rem"
+                    />
                     {% endif %}
                   </div>
                   <div class="col-md-12 mt-1 text-center">
-                    <b style="text-transform: uppercase; color: black;">{% if i.student.user.first_name %} {{i.student.user.first_name}}
-                      {{i.student.user.last_name}} {% else %} {{i.student.user.username}} {% endif %}</b>
+                    <b style="text-transform: uppercase; color: black"
+                      >{% if i.student.user.first_name %}
+                      {{i.student.user.first_name}} {{i.student.user.last_name}}
+                      {% else %} {{i.student.user.username}} {% endif %}</b
+                    >
                   </div>
-                  <div class="col-md-12 mt-1 text-center" style="color: black;">
+                  <div class="col-md-12 mt-1 text-center" style="color: black">
                     <div class="row">
-                      <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                      <div
+                        class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12"
+                      >
                         <b>Class:</b>
-                        <span class="t-s-car-sold-number mb-0 ml-1">{{i.forclass}}</span>
+                        <span class="t-s-car-sold-number mb-0 ml-1"
+                          >{{i.forclass}}</span
+                        >
                       </div>
-                      <div class="col-xl-12 mt-2 col-lg-12 col-md-12 col-sm-12 col-12">
+                      <div
+                        class="
+                          col-xl-12
+                          mt-2
+                          col-lg-12 col-md-12 col-sm-12 col-12
+                        "
+                      >
                         <b>Course:</b>
-                        <span class="t-s-car-sold-number mb-0 ml-1">{{i.subject}}</span>
+                        <span class="t-s-car-sold-number mb-0 ml-1"
+                          >{{i.subject}}</span
+                        >
                       </div>
-                      <div class="col-xl-12 mt-2 col-lg-12 col-md-12 col-sm-12 col-12">
+                      <div
+                        class="
+                          col-xl-12
+                          mt-2
+                          col-lg-12 col-md-12 col-sm-12 col-12
+                        "
+                      >
                         <b>TeachType:</b>
-                        <span class="t-s-car-sold-number mb-0 ml-1">{{i.teachingMode}}</span>
+                        <span class="t-s-car-sold-number mb-0 ml-1"
+                          >{{i.teachingMode}}</span
+                        >
                       </div>
-                      <div class="col-xl-12 mt-2 col-lg-12 col-md-12 col-sm-12 col-12">
+                      <div
+                        class="
+                          col-xl-12
+                          mt-2
+                          col-lg-12 col-md-12 col-sm-12 col-12
+                        "
+                      >
                         <b>Budget:</b>
-                        <span class="t-s-car-sold-number mb-0 ml-1">{{i.budgetVal}}</span>
+                        <span class="t-s-car-sold-number mb-0 ml-1"
+                          >{{i.budgetVal}}</span
+                        >
                       </div>
                     </div>
                   </div>
-                  <div class="col-xl-12 text-center mt-2 mb-2 card-bottom-section">
-                    <button type="button" data-toggle="modal" data-target="#StuModal{{i.sno}}"
-                      class="btn btn-info">View</button>
-                      <a class="btn btn-success" href='{% url "room" request.user.username "Teacher" i.student.user.username %}'>Chat</a>
+                  <div
+                    class="col-xl-12 text-center mt-2 mb-2 card-bottom-section"
+                  >
+                    <button
+                      type="button"
+                      data-toggle="modal"
+                      data-target="#StuModal{{i.sno}}"
+                      class="btn btn-info"
+                    >
+                      View
+                    </button>
+                    <a
+                      class="btn btn-success"
+                      href='{% url "room" request.user.username "Teacher" i.student.user.username %}'
+                      >Chat</a
+                    >
                   </div>
                 </div>
               </div>
@@ -164,122 +269,162 @@
           </div>
         </div>
       </div>
+    </div>
   </div>
-</div>
 
-<!-- Model view -->
-<div class="modal fade" id="StuModal{{i.sno}}" tabindex="-1" role="dialog" aria-labelledby="{{i.sno}}"
-  aria-hidden="true" style="top:30%; color: black;">
-  <div class="modal-dialog modal-lg" role="document">
-    <div class="modal-content ml-2">
-      <div class="modal-header">
-        <h5 class="col-sm-12 text-center" id="{{i.sno}}">
-          {% if i.student.user.first_name %} {{i.student.user.first_name}}
-                      {{i.student.user.last_name}} {% else %} {{i.student.user.username}} {% endif %}</h5>
-      </div>
-      <div class="modal-body">
-        <div class="row">
-          <div class="col-sm-3 col-12">
-            <div class="row d-flex justify-content-center ">
-              {% if i.student.photo %}
-              <img class="avatar rounded-circle" src="{{i.student.photo.url}}" alt="Not Found"
-                style="height:5rem;width:5rem;" />
-              {% else %}
-              <img id="preview" src="{% static 'default-profile.png' %}" alt="Default Not Found"
-                style="height:5em; width:5em;">
-              {% endif %}
-            </div>
-            <div class="d-flex justify-content-center row my-2">
-              <a href="{% url 'teaMakeAppointment' i.student.id %}" id="sc" class="btn btn-sm btn-info" style="font-size:smaller; width: 130px;">Schedule Class</a>
-            </div>
-            <div class="d-flex justify-content-center row my-2">
-              <a class="btn-sm btn btn-success" style="font-size:smaller; width: 130px;" id="ch" href='{% url "room" request.user.username "Teacher" i.student.user.username %}'>Chat</a>
-            </div>
-          </div>
-          <div class="col-sm-9 col-12">
-            <div class="row">
-              <div class="col-sm-6 col-12">
-                <svg width="22" height="18" viewBox="0 0 22 18" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path
-                    d="M18.875 0.75H3.125C2.42904 0.750744 1.76179 1.02755 1.26967 1.51967C0.777545 2.01179 0.500744 2.67904 0.5 3.375V14.625C0.500744 15.321 0.777545 15.9882 1.26967 16.4803C1.76179 16.9725 2.42904 17.2493 3.125 17.25H18.875C19.571 17.2493 20.2382 16.9725 20.7303 16.4803C21.2225 15.9882 21.4993 15.321 21.5 14.625V3.375C21.4993 2.67904 21.2225 2.01179 20.7303 1.51967C20.2382 1.02755 19.571 0.750744 18.875 0.75ZM18.2103 5.09203L11.4603 10.342C11.3287 10.4444 11.1667 10.4999 11 10.4999C10.8333 10.4999 10.6713 10.4444 10.5397 10.342L3.78969 5.09203C3.71038 5.03214 3.64377 4.95709 3.59372 4.87123C3.54367 4.78537 3.51118 4.69042 3.49815 4.5919C3.48511 4.49338 3.49179 4.39325 3.51778 4.29733C3.54378 4.20142 3.58858 4.11162 3.64958 4.03316C3.71058 3.95471 3.78656 3.88916 3.87312 3.84032C3.95967 3.79149 4.05506 3.76034 4.15376 3.74869C4.25245 3.73704 4.35248 3.74513 4.44802 3.77247C4.54357 3.79981 4.63272 3.84587 4.71031 3.90797L11 8.79984L17.2897 3.90797C17.447 3.7892 17.6447 3.73711 17.84 3.76296C18.0354 3.78881 18.2128 3.89053 18.3338 4.04612C18.4547 4.20171 18.5096 4.39866 18.4865 4.59439C18.4634 4.79011 18.3642 4.96888 18.2103 5.09203Z"
-                    fill="#FF7918" />
-                </svg>
-                <b class="ml-1">{{i.student.user.email}}</b>
-              </div>
-              <div class="col-sm-6 col-12">
-                <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path
-                    d="M20 14.92V17.92C20.0011 18.1985 19.9441 18.4742 19.8325 18.7293C19.7209 18.9845 19.5573 19.2136 19.3521 19.4019C19.1469 19.5901 18.9046 19.7335 18.6407 19.8227C18.3769 19.9119 18.0974 19.9451 17.82 19.92C14.7428 19.5856 11.787 18.5341 9.19 16.85C6.77383 15.3147 4.72534 13.2662 3.19 10.85C1.49998 8.2412 0.448243 5.27099 0.12 2.18C0.0950104 1.90347 0.127875 1.62476 0.2165 1.36162C0.305126 1.09849 0.447571 0.856689 0.634766 0.651621C0.821961 0.446553 1.0498 0.282709 1.30379 0.170522C1.55778 0.0583346 1.83234 0.000261514 2.11 3.51938e-08H5.11C5.59531 -0.00477641 6.06579 0.167079 6.43376 0.483533C6.80173 0.799987 7.04208 1.23945 7.11 1.72C7.23662 2.68007 7.47145 3.62273 7.81 4.53C7.94454 4.88792 7.97366 5.27691 7.89391 5.65088C7.81415 6.02485 7.62886 6.36811 7.36 6.64L6.09 7.91C7.51356 10.4135 9.58645 12.4864 12.09 13.91L13.36 12.64C13.6319 12.3711 13.9752 12.1858 14.3491 12.1061C14.7231 12.0263 15.1121 12.0555 15.47 12.19C16.3773 12.5286 17.3199 12.7634 18.28 12.89C18.7658 12.9585 19.2094 13.2032 19.5265 13.5775C19.8437 13.9518 20.0122 14.4296 20 14.92Z"
-                    fill="#00D3D3" />
-                </svg>
-                <b class="ml-1">{{i.student.phone}}</b>
-              </div>
-            </div>
-            <br>
-            <div class="col-md-12">
-              <div class="row">
-                <div class="col-md-6 col-sm-6 col-12">
-                  <b>Class:</b>
-                  <span class="ml-1">{{i.forclass}}</span>
-                </div>
-                <div class="col-md-6 col-sm-6 col-12">
-                  <b>Course:</b>
-                  <span class="ml-1">{{i.subject}}</span>
-                </div>
-                <div class="col-md-6 col-sm-6 col-12 ">
-                  <b>Teaching Type:</b>
-                  <span class="ml-1">{{i.teachingMode}}</span>
-                </div>
-                <div class="col-md-6 col-sm-6 col-12 ">
-                  <b>Gender Preference:</b>
-                  <span class="ml-1">{{i.genderPreference}}</span>
-                </div>
-                <div class="col-md-6 col-sm-6 col-12 ">
-                  <b>Start Date:</b>
-                  <span class="ml-1">
-                    {{i.whenToStart}}
-                  </span>
-                </div>
-                <div class="col-md-6 col-sm-6 col-12 ">
-                  <b>No. of Sessions:</b>
-                  <span class="ml-1">
-                    {{i.numberOfSessions}}
-                  </span>
-                </div>
-                <div class="col-md-6 col-sm-6 col-12 ">
-                  <b>Budget:</b>
-                  <span class="ml-1">{{i.budgetVal}}</span>
-                </div>
-                <div class="col-md-12 col-sm-12 col-12">
-                  <b>Description:</b><br>
-                  <p>{{i.description}}</p>
-                </div>
-              </div>
-            </div>
-          </div>
+  <!-- Model view -->
+  <div
+    class="modal fade"
+    id="StuModal{{i.sno}}"
+    tabindex="-1"
+    role="dialog"
+    aria-labelledby="{{i.sno}}"
+    aria-hidden="true"
+    style="top: 30%; color: black"
+  >
+    <div class="modal-dialog modal-lg" role="document">
+      <div class="modal-content ml-2">
+        <div class="modal-header">
+          <h5 class="col-sm-12 text-center" id="{{i.sno}}">
+            {% if i.student.user.first_name %} {{i.student.user.first_name}}
+            {{i.student.user.last_name}} {% else %} {{i.student.user.username}}
+            {% endif %}
+          </h5>
         </div>
-        <br>
+        <div class="modal-body">
+          <div class="row">
+            <div class="col-sm-3 col-12">
+              <div class="row d-flex justify-content-center">
+                {% if i.student.photo %}
+                <img
+                  class="avatar rounded-circle"
+                  src="{{i.student.photo.url}}"
+                  alt="Not Found"
+                  style="height: 5rem; width: 5rem"
+                />
+                {% else %}
+                <img
+                  id="preview"
+                  src="{% static 'default-profile.png' %}"
+                  alt="Default Not Found"
+                  style="height: 5em; width: 5em"
+                />
+                {% endif %}
+              </div>
+              <div class="d-flex justify-content-center row my-2">
+                <a
+                  href="{% url 'teaMakeAppointment' i.student.id %}"
+                  id="sc"
+                  class="btn btn-sm btn-info"
+                  style="font-size: smaller; width: 130px"
+                  >Schedule Class</a
+                >
+              </div>
+              <div class="d-flex justify-content-center row my-2">
+                <a
+                  class="btn-sm btn btn-success"
+                  style="font-size: smaller; width: 130px"
+                  id="ch"
+                  href='{% url "room" request.user.username "Teacher" i.student.user.username %}'
+                  >Chat</a
+                >
+              </div>
+            </div>
+            <div class="col-sm-9 col-12">
+              <div class="row">
+                <div class="col-sm-6 col-12">
+                  <svg
+                    width="22"
+                    height="18"
+                    viewBox="0 0 22 18"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      d="M18.875 0.75H3.125C2.42904 0.750744 1.76179 1.02755 1.26967 1.51967C0.777545 2.01179 0.500744 2.67904 0.5 3.375V14.625C0.500744 15.321 0.777545 15.9882 1.26967 16.4803C1.76179 16.9725 2.42904 17.2493 3.125 17.25H18.875C19.571 17.2493 20.2382 16.9725 20.7303 16.4803C21.2225 15.9882 21.4993 15.321 21.5 14.625V3.375C21.4993 2.67904 21.2225 2.01179 20.7303 1.51967C20.2382 1.02755 19.571 0.750744 18.875 0.75ZM18.2103 5.09203L11.4603 10.342C11.3287 10.4444 11.1667 10.4999 11 10.4999C10.8333 10.4999 10.6713 10.4444 10.5397 10.342L3.78969 5.09203C3.71038 5.03214 3.64377 4.95709 3.59372 4.87123C3.54367 4.78537 3.51118 4.69042 3.49815 4.5919C3.48511 4.49338 3.49179 4.39325 3.51778 4.29733C3.54378 4.20142 3.58858 4.11162 3.64958 4.03316C3.71058 3.95471 3.78656 3.88916 3.87312 3.84032C3.95967 3.79149 4.05506 3.76034 4.15376 3.74869C4.25245 3.73704 4.35248 3.74513 4.44802 3.77247C4.54357 3.79981 4.63272 3.84587 4.71031 3.90797L11 8.79984L17.2897 3.90797C17.447 3.7892 17.6447 3.73711 17.84 3.76296C18.0354 3.78881 18.2128 3.89053 18.3338 4.04612C18.4547 4.20171 18.5096 4.39866 18.4865 4.59439C18.4634 4.79011 18.3642 4.96888 18.2103 5.09203Z"
+                      fill="#FF7918"
+                    />
+                  </svg>
+                  <b class="ml-1">{{i.student.user.email}}</b>
+                </div>
+                <div class="col-sm-6 col-12">
+                  <svg
+                    width="20"
+                    height="20"
+                    viewBox="0 0 20 20"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      d="M20 14.92V17.92C20.0011 18.1985 19.9441 18.4742 19.8325 18.7293C19.7209 18.9845 19.5573 19.2136 19.3521 19.4019C19.1469 19.5901 18.9046 19.7335 18.6407 19.8227C18.3769 19.9119 18.0974 19.9451 17.82 19.92C14.7428 19.5856 11.787 18.5341 9.19 16.85C6.77383 15.3147 4.72534 13.2662 3.19 10.85C1.49998 8.2412 0.448243 5.27099 0.12 2.18C0.0950104 1.90347 0.127875 1.62476 0.2165 1.36162C0.305126 1.09849 0.447571 0.856689 0.634766 0.651621C0.821961 0.446553 1.0498 0.282709 1.30379 0.170522C1.55778 0.0583346 1.83234 0.000261514 2.11 3.51938e-08H5.11C5.59531 -0.00477641 6.06579 0.167079 6.43376 0.483533C6.80173 0.799987 7.04208 1.23945 7.11 1.72C7.23662 2.68007 7.47145 3.62273 7.81 4.53C7.94454 4.88792 7.97366 5.27691 7.89391 5.65088C7.81415 6.02485 7.62886 6.36811 7.36 6.64L6.09 7.91C7.51356 10.4135 9.58645 12.4864 12.09 13.91L13.36 12.64C13.6319 12.3711 13.9752 12.1858 14.3491 12.1061C14.7231 12.0263 15.1121 12.0555 15.47 12.19C16.3773 12.5286 17.3199 12.7634 18.28 12.89C18.7658 12.9585 19.2094 13.2032 19.5265 13.5775C19.8437 13.9518 20.0122 14.4296 20 14.92Z"
+                      fill="#00D3D3"
+                    />
+                  </svg>
+                  <b class="ml-1">{{i.student.phone}}</b>
+                </div>
+              </div>
+              <br />
+              <div class="col-md-12">
+                <div class="row">
+                  <div class="col-md-6 col-sm-6 col-12">
+                    <b>Class:</b>
+                    <span class="ml-1">{{i.forclass}}</span>
+                  </div>
+                  <div class="col-md-6 col-sm-6 col-12">
+                    <b>Course:</b>
+                    <span class="ml-1">{{i.subject}}</span>
+                  </div>
+                  <div class="col-md-6 col-sm-6 col-12">
+                    <b>Teaching Type:</b>
+                    <span class="ml-1">{{i.teachingMode}}</span>
+                  </div>
+                  <div class="col-md-6 col-sm-6 col-12">
+                    <b>Gender Preference:</b>
+                    <span class="ml-1">{{i.genderPreference}}</span>
+                  </div>
+                  <div class="col-md-6 col-sm-6 col-12">
+                    <b>Start Date:</b>
+                    <span class="ml-1"> {{i.whenToStart}} </span>
+                  </div>
+                  <div class="col-md-6 col-sm-6 col-12">
+                    <b>No. of Sessions:</b>
+                    <span class="ml-1"> {{i.numberOfSessions}} </span>
+                  </div>
+                  <div class="col-md-6 col-sm-6 col-12">
+                    <b>Budget:</b>
+                    <span class="ml-1">{{i.budgetVal}}</span>
+                  </div>
+                  <div class="col-md-12 col-sm-12 col-12">
+                    <b>Description:</b><br />
+                    <p>{{i.description}}</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <br />
+        </div>
       </div>
     </div>
   </div>
-</div>
-{% endfor %}
-{% else %}
-<div class="card w-100 h-25 mx-3">
-  <h5 class="mt-2 mb-2 p-2">No Student Found</h5>
-</div>
-{% endif %}
+  {% endfor %} {% else %}
+  <div class="card w-100 h-25 mx-3">
+    <h5 class="mt-2 mb-2 p-2">No Student Found</h5>
+  </div>
+  {% endif %}
 </div>
 <script>
   //Getting Location Autofield from google places API
   $(document).on("DOMContentLoaded", function () {
     function initialize() {
-      var input = document.getElementById('pac-input');
+      var input = document.getElementById("pac-input");
       var autocomplete = new google.maps.places.Autocomplete(input);
-      google.maps.event.addListener(autocomplete, 'place_changed', function () {
+      google.maps.event.addListener(autocomplete, "place_changed", function () {
         var place = autocomplete.getPlace();
-        document.getElementById('cityLat').value = place.geometry.location.lat();
-        document.getElementById('cityLng').value = place.geometry.location.lng();
+        document.getElementById("cityLat").value =
+          place.geometry.location.lat();
+        document.getElementById("cityLng").value =
+          place.geometry.location.lng();
       });
     }
     initialize();
@@ -316,6 +461,5 @@
             $(".ctn").append(newOption).trigger("change");
         }
     }
-
 </script>
 {% endblock main-content %}

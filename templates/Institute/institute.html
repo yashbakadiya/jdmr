@@ -1,142 +1,155 @@
-{% extends template %}
-{% load static %}
-{% block main-content %}
+{% extends template %} {% load static %} {% block main-content %}
 <div class="mt-5">
-    {% if messages %}
-    {% for k in messages%}
-    <div class="alert alert-{{k.tags}} alert-dismissible fade show" role="alert">
-        <b>{{ k }} !</b>
-        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-        </button>
-    </div>
-    {% endfor %}
-    {% endif %}
-    {% if Institute %}
-    {% if request.session.type  == "Student" %}
-    <div class="row layout-spacing">
-        <div class="col-lg-12 col-md-12">
-            <div class="card statbox widget box box-shadow">
-                <div class="card-header">
-                    <div class="row">
-                        <div class="col-sm-10">
-                            <h2 style="color: black;">Endrolled Institute</h2>
-                        </div>
-    
-                    </div>
-                </div>
-                <div class="widget-content widget-content-area">
-                    <div class="table-responsive">
-                        <table id="htmlgrid" class="testgrid table table-striped table-bordered table-hover mb-4">
-                            <tr>
-                                <th>#</th>
-                                <th>Institute</th>
-                                <th>Class</th>
-                                <th>Course</th>
-                                <th>Batch</th>
-                                <th>Total Fees</th>
-                                <th>Payed</th>
-                                <th>Balance</th>
-                                <th class="text-center">View</th>
-                            </tr>
-                            {% for i in Institute %}
-                            <tr>
-                                <td>{{forloop.counter}}</td>
-                                <td>{{i.institute.user.username}}</td>
-                                <td>{{i.forclass}}</td>
-                                <td>{{i.courseName}}</td>
-                                <td>{{i.batch}}</td>
-                                {% if i.student.fees.all %}
-                                {% for sf in i.student.fees.all %}
-                                <td>{{sf.totalFee}}</td>
-                                <td>{{sf.feePayed}}</td>
-                                <td>{{sf.balanceFee}}</td>
-                                {% endfor %}
-                                {% else %}
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                {% endif %}
-                                <td class="text-center"><a href="{% url 'reviewinstitute' i.institute.id %}"
-                                        class="btn btn-info">View</a></td>
-                            </tr>
-                            {% endfor %}
-                        </table>
-                        <div class="widget-content widget-content-area text-center">
-                            <ul class="pagination pagination-style-1 justify-content-center">
-                                <li><a href="?page=">&laquo;</a></li>
-                                <li><a href="javascript:void(0);" class="active">1</a></li>
-                                <li><a href="?page=">&raquo;</a></li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    {% elif request.session.type  == "Teacher" %}
-    <div class="row layout-spacing">
-        <div class="col-lg-12 col-md-12">
-            <div class="card statbox widget box box-shadow">
-                <div class="card-header">
-                    <div class="row">
-                        <div class="col-xl-12 col-md-12 col-12">
-                            <h2 style="color:black;">Endrolled Institute</h2>
-                        </div>
-                    </div>
-                </div>
-                <div class="widget-content widget-content-area">
-                    <div class="table-responsive">
-                        <table class="testgrid table table-striped table-bordered table-hover mb-4">
-                                <tr>
-                                    <th>#</th>
-                                    <th>Institute</th>
-                                    <th>Class</th>
-                                    <th>Course</th>
-                                    <th>TeachType</th>
-                                    <th>Availability</th>
-                                    <th class="text-center">View</th>
-                                </tr>
-                                {% for i in Institute %}
-                                <tr>
-                                    <td>{{forloop.counter}}</td>
-                                    <td>{{i.institute.user.username}}</td>
-                                    <td>{{i.forclass}}</td>
-                                    <td>{{i.courseName}}</td>
-                                    <td>{{i.teachType}}</td>
-                                    <td>{{i.availability}}</td>
-                                    <td class="text-center"><a href="{% url 'reviewinstitute' i.institute.id %}"
-                                            class="btn btn-info">View</a></td>
-                                </tr>
-                                {% endfor %}
-                        </table>
-                        <div class="widget-content widget-content-area text-center">
-                            <ul class="pagination pagination-style-1 justify-content-center">
-                                <li><a href="?page=">&laquo;</a></li>
-                                <li><a href="javascript:void(0);" class="active">1</a></li>
-                                <li><a href="?page=">&raquo;</a></li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    {% endif %}
-
-    {% else %}
-    <div class="card">
+  {% if messages %} {% for k in messages%}
+  <div class="alert alert-{{k.tags}} alert-dismissible fade show" role="alert">
+    <b>{{ k }} !</b>
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  {% endfor %} {% endif %} {% if Institute %} {% if request.session.type ==
+  "Student" %}
+  <div class="row layout-spacing">
+    <div class="col-lg-12 col-md-12">
+      <div class="card statbox widget box box-shadow">
         <div class="card-header">
-            <div class="row">
-                <div class="col-sm">
-                    <h2 style="color: black;">Endrolled Institute</h2>
-                </div>
+          <div class="row">
+            <div class="col-sm-10">
+              <h2 style="color: black">Endrolled Institute</h2>
             </div>
+          </div>
         </div>
-        <div class="card-body">
-            <h3>No Institute Enrolled</h3>
+        <div class="widget-content widget-content-area">
+          <div class="table-responsive">
+            <table
+              id="htmlgrid"
+              class="
+                testgrid
+                table table-striped table-bordered table-hover
+                mb-4
+              "
+            >
+              <tr>
+                <th>#</th>
+                <th>Institute</th>
+                <th>Class</th>
+                <th>Course</th>
+                <th>Batch</th>
+                <th>Total Fees</th>
+                <th>Payed</th>
+                <th>Balance</th>
+                <th class="text-center">View</th>
+              </tr>
+              {% for i in Institute %}
+              <tr>
+                <td>{{forloop.counter}}</td>
+                <td>{{i.institute.user.username}}</td>
+                <td>{{i.forclass}}</td>
+                <td>{{i.courseName}}</td>
+                <td>{{i.batch}}</td>
+                {% if i.student.fees.all %} {% for sf in i.student.fees.all %}
+                <td>{{sf.totalFee}}</td>
+                <td>{{sf.feePayed}}</td>
+                <td>{{sf.balanceFee}}</td>
+                {% endfor %} {% else %}
+                <td></td>
+                <td></td>
+                <td></td>
+                {% endif %}
+                <td class="text-center">
+                  <a
+                    href="{% url 'reviewinstitute' i.institute.id %}"
+                    class="btn btn-info"
+                    >View</a
+                  >
+                </td>
+              </tr>
+              {% endfor %}
+            </table>
+            <div class="widget-content widget-content-area text-center">
+              <ul class="pagination pagination-style-1 justify-content-center">
+                <li><a href="?page=">&laquo;</a></li>
+                <li><a href="javascript:void(0);" class="active">1</a></li>
+                <li><a href="?page=">&raquo;</a></li>
+              </ul>
+            </div>
+          </div>
         </div>
+      </div>
     </div>
-    {% endif %}
+  </div>
+  {% elif request.session.type == "Teacher" %}
+  <div class="row layout-spacing">
+    <div class="col-lg-12 col-md-12">
+      <div class="card statbox widget box box-shadow">
+        <div class="card-header">
+          <div class="row">
+            <div class="col-xl-12 col-md-12 col-12">
+              <h2 style="color: black">Endrolled Institute</h2>
+            </div>
+          </div>
+        </div>
+        <div class="widget-content widget-content-area">
+          <div class="table-responsive">
+            <table
+              class="
+                testgrid
+                table table-striped table-bordered table-hover
+                mb-4
+              "
+            >
+              <tr>
+                <th>#</th>
+                <th>Institute</th>
+                <th>Class</th>
+                <th>Course</th>
+                <th>TeachType</th>
+                <th>Availability</th>
+                <th class="text-center">View</th>
+              </tr>
+              {% for i in Institute %}
+              <tr>
+                <td>{{forloop.counter}}</td>
+                <td>{{i.institute.user.username}}</td>
+                <td>{{i.forclass}}</td>
+                <td>{{i.courseName}}</td>
+                <td>{{i.teachType}}</td>
+                <td>{{i.availability}}</td>
+                <td class="text-center">
+                  <a
+                    href="{% url 'reviewinstitute' i.institute.id %}"
+                    class="btn btn-info"
+                    >View</a
+                  >
+                </td>
+              </tr>
+              {% endfor %}
+            </table>
+            <div class="widget-content widget-content-area text-center">
+              <ul class="pagination pagination-style-1 justify-content-center">
+                <li><a href="?page=">&laquo;</a></li>
+                <li><a href="javascript:void(0);" class="active">1</a></li>
+                <li><a href="?page=">&raquo;</a></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  {% endif %} {% else %}
+  <div class="card">
+    <div class="card-header">
+      <div class="row">
+        <div class="col-sm">
+          <h2 style="color: black">Endrolled Institute</h2>
+        </div>
+      </div>
+    </div>
+    <div class="card-body">
+      <h3>No Institute Enrolled</h3>
+    </div>
+  </div>
+  {% endif %}
 </div>
 {% endblock main-content %}

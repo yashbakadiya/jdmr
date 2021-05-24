@@ -1,19 +1,19 @@
-{% extends 'dashboard/institute-dashboard.html' %}
-{% load static %}
-{% block head-title %}
-Institute Dashboard
-{% endblock head-title %}
+{% extends 'dashboard/institute-dashboard.html' %} {% load static %} {% block
+head-title %} Institute Dashboard {% endblock head-title %} {% block
+extra-stylesheets %}
 
+<link
+  rel="stylesheet"
+  type="text/css"
+  href="{% static 'plugins/bootstrap-select/bootstrap-select.min.css' %}"
+/>
 
-{% block extra-stylesheets %}
-
-<link rel="stylesheet" type="text/css" href="{% static 'plugins/bootstrap-select/bootstrap-select.min.css' %}">
-
-<link rel="stylesheet" type="text/css" href="{% static 'plugins/table/jquery-tabledit/custom-tabledit.css' %}">
-{% endblock extra-stylesheets %}
-
-
-{% block extra-style %}
+<link
+  rel="stylesheet"
+  type="text/css"
+  href="{% static 'plugins/table/jquery-tabledit/custom-tabledit.css' %}"
+/>
+{% endblock extra-stylesheets %} {% block extra-style %}
 <style>
   .special {
     font-weight: bold !important;
@@ -22,7 +22,10 @@ Institute Dashboard
     text-transform: uppercase;
   }
 
-  .bootstrap-select.btn-group .dropdown-menu a.dropdown-item span.dropdown-item-inner {
+  .bootstrap-select.btn-group
+    .dropdown-menu
+    a.dropdown-item
+    span.dropdown-item-inner {
     color: #171820;
   }
 
@@ -47,19 +50,24 @@ Institute Dashboard
     outline: none;
   }
 </style>
-{% endblock extra-style %}
-
-{% block notifications %}
-{% if messages %}
-{% for k in messages%}
+{% endblock extra-style %} {% block notifications %} {% if messages %} {% for k
+in messages%}
 <div class="dropdown-item">
   <a href="">
     <div class="media">
       <div class="media-body">
         <span>
-          <div class="alert alert-{{k.tags}} alert-dismissible fade show" role="alert">
+          <div
+            class="alert alert-{{k.tags}} alert-dismissible fade show"
+            role="alert"
+          >
             <b>{{ k }} !</b>
-            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <button
+              type="button"
+              class="close"
+              data-dismiss="alert"
+              aria-label="Close"
+            >
               <span aria-hidden="true">&times;</span>
             </button>
           </div>
@@ -68,8 +76,7 @@ Institute Dashboard
     </div>
   </a>
 </div>
-{% endfor %}
-{% else %}
+{% endfor %} {% else %}
 <div class="dropdown-item">
   <a href="">
     <div class="media">
@@ -79,30 +86,20 @@ Institute Dashboard
     </div>
   </a>
 </div>
-{% endif %}
-{% endblock notifications %}
-
-
-{% block main-content %}
-
-
+{% endif %} {% endblock notifications %} {% block main-content %}
 
 <div class="">
-
-  <br>
-  <br>
-  <div class="row layout-spacing ">
-
-
+  <br />
+  <br />
+  <div class="row layout-spacing">
     <div class="col-xl-12 col-md-12 col-12 mt-3">
       <div class="card statbox widget box box-shadow">
-          <div class="card-header">
-              <div class="row">
-                  <div class="col-xl-12 col-md-12 col-12">
-                      <h2 style="color:black;">List of Archived Courses</h2>
-                    </div>
-                </div>
+        <div class="card-header">
+          <div class="row">
+            <div class="col-xl-12 col-md-12 col-12">
+              <h2 style="color: black">List of Archived Courses</h2>
             </div>
+<<<<<<< HEAD
             {% if course %}
           <div class="widget-content widget-content-area">
             <div class="table-responsive">
@@ -125,8 +122,50 @@ Institute Dashboard
                       <a data-toggle="tooltip" title="Unarchive" class="btn btn-success" href="{% url 'course-unarchive' i.id %}"><i class="flaticon-log-4"
                         style="font-size:medium; transform: rotate(180deg);"></i></a>
                     </td>
+=======
+          </div>
+        </div>
+        {% if course %}
+        <div class="widget-content widget-content-area">
+          <div class="table-responsive">
+            <table class="table table-bordered table-hover table-striped mb-4">
+              <tr>
+                <th class="">Sr No</th>
+                <th class="">Class</th>
+                <th class="">Course</th>
+                <th class="text-center">Actions</th>
+              </tr>
 
-                    <!-- <td class="text-center">
+              {% for i in course %}
+              <tr id="{{ i.pk }}">
+                <td>{{ forloop.counter }}</td>
+                <td>{{i.forclass}}</td>
+                <td>{{i.courseName}}</td>
+                <td class="text-center">
+                  <a
+                    data-toggle="tooltip"
+                    title="Delete"
+                    class="btn btn-danger"
+                    href="{% url 'deleteCourse' i.id %}"
+                    ><i
+                      class="flaticon-delete-fill"
+                      style="font-size: medium"
+                    ></i
+                  ></a>
+                  <a
+                    data-toggle="tooltip"
+                    title="Unarchive"
+                    class="btn btn-success"
+                    href="{% url 'course-unarchive' i.id %}"
+                    ><i
+                      class="flaticon-log-4"
+                      style="font-size: medium; transform: rotate(90deg)"
+                    ></i
+                  ></a>
+                </td>
+>>>>>>> b468368945802139206b7ab8fc81cc82d1f18743
+
+                <!-- <td class="text-center">
                       <ul class="table-controls">
                         <li>
                           <a class="popup-with-form" data-toggle="modal" data-target="#unarchive-{{i.pk}}"
@@ -135,84 +174,107 @@ Institute Dashboard
                         </li>
                       </ul>
                     </td> -->
-                  </tr>
+              </tr>
 
-                  <div class="modal fade" id="unarchive-{{i.pk}}" tabindex="-1" role="dialog"
-                    aria-labelledby="archive-{{i.pk}}=Title" aria-hidden="true">
-                    <div class="modal-dialog modal-dialog-centered" role="document">
-                      <div class="modal-content">
-                        <div class="modal-header">
-                          <h5 class="modal-title" id="archive-{{i.pk}}-Title">Unarchive Course</h5>
-                          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                          </button>
-                        </div>
-                        <div class="modal-body">
-                          <h4 class="modal-heading mb-4 mt-2">UNARCHIVE COURSE</h4>
-                          <p class="modal-text mb-4">
-                            Do you really want to unarchive this course?
-                          </p>
-                          <div class="modal-footer">
-                            <button type="button" class="btn btn-warning btn-rounded mb-3 mt-3">Unarchive</button>
-                            <button type="button" class="btn btn-dark btn-rounded mb-3 mt-3"
-                              data-dismiss="modal">Close</button>
-                          </div>
-                        </div>
+              <div
+                class="modal fade"
+                id="unarchive-{{i.pk}}"
+                tabindex="-1"
+                role="dialog"
+                aria-labelledby="archive-{{i.pk}}=Title"
+                aria-hidden="true"
+              >
+                <div class="modal-dialog modal-dialog-centered" role="document">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h5 class="modal-title" id="archive-{{i.pk}}-Title">
+                        Unarchive Course
+                      </h5>
+                      <button
+                        type="button"
+                        class="close"
+                        data-dismiss="modal"
+                        aria-label="Close"
+                      >
+                        <span aria-hidden="true">&times;</span>
+                      </button>
+                    </div>
+                    <div class="modal-body">
+                      <h4 class="modal-heading mb-4 mt-2">UNARCHIVE COURSE</h4>
+                      <p class="modal-text mb-4">
+                        Do you really want to unarchive this course?
+                      </p>
+                      <div class="modal-footer">
+                        <button
+                          type="button"
+                          class="btn btn-warning btn-rounded mb-3 mt-3"
+                        >
+                          Unarchive
+                        </button>
+                        <button
+                          type="button"
+                          class="btn btn-dark btn-rounded mb-3 mt-3"
+                          data-dismiss="modal"
+                        >
+                          Close
+                        </button>
                       </div>
                     </div>
                   </div>
-
-
-
-                  {% endfor %}
-              </table>
-              <div class="widget-content widget-content-area text-center">
-                <ul class="pagination pagination-style-1 justify-content-center mb-5">
-                  {% if course.has_previous %}
-                  <li><a href="?page={{ course.previous_page_number }}">&laquo;</a></li>
-                  {% else %}
-                  {% endif %}
-                  {% for i in course.paginator.page_range %}
-                  {% if course.number == i %}
-                  <li><a href="javascript:void(0);" class="active">{{ i }}</a></li>
-                  {% else %}
-                  <li><a href="?page={{ i }}">{{ i }}</a></li>
-                  {% endif %}
-                  {% endfor %}
-                  {% if course.has_next %}
-                  <li><a href="?page={{ course.next_page_number }}">&raquo;</a></li>
-                  {% else %}
-                  {% endif %}
-                </ul>
+                </div>
               </div>
+
+              {% endfor %}
+            </table>
+            <div class="widget-content widget-content-area text-center">
+              <ul
+                class="
+                  pagination pagination-style-1
+                  justify-content-center
+                  mb-5
+                "
+              >
+                {% if course.has_previous %}
+                <li>
+                  <a href="?page={{ course.previous_page_number }}">&laquo;</a>
+                </li>
+                {% else %} {% endif %} {% for i in course.paginator.page_range
+                %} {% if course.number == i %}
+                <li>
+                  <a href="javascript:void(0);" class="active">{{ i }}</a>
+                </li>
+                {% else %}
+                <li><a href="?page={{ i }}">{{ i }}</a></li>
+                {% endif %} {% endfor %} {% if course.has_next %}
+                <li>
+                  <a href="?page={{ course.next_page_number }}">&raquo;</a>
+                </li>
+                {% else %} {% endif %}
+              </ul>
             </div>
           </div>
-            {% else %}
-        <div class="card-header" style="background: none;">
-            <div class="row">
-                <div class="col-xl-12 col-md-12 col-12">
-                    <h2>No Courses to show</h2>
-                </div>
+        </div>
+        {% else %}
+        <div class="card-header" style="background: none">
+          <div class="row">
+            <div class="col-xl-12 col-md-12 col-12">
+              <h2>No Courses to show</h2>
             </div>
+          </div>
         </div>
-            {% endif %}
-            
-        </div>
+        {% endif %}
       </div>
     </div>
-
+  </div>
 </div>
 <script>
   $(document).ready(function () {
-    $('#multiple-checkboxes').multiselect({
+    $("#multiple-checkboxes").multiselect({
       includeSelectAllOption: true,
     });
   });
 </script>
-{% endblock main-content %}
-
-
-{% block extra-script %}
+{% endblock main-content %} {% block extra-script %}
 
 <script src="{% static 'plugins/bootstrap-select/bootstrap-select.min.js' %}"></script>
 <script src="{% static 'plugins/table/jquery-tabledit/jquery.tabledit.js' %}"></script>

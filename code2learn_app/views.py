@@ -35,6 +35,7 @@ KEY_SECRET = settings.KEY_SECRET
 MID = settings.MID
 MERCHANT_KEY = settings.MERCHANT_KEY
 
+
 def main(request):
     if request.user.is_authenticated:
         return redirect('dashboard')
@@ -43,6 +44,8 @@ def main(request):
         return redirect('home')
 
 # Create your views here.
+
+
 def index(request):
     categories = Category.objects.filter(available=True)
     context = {
@@ -80,20 +83,22 @@ def index(request):
         email.attach_alternative(html_content, "text/html")
         email.send()
 
-        # print("Message Sent Successfully!")
         return redirect("/")
 
     else:
         return render(request, 'home/index.html', context)
 
+
 def InstitutePage(request):
-    return render(request,'home/InstitutePage.html')
+    return render(request, 'home/InstitutePage.html')
+
 
 def StudentPage(request):
-    return render(request,'home/StudentPage.html')
+    return render(request, 'home/StudentPage.html')
+
 
 def TutorPage(request):
-    return render(request,'home/TutorPage.html')
+    return render(request, 'home/TutorPage.html')
 
 # def course_page(request):
 #     if not request.GET.get('course_id'):
@@ -237,7 +242,7 @@ def TutorPage(request):
 #     }
 
 #     if request.method == "POST":
-        
+
 #         if request.is_ajax():
 #             print(request.POST)
 #             coupen = request.POST.get('coupen')
@@ -665,7 +670,7 @@ def TutorPage(request):
 #             context['error'] = error
 #     except:
 #         raise Http404()
-    
+
 #     if request.method == "POST":
 #         global amount
 #         if request.is_ajax():

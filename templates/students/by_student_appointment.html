@@ -1,211 +1,253 @@
-{% extends 'dashboard/student-dashboard.html' %}
-{% load static %}
-{% block extra-stylesheets %}
+{% extends 'dashboard/student-dashboard.html' %} {% load static %} {% block
+extra-stylesheets %}
 <!-- CDN for google maps Place API -->
-<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCBJybI10-Xa43-F5GSad1i0Y9W3yqlW6Q&libraries=places&v=3"
-   defer></script>
+<script
+  src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCBJybI10-Xa43-F5GSad1i0Y9W3yqlW6Q&libraries=places&v=3"
+  defer
+></script>
 <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-{% endblock extra-stylesheets %}
-{% block main-content %}
+{% endblock extra-stylesheets %} {% block main-content %}
 <div class="mt-5">
-   <div class="modal-content">
-      <div class="modal-header">
-         <h5 class="modal-title text-center col-sm-12 col-12"
-            style="text-align: center;">Create Appointment</h5>
-      </div>
-      <form id="createAppointmentForm" action="" method="post">
-         {% csrf_token %}
-         <div class="modal-body">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h5
+        class="modal-title text-center col-sm-12 col-12"
+        style="text-align: center"
+      >
+        Create Appointment
+      </h5>
+    </div>
+    <form id="createAppointmentForm" action="" method="post">
+      {% csrf_token %}
+      <div class="modal-body">
+        <div class="row">
+          <div class="col-sm-10">
+            <div class="row form-inline">
+              <div class="col-sm-2 bold">Date</div>
+              <div class="col-sm-4">
+                <input
+                  style="width: 100%"
+                  class="form-control"
+                  type="date"
+                  name="date"
+                  value=""
+                  required
+                  id="appointmentdate"
+                />
+              </div>
+              <div class="col-sm-2 bold">Time</div>
+              <div class="col-sm-4">
+                <input
+                  style="width: 100%"
+                  class="form-control"
+                  type="time"
+                  name="time"
+                  value=""
+                  required
+                  id="appointmenttime"
+                />
+              </div>
+            </div>
+            <br />
             <div class="row">
-               <div class="col-sm-10">
-                  <div class="row form-inline">
-                     <div class="col-sm-2 bold">
-                        Date
-                     </div>
-                     <div class="col-sm-4">
-                        <input style="width: 100%;" class="form-control" type="date" name="date" value="" required
-                           id="appointmentdate">
-                     </div>
-                     <div class="col-sm-2 bold">
-                        Time
-                     </div>
-                     <div class="col-sm-4">
-                        <input style="width: 100%;" class="form-control" type="time" name="time" value="" required
-                           id="appointmenttime">
-                     </div>
-                  </div>
-                  <br>
-                  <div class="row">
-                     <div class="form-inline">
-                        <div class="col-sm-2 bold">
-                           Timezone
-                        </div>
-                        <div class="col-sm-4">
-                           <select class="form-control col-sm-12" name="timezone" value="" required id="appointmentzone">
-                              <option selected disabled>Timezone</option>
-                              {% include "teacher/timezoneArea.html" %}
-                           </select>
-                        </div>
-                        <div class="col-sm-2 bold">
-                           Duration
-                        </div>
-                        <div class="col-sm-4">
-                           <select class="form-control" name="durationHour" required id="appointmenthour">
-                              <option disabled selected>Hours</option>
-                              <option value="0">0</option>
-                              <option value="1">1</option>
-                              <option value="2">2</option>
-                              <option value="3">3</option>
-                              <option value="4">4</option>
-                              <option value="5">5</option>
-                              <option value="6">6</option>
-                              <option value="7">7</option>
-                              <option value="8">8</option>
-                              <option value="9">9</option>
-                              <option value="10">10</option>
-                              <option value="11">11</option>
-                              <option value="12">12</option>
-                              <option value="13">13</option>
-                              <option value="14">14</option>
-                              <option value="15">15</option>
-                              <option value="16">16</option>
-                              <option value="17">17</option>
-                              <option value="18">18</option>
-                              <option value="19">19</option>
-                              <option value="20">20</option>
-                              <option value="21">21</option>
-                              <option value="22">22</option>
-                              <option value="23">23</option>
-                              <option value="24">24</option>
-                           </select>
-                           <select class="form-control" name="durationMinute" required id="appointmentminute">
-                              <option selected disabled>Minutes</option>
-                              <option value="0">0</option>
-                              <option value="5">5</option>
-                              <option value="10">10</option>
-                              <option value="15">15</option>
-                              <option value="20">20</option>
-                              <option value="25">25</option>
-                              <option value="30">30</option>
-                              <option value="35">35</option>
-                              <option value="40">40</option>
-                              <option value="45">45</option>
-                              <option value="50">50</option>
-                              <option value="55">55</option>
-                           </select>
-                        </div>
-                     </div>
-                  </div>
-                  <br>
-                  <div class="row form-inline">
-                     <div class="col-sm-3 bold">
-                        Recurrence 
-                     </div>
-                     <div class="col-sm-1">
-                        <input id="recurrenceCheck" class="form-check" type="checkbox" name="recc" id="appointmentrecc">
-                     </div>
-                  </div>
-                  <br>
-                  <div class="row form-inline">
-                     <div class="col-sm-2 bold">
-                        Recurrence Pattern
-                     </div>
-                     <div class="col-sm-4">
-                        <select id="reccPattern" class="form-control reccPattern reccEntry" name="reccPattern" required>
-                           <option selected disabled>Choose Reccurence</option>
-                           <option value="D">Daily</option>
-                           <option value="W">Weekly</option>
-                        </select>
-                     </div>
-                     <div class="col-sm-2 bold">
-                        Select WeekDays
-                     </div>
-                     <div class="col-sm-4">
-                        <select class="form-control multiselect4 reccWeek reccEntry w-100" name="reccWeek" multiple>
-                           <option value="Sun">Sun</option>
-                           <option value="Mon">Mon</option>
-                           <option value="Tue">Tue</option>
-                           <option value="Wed">Wed</option>
-                           <option value="Thu">Thu</option>
-                           <option value="Fri">Fri</option>
-                           <option value="Sat">Sat</option>
-                        </select>
-                     </div>
-                  </div>
-                  <br>
-                  <!-- <div class="col-sm-12 bold form-inline spacing">
+              <div class="form-inline">
+                <div class="col-sm-2 bold">Timezone</div>
+                <div class="col-sm-4">
+                  <select
+                    class="form-control col-sm-12"
+                    name="timezone"
+                    value=""
+                    required
+                    id="appointmentzone"
+                  >
+                    <option selected disabled>Timezone</option>
+                    {% include "teacher/timezoneArea.html" %}
+                  </select>
+                </div>
+                <div class="col-sm-2 bold">Duration</div>
+                <div class="col-sm-4">
+                  <select
+                    class="form-control"
+                    name="durationHour"
+                    required
+                    id="appointmenthour"
+                  >
+                    <option disabled selected>Hours</option>
+                    <option value="0">0</option>
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                    <option value="6">6</option>
+                    <option value="7">7</option>
+                    <option value="8">8</option>
+                    <option value="9">9</option>
+                    <option value="10">10</option>
+                    <option value="11">11</option>
+                    <option value="12">12</option>
+                    <option value="13">13</option>
+                    <option value="14">14</option>
+                    <option value="15">15</option>
+                    <option value="16">16</option>
+                    <option value="17">17</option>
+                    <option value="18">18</option>
+                    <option value="19">19</option>
+                    <option value="20">20</option>
+                    <option value="21">21</option>
+                    <option value="22">22</option>
+                    <option value="23">23</option>
+                    <option value="24">24</option>
+                  </select>
+                  <select
+                    class="form-control"
+                    name="durationMinute"
+                    required
+                    id="appointmentminute"
+                  >
+                    <option selected disabled>Minutes</option>
+                    <option value="0">0</option>
+                    <option value="5">5</option>
+                    <option value="10">10</option>
+                    <option value="15">15</option>
+                    <option value="20">20</option>
+                    <option value="25">25</option>
+                    <option value="30">30</option>
+                    <option value="35">35</option>
+                    <option value="40">40</option>
+                    <option value="45">45</option>
+                    <option value="50">50</option>
+                    <option value="55">55</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+            <br />
+            <div class="row form-inline">
+              <div class="col-sm-3 bold">Recurrence</div>
+              <div class="col-sm-1">
+                <input
+                  id="recurrenceCheck"
+                  class="form-check"
+                  type="checkbox"
+                  name="recc"
+                  id="appointmentrecc"
+                />
+              </div>
+            </div>
+            <br />
+            <div class="row form-inline">
+              <div class="col-sm-2 bold">Recurrence Pattern</div>
+              <div class="col-sm-4">
+                <select
+                  id="reccPattern"
+                  class="form-control reccPattern reccEntry"
+                  name="reccPattern"
+                  required
+                >
+                  <option selected disabled>Choose Reccurence</option>
+                  <option value="D">Daily</option>
+                  <option value="W">Weekly</option>
+                </select>
+              </div>
+              <div class="col-sm-2 bold">Select WeekDays</div>
+              <div class="col-sm-4">
+                <select
+                  class="form-control multiselect4 reccWeek reccEntry w-100"
+                  name="reccWeek"
+                  multiple
+                >
+                  <option value="Sun">Sun</option>
+                  <option value="Mon">Mon</option>
+                  <option value="Tue">Tue</option>
+                  <option value="Wed">Wed</option>
+                  <option value="Thu">Thu</option>
+                  <option value="Fri">Fri</option>
+                  <option value="Sat">Sat</option>
+                </select>
+              </div>
+            </div>
+            <br />
+            <!-- <div class="col-sm-12 bold form-inline spacing">
                      <div class="col-sm-3">
                        End After
                      </div>
                      <input class="form-control col-sm-3 reccEntry" type="date" id="endingDate" name="endingDate"
                        value="" disabled>
                      </div> -->
-               </div>
-            </div>
-         </div>
-         <br>
-         <div class="modal-footer" id="changeAfterCreation">
-            <button id="submitAppointment" class="btn btn-info" type="submit" name="button">Create</button>
-         </div>
-         <div class="container" style="font-size:small;color:red;">
-            <ul id="ErrorList" class="">
-            </ul>
-         </div>
-      </form>
-   </div>
+          </div>
+        </div>
+      </div>
+      <br />
+      <div class="modal-footer" id="changeAfterCreation">
+        <button
+          id="submitAppointment"
+          class="btn btn-info"
+          type="submit"
+          name="button"
+        >
+          Create
+        </button>
+      </div>
+      <div class="container" style="font-size: small; color: red">
+        <ul id="ErrorList" class=""></ul>
+      </div>
+    </form>
+  </div>
 </div>
 <script>
-   //Getting Location Autofield from google places API
-   $(document).on("DOMContentLoaded", function () {
-     function initialize() {
-       var input = document.getElementById('pac-input');
-       var autocomplete = new google.maps.places.Autocomplete(input);
-       google.maps.event.addListener(autocomplete, 'place_changed', function () {
-         var place = autocomplete.getPlace();
-         document.getElementById('cityLat').value = place.geometry.location.lat();
-         document.getElementById('cityLng').value = place.geometry.location.lng();
-       });
-     }
-     initialize();
-   });
+  //Getting Location Autofield from google places API
+  $(document).on("DOMContentLoaded", function () {
+    function initialize() {
+      var input = document.getElementById("pac-input");
+      var autocomplete = new google.maps.places.Autocomplete(input);
+      google.maps.event.addListener(autocomplete, "place_changed", function () {
+        var place = autocomplete.getPlace();
+        document.getElementById("cityLat").value =
+          place.geometry.location.lat();
+        document.getElementById("cityLng").value =
+          place.geometry.location.lng();
+      });
+    }
+    initialize();
+  });
 </script>
 <script>
-   var className = document.getElementById("className")
-   var jsondata = {{ jsonLocalData| safe}}
-   var prefillclass = "{{prefill.class}}"
-         const keys = Object.keys(jsondata);
-         
-         if (prefillclass)
-         {
-             var classes = `<option disabled selected value="${prefillclass}">${prefillclass}</option>`
-         }
-         else
-         {
-             var classes = `<option disabled selected value="">Class</option>`
-         }
-         for (let index = 0; index < keys.length; index++) {
-             const element = keys[index];
-             classes += `<option value="${element}">${element}</option>`
-         }
-         className.innerHTML = classes
-   
-         function subjects() {
-             var className = document.getElementById("className").value
-             var subject = document.getElementById("subject")
-             var html=''
-     class_subjects = jsondata[`${className}`]
-     for (let index = 0; index < class_subjects.length; index++) {
-       const element = class_subjects[index];
-       html += `<option value="${element}">${element}</option>`
-     }
-     subject.innerHTML = html
-   }
-   
-   function newModal(el){
-             $(`#StuModal${el.value}`).modal('hide');
-             $(`#appointmentModal${el.value}`).modal('show');
-   
-         }
+  var className = document.getElementById("className")
+  var jsondata = {{ jsonLocalData| safe}}
+  var prefillclass = "{{prefill.class}}"
+        const keys = Object.keys(jsondata);
+
+        if (prefillclass)
+        {
+            var classes = `<option disabled selected value="${prefillclass}">${prefillclass}</option>`
+        }
+        else
+        {
+            var classes = `<option disabled selected value="">Class</option>`
+        }
+        for (let index = 0; index < keys.length; index++) {
+            const element = keys[index];
+            classes += `<option value="${element}">${element}</option>`
+        }
+        className.innerHTML = classes
+
+        function subjects() {
+            var className = document.getElementById("className").value
+            var subject = document.getElementById("subject")
+            var html=''
+    class_subjects = jsondata[`${className}`]
+    for (let index = 0; index < class_subjects.length; index++) {
+      const element = class_subjects[index];
+      html += `<option value="${element}">${element}</option>`
+    }
+    subject.innerHTML = html
+  }
+
+  function newModal(el){
+            $(`#StuModal${el.value}`).modal('hide');
+            $(`#appointmentModal${el.value}`).modal('show');
+
+        }
 </script>
 {% endblock main-content %}
-

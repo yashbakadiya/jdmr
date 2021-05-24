@@ -10,6 +10,8 @@ class BatchTiming(models.Model):
     startTime       = models.CharField(max_length=255,default="")
     endTime         = models.CharField(max_length=255,default="")
     original24time  = models.CharField(max_length=255,default="",help_text="Comma seperated")
+    startDate       = models.DateField(null=True,blank=True)
+    endDate         = models.DateField(null=True,blank=True)
     createdAt       = models.DateTimeField(auto_now_add=True)
     updatedAt       = models.DateTimeField(auto_now=True)
     institute       = models.ForeignKey(Institute,on_delete=models.CASCADE,related_name='BatchTiming')

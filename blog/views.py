@@ -36,11 +36,11 @@ def blog_single(request, slug):
             email = request.POST.get('email')
             if comm_id:
                 SubComment(post=post,
-                    user=name,
-                    email=email,
-                    message=comment,
-                    comment=Comment.objects.get(id=int(comm_id))
-                    ).save()
+                           user=name,
+                           email=email,
+                           message=comment,
+                           comment=Comment.objects.get(id=int(comm_id))
+                           ).save()
             else:
                 Comment(post=post,
                         user=name,

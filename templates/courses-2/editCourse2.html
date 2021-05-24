@@ -1,8 +1,5 @@
-{% extends 'dashboard/base.html' %}
-{% load static %}
-{% block css %}
-{% endblock %}
-{% block main-content %}
+{% extends 'dashboard/base.html' %} {% load static %} {% block css %} {%
+endblock %} {% block main-content %}
 <style>
   #card {
     background-color: white;
@@ -11,31 +8,40 @@
     color: black;
   }
 </style>
-<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/css/select2.min.css" rel="stylesheet" />
+<link
+  href="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/css/select2.min.css"
+  rel="stylesheet"
+/>
 <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/js/select2.min.js"></script>
 <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 
 <div class="mt-5">
-  {% if messages %}
-  {% for k in messages%}
+  {% if messages %} {% for k in messages%}
   <div class="alert alert-{{k.tags}} alert-dismissible fade show" role="alert">
     <b>{{ k }} !</b>
     <button type="button" class="close" data-dismiss="alert" aria-label="Close">
       <span aria-hidden="true">&times;</span>
     </button>
   </div>
-  {% endfor %}
-  {% endif %}
-  <div class="card" style="color: black;">
+  {% endfor %} {% endif %}
+  <div class="card" style="color: black">
     <div class="card-header">
-      <h3 style="align-items: center;text-align: center;">Edit Course</h3>
+      <h3 style="align-items: center; text-align: center">Edit Course</h3>
     </div>
-    <form id="frm" class="mb-4 mt-4" method="post">{% csrf_token %}
+    <form id="frm" class="mb-4 mt-4" method="post">
+      {% csrf_token %}
       <div class="mx-2 row" id="INSTBATCH">
         <div class="col">
-          <label for="validationCustom01"><strong>Select Class <span class="red">*</span></strong></label>
+          <label for="validationCustom01"
+            ><strong>Select Class <span class="red">*</span></strong></label
+          >
 
-          <select id="class_select" name="forclass" class="js-example-basic-single form-control" onchange="addoptions(this)">
+          <select
+            id="class_select"
+            name="forclass"
+            class="js-example-basic-single form-control"
+            onchange="addoptions(this)"
+          >
             <option value="" selected disabled>Select Class</option>
             {% for x,y in data.items %}
             <option value="{{ x }}">{{ x }}</option>
@@ -43,74 +49,81 @@
           </select>
         </div>
 
-
         <div class="col">
-          <label for="validationCustom01"><strong>Select Course<span class="red">*</span></strong></label>          
-          <select id="cn" name="selectcourse" style="width: 100%" class="js-example-basic-single form-control" required>
-            <option class="form-control form-control-lg" selected disabled value="">Select Course</option>
+          <label for="validationCustom01"
+            ><strong>Select Course<span class="red">*</span></strong></label
+          >
+          <select
+            id="cn"
+            name="selectcourse"
+            style="width: 100%"
+            class="js-example-basic-single form-control"
+            required
+          >
+            <option
+              class="form-control form-control-lg"
+              selected
+              disabled
+              value=""
+            >
+              Select Course
+            </option>
           </select>
         </div>
       </div>
 
-      <br>
+      <br />
       <div class="text-center">
-        <button type="submit" class="btn btn-primary"> Add </button>
+        <button type="submit" class="btn btn-primary">Add</button>
       </div>
     </form>
   </div>
 
-
   <script>
-  $(document).ready(function () {
-      $('.js-example-basic-single').select2();
+    $(document).ready(function () {
+      $(".js-example-basic-single").select2();
     });
-
   </script>
 
   <script>
-    
     function addoptions(el) {
-      var data = JSON.parse("{{ data|escapejs }}".replaceAll("'", "\""));
-     
+      var data = JSON.parse("{{ data|escapejs }}".replaceAll("'", '"'));
+
       var items = data[el.value];
-      html1 = "";  
-      
-      if (el.value == 'Other')
-      {
-        $('#cn').replaceWith(`<input type="text" id="cn" name="selectcourse" list="myList" style="width: 100%"
-                                class="js-example-basic-single form-control" required placeholder="Select Course"/>`)
-                                
-                                for (i = 0; i < items.length; i++) {
-                                  html1 += `<option value="${items[i]}" />`;
-                                }
-                                
-                                $("#cn").after(`<datalist id="myList">${html1}</datalist>`);
-                                
-                              }
-                              else
-                              {
-                                $('#myList').remove()
-                                $('#cn').replaceWith(`<select id="cn" name="selectcourse" style="width: 100%" class="js-example-basic-single form-control" required>
-                                </select>`)
-                                
-          html1 += `<option value="" selected disabled>Select Course</option>`
-          for (i = 0; i < items.length; i++) {
-            html1 += `<option value="${items[i]}">${items[i]}</option>`;
-          }
-          
-          $("#cn").html(html1);
+      html1 = "";
+
+      if (el.value == "Other") {
+        $("#cn")
+          .replaceWith(`<input type="text" id="cn" name="selectcourse" list="myList" style="width: 100%"
+                                class="js-example-basic-single form-control" required placeholder="Select Course"/>`);
+
+        for (i = 0; i < items.length; i++) {
+          html1 += `<option value="${items[i]}" />`;
         }
 
-        
-      };
+        $("#cn").after(`<datalist id="myList">${html1}</datalist>`);
+      } else {
+        $("#myList").remove();
+        $("#cn")
+          .replaceWith(`<select id="cn" name="selectcourse" style="width: 100%" class="js-example-basic-single form-control" required>
+                                </select>`);
 
-        var cla = '{{course.forclass}}'
-        var cou = '{{course.courseName}}'
-        $(`#class_select option[value=${cla}]`).prop('selected',true)
-        addoptions(document.getElementById('class_select'))
-        
-        $(`select#cn option[value=${cou}]`).prop('selected',true)
-        $('input#cn').val(cou)
-      </script>
+        html1 += `<option value="" selected disabled>Select Course</option>`;
+        for (i = 0; i < items.length; i++) {
+          html1 += `<option value="${items[i]}">${items[i]}</option>`;
+        }
+
+        $("#cn").html(html1);
+      }
+    }
+
+    var cla = "{{course.forclass}}";
+    var cou = "{{course.courseName}}";
+    $(`#class_select option[value=${cla}]`).prop("selected", true);
+    addoptions(document.getElementById("class_select"));
+
+    $(`select#cn option[value=${cou}]`).prop("selected", true);
+    $("input#cn").val(cou);
+  </script>
 </div>
 {% endblock main-content %}

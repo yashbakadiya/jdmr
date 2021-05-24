@@ -1,8 +1,5 @@
-{% extends 'dashboard/base.html' %}
-{% load static %}
-{% block css %}
-{% endblock %}
-{% block main-content %}
+{% extends 'dashboard/base.html' %} {% load static %} {% block css %} {%
+endblock %} {% block main-content %}
 <style>
 	.btn-group>.btn{
 		padding: 0;
@@ -30,85 +27,129 @@
 		color: black;
 	}
 </style>
-<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/css/select2.min.css" rel="stylesheet" />
+<link
+  href="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/css/select2.min.css"
+  rel="stylesheet"
+/>
 <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/js/select2.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-multiselect/0.9.13/js/bootstrap-multiselect.js">
 </script>
 <link rel="stylesheet"
 href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-multiselect/0.9.13/css/bootstrap-multiselect.css">
 <div class="mt-5">
-	{% if messages %}
-	{% for k in messages%}
-	<div class="alert alert-{{k.tags}} alert-dismissible fade show" role="alert">
-	  <b>{{ k }} !</b>
-	  <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-		<span aria-hidden="true">&times;</span>
-	  </button>
-	</div>
-	{% endfor %}
-	{% endif %}
-	<div class="card" style="color: black;">
-	  <div class="card-header">
-		<h3 style="align-items: center;text-align: center;">Add Teaching Type</h3>
-	  </div>
-	  <form id="frm" class="mb-4 mt-4" method="post">{% csrf_token %}
-		<div class="mx-2 row" id="INSTBATCH">
-		  <div class="col">
-			<label for="validationCustom01"><strong>Select Class <span class="red">*</span></strong></label>
-			<select id="forclass" name='forclass' style="width: 100%;" class="js-example-basic-single form-control"
-			  onchange="selectclass()" required>
-			  <option class="form-control" selected disabled value="">Select Class</option>
-			  {% for i in classes %}
-			  <option class="form-control form-control-lg" value="{{ i.0 }}">{{i.0}} </option>
-			  {% endfor %}
-			</select>
-		  </div>
-		  <div class="col">
-			<label for="validationCustom01"><strong>Select Course<span class="red">*</span></strong></label>
-			<select id="courseName" name="courseName" style="width: 100%" required class="js-example-basic-single form-control">
-			  <option class="form-control form-control-lg" selected disabled value="">Select Course</option>
-			</select>
-		  </div>
-		  <div class="col">
-			<label for="validationCustom01"><strong>Teaching Type <span class="red">*</span></strong></label>
-			  <select id="teachingtype" name='teaching' multiple style="width: 100%;" required onchange="teachSelect()"
-				class="js-example-basic-single form-control ">
-				<option value="Online">Online</option>
-				<option value="ClassRoom">Class Room</option>
-				<option value="Home Tutors">Home Tutors</option>
-			  </select>          
-		  </div>
-		</div>
-		<div class="mx-2 row mt-4" id="allvalue" style="display: none;">
-		  <div class="col">
-			<div class="row hideforphone">
-			  <div class="col">
-				<div class="form-group">
-				  <label class="control-label">Teaching Type<span class="text-danger">*</span></label>
-				</div>
-			  </div>
-			  <div class="col-md-4">
-				<div class="form-group">
-				  <label class="control-label">Course Duration<span class="text-danger">*</span></label>
-				</div>
-			  </div>
-			  <div class="col-md-4">
-				<div class="input-group form-group">
-				  <label class="control-label">How many hours/weeks/months?<span class="text-danger">*</span></label>
-				</div>
-			  </div>
-			</div>
-		  </div>
-  
-  
-		</div>
-		<div class="text-center">
-		  <button type="submit" class="btn btn-primary"> Submit </button>
-		</div>
-	  </form>
-	</div>
-	<br>
-	<br>
+  {% if messages %} {% for k in messages%}
+  <div class="alert alert-{{k.tags}} alert-dismissible fade show" role="alert">
+    <b>{{ k }} !</b>
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  {% endfor %} {% endif %}
+  <div class="card" style="color: black">
+    <div class="card-header">
+      <h3 style="align-items: center; text-align: center">Add Teaching Type</h3>
+    </div>
+    <form id="frm" class="mb-4 mt-4" method="post">
+      {% csrf_token %}
+      <div class="mx-2 row" id="INSTBATCH">
+        <div class="col">
+          <label for="validationCustom01"
+            ><strong>Select Class <span class="red">*</span></strong></label
+          >
+          <select
+            id="forclass"
+            name="forclass"
+            style="width: 100%"
+            class="js-example-basic-single form-control"
+            onchange="selectclass()"
+            required
+          >
+            <option class="form-control" selected disabled value="">
+              Select Class
+            </option>
+            {% for i in classes %}
+            <option class="form-control form-control-lg" value="{{ i.0 }}">
+              {{i.0}}
+            </option>
+            {% endfor %}
+          </select>
+        </div>
+        <div class="col">
+          <label for="validationCustom01"
+            ><strong>Select Course<span class="red">*</span></strong></label
+          >
+          <select
+            id="courseName"
+            name="courseName"
+            style="width: 100%"
+            required
+            class="js-example-basic-single form-control"
+          >
+            <option
+              class="form-control form-control-lg"
+              selected
+              disabled
+              value=""
+            >
+              Select Course
+            </option>
+          </select>
+        </div>
+        <div class="col">
+          <label for="validationCustom01"
+            ><strong>Teaching Type <span class="red">*</span></strong></label
+          >
+          <select
+            id="teachingtype"
+            name="teaching"
+            multiple
+            style="width: 100%"
+            required
+            onchange="teachSelect()"
+            class="js-example-basic-single form-control"
+          >
+            <option value="Online">Online</option>
+            <option value="ClassRoom">Class Room</option>
+            <option value="Home Tutors">Home Tutors</option>
+          </select>
+        </div>
+      </div>
+      <div class="mx-2 row mt-4" id="allvalue" style="display: none">
+        <div class="col">
+          <div class="row hideforphone">
+            <div class="col">
+              <div class="form-group">
+                <label class="control-label"
+                  >Teaching Type<span class="text-danger">*</span></label
+                >
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div class="form-group">
+                <label class="control-label"
+                  >Course Duration<span class="text-danger">*</span></label
+                >
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div class="input-group form-group">
+                <label class="control-label"
+                  >How many hours/weeks/months?<span class="text-danger"
+                    >*</span
+                  ></label
+                >
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="text-center">
+        <button type="submit" class="btn btn-primary">Submit</button>
+      </div>
+    </form>
+  </div>
+  <br />
+  <br />
 
 	<script>
 
@@ -145,79 +186,79 @@ href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-multiselect/0.9.13/css/bo
 					</div>
 				  </div>
 				</div>`);
-				if(dur[i]){
-					$(`label:contains('${selected[i]}')`).closest('.remember').find(`select option:contains('${dur[i]}')`).prop('selected',true)
-				}
-				if(tim[i]){
-					$(`label:contains('${selected[i]}')`).closest('.remember').find(`select option:contains('${dur[i]}')`).prop('selected',true)
-				}
-			}
-		  }
-		}
-		  </script>
-	  
-	  
-		<script>
-		  // In your Javascript (external .js resource or <script> tag)
-		  $(document).ready(function () {
-			$('.js-example-basic-single').select2();
-		  });
-	  
-		  function selectclass() {
-			var selected = $("#forclass").val();
-			var cou = '{{teach.courseID}}'
-			$.ajax({
-			  url: "{% url 'findCourse' %}",
-			  data: {
-				forclass: selected,
-			  },
-			  success: function (data) {
-				courses = data.courses;
-				$("#courseName").empty().trigger("change");
-				var newOption = new Option(
-					'Select Course',
-					'',
-					true,
-					true
-				  );
-				newOption.disabled=true
-			  	$("#courseName").append(newOption).trigger("change");
-				for (i = 0; i < courses.length; i++) {
-				  var newOption = new Option(
-					courses[i][1],
-					courses[i][0],
-					false,
-					false
-				  );
-				  $("#courseName").append(newOption).trigger("change");
-				}
-				if(cou){
-					$(`#courseName option[value='${cou}']`).prop('selected',true)
-				}
-			  },
-			});
-		  }
+          if (dur[i]) {
+            $(`label:contains('${selected[i]}')`)
+              .closest(".remember")
+              .find(`select option:contains('${dur[i]}')`)
+              .prop("selected", true);
+          }
+          if (tim[i]) {
+            $(`label:contains('${selected[i]}')`)
+              .closest(".remember")
+              .find(`select option:contains('${dur[i]}')`)
+              .prop("selected", true);
+          }
+        }
+      }
+    }
+  </script>
 
-		var cla = '{{teach.forclass}}'
-		var tt = '{{teach.teachType}}'.split(',')
-		var dur = '{{teach.duration}}'.split(',')
-		var tim = '{{teach.timePeriod}}'.split(',')
-		$(`#forclass option[value='${cla}']`).prop('selected',true)
-		selectclass()
-		for (let i = 0; i < tt.length; i++) {
-			$(`#teachingtype option[value='${tt[i]}']`).prop('selected',true)
-		}
-		var selected = $('#teachingtype').val()
-		var dur = '{{teach.duration}}'.split(',')
-		var tim = '{{teach.timePeriod}}'.split(',')
-		  $('#allvalue').hide()
-		  $('.remember').empty()
-	  
-		  if (selected.length>0){
-			$('#allvalue').show()
-	  
-		  for (let i = 0; i < selected.length; i++) {
-			$('#allvalue > .col').append(`<div class="row remember">
+  <script>
+    // In your Javascript (external .js resource or <script> tag)
+    $(document).ready(function () {
+      $(".js-example-basic-single").select2();
+    });
+
+    function selectclass() {
+      var selected = $("#forclass").val();
+      var cou = "{{teach.courseID}}";
+      $.ajax({
+        url: "{% url 'findCourse' %}",
+        data: {
+          forclass: selected,
+        },
+        success: function (data) {
+          courses = data.courses;
+          $("#courseName").empty().trigger("change");
+          var newOption = new Option("Select Course", "", true, true);
+          newOption.disabled = true;
+          $("#courseName").append(newOption).trigger("change");
+          for (i = 0; i < courses.length; i++) {
+            var newOption = new Option(
+              courses[i][1],
+              courses[i][0],
+              false,
+              false
+            );
+            $("#courseName").append(newOption).trigger("change");
+          }
+          if (cou) {
+            $(`#courseName option[value='${cou}']`).prop("selected", true);
+          }
+        },
+      });
+    }
+
+    var cla = "{{teach.forclass}}";
+    var tt = "{{teach.teachType}}".split(",");
+    var dur = "{{teach.duration}}".split(",");
+    var tim = "{{teach.timePeriod}}".split(",");
+    $(`#forclass option[value='${cla}']`).prop("selected", true);
+    selectclass();
+    for (let i = 0; i < tt.length; i++) {
+      $(`#teachingtype option[value='${tt[i]}']`).prop("selected", true);
+    }
+    var selected = $("#teachingtype").val();
+    var dur = "{{teach.duration}}".split(",");
+    var tim = "{{teach.timePeriod}}".split(",");
+    $("#allvalue").hide();
+    $(".remember").empty();
+
+    if (selected.length > 0) {
+      $("#allvalue").show();
+
+      for (let i = 0; i < selected.length; i++) {
+        $("#allvalue > .col").append(`<div class="row remember">
 				  <div class="col-md-4">
 					<label style="color: rgb(66, 8, 8);">${selected[i]}</label>
 				  </div>

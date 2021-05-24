@@ -17,7 +17,6 @@ from batches.models import BatchTiming
 
 
 def ampm(inpTime):
-    print(inpTime)
     # converting 24 hour time to 12 hour time
     temp = inpTime.split(":")
     hour = int(temp[0])
@@ -42,41 +41,47 @@ def batchTiming2(request):
         if request.method == 'POST':
             user = User.objects.get(username=request.session['user'])
             institute = Institute.objects.get(user=user)
-            
+
             if('delteSno' in request.POST):
-                delObj = BatchTiming.objects.get(sid=request.POST.get('delteSno'))
+                delObj = BatchTiming.objects.get(
+                    sid=request.POST.get('delteSno'))
                 delObj.delete()
                 messages.warning(request, "Batch Deleted Successfully")
             else:
                 courseID = request.POST.get('courseName')
                 forclass1 = request.POST.getlist('forclass', '')
-                forclass = ', '.join(forclass1) 
+                forclass = ', '.join(forclass1)
                 batchName = request.POST.get('batchName')
                 startTime = request.POST.get('startTime')
                 endTime = request.POST.get('endTime')
+                startDate = request.POST.get('startDate')
+                endDate = request.POST.get('endDate')
                 teachingtype = request.POST.get('teaching')
                 original = startTime+","+endTime
                 try:
                     startTime = ampm(startTime)
                     endTime = ampm(endTime)
+
                 except Exception as e:
                     print(e)
                 days = request.POST.getlist('fordays')
                 days = ", ".join(days)
-                course = Courses.objects.get(id = courseID).courseName
-                if not BatchTiming.objects.filter(forclass=forclass,course=course,startTime=startTime,endTime=endTime):
+                course = Courses.objects.get(id=courseID).courseName
+                if not BatchTiming.objects.filter(forclass=forclass, course=course, startTime=startTime, endTime=endTime, startDate=startDate, endDate=endDate):
                     batchObj = BatchTiming(
-                    #course=Courses.objects.get(id=int(courseID[0])),
-                    course = course,
-                    forclass = forclass,
-                    batchName = batchName,
-                    startTime = startTime,
-                    endTime = endTime,
-                    institute = institute,
-                    days = days,
-                    original24time = original,
-                    teachingtype = teachingtype
-                )
+                        # course=Courses.objects.get(id=int(courseID[0])),
+                        course=course,
+                        forclass=forclass,
+                        batchName=batchName,
+                        startTime=startTime,
+                        endTime=endTime,
+                        startDate=startDate,
+                        endDate=endDate,
+                        institute=institute,
+                        days=days,
+                        original24time=original,
+                        teachingtype=teachingtype
+                    )
                     batchObj.save()
                     messages.success(request, "Batch Added Successfully")
                 else:
@@ -85,12 +90,13 @@ def batchTiming2(request):
         coachingCenter = Institute.objects.get(user=user).BatchTiming.all()
         inst = Institute.objects.get(user=user)
         courses = Courses.objects.filter(intitute=inst, archieved=False)
-        forclass_sel = Courses.objects.filter(intitute=inst).values_list('forclass').distinct()
+        forclass_sel = Courses.objects.filter(
+            intitute=inst).values_list('forclass').distinct()
         jsonCources = {}
         bat = BatchTiming.objects.all()
         for x in courses:
             jsonCources[x.id] = x.forclass.split(", ")
-        params = {'data': coachingCenter, 'courses': courses,'classes':forclass_sel,'bat':bat,
+        params = {'data': coachingCenter, 'courses': courses, 'classes': forclass_sel, 'bat': bat,
                   'json': json.dumps(jsonCources)}
         return render(request, 'batches/batch-timing.html', params)
     return HttpResponse("You Are not Authenticated for this Page")
@@ -102,10 +108,10 @@ def batchTimingEdit(request, id):
         user = User.objects.get(username=request.session['user'])
         inst = Institute.objects.get(user=user)
         batchObj = BatchTiming.objects.get(id=id, institute=inst)
-        forclass_sel = Courses.objects.filter(intitute=inst).values_list('forclass').distinct()
+        forclass_sel = Courses.objects.filter(
+            intitute=inst).values_list('forclass').distinct()
 
         cours = Courses.objects.filter(intitute=inst)
-        print('cours',cours)
         if request.method == "POST":
             courseName = request.POST.get('courseName')
             forclass1 = request.POST.getlist('forclass', '')
@@ -113,6 +119,8 @@ def batchTimingEdit(request, id):
             batchName = request.POST.get('batchName')
             startTime = request.POST.get('startTime')
             endTime = request.POST.get('endTime')
+            startDate = request.POST.get('startDate')
+            endDate = request.POST.get('endDate')
             teachingtype = request.POST.get('teaching')
             original = startTime+","+endTime
             try:
@@ -123,11 +131,13 @@ def batchTimingEdit(request, id):
             days = request.POST.getlist('fordays')
             days = ", ".join(days)
             batchObj.batchName = batchName
-            batchObj.startTime = startTime        
+            batchObj.startTime = startTime
             batchObj.courseName = courseName
             #batchObj.course = Courses.objects.get(id = courseID)
             batchObj.forclass = forclass
             batchObj.endTime = endTime
+            batchObj.startDate = startDate
+            batchObj.endDate = endDate
             batchObj.days = days
             batchObj.teachingtype = teachingtype
             batchObj.original24time = original
@@ -136,27 +146,27 @@ def batchTimingEdit(request, id):
             return redirect("batchTiming2")
         courses = Courses.objects.filter(intitute=inst, archieved=False)
         jsonCources = {}
-        strt = datetime.strptime(batchObj.original24time.split(',')[0],'%H:%M')
-        end = datetime.strptime(batchObj.original24time.split(',')[1],'%H:%M')
+        strt = datetime.strptime(
+            batchObj.original24time.split(',')[0], '%H:%M')
+        end = datetime.strptime(batchObj.original24time.split(',')[1], '%H:%M')
         for x in courses:
             jsonCources[x.id] = x.forclass.split(", ")
-        params = {'batchObj': batchObj, 'classes':forclass_sel,
-                  'json': json.dumps(jsonCources), 'start':strt, 'end':end}
+        params = {'batchObj': batchObj, 'classes': forclass_sel,
+                  'json': json.dumps(jsonCources), 'start': strt, 'end': end}
         return render(request, 'batches/batchTimingEdit.html', params)
     return HttpResponse("You Are not Authenticated for this Page")
 
-def Findbatch(request):
-    courses={}
-    forclass = request.GET.get('forclass')
-    print("forclass",forclass)
 
+def Findbatch(request):
+    courses = {}
+    forclass = request.GET.get('forclass')
     if forclass:
         course_obj = Courses.objects.filter(forclass=forclass)
         courses = []
         for i in course_obj:
-            courses.append((i.id,i.courseName))
-        print('jsoncourse',courses)
-    return JsonResponse({'courses':courses})
+            courses.append((i.id, i.courseName))
+    return JsonResponse({'courses': courses})
+
 
 @login_required(login_url='Login')
 def batchTiming(request):
@@ -183,7 +193,6 @@ def batchTiming(request):
                 except Exception as e:
                     print(e)
                 days = request.POST.getlist('fordays')
-                print('days',days)
                 days = ", ".join(days)
                 batchObj = BatchTiming(
                     course=Courses.objects.get(id=int(courseID[0])),
@@ -210,19 +219,19 @@ def batchTiming(request):
     return HttpResponse("You Are not Authenticated for this Page")
 
 
-
 @login_required(login_url="Login")
 def batchTimingdelete(request, id):
     if request.session['type'] == "Institute":
         user = User.objects.get(username=request.session['user'])
         inst = Institute.objects.get(user=user)
-        batchObj = BatchTiming.objects.get(id=id)       
+        batchObj = BatchTiming.objects.get(id=id)
        # course = Courses.objects.get(id=id, intitute=inst)
         batchObj.delete()
         messages.success(request, "Batch Deleted Succssfully")
         return redirect("batchTiming2")
     return HttpResponse("You Are Not Authenticated for this Page")
-        
+
+
 @login_required(login_url='Login')
 def postNotice(request):
     context = {}
@@ -231,8 +240,6 @@ def postNotice(request):
             title = request.POST.get("title")
             desc = request.POST.get("description")
             batch_name = request.POST.get("batch")
-            print(request.POST)
-            print('batch_name--', batch_name)
             batch = BatchTiming.objects.get(batchName=batch_name)
             newNotice = Notice(
                 title=title,
@@ -244,7 +251,7 @@ def postNotice(request):
             return redirect("postNotice")
         user = User.objects.get(username=request.session['user'])
         batches = BatchTiming.objects.all()
-        return render(request, 'batches/postNotice.html', {'batches':batches})
+        return render(request, 'batches/postNotice.html', {'batches': batches})
     return HttpResponse("You Are not Authenticated for this Page")
 
 
@@ -266,7 +273,6 @@ def BatchTutor(request):
             days = ",".join(forday)
             startdate = datetime.strptime(startdate, format_str)
             enddate = datetime.strptime(enddate, format_str)
-            print(name, starttime, endtime, startdate, enddate, forday, days)
             try:
                 data = BatchTimingTutor(
                     Tutor=tutor,
@@ -318,7 +324,6 @@ def editBatchTutor(request, batch_id):
             days = ",".join(forday)
             startdate = datetime.strptime(startdate, format_str)
             enddate = datetime.strptime(enddate, format_str)
-            print(name, starttime, endtime, startdate, enddate, forday, days)
             if name:
                 data.batchName = name
             if starttime:
