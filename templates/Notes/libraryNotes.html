@@ -50,6 +50,7 @@
                             <th>Description</th>
                             <th>Institute</th>
                             <th>Price</th>
+                            <th class="text-center">View</th>
                             <th class="text-center">Buy</th>
                         </tr>
 
@@ -73,6 +74,10 @@
                                 <p style="color: black;font-size: 14px;">{{note.price}}</p>
                             </td>
                             <td style="text-align: center;">
+                                <a class="btn btn-info" href="{% url 'viewinstitutesamplepdf' note.id %}"
+                                    target="_blank">View Note</a>
+                            </td>
+                            <td style="text-align: center;">
                                 <a class="btn btn-info" href="{% url 'buyInstituteNotes' note.id %}">Buy Note</a>
                             </td>
                         </tr>
@@ -94,6 +99,7 @@
                             <th>Description</th>
                             <th>Teacher</th>
                             <th>Price</th>
+                            <th class="text-center">View</th>
                             <th class="text-center">Buy</th>
                         </tr>
 
@@ -116,6 +122,10 @@
                             </td>
                             <td>
                                 <p style="color: black;font-size: 14px;">{{note.price}}</p>
+                            </td>
+                            <td style="text-align: center;">
+                                <a class="btn btn-info" href="{% url 'viewtutorsamplepdf' note.id %}"
+                                    target="_blank">View</a>
                             </td>
                             <td style="text-align: center;">
                                 <a class="btn btn-info" href="{% url 'buyTutorNotes' note.id %}">Buy Note</a>

@@ -272,11 +272,11 @@
                     <td>{{fee.fee_amt}}</td>
                     <td>{{fee.no_of_installment}}</td>
                     <td>{{fee.final_amount}}</td>
-                    <td>                      
-                        <a class="btn btn-success" href="{% url 'unarchiveFee' fee.id %}"><i class="flaticon-delete-fill"
-                            style="font-size:medium;"></i></a>               
-
-
+                    <td style="text-align: center;">                      
+                        <a class="btn btn-success" href="{% url 'unarchiveFee' fee.id %}"><i class="flaticon-log-4"
+                            style="font-size:medium; transform: rotate(180deg);"></i></a>               
+                        <a class="btn btn-danger" href="{% url 'deleteFee' fee.id %}"><i class="flaticon-delete-fill"
+                                style="font-size:medium;"></i></a>
                     </td>                    
                   </tr>   
         

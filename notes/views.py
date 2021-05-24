@@ -13,6 +13,9 @@ from django.contrib import messages
 from buy_items.models import BuyInstituteNotes, BuyTutorNotes
 from students.models import AddStudentInst
 from datetime import datetime
+from PyPDF2 import PdfFileReader,PdfFileWriter
+from django.core.files import File
+import math
 # Create your views here.
 
 
@@ -22,7 +25,7 @@ def AddNotesInstitute(request):
     if request.session['type'] == "Institute":
         user = User.objects.get(username=request.session['user'])
         inst = Institute.objects.get(user=user)
-        classes = Courses.objects.filter(intitute=inst).values_list('forclass')
+        classes = Courses.objects.filter(intitute=inst).values_list('forclass').distinct()
         notes = NotesInstitute.objects.filter(institute=inst)
         context = {
             'notes': notes,
@@ -43,6 +46,11 @@ def AddNotesInstitute(request):
                 freeEnrolled = False
             if (note and title and description and course):
                 for i in range(len(note)):
+                    inputpdf = PdfFileReader(note[i])
+                    output = PdfFileWriter()
+                    for j in range(math.ceil(inputpdf.numPages/10)):
+                        output.addPage(inputpdf.getPage(j))
+
                     data = NotesInstitute(
                         institute=inst,
                         notes=note[i],
@@ -53,6 +61,9 @@ def AddNotesInstitute(request):
                         description=description[i],
                         freeEnrolled=freeEnrolled
                     )
+                    with open('sample.pdf', 'w+b') as f:
+                        output.write(f)
+                        data.sample.save('sample.pdf', File(f))
                     try:
                         data.save()
                     except:
@@ -102,6 +113,13 @@ def EditNoteInstitute(request, note_id):
 
             if note:
                 data.notes = note
+                inputpdf = PdfFileReader(note)
+                output = PdfFileWriter()
+                for i in range(math.ceil(inputpdf.numPages/10)):
+                    output.addPage(inputpdf.getPage(i))
+                with open('sample.pdf', 'w+b') as f:
+                    output.write(f)
+                    data.sample.save('sample.pdf', File(f))
             if title:
                 data.title = title
             if price:
@@ -161,6 +179,10 @@ def AddNotesTutor(request):
             course = request.POST.get("course", "")
             if note:
                 for i in range(len(note)):
+                    inputpdf = PdfFileReader(note[i])
+                    output = PdfFileWriter()
+                    for j in range(math.ceil(inputpdf.numPages/10)):
+                        output.addPage(inputpdf.getPage(j))
                     data = NotesTutor(
                         tutor=tutor,
                         forclass=forclass,
@@ -170,6 +192,9 @@ def AddNotesTutor(request):
                         price=price[i],
                         description=description[i],
                     )
+                    with open('sample.pdf', 'w+b') as f:
+                        output.write(f)
+                        data.sample.save('sample.pdf', File(f))
                     try:
                         data.save()
                     except:
@@ -222,6 +247,13 @@ def EditNoteTutor(request, note_id):
 
             if note:
                 data.notes = note
+                inputpdf = PdfFileReader(note)
+                output = PdfFileWriter()
+                for i in range(math.ceil(inputpdf.numPages/10)):
+                    output.addPage(inputpdf.getPage(i))
+                with open('sample.pdf', 'w+b') as f:
+                    output.write(f)
+                    data.sample.save('sample.pdf', File(f))
             if title:
                 data.title = title
             if price:
@@ -359,10 +391,14 @@ def subjects(request):
             data["categories"] = courses
     return JsonResponse(data, safe=False)
 
-
 def viewInstituteNotesPDF(request, pk):
     return render(request, 'Notes/notesview.html', {'note': NotesInstitute.objects.get(id=pk)})
 
-
 def viewTutorNotesPDF(request, pk):
     return render(request, 'Notes/notesview.html', {'note': NotesTutor.objects.get(id=pk)})
+
+def viewInstituteSamplePDF(request, pk):
+    return render(request, 'Notes/sampleview.html', {'note': NotesInstitute.objects.get(id=pk)})
+    
+def viewTutorSamplePDF(request, pk):
+    return render(request, 'Notes/sampleview.html', {'note': NotesTutor.objects.get(id=pk)})

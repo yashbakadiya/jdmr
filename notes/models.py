@@ -6,6 +6,7 @@ from datetime import datetime
 class NotesInstitute(models.Model):
     institute = models.ForeignKey(Institute,related_name='centernotes',on_delete=models.CASCADE)
     notes = models.FileField(upload_to="notes/Institute")
+    sample = models.FileField(null=True,blank=True,upload_to="notes/sample/Institute")
     title = models.CharField(max_length=2000)
     subject = models.CharField(max_length=3000)
     forclass = models.CharField(max_length=150, default="")
@@ -24,7 +25,8 @@ class NotesInstitute(models.Model):
 
 class NotesTutor(models.Model):
     tutor = models.ForeignKey(Teacher,related_name='tutornotes',on_delete=models.CASCADE)
-    notes = models.FileField(upload_to="notes/Institute")
+    notes = models.FileField(upload_to="notes/Tutor")
+    sample = models.FileField(null=True,blank=True,upload_to="notes/sample/Tutor")
     title = models.CharField(max_length=2000)
     subject = models.CharField(max_length=3000)
     forclass = models.CharField(max_length=150, default="")
