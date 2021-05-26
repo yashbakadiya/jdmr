@@ -1,368 +1,321 @@
-{% extends 'dashboard/base.html' %} {% load static %} {% block css %} @import
-url('https://fonts.googleapis.com/css?family=Numans');
+{% extends 'dashboard/base.html' %}
+{% load static %}
+{% block css %}
+@import url('https://fonts.googleapis.com/css?family=Numans');
 <style media="screen">
-  .container {
-    align-content: center;
-  }
+	.container {
+		align-content: center;
+	}
 
-  .card {
-    margin-top: auto;
-    margin-bottom: auto;
-    width: 800px;
-    background-color: white;
-  }
+	.card {
+		margin-top: auto;
+		margin-bottom: auto;
+		width: 800px;
+		background-color: white;
+	}
 
-  .card-header h3 {
-    color: white;
-  }
+	.card-header h3 {
+		color: white;
+	}
 
-  input:focus {
-    outline: 0 0 0 0 !important;
-    box-shadow: 0 0 0 0 !important;
-  }
+	input:focus {
+		outline: 0 0 0 0 !important;
+		box-shadow: 0 0 0 0 !important;
 
-  .remember {
-    color: white;
-  }
+	}
 
-  .remember input {
-    width: 19px;
-    height: 19px;
-    margin-left: 15px;
-    margin-right: 5px;
-  }
+	.remember {
+		color: white;
+	}
 
-  .links {
-    color: white;
-  }
+	.remember input {
+		width: 19px;
+		height: 19px;
+		margin-left: 15px;
+		margin-right: 5px;
+	}
 
-  .links a {
-    margin-left: 4px;
-  }
+	.links {
+		color: white;
+	}
 
-  .control-label {
-    color: rgb(66, 8, 8);
-    font-size: 20px;
-  }
+	.links a {
+		margin-left: 4px;
+	}
 
-  .multiselect-container > li > a > label {
-    height: auto;
-  }
+	.control-label {
+		color: rgb(66, 8, 8);
+		font-size: 20px;
+	}
 
-  .multiselect-container {
-    height: 10rem;
-    overflow-y: scroll;
-    width: max-content;
-  }
+	.multiselect-container>li>a>label {
+		height: auto;
+	}
+
+	.multiselect-container {
+		height: 10rem;
+		overflow-y: scroll;
+		width: max-content;
+	}
 </style>
-{% endblock %} {% block main-content %}
+{% endblock %}
+{% block main-content %}
 <div class="mt-5">
-  {% if messages %} {% for k in messages%}
-  <div class="alert alert-{{k.tags}} alert-dismissible fade show" role="alert">
-    <b>{{ k }} !</b>
-    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-      <span aria-hidden="true">&times;</span>
-    </button>
-  </div>
-  {% endfor %} {% endif %}
-  <div class="card">
-    <div class="card-header">
-      <div class="row">
-        <div class="col-sm">
-          <h2 style="color: rgb(0, 0, 0)">Edit Tutor Instance</h2>
-        </div>
-      </div>
-    </div>
-    <div class="card-body mt-4">
-      <form id="submitForm" method="post" action="">
-        {% csrf_token %}
-        <div id="mainForm" class="row">
-          <div class="col-md-6 col-lg-4 col-12 input-group form-group">
-            <label
-              class="control-label col-sm-5 col-5 mt-2"
-              style="color: black"
-              >Username</label
-            >
-            <input
-              style="height: fit-content"
-              type="text"
-              class="form-control"
-              id="username "
-              name="NewUsername"
-              placeholder="Username"
-              readonly
-              required
-              value="{{ tutorBaseData.user.username }}"
-            /><br /><br />
-          </div>
-          <div class="col-md-6 col-lg-4 col-12 input-group form-group">
-            <label
-              class="control-label col-sm-5 col-5 mt-2"
-              style="color: black"
-              >Email-Id</label
-            >
-            <input
-              style="height: fit-content"
-              type="email"
-              class="form-control"
-              id="email"
-              name="NewEmail"
-              placeholder="Email Address"
-              readonly
-              required
-              value="{{ tutorBaseData.user.email }}"
-            /><br /><br />
-          </div>
-          <div class="col-md-6 col-lg-4 col-12 input-group form-group">
-            <label
-              class="control-label col-sm-5 col-5 mt-2"
-              style="color: black"
-              >Phone Number<span class="text-danger">*</span></label
-            >
-            <input
-              style="height: fit-content"
-              type="number"
-              class="form-control"
-              id="phone"
-              name="NewPhone"
-              placeholder="Phone Number"
-              required
-              readonly
-              value="{{ tutorBaseData.phone }}"
-              type="number"
-            />
-          </div>
-          <div class="col-md-6 col-lg-4 col-12 input-group form-group">
-            <label
-              class="control-label col-sm-5 col-5 mt-2"
-              style="color: black"
-              >Availability<span class="text-danger">*</span></label
-            >
-            <select
-              id="availability"
-              name="availability"
-              class="custom-select form-control"
-              required="required"
-            >
-              <option value="weekly" selected>weekly</option>
-              <option value="weekend" selected>weekend</option>
-              <option value="both" selected>both</option>
-            </select>
-          </div>
-        </div>
-        <hr />
-        <div class="outside"></div>
-        <div class="col-lg-12 col-md-12 col-12 d-flex justify-content-end">
-          <button
-            class="btn btn-info btn-md"
-            type="button"
-            onclick="duplicate(this)"
-          >
-            Add New
-          </button>
-        </div>
-        <div class="col-lg-12 col-md-12 col-12 mt-4 text-center">
-          <button
-            id="submitBtn"
-            name="submit"
-            type="submit"
-            class="btn btn-info"
-          >
-            Submit
-          </button>
-        </div>
-      </form>
-    </div>
-  </div>
+	{% if messages %}
+	{% for k in messages%}
+	<div class="alert alert-{{k.tags}} alert-dismissible fade show" role="alert">
+		<b>{{ k }} !</b>
+		<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+			<span aria-hidden="true">&times;</span>
+		</button>
+	</div>
+	{% endfor %}
+	{% endif %}
+	<div class="card">
+		<div class="card-header">
+			<div class="row">
+				<div class="col-sm">
+					<h2 style="color: rgb(0, 0, 0);">Edit Tutor Instance</h2>
+				</div>
+			</div>
+		</div>
+		<div class="card-body mt-4">
+			<form id='submitForm' method='post' action=''>{% csrf_token %}
+				<div id='mainForm' class="row">
+					<div class="col-md-6 col-lg-4 col-12 input-group form-group">
+						<label class="control-label col-sm-5 col-5 mt-2" style="color:black;">Username</label>
+						<input style="height: fit-content;" type="text" class="form-control" id="username "
+							name='NewUsername' placeholder="Username" readonly required
+							value="{{ tutorBaseData.user.username }}"><br><br>
+					</div>
+					<div class="col-md-6 col-lg-4 col-12 input-group form-group">
+						<label class="control-label col-sm-5 col-5 mt-2" style="color:black;">Email-Id</label>
+						<input style="height: fit-content;" type="email" class="form-control" id="email" name='NewEmail'
+							placeholder="Email Address" readonly required
+							value="{{ tutorBaseData.user.email }}"><br><br>
+					</div>
+					<div class="col-md-6 col-lg-4 col-12 input-group form-group">
+						<label class="control-label col-sm-5 col-5 mt-2" style="color:black;">Phone Number<span
+								class="text-danger">*</span></label>
+						<input style="height: fit-content;" type="number" class="form-control" id="phone"
+							name='NewPhone' placeholder="Phone Number" required readonly value="{{ tutorBaseData.phone }}"
+							type="number">
+					</div>
+					<div class="col-md-6 col-lg-4 col-12 input-group form-group">
+						<label class="control-label col-sm-5 col-5 mt-2" style="color:black;">Availability<span
+								class="text-danger">*</span></label>
+						<select id="availability" name="availability" class="custom-select form-control"
+							required="required">
+							<option value="weekly" selected>weekly</option>
+							<option value="weekend" selected>weekend</option>
+							<option value="both" selected>both</option>
+						</select>
+					</div>
+				</div>
+				<hr>
+				<div class="outside">
+
+				</div>
+				<div class="col-lg-12 col-md-12  col-12 d-flex justify-content-end">
+					<button class="btn btn-info btn-md" type="button" onclick="duplicate(this)">Add
+						New</button>
+				</div>
+				<div class="col-lg-12 col-md-12 col-12 mt-4 text-center">
+					<button id='submitBtn' name="submit" type="submit" class="btn btn-info">Submit</button>
+				</div>
+			</form>
+		</div>
+	</div>
+
 </div>
 <script>
-  function selectclass(el) {
-  	var selected = el.value;
-  	$.ajax({
-  		url: "{% url 'findCourse' %}",
-  		data: {
-  			forclass: selected,
-  		},
-  		success: function (data) {
-  			courses = data.courses;
-  			$(el).closest(".entry").find(".ctn").empty().trigger("change");
+	function selectclass(el) {
+		var selected = el.value;
+		$.ajax({
+			url: "{% url 'findCourse' %}",
+			data: {
+				forclass: selected,
+			},
+			success: function (data) {
+				courses = data.courses;
+				$(el).closest(".entry").find(".ctn").empty().trigger("change");
 
-  			var newOption = new Option(
-  				"Select an option",
-  				"",
-  				false,
-  				false
-  			);
-  			$(el).closest(".entry").find(".ctn").append(newOption).trigger("change");
+				var newOption = new Option(
+					"Select an option",
+					"",
+					false,
+					false
+				);
+				$(el).closest(".entry").find(".ctn").append(newOption).trigger("change");
 
-  			for (i = 0; i < courses.length; i++) {
-  				var newOption = new Option(
-  					courses[i][1],
-  					courses[i][1],
-  					false,
-  					false
-  				);
-  				$(el).closest(".entry").find(".ctn").append(newOption).trigger("change");
-  			}
-  		},
-  	});
-  }
+				for (i = 0; i < courses.length; i++) {
+					var newOption = new Option(
+						courses[i][1],
+						courses[i][1],
+						false,
+						false
+					);
+					$(el).closest(".entry").find(".ctn").append(newOption).trigger("change");
+				}
+			},
+		});
+	}
 
-  function selectcourse(el) {
-  	var selected_course = el.value;
-  	var selected_class = $(el).closest(".entry").find(".cn").val();
-  	console.log(selected_class, selected_course)
-  	$.ajax({
-  		url: "{% url 'findTeaching' %}",
-  		data: {
-  			forclass: selected_class,
-  			course: selected_course
-  		},
-  		success: function (data) {
-  			teaching = data.teaching;
-  			$(el).closest(".entry").find(".ttn").empty().trigger("change");
+	function selectcourse(el) {
+		var selected_course = el.value;
+		var selected_class = $(el).closest(".entry").find(".cn").val();
+		console.log(selected_class, selected_course)
+		$.ajax({
+			url: "{% url 'findTeaching' %}",
+			data: {
+				forclass: selected_class,
+				course: selected_course
+			},
+			success: function (data) {
+				teaching = data.teaching;
+				$(el).closest(".entry").find(".ttn").empty().trigger("change");
 
-  			var newOption = new Option(
-  				"Select an option",
-  				"",
-  				false,
-  				false
-  			);
-  			$(el).closest(".entry").find(".ttn").append(newOption).trigger("change");
+				var newOption = new Option(
+					"Select an option",
+					"",
+					false,
+					false
+				);
+				$(el).closest(".entry").find(".ttn").append(newOption).trigger("change");
 
-  			for (i = 0; i < teaching.length; i++) {
-  				var newOption = new Option(
-  					teaching[i],
-  					teaching[i],
-  					false,
-  					false
-  				);
-  				$(el).closest(".entry").find(".ttn").append(newOption).trigger("change");
-  			}
-  		},
-  	});
-  }
+				for (i = 0; i < teaching.length; i++) {
+					var newOption = new Option(
+						teaching[i],
+						teaching[i],
+						false,
+						false
+					);
+					$(el).closest(".entry").find(".ttn").append(newOption).trigger("change");
+				}
+			},
+		});
+	}
 
-  function duplicate() {
-  	$('.outside').append(`<div class="row entry">
-             <div class="input-group" style="width: 92%">
-                 <div class="col-md-6 col-lg-4 col-12 input-group form-group">
-                     <label class="control-label col-sm-5 col-5 mt-2" style="color:black;" for="cn">Class<span
-                                 class="text-danger">*</span></label>
-                     <select name="cn" class="cn custom-select form-control" required="required" onchange="selectclass(this)">
-                         <option disabled selected value="">Select an option</option>
-                         {% for x in data %}
-                                         <option value="{{ x.0 }}">{{ x.0 }}</option>
-                         {% endfor %}
-                     </select>
-                 </div>
-                 <div class="col-md-6 col-lg-4 col-12 input-group form-group">
-                     <label class="control-label col-sm-5 col-5 mt-2" style="color:black;" for="ctn">Course<span
-                                 class="text-danger">*</span></label>
-                     <select name="ctn" class="ctn custom-select form-control" required="required" onchange="selectcourse(this)">
-                         <option disabled selected value="">Select an option</option>
-                     </select>
-                 </div>
-                 <div class="col-md-6 col-lg-4 col-12 input-group form-group">
-                     <label class="control-label col-sm-5 col-5 mt-2" style="color:black;" for="ttn">Teaching Type<span
-                                 class="text-danger">*</span></label>
-                     <select name="ttn" class="ttn custom-select form-control" required="required">
-                         <option disabled selected value="">Select an option</option>
-                     </select>
-                 </div>
-             </div>
-             <div class="mx-auto">
-                 <button type="button" class="btn btn-success" onclick="removeDuplicate(this)">
-                     Remove
-                 </button>
-             </div>
-         </div>`)
-  }
+	function duplicate() {
+		$('.outside').append(`<div class="row entry">
+            <div class="input-group" style="width: 92%">
+                <div class="col-md-6 col-lg-4 col-12 input-group form-group">
+                    <label class="control-label col-sm-5 col-5 mt-2" style="color:black;" for="cn">Class<span
+                                class="text-danger">*</span></label>
+                    <select name="cn" class="cn custom-select form-control" required="required" onchange="selectclass(this)">
+                        <option disabled selected value="">Select an option</option>
+                        {% for x in data %}
+                                        <option value="{{ x.0 }}">{{ x.0 }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-md-6 col-lg-4 col-12 input-group form-group">
+                    <label class="control-label col-sm-5 col-5 mt-2" style="color:black;" for="ctn">Course<span
+                                class="text-danger">*</span></label>
+                    <select name="ctn" class="ctn custom-select form-control" required="required" onchange="selectcourse(this)">
+                        <option disabled selected value="">Select an option</option>
+                    </select>
+                </div>
+                <div class="col-md-6 col-lg-4 col-12 input-group form-group">
+                    <label class="control-label col-sm-5 col-5 mt-2" style="color:black;" for="ttn">Teaching Type<span
+                                class="text-danger">*</span></label>
+                    <select name="ttn" class="ttn custom-select form-control" required="required">
+                        <option disabled selected value="">Select an option</option>
+                    </select>
+                </div>
+            </div>
+            <div class="mx-auto">
+                <button type="button" class="btn btn-success" onclick="removeDuplicate(this)">
+                    Remove
+                </button>
+            </div>
+        </div>`)
+	}
 
-  function removeDuplicate(el) {
-  	$(el).closest(".entry").empty().trigger("change");
-  }
+	function removeDuplicate(el) {
+		$(el).closest(".entry").empty().trigger("change");
+	}
 
-  function prefill() {
-  	{% if editTutor %}
-  	{% for i in editTutor %}
-  	$('.outside').append(`<div class="row entry">
-  		{% if forloop.counter != 1 %}
-  		<div class="input-group" style="width: 92%">
-  		{% endif %}
-  			<div class="col-md-6 col-lg-4 col-12 input-group form-group">
-  				<label class="control-label col-sm-5 col-5 mt-2" style="color:black;" for="cn">Class<span
-                                 class="text-danger">*</span></label>
-  				<select name="cn" class="cn custom-select form-control" required="required" onchange="selectclass(this)">
-  					<option selected value="{{ i.forclass }}">{{ i.forclass }}</option>
-  					{% for x in data %}
-  						{% if x.0 != i.forclass %}
-  							<option value="{{ x.0 }}">{{ x.0 }}</option>
-  						{% endif %}
-  					{% endfor %}
-  				</select>
-  			</div>
-  			<div class="col-md-6 col-lg-4 col-12 input-group form-group">
-  				<label class="control-label col-sm-5 col-5 mt-2" style="color:black;" for="ctn">Course<span
-                                 class="text-danger">*</span></label>
-  				<select name="ctn" class="ctn custom-select form-control" required="required" onchange="selectcourse(this)">
-  					<option selected value="{{i.courseName}}">{{ i.courseName }}</option>
-  				</select>
-  			</div>
-  			<div class="col-md-6 col-lg-4 col-12 input-group form-group">
-  				<label class="control-label col-sm-5 col-5 mt-2" style="color:black;" for="ttn">Teaching Type<span
-                                 class="text-danger">*</span></label>
-  				<select name="ttn" class="ttn custom-select form-control" required="required">
-  					<option selected value="{{i.teachType}}">{{ i.teachType }}</option>
-  				</select>
-  			</div>
-  			{% if forloop.counter != 1 %}
-  			</div>
-  			<div class="mx-auto">
-  				<button type="button" class="btn btn-success" onclick="removeDuplicate(this)">
-  					Remove
-  				</button>
-  			</div>
-  		{% endif %}
-  		</div>`)
-  	{% endfor %}
+	function prefill() {
+		{% if editTutor %}
+		{% for i in editTutor %}
+		$('.outside').append(`<div class="row entry">
+			{% if forloop.counter != 1 %}
+			<div class="input-group" style="width: 92%">
+			{% endif %}
+				<div class="col-md-6 col-lg-4 col-12 input-group form-group">
+					<label class="control-label col-sm-5 col-5 mt-2" style="color:black;" for="cn">Class<span
+                                class="text-danger">*</span></label>
+					<select name="cn" class="cn custom-select form-control" required="required" onchange="selectclass(this)">
+						<option selected value="{{ i.forclass }}">{{ i.forclass }}</option>
+						{% for x in data %}
+							{% if x.0 != i.forclass %}
+								<option value="{{ x.0 }}">{{ x.0 }}</option>
+							{% endif %}
+						{% endfor %}
+					</select>
+				</div>
+				<div class="col-md-6 col-lg-4 col-12 input-group form-group">
+					<label class="control-label col-sm-5 col-5 mt-2" style="color:black;" for="ctn">Course<span
+                                class="text-danger">*</span></label>
+					<select name="ctn" class="ctn custom-select form-control" required="required" onchange="selectcourse(this)">
+						<option selected value="{{i.courseName}}">{{ i.courseName }}</option>
+					</select>
+				</div>
+				<div class="col-md-6 col-lg-4 col-12 input-group form-group">
+					<label class="control-label col-sm-5 col-5 mt-2" style="color:black;" for="ttn">Teaching Type<span
+                                class="text-danger">*</span></label>
+					<select name="ttn" class="ttn custom-select form-control" required="required">
+						<option selected value="{{i.teachType}}">{{ i.teachType }}</option>
+					</select>
+				</div>
+				{% if forloop.counter != 1 %}
+				</div>
+				<div class="mx-auto">
+					<button type="button" class="btn btn-success" onclick="removeDuplicate(this)">
+						Remove
+					</button>
+				</div>
+			{% endif %}
+			</div>`)
+		{% endfor %}
 
-  	{% else %}
-  	$('.outside').append(`<div class="row entry">
-                         <div class="col-md-6 col-lg-4 col-12 input-group form-group">
-                             <label class="control-label col-sm-5 col-5 mt-2" style="color:black;" for="cn">Class<span class="text-danger">*</span></label>
-                             <select name="cn" class="cn custom-select form-control" required="required"
-                                 onchange="selectclass(this)">
-                                 <option disabled selected value="">Select an option</option>
-                                 {% for x in data %}
-                                 <option value="{{ x.0 }}">{{ x.0 }}</option>
-                                 {% endfor %}
-                             </select>
-                         </div>
-                         <div class="col-md-6 col-lg-4 col-12 input-group form-group">
-                             <label class="control-label col-sm-5 col-5 mt-2" style="color:black;" for="ctn">Course<span class="text-danger">*</span></label>
-                             <select name="ctn" class="ctn custom-select form-control" required="required"
-                                 onchange="selectcourse(this)">
-                                 <option disabled selected value="">Select an option</option>
-                             </select>
-                         </div>
-                         <div class="col-md-6 col-lg-4 col-12 input-group form-group">
-                             <label class="control-label col-sm-5 col-5 mt-2" style="color:black;" for="ttn">Teaching Type<span
-                                 class="text-danger">*</span></label>
-                             <select name="ttn" class="ttn custom-select form-control" required="required">
-                                 <option disabled selected value="">Select an option</option>
-                             </select>
+		{% else %}
+		$('.outside').append(`<div class="row entry">
+                        <div class="col-md-6 col-lg-4 col-12 input-group form-group">
+                            <label class="control-label col-sm-5 col-5 mt-2" style="color:black;" for="cn">Class<span class="text-danger">*</span></label>
+                            <select name="cn" class="cn custom-select form-control" required="required"
+                                onchange="selectclass(this)">
+                                <option disabled selected value="">Select an option</option>
+                                {% for x in data %}
+                                <option value="{{ x.0 }}">{{ x.0 }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="col-md-6 col-lg-4 col-12 input-group form-group">
+                            <label class="control-label col-sm-5 col-5 mt-2" style="color:black;" for="ctn">Course<span class="text-danger">*</span></label>
+                            <select name="ctn" class="ctn custom-select form-control" required="required"
+                                onchange="selectcourse(this)">
+                                <option disabled selected value="">Select an option</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6 col-lg-4 col-12 input-group form-group">
+                            <label class="control-label col-sm-5 col-5 mt-2" style="color:black;" for="ttn">Teaching Type<span
+                                class="text-danger">*</span></label>
+                            <select name="ttn" class="ttn custom-select form-control" required="required">
+                                <option disabled selected value="">Select an option</option>
+                            </select>
 
-                         </div>
-                     </div>`);
-  	{% endif %}
-  }
+                        </div>
+                    </div>`);
+		{% endif %}
+	}
 
-  $(document).on('ready', () => {
-  	prefill();
-  	if (performance.navigation.type == 2) {
-             location.reload();
-         }
-  });
+	$(document).on('ready', () => {
+		prefill();
+		if (performance.navigation.type == 2) {
+            location.reload();
+        }
+	});
 </script>
 {% endblock %}

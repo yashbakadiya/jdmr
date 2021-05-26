@@ -69,9 +69,9 @@
       <!-- Section A -->
       <h3 class="lead">Section A</h3>
       {% for question in questions %} {% if question.section == 'A' %}
-      <section style="display: inline">
+      <section style="display: inline;">
         <span>{{question.questionNo}}</span>
-        <section style="position: relative; top: -24px; margin-left: 60px">
+        <section style="position: relative; top: -24px; margin-left: 60px;">
           <pre>{{question.question | safe }} </pre>
         </section>
       </section>
@@ -81,9 +81,9 @@
       <!-- Section B -->
       <h3 class="lead">Section B</h3>
       {% for question in questions %} {% if question.section == 'B' %}
-      <section style="display: inline">
+      <section style="display: inline;">
         <span>{{question.questionNo}}</span>
-        <section style="position: relative; top: -24px; margin-left: 60px">
+        <section style="position: relative; top: -24px; margin-left: 60px;">
           <pre>{{question.question |safe}} </pre>
         </section>
       </section>
@@ -93,9 +93,9 @@
       <!-- Section C -->
       <h3 class="lead">Section C</h3>
       {% for question in questions %} {% if question.section == 'C' %}
-      <section style="display: inline">
+      <section style="display: inline;">
         <span>{{question.questionNo}}</span>
-        <section style="position: relative; top: -24px; margin-left: 60px">
+        <section style="position: relative; top: -24px; margin-left: 60px;">
           <pre>{{question.question | safe}} </pre>
         </section>
       </section>
@@ -105,9 +105,9 @@
       <!-- Section D -->
       <h3 class="lead">Section D</h3>
       {% for question in questions %} {% if question.section == 'D' %}
-      <section style="display: inline">
+      <section style="display: inline;">
         <span>{{question.questionNo}}</span>
-        <section style="position: relative; top: -24px; margin-left: 60px">
+        <section style="position: relative; top: -24px; margin-left: 60px;">
           <pre>{{question.question | safe}} </pre>
         </section>
       </section>
@@ -117,11 +117,11 @@
     </main>
 
     <footer class="text-center">
-      <div style="width: 100%; background-color: white">
+      <div style="width: 100%; background-color: white;">
         <a
           href="{% url 'tutor_start_exam' pk=exam.id %}"
           class="btn btn-outline-secondary btn-sm"
-          style="position: fixed; bottom: 0; width: 10%; height: 5%"
+          style="position: fixed; bottom: 0; width: 10%; height: 5%;"
           >Back</a
         >
       </div>

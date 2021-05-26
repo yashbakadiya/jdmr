@@ -1,348 +1,253 @@
-<link
-  href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css"
-  rel="stylesheet"
-  id="bootstrap-css"
-/>
+<link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
 <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
 <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 <!------ Include the above in your HEAD tag ---------->
 
 <!DOCTYPE html>
 <html>
-  <head>
-    <title>Sign Up</title>
-    <!--Made by Swapnil Singh -->
 
-    <!--Bootsrap 4 CDN-->
-    <link
-      rel="stylesheet"
-      href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
-      integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO"
-      crossorigin="anonymous"
-    />
+<head>
+	<title>Sign Up</title>
+	<!--Made by Swapnil Singh -->
 
-    <!--Fontawesome CDN-->
-    <link
-      rel="stylesheet"
-      href="https://use.fontawesome.com/releases/v5.3.1/css/all.css"
-      integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU"
-      crossorigin="anonymous"
-    />
-    <script
-      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCBJybI10-Xa43-F5GSad1i0Y9W3yqlW6Q&libraries=places&v=3"
-      defer
-    ></script>
-    <!--Custom styles-->
-    {% load static %}
-    <link
-      rel="stylesheet"
-      href="{% static 'css/stylessignupCoachingCentre.css' %}"
-      type="text/css"
-    />
-  </head>
-  <style>
-    body {
-      overflow: auto;
-    }
+	<!--Bootsrap 4 CDN-->
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
+		integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
 
-    .card {
-      height: auto;
-    }
+	<!--Fontawesome CDN-->
+	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css"
+		integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
+	<script
+		src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCBJybI10-Xa43-F5GSad1i0Y9W3yqlW6Q&libraries=places&v=3"
+		defer></script>
+	<!--Custom styles-->
+	{% load static %}
+	<link rel="stylesheet" href="{% static 'css/stylessignupCoachingCentre.css' %}" type="text/css">
+</head>
+<style>
+	body {
+		overflow: auto;
+	}
 
-    #map {
-      height: 100%;
-    }
+	.card {
+		height: auto;
+	}
 
-    #infowindow-content {
-      display: none;
-    }
+	#map {
+		height: 100%;
+	}
 
-    #map #infowindow-content {
-      display: inline;
-    }
+	#infowindow-content {
+		display: none;
+	}
 
-    .pac-card {
-      margin: 10px 10px 0 0;
-      border-radius: 2px 0 0 2px;
-      box-sizing: border-box;
-      -moz-box-sizing: border-box;
-      outline: none;
-      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
-      background-color: #fff;
-    }
+	#map #infowindow-content {
+		display: inline;
+	}
 
-    #pac-container {
-      padding-bottom: 12px;
-      margin-right: 12px;
-    }
+	.pac-card {
+		margin: 10px 10px 0 0;
+		border-radius: 2px 0 0 2px;
+		box-sizing: border-box;
+		-moz-box-sizing: border-box;
+		outline: none;
+		box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+		background-color: #fff;
+	}
 
-    .pac-controls {
-      display: inline-block;
-      padding: 5px 11px;
-    }
+	#pac-container {
+		padding-bottom: 12px;
+		margin-right: 12px;
+	}
 
-    .pac-controls label {
-      font-weight: 300;
-    }
+	.pac-controls {
+		display: inline-block;
+		padding: 5px 11px;
+	}
 
-    #pac-input {
-      text-overflow: ellipsis;
-    }
+	.pac-controls label {
+		font-weight: 300;
+	}
 
-    #pac-input:focus {
-      border-color: #4d90fe;
-    }
+	#pac-input {
+		text-overflow: ellipsis;
+	}
 
-    .pac-container {
-      z-index: 1100 !important;
-    }
-  </style>
+	#pac-input:focus {
+		border-color: #4d90fe;
+	}
 
-  <body>
-    <div class="container">
-      <div>
-        {% if messages %}
-        <div class="alert alert-warning" role="alert">
-          <ul class="messages">
-            {% for k in messages %}
-            <li style="color: darkred">{{ k }}</li>
-            {% endfor %}
-          </ul>
-        </div>
-        {% endif %}
-      </div>
-      <div class="d-flex justify-content-center h-100">
-        <div class="card">
-          <div class="card-header">
-            <h2 style="color: rgb(66, 8, 8)">Sign Up As Coaching Centre</h2>
-          </div>
-          <div class="card-body">
-            <form action="{% url 'Signup'%}" method="post">
-              {% csrf_token %}
-              <div class="input-group form-group">
-                <input type="hidden" name="type" value="Institute" />
-                <label class="control-label col-sm-4"
-                  >Institute name<span class="text-danger">*</span></label
-                >
-                <div class="input-group-prepend">
-                  <span class="input-group-text"
-                    ><i class="fas fa-university"></i
-                  ></span>
-                </div>
-                <input
-                  type="text"
-                  class="form-control"
-                  id="instituteName "
-                  name="name"
-                  placeholder="Institute name"
-                  value="{{prefil.instituteName}}"
-                  required
-                />
-              </div>
-              <div class="input-group form-group">
-                <label class="control-label col-sm-4"
-                  >Email Id<span class="text-danger">*</span></label
-                >
-                <div class="input-group-prepend">
-                  <span class="input-group-text"
-                    ><i class="fas fa-envelope"></i
-                  ></span>
-                </div>
-                <input
-                  type="email"
-                  class="form-control"
-                  id="email"
-                  name="email"
-                  placeholder="Email Address"
-                  value="{{prefil.email}}"
-                  required
-                />
-              </div>
+	.pac-container {
+		z-index: 1100 !important;
+	}
+</style>
 
-              <div class="input-group form-group">
-                <label class="control-label col-sm-4"
-                  >Set Password<span class="text-danger">*</span></label
-                >
-                <div class="input-group-prepend">
-                  <span class="input-group-text"
-                    ><i class="fas fa-key"></i
-                  ></span>
-                </div>
-                <input
-                  type="password"
-                  id="password"
-                  name="password"
-                  class="form-control pwd"
-                  value="{{ prefil.password }}"
-                  required
-                />
-                <span class="input-group-btn">
-                  <button class="btn btn-default reveal mt-1" type="button">
-                    <i class="fa fa-eye"></i>
-                  </button>
-                </span>
-              </div>
-              <div class="input-group form-group">
-                <label class="control-label col-sm-4"
-                  >Confirm Password<span class="text-danger">*</span></label
-                >
-                <div class="input-group-prepend">
-                  <span class="input-group-text"
-                    ><i class="fas fa-key"></i
-                  ></span>
-                </div>
-                <input
-                  type="password"
-                  id="confpassword"
-                  name="confpassword"
-                  class="form-control pwd"
-                  value="{{ prefil.confpassword }}"
-                  required
-                />
-                <span class="input-group-btn">
-                  <button class="btn btn-default reveal mt-1" type="button">
-                    <i class="fa fa-eye"></i>
-                  </button>
-                </span>
-              </div>
+<body>
+	<div class="container">
+		<div>
+			{% if messages %}
+			<div class="alert alert-warning" role="alert">
+				<ul class="messages">
+					{% for k in messages %}
+					<li style="color: darkred;">{{ k }}</li>
+					{% endfor %}
+				</ul>
+			</div>
+			{% endif %}
+		</div>
+		<div class="d-flex justify-content-center h-100">
+			<div class="card">
+				<div class="card-header">
+					<h2 style="color: rgb(66, 8, 8);">Sign Up As Coaching Centre</h2>
+				</div>
+				<div class="card-body">
+					<form action="{% url 'Signup'%}" method="post">{% csrf_token %}
+						<div class="input-group form-group">
+						<input type="hidden" name="type" value="Institute">
+							<label class="control-label col-sm-4">Institute name<span
+									class="text-danger">*</span></label>
+							<div class="input-group-prepend">
+								<span class="input-group-text"><i class="fas fa-university"></i></span>
+							</div>
+							<input type="text" class="form-control" id="instituteName " name='name'
+								placeholder="Institute name" value="{{prefil.instituteName}}" required>
+						</div>
+						<div class="input-group form-group">
+							<label class="control-label col-sm-4">Email Id<span class="text-danger">*</span></label>
+							<div class="input-group-prepend">
+								<span class="input-group-text"><i class="fas fa-envelope"></i></span>
+							</div>
+							<input type="email" class="form-control" id="email" name='email' placeholder="Email Address"
+								value="{{prefil.email}}" required>
+						</div>
+						
+						<div class="input-group form-group">
+							<label class="control-label col-sm-4">Set Password<span class="text-danger">*</span></label>
+							<div class="input-group-prepend">
+								<span class="input-group-text"><i class="fas fa-key"></i></span>
+							</div>
+							<input type="password" id="password" name='password' class="form-control pwd"
+								value="{{ prefil.password }}" required>
+							<span class="input-group-btn">
+								<button class="btn btn-default reveal mt-1" type="button"><i
+										class="fa fa-eye"></i></button>
+							</span>
 
-              <div class="input-group form-group">
-                <label class="control-label col-sm-4"
-                  >Phone Number<span class="text-danger">*</span></label
-                >
-                <div class="input-group-prepend">
-                  <span class="input-group-text"
-                    ><i class="fas fa-phone"></i
-                  ></span>
-                </div>
-                <input
-                  type="tel"
-                  class="form-control"
-                  id="phone"
-                  name="phone"
-                  placeholder="Phone Number"
-                  value="{{ prefil.phone }}"
-                  maxlength="10"
-                  pattern="\d{10}"
-                  type="number"
-                  required
-                />
-              </div>
-              <div class="input-group form-group">
-                <label class="control-label col-sm-4"
-                  >Location<span class="text-danger">*</span></label
-                >
-                <div class="input-group-prepend">
-                  <span class="input-group-text"
-                    ><i class="fas fa-location-arrow"></i
-                  ></span>
-                </div>
-                <input
-                  id="pac-input"
-                  type="text"
-                  class="controls form-control"
-                  name="address"
-                  placeholder="Search"
-                  required
-                  value="{{prefil.address}}"
-                /><button
-                  class="btn btn-info btn-sm"
-                  id="getUserLocation"
-                  type="button"
-                  name="getUserLocation"
-                >
-                  Get
-                </button>
-                <input type="hidden" id="cityLat" name="cityLat" />
-                <input type="hidden" id="cityLng" name="cityLng" />
-              </div>
+						</div>
+						<div class="input-group form-group">
+							<label class="control-label col-sm-4">Confirm Password<span
+									class="text-danger">*</span></label>
+							<div class="input-group-prepend">
+								<span class="input-group-text"><i class="fas fa-key"></i></span>
+							</div>
+							<input type="password" id="confpassword" name='confpassword' class="form-control pwd"
+								value="{{ prefil.confpassword }}" required>
+							<span class="input-group-btn">
+								<button class="btn btn-default reveal mt-1" type="button"><i
+										class="fa fa-eye"></i></button>
+							</span>
+						</div>
+						
+						<div class="input-group form-group">
+							<label class="control-label col-sm-4">Phone Number<span class="text-danger">*</span></label>
+							<div class="input-group-prepend">
+								<span class="input-group-text"><i class="fas fa-phone"></i></span>
+							</div>
+							<input type="tel" class="form-control" id="phone" name='phone' placeholder="Phone Number"
+								value="{{ prefil.phone }}" maxlength="10" pattern="\d{10}" type="number" required>
 
-              <div class="form-group">
-                <label class="control-label col-sm-4"
-                  ><span class="text-danger">Note :</span></label
-                >
-                <div class="col-md-12">
-                  <span class="text-muted">
-                    By clicking Sign Up, you agree to our
-                    <a href="#">Terms</a> and that you have read our
-                    <a href="#">Policy</a>, including our
-                    <a href="#">Cookie Use</a>.
-                  </span>
-                </div>
-              </div>
-              <div class="form-group text-center">
-                <input type="submit" value="Sign Up" class="btn signup_btn" />
-                <hr />
-              </div>
-            </form>
-          </div>
-        </div>
-      </div>
-    </div>
-    <script>
-      $(document).on("DOMContentLoaded", function () {
-        function showPosition(position) {
-          document.getElementById("pac-input").value = "processing...";
-          document.getElementById("cityLat").value = position.coords.latitude;
-          document.getElementById("cityLng").value = position.coords.longitude;
+						</div>
+						<div class="input-group form-group">
+							<label class="control-label col-sm-4">Location<span class="text-danger">*</span></label>
+							<div class="input-group-prepend">
+								<span class="input-group-text"><i class="fas fa-location-arrow"></i></span>
+							</div>
+							<input id="pac-input" type="text" class="controls form-control" name='address'
+								placeholder="Search" required value="{{prefil.address}}"><button class="btn btn-info btn-sm"
+								id="getUserLocation" type="button" name="getUserLocation">Get</button>
+							<input type="hidden" id="cityLat" name="cityLat" />
+							<input type="hidden" id="cityLng" name="cityLng" />
+						</div>
 
-          $.ajax({
-            type: "POST",
-            url: "/ajaxLocation/",
-            data: {
-              cityLat: position.coords.latitude,
-              cityLng: position.coords.longitude,
-              ajax: 1,
-            },
-            success: function (response) {
-              if (response.status == "success") {
-                document.getElementById("pac-input").value = response.result;
-              } else {
-                document.getElementById("pac-input").value = response.error;
-              }
-            },
-            error: function () {
-              document.getElementById("pac-input").value = "";
-            },
-          });
-        }
+						<div class="form-group">
+							<label class="control-label col-sm-4"><span class="text-danger">Note :</span></label>
+							<div class="col-md-12">
+								<span class="text-muted">
+									By clicking Sign Up, you agree to our <a href="#">Terms</a> and that you have read
+									our <a href="#">Policy</a>, including our <a href="#">Cookie Use</a>.
+								</span>
+							</div>
+						</div>
+						<div class="form-group text-center">
+							<input type="submit" value="Sign Up" class="btn signup_btn">
+							<hr>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+	<script>
+		$(document).on("DOMContentLoaded", function () {
+			function showPosition(position) {
+				document.getElementById('pac-input').value = "processing...";
+				document.getElementById('cityLat').value = position.coords.latitude;
+				document.getElementById('cityLng').value = position.coords.longitude;
 
-        function getLocation() {
-          if (navigator.geolocation) {
-            navigator.geolocation.getCurrentPosition(showPosition);
-          } else {
-            //  "Geolocation is not supported by this browser.";
-          }
-        }
-        $("#getUserLocation").on("click", getLocation);
+				$.ajax({
+					type: "POST",
+					url: "/ajaxLocation/",
+					data: {
+						'cityLat': position.coords.latitude,
+						'cityLng': position.coords.longitude,
+						'ajax': 1
+					},
+					success: function (response) {
+						if (response.status == 'success') {
+							document.getElementById('pac-input').value = response.result;
+						} else {
+							document.getElementById('pac-input').value = response.error;
+						}
+					},
+					error: function () {
+						document.getElementById('pac-input').value = "";
+					}
+				});
 
-        function initialize() {
-          var input = document.getElementById("pac-input");
-          var autocomplete = new google.maps.places.Autocomplete(input);
-          google.maps.event.addListener(
-            autocomplete,
-            "place_changed",
-            function () {
-              var place = autocomplete.getPlace();
-              document.getElementById("cityLat").value =
-                place.geometry.location.lat();
-              document.getElementById("cityLng").value =
-                place.geometry.location.lng();
-            }
-          );
-        }
+			}
 
-        initialize();
-      });
+			function getLocation() {
+				if (navigator.geolocation) {
+					navigator.geolocation.getCurrentPosition(showPosition);
+				} else {
+					//  "Geolocation is not supported by this browser.";
+				}
+			}
+			$("#getUserLocation").on("click", getLocation);
 
-      $(".reveal").on("click", function () {
-        var $pwd = $(".pwd");
-        if ($pwd.attr("type") === "password") {
-          $pwd.attr("type", "text");
-        } else {
-          $pwd.attr("type", "password");
-        }
-      });
-    </script>
-  </body>
+			function initialize() {
+				var input = document.getElementById('pac-input');
+				var autocomplete = new google.maps.places.Autocomplete(input);
+				google.maps.event.addListener(autocomplete, 'place_changed', function () {
+					var place = autocomplete.getPlace();
+					document.getElementById('cityLat').value = place.geometry.location.lat();
+					document.getElementById('cityLng').value = place.geometry.location.lng();
+				});
+			}
+
+			initialize();
+		});
+
+		$(".reveal").on('click', function () {
+			var $pwd = $(".pwd");
+			if ($pwd.attr('type') === 'password') {
+				$pwd.attr('type', 'text');
+			} else {
+				$pwd.attr('type', 'password');
+			}
+		});
+	</script>
+
+</body>
+
 </html>

@@ -1,8 +1,9 @@
-{% extends 'dashboard/student-dashboard.html' %} {% load static %} {% block
-main-content %}
+{% extends 'dashboard/student-dashboard.html' %}
+{% load static %}
+{% block main-content %}
 <div class="mt-5 card">
   <div class="card-header">
-    <h2 style="color: black">Results</h2>
+   <h2 style="color: black;">Results</h2>
   </div>
   <div class="card-body">
     <div class="accordion" id="accordionExample">
@@ -10,74 +11,38 @@ main-content %}
       <!-- rish make changes in bootstrap classes -->
       <div class="row border-bottom">
         <div class="col border-right text-center my-2">
-          <button
-            class="btn btn-info font-weight-bold"
-            type="button"
-            data-toggle="collapse"
-            data-target="#scorecard"
-            aria-expanded="true"
-            aria-controls="scorecard"
-          >
+          <button class="btn btn-info font-weight-bold" type="button" data-toggle="collapse" data-target="#scorecard"
+            aria-expanded="true" aria-controls="scorecard">
             Score Card
           </button>
         </div>
         <div class="col border-right text-center my-2">
-          <button
-            class="btn btn-info font-weight-bold"
-            type="button"
-            data-toggle="collapse"
-            data-target="#sectionreport"
-            aria-expanded="true"
-            aria-controls="sectionreport"
-          >
+          <button class="btn btn-info  font-weight-bold" type="button" data-toggle="collapse"
+            data-target="#sectionreport" aria-expanded="true" aria-controls="sectionreport">
             Section Report
           </button>
         </div>
         <div class="col border-right text-center my-2">
-          <button
-            class="btn btn-info font-weight-bold"
-            type="button"
-            data-toggle="collapse"
-            data-target="#timemanage"
-            aria-expanded="true"
-            aria-controls="timemanage"
-          >
+          <button class="btn btn-info  font-weight-bold" type="button" data-toggle="collapse" data-target="#timemanage"
+            aria-expanded="true" aria-controls="timemanage">
             Time Taken
           </button>
         </div>
         <div class="col border-right text-center my-2">
-          <button
-            class="btn btn-info font-weight-bold"
-            type="button"
-            data-toggle="collapse"
-            data-target="#questionreport"
-            aria-expanded="true"
-            aria-controls="questionreport"
-          >
+          <button class="btn btn-info  font-weight-bold" type="button" data-toggle="collapse"
+            data-target="#questionreport" aria-expanded="true" aria-controls="questionreport">
             Question Report
           </button>
         </div>
         <div class="col border-right text-center my-2">
-          <button
-            class="btn btn-info font-weight-bold"
-            type="button"
-            data-toggle="collapse"
-            data-target="#solution"
-            aria-expanded="true"
-            aria-controls="solution"
-          >
+          <button class="btn btn-info  font-weight-bold" type="button" data-toggle="collapse" data-target="#solution"
+            aria-expanded="true" aria-controls="solution">
             Solution
           </button>
         </div>
         <div class="col text-center my-2">
-          <button
-            class="btn btn-info font-weight-bold"
-            type="button"
-            data-toggle="collapse"
-            data-target="#comparereport"
-            aria-expanded="true"
-            aria-controls="comparereport"
-          >
+          <button class="btn btn-info  font-weight-bold" type="button" data-toggle="collapse"
+            data-target="#comparereport" aria-expanded="true" aria-controls="comparereport">
             Compare Report
           </button>
         </div>
@@ -106,9 +71,7 @@ main-content %}
                   <td>Incorrect Question: {{result.incorrect_qs_count}}</td>
                 </tr>
                 <tr>
-                  <td scope="row">
-                    Total Marks Of Test: {{result.total_marks}}
-                  </td>
+                  <td scope="row">Total Marks Of Test: {{result.total_marks}}</td>
                   <td>My Percentile: {{result.percentage}}</td>
                   <td>Right Marks: {{result.correct_qs_marks}}</td>
                   <td>Negative Marks: {{result.incorrect_qs_marks}}</td>
@@ -121,10 +84,7 @@ main-content %}
                 </tr>
                 <tr>
                   <td>Total Time: {{result.exam_duration}}</td>
-                  <td>
-                    My Time:
-                    <div class="time">{{result.time_taken}}</div>
-                  </td>
+                  <td>My Time: <div class="time">{{result.time_taken}}</div></td>
                   <td>My Rank: {{result.rank}}</td>
                   <td>
                     Result: {% if result.pass_status %}
@@ -134,11 +94,14 @@ main-content %}
                     {% endif %}
                   </td>
                 </tr>
+
               </tbody>
             </table>
           </div>
-          <hr />
+          <hr>
           <!-- end-->
+
+
 
           <!-- Char -->
           <div class="row">
@@ -157,65 +120,65 @@ main-content %}
         <div class="card-body">
           <div class="table-responsive border-bottom mb-3">
             <table class="table table-striped table-hover">
-              <tr>
-                <th scope="col">Section</th>
-                <th scope="col">Total Question</th>
-                <th scope="col">Correct/Incorrect Question</th>
-                <th scope="col">Positive Marks/Negative Marks</th>
-                <th scope="col">Unattempted Question/ Marks</th>
-              </tr>
-              <tr>
-                <th scope="row">A</th>
-                <td>{{section.A_section_count}}</td>
-                <td>
-                  {{section.A_section_correct_count}}/{{section.A_section_incorrect_count}}
-                </td>
-                <td>
-                  {{section.A_section_correct_marks}}/{{section.A_section_incorrect_marks}}
-                </td>
-                <td>
-                  {{section.A_section_unanswered}}/{{section.A_section_unanswered_marks}}
-                </td>
-              </tr>
-              <tr>
-                <th scope="row">B</th>
-                <td>{{section.B_section_count}}</td>
-                <td>
-                  {{section.B_section_correct_count}}/{{section.B_section_incorrect_count}}
-                </td>
-                <td>
-                  {{section.B_section_correct_marks}}/{{section.B_section_incorrect_marks}}
-                </td>
-                <td>
-                  {{section.B_section_unanswered}}/{{section.B_section_unanswered_marks}}
-                </td>
-              </tr>
-              <tr>
-                <th scope="row">C</th>
-                <td>{{section.C_section_count}}</td>
-                <td>
-                  {{section.C_section_correct_count}}/{{section.C_section_incorrect_count}}
-                </td>
-                <td>
-                  {{section.C_section_correct_marks}}/{{section.C_section_incorrect_marks}}
-                </td>
-                <td>
-                  {{section.C_section_unanswered}}/{{section.C_section_unanswered_marks}}
-                </td>
-              </tr>
-              <tr>
-                <th scope="row">D</th>
-                <td>{{section.D_section_count}}</td>
-                <td>
-                  {{section.D_section_correct_count}}/{{section.D_section_incorrect_count}}
-                </td>
-                <td>
-                  {{section.D_section_correct_marks}}/{{section.D_section_incorrect_marks}}
-                </td>
-                <td>
-                  {{section.D_section_unanswered}}/{{section.D_section_unanswered_marks}}
-                </td>
-              </tr>
+                <tr>
+                  <th scope="col">Section</th>
+                  <th scope="col">Total Question</th>
+                  <th scope="col">Correct/Incorrect Question</th>
+                  <th scope="col">Positive Marks/Negative Marks</th>
+                  <th scope="col">Unattempted Question/ Marks</th>
+                </tr>
+                <tr>
+                  <th scope="row">A</th>
+                  <td>{{section.A_section_count}}</td>
+                  <td>
+                    {{section.A_section_correct_count}}/{{section.A_section_incorrect_count}}
+                  </td>
+                  <td>
+                    {{section.A_section_correct_marks}}/{{section.A_section_incorrect_marks}}
+                  </td>
+                  <td>
+                    {{section.A_section_unanswered}}/{{section.A_section_unanswered_marks}}
+                  </td>
+                </tr>
+                <tr>
+                  <th scope="row">B</th>
+                  <td>{{section.B_section_count}}</td>
+                  <td>
+                    {{section.B_section_correct_count}}/{{section.B_section_incorrect_count}}
+                  </td>
+                  <td>
+                    {{section.B_section_correct_marks}}/{{section.B_section_incorrect_marks}}
+                  </td>
+                  <td>
+                    {{section.B_section_unanswered}}/{{section.B_section_unanswered_marks}}
+                  </td>
+                </tr>
+                <tr>
+                  <th scope="row">C</th>
+                  <td>{{section.C_section_count}}</td>
+                  <td>
+                    {{section.C_section_correct_count}}/{{section.C_section_incorrect_count}}
+                  </td>
+                  <td>
+                    {{section.C_section_correct_marks}}/{{section.C_section_incorrect_marks}}
+                  </td>
+                  <td>
+                    {{section.C_section_unanswered}}/{{section.C_section_unanswered_marks}}
+                  </td>
+                </tr>
+                <tr>
+                  <th scope="row">D</th>
+                  <td>{{section.D_section_count}}</td>
+                  <td>
+                    {{section.D_section_correct_count}}/{{section.D_section_incorrect_count}}
+                  </td>
+                  <td>
+                    {{section.D_section_correct_marks}}/{{section.D_section_incorrect_marks}}
+                  </td>
+                  <td>
+                    {{section.D_section_unanswered}}/{{section.D_section_unanswered_marks}}
+                  </td>
+                </tr>
             </table>
           </div>
           <canvas id="sectionchart"></canvas>
@@ -225,7 +188,7 @@ main-content %}
       <div id="timemanage" class="collapse" data-parent="#accordionExample">
         <div class="card-body">
           <div class="table-responsive border-bottom mb-3">
-            <table class="table table-hover table-striped">
+          <table class="table table-hover table-striped">
               <tr>
                 <th scope="col text-center">Section</th>
                 <th scope="col text-center">Total Question</th>
@@ -248,7 +211,7 @@ main-content %}
                 <td>
                   {{section.A_section_unanswered}}/{{section.A_section_unanswered_marks}}
                 </td>
-                <td><div class="time">{{section.A_section_time}}</div></td>
+                <td><div class="time">{{section.A_section_time}} </div></td>
               </tr>
               <tr>
                 <th scope="row">B</th>
@@ -263,7 +226,7 @@ main-content %}
                 <td>
                   {{section.B_section_unanswered}}/{{section.B_section_unanswered_marks}}
                 </td>
-                <td><div class="time">{{section.B_section_time}}</div></td>
+                <td><div class="time">{{section.B_section_time}} </div></td>
               </tr>
               <tr>
                 <th scope="row">C</th>
@@ -295,8 +258,8 @@ main-content %}
                 </td>
                 <td><div class="time">{{section.D_section_time}}</div></td>
               </tr>
-            </table>
-          </div>
+          </table>
+        </div>
           <canvas id="timegraph"></canvas>
         </div>
       </div>
@@ -304,29 +267,29 @@ main-content %}
       <div id="questionreport" class="collapse" data-parent="#accordionExample">
         <div class="card-body">
           <div class="table-responsive table-striped table-hover">
-            <table class="table">
-              <tr>
-                <th scope="col">Q.No</th>
-                <th scope="col">Question</th>
-                <th scope="col">Answer</th>
-                <th scope="col">Correct Answer</th>
-                <th scope="col">Max Marks</th>
-                <th scope="col">Your Score</th>
-                <th scope="col">Time</th>
-                <th scope="col">Extra Time</th>
-              </tr>
-              {% for q in questions %}
-              <tr>
-                <th scope="row">{{forloop.counter}}</th>
-                <td>{{q.question | safe }}</td>
-                <td>{{q.input_ans | safe }}</td>
-                <td>{{q.correct_ans | safe}}</td>
-                <td>{{q.marks}}</td>
-                <td>{{q.marks_given}}</td>
-                <td><div class="time">{{q.time}}</div></td>
-                <td><div class="time">{{q.extra_time}}</div></td>
-              </tr>
-              {% endfor %}
+            <table class="table ">
+                <tr>
+                  <th scope="col">Q.No</th>
+                  <th scope="col">Question</th>
+                  <th scope="col">Answer</th>
+                  <th scope="col">Correct Answer</th>
+                  <th scope="col">Max Marks</th>
+                  <th scope="col">Your Score</th>
+                  <th scope="col">Time</th>
+                  <th scope="col">Extra Time</th>
+                </tr>
+                {% for q in questions %}
+                <tr>
+                  <th scope="row">{{forloop.counter}}</th>
+                  <td>{{q.question | safe }}</td>
+                  <td>{{q.input_ans | safe }}</td>
+                  <td>{{q.correct_ans | safe}}</td>
+                  <td>{{q.marks}}</td>
+                  <td>{{q.marks_given}}</td>
+                  <td><div class="time">{{q.time}} </div></td>
+                  <td><div class="time">{{q.extra_time}}</div></td>
+                </tr>
+                {% endfor %}
             </table>
           </div>
         </div>
@@ -338,19 +301,16 @@ main-content %}
           <br />
           <div class="border p-2">
             <p class="border-bottom text-dark">
-              <strong>Question: {{forloop.counter}} </strong>{{q.question |
-              safe}}
+              <strong>Question: {{forloop.counter}} </strong>{{q.question | safe}}
             </p>
 
             <!-- Multiple -->
             {% if q.qtype == 'multiple' %}
-            <ul class="border-bottom ml-3" style="list-style-type: decimal">
+            <ul class="border-bottom ml-3" style="list-style-type: decimal;">
               {% for option in q.multiple.options.all %}
               <!--  -->
               {% if option.option == q.correct_ans %}
-              <li>
-                <span class="mr-2 fa fa-check"></span>{{option.option | safe}}
-              </li>
+              <li><span class="mr-2 fa fa-check"></span>{{option.option | safe}}</li>
               {% else %}
               <li>{{option.option | safe}}</li>
               {% endif %} {% endfor %}
@@ -358,17 +318,13 @@ main-content %}
 
             <!-- True or false -->
             {% elif q.qtype == 'tof' %}
-            <ul class="border-bottom ml-3" style="list-style-type: decimal">
+            <ul class="border-bottom ml-3" style="list-style-type: decimal;">
               {% if q.tof.option1 == q.correct_ans %}
-              <li>
-                <span class="mr-2 fa fa-check"></span>{{q.tof.option1 | safe}}
-              </li>
+              <li><span class="mr-2 fa fa-check"></span>{{q.tof.option1 | safe}}</li>
               {% else %}
               <li>{{q.tof.option1 | safe}}</li>
               {% endif %} {% if q.tof.option2 == q.correct_ans %}
-              <li>
-                <span class="mr-2 fa fa-check"></span>{{q.tof.option2 | safe}}
-              </li>
+              <li><span class="mr-2 fa fa-check"></span>{{q.tof.option2 | safe}}</li>
               {% else %}
               <li>{{q.tof.option2 | safe}}</li>
               {% endif %}
@@ -396,8 +352,7 @@ main-content %}
                 Marks Scored: {{q.marks_given}}
               </div>
               <div class="border-right col-3 text-dark">
-                Time Taken:
-                <div class="time">{{q.time}}</div>
+                Time Taken: <div class="time">{{q.time}}</div>
               </div>
             </div>
           </div>
@@ -409,9 +364,7 @@ main-content %}
         <div class="card-body">
           <div class="row mb-3">
             <div class="col-6 border-right">
-              <p style="color: black" class="text-center lead yr">
-                Your Result
-              </p>
+              <p style="color: black;" class="text-center lead yr">Your Result</p>
               <div class="row">
                 <div class="col text-dark">
                   Total Question: {{result.total_questions}}
@@ -422,31 +375,22 @@ main-content %}
               </div>
               <hr />
               <div class="row">
-                <div class="col text-dark">
-                  Maximum Marks: {{result.total_marks}}
-                </div>
-                <div class="col text-dark">
-                  Percentage: {{result.percentage}}
-                </div>
+                <div class="col text-dark">Maximum Marks: {{result.total_marks}}</div>
+                <div class="col text-dark">Percentage: {{result.percentage}}</div>
               </div>
               <hr />
               <div class="row">
                 <div class="col text-dark">
                   Attempted Question: {{result.q_answered}}
                 </div>
-                <div class="col text-dark">
-                  Percentile: {{result.percentile}}
-                </div>
+                <div class="col text-dark">Percentile: {{result.percentile}}</div>
               </div>
               <hr />
               <div class="row">
                 <div class="col text-dark">
                   Unattempted Question: {{result.q_unanswered}}
                 </div>
-                <div class="col text-dark">
-                  Total time:
-                  <div class="time">{{result.time_taken}}</div>
-                </div>
+                <div class="col text-dark">Total time: <div class="time">{{result.time_taken}} </div></div>
               </div>
               <hr />
               <div class="row">
@@ -465,9 +409,7 @@ main-content %}
               <hr />
             </div>
             <div class="col-6">
-              <p style="color: black" class="text-center lead tr">
-                Topper's Result
-              </p>
+              <p style="color: black;" class="text-center lead tr">Topper's Result</p>
               <div class="row">
                 <div class="col text-dark">
                   Total Question: {{topper.total_questions}}
@@ -478,31 +420,22 @@ main-content %}
               </div>
               <hr />
               <div class="row">
-                <div class="col text-dark">
-                  Maximum Marks: {{topper.total_marks}}
-                </div>
-                <div class="col text-dark">
-                  Percentage: {{topper.percentage}}
-                </div>
+                <div class="col text-dark">Maximum Marks: {{topper.total_marks}}</div>
+                <div class="col text-dark">Percentage: {{topper.percentage}}</div>
               </div>
               <hr />
               <div class="row">
                 <div class="col text-dark">
                   Attempted Question: {{topper.q_answered}}
                 </div>
-                <div class="col text-dark">
-                  Percentile: {{topper.percentile}}
-                </div>
+                <div class="col text-dark">Percentile: {{topper.percentile}}</div>
               </div>
               <hr />
               <div class="row">
                 <div class="col text-dark">
                   Unattempted Question: {{topper.q_unanswered}}
                 </div>
-                <div class="col text-dark">
-                  Total time:
-                  <div class="time">{{topper.time_taken}}</div>
-                </div>
+                <div class="col text-dark">Total time: <div class="time">{{topper.time_taken}} </div></div>
               </div>
               <hr />
               <div class="row">
@@ -529,146 +462,148 @@ main-content %}
 </div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.3.3/jspdf.min.js"></script>
 <script>
-    var allresults = {{json_allresults|safe}};
-    var result = {{json_result|safe}};
-    var details = {{details|safe}};
-    var topper_section = {{topper_section|safe}};
-    var section = {{section|safe}};
-    result = result[0].fields;
+  var allresults = {{json_allresults|safe}};
+  var result = {{json_result|safe}};
+  var details = {{details|safe}};
+  var topper_section = {{topper_section|safe}};
+  var section = {{section|safe}};
+  result = result[0].fields;
 
-    // Score Chart
-    var scorechart1 = document.getElementById("scoreChart1");
-    getChart(scorechart1, ['Topper', 'Me'], [allresults[0].marks_scored, result.marks_scored], 'bar');
-    var scorechart2 = document.getElementById("scoreChart2");
-    getChart(scorechart2,
-            ['Right Marks', 'Negative Marks', 'Correct Question', 'Incorrect Question'],
-            [details.correct_qs_marks, details.incorrect_qs_marks, details.correct_qs_count, details.incorrect_qs_count],
-            'pie',
-            )
+  // Score Chart
+  var scorechart1 = document.getElementById("scoreChart1");
+  getChart(scorechart1, ['Topper', 'Me'], [allresults[0].marks_scored, result.marks_scored], 'bar');
+  var scorechart2 = document.getElementById("scoreChart2");
+  getChart(scorechart2,
+          ['Right Marks', 'Negative Marks', 'Correct Question', 'Incorrect Question'],
+          [details.correct_qs_marks, details.incorrect_qs_marks, details.correct_qs_count, details.incorrect_qs_count],
+          'pie',
+          )
 
 
-    // Section Chart
-    data1 = topper_section
-    data2 = [section.A_marks, section.B_marks, section.C_marks, section.D_marks]
-    graph2(data1, data2)
+  // Section Chart
+  data1 = topper_section
+  data2 = [section.A_marks, section.B_marks, section.C_marks, section.D_marks]
+  graph2(data1, data2)
 
-    // Time Graph
-    var timechart = document.getElementById('timegraph')
-    getChart(timechart,
-    ['Section A','Section B','Section C','Section D',],
-    [section.A_section_time,section.B_section_time,section.C_section_time,section.D_section_time,],
-    'pie')
+  // Time Graph
+  var timechart = document.getElementById('timegraph')
+  getChart(timechart,
+  ['Section A','Section B','Section C','Section D',],
+  [section.A_section_time,section.B_section_time,section.C_section_time,section.D_section_time,],
+  'pie')
 
-    // Compare Report
-    var comparechart = document.getElementById('comparegraph')
-    labels = []
-    data = []
-    for (i=0;i<allresults.length;i++){
-      labels.push(`Topper ${i+1}`)
-      data.push(parseInt(allresults[i].percentage))
+  // Compare Report
+  var comparechart = document.getElementById('comparegraph')
+  labels = []
+  data = []
+  for (i=0;i<allresults.length;i++){
+    labels.push(`Topper ${i+1}`)
+    data.push(parseInt(allresults[i].percentage))
+  }
+  getChart(comparechart, labels, data, 'bar')
+
+  function getChart(ctx, labels, data, bar_type) {
+
+    if (bar_type == 'bar') {
+      option = {
+        scales: {
+            yAxes: [{
+                ticks: {
+                    beginAtZero: true
+                }
+            }]
+        }
     }
-    getChart(comparechart, labels, data, 'bar')
-
-    function getChart(ctx, labels, data, bar_type) {
-
-      if (bar_type == 'bar') {
+  }else{
         option = {
-          scales: {
-              yAxes: [{
-                  ticks: {
-                      beginAtZero: true
-                  }
-              }]
-          }
-      }
-    }else{
-          option = {
-          }
-    }
-      var myChart = new Chart(ctx, {
-        type: bar_type,
-        options: option,
-        data: {
-          labels: labels,
-          datasets: [
-            {
-              label: "Marks",
-              data: data,
-              backgroundColor: [
-              'red',
-              'blue',
-              'green',
-              'yellow',
-          ],
-            },
-          ],
-        },
-      });
-    };
-
-    function graph2(data1, data2){
-      var ctx = document.getElementById("sectionchart")
-      var data = {
-      labels: ["Section A", "Section B", "Section C", 'Section D'],
-      datasets: [
+        }
+  }
+    var myChart = new Chart(ctx, {
+      type: bar_type,
+      options: option,
+      data: {
+        labels: labels,
+        datasets: [
           {
-              label: "Topper Marks",
-              backgroundColor: "red",
-              data: data1
+            label: "Marks",
+            data: data,
+            backgroundColor: [
+            'red',
+            'blue',
+            'green',
+            'yellow',
+        ],
           },
-          {
-              label: "My Marks",
-              backgroundColor: "blue",
-              data: data2
-          },
-      ]
+        ],
+      },
+    });
   };
 
-  var myBarChart = new Chart(ctx, {
-      type: 'bar',
-      data: data,
-      options: {
-          barValueSpacing: 20,
-          scales: {
-              yAxes: [{
-                  ticks: {
-                      min: 0,
-                  }
-              }]
-          }
-      }
-  });
+  function graph2(data1, data2){
+    var ctx = document.getElementById("sectionchart")
+    var data = {
+    labels: ["Section A", "Section B", "Section C", 'Section D'],
+    datasets: [
+        {
+            label: "Topper Marks",
+            backgroundColor: "red",
+            data: data1
+        },
+        {
+            label: "My Marks",
+            backgroundColor: "blue",
+            data: data2
+        },
+    ]
+};
 
+var myBarChart = new Chart(ctx, {
+    type: 'bar',
+    data: data,
+    options: {
+        barValueSpacing: 20,
+        scales: {
+            yAxes: [{
+                ticks: {
+                    min: 0,
+                }
+            }]
+        }
+    }
+});
+
+  }
+
+  function PDFscorecard() {
+    var options = {};
+    var pdf = new jsPDF('landscape');
+    pdf.addHTML($('#scorecard'), 15, 15, options, function() {
+        pdf.save('ScoreCard.pdf');
+      })
     }
 
-    function PDFscorecard() {
-      var options = {};
-      var pdf = new jsPDF('landscape');
-      pdf.addHTML($('#scorecard'), 15, 15, options, function() {
-          pdf.save('ScoreCard.pdf');
-        })
-      }
 </script>
 <script>
-  $(document).ready(function () {
-    var time_divs = $(".time");
+  $( document ).ready(function() {
+    var time_divs = $('.time');
     for (let i = 0; i < time_divs.length; i++) {
       d = Number(time_divs[i].innerText);
       var h = Math.floor(d / 3600);
-      var m = Math.floor((d % 3600) / 60);
-      var s = Math.floor((d % 3600) % 60);
-
+      var m = Math.floor(d % 3600 / 60);
+      var s = Math.floor(d % 3600 % 60);
+  
       var hDisplay = h > 0 ? h + (h == 1 ? " hour, " : " hours, ") : "";
       var mDisplay = m > 0 ? m + (m == 1 ? " minute, " : " minutes, ") : "";
       var sDisplay = s > 0 ? s + (s == 1 ? " second" : " seconds") : "";
-
+      
       var final_time = hDisplay + mDisplay + sDisplay;
-      if (final_time == "") {
-        final_time = "0 seconds";
+      if (final_time=="")
+      {
+        final_time = "0 seconds"
       }
 
-      time_divs[i].innerHTML = final_time;
+      time_divs[i].innerHTML = final_time; 
     }
-  });
+});
 </script>
 {% endblock main-content %}

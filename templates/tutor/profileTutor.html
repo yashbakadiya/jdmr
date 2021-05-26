@@ -1,924 +1,632 @@
-{% extends 'tutor/dashboardTutor.html' %} {% load static %} {% block css %}
+{% extends 'tutor/dashboardTutor.html' %}
+{% load static %}
+{% block css %}
 
 <style media="screen">
-  @import url("https://fonts.googleapis.com/css?family=Numans");
+@import url('https://fonts.googleapis.com/css?family=Numans');
 
-  .container {
-    align-content: center;
-  }
+.container{
+align-content: center;
+}
 
-  .card {
-    margin-top: auto;
-    margin-bottom: auto;
-    background-color: white;
-    width: 95%;
-  }
+.card{
+margin-top: auto;
+margin-bottom: auto;
+background-color: white;
+width : 95%;
+}
 
-  .card-header h3 {
-    color: white;
-  }
+.card-header h3{
+color: white;
+}
 
-  .profileCard {
-    color: black;
-  }
+.profileCard{
+	color: black;
+}
 
-  .profileCard .col-sm-5,
-  .col-sm-6 {
-    display: flex;
-    justify-content: center;
-  }
-  .profileCard .row {
-    margin-bottom: 2rem;
-    margin-top: 2rem;
-  }
-  .profileCard .col-sm-5 {
-    font-weight: bold;
-  }
-  .form-inline input {
-    width: 100% !important;
-  }
+.profileCard .col-sm-5,.col-sm-6{
+	display:flex;
+	justify-content:center;
+}
+.profileCard .row{
+	margin-bottom:2rem;
+	margin-top:2rem;
+}
+.profileCard .col-sm-5{
+	font-weight:bold;
+}
+.form-inline input{
+	width:100% !important;
+}
 
-  .profileCard img {
-    max-width: 19rem;
-    max-height: 19rem;
-  }
+.profileCard img{
+ 	max-width:19rem;
+	max-height:19rem;
+}
 
-  .multiselect {
-    width: 100%;
-  }
-  .btn-group {
-    width: 90%;
-  }
-  .form-control {
-    width: 100% !important;
-  }
-  .sIm {
-    width: 100%;
-  }
-  .imgb {
-    padding: 5px;
-    margin: 0px;
-  }
+.multiselect{
+  width:100%;
+}
+.btn-group{
+  width:90%;
+}
+.form-control{
+    width:100% !important;
+}
+.sIm{
+	width: 100%;
+}
+.imgb{
+	padding: 5px;
+	margin: 0px;
+}
 </style>
 
-{% endblock %} {% block body %}
+{% endblock %}
+{% block body %}
 <link rel="stylesheet" href="{% static 'css/croppie.css' %}" />
 <script src="{% static 'js/croppie.min.js' %}"></script>
-<script
-  src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCBJybI10-Xa43-F5GSad1i0Y9W3yqlW6Q&libraries=places&v=3"
-  defer
-></script>
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCBJybI10-Xa43-F5GSad1i0Y9W3yqlW6Q&libraries=places&v=3" defer></script>
 <div class="container">
-  <div>
-    {% if messages %}
-    <div class="alert alert-warning" role="alert">
-      <ul class="messages">
-        {% for k in messages %}
-        <li style="color: darkred">{{ k }}</li>
-        {% endfor %}
-      </ul>
-    </div>
-    {% endif %}
-  </div>
-  <div class="d-flex justify-content-center h-100">
-    <div class="card">
-      <div class="card-header">
-        <div class="row">
-          <div class="col-sm">
-            <h2 style="color: rgb(66, 8, 8)">My Profile</h2>
-          </div>
-        </div>
-      </div>
-      <form enctype="multipart/form-data" method="post">
-        {% csrf_token %}
+	<div>
+		{% if messages %}
+			<div class="alert alert-warning" role="alert">
+				<ul class="messages">
+					{% for k in messages %}
+						<li style="color: darkred;">{{ k }}</li>
+					{% endfor %}
+				</ul>
+			</div>
+		{% endif %}
+	</div>
+	<div class="d-flex justify-content-center h-100">
+		<div class="card">
+			<div class="card-header">
+		        <div class="row">
+		        	<div class="col-sm"><h2 style="color: rgb(66, 8, 8);">My Profile</h2></div>
+		        </div>
+			</div>
+			<form enctype="multipart/form-data" method="post">{% csrf_token %}
 
-        <div class="card-body container">
-          <div class="row">
-            <div class="col-sm-12 profileCard">
-              <div class="row d-flex justify-content-center">
-                <div class="col-sm-4">
-                  {% if tutor.signupTutorContinued.all.0.photo %}
-                  <img
-                    id="preview"
-                    src="{{tutor.signupTutorContinued.all.0.photo.url}}"
-                    alt="Not Found"
-                  />
-                  {% else %} {% if tutor.signupTutorContinued.all.0.avatar != 0
-                  %}
-                  <img
-                    id="preview"
-                    src="{% static 'avatars/' %}{{tutor.signupTutorContinued.all.0.avatar}}.jpg"
-                    alt="Not Found"
-                  />
-                  {% else %} {% if tutor.signupTutorContinued.all.0.gender ==
-                  "Male" %}
-                  <img
-                    id="preview"
-                    src="{% static 'default-male.jpg' %}"
-                    alt="Default Not Found"
-                  />
-                  {% else %}
-                  <img
-                    id="preview"
-                    src="{% static 'default-female.jpg' %}"
-                    alt="Default Not Found"
-                  />
-                  {% endif %} {% endif %} {% endif %}
-                </div>
-              </div>
-              <div class="row d-flex justify-content-center">
-                <div class="col-sm-2">Change :</div>
-                <div class="col-sm-6">
-                  <input id="uploadImage" type="file" value="" />
-                  <input id="ImageToServer" type="hidden" name="photo" />
-                  <button
-                    type="button"
-                    class="btn-primary btn-sm"
-                    name="button"
-                    style="margin-left: 1rem"
-                    data-toggle="modal"
-                    data-target="#profile_images"
-                    style="border: 1px solid black"
-                  >
-                    Choose&nbsp;&nbsp;Avatar
-                  </button>
-                </div>
-              </div>
-              <!-- cropping modal starts -->
-              <div
-                class="modal fade"
-                id="imageCropperModal"
-                tabindex="-1"
-                role="dialog"
-                aria-labelledby="imageCropperModal"
-                aria-hidden="true"
-              >
-                <div class="modal-dialog modal-lg" role="document">
-                  <div class="modal-content">
-                    <div class="modal-body" style="text-align: center">
-                      <div id="upload_cropper"></div>
-                    </div>
-                    <div class="modal-footer">
-                      <button
-                        type="button"
-                        data-target="#imageCropperModal"
-                        data-toggle="modal"
-                        class="btn btn-danger"
-                        name="button"
-                      >
-                        Cancel
-                      </button>
-                      <button
-                        id="saveCroppedImage"
-                        class="btn btn-warning"
-                        type="button"
-                        name="button"
-                      >
-                        Save
-                      </button>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <!-- modal ends -->
+			<div class="card-body container">
+				<div class="row">
+					<div class="col-sm-12 profileCard">
+						<div class="row d-flex justify-content-center">
+							<div class="col-sm-4">
+								{% if tutor.signupTutorContinued.all.0.photo %}
+								<img id="preview" src="{{tutor.signupTutorContinued.all.0.photo.url}}" alt="Not Found">
+								{% else %}
+									{% if tutor.signupTutorContinued.all.0.avatar != 0 %}
+										<img id="preview" src="{% static 'avatars/' %}{{tutor.signupTutorContinued.all.0.avatar}}.jpg" alt="Not Found">
+									{% else %}
+	                                    {% if tutor.signupTutorContinued.all.0.gender == "Male" %}
+				                            <img id="preview" src="{% static 'default-male.jpg' %}" alt="Default Not Found">
+	                                    {% else %}
+	                                        <img id="preview" src="{% static 'default-female.jpg' %}" alt="Default Not Found">
+	                                    {% endif %}
+									{% endif %}
+								{% endif %}
+							</div>
+						</div>
+						<div class="row d-flex justify-content-center">
+							<div class="col-sm-2">
+								Change :
+							</div>
+							<div class="col-sm-6">
+								<input id="uploadImage" type="file" value="">
+								<input id="ImageToServer" type="hidden" name="photo">
+								<button type="button" class="btn-primary btn-sm" name="button" style="margin-left:1rem" data-toggle="modal" data-target="#profile_images" style="border:1px solid black">Choose&nbsp;&nbsp;Avatar</button>
+							</div>
+						</div>
+<!-- cropping modal starts -->
+	<div class="modal fade" id="imageCropperModal" tabindex="-1" role="dialog" aria-labelledby="imageCropperModal" aria-hidden="true">
+	  <div class="modal-dialog modal-lg" role="document">
+	    <div class="modal-content">
+	      	<div class="modal-body" style="text-align: center;">
+				<div id="upload_cropper">
+				</div>
+	      	</div>
+		  	<div class="modal-footer">
+				<button type="button" data-target="#imageCropperModal" data-toggle="modal" class="btn btn-danger" name="button">Cancel</button>
+		  		<button id="saveCroppedImage" class="btn btn-warning" type="button" name="button">Save</button>
+	  		</div>
+	    </div>
+	  </div>
+	</div>
+<!-- modal ends -->
 
-              <!-- modal here -->
-              <div
-                class="modal fade"
-                id="otpModal"
-                tabindex="-1"
-                role="dialog"
-                aria-labelledby="otpModal"
-                aria-hidden="true"
-              >
-                <div class="modal-dialog modal-sm" role="document">
-                  <div class="modal-content">
-                    <form method="post">
-                      <div class="modal-body" style="text-align: center">
-                        <input
-                          value="{{tutor.email}}"
-                          type="hidden"
-                          class="form-control"
-                          id="email"
-                          name="email"
-                          disabled
-                          hidden
-                        />
-                        <div class="row form-inline">
-                          <div class="col-sm-4">OTP :</div>
-                          <div class="col-sm-7">
-                            <input
-                              type="text"
-                              class="form-control"
-                              id="otp"
-                              name="otp"
-                              placeholder="otp"
-                            />
-                          </div>
-                        </div>
-                      </div>
-                      <div class="modal-footer">
-                        <button
-                          type="Submit"
-                          class="btn btn-danger"
-                          name="otpReceived"
-                        >
-                          Confirm
-                        </button>
-                        <button
-                          type="button"
-                          data-target="#otpModal"
-                          data-toggle="modal"
-                          class="btn btn-danger"
-                          name="button"
-                        >
-                          Cancel
-                        </button>
-                      </div>
-                    </form>
-                  </div>
-                </div>
-              </div>
-
-              <!-- css from top -->
-              <!-- .sIm -->
-              <!-- .imgb -->
-
-              <div
-                class="modal fade"
-                id="profile_images"
-                tabindex="-1"
-                role="dialog"
-                aria-labelledby="profile_images"
-                aria-hidden="true"
-                style="position: absolute; left: 75%"
-              >
-                <div class="modal-dialog modal-sm" role="document">
-                  <div class="modal-content">
-                    <div class="modal-header">
-                      <h5
-                        class="
-                          modal-title
-                          d-flex
-                          justify-content-center
-                          col-sm-12
-                        "
-                        style="color: rgb(66, 8, 8); text-align: center"
-                      >
-                        Avatars
-                      </h5>
-                    </div>
-
-                    <div
-                      class="modal-body"
-                      style="text-align: center; padding: 2%"
-                    >
-                      <div class="row" style="padding: 0px; margin: 0px">
-                        <div class="col-sm-4 imgb">
-                          <img
-                            id="img1"
-                            src="{% static 'avatars/1.jpg' %}"
-                            class="sIm"
-                            onclick="imgSel(this)"
-                            style="padding: 0px; margin: 0px"
-                          />
-                        </div>
-                        <div class="col-sm-4 imgb">
-                          <img
-                            id="img2"
-                            src="{% static 'avatars/2.jpg' %}"
-                            class="sIm"
-                            onclick="imgSel(this)"
-                          />
-                        </div>
-                        <div class="col-sm-4 imgb">
-                          <img
-                            id="img3"
-                            src="{% static 'avatars/3.jpg' %}"
-                            class="sIm"
-                            onclick="imgSel(this)"
-                          />
-                        </div>
-                      </div>
-                      <div class="row" style="padding: 0px; margin: 0px">
-                        <div class="col-sm-4 imgb">
-                          <img
-                            id="img4"
-                            src="{% static 'avatars/4.jpg' %}"
-                            class="sIm"
-                            onclick="imgSel(this)"
-                          />
-                        </div>
-                        <div class="col-sm-4 imgb">
-                          <img
-                            id="img5"
-                            src="{% static 'avatars/5.jpg' %}"
-                            class="sIm"
-                            onclick="imgSel(this)"
-                          />
-                        </div>
-                        <div class="col-sm-4 imgb">
-                          <img
-                            id="img6"
-                            src="{% static 'avatars/6.jpg' %}"
-                            class="sIm"
-                            onclick="imgSel(this)"
-                          />
-                        </div>
-                      </div>
-                      <div class="row" style="padding: 0px; margin: 0px">
-                        <div class="col-sm-4 imgb">
-                          <img
-                            id="img7"
-                            src="{% static 'avatars/7.jpg' %}"
-                            class="sIm"
-                            onclick="imgSel(this)"
-                          />
-                        </div>
-                        <div class="col-sm-4 imgb">
-                          <img
-                            id="img8"
-                            src="{% static 'avatars/8.jpg' %}"
-                            class="sIm"
-                            onclick="imgSel(this)"
-                          />
-                        </div>
-                        <div class="col-sm-4 imgb">
-                          <img
-                            id="img9"
-                            src="{% static 'avatars/9.jpg' %}"
-                            class="sIm"
-                            onclick="imgSel(this)"
-                          />
-                        </div>
-                      </div>
-                      <div class="row" style="padding: 0px; margin: 0px">
-                        <div class="col-sm-4 imgb">
-                          <img
-                            id="img10"
-                            src="{% static 'avatars/10.jpg' %}"
-                            class="sIm"
-                            onclick="imgSel(this)"
-                          />
-                        </div>
-                        <div class="col-sm-4 imgb">
-                          <img
-                            id="img11"
-                            src="{% static 'avatars/11.jpg' %}"
-                            class="sIm"
-                            onclick="imgSel(this)"
-                          />
-                        </div>
-                        <div class="col-sm-4 imgb">
-                          <img
-                            id="img12"
-                            src="{% static 'avatars/12.jpg' %}"
-                            class="sIm"
-                            onclick="imgSel(this)"
-                          />
-                        </div>
-                      </div>
-                      <button
-                        type="button"
-                        class="btn btn-danger"
-                        data-dismiss="modal"
-                        style="margin-top: 10%"
-                      >
-                        Close
-                      </button>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              <!-- modal ends -->
-              <br />
-              <br />
-              <div class="row form-inline">
-                <div class="col-sm-5">
-                  First Name<span class="text-danger">*</span>
-                </div>
-                <div class="col-sm-1">:</div>
-                <div class="col-sm-6">
-                  <div class="input-group-prepend">
-                    <span class="input-group-text"
-                      ><i class="fas fa-user"></i
-                    ></span>
-                  </div>
-                  <input
-                    value="{{tutor.firstName}}"
-                    type="text"
-                    class="form-control"
-                    id="firstName "
-                    name="firstName"
-                    placeholder="First name"
-                    required
-                  />
-                </div>
-              </div>
-
-              <div class="row form-inline">
-                <div class="col-sm-5">
-                  Last Name<span class="text-danger">*</span>
-                </div>
-                <div class="col-sm-1">:</div>
-                <div class="col-sm-6">
-                  <div class="input-group-prepend">
-                    <span class="input-group-text"
-                      ><i class="fas fa-user"></i
-                    ></span>
-                  </div>
-                  <input
-                    value="{{tutor.lastName}}"
-                    type="text"
-                    class="form-control"
-                    id="lastName "
-                    name="lastName"
-                    placeholder="Last name"
-                  />
-                </div>
-              </div>
-
-              <div class="row form-inline">
-                <div class="col-sm-5">
-                  Email<span class="text-danger">*</span>
-                </div>
-                <div class="col-sm-1">:</div>
-                <div class="col-sm-6">
-                  <div class="input-group-prepend">
-                    <span class="input-group-text"
-                      ><i class="fas fa-user"></i
-                    ></span>
-                  </div>
-                  <input
-                    value="{{tutor.email}}"
-                    type="text"
-                    class="form-control"
-                    id="email "
-                    name="email"
-                    placeholder="Email Address"
-                    disabled
-                  />
-                  {% if not tutor.emailValidated %}<button
-                    class="btn btn-info btn-sm"
-                    id="getOTP"
-                    type="button"
-                    name="getOTP"
-                  >
-                    Get OTP</button
-                  >{% endif %}
-                </div>
-              </div>
-
-              <div class="row form-inline">
-                <div class="col-sm-5">
-                  Phone No.<span class="text-danger">*</span>
-                </div>
-                <div class="col-sm-1">:</div>
-                <div class="col-sm-6">
-                  <div class="input-group-prepend">
-                    <span class="input-group-text"
-                      ><i class="fas fa-phone"></i
-                    ></span>
-                  </div>
-                  <input
-                    value="{{tutor.phone}}"
-                    type="tel"
-                    class="form-control"
-                    id="phone"
-                    name="phone"
-                    placeholder="Phone Number"
-                    required
-                  />
-                </div>
-              </div>
-
-              <div class="row form-inline">
-                <div class="col-sm-5">
-                  Old Password<span class="text-danger">*</span>
-                </div>
-                <div class="col-sm-1">:</div>
-                <div class="col-sm-6">
-                  <div class="input-group-prepend">
-                    <span class="input-group-text"
-                      ><i class="fas fa-key"></i
-                    ></span>
-                  </div>
-                  <input
-                    value=""
-                    type="password"
-                    class="form-control"
-                    id="oldpassword"
-                    name="oldPassword"
-                    placeholder="Password"
-                    required
-                  />
-                </div>
-              </div>
-
-              <div class="row form-inline">
-                <div class="col-sm-5">
-                  New Password<span class="text-danger">*</span>
-                </div>
-                <div class="col-sm-1">:</div>
-                <div class="col-sm-6">
-                  <div class="input-group-prepend">
-                    <span class="input-group-text"
-                      ><i class="fas fa-key"></i
-                    ></span>
-                  </div>
-                  <input
-                    value=""
-                    type="password"
-                    class="form-control"
-                    id="newPassword"
-                    name="newPassword"
-                    placeholder="Password"
-                    required
-                  />
-                </div>
-              </div>
-
-              <div class="row form-inline">
-                <div class="col-sm-5">
-                  Confirm Password<span class="text-danger">*</span>
-                </div>
-                <div class="col-sm-1">:</div>
-                <div class="col-sm-6">
-                  <div class="input-group-prepend">
-                    <span class="input-group-text"
-                      ><i class="fas fa-key"></i
-                    ></span>
-                  </div>
-                  <input
-                    value=""
-                    type="password"
-                    class="form-control"
-                    id="confirmPassword"
-                    name="confirmPassword"
-                    placeholder="Password"
-                    required
-                  />
-                </div>
-              </div>
-
-              <div class="row form-inline">
-                <div class="col-sm-5">
-                  Location<span class="text-danger">*</span>
-                </div>
-                <div class="col-sm-1">:</div>
-                <div class="col-sm-6">
-                  <div class="input-group-prepend">
-                    <span class="input-group-text"
-                      ><i class="fas fa-location-arrow"></i
-                    ></span>
-                  </div>
-                  <input
-                    value="{{tutor.location}}"
-                    id="pac-input"
-                    type="text"
-                    class="controls form-control"
-                    name="loc"
-                    placeholder="Search"
-                    required
-                  /><button
-                    class="btn btn-info btn-sm"
-                    id="getUserLocation"
-                    type="button"
-                    name="getUserLocation"
-                  >
-                    Get
-                  </button>
-                  <input
-                    type="hidden"
-                    id="cityLat"
-                    name="cityLat"
-                    value="{{tutor.latitude}}"
-                  />
-                  <input
-                    type="hidden"
-                    id="cityLng"
-                    name="cityLng"
-                    value="{{tutor.longitude}}"
-                  />
-                </div>
-              </div>
-
-              <div class="row form-inline">
-                <div class="col-sm-5">
-                  Availability<span class="text-danger">*</span>
-                </div>
-                <div class="col-sm-1">:</div>
-                <div class="col-sm-6">
-                  <select
-                    value="{{tutor.signupTutorContinued.all.0.availability}}"
-                    name="availability"
-                    class="custom-select form-control multiselect1"
-                    required
-                    multiple
-                  >
-                    <option disabled>Select an option</option>
-                    <option value="Online Tutor">Online Tutor</option>
-                    <option value="Institute">Institute</option>
-                    <option value="Home Tutor">Home Tutor</option>
-                    <option value="Assignment Solutions">
-                      Assignment Solutions
-                    </option>
-                  </select>
-                </div>
-              </div>
-
-              <div class="row form-inline">
-                <div class="col-sm-5">
-                  Qualification<span class="text-danger">*</span>
-                </div>
-                <div class="col-sm-1">:</div>
-                <div class="col-sm-6">
-                  <div class="input-group-prepend">
-                    <span class="input-group-text"
-                      ><i class="fas fa-user"></i
-                    ></span>
-                  </div>
-                  <input
-                    value="{{tutor.signupTutorContinued.all.0.qualification}}"
-                    type="text"
-                    class="form-control"
-                    id="Qualification"
-                    name="qualification"
-                    placeholder="Qualification"
-                    required
-                  />
-                </div>
-              </div>
-
-              <div class="row form-inline">
-                <div class="col-sm-5">
-                  Experience<span class="text-danger">*</span>
-                </div>
-                <div class="col-sm-1">:</div>
-                <div class="col-sm-6">
-                  <div class="input-group-prepend">
-                    <span class="input-group-text"
-                      ><i class="fas fa-envelope"></i
-                    ></span>
-                  </div>
-                  <input
-                    value="{{tutor.signupTutorContinued.all.0.experience}}"
-                    type="text"
-                    class="form-control"
-                    id="Experience"
-                    name="experience"
-                    placeholder="Experience"
-                  />
-                </div>
-              </div>
-
-              <div class="row form-inline">
-                <div class="col-sm-5">
-                  Description<span class="text-danger">*</span>
-                </div>
-                <div class="col-sm-1">:</div>
-                <div class="col-sm-6">
-                  <div class="input-group-prepend">
-                    <span class="input-group-text"
-                      ><i class="fa fa-map-marker"></i
-                    ></span>
-                  </div>
-                  <textarea
-                    class="form-control"
-                    id="Description"
-                    name="description"
-                    placeholder="About Yourself"
-                    required
-                  >
-{{tutor.signupTutorContinued.all.0.description}}</textarea
-                  >
-                </div>
-              </div>
-
-              <div class="row form-inline">
-                <div class="col-sm-5">
-                  Free Demo Available<span class="text-danger">*</span>
-                </div>
-                <div class="col-sm-1">:</div>
-                <div class="col-sm-6">
-                  <input {% if tutor.signupTutorContinued.all.0.freeDemo == 1 %}
-                  checked {% endif %} type="checkbox" name="fda" value="1"
-                  style="width: 2em;height: 2em">
-                </div>
-              </div>
-
-              <div class="row form-inline">
-                <div class="col-sm-5">
-                  Gender<span class="text-danger">*</span>
-                </div>
-                <div class="col-sm-1">:</div>
-                <div class="col-sm-6">
-                  <select
-                    value="{{tutor.signupTutorContinued.all.0.gender}}"
-                    id="gender"
-                    name="gender"
-                    class="custom-select form-control"
-                    required
-                  >
-                    <option disabled>Select an option</option>
-                    <option value="Male">Male</option>
-                    <option value="Female">Female</option>
-                  </select>
-                </div>
-              </div>
-
-              <div class="row form-inline">
-                <div class="col-sm-5">
-                  Fees<span class="text-danger">*</span>
-                </div>
-                <div class="col-sm-1">:</div>
-                <div class="col-sm-6">
-                  <input
-                    type="number"
-                    value="{{tutor.signupTutorContinued.all.0.fees}}"
-                    step="0.01"
-                    class="form-control"
-                    id="fees"
-                    name="fees"
-                  />
-                </div>
-              </div>
-
-              <div class="row form-inline">
-                <div class="col-sm-5">
-                  Distance(in Km)<span class="text-danger">*</span>
-                </div>
-                <div class="col-sm-1">:</div>
-                <div class="col-sm-6">
-                  <input
-                    type="number"
-                    value="{{tutor.distance}}"
-                    class="form-control"
-                    id="distance"
-                    name="distance"
-                    placeholder="Distance(Km)"
-                    required
-                    value="{{ prefil.distance }}"
-                  />
-                </div>
-              </div>
-
-              <hr />
-              <div class="row d-flex justify-content-end">
-                <div class="col-sm-2">
-                  <input
-                    type="submit"
-                    value="Save Changes"
-                    class="btn btn-warning"
-                  />
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </form>
+<!-- modal here -->
+<div class="modal fade" id="otpModal" tabindex="-1" role="dialog" aria-labelledby="otpModal" aria-hidden="true">
+  <div class="modal-dialog modal-sm" role="document">
+    <div class="modal-content">
+		<form method="post">
+      		<div class="modal-body" style="text-align: center;">
+				<input value="{{tutor.email}}" type="hidden" class="form-control" id="email" name='email' disabled hidden>
+				<div class="row form-inline">
+					<div class="col-sm-4">
+						OTP :
+					</div>
+					<div class="col-sm-7">
+						<input type="text" class="form-control" id="otp" name='otp' placeholder="otp">
+					</div>
+				</div>
+			</div>
+		  	<div class="modal-footer">
+				<button type="Submit" class="btn btn-danger" name="otpReceived">Confirm</button>
+				<button type="button" data-target="#otpModal" data-toggle="modal" class="btn btn-danger" name="button">Cancel</button>
+	  		</div>
+		</form>
     </div>
   </div>
 </div>
+
+<!-- css from top -->
+<!-- .sIm -->
+<!-- .imgb -->
+
+<div class="modal fade" id="profile_images" tabindex="-1" role="dialog" aria-labelledby="profile_images" aria-hidden="true" style="position: absolute;left: 75%">
+  <div class="modal-dialog modal-sm" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title d-flex justify-content-center col-sm-12" style="color: rgb(66, 8, 8); text-align: center;">Avatars</h5>
+      </div>
+
+      <div class="modal-body" style="text-align: center;padding:2%;">
+      	<div class="row" style="padding: 0px;margin: 0px">
+        	<div class="col-sm-4 imgb" >
+        		<img id='img1' src="{% static 'avatars/1.jpg' %}" class="sIm" onclick="imgSel(this)" style="padding: 0px;margin: 0px">
+        	</div>
+        	<div class="col-sm-4 imgb">
+        		<img id='img2' src="{% static 'avatars/2.jpg' %}" class="sIm" onclick="imgSel(this)">
+        	</div>
+        	<div class="col-sm-4 imgb">
+        		<img id='img3' src="{% static 'avatars/3.jpg' %}" class="sIm" onclick="imgSel(this)">
+        	</div>
+        </div>
+        <div class="row" style="padding: 0px;margin: 0px">
+        	<div class="col-sm-4 imgb">
+        		<img id='img4' src="{% static 'avatars/4.jpg' %}" class="sIm" onclick="imgSel(this)">
+        	</div>
+        	<div class="col-sm-4 imgb">
+        		<img id='img5' src="{% static 'avatars/5.jpg' %}" class="sIm" onclick="imgSel(this)">
+        	</div>
+        	<div class="col-sm-4 imgb">
+        		<img id='img6' src="{% static 'avatars/6.jpg' %}" class="sIm" onclick="imgSel(this)">
+        	</div>
+        </div>
+        <div class="row" style="padding: 0px;margin: 0px">
+        	<div class="col-sm-4 imgb">
+        		<img id='img7' src="{% static 'avatars/7.jpg' %}" class="sIm" onclick="imgSel(this)" >
+        	</div>
+        	<div class="col-sm-4 imgb">
+        		<img id='img8' src="{% static 'avatars/8.jpg' %}" class="sIm" onclick="imgSel(this)">
+        	</div>
+        	<div class="col-sm-4 imgb">
+        		<img id='img9' src="{% static 'avatars/9.jpg' %}" class="sIm" onclick="imgSel(this)">
+        	</div>
+        </div>
+        <div class="row" style="padding: 0px;margin: 0px">
+        	<div class="col-sm-4 imgb">
+        		<img id='img10' src="{% static 'avatars/10.jpg' %}" class="sIm" onclick="imgSel(this)">
+        	</div>
+        	<div class="col-sm-4 imgb">
+        		<img id='img11' src="{% static 'avatars/11.jpg' %}" class="sIm" onclick="imgSel(this)">
+        	</div>
+        	<div class="col-sm-4 imgb">
+        		<img id='img12' src="{% static 'avatars/12.jpg' %}" class="sIm" onclick="imgSel(this)">
+        	</div>
+        </div>
+        <button type="button" class="btn btn-danger" data-dismiss="modal" style="margin-top: 10%">Close</button>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- modal ends -->
+						<br>
+						<br>
+						<div class="row form-inline">
+							<div class="col-sm-5">
+								First Name<span class="text-danger">*</span>
+							</div>
+							<div class="col-sm-1">
+								:
+							</div>
+							<div class="col-sm-6">
+								<div class="input-group-prepend">
+									<span class="input-group-text"><i class="fas fa-user"></i></span>
+								</div>
+								<input value="{{tutor.firstName}}" type="text" class="form-control" id="firstName " name='firstName' placeholder="First name" required>
+
+							</div>
+						</div>
+
+						<div class="row form-inline">
+							<div class="col-sm-5">
+								Last Name<span class="text-danger">*</span>
+							</div>
+							<div class="col-sm-1">
+								:
+							</div>
+							<div class="col-sm-6">
+								<div class="input-group-prepend">
+									<span class="input-group-text"><i class="fas fa-user"></i></span>
+								</div>
+								<input value="{{tutor.lastName}}" type="text" class="form-control" id="lastName " name='lastName' placeholder="Last name">
+							</div>
+						</div>
+
+						<div class="row form-inline">
+							<div class="col-sm-5">
+								Email<span class="text-danger">*</span>
+							</div>
+							<div class="col-sm-1">
+								:
+							</div>
+							<div class="col-sm-6">
+								<div class="input-group-prepend">
+									<span class="input-group-text"><i class="fas fa-user"></i></span>
+								</div>
+								<input value="{{tutor.email}}" type="text" class="form-control" id="email " name='email' placeholder="Email Address" disabled>
+								{% if not tutor.emailValidated %}<button class="btn btn-info btn-sm" id="getOTP" type="button" name="getOTP">Get OTP</button>{% endif %}
+							</div>
+						</div>
+
+						<div class="row form-inline">
+							<div class="col-sm-5">
+								Phone No.<span class="text-danger">*</span>
+							</div>
+							<div class="col-sm-1">
+								:
+							</div>
+							<div class="col-sm-6">
+								<div class="input-group-prepend">
+									<span class="input-group-text"><i class="fas fa-phone"></i></span>
+								</div>
+								<input value="{{tutor.phone}}" type="tel" class="form-control" id="phone" name='phone' placeholder="Phone Number" required>
+
+							</div>
+						</div>
+
+						<div class="row form-inline">
+							<div class="col-sm-5">
+								Old Password<span class="text-danger">*</span>
+							</div>
+							<div class="col-sm-1">
+								:
+							</div>
+							<div class="col-sm-6">
+								<div class="input-group-prepend">
+									<span class="input-group-text"><i class="fas fa-key"></i></span>
+								</div>
+								<input value="" type="password" class="form-control" id="oldpassword" name='oldPassword' placeholder="Password" required>
+
+							</div>
+						</div>
+
+						<div class="row form-inline">
+							<div class="col-sm-5">
+								New Password<span class="text-danger">*</span>
+							</div>
+							<div class="col-sm-1">
+								:
+							</div>
+							<div class="col-sm-6">
+								<div class="input-group-prepend">
+									<span class="input-group-text"><i class="fas fa-key"></i></span>
+								</div>
+								<input value="" type="password" class="form-control" id="newPassword" name='newPassword' placeholder="Password" required>
+
+							</div>
+						</div>
+
+						<div class="row form-inline">
+							<div class="col-sm-5">
+								Confirm Password<span class="text-danger">*</span>
+							</div>
+							<div class="col-sm-1">
+								:
+							</div>
+							<div class="col-sm-6">
+								<div class="input-group-prepend">
+									<span class="input-group-text"><i class="fas fa-key"></i></span>
+								</div>
+								<input value="" type="password" class="form-control" id="confirmPassword" name='confirmPassword' placeholder="Password" required>
+							</div>
+						</div>
+
+						<div class="row form-inline">
+							<div class="col-sm-5">
+								Location<span class="text-danger">*</span>
+							</div>
+							<div class="col-sm-1">
+								:
+							</div>
+							<div class="col-sm-6">
+								<div class="input-group-prepend">
+									<span class="input-group-text"><i class="fas fa-location-arrow"></i></span>
+								</div>
+		  						<input value="{{tutor.location}}" id="pac-input" type="text" class="controls form-control" name='loc' placeholder="Search" required><button class="btn btn-info btn-sm" id="getUserLocation" type="button" name="getUserLocation">Get</button>
+								<input type="hidden" id="cityLat" name="cityLat" value="{{tutor.latitude}}" />
+								<input type="hidden" id="cityLng" name="cityLng" value="{{tutor.longitude}}" />
+							</div>
+						</div>
+
+                        <div class="row form-inline">
+							<div class="col-sm-5">
+								Availability<span class="text-danger">*</span>
+							</div>
+							<div class="col-sm-1">
+								:
+							</div>
+							<div class="col-sm-6">
+                                <select value="{{tutor.signupTutorContinued.all.0.availability}}" name="availability" class="custom-select form-control multiselect1" required multiple>
+                                   <option disabled>Select an option</option>
+                                   <option value="Online Tutor">Online Tutor</option>
+                                   <option value="Institute">Institute</option>
+                                   <option value="Home Tutor">Home Tutor</option>
+                                   <option value="Assignment Solutions">Assignment Solutions</option>
+                                </select>
+							</div>
+						</div>
+
+                        <div class="row form-inline">
+							<div class="col-sm-5">
+								Qualification<span class="text-danger">*</span>
+							</div>
+							<div class="col-sm-1">
+								:
+							</div>
+							<div class="col-sm-6">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text"><i class="fas fa-user"></i></span>
+                                </div>
+                                <input value="{{tutor.signupTutorContinued.all.0.qualification}}" type="text" class="form-control" id="Qualification" name='qualification' placeholder="Qualification" required>
+
+							</div>
+						</div>
+
+                        <div class="row form-inline">
+							<div class="col-sm-5">
+								Experience<span class="text-danger">*</span>
+							</div>
+							<div class="col-sm-1">
+								:
+							</div>
+							<div class="col-sm-6">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text"><i class="fas fa-envelope"></i></span>
+                                </div>
+                                <input value="{{tutor.signupTutorContinued.all.0.experience}}" type="text" class="form-control" id="Experience" name='experience' placeholder="Experience">
+
+							</div>
+						</div>
+
+                        <div class="row form-inline">
+							<div class="col-sm-5">
+								Description<span class="text-danger">*</span>
+							</div>
+							<div class="col-sm-1">
+								:
+							</div>
+							<div class="col-sm-6">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text"><i class="fa fa-map-marker"></i></span>
+                                </div>
+                                <textarea class="form-control" id="Description" name='description' placeholder="About Yourself" required>{{tutor.signupTutorContinued.all.0.description}}</textarea>
+
+							</div>
+						</div>
+
+                        <div class="row form-inline">
+                            <div class="col-sm-5">
+                                Free Demo Available<span class="text-danger">*</span>
+                            </div>
+                            <div class="col-sm-1">
+                                :
+                            </div>
+                            <div class="col-sm-6">
+                                <input {% if tutor.signupTutorContinued.all.0.freeDemo == 1 %} checked {% endif %} type="checkbox" name="fda" value="1" style="width: 2em;height: 2em">
+                            </div>
+                        </div>
+
+						<div class="row form-inline">
+                            <div class="col-sm-5">
+                                Gender<span class="text-danger">*</span>
+                            </div>
+                            <div class="col-sm-1">
+                                :
+                            </div>
+                            <div class="col-sm-6">
+								<select value="{{tutor.signupTutorContinued.all.0.gender}}" id="gender" name="gender" class="custom-select form-control" required>
+                                      <option disabled>Select an option</option>
+                                      <option value="Male">Male</option>
+                                      <option value="Female">Female</option>
+                                </select>
+                            </div>
+                        </div>
+
+						<div class="row form-inline">
+                            <div class="col-sm-5">
+                                Fees<span class="text-danger">*</span>
+                            </div>
+                            <div class="col-sm-1">
+                                :
+                            </div>
+                            <div class="col-sm-6">
+								<input type="number" value="{{tutor.signupTutorContinued.all.0.fees}}" step="0.01" class="form-control" id="fees" name="fees">
+                            </div>
+                        </div>
+
+						<div class="row form-inline">
+                            <div class="col-sm-5">
+                                Distance(in Km)<span class="text-danger">*</span>
+                            </div>
+                            <div class="col-sm-1">
+                                :
+                            </div>
+                            <div class="col-sm-6">
+								<input type="number" value="{{tutor.distance}}" class="form-control" id="distance" name='distance' placeholder="Distance(Km)" required  value = "{{ prefil.distance }}">
+                            </div>
+                        </div>
+
+						<hr>
+						<div class="row d-flex justify-content-end">
+							<div class="col-sm-2">
+								<input type="submit" value="Save Changes" class="btn btn-warning">
+							</div>
+						</div>
+					</div>
+				</div>
+      		</div>
+		</form>
+
+		</div>
+	</div>
+</div>
 <script>
-  function imgSel(data) {
-    var bStyle = "5px solid rgb(0, 222, 255)";
-    var valueObj = document.getElementById("ImageToServer");
-    var uns = 0;
-    if (data.style.border == bStyle) {
-      uns = 1;
-    }
-    // var imageIds = ['img1','img2','img3','img4','img5','img6'];
-    for (x = 1; x < 13; x++) {
-      document.getElementById("img" + String(x)).style.border = "none";
-    }
-    if (uns) {
-      data.style.border = "none";
-      valueObj.value = "";
-      $("#preview")[0].src = "";
-    } else {
-      data.style.border = bStyle;
-      valueObj.value = data.id[3];
-      $("#preview")[0].src = data.src;
-    }
-  }
-  $(document).on("DOMContentLoaded", function () {
-    function showPosition(position) {
-      document.getElementById("pac-input").value = "Processing";
-      document.getElementById("cityLat").value = position.coords.latitude;
-      document.getElementById("cityLng").value = position.coords.longitude;
+	function imgSel(data){
+		var bStyle = '5px solid rgb(0, 222, 255)';
+		var valueObj = document.getElementById('ImageToServer');
+		var uns = 0
+		if(data.style.border==bStyle){
+			uns = 1;
+		}
+		// var imageIds = ['img1','img2','img3','img4','img5','img6'];
+		for(x=1;x<13;x++){
+			document.getElementById("img"+String(x)).style.border = 'none';
+		}
+		if(uns){
+			data.style.border = 'none';
+			valueObj.value = "";
+			$("#preview")[0].src = "";
+		}
+		else{
+			data.style.border = bStyle;
+			valueObj.value = data.id[3];
+			$("#preview")[0].src = data.src;
+		}
+	}
+	$(document).on("DOMContentLoaded",function(){
+		function showPosition(position) {
+				document.getElementById('pac-input').value = "Processing";
+			   document.getElementById('cityLat').value = position.coords.latitude;
+			   document.getElementById('cityLng').value = position.coords.longitude;
 
-      $.ajax({
-        type: "POST",
-        url: "/ajaxLocation/",
-        data: {
-          cityLat: position.coords.latitude,
-          cityLng: position.coords.longitude,
-          ajax: 1,
-        },
-        success: function (response) {
-          if (response.status == "success") {
-            $("#pac-input").val(response.result);
-          } else {
-            document.getElementById("pac-input").value = response.error;
-          }
-        },
-        error: function () {
-          document.getElementById("pac-input").value = "";
-        },
-      });
-    }
-    function getLocation() {
-      if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(showPosition);
-      } else {
-        //  "Geolocation is not supported by this browser.";
-      }
-    }
-    $("#getUserLocation").on("click", getLocation);
+			   $.ajax({
+	               type: "POST",
+	               url: "/ajaxLocation/",
+	               data: {
+	                   'cityLat': position.coords.latitude,
+	                   'cityLng': position.coords.longitude,
+	                   'ajax': 1
+	               },
+	               success: function (response) {
+	                   if (response.status == 'success') {
+						   $("#pac-input").val(response.result);
+	                   }
+	                   else {
+	                       document.getElementById('pac-input').value = response.error;
+	                   }
+	               },
+	               error: function () {
+	                   document.getElementById('pac-input').value = "";
+	               }
+	           });
 
-    function initialize() {
-      var input = document.getElementById("pac-input");
-      var autocomplete = new google.maps.places.Autocomplete(input);
-      google.maps.event.addListener(autocomplete, "place_changed", function () {
-        var place = autocomplete.getPlace();
-        document.getElementById("cityLat").value =
-          place.geometry.location.lat();
-        document.getElementById("cityLng").value =
-          place.geometry.location.lng();
-      });
-    }
+			}
+		function getLocation() {
+			  if (navigator.geolocation) {
+				navigator.geolocation.getCurrentPosition(showPosition);
+			  } else {
+				//  "Geolocation is not supported by this browser.";
+			  }
+			}
+		$("#getUserLocation").on("click", getLocation);
 
-    var cropper = $("#upload_cropper").croppie({
-      viewport: {
-        width: 300,
-        height: 300,
-        type: "square",
-      },
-      boundary: {
-        width: 400,
-        height: 400,
-      },
-      mouseWheelZoom: "ctrl",
-    });
+		function initialize() {
+			  var input = document.getElementById('pac-input');
+			  var autocomplete = new google.maps.places.Autocomplete(input);
+			  google.maps.event.addListener(autocomplete, 'place_changed', function () {
+		            var place = autocomplete.getPlace();
+		            document.getElementById('cityLat').value = place.geometry.location.lat();
+		            document.getElementById('cityLng').value = place.geometry.location.lng();
+				});
+		}
 
-    function previewImage() {
-      var preview = $("#preview")[0];
-      var file = $("#uploadImage")[0].files[0];
-      var reader = new FileReader();
+		var cropper = $("#upload_cropper").croppie({
+			viewport: {
+						width: 300,
+						height: 300,
+						type: 'square'
+			},
+			boundary: {
+				width: 400,
+				height: 400
+			},
+			mouseWheelZoom: 'ctrl',
+		});
 
-      reader.onloadend = function () {
-        $("#imageCropperModal").on("shown.bs.modal", function (e) {
-          cropper.croppie("bind", {
-            url: reader.result,
-            points: [0, 0, 300, 300],
-            zoom: 0.5,
-          });
-        });
-        $("#imageCropperModal").modal("show");
-      };
+	function previewImage(){
+		var preview = $("#preview")[0];
+		var file = $("#uploadImage")[0].files[0];
+		var reader  = new FileReader();
 
-      if (file) {
-        reader.readAsDataURL(file);
-      } else {
-      }
-    }
-    $("#uploadImage").on("change", previewImage);
+		reader.onloadend = function () {
 
-    $("#saveCroppedImage").on("click", function () {
-      cropper.croppie("result", "base64").then(function (imageurl) {
-        preview.src = imageurl;
-        $("#ImageToServer").val(imageurl);
-      });
-      $("#imageCropperModal").modal("hide");
-    });
+		  $('#imageCropperModal').on('shown.bs.modal', function (e) {
+			  cropper.croppie('bind', {
+				  url: reader.result,
+				  points: [0,0,300,300],
+				  zoom: 0.5,
+			  });
+			});
+		$("#imageCropperModal").modal("show");
+		}
 
-    $("#getOTP").on("click", function () {
-      //send ajax to backend send otp
-      $("#otpModal").modal("show");
+		if (file) {
+		  reader.readAsDataURL(file);
+		} else {
+		}
+	}
+	$("#uploadImage").on('change', previewImage);
 
-      $.ajax({
-        type: "POST",
-        url: "/getOTP/",
-        data: {
-          email: "{{tutor.email}}",
-          getotp: true,
-        },
-        success: function (response) {
-          if (response.status == "success") {
-          }
-        },
-        error: function () {},
-      });
-    });
+	$("#saveCroppedImage").on("click",function(){
+		cropper.croppie("result",'base64').then(function(imageurl) {
+			preview.src = imageurl;
+			$("#ImageToServer").val(imageurl);
+		});
+		$("#imageCropperModal").modal("hide");
+	});
 
-    $(".multiselect1").multiselect(
-      "select",
-      "{{tutor.signupTutorContinued.all.0.availability}}".split(", ")
-    );
-    initialize();
-    //end of dom
-  });
+	$("#getOTP").on("click",function(){
+		//send ajax to backend send otp
+		$("#otpModal").modal("show");
+
+		$.ajax({
+				type: "POST",
+				url: "/getOTP/",
+				data: {
+					'email':"{{tutor.email}}",
+					'getotp':true
+				},
+				success: function (response) {
+					if (response.status == 'success') {
+
+					}
+				},
+				error: function () {
+				}
+			});
+	});
+
+
+	$(".multiselect1").multiselect("select","{{tutor.signupTutorContinued.all.0.availability}}".split(", "));
+	initialize();
+//end of dom
+});
+
+
 </script>
 {% endblock %}

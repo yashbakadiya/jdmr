@@ -1,309 +1,296 @@
-{% extends 'tutor/dashboard.html' %} {% load static %} {% block css %} @import
-url('https://fonts.googleapis.com/css?family=Numans'); .container{ height: 100%;
-align-content: center; } .card{ height: 850px; max-height:100%; margin-top:
-auto; margin-bottom: auto; width: 1200px; background-color: white; }
-.social_icon span{ font-size: 60px; margin-left: 10px; color: #FFC312; }
-.social_icon span:hover{ color: white; cursor: pointer; } .card-header h3{
-color: white; } .social_icon{ position: absolute; right: 20px; top: -45px; }
-.input-group-prepend span{ width: 50px; background-color: #FFC312; color: black;
-border:0 !important; } input:focus{ outline: 0 0 0 0 !important; box-shadow: 0 0
-0 0 !important; } .remember{ color: white; } .remember input { width: 19px;
-height: 19px; margin-left: 15px; margin-right: 5px; } .signup_btn{ color: black;
-background-color: #FFC312; } .signup_btn:hover{ background-color: #2a2b3d;
-color:white; } .links{ color: white; } .links a{ margin-left: 4px; }
-.control-label { color: rgb(66, 8, 8); font-size: 20px; } {% endblock %} {%
-block body %}
+{% extends 'tutor/dashboard.html' %}
+{% load static %}
+{% block css %}
+@import url('https://fonts.googleapis.com/css?family=Numans');
+
+.container{
+height: 100%;
+align-content: center;
+}
+
+.card{
+height: 850px;
+max-height:100%;
+margin-top: auto;
+margin-bottom: auto;
+width: 1200px;
+background-color: white;
+}
+
+.social_icon span{
+font-size: 60px;
+margin-left: 10px;
+color: #FFC312;
+}
+
+.social_icon span:hover{
+color: white;
+cursor: pointer;
+}
+
+.card-header h3{
+color: white;
+}
+
+.social_icon{
+position: absolute;
+right: 20px;
+top: -45px;
+}
+
+.input-group-prepend span{
+width: 50px;
+background-color: #FFC312;
+color: black;
+border:0 !important;
+}
+
+input:focus{
+outline: 0 0 0 0  !important;
+box-shadow: 0 0 0 0 !important;
+
+}
+
+.remember{
+color: white;
+}
+
+.remember input
+{
+width: 19px;
+height: 19px;
+margin-left: 15px;
+margin-right: 5px;
+}
+
+.signup_btn{
+color: black;
+background-color: #FFC312;
+}
+
+.signup_btn:hover{
+    background-color: #2a2b3d;
+    color:white;
+}
+
+.links{
+color: white;
+}
+
+.links a{
+margin-left: 4px;
+}
+
+.control-label {
+color: rgb(66, 8, 8);
+font-size: 20px;
+}
+
+{% endblock %}
+{% block body %}
 <div>
-  {% if messages %}
-  <div class="alert alert-warning" role="alert">
-    <ul class="messages">
-      {% for k in messages %}
-      <li style="color: darkred">{{ k }}</li>
-      {% endfor %}
-    </ul>
-  </div>
-  {% endif %}
+    {% if messages %}
+        <div class="alert alert-warning" role="alert">
+            <ul class="messages">
+                {% for k in messages %}
+                    <li style="color: darkred;">{{ k }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+    {% endif %}
 </div>
 <div class="container">
-  <div class="d-flex justify-content-center h-100">
-    <div class="card">
-      <div class="card-header">
-        <div class="row">
-          <div class="col-sm">
-            <h2 style="color: rgb(66, 8, 8)">
-              Add Tutor Details Respect to Work
-            </h2>
-          </div>
-        </div>
-      </div>
-      <div class="card-body">
-        <form action="" method="post">
-          {% csrf_token %}
-          <div class="input-group form-group">
-            <label class="control-label col-sm-4"
-              >Tutor name<span class="text-danger">*</span></label
-            >
-            <div class="input-group-prepend">
-              <span class="input-group-text"><i class="fas fa-user"></i></span>
-            </div>
-            <input
-              type="text"
-              class="form-control"
-              id="tutorName "
-              name="tutorName"
-              placeholder="Tutor name"
-              required
-            />
-          </div>
-          <div class="input-group form-group">
-            <label class="control-label col-sm-4"
-              >Email Id<span class="text-danger">*</span></label
-            >
-            <div class="input-group-prepend">
-              <span class="input-group-text"
-                ><i class="fas fa-envelope"></i
-              ></span>
-            </div>
-            <input
-              type="email"
-              class="form-control"
-              id="email"
-              name="email"
-              placeholder="Email Address"
-              required
-            />
-          </div>
-          <div class="input-group form-group">
-            <label class="control-label col-sm-4"
-              >Phone Number<span class="text-danger">*</span></label
-            >
-            <div class="input-group-prepend">
-              <span class="input-group-text"><i class="fas fa-phone"></i></span>
-            </div>
-            <input
-              type="tel"
-              class="form-control"
-              id="phone"
-              name="phone"
-              placeholder="Phone Number"
-              required
-            />
-          </div>
-          <div>
-            <label class="control-label col-sm-4"
-              >Availability<span class="text-danger">*</span></label
-            >
-            <div class="row remember" style="display: inline-block">
-              <input
-                type="checkbox"
-                class="bigcheckbox"
-                name="radio"
-                value="weekday"
-              /><label class="control-label">Weekday</label>
-              <input
-                type="checkbox"
-                class="bigcheckbox"
-                name="radio"
-                value="weekend"
-              /><label class="control-label">Weekend</label>
-            </div>
-          </div>
-          <br />
-          <br />
-          <label class="control-label col-sm-10"
-            >Select the Number of Courses: &nbsp;
-            <select id="participants" class="input-mini required-entry">
-              <option value="1">1</option>
-              <option value="2">2</option>
-              <option value="3">3</option>
-              <option value="4">4</option>
-              <option value="5">5</option>
-              <option value="6">6</option>
-              <option value="7">7</option>
-              <option value="8">8</option>
-              <option value="9">9</option>
-              <option value="10">10</option>
-              <option value="11">11</option>
-              <option value="12">12</option>
-              <option value="13">13</option>
-              <option value="14">14</option>
-              <option value="15">15</option>
-            </select></label
-          >
-          <br />
-          <table class="table table-hover" id="participantTable">
-            <thead>
-              <tr>
-                <th>&nbsp;</th>
-                <th>Course Taught</th>
-                <th>Class</th>
-                <th>Teaching Type</th>
-                <th>Save</th>
-                <th>Update</th>
-                <th>Delete</th>
-              </tr>
-            </thead>
-            <tr class="participantRow">
-              <td>&nbsp;</td>
-              <td>
-                <select
-                  class="form-control col-sm-10"
-                  id="courseName"
-                  name="courseName"
-                  style="display: inline-block"
-                  required
-                >
-                  {% for i in courses %}
-                  <option value="{{ i.courseName }}">{{ i.courseName }}</option>
-                  {% endfor %}
-                </select>
-              </td>
-              <td>
-                <select
-                  id="multiple-checkboxes2"
-                  id="forclass"
-                  name="forclass"
-                  multiple="multiple"
-                >
-                  <option>nursery</option>
-                  <option>I</option>
-                  <option>II</option>
-                  <option>III</option>
-                  <option>IV</option>
-                  <option>V</option>
-                  <option>VI</option>
-                  <option>VII</option>
-                  <option>VIII</option>
-                  <option>IX</option>
-                  <option>X</option>
-                  <option>XI</option>
-                  <option>XII</option>
-                </select>
-              </td>
-              <td>
-                <div class="row remember" style="display: inline-block">
-                  <input
-                    type="checkbox"
-                    class="bigcheckbox"
-                    name="check"
-                    value="Online"
-                  /><label class="control-label">Online</label>
-                  <br />
-                  <input
-                    type="checkbox"
-                    class="bigcheckbox"
-                    name="check"
-                    value="Home Tutors"
-                  /><label class="control-label">Home Tutor</label>
-                  <br />
-                  <input
-                    type="checkbox"
-                    class="bigcheckbox"
-                    name="check"
-                    value="Classroom"
-                  /><label class="control-label">Classroom</label>
+	<div class="d-flex justify-content-center h-100">
+		<div class="card">
+			<div class="card-header">
+                <div class="row">
+                    <div class="col-sm"><h2 style="color: rgb(66, 8, 8);">Add Tutor Details Respect to Work</h2></div>
                 </div>
-              </td>
-              <td>
-                <div class="form-group">
-                  <input type="submit" value="Save" class="btn btn-danger" />
-                </div>
-              </td>
-              <td>
-                <button class="btn btn-danger edit" type="button">
-                  Update
-                </button>
-              </td>
-              <td>
-                <button class="btn btn-danger remove" type="button">
-                  Delete
-                </button>
-              </td>
-            </tr>
-            <tr id="addButtonRow">
-              <td colspan="8">
-                <center>
-                  <button class="btn btn-large btn-success add" type="button">
-                    <i class="fa fa-plus-circle" aria-hidden="true"></i> Add
-                    More Rows
-                  </button>
-                </center>
-              </td>
-            </tr>
-          </table>
-          <br />
-          <br />
-        </form>
-      </div>
-    </div>
-  </div>
+			</div>
+			<div class="card-body">
+				<form action="" method="post">{% csrf_token %}
+                    <div class="input-group form-group">
+                        <label class="control-label col-sm-4">Tutor name<span class="text-danger">*</span></label>
+						<div class="input-group-prepend">
+							<span class="input-group-text"><i class="fas fa-user"></i></span>
+						</div>
+						<input type="text" class="form-control" id="tutorName " name='tutorName' placeholder="Tutor name" required>
+                    </div>
+					<div class="input-group form-group">
+                        <label class="control-label col-sm-4">Email Id<span class="text-danger">*</span></label>
+						<div class="input-group-prepend">
+							<span class="input-group-text"><i class="fas fa-envelope"></i></span>
+						</div>
+						<input type="email" class="form-control" id="email" name='email' placeholder="Email Address" required>
+					</div>
+                    <div class="input-group form-group">
+                        <label class="control-label col-sm-4">Phone Number<span class="text-danger">*</span></label>
+						<div class="input-group-prepend">
+							<span class="input-group-text"><i class="fas fa-phone"></i></span>
+						</div>
+						<input type="tel" class="form-control" id="phone" name='phone' placeholder="Phone Number" required>
+                    </div>
+                    <div>
+                        <label class="control-label col-sm-4">Availability<span class="text-danger">*</span></label>
+                        <div class="row remember" style="display: inline-block;">
+                            <input type="checkbox" class="bigcheckbox" name="radio" value="weekday"><label class="control-label">Weekday</label>
+                            <input type="checkbox" class="bigcheckbox" name="radio" value="weekend"><label class="control-label">Weekend</label>
+                        </div>
+                    </div>
+                    <br>
+                    <br>
+                    <label class="control-label col-sm-10">Select the Number of Courses: &nbsp;
+                    <select id="participants" class="input-mini required-entry">
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                        <option value="5">5</option>
+                        <option value="6">6</option>
+                        <option value="7">7</option>
+                        <option value="8">8</option>
+                        <option value="9">9</option>
+                        <option value="10">10</option>
+                        <option value="11">11</option>
+                        <option value="12">12</option>
+                        <option value="13">13</option>
+                        <option value="14">14</option>
+                        <option value="15">15</option>
+                    </select></label>
+                    <br>
+                    <table class="table table-hover" id="participantTable">
+                        <thead>
+                            <tr>
+                                <th>&nbsp;</th>
+                                <th>Course Taught</th>
+                                <th>Class</th>
+                                <th>Teaching Type</th>
+                                <th>Save</th>
+                                <th>Update</th>
+                                <th>Delete</th>
+                            </tr>
+                        </thead>
+                        <tr class="participantRow">
+                            <td>&nbsp;</td>
+                            <td>
+                                <select class="form-control col-sm-10" id="courseName" name="courseName" style="display: inline-block;" required>
+                                    {% for i in courses %}
+                                        <option value="{{ i.courseName }}">{{ i.courseName }}</option>
+                                    {% endfor %}
+                                </select>
+                            </td>
+                            <td>
+                                <select id="multiple-checkboxes2" id="forclass" name='forclass' multiple="multiple">
+                                    <option>nursery</option>
+                                    <option>I</option>
+                                    <option>II</option>
+                                    <option>III</option>
+                                    <option>IV</option>
+                                    <option>V</option>
+                                    <option>VI</option>
+                                    <option>VII</option>
+                                    <option>VIII</option>
+                                    <option>IX</option>
+                                    <option>X</option>
+                                    <option>XI</option>
+                                    <option>XII</option>
+                                </select>
+                            </td>
+                            <td>
+                                <div class="row remember" style="display: inline-block;">
+                                    <input type="checkbox" class="bigcheckbox" name="check" value="Online"><label class="control-label">Online</label>
+                                    <br>
+                                    <input type="checkbox" class="bigcheckbox" name="check" value="Home Tutors"><label class="control-label">Home Tutor</label>
+                                    <br>
+                                    <input type="checkbox" class="bigcheckbox" name="check" value="Classroom"><label class="control-label">Classroom</label>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="form-group">
+                                    <input type="submit" value="Save" class="btn btn-danger">
+                                </div>
+                            </td>
+                            <td><button class="btn btn-danger edit" type="button">Update</button></td>
+                            <td><button class="btn btn-danger remove" type="button">Delete</button></td>
+                        </tr>
+                        <tr id="addButtonRow">
+                            <td colspan="8"><center><button class="btn btn-large btn-success add" type="button"><i class="fa fa-plus-circle" aria-hidden="true"></i>
+                                Add More Rows</button></center></td>
+                        </tr>
+                    </table>
+                    <br>
+                    <br>
+                </form>
+            </div>
+		</div>
+	</div>
 </div>
 <script>
-  $(document).ready(function () {
-    $("#multiple-checkboxes2").multiselect({
-      includeSelectAllOption: true,
-    });
+    $(document).ready(function() {
+      $('#multiple-checkboxes2').multiselect({
+        includeSelectAllOption: true,
+      });
   });
 </script>
 <script>
-  /* Variables */
-  var p = $("#participants").val();
-  var row = $(".participantRow");
+    /* Variables */
+var p = $("#participants").val();
+var row = $(".participantRow");
 
-  /* Functions */
-  function getP() {
-    p = $("#participants").val();
-  }
+/* Functions */
+function getP(){
+  p = $("#participants").val();
+}
 
-  function addRow() {
-    row.clone(true, true).appendTo("#participantTable");
-  }
+function addRow() {
+  row.clone(true, true).appendTo("#participantTable");
+}
 
-  function removeRow(button) {
-    button.closest("tr").remove();
+function removeRow(button) {
+  button.closest("tr").remove();
+}
+/* Doc ready */
+$(".add").on('click', function () {
+  getP();
+  if($("#participantTable tr").length < 17) {
+    addRow();
+    var i = Number(p)+1;
+    $("#participants").val(i);
   }
-  /* Doc ready */
-  $(".add").on("click", function () {
-    getP();
-    if ($("#participantTable tr").length < 17) {
+  $(this).closest("tr").appendTo("#participantTable");
+  if ($("#participantTable tr").length === 3) {
+    $(".remove").hide();
+  } else {
+    $(".remove").show();
+  }
+});
+$(".remove").on('click', function () {
+  getP();
+  if($("#participantTable tr").length === 3) {
+    //alert("Can't remove row.");
+    $(".remove").hide();
+  } else if($("#participantTable tr").length - 1 ==3) {
+    $(".remove").hide();
+    removeRow($(this));
+    var i = Number(p)-1;
+    $("#participants").val(i);
+  } else {
+    removeRow($(this));
+    var i = Number(p)-1;
+    $("#participants").val(i);
+  }
+});
+$("#participants").change(function () {
+  var i = 0;
+  p = $("#participants").val();
+  var rowCount = $("#participantTable tr").length - 2;
+  if(p > rowCount) {
+    for(i=rowCount; i<p; i+=1){
       addRow();
-      var i = Number(p) + 1;
-      $("#participants").val(i);
     }
-    $(this).closest("tr").appendTo("#participantTable");
-    if ($("#participantTable tr").length === 3) {
-      $(".remove").hide();
-    } else {
-      $(".remove").show();
-    }
-  });
-  $(".remove").on("click", function () {
-    getP();
-    if ($("#participantTable tr").length === 3) {
-      //alert("Can't remove row.");
-      $(".remove").hide();
-    } else if ($("#participantTable tr").length - 1 == 3) {
-      $(".remove").hide();
-      removeRow($(this));
-      var i = Number(p) - 1;
-      $("#participants").val(i);
-    } else {
-      removeRow($(this));
-      var i = Number(p) - 1;
-      $("#participants").val(i);
-    }
-  });
-  $("#participants").change(function () {
-    var i = 0;
-    p = $("#participants").val();
-    var rowCount = $("#participantTable tr").length - 2;
-    if (p > rowCount) {
-      for (i = rowCount; i < p; i += 1) {
-        addRow();
-      }
-      $("#participantTable #addButtonRow").appendTo("#participantTable");
-    } else if (p < rowCount) {
-    }
-  });
+    $("#participantTable #addButtonRow").appendTo("#participantTable");
+  } else if(p < rowCount) {
+  }
+});
 </script>
 {% endblock %}

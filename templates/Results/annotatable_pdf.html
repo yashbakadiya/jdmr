@@ -1,22 +1,30 @@
 <style>
-  h6 {
+  h6{
     font-size: 1.2em;
   }
 
   .float-right {
     padding-left: 63em;
   }
+  
 </style>
 
 <div class="mb-3 card">
-  <h1 class="m-2" style="font-size: 2em">
+  <h1 class="m-2" style="font-size: 2em;">
     <b>
-      <center><u> {{name}} Results </u></center>
+      <center><u>
+          {{name}} Results
+
+        </u>
+      </center>
     </b>
   </h1>
+  
+  
 
   <div class="card-body">
     {% if status %}
+
 
     <!-- added table -->
     <div class="table-responsive">
@@ -31,52 +39,22 @@
 
                   <span>{{question.negative_marks}}</span>
                 </div>
-                <h5 style="font-family: fantasy; font-size: 1.35em">
-                  {{question.question | safe}}
-                </h5>
-                <div style="text-indent: 1em">
-                  <h6>
-                    Answer:
-                    <span style="font-weight: normal"
-                      >{{question.input_ans|safe}}</span
-                    >
-                  </h6>
+                <h5 style="font-family: fantasy; font-size: 1.35em;">{{question.question | safe}}</h5>
+                <div style="text-indent: 1em;">
+                  <h6>Answer: <span style="font-weight:normal">{{question.input_ans|safe}}</span></h6>
 
                   {% if question.input_ans_Image %}
-                  <p>
-                    <img
-                      src="http://localhost:8000/media/{{question.input_ans_Image}}"
-                      alt="answer image"
-                      width="95%"
-                    />
+                  <p><img src="http://localhost:8000/media/{{question.input_ans_Image}}" alt="answer image" width="95%">
                   </p>
                   {% endif %}
 
-                  <h6>
-                    Correct Answer:
-                    <span style="font-weight: normal"
-                      >{{question.correct_ans |safe}}</span
-                    >
-                  </h6>
-                  <h6>
-                    Marks:
-                    <span style="font-weight: normal"
-                      >{{question.marks_given}}</span
-                    >
-                  </h6>
-                  <h6>
-                    Time Taken:
-                    <span style="font-weight: normal">{{question.time}}</span>
-                  </h6>
-                  <h6>
-                    Extra Time Taken:
-                    <span style="font-weight: normal"
-                      >{{question.extra_time}}</span
-                    >
-                  </h6>
+                  <h6>Correct Answer: <span style="font-weight:normal">{{question.correct_ans |safe}}</span></h6>
+                  <h6>Marks: <span style="font-weight:normal">{{question.marks_given}}</span></h6>
+                  <h6>Time Taken: <span style="font-weight:normal">{{question.time}}</span></h6>
+                  <h6>Extra Time Taken: <span style="font-weight:normal">{{question.extra_time}}</span></h6>
                 </div>
               </div>
-              <br />
+              <br>
             </td>
           </tr>
           {% endfor %} {% else %}

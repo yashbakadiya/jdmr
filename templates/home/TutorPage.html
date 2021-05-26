@@ -1,584 +1,355 @@
 {% load static %}
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <title>Choachizz</title>
-    <meta charset="UTF-8" />
-    <meta
-      name="description"
-      content="Choachizz offers local tutors, online teachers, and teachers to help with tutoring, coaching, assignments, academic projects"
-    />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-    <link
-      rel="icon"
-      type="image/x-icon"
-      href="{% static 'assets/img/favicon.ico' %}"
-    />
-    <link
-      rel="stylesheet"
-      href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
-    />
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.4.0/jquery.easing.min.js"></script>
+<head>
+	
+  <title>Choachizz</title>
+  <meta charset="UTF-8">
+  <meta name="description" content="Choachizz offers local tutors, online teachers, and teachers to help with tutoring, coaching, assignments, academic projects">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	
+  <link rel="icon" type="image/x-icon" href="{% static 'assets/img/favicon.ico' %}" />
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.4.0/jquery.easing.min.js"></script>
 
+	
     <!-- Font-awesome -->
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
-    />
-
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+   
     <!-- Google Fonts -->
-    <link
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@100;400;700&display=swap"
-      rel="stylesheet"
-    />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Roboto:wght@100;400;700&display=swap"
-      rel="stylesheet"
-    />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;400;700&display=swap" rel="stylesheet">
+ <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@100;400;700&display=swap" rel="stylesheet">
 
-    <link href='{% static "assets/css/navbar.css" %}' rel="stylesheet" />
-    <link href='{% static "assets/css/TutorPage.css" %}' rel="stylesheet" />
-    <link href='{% static "assets/css/footer.css" %}' rel="stylesheet" />
+  <link href='{% static "assets/css/navbar.css" %}' rel="stylesheet">
+  <link href='{% static "assets/css/TutorPage.css" %}' rel="stylesheet">
+  <link href='{% static "assets/css/footer.css" %}' rel="stylesheet">
 
-    <script src='{% static "assets/js/script.js" %}'></script>
-  </head>
-  <body>
-    <section>
-      <!-- header -->
-      <header
-        style="
-          background-image: url('{% static 'assets/img/Rectangle%2055.png' %}');
-        "
-      >
-        <!-- Navbar -->
-        <nav
-          class="navbar navbar-expand-lg navbar-dark navbar-custom fixed-top"
-        >
-          <!-- Image Logo -->
-          <a class="navbar-brand logo-image" href="{% url 'home' %}"
-            ><img src='{% static "assets/img/1.png" %}' alt="alternative"
-          /></a>
 
-          <!-- Mobile Menu Toggle Button -->
-          <button
-            class="navbar-toggler"
-            type="button"
-            data-toggle="collapse"
-            data-target="#navbarsExampleDefault"
-            aria-controls="navbarsExampleDefault"
-            aria-expanded="false"
-            aria-label="Toggle navigation"
-          >
-            <span class="navbar-toggler-icon"></span>
-          </button>
-          <!-- end of mobile menu toggle button -->
+	<script src='{% static "assets/js/script.js" %}'></script>
 
-          <div class="collapse navbar-collapse" id="navbarsExampleDefault">
+
+</head>
+<body>
+<section>
+  
+  <!-- header -->
+  <header style="background-image: url('{% static 'assets/img/Rectangle%2055.png' %}');">	
+
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark navbar-custom fixed-top">
+
+        <!-- Image Logo -->
+        <a class="navbar-brand logo-image" href="{% url 'home' %}"><img src='{% static "assets/img/1.png" %}' alt="alternative"></a>
+        
+        <!-- Mobile Menu Toggle Button -->
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
+              <span class="navbar-toggler-icon"></span>
+        </button>
+        <!-- end of mobile menu toggle button -->
+
+        <div class="collapse navbar-collapse" id="navbarsExampleDefault">
             <ul class="navbar-nav ml-auto">
-              <!-- Dropdown Menu -->
-              <li class="nav-item dropdown">
-                <a
-                  class="nav-link dropdown-toggle page-scroll"
-                  href="#Find Tutors"
-                  id="navbarDropdown"
-                  role="button"
-                  aria-haspopup="true"
-                  aria-expanded="false"
-                  >Find Tutors</a
-                >
-                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                  <a class="dropdown-item" href="terms-conditions.html"
-                    ><span class="item-text">TERMS CONDITIONS</span></a
-                  >
-                  <div class="dropdown-items-divide-hr"></div>
-                  <a class="dropdown-item" href="privacy-policy.html"
-                    ><span class="item-text">PRIVACY POLICY</span></a
-                  >
-                </div>
-              </li>
-              <!-- end of dropdown menu -->
+              <!-- Dropdown Menu -->          
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle page-scroll" href="#Find Tutors" id="navbarDropdown" role="button" aria-haspopup="true" aria-expanded="false">Find Tutors</a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <a class="dropdown-item" href="terms-conditions.html"><span class="item-text">TERMS CONDITIONS</span></a>
+                        <div class="dropdown-items-divide-hr"></div>
+                        <a class="dropdown-item" href="privacy-policy.html"><span class="item-text">PRIVACY POLICY</span></a>
+                    </div>
+                </li>
+                <!-- end of dropdown menu -->
+				
+				<!-- Dropdown Menu -->          
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle page-scroll" href="#Find Tutors Jobs" id="navbarDropdown" role="button" aria-haspopup="true" aria-expanded="false">Find Tutors Jobs</a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <a class="dropdown-item" href="terms-conditions.html"><span class="item-text">TERMS CONDITIONS</span></a>
+                        <div class="dropdown-items-divide-hr"></div>
+                        <a class="dropdown-item" href="privacy-policy.html"><span class="item-text">PRIVACY POLICY</span></a>
+                    </div>
+                </li>
+                <!-- end of dropdown menu -->
 
-              <!-- Dropdown Menu -->
-              <li class="nav-item dropdown">
-                <a
-                  class="nav-link dropdown-toggle page-scroll"
-                  href="#Find Tutors Jobs"
-                  id="navbarDropdown"
-                  role="button"
-                  aria-haspopup="true"
-                  aria-expanded="false"
-                  >Find Tutors Jobs</a
-                >
-                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                  <a class="dropdown-item" href="terms-conditions.html"
-                    ><span class="item-text">TERMS CONDITIONS</span></a
-                  >
-                  <div class="dropdown-items-divide-hr"></div>
-                  <a class="dropdown-item" href="privacy-policy.html"
-                    ><span class="item-text">PRIVACY POLICY</span></a
-                  >
-                </div>
-              </li>
-              <!-- end of dropdown menu -->
+                <!-- Dropdown Menu -->          
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle page-scroll" href="#Institute" id="navbarDropdown" role="button" aria-haspopup="true" aria-expanded="false">Institute</a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <a class="dropdown-item" href="terms-conditions.html"><span class="item-text">TERMS CONDITIONS</span></a>
+                        <div class="dropdown-items-divide-hr"></div>
+                        <a class="dropdown-item" href="privacy-policy.html"><span class="item-text">PRIVACY POLICY</span></a>
+                    </div>
+                </li>
+                <!-- end of dropdown menu -->
 
-              <!-- Dropdown Menu -->
-              <li class="nav-item dropdown">
-                <a
-                  class="nav-link dropdown-toggle page-scroll"
-                  href="#Institute"
-                  id="navbarDropdown"
-                  role="button"
-                  aria-haspopup="true"
-                  aria-expanded="false"
-                  >Institute</a
-                >
-                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                  <a class="dropdown-item" href="terms-conditions.html"
-                    ><span class="item-text">TERMS CONDITIONS</span></a
-                  >
-                  <div class="dropdown-items-divide-hr"></div>
-                  <a class="dropdown-item" href="privacy-policy.html"
-                    ><span class="item-text">PRIVACY POLICY</span></a
-                  >
-                </div>
-              </li>
-              <!-- end of dropdown menu -->
             </ul>
-            <span style="padding-left: 15px">
-              <span>
-                <a
-                  href="{% url 'Signup' %}"
-                  class="btn signup-btn"
-                  type="submit"
-                  >Sign Up</a
-                >
-              </span>
-              <span>
-                <a href="{% url 'Login' %}" class="btn login-btn" type="submit"
-                  >Log In</a
-                >
-              </span>
+			<span style="padding-left:15px">
+			<span>
+             <a href="{% url 'Signup' %}" class="btn  signup-btn" type="submit">Sign Up</a>
+			</span>
+			<span>
+             <a href="{% url 'Login' %}" class="btn login-btn" type="submit">Log In</a>
+			</span>
             </span>
+        </div>
+    </nav> <!-- end of navbar -->
+    <!-- end of navbar -->	
+	
+<div id="banner">
+        <div class="row">
+		<div class="col-md-6 order-md-1 order-2" style="position: relative">
+           <img src='{% static "assets/img/Group%2040.png" %}'   alt="Group 40" style="position: relative; bottom: 0px;width: 100%"/>
           </div>
-        </nav>
-        <!-- end of navbar -->
-        <!-- end of navbar -->
-
-        <div id="banner">
-          <div class="row">
-            <div class="col-md-6 order-md-1 order-2" style="position: relative">
-              <img
-                src='{% static "assets/img/Group%2040.png" %}'
-                alt="Group 40"
-                style="position: relative; bottom: 0px; width: 100%"
-              />
-            </div>
-            <div class="col-md-6 order-md-2 order-1">
-              <h1 class="banner-heading">
-                Make your mark as a <span class="banner-sub">tutor</span>.
-              </h1>
-              <p class="banner-subtitle">
-                Coachizz isn’t your average service. We know what worries you
-                and what delights you. You’re a teacher! You’ve got enough
-                worries as it is. <br /><br />
-                We’ll take care of the rest.
-              </p>
-
-              <a href="#" class="btn getStart-btn">Get Started</a>
-            </div>
-            <img
-              src='{% static "assets/img/Group%2053.png" %}'
-              alt="group 53"
-              class="group53"
-            />
-          </div>
-        </div>
-      </header>
-    </section>
-    <section id="HowWorks">
-      <h1>
-        <img src='{% static "assets/img/Group%2033.png" %}' alt="group33" /> How
-        it works
-      </h1>
-
-      <div class="row" style="margin: 50px 0; text-align: center">
-        <div class="col-md-3">
-          <img
-            src='{% static "assets/img/Ellipse%2056.png" %}'
-            alt="ellipse56"
-            class="ellipse"
-          />
-          <img
-            src='{% static "assets/img/plan%202.png" %}'
-            alt="plan2"
-            class="images"
-          />
-          <h1 class="heading1">Plan your course</h1>
-        </div>
-        <div class="col-md-1">
-          <img
-            src='{% static "assets/img/Group%2033.png" %}'
-            alt="group33"
-            class="group33"
-          />
-        </div>
-        <div class="col-md-3">
-          <img
-            src='{% static "assets/img/Ellipse%2056.png" %}'
-            alt="ellipse56"
-            class="ellipse"
-          />
-          <img
-            src='{% static "assets/img/create%202.png" %}'
-            alt="create2"
-            class="images"
-          />
-          <h1 class="heading1">Create your curriculum</h1>
-        </div>
-        <div class="col-md-1">
-          <img
-            src='{% static "assets/img/Group%2033.png" %}'
-            alt="group33"
-            class="group33"
-          />
-        </div>
-        <div class="col-md-3">
-          <img
-            src='{% static "assets/img/Ellipse%2056.png" %}'
-            alt="ellipse56"
-            class="ellipse"
-          />
-          <img
-            src='{% static "assets/img/1.png" %}'
-            alt="group"
-            class="images"
-          />
-          <h1 class="heading1">Build your community</h1>
-        </div>
+          <div class="col-md-6 order-md-2 order-1">
+         <h1 class="banner-heading">Make your mark as a <span class="banner-sub">tutor</span>.</h1>
+            <p class="banner-subtitle">Coachizz isn’t your average service. We know what worries you and what delights you. You’re a teacher! You’ve got enough worries as it is.
+           <br><br>
+			We’ll take care of the rest.
+			</p>
+			  
+			 <a href="#" class="btn getStart-btn">Get Started</a>
       </div>
-    </section>
-
-    <section id="we-offer">
-      <img
-        src='{% static "assets/img/Group%2051.png" %}'
-        alt="group51"
-        style="max-width: 400px; max-height: 700px; width: 100%; height: 100%"
-      />
-      <h1 class="heading2">What do we offer you?</h1>
-      <div id="offers1">
-        <div class="container py-5">
-          <div class="row">
-            <div class="col-md-4 white-bg">
-              <img
-                src='{% static "assets/img/Group%2049.png" %}'
-                alt="group49"
-                class="offer-images"
-              />
-            </div>
-            <div class="col-md-8 blue-bg">
-              <h1>Apply for teaching jobs</h1>
-              <p>
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-                eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
-                enim ad minim veniam, quis nostrud exercitation ullamco laboris
-                nisi ut aliquip ex ea commodo consequat.
-              </p>
-              <div class="text-center">
-                <a href="#" class="btn link-btns text-center">Apply Now</a>
-              </div>
-            </div>
-          </div>
-
-          <div class="row">
-            <div class="col-md-8 blue-bg order-md-1 order-2">
-              <h1>Solve Assignments</h1>
-              <p>
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-                eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
-                enim ad minim veniam, quis nostrud exercitation ullamco laboris
-                nisi ut aliquip ex ea commodo consequat.
-              </p>
-              <div class="text-center">
-                <a href="#" class="btn link-btns">Take a Look</a>
-              </div>
-            </div>
-            <div class="col-md-4 white-bg order-md-2 order-1">
-              <img
-                src='{% static "assets/img/image%204.png" %}'
-                alt="group49"
-                class="offer-images"
-              />
-            </div>
-          </div>
+			<img src='{% static "assets/img/Group%2053.png" %}' alt="group 53"  class="group53"/>
         </div>
+  </div>
+</header>
+</section>
+<section id="HowWorks">
+ <h1><img src='{% static "assets/img/Group%2033.png" %}' alt="group33" /> How it works </h1> 
+	
+<div class="row" style="margin: 50px 0;text-align: center">
+	<div class="col-md-3">
+	<img src='{% static "assets/img/Ellipse%2056.png" %}' alt="ellipse56"  class="ellipse" />
+	<img src='{% static "assets/img/plan%202.png" %}' alt="plan2"
+	class="images" />
+	<h1 class="heading1">Plan your course</h1>
+	</div>
+	<div class="col-md-1">
+	<img src='{% static "assets/img/Group%2033.png" %}' alt="group33" class="group33" /> 
+	</div>
+	<div class="col-md-3">
+	<img src='{% static "assets/img/Ellipse%2056.png" %}' alt="ellipse56"  class="ellipse" />
+	<img src='{% static "assets/img/create%202.png" %}' alt="create2"  class="images"/>	
+	<h1 class="heading1">Create your curriculum</h1>
+	</div>
+	<div class="col-md-1">
+	<img src='{% static "assets/img/Group%2033.png" %}' alt="group33" class="group33" /> 
+	</div>
+	<div class="col-md-3">
+	<img src='{% static "assets/img/Ellipse%2056.png" %}' alt="ellipse56"  class="ellipse" />
+	<img src='{% static "assets/img/1.png" %}' alt="group" class="images" />	
+	<h1 class="heading1"> Build your community</h1>
+	</div>
+</div>
+</section>
+
+
+<section id="we-offer">
+<img src='{% static "assets/img/Group%2051.png" %}' alt="group51" style="max-width: 400px;max-height: 700px;width: 100%;height: 100%"/>
+<h1 class="heading2">What do we offer you?</h1>
+<div id="offers1">
+<div class="container py-5">
+	<div class="row">
+    <div class="col-md-4 white-bg">
+	<img src='{% static "assets/img/Group%2049.png" %}' alt="group49" class="offer-images"/>
+	</div>
+	<div class="col-md-8 blue-bg">
+	<h1>Apply for teaching jobs</h1>
+	<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. </p>
+	<div class="text-center">
+	<a href="#" class="btn link-btns text-center">Apply Now</a>
+	</div>
+	</div>
+	</div>
+	
+	<div class="row">
+	<div class="col-md-8 blue-bg order-md-1 order-2">
+	<h1>Solve Assignments</h1>
+	<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. </p>
+	<div class="text-center">
+	<a href="#" class="btn link-btns">Take a Look</a>
+		</div>
+	</div>
+    <div class="col-md-4 white-bg order-md-2 order-1">
+	<img src='{% static "assets/img/image%204.png" %}' alt="group49" class="offer-images" />
+	</div>
+	</div>
+	</div>
+	</div>
+	
+	<div id="offers2">
+	<div class="container" style="margin-top: -100px">
+	<div class="row">
+    <div class="col-md-4 white-bg">
+	<img src='{% static "assets/img/Group%2074.png" %}' alt="group49" class="offer-images" />
+	</div>
+	<div class="col-md-8 blue-bg">
+	<h1>Make and Sell Courses</h1>
+	<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. </p>
+	<div class="text-center">
+	<a href="#" class="btn link-btns">See More</a>
+	</div>
+	</div>
+	</div>
+	
+	<div class="row">
+	<div class="col-md-8 blue-bg order-md-1 order-2">
+	<h1>Sell Notes</h1>
+	<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. </p>
+	<div class="text-center">
+	<a href="#" class="btn link-btns">Get Started</a>
+	</div>
+	</div>
+    <div class="col-md-4 white-bg order-md-2 order-1">
+	<img src='{% static "assets/img/Group%2070.png" %}' alt="group49" class="offer-images" />
+	</div>
+	</div>
+	
+	<div class="row">
+    <div class="col-md-4 white-bg">
+	<img src='{% static "assets/img/Group%2072.png" %}' alt="group49" class="offer-images" />
+	</div>
+	<div class="col-md-8 blue-bg">
+	<h1>Sell Mock Tests</h1>
+	<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. </p>
+	<div class="text-center">
+	<a href="#" class="btn link-btns">See More</a>
+	</div>
+	</div>
+	</div>
+	</div>
+	<img src='{% static "assets/img/Group%2057.png" %}' alt="group57" style="position: absolute;right: 80px;margin-top: -120px;z-index: -1;max-width: 480px;max-height: 700px"/>
+</div>
+</section>
+
+<section id="footer">
+	 <div class="row mb-3 py-5">
+	<div class="col-lg-7">
+<div style="color: white;float: left;" id="details">
+	   <span>
+	    <i class="fa fa-phone icons"></i>
+		<ul class="list-unstyled address">
+		<li>9999999999</li>
+        <li>8989898989</li>
+		</ul>
+		</span>
+	    <span>
+		<i class="fa fa-map-marker icons"></i>
+		<ul class="list-unstyled address">
+		<li>Example address,</li>
+		<li>Example Road,</li>
+		<li>India</li>
+		</ul>
+		</span>
+	    <span>
+	    <i class="fa fa-envelope icons"></i>
+		<ul class="list-unstyled address">
+		<li>example@gmail.com</li>
+		</ul>
+	    </span>
+	<ul class="list-inline mt-4 social-links">
+             <li class="list-inline-item">
+			 <a href="https://www.facebook.com/Code2Learn-103306408351004" target="_blank" title="facebook"><i class="fa fa-facebook"></i></a></li>
+            <li class="list-inline-item"><a href="#" target="_blank" title="twitter"><i class="fa fa-twitter"></i></a></li>
+            <li class="list-inline-item"><a href="https://www.instagram.com/codee2learn/" target="_blank" title="instagram"><i class="fa fa-instagram"></i></a></li>
+          </ul>
+</div>
+		<img src='{% static "assets/img/Contact%20us-amico.png" %}' width="100%" height="100%"  alt="Contact Us" id="contact-image"/>
+  </div>
+	<div class="col-lg-5">
+	  <form>
+      <h2 class="heading1"> Start your journey here</h2>
+    <div class="form-group form-row">
+      <div class="col">
+        <input type="text" class="form-control" id="email" placeholder="First Name" name="name" required>
+		<div class="valid-feedback">Valid.</div>
+      <div class="invalid-feedback">Please fill out this field.</div>
       </div>
-
-      <div id="offers2">
-        <div class="container" style="margin-top: -100px">
-          <div class="row">
-            <div class="col-md-4 white-bg">
-              <img
-                src='{% static "assets/img/Group%2074.png" %}'
-                alt="group49"
-                class="offer-images"
-              />
-            </div>
-            <div class="col-md-8 blue-bg">
-              <h1>Make and Sell Courses</h1>
-              <p>
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-                eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
-                enim ad minim veniam, quis nostrud exercitation ullamco laboris
-                nisi ut aliquip ex ea commodo consequat.
-              </p>
-              <div class="text-center">
-                <a href="#" class="btn link-btns">See More</a>
-              </div>
-            </div>
-          </div>
-
-          <div class="row">
-            <div class="col-md-8 blue-bg order-md-1 order-2">
-              <h1>Sell Notes</h1>
-              <p>
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-                eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
-                enim ad minim veniam, quis nostrud exercitation ullamco laboris
-                nisi ut aliquip ex ea commodo consequat.
-              </p>
-              <div class="text-center">
-                <a href="#" class="btn link-btns">Get Started</a>
-              </div>
-            </div>
-            <div class="col-md-4 white-bg order-md-2 order-1">
-              <img
-                src='{% static "assets/img/Group%2070.png" %}'
-                alt="group49"
-                class="offer-images"
-              />
-            </div>
-          </div>
-
-          <div class="row">
-            <div class="col-md-4 white-bg">
-              <img
-                src='{% static "assets/img/Group%2072.png" %}'
-                alt="group49"
-                class="offer-images"
-              />
-            </div>
-            <div class="col-md-8 blue-bg">
-              <h1>Sell Mock Tests</h1>
-              <p>
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-                eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
-                enim ad minim veniam, quis nostrud exercitation ullamco laboris
-                nisi ut aliquip ex ea commodo consequat.
-              </p>
-              <div class="text-center">
-                <a href="#" class="btn link-btns">See More</a>
-              </div>
-            </div>
-          </div>
-        </div>
-        <img
-          src='{% static "assets/img/Group%2057.png" %}'
-          alt="group57"
-          style="
-            position: absolute;
-            right: 80px;
-            margin-top: -120px;
-            z-index: -1;
-            max-width: 480px;
-            max-height: 700px;
-          "
-        />
+      <div class="col">
+        <input type="text" class="form-control" placeholder="Last Name" name="name" required>
+		 <div class="valid-feedback">Valid.</div>
+      <div class="invalid-feedback">Please fill out this field.</div>
       </div>
-    </section>
+    </div>
+	 <div class="form-group">
+      <input type="email" class="form-control" id="email" placeholder="Email Address" name="email" required>
+      <div class="valid-feedback">Valid.</div>
+      <div class="invalid-feedback">Please fill out this field.</div>
+    </div>
+    <div class="form-group">
+      <input type="text" class="form-control" id="cnum" placeholder="Contact Number" name="cnum" required>
+      <div class="valid-feedback">Valid.</div>
+      <div class="invalid-feedback">Please fill out this field.</div>
+	</div>
+	<div class="form-group">
+      <textarea class="form-control" rows="3" id="comment" name="comment" placeholder="Enter your message"></textarea>
+    </div>
+      <button type="submit" class="btn btn-block">Send</button>
 
-    <section id="footer">
-      <div class="row mb-3 py-5">
-        <div class="col-lg-7">
-          <div style="color: white; float: left" id="details">
-            <span>
-              <i class="fa fa-phone icons"></i>
-              <ul class="list-unstyled address">
-                <li>9999999999</li>
-                <li>8989898989</li>
-              </ul>
-            </span>
-            <span>
-              <i class="fa fa-map-marker icons"></i>
-              <ul class="list-unstyled address">
-                <li>Example address,</li>
-                <li>Example Road,</li>
-                <li>India</li>
-              </ul>
-            </span>
-            <span>
-              <i class="fa fa-envelope icons"></i>
-              <ul class="list-unstyled address">
-                <li>example@gmail.com</li>
-              </ul>
-            </span>
-            <ul class="list-inline mt-4 social-links">
-              <li class="list-inline-item">
-                <a
-                  href="https://www.facebook.com/Code2Learn-103306408351004"
-                  target="_blank"
-                  title="facebook"
-                  ><i class="fa fa-facebook"></i
-                ></a>
-              </li>
-              <li class="list-inline-item">
-                <a href="#" target="_blank" title="twitter"
-                  ><i class="fa fa-twitter"></i
-                ></a>
-              </li>
-              <li class="list-inline-item">
-                <a
-                  href="https://www.instagram.com/codee2learn/"
-                  target="_blank"
-                  title="instagram"
-                  ><i class="fa fa-instagram"></i
-                ></a>
-              </li>
-            </ul>
-          </div>
-          <img
-            src='{% static "assets/img/Contact%20us-amico.png" %}'
-            width="100%"
-            height="100%"
-            alt="Contact Us"
-            id="contact-image"
-          />
-        </div>
-        <div class="col-lg-5">
-          <form>
-            <h2 class="heading1">Start your journey here</h2>
-            <div class="form-group form-row">
-              <div class="col">
-                <input
-                  type="text"
-                  class="form-control"
-                  id="email"
-                  placeholder="First Name"
-                  name="name"
-                  required
-                />
-                <div class="valid-feedback">Valid.</div>
-                <div class="invalid-feedback">Please fill out this field.</div>
-              </div>
-              <div class="col">
-                <input
-                  type="text"
-                  class="form-control"
-                  placeholder="Last Name"
-                  name="name"
-                  required
-                />
-                <div class="valid-feedback">Valid.</div>
-                <div class="invalid-feedback">Please fill out this field.</div>
-              </div>
-            </div>
-            <div class="form-group">
-              <input
-                type="email"
-                class="form-control"
-                id="email"
-                placeholder="Email Address"
-                name="email"
-                required
-              />
-              <div class="valid-feedback">Valid.</div>
-              <div class="invalid-feedback">Please fill out this field.</div>
-            </div>
-            <div class="form-group">
-              <input
-                type="text"
-                class="form-control"
-                id="cnum"
-                placeholder="Contact Number"
-                name="cnum"
-                required
-              />
-              <div class="valid-feedback">Valid.</div>
-              <div class="invalid-feedback">Please fill out this field.</div>
-            </div>
-            <div class="form-group">
-              <textarea
-                class="form-control"
-                rows="3"
-                id="comment"
-                name="comment"
-                placeholder="Enter your message"
-              ></textarea>
-            </div>
-            <button type="submit" class="btn btn-block">Send</button>
-          </form>
-        </div>
-      </div>
-
+  </form>
+    </div>
+    </div>
+		
       <div class="row">
         <div class="col-lg-4 col-md-6 mb-4">
-          <h2 class="mb-3 logo-heading">CHOACHIZZ</h2>
-          <ul class="footer-term list-unstyled mb-0">
-            <li class="mb-2">© 2010 — 2020</li>
-            <li class="mb-2">Privacy — Terms</li>
+			<h2 class="mb-3 logo-heading">CHOACHIZZ</h2>
+		  <ul class="footer-term list-unstyled mb-0">
+          <li class="mb-2">© 2010 — 2020</li>
+		  <li class="mb-2">Privacy — Terms</li>
+			</ul>
+        </div>
+		 <div class="col-lg-4 col-md-6 mb-4">
+		<div class="row">
+        <div class="col-6">
+          <h6 class="footer-headings mb-3">For Students</h6>
+          <ul class="footer-links list-unstyled mb-0">
+            <li class="mb-2"><a href="#">Product</a></li>
+            <li class="mb-2"><a href="#">Product</a></li>
+            <li class="mb-2"><a href="#">Product</a></li>
           </ul>
         </div>
-        <div class="col-lg-4 col-md-6 mb-4">
-          <div class="row">
-            <div class="col-6">
-              <h6 class="footer-headings mb-3">For Students</h6>
-              <ul class="footer-links list-unstyled mb-0">
-                <li class="mb-2"><a href="#">Product</a></li>
-                <li class="mb-2"><a href="#">Product</a></li>
-                <li class="mb-2"><a href="#">Product</a></li>
-              </ul>
-            </div>
-            <div class="col-6">
-              <h6 class="footer-headings mb-3">For Teachers</h6>
-              <ul class="footer-links list-unstyled mb-0">
-                <li class="mb-2"><a href="#">Feature</a></li>
-                <li class="mb-2"><a href="#">Feature</a></li>
-                <li class="mb-2"><a href="#">Feature</a></li>
-              </ul>
-            </div>
-          </div>
+        <div class="col-6">
+          <h6 class="footer-headings mb-3">For Teachers</h6>
+          <ul class="footer-links list-unstyled mb-0">
+            <li class="mb-2"><a href="#">Feature</a></li>
+            <li class="mb-2"><a href="#">Feature</a></li>
+            <li class="mb-2"><a href="#">Feature</a></li>
+          </ul>
         </div>
+		</div> 
+		</div>
         <div class="col-lg-4 col-md-6">
-          <div class="row">
-            <div class="col-6">
-              <h6 class="footer-headings mb-3">For Institues</h6>
-              <ul class="footer-links list-unstyled mb-0">
-                <li class="mb-2"><a href="#">Resource</a></li>
-                <li class="mb-2"><a href="#">Resource</a></li>
-                <li class="mb-2"><a href="#">Resource</a></li>
-              </ul>
-            </div>
-            <div class="col-6">
-              <h6 class="footer-headings mb-3">Feedback</h6>
-              <ul class="footer-links list-unstyled mb-0">
-                <li class="mb-2"><a href="#">Company</a></li>
-                <li class="mb-2"><a href="#">Company</a></li>
-                <li class="mb-2"><a href="#">Company</a></li>
-              </ul>
-            </div>
-          </div>
+          	<div class="row">
+        <div class="col-6">
+          <h6 class="footer-headings mb-3">For Institues</h6>
+          <ul class="footer-links list-unstyled mb-0">
+            <li class="mb-2"><a href="#">Resource</a></li>
+            <li class="mb-2"><a href="#">Resource</a></li>
+            <li class="mb-2"><a href="#">Resource</a></li>
+          </ul>
+        </div>
+        <div class="col-6">
+          <h6 class="footer-headings mb-3">Feedback</h6>
+          <ul class="footer-links list-unstyled mb-0">
+            <li class="mb-2"><a href="#">Company</a></li>
+            <li class="mb-2"><a href="#">Company</a></li>
+            <li class="mb-2"><a href="#">Company</a></li>
+          </ul>
+        </div>
+		</div>
         </div>
       </div>
-
-      <!-- Go to Top Link -->
-      <a href="body" class="back-to-top page-scroll">
-        <i class="fa fa-angle-up"></i>
-      </a>
-
-      <!-- End -->
-    </section>
-  </body>
+	 
+   <!-- Go to Top Link -->
+    <a href="body" class="back-to-top page-scroll">
+      <i class="fa fa-angle-up"></i>
+    </a>
+	
+  <!-- End -->    
+</section>
+</body>
 </html>

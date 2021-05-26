@@ -1,118 +1,112 @@
-{% extends 'dashboard/base.html' %} {% load static %} {% block css %}
+{% extends 'dashboard/base.html' %}
+{% load static %}
+{% block css %}
 <style>
-  .table-bordered.red-border,
-  .table-bordered.red-border th,
-  .table-bordered.red-border td {
-    border: 1px solid #ff3547 !important;
-  }
-  .table.table-bordered th {
+.table-bordered.red-border, .table-bordered.red-border th, .table-bordered.red-border td {
+    border: 1px solid #ff3547!important;
+}
+.table.table-bordered th {
     text-align: center;
-  }
-  .darken-grey-text {
-    color: #2e2e2e;
-  }
-  .input-group.md-form.form-sm.form-2 input {
+}
+.darken-grey-text {
+    color: #2E2E2E;
+}
+.input-group.md-form.form-sm.form-2 input {
     border: 1px solid #bdbdbd;
     border-top-left-radius: 0.25rem;
     border-bottom-left-radius: 0.25rem;
-  }
-  .input-group.md-form.form-sm.form-2 input.purple-border {
+}
+.input-group.md-form.form-sm.form-2 input.purple-border {
     border: 1px solid #9e9e9e;
-  }
-  .input-group.md-form.form-sm.form-2
-    input[type="text"]:focus:not([readonly]).purple-border {
+}
+.input-group.md-form.form-sm.form-2 input[type=text]:focus:not([readonly]).purple-border {
     border: 1px solid #ba68c8;
     box-shadow: none;
-  }
-  .form-2 .input-group-addon {
+}
+.form-2 .input-group-addon {
     border: 1px solid #ba68c8;
-  }
-  .danger-text {
-    color: #ff3547;
-  }
-  .success-text {
-    color: #00c851;
-  }
+}
+.danger-text {
+    color: #ff3547; 
+}
+.success-text {
+    color: #00C851; 
+}
 </style>
-{% endblock %} {% block main-content %}
+{% endblock %}
+{% block main-content %}
 <div class="mt-5">
-  {% if messages %} {% for k in messages%}
-  <div class="alert alert-{{k.tags}} alert-dismissible fade show" role="alert">
-    <b>{{ k }} !</b>
-    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-      <span aria-hidden="true">&times;</span>
-    </button>
-  </div>
-  {% endfor %} {% endif %}
-  <div class="card mb-4">
-    <div class="card-body">
-      <div>
-        <h2 style="color: rgb(66, 8, 8)">Search Fee Details</h2>
-        <br />
-        <form action="/searchFee/" method="POST">
-          {% csrf_token %}
-          <div class="form-group">
-            <div class="col-lg-5">
-              <input
-                type="text"
-                class="form-control"
-                name="srh"
-                placeholder="Enter Teaching Type or Course Enrolled or Fee Duration"
-              />
-            </div>
-            <br />
-            <label class="col-lg-2">
-              <button type="submit" class="btn btn-warning">Search</button>
-            </label>
-          </div>
-        </form>
-        <br />
-        <div>
-          {% if messages %}
-          <ul class="messages">
-            {% for k in messages %}
-            <li style="color: darkred">{{ k }}</li>
-            {% endfor %}
-          </ul>
-          {% endif %}
-        </div>
-        <br />
-        <div>
-          {% if sr %}
-          <table class="table table-striped">
-            <!--Table head-->
-            <thead>
-              <tr>
-                <th>Course Name</th>
-                <th>Teaching Type</th>
-                <th>Duration</th>
-                <th>Fee Duration</th>
-                <th>Number of Installments</th>
-                <th>Course Fee</th>
-              </tr>
-            </thead>
-            <!--Table head-->
-            <!--Table body-->
-            {% for k in sr %}
-            <tbody>
-              <tr>
-                <td>{{k.courseName}}</td>
-                <td>{{k.teachType}}</td>
-                <td>{{k.duration}}</td>
-                <td>{{k.feeDuration}}</td>
-                <td>{{k.no_of_installment}}</td>
-                <td>{{k.feeamt}}</td>
-              </tr>
-            </tbody>
-            {% endfor %}
-            <!--Table body-->
-          </table>
-          <!--Table-->
-          <hr />
-          {% endif %}
-        </div>
-      </div>
+    {% if messages %}
+    {% for k in messages%}
+    <div class="alert alert-{{k.tags}} alert-dismissible fade show" role="alert">
+        <b>{{ k }} !</b>
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
     </div>
-  </div>
+    {% endfor %}
+    {% endif %}
+    <div class="card mb-4">
+        <div class="card-body">
+            <div>
+                <h2 style="color: rgb(66, 8, 8);">Search Fee Details</h2>
+                <br>
+                <form action="/searchFee/" method="POST">{% csrf_token %}
+                    <div class="form-group">
+                        <div class="col-lg-5">
+                            <input type="text" class="form-control" name='srh' placeholder="Enter Teaching Type or Course Enrolled or Fee Duration">
+                        </div>
+                        <br>
+                        <label class="col-lg-2">
+                            <button type="submit" class="btn btn-warning">Search</button>
+                        </label>
+                    </div>
+                </form><br>
+                <div>
+                    {% if messages %}
+                        <ul class="messages">
+                            {% for k in messages %}
+                                <li style="color: darkred;">{{ k }}</li>
+                            {% endfor %}
+                        </ul>
+                    {% endif %}
+                </div><br>
+                <div>
+                    {% if sr %}
+                            <table class="table table-striped">
+                                <!--Table head-->
+                                <thead>
+                                    <tr>
+                                        <th>Course Name</th>
+                                        <th>Teaching Type</th>
+                                        <th>Duration</th>
+                                        <th>Fee Duration</th>
+                                        <th>Number of Installments</th>
+                                        <th>Course Fee</th>
+                                    </tr>
+                                </thead>
+                                <!--Table head-->
+                                <!--Table body-->
+                                {% for k in sr %}
+                                    <tbody>
+                                            <tr>
+                                                <td>{{k.courseName}}</td>
+                                                <td>{{k.teachType}}</td>
+                                                <td>{{k.duration}}</td>
+                                                <td>{{k.feeDuration}}</td>
+                                                <td>{{k.no_of_installment}}</td>
+                                                <td>{{k.feeamt}}</td>
+                                            </tr>
+                                    </tbody>
+                                {% endfor %}
+                                <!--Table body-->
+                            </table>
+                            <!--Table-->
+                            <hr>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 {% endblock %}

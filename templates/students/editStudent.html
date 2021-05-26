@@ -1,6 +1,8 @@
-{% extends 'dashboard/base.html' %} {% load static %} {% block css %}
+{% extends 'dashboard/base.html' %}
+{% load static %}
+{% block css %}
 <style>
-  @import url("https://fonts.googleapis.com/css?family=Numans");
+  @import url('https://fonts.googleapis.com/css?family=Numans');
 
   .container {
     height: 100%;
@@ -16,7 +18,7 @@
   .social_icon span {
     font-size: 60px;
     margin-left: 10px;
-    color: #ffc312;
+    color: #FFC312;
   }
 
   .social_icon span:hover {
@@ -36,7 +38,7 @@
 
   .input-group-prepend span {
     width: 50px;
-    background-color: #ffc312;
+    background-color: #FFC312;
     color: black;
     border: 0 !important;
   }
@@ -44,6 +46,7 @@
   input:focus {
     outline: 0 0 0 0 !important;
     box-shadow: 0 0 0 0 !important;
+
   }
 
   .remember {
@@ -59,7 +62,7 @@
 
   .login_btn {
     color: black;
-    background-color: #ffc312;
+    background-color: #FFC312;
     width: 100px;
   }
 
@@ -108,7 +111,7 @@
   }
 
   .button:after {
-    content: "";
+    content: '';
     position: absolute;
     z-index: -1;
     -webkit-transition: all 0.3s;
@@ -131,7 +134,7 @@
     top: 2px;
   }
 
-  .button-3 > .fa {
+  .button-3>.fa {
     position: absolute;
     height: 100%;
     left: 0;
@@ -140,7 +143,7 @@
     width: 60px;
   }
 
-  .button-3 > .fa:before {
+  .button-3>.fa:before {
     position: absolute;
     width: 25px;
     height: 25px;
@@ -156,7 +159,7 @@
     padding: 25px 60px 25px 120px;
   }
 
-  .button-3a > .fa {
+  .button-3a>.fa {
     background: rgba(0, 0, 0, 0.05);
   }
 
@@ -166,7 +169,7 @@
     border-radius: 10px;
   }
 
-  .button-3b > .fa {
+  .button-3b>.fa {
     border-right: 2px solid rgba(255, 255, 255, 0.75);
   }
 
@@ -177,7 +180,7 @@
     box-shadow: 0 3px #da9622;
   }
 
-  .button-3c > .fa:before {
+  .button-3c>.fa:before {
     position: static;
   }
 
@@ -185,7 +188,7 @@
     box-shadow: 0 3px #dc7801;
   }
 
-  .button-3c > .fa {
+  .button-3c>.fa {
     height: 60px;
     width: 100%;
     line-height: 60px;
@@ -204,7 +207,7 @@
     border-radius: 10px;
   }
 
-  .button-3d > .fa {
+  .button-3d>.fa {
     background: #fff;
     color: #fcad26;
     z-index: 2;
@@ -243,7 +246,7 @@
     overflow: hidden;
   }
 
-  .button-3e > .fa {
+  .button-3e>.fa {
     left: auto;
     right: 10px;
     z-index: 2;
@@ -357,168 +360,84 @@
     z-index: 1100 !important;
   }
 </style>
-{% endblock %} {% block main-content %}
-<script
-  src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCBJybI10-Xa43-F5GSad1i0Y9W3yqlW6Q&libraries=places&v=3"
-  defer
-></script>
+{% endblock %}
+{% block main-content %}
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCBJybI10-Xa43-F5GSad1i0Y9W3yqlW6Q&libraries=places&v=3"
+  defer></script>
 
 <div class="mt-5">
-  {% if messages %} {% for k in messages%}
+  {% if messages %}
+  {% for k in messages%}
   <div class="alert alert-{{k.tags}} alert-dismissible fade show" role="alert">
     <b>{{ k }} !</b>
     <button type="button" class="close" data-dismiss="alert" aria-label="Close">
       <span aria-hidden="true">&times;</span>
     </button>
   </div>
-  {% endfor %} {% endif %}
+  {% endfor %}
+  {% endif %}
   <div class="card">
     <div class="card-header">
       <div class="row">
         <div class="col-sm">
-          <h2 style="color: rgb(0, 0, 0)">Edit Student</h2>
+          <h2 style="color: rgb(0, 0, 0);">Edit Student</h2>
         </div>
       </div>
     </div>
     <div class="card-body">
-      <form id="submitForm" action="" method="post">
-        {% csrf_token %}
+      <form id="submitForm" action="" method="post">{% csrf_token %}
         <div class="row">
           <div class="col-md-6 col-lg-4 col-12 input-group form-group">
-            <label
-              class="control-label col-sm-5 col-5 mt-2"
-              style="color: black"
-              >First name<span class="text-danger">*</span></label
-            >
-            <input
-              type="text"
-              class="form-control"
-              id="firstName"
-              name="firstName"
-              placeholder="First Name"
-              value="{{studentBaseData.user.first_name}}"
-              readonly
-              required
-            />
+            <label class="control-label col-sm-5 col-5 mt-2" style="color:black;">First name<span
+                class="text-danger">*</span></label>
+            <input type="text" class="form-control" id="firstName" name='firstName' placeholder="First Name"
+              value="{{studentBaseData.user.first_name}}" readonly required>
           </div>
           <div class="col-md-6 col-lg-4 col-12 input-group form-group">
-            <label
-              class="control-label col-sm-5 col-5 mt-2"
-              style="color: black"
-              >Last name</label
-            >
-            <input
-              type="text"
-              class="form-control"
-              id="lastName"
-              name="lastName"
-              placeholder="Last Name"
-              value="{{studentBaseData.user.last_name}}"
-              readonly
-            />
+            <label class="control-label col-sm-5 col-5 mt-2" style="color:black;">Last name</label>
+            <input type="text" class="form-control" id="lastName" name='lastName' placeholder="Last Name"
+              value="{{studentBaseData.user.last_name}}" readonly>
           </div>
           <div class="col-md-6 col-lg-4 col-12 input-group form-group">
-            <label
-              class="control-label col-sm-5 col-5 mt-2"
-              style="color: black"
-              >Email Id<span class="text-danger">*</span></label
-            >
-            <input
-              type="email"
-              class="form-control"
-              id="email"
-              name="email"
-              placeholder="Email Address"
-              value="{{studentBaseData.user.email}}"
-              readonly
-              required
-            />
+            <label class="control-label col-sm-5 col-5 mt-2" style="color:black;">Email Id<span
+                class="text-danger">*</span></label>
+            <input type="email" class="form-control" id="email" name='email' placeholder="Email Address"
+              value="{{studentBaseData.user.email}}" readonly required>
           </div>
           <div class="col-md-6 col-lg-4 col-12 input-group form-group">
-            <label
-              class="control-label col-sm-5 col-5 mt-2"
-              style="color: black"
-              >Phone Number<span class="text-danger">*</span></label
-            >
-            <input
-              type="tel"
-              pattern="[0-9]{10}"
-              class="form-control"
-              id="phone"
-              name="phone"
-              value="{{studentBaseData.phone}}"
-              readonly
-              required
-            />
+            <label class="control-label col-sm-5 col-5 mt-2" style="color:black;">Phone Number<span
+                class="text-danger">*</span></label>
+            <input type="tel" pattern="[0-9]{10}" class="form-control" id="phone" name='phone'
+              value="{{studentBaseData.phone}}" readonly required>
           </div>
           <div class="col-md-6 col-lg-4 col-12 input-group form-group">
-            <label
-              class="control-label col-sm-5 col-5 mt-2"
-              style="color: black"
-              >Address<span class="text-danger">*</span></label
-            >
-            <input
-              id="pac-input"
-              type="text"
-              class="controls form-control"
-              name="loc"
-              placeholder="Search Address"
-              value="{{studentBaseData.address}}"
-              required
-            />
-            <input
-              type="hidden"
-              id="cityLat"
-              name="cityLat"
-              value="{{qry.conector.latitude}}"
-            />
-            <input
-              type="hidden"
-              id="cityLng"
-              name="cityLng"
-              value="{{qry.conector.longitude}}"
-            />
+            <label class="control-label col-sm-5 col-5 mt-2" style="color:black;">Address<span
+                class="text-danger">*</span></label>
+            <input id="pac-input" type="text" class="controls form-control" name='loc' placeholder="Search Address"
+              value="{{studentBaseData.address}}" required>
+            <input type="hidden" id="cityLat" name="cityLat" value="{{qry.conector.latitude}}" />
+            <input type="hidden" id="cityLng" name="cityLng" value="{{qry.conector.longitude}}" />
           </div>
           <div class="col-md-6 col-lg-4 col-12 input-group form-group">
-            <label
-              class="control-label col-sm-5 col-5 mt-2"
-              style="color: black"
-              >School Name</label
-            >
-            <input
-              type="text"
-              class="form-control"
-              id="schoolName"
-              name="school"
-              placeholder="School Name"
-              value="{{studentBaseData.schoolName}}"
-            />
+            <label class="control-label col-sm-5 col-5 mt-2" style="color:black;">School Name</label>
+            <input type="text" class="form-control" id="schoolName" name='school' placeholder="School Name"
+              value="{{studentBaseData.schoolName}}">
           </div>
         </div>
-        <hr />
+        <hr>
 
         <!-- detail start -->
-        <div id="mainForm" class="outside"></div>
-        <div class="col-lg-12 col-md-12 col-12 d-flex justify-content-end">
-          <button
-            class="btn btn-info btn-md"
-            type="button"
-            onclick="duplicate(this)"
-          >
-            Add New
-          </button>
+        <div id='mainForm' class="outside">
+
         </div>
-        <hr />
+        <div class="col-lg-12 col-md-12  col-12 d-flex justify-content-end">
+          <button class="btn btn-info btn-md" type="button" onclick="duplicate(this)">Add
+            New</button>
+        </div>
+        <hr>
 
         <div class="col-lg-12 col-md-12 col-12 mt-4 text-center">
-          <button
-            id="submitBtn"
-            name="submit"
-            type="submit"
-            class="btn btn-info"
-          >
-            Submit
-          </button>
+          <button id='submitBtn' name="submit" type="submit" class="btn btn-info">Submit</button>
         </div>
       </form>
     </div>
@@ -814,18 +733,18 @@
     {% for i in editStudent %}
     $('.outside').append(`<div class="row entry">
       {% if forloop.counter != 1 %}
-  	<div class="input-group" style="width: 92%">
+			<div class="input-group" style="width: 92%">
         {% endif %}
         <div class="col-md-6 col-lg-4 col-12 input-group form-group">
           <label class="control-label col-sm-5 col-5 mt-2" style="color:black;" for="cn">Class<span
             class="text-danger">*</span></label>
           <select name="cn" class="cn custom-select form-control" required="required" onchange="selectclass(this)">
             <option selected value="{{ i.forclass }}">{{ i.forclass }}</option>
-  				{% for x in data %}
-  					{% if x.0 != i.forclass %}
-  						<option value="{{ x.0 }}">{{ x.0 }}</option>
-  					{% endif %}
-  				{% endfor %}
+						{% for x in data %}
+							{% if x.0 != i.forclass %}
+								<option value="{{ x.0 }}">{{ x.0 }}</option>
+							{% endif %}
+						{% endfor %}
           </select>
         </div>
         <div class="col-md-6 col-lg-4 col-12 input-group form-group">
@@ -868,11 +787,11 @@
           <input type="number" class="form-control" name="feedis" placeholder="In Percentage(%)" value = "{{i.feeDisc}}">
                     </div>
           {% if forloop.counter != 1 %}
-  		</div>
+				</div>
         <div class="mx-auto">
           <button type="button" class="btn btn-success" onclick="removeDuplicate(this)">
             Remove
-  			</button>
+					</button>
         </div>
         {% endif %}
       </div>`)
@@ -931,5 +850,6 @@
             location.reload();
         }
   });
+
 </script>
 {% endblock %}

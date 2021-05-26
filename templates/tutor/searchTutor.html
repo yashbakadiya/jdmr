@@ -1,90 +1,104 @@
-{% extends 'tutor/dashboard.html' %} {% load static %} {% block css %}
-.table-bordered.red-border, .table-bordered.red-border th,
-.table-bordered.red-border td { border: 1px solid #ff3547!important; }
-.table.table-bordered th { text-align: center; } .darken-grey-text { color:
-#2E2E2E; } .input-group.md-form.form-sm.form-2 input { border: 1px solid
-#bdbdbd; border-top-left-radius: 0.25rem; border-bottom-left-radius: 0.25rem; }
-.input-group.md-form.form-sm.form-2 input.purple-border { border: 1px solid
-#9e9e9e; } .input-group.md-form.form-sm.form-2
-input[type=text]:focus:not([readonly]).purple-border { border: 1px solid
-#ba68c8; box-shadow: none; } .form-2 .input-group-addon { border: 1px solid
-#ba68c8; } .danger-text { color: #ff3547; } .success-text { color: #00C851; } {%
-endblock %} {% block body %}
-<div class="container mt-4">
-  <div class="card mb-4">
-    <div class="card-body">
-      <div>
-        <h2 style="color: rgb(66, 8, 8)">Search Tutor</h2>
-        <br />
-        <form action="/searchTutor/" method="POST">
-          {% csrf_token %}
-          <div class="form-group">
-            <div class="col-lg-5">
-              <input
-                type="text"
-                class="form-control"
-                name="srh"
-                placeholder="Enter Tutor Name or Class Name or Course Taught or Availability or Teaching Type"
-                required
-              />
+{% extends 'tutor/dashboard.html' %}
+{% load static %}
+{% block css %}
+.table-bordered.red-border, .table-bordered.red-border th, .table-bordered.red-border td {
+    border: 1px solid #ff3547!important;
+}
+.table.table-bordered th {
+    text-align: center;
+}
+.darken-grey-text {
+    color: #2E2E2E;
+}
+.input-group.md-form.form-sm.form-2 input {
+    border: 1px solid #bdbdbd;
+    border-top-left-radius: 0.25rem;
+    border-bottom-left-radius: 0.25rem;
+}
+.input-group.md-form.form-sm.form-2 input.purple-border {
+    border: 1px solid #9e9e9e;
+}
+.input-group.md-form.form-sm.form-2 input[type=text]:focus:not([readonly]).purple-border {
+    border: 1px solid #ba68c8;
+    box-shadow: none;
+}
+.form-2 .input-group-addon {
+    border: 1px solid #ba68c8;
+}
+.danger-text {
+    color: #ff3547; 
+}
+.success-text {
+    color: #00C851; 
+}
+{% endblock %}
+{% block body %}
+        <div class="container mt-4">
+            <div class="card mb-4">
+                <div class="card-body">
+                    <div>
+                        <h2 style="color: rgb(66, 8, 8);">Search Tutor</h2>
+                        <br>
+                        <form action="/searchTutor/" method="POST">{% csrf_token %}
+                            <div class="form-group">
+                                <div class="col-lg-5">
+                                    <input type="text" class="form-control" name='srh' placeholder="Enter Tutor Name or Class Name or Course Taught or Availability or Teaching Type" required>
+                                </div>
+                                <br>
+                                <label class="col-lg-2">
+                                    <button type="submit" class="btn btn-warning">Search</button>
+                                </label>
+                            </div>
+                        </form><br>
+                        <div>
+                            {% if messages %}
+                                <ul class="messages">
+                                    {% for k in messages %}
+                                        <li style="color: darkred;">{{ k }}</li>
+                                    {% endfor %}
+                                </ul>
+                            {% endif %}
+                        </div><br>
+                        <div>
+                            {% if sr %}
+                                    <table class="table table-striped">
+                                        <!--Table head-->
+                                        <thead>
+                                            <tr>
+                                                <th>Tutor Name</th>
+                                                <th>Email Id</th>
+                                                <th>Password</th>
+                                                <th>Phone Number</th>
+                                                <th>Course Taught</th>
+                                                <th>Class</th>
+                                                <th>Availability</th>
+                                                <th>Teaching Type</th>
+                                            </tr>
+                                        </thead>
+                                        <!--Table head-->
+                                        <!--Table body-->
+                                        {% for k in sr %}
+                                            <tbody>
+                                                    <tr>
+                                                        <td>{{k.tutorname}}</td>
+                                                        <td>{{k.email}}</td>
+                                                        <td>{{k.password}}</td>
+                                                        <td>{{k.phone}}</td>
+                                                        <td>{{k.courseTaught}}</td>
+                                                        <td>{{k.forclass}}</td>
+                                                        <td>{{k.availability}}</td>
+                                                        <td>{{k.teachType}}</td>
+                                                    </tr>
+                                            </tbody>
+                                        {% endfor %}
+                                        <!--Table body-->
+                                    </table>
+                                    <!--Table-->
+                                    <hr>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
             </div>
-            <br />
-            <label class="col-lg-2">
-              <button type="submit" class="btn btn-warning">Search</button>
-            </label>
-          </div>
-        </form>
-        <br />
-        <div>
-          {% if messages %}
-          <ul class="messages">
-            {% for k in messages %}
-            <li style="color: darkred">{{ k }}</li>
-            {% endfor %}
-          </ul>
-          {% endif %}
         </div>
-        <br />
-        <div>
-          {% if sr %}
-          <table class="table table-striped">
-            <!--Table head-->
-            <thead>
-              <tr>
-                <th>Tutor Name</th>
-                <th>Email Id</th>
-                <th>Password</th>
-                <th>Phone Number</th>
-                <th>Course Taught</th>
-                <th>Class</th>
-                <th>Availability</th>
-                <th>Teaching Type</th>
-              </tr>
-            </thead>
-            <!--Table head-->
-            <!--Table body-->
-            {% for k in sr %}
-            <tbody>
-              <tr>
-                <td>{{k.tutorname}}</td>
-                <td>{{k.email}}</td>
-                <td>{{k.password}}</td>
-                <td>{{k.phone}}</td>
-                <td>{{k.courseTaught}}</td>
-                <td>{{k.forclass}}</td>
-                <td>{{k.availability}}</td>
-                <td>{{k.teachType}}</td>
-              </tr>
-            </tbody>
-            {% endfor %}
-            <!--Table body-->
-          </table>
-          <!--Table-->
-          <hr />
-          {% endif %}
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
 {% endblock %}

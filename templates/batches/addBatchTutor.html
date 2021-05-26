@@ -1,335 +1,280 @@
-{% extends 'dashboard/dashboardTutor.html' %} {% load static %} {% block css %}
+{% extends 'dashboard/dashboardTutor.html' %}
+{% load static %}
+{% block css %}
 <style>
-  @import url("https://fonts.googleapis.com/css?family=Numans");
+    @import url('https://fonts.googleapis.com/css?family=Numans');
 
-  .container {
-    align-content: center;
-  }
+    .container {
+        align-content: center;
+    }
 
-  .card {
-    margin-top: auto;
-    margin-bottom: auto;
-    width: 800px;
-    background-color: white;
-  }
+    .card {
+        margin-top: auto;
+        margin-bottom: auto;
+        width: 800px;
+        background-color: white;
+    }
 
-  .card-header h3 {
-    color: white;
-  }
+    .card-header h3 {
+        color: white;
+    }
 
-  input:focus {
-    outline: 0 0 0 0 !important;
-    box-shadow: 0 0 0 0 !important;
-  }
+    input:focus {
+        outline: 0 0 0 0 !important;
+        box-shadow: 0 0 0 0 !important;
 
-  .remember {
-    color: white;
-  }
+    }
 
-  .remember input {
-    width: 19px;
-    height: 19px;
-    margin-left: 15px;
-    margin-right: 5px;
-  }
+    .remember {
+        color: white;
+    }
 
-  .links {
-    color: white;
-  }
+    .remember input {
+        width: 19px;
+        height: 19px;
+        margin-left: 15px;
+        margin-right: 5px;
+    }
 
-  .links a {
-    margin-left: 4px;
-  }
+    .links {
+        color: white;
+    }
 
-  .control-label {
-    color: rgb(66, 8, 8);
-    font-size: 20px;
-  }
+    .links a {
+        margin-left: 4px;
+    }
 
-  .social_icon span {
-    font-size: 60px;
-    margin-left: 10px;
-    color: #ffc312;
-  }
+    .control-label {
+        color: rgb(66, 8, 8);
+        font-size: 20px;
+    }
 
-  .social_icon span:hover {
-    color: white;
-    cursor: pointer;
-  }
+    .social_icon span {
+        font-size: 60px;
+        margin-left: 10px;
+        color: #FFC312;
+    }
 
-  .card-header h3 {
-    color: white;
-  }
+    .social_icon span:hover {
+        color: white;
+        cursor: pointer;
+    }
 
-  .social_icon {
-    position: absolute;
-    right: 20px;
-    top: -45px;
-  }
+    .card-header h3 {
+        color: white;
+    }
 
-  .input-group-prepend span {
-    width: 50px;
-    background-color: #ffc312;
-    color: black;
-    border: 0 !important;
-  }
+    .social_icon {
+        position: absolute;
+        right: 20px;
+        top: -45px;
+    }
 
-  input:focus {
-    outline: 0 0 0 0 !important;
-    box-shadow: 0 0 0 0 !important;
-  }
+    .input-group-prepend span {
+        width: 50px;
+        background-color: #FFC312;
+        color: black;
+        border: 0 !important;
+    }
 
-  .remember {
-    color: white;
-  }
+    input:focus {
+        outline: 0 0 0 0 !important;
+        box-shadow: 0 0 0 0 !important;
 
-  .remember input {
-    width: 20px;
-    height: 20px;
-    margin-left: 15px;
-    margin-right: 5px;
-  }
+    }
 
-  .signup_btn {
-    color: black;
-    background-color: #ffc312;
-    width: 300px;
-  }
+    .remember {
+        color: white;
+    }
 
-  .signup_btn:hover {
-    background-color: #2a2b3d;
-    color: white;
-  }
+    .remember input {
+        width: 20px;
+        height: 20px;
+        margin-left: 15px;
+        margin-right: 5px;
+    }
 
-  .links {
-    color: white;
-  }
+    .signup_btn {
+        color: black;
+        background-color: #FFC312;
+        width: 300px;
+    }
 
-  .links a {
-    margin-left: 4px;
-  }
+    .signup_btn:hover {
+        background-color: #2a2b3d;
+        color: white;
+    }
 
-  .control-label {
-    color: rgb(66, 8, 8);
-    font-size: 20px;
-  }
+    .links {
+        color: white;
+    }
+
+    .links a {
+        margin-left: 4px;
+    }
+
+    .control-label {
+        color: rgb(66, 8, 8);
+        font-size: 20px;
+    }
 </style>
-{% endblock %} {% block body %}
+{% endblock %}
+{% block body %}
 <div class="container m-0">
-  {% if errors %}
-  <div class="alert alert-danger" role="alert">
-    <div id="errorsBox">
-      <div>
-        <h5
-          style="
-            color: red;
-            text-shadow: -0.5px -0.5px 0 #000, 0.5px -0.5px 0 #000,
-              -0.5px 0.5px 0 #000, 0.5px 0.5px 0 #000;
-          "
-        >
-          Error !
-        </h5>
-        <ul>
-          {% for x in errors %}
-          <li>{{ x }}</li>
-          {% endfor %}
-        </ul>
-      </div>
-    </div>
-  </div>
-  {% endif %} {% comment %}
-  <div class="d-flex justify-content-center h-100 m-0">
-    <div class="card">
-      <div class="card-header">
-        <div class="row">
-          <div class="col-sm-4">
-            <h2 style="color: rgb(66, 8, 8)">Batch Timing</h2>
-          </div>
-        </div>
-      </div>
-      <div class="card-body container">
-        <form id="submitForm" method="post" action="">
-          {% csrf_token %}
-          <div class="input-group form-group">
-            <label class="control-label col-sm-4"
-              >Batch Name<span class="text-danger">*</span></label
-            >
-            <div class="input-group-prepend">
-              <span class="input-group-text"><i class="fas fa-user"></i></span>
-            </div>
-            <input
-              type="text"
-              class="form-control"
-              id="batchName "
-              name="batchName"
-              placeholder="Batch Name"
-              required
-            />
-          </div>
-          <div class="input-group form-group">
-            <label class="control-label col-sm-4"
-              >Start Time<span class="text-danger">*</span></label
-            >
-            <div class="input-group-prepend">
-              <span class="input-group-text"><i class="fas fa-user"></i></span>
-            </div>
-            <input
-              type="time"
-              class="form-control"
-              id="startTime"
-              name="startTime"
-              placeholder="Start Time"
-              required
-            />
-          </div>
-          <div class="input-group form-group">
-            <label class="control-label col-sm-4"
-              >End Time<span class="text-danger">*</span></label
-            >
-            <div class="input-group-prepend">
-              <span class="input-group-text"><i class="fas fa-user"></i></span>
-            </div>
-            <input
-              type="time"
-              class="form-control"
-              id="endTime"
-              name="endTime"
-              placeholder="End Time"
-              required
-            />
-          </div>
-          <div class="input-group form-group">
-            <label class="control-label col-sm-4"
-              >Start Date<span class="text-danger">*</span></label
-            >
-            <div class="input-group-prepend">
-              <span class="input-group-text"><i class="fas fa-user"></i></span>
-            </div>
-            <input
-              type="Date"
-              class="form-control"
-              id="validity"
-              name="startdate"
-              placeholder="Val"
-              required=""
-            />
-          </div>
-          <div class="input-group form-group">
-            <label class="control-label col-sm-4"
-              >End Date<span class="text-danger">*</span></label
-            >
-            <div class="input-group-prepend">
-              <span class="input-group-text"><i class="fas fa-user"></i></span>
-            </div>
-            <input
-              type="Date"
-              class="form-control"
-              id="validity"
-              name="enddate"
-              placeholder="Val"
-              required=""
-            />
-          </div>
-          <div class="input-group form-group">
-            <label class="control-label col-sm-4" for="forday"
-              >Days<span class="text-danger">*</span></label
-            >
+    {% if errors %}
+    <div class="alert alert-danger" role="alert">
+        <div id='errorsBox'>
             <div>
-              <select
-                id="multiple-checkboxes"
-                id="forday"
-                name="forday"
-                multiple
-                required
-              >
-                <option>Monday</option>
-                <option>Tuesday</option>
-                <option>Wednesday</option>
-                <option>Thursday</option>
-                <option>Friday</option>
-                <option>Saturday</option>
-                <option>Sunday</option>
-              </select>
+                <h5
+                    style="color: red;text-shadow:-0.5px -0.5px 0 #000,0.5px -0.5px 0 #000,-0.5px 0.5px 0 #000,0.5px 0.5px 0 #000;">
+                    Error !</h5>
+                <ul>
+                    {% for x in errors %}
+                    <li>{{ x }}</li>
+                    {% endfor %}
+                </ul>
             </div>
-          </div>
-          <br />
-          <hr />
-          <div class="row container d-flex justify-content-end">
-            <div class="col-sm-2 sm-ml-1">
-              <button
-                id="submitBtn"
-                name="submit"
-                type="submit"
-                class="btn btn-warning"
-              >
-                SUBMIT
-              </button>
+        </div>
+    </div>
+    {% endif %}
+    {% comment %} <div class="d-flex justify-content-center h-100 m-0">
+        <div class="card">
+            <div class="card-header">
+                <div class="row">
+                    <div class="col-sm-4">
+                        <h2 style="color: rgb(66, 8, 8);">Batch Timing</h2>
+                    </div>
+                </div>
             </div>
-          </div>
-        </form>
-      </div>
+            <div class="card-body container">
+                <form id='submitForm' method='post' action=''>{% csrf_token %}
+                    <div class="input-group form-group">
+                        <label class="control-label col-sm-4">Batch Name<span class="text-danger">*</span></label>
+                        <div class="input-group-prepend">
+                            <span class="input-group-text"><i class="fas fa-user"></i></span>
+                        </div>
+                        <input type="text" class="form-control" id="batchName " name='batchName'
+                            placeholder="Batch Name" required>
+                    </div>
+                    <div class="input-group form-group">
+                        <label class="control-label col-sm-4">Start Time<span class="text-danger">*</span></label>
+                        <div class="input-group-prepend">
+                            <span class="input-group-text"><i class="fas fa-user"></i></span>
+                        </div>
+                        <input type="time" class="form-control" id="startTime" name='startTime' placeholder="Start Time"
+                            required>
+                    </div>
+                    <div class="input-group form-group">
+                        <label class="control-label col-sm-4">End Time<span class="text-danger">*</span></label>
+                        <div class="input-group-prepend">
+                            <span class="input-group-text"><i class="fas fa-user"></i></span>
+                        </div>
+                        <input type="time" class="form-control" id="endTime" name='endTime' placeholder="End Time"
+                            required>
+                    </div>
+                    <div class="input-group form-group">
+                        <label class="control-label col-sm-4">Start Date<span class="text-danger">*</span></label>
+                        <div class="input-group-prepend">
+                            <span class="input-group-text"><i class="fas fa-user"></i></span>
+                        </div>
+                        <input type="Date" class="form-control" id="validity" name='startdate' placeholder="Val"
+                            required="">
+                    </div>
+                    <div class="input-group form-group">
+                        <label class="control-label col-sm-4">End Date<span class="text-danger">*</span></label>
+                        <div class="input-group-prepend">
+                            <span class="input-group-text"><i class="fas fa-user"></i></span>
+                        </div>
+                        <input type="Date" class="form-control" id="validity" name='enddate' placeholder="Val"
+                            required="">
+                    </div>
+                    <div class="input-group form-group">
+                        <label class="control-label col-sm-4" for='forday'>Days<span
+                                class="text-danger">*</span></label>
+                        <div>
+                            <select id="multiple-checkboxes" id="forday" name='forday' multiple required>
+                                <option>Monday</option>
+                                <option>Tuesday</option>
+                                <option>Wednesday</option>
+                                <option>Thursday</option>
+                                <option>Friday</option>
+                                <option>Saturday</option>
+                                <option>Sunday</option>
+                            </select>
+                        </div>
+                    </div><br>
+                    <hr>
+                    <div class="row container d-flex justify-content-end">
+                        <div class="col-sm-2 sm-ml-1">
+                            <button id='submitBtn' name="submit" type="submit" class="btn btn-warning">SUBMIT</button>
+
+                        </div>
+                    </div>
+
+                </form>
+            </div>
+        </div>
+    </div>{% endcomment %}
+</div> 
+<div class="container" style="padding-top: 2%;margin-top:5rem;">
+    <div class="card-body" style="overflow: scroll;background: white">
+        <!-- Grid row -->
+        <div class="row">
+        </div>
+        <!-- Grid row -->
+        <div>
+            <!--Table-->
+            <table class="table table-striped">
+                <!--Table head-->
+                <thead>
+                    <tr>
+                        <th>Batch Name</th>
+                        <th>Course Name</th>
+                        <th>Class</th>
+                        <th>Start Time</th>
+                        <th>End Time</th>
+                        <th>Teaching-Type</th>
+                        <th>Days</th>
+                    </tr>
+                </thead>
+                <!--Table head-->
+                <!--Table body-->
+                <tbody>
+                    {% comment %} {% for i in data %}
+                    <tr>
+                        <td>{{i.batchName}}</td>
+                        <td>{{i.course.courseName}}</td>
+                        <td>{{i.forclass}}</td>
+                        <td>{{i.startTime}}</td>
+                        <td>{{i.endTime}}</td>
+                        <td>{{i.days}}</td>
+                    </tr>
+                    {% endfor %} {% endcomment %}
+                    {% for i in INSTbatch %}
+                    <tr>
+                        <td>{{i.batchName}}</td>
+                        <td>{{i.course.courseName}}</td>
+                        <td>{{i.forclass}}</td>
+                        <td>{{i.startTime}}</td>
+                        <td>{{i.endTime}}</td>
+                        <td>{{tutor}}</td>
+                        <td>{{i.days}}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+                <!--Table body-->
+            </table>
+            <!--Table-->
+        </div>
     </div>
-  </div>
-  {% endcomment %}
-</div>
-<div class="container" style="padding-top: 2%; margin-top: 5rem">
-  <div class="card-body" style="overflow: scroll; background: white">
-    <!-- Grid row -->
-    <div class="row"></div>
-    <!-- Grid row -->
-    <div>
-      <!--Table-->
-      <table class="table table-striped">
-        <!--Table head-->
-        <thead>
-          <tr>
-            <th>Batch Name</th>
-            <th>Course Name</th>
-            <th>Class</th>
-            <th>Start Time</th>
-            <th>End Time</th>
-            <th>Teaching-Type</th>
-            <th>Days</th>
-          </tr>
-        </thead>
-        <!--Table head-->
-        <!--Table body-->
-        <tbody>
-          {% comment %} {% for i in data %}
-          <tr>
-            <td>{{i.batchName}}</td>
-            <td>{{i.course.courseName}}</td>
-            <td>{{i.forclass}}</td>
-            <td>{{i.startTime}}</td>
-            <td>{{i.endTime}}</td>
-            <td>{{i.days}}</td>
-          </tr>
-          {% endfor %} {% endcomment %} {% for i in INSTbatch %}
-          <tr>
-            <td>{{i.batchName}}</td>
-            <td>{{i.course.courseName}}</td>
-            <td>{{i.forclass}}</td>
-            <td>{{i.startTime}}</td>
-            <td>{{i.endTime}}</td>
-            <td>{{tutor}}</td>
-            <td>{{i.days}}</td>
-          </tr>
-          {% endfor %}
-        </tbody>
-        <!--Table body-->
-      </table>
-      <!--Table-->
-    </div>
-  </div>
-  <br /><br />
-  <script>
-    $(document).ready(function () {
-      $("#multiple-checkboxes").multiselect({
-        includeSelectAllOption: true,
-        minwidth: 2000,
-      });
-    });
-    $("");
-  </script>
-  {% endblock %}
-</div>
+    <br><br>
+    <script>
+        $(document).ready(function () {
+            $('#multiple-checkboxes').multiselect({
+                includeSelectAllOption: true,
+                minwidth: 2000
+            });
+        });
+        $('')
+    </script>
+    {% endblock %}

@@ -1,82 +1,86 @@
-{% extends 'dashboard/base.html' %} {% load static %} {% block css %}
+{% extends 'dashboard/base.html' %}
+{% load static %}
+{% block css %}
 <style>
-  @import url("https://fonts.googleapis.com/css?family=Numans");
-  .container {
+@import url('https://fonts.googleapis.com/css?family=Numans');
+.container{
     height: 100%;
     align-content: center;
-  }
-  .card {
+}
+.card{
     height: 140%;
     margin-top: auto;
     margin-bottom: auto;
     width: 900px;
     background-color: white;
-  }
-  .social_icon span {
+}
+.social_icon span{
     font-size: 60px;
     margin-left: 10px;
-    color: #ffc312;
-  }
-  .social_icon span:hover {
+    color: #FFC312;
+}
+.social_icon span:hover{
     color: white;
     cursor: pointer;
-  }
-  .card-header h3 {
+}
+.card-header h3{
     color: white;
-  }
-  .social_icon {
+}
+.social_icon{
     position: absolute;
     right: 20px;
     top: -45px;
-  }
-  .input-group-prepend span {
+}
+.input-group-prepend span{
     width: 50px;
-    background-color: #ffc312;
+    background-color: #FFC312;
     color: black;
-    border: 0 !important;
-  }
-  input:focus {
-    outline: 0 0 0 0 !important;
+    border:0 !important;
+}
+input:focus{
+    outline: 0 0 0 0  !important;
     box-shadow: 0 0 0 0 !important;
-  }
-  .remember {
+}
+.remember{
     color: white;
-  }
-  .remember input {
+}
+.remember input
+{
     width: 20px;
     height: 20px;
     margin-left: 30px;
     margin-right: 15px;
-  }
-  .remember1 input {
+}
+.remember1 input
+{
     width: 20px;
     height: 25px;
     margin-right: 10px;
-  }
-  .login_btn {
+}
+.login_btn{
     color: black;
-    background-color: #ffc312;
+    background-color: #FFC312;
     width: 100px;
-  }
-  .login_btn:hover {
+}
+.login_btn:hover{
     background-color: #2a2b3d;
+    color:white;
+}
+.links{
     color: white;
-  }
-  .links {
-    color: white;
-  }
-  .links a {
+}
+.links a{
     margin-left: 4px;
-  }
-  .bigcheckbox {
+}
+.bigcheckbox{
     width: 20px;
     height: 20px;
-  }
-  .color-pattern-3 {
+}
+.color-pattern-3 {
     text-align: center;
-  }
-  /* General button style (reset) */
-  .button {
+}
+/* General button style (reset) */
+.button {
     border: none;
     font-family: inherit;
     font-size: inherit;
@@ -95,36 +99,36 @@
     -webkit-transition: all 0.3s;
     -moz-transition: all 0.3s;
     transition: all 0.3s;
-  }
-  .button:after {
-    content: "";
+}
+.button:after {
+    content: '';
     position: absolute;
     z-index: -1;
     -webkit-transition: all 0.3s;
     -moz-transition: all 0.3s;
     transition: all 0.3s;
-  }
-  /* Button 3 */
-  .button-3 {
+}
+/* Button 3 */
+.button-3 {
     background: #fcad26;
     color: #fff;
-  }
-  .button-3:hover {
+}
+.button-3:hover {
     background: #f29e0d;
-  }
-  .button-3:active {
+}
+.button-3:active {
     background: #f58500;
     top: 2px;
-  }
-  .button-3 > .fa {
+}
+.button-3>.fa {
     position: absolute;
     height: 100%;
     left: 0;
     top: 0;
     font-size: 140%;
     width: 60px;
-  }
-  .button-3 > .fa:before {
+}
+.button-3>.fa:before {
     position: absolute;
     width: 25px;
     height: 25px;
@@ -133,57 +137,57 @@
     right: 0;
     bottom: 0;
     margin: auto;
-  }
-  /* Button 3a */
-  .button-3a {
+}
+/* Button 3a */
+.button-3a {
     padding: 25px 60px 25px 120px;
-  }
-  .button-3a > .fa {
+}
+.button-3a>.fa {
     background: rgba(0, 0, 0, 0.05);
-  }
-  /* Button 3b */
-  .button-3b {
+}
+/* Button 3b */
+.button-3b {
     padding: 25px 60px 25px 120px;
     border-radius: 10px;
-  }
-  .button-3b > .fa {
+}
+.button-3b>.fa {
     border-right: 2px solid rgba(255, 255, 255, 0.75);
-  }
-  /* Button 3c */
-  .button-3c {
+}
+/* Button 3c */
+.button-3c {
     padding: 80px 20px 20px 20px;
     border-radius: 10px;
     box-shadow: 0 3px #da9622;
-  }
-  .button-3c > .fa:before {
+}
+.button-3c>.fa:before {
     position: static;
-  }
-  .button-3c:active {
+}
+.button-3c:active {
     box-shadow: 0 3px #dc7801;
-  }
-  .button-3c > .fa {
+}
+.button-3c>.fa {
     height: 60px;
     width: 100%;
     line-height: 60px;
     background: #fff;
     color: #f29e0d;
     border-radius: 10px 10px 0 0;
-  }
-  .button-3c:active:before {
+}
+.button-3c:active:before {
     color: #f58500;
-  }
-  /* Button 3d */
-  .button-3d {
+}
+/* Button 3d */
+.button-3d {
     padding: 25px 60px 25px 120px;
     border-radius: 10px;
-  }
-  .button-3d > .fa {
+}
+.button-3d>.fa {
     background: #fff;
     color: #fcad26;
     z-index: 2;
     border-radius: 10px 0 0 10px;
-  }
-  .button-3d:after {
+}
+.button-3d:after {
     width: 20px;
     height: 20px;
     background: #fff;
@@ -195,27 +199,27 @@
     -moz-transform: rotate(45deg);
     -ms-transform: rotate(45deg);
     transform: rotate(45deg);
-  }
-  .button-3d:active:before {
+}
+.button-3d:active:before {
     color: #f58500;
-  }
-  .button-3d:active {
+}
+.button-3d:active {
     top: 0;
-  }
-  .button-3d:active:after {
+}
+.button-3d:active:after {
     left: 60px;
-  }
-  /* Button 3e */
-  .button-3e {
+}
+/* Button 3e */
+.button-3e {
     padding: 25px 120px 25px 60px;
     overflow: hidden;
-  }
-  .button-3e > .fa {
+}
+.button-3e>.fa {
     left: auto;
     right: 10px;
     z-index: 2;
-  }
-  .button-3e:after {
+}
+.button-3e:after {
     width: 30%;
     height: 200%;
     background: rgba(255, 255, 255, 0.1);
@@ -231,374 +235,254 @@
     -ms-transform: rotate(-20deg);
     transform-origin: 0 0;
     transform: rotate(-20deg);
-  }
-  .button-3e:hover:after {
+}
+.button-3e:hover:after {
     width: 35%;
-  }
-  .control-label {
+}
+.control-label {
     color: rgb(66, 8, 8);
     font-size: 20px;
-  }
-  [type="checkbox"] {
-    vertical-align: middle;
-  }
-  [type="radio"] {
-    vertical-align: middle;
-  }
-  .multiselect-container > li > a > label {
-    height: auto;
-  }
-  .multiselect-container {
-    height: 10rem;
-    overflow-y: scroll;
-    width: max-content;
-  }
+}
+[type="checkbox"]
+{
+    vertical-align:middle;
+}
+[type="radio"]
+{
+    vertical-align:middle;
+}
+.multiselect-container > li > a > label{
+    height:auto;
+}
+.multiselect-container{
+    height:10rem;
+    overflow-y:scroll;
+    width:max-content;
+}
 </style>
-{% endblock %} {% block main-content %}
+{% endblock %}
+{% block main-content %}
 <div class="mt-5">
-  {% if messages %} {% for k in messages%}
-  <div class="alert alert-{{k.tags}} alert-dismissible fade show" role="alert">
-    <b>{{ k }} !</b>
-    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-      <span aria-hidden="true">&times;</span>
-    </button>
-  </div>
-  {% endfor %} {% endif %}
-  <div class="d-flex justify-content-center h-100">
-    <div class="card">
-      <div class="card-header">
-        <div class="row">
-          <div class="col-sm">
-            <h2 style="color: rgb(66, 8, 8)">Add Course Fees</h2>
-          </div>
-        </div>
-      </div>
-      <div class="card-body">
-        <form action="" method="post">
-          {% csrf_token %}
-          <div>
-            <label class="control-label col-sm-4"
-              >Courses Enrolled<span class="text-danger">*</span></label
-            >
-            <select
-              class="form-control col-sm-6"
-              id="courseID"
-              name="courseID"
-              style="display: inline-block"
-            >
-              <option selected disabled>None Selected</option>
-              {% for i in courses %}
-              <option value="{{ i.id }}">{{ i.courseName }}</option>
-              {% endfor %}
-            </select>
-          </div>
-          <br />
-          <div>
-            <label class="control-label col-sm-4"
-              >Class<span class="text-danger">*</span></label
-            >
-            <select
-              class="form-control col-sm-6"
-              id="forclass"
-              name="forclass"
-              style="display: inline-block"
-            >
-              {% for class in classes %}
-              <option value="{{ class }}">{{ class }}</option>
-              {% endfor %}
-            </select>
-          </div>
-          <br />
-          <div>
-            <label class="control-label col-sm-4"
-              >Teaching Type<span class="text-danger">*</span></label
-            >
-            <select
-              class="form-control col-sm-6"
-              id="check"
-              name="check"
-              style="display: inline-block"
-            >
-              {% for teach in teachings %}
-              <option value="{{ teach }}">{{ teach }}</option>
-              {% endfor %}
-            </select>
-          </div>
-          <br />
-          <div>
-            <label class="control-label col-sm-4"
-              >Course Duration<span class="text-danger">*</span></label
-            >
-            <select
-              class="form-control col-sm-6"
-              id="duration"
-              name="duration"
-              style="display: inline-block"
-            >
-              {% for dura in durations %}
-              <option value="{{ dura }}">{{ dura }}</option>
-              {% endfor %}
-            </select>
-          </div>
-          <br />
-          <div class="input-group form-group">
-            <label class="control-label col-sm-4"
-              >Course Fees<span class="text-danger">*</span></label
-            >
-            <input
-              type="text"
-              class="form-control col-sm-2 finalcalc"
-              id="feeamt"
-              name="feeamt"
-              placeholder="Course Fee"
-            />
-            <button class="btn btn-danger" disabled>
-              <i class="fas fa-plus"></i>
-            </button>
-            <input
-              type="text"
-              class="form-control col-sm-1 finalcalc"
-              id="tax"
-              name="tax"
-              placeholder="Tax %"
-            />
-            <button class="btn btn-danger" disabled>
-              <i class="fas fa-equals"></i>
-            </button>
-            <input
-              type="text"
-              class="form-control col-sm-2"
-              id="final"
-              name="final"
-              readonly
-            />
-          </div>
-          <br />
-          <div class="form-group">
-            <label class="control-label col-sm-4"
-              >Installment<span class="text-danger">*</span></label
-            >
-            <div class="col-sm-6" style="display: inline-block">
-              <select
-                id="no_of_installment"
-                class="multiselect"
-                name="no_of_installment"
-                multiple="multiple"
-              >
-                <!-- <option value="1">1</option> -->
-                <option value="2">2</option>
-                <option value="3">3</option>
-                <option value="4">4</option>
-                <option value="5">5</option>
-                <option value="6">6</option>
-              </select>
-            </div>
-          </div>
-          <br />
-          <div class="input-group form-group">
-            <label class="control-label col-sm-4"
-              >Charge Type<span class="text-danger">*</span></label
-            >
-            <div class="col-sm-3 form-inline">
-              <label for="chargeType1" class="control-label">Amount</label
-              >&nbsp;&nbsp;&nbsp;&nbsp;
-              <input
-                id="chargeType1"
-                type="radio"
-                name="chargeType"
-                value="1"
-              />
-            </div>
-            <div class="col-sm-3 form-inline">
-              <label for="chargeType2" class="control-label">Percent</label
-              >&nbsp;&nbsp;&nbsp;&nbsp;
-              <input
-                id="chargeType2"
-                type="radio"
-                name="chargeType"
-                value="0"
-              />
-            </div>
-          </div>
-          <br />
-          <div id="echarges" class="input-group form-group">
-            <label class="control-label col-sm-4"
-              >Extra Charges (Each Installment)<span class="text-danger"
-                >*</span
-              ></label
-            >
-            <!-- <input type="text" class="form-control col-sm-1" id="echarge1" name='echarge' placeholder="1" disabled="disabled"> -->
-            <input
-              type="text"
-              class="form-control col-sm-1"
-              id="echarge2"
-              name="echarge"
-              placeholder="2"
-              disabled="disabled"
-              value="2"
-            />
-            <input
-              type="text"
-              class="form-control col-sm-1"
-              id="echarge3"
-              name="echarge"
-              placeholder="3"
-              disabled="disabled"
-              value="3"
-            />
-            <input
-              type="text"
-              class="form-control col-sm-1"
-              id="echarge4"
-              name="echarge"
-              placeholder="4"
-              disabled="disabled"
-              value="4"
-            />
-            <input
-              type="text"
-              class="form-control col-sm-1"
-              id="echarge5"
-              name="echarge"
-              placeholder="5"
-              disabled="disabled"
-              value="5"
-            />
-            <input
-              type="text"
-              class="form-control col-sm-1"
-              id="echarge6"
-              name="echarge"
-              placeholder="6"
-              disabled="disabled"
-              value="6"
-            />
-          </div>
-          <div class="input-group form-group">
-            <label class="control-label col-sm-4">Discount (in %)</label>
-            <input
-              type="number"
-              step="0.01"
-              class="form-control col-sm-2"
-              id="discount"
-              name="feeDisc"
-              placeholder="Discount (%)"
-            />
-
-            <label class="control-label col-sm-2 ml-sm-4">Validity</label>
-            <input
-              type="Date"
-              class="form-control col-sm-3"
-              id="validity"
-              name="discValidity"
-              placeholder="Val"
-            />
-          </div>
-          <br /><br />
-          <div class="form-group text-center">
-            <input
-              type="submit"
-              value="Add Fee"
-              class="btn login_btn form-control"
-            />
-          </div>
-        </form>
-      </div>
-      <br />
+    {% if messages %}
+    {% for k in messages%}
+    <div class="alert alert-{{k.tags}} alert-dismissible fade show" role="alert">
+        <b>{{ k }} !</b>
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
     </div>
-  </div>
+    {% endfor %}
+    {% endif %}
+    <div class="d-flex justify-content-center h-100">
+        <div class="card">
+            <div class="card-header">
+                <div class="row">
+                    <div class="col-sm">
+                        <h2 style="color: rgb(66, 8, 8);">Add Course Fees</h2>
+                    </div>
+                </div>
+            </div>
+            <div class="card-body">
+                <form action="" method="post">
+                    {% csrf_token %}
+                    <div>
+                        <label class="control-label col-sm-4">Courses Enrolled<span class="text-danger">*</span></label>
+                        <select class="form-control col-sm-6" id="courseID" name="courseID" style="display: inline-block;">
+                            <option selected disabled>None Selected</option>
+                            {% for i in courses %}
+                            <option value="{{ i.id }}">{{ i.courseName }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <br>
+                    <div>
+                        <label class="control-label col-sm-4">Class<span class="text-danger">*</span></label>
+                        <select class="form-control col-sm-6" id="forclass" name="forclass" style="display: inline-block;">
+                            {% for class in classes %}
+                            <option value="{{ class }}">{{ class }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <br>
+                    <div>
+                        <label class="control-label col-sm-4">Teaching Type<span class="text-danger">*</span></label>
+                        <select class="form-control col-sm-6" id="check" name="check" style="display: inline-block;">
+                            {% for teach in teachings %}
+                            <option value="{{ teach }}">{{ teach }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <br>
+                    <div>
+                        <label class="control-label col-sm-4">Course Duration<span class="text-danger">*</span></label>
+                        <select class="form-control col-sm-6" id="duration" name="duration" style="display: inline-block;">
+                            {% for dura in durations %}
+                            <option value="{{ dura }}">{{ dura }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <br>
+                    <div class="input-group form-group">
+                        <label class="control-label col-sm-4">Course Fees<span class="text-danger">*</span></label>
+                        <input type="text" class="form-control col-sm-2 finalcalc" id="feeamt" name='feeamt' placeholder="Course Fee">
+                        <button class="btn btn-danger" disabled><i class="fas fa-plus"></i></button>
+                        <input type="text" class="form-control col-sm-1 finalcalc" id="tax" name='tax' placeholder="Tax %">
+                        <button class="btn btn-danger" disabled><i class="fas fa-equals"></i></button>
+                        <input type="text" class="form-control col-sm-2" id="final" name='final' readonly>
+                    </div>
+                    <br>
+                    <div class="form-group">
+                        <label class="control-label col-sm-4">Installment<span class="text-danger">*</span></label>
+                        <div class="col-sm-6" style="display: inline-block;">
+                            <select id="no_of_installment" class="multiselect" name='no_of_installment' multiple="multiple">
+                                <!-- <option value="1">1</option> -->
+                                <option value="2">2</option>
+                                <option value="3">3</option>
+                                <option value="4">4</option>
+                                <option value="5">5</option>
+                                <option value="6">6</option>
+                            </select>
+                        </div>
+                    </div>
+                    <br>
+                    <div class="input-group form-group">
+                        <label class="control-label col-sm-4">Charge Type<span class="text-danger">*</span></label>
+                        <div class="col-sm-3 form-inline">
+                            <label for="chargeType1" class="control-label">Amount</label>&nbsp;&nbsp;&nbsp;&nbsp;
+                            <input id="chargeType1" type="radio" name="chargeType" value="1">
+                        </div>
+                        <div class="col-sm-3 form-inline">
+                            <label for="chargeType2" class="control-label">Percent</label>&nbsp;&nbsp;&nbsp;&nbsp;
+                            <input id="chargeType2" type="radio" name="chargeType" value="0">
+                        </div>
+                    </div>
+                    <br>
+                    <div id="echarges" class="input-group form-group">
+                        <label class="control-label col-sm-4">Extra Charges (Each Installment)<span class="text-danger">*</span></label>
+                        <!-- <input type="text" class="form-control col-sm-1" id="echarge1" name='echarge' placeholder="1" disabled="disabled"> -->
+                        <input type="text" class="form-control col-sm-1" id="echarge2" name='echarge' placeholder="2" disabled="disabled" value="2">
+                        <input type="text" class="form-control col-sm-1" id="echarge3" name='echarge' placeholder="3" disabled="disabled" value="3">
+                        <input type="text" class="form-control col-sm-1" id="echarge4" name='echarge' placeholder="4" disabled="disabled" value="4">
+                        <input type="text" class="form-control col-sm-1" id="echarge5" name='echarge' placeholder="5" disabled="disabled" value="5">
+                        <input type="text" class="form-control col-sm-1" id="echarge6" name='echarge' placeholder="6" disabled="disabled" value="6">
+                    </div>
+                    <div class="input-group form-group">
+                        <label class="control-label col-sm-4">Discount (in %)</label>
+                        <input type="number" step="0.01" class="form-control col-sm-2" id="discount" name='feeDisc' placeholder="Discount (%)">
+
+                        <label class="control-label col-sm-2 ml-sm-4">Validity</label>
+                        <input type="Date" class="form-control col-sm-3" id="validity" name='discValidity' placeholder="Val">
+                    </div>
+                    <br><br>
+                    <div class="form-group text-center">
+                        <input type="submit" value="Add Fee" class="btn login_btn form-control">
+                    </div>
+                </form>
+            </div>
+            <br>
+        </div>
+    </div>
 </div>
 <script>
-  console.log("this is jquery");
-  function Enableddl(install) {
-    var ddl = document.getElementById("no_of_installment");
-    ddl.disabled = install.checked ? false : true;
-    if (!ddl.disabled) {
-      ddl.focus();
-    }
-  }
 
-  $(function () {
-    $("#no_of_installment").on("change", function () {
-      $("#echarges input").prop("disabled", true);
-      var selected = $("option:selected", this)
-        .map(function () {
-          return $(this).text();
-        })
-        .toArray();
-      var i;
-      for (i = 0; i < selected.length; ++i) {
-        if (selected[i] == 2) {
-          // {
-          //     $('#echarge1').prop( "disabled", false );
-          // }
-          // else if(selected[i]==2)
-          $("#echarge2").prop("disabled", false);
-        } else if (selected[i] == 3) {
-          $("#echarge3").prop("disabled", false);
-        } else if (selected[i] == 4) {
-          $("#echarge4").prop("disabled", false);
-        } else if (selected[i] == 5) {
-          $("#echarge5").prop("disabled", false);
-        } else if (selected[i] == 6) {
-          $("#echarge6").prop("disabled", false);
+console.log("this is jquery")
+    function Enableddl(install)
+    {
+        var ddl=document.getElementById("no_of_installment");
+        ddl.disabled=install.checked ? false : true;
+        if(!ddl.disabled)
+        {
+            ddl.focus();
         }
-      }
-    });
-  });
-
-  $(document).ready(function () {
-    $("#no_of_installment").multiselect({
-      includeSelectAllOption: true,
-    });
-  });
-
-  $(".finalcalc").on("change", function () {
-    var a, b, c;
-    a = Number(document.getElementById("feeamt").value);
-    b = Number(document.getElementById("tax").value);
-    if (a == undefined) {
-      a = 0;
     }
-    if (b == undefined) {
-      b = 0;
-    }
-    c = a + (b / 100) * a;
-    $("#final").val(c);
-    event.preventDefault();
-  });
+
+    $(function() {
+        $("#no_of_installment").on("change", function() {
+            $("#echarges input").prop("disabled",true);
+            var selected = $("option:selected", this).map(function() {
+                return $(this).text();
+            }).toArray();
+            var i;
+            for (i = 0; i < selected.length; ++i)
+            {
+                if(selected[i]==2)
+                // {
+                //     $('#echarge1').prop( "disabled", false );
+                // }
+                // else if(selected[i]==2)
+                {
+                    $('#echarge2').prop( "disabled", false );
+                }
+                else if(selected[i]==3)
+                {
+                    $('#echarge3').prop( "disabled", false );
+                }
+                else if(selected[i]==4)
+                {
+                    $('#echarge4').prop( "disabled", false );
+                }
+                else if(selected[i]==5)
+                {
+                    $('#echarge5').prop( "disabled", false );
+                }
+                else if(selected[i]==6)
+                {
+                    $('#echarge6').prop( "disabled", false );
+                }
+            }
+        });
+    });
+
+
+    $(document).ready(function() {
+        $('#no_of_installment').multiselect({
+            includeSelectAllOption: true,
+        });
+    });
+
+    $(".finalcalc").on("change",function(){
+        var a,b,c;
+        a=Number(document.getElementById("feeamt").value);
+        b=Number(document.getElementById("tax").value);
+        if(a==undefined){a = 0;}
+        if(b==undefined){b = 0;}
+        c= a + (b/100)*a;
+        $('#final').val(c);
+        event.preventDefault()
+    });
+
 </script>
 <script>
-  $("#courseID").on("change", function(){
-      $.ajax({
-          type:'POST',
-          url:'{% url 'addFeesC' %}',
-          data:{
-              'ajax_getinfo':1,
-              "courseID":this.value,
-              csrfmiddlewaretoken: '{{ csrf_token }}'
-          },
-          success:function(response){
-              console.log(response);
-              html = ""
-              for(i=0;i<response.classes.length;i++){
-                  html += "<option value=\""+response.classes[i]+"\">"+response.classes[i]+"</option>";
-              }
-              $("#forclass").html(html);
+    $("#courseID").on("change", function(){
+        $.ajax({
+            type:'POST',
+            url:'{% url 'addFeesC' %}',
+            data:{
+                'ajax_getinfo':1,
+                "courseID":this.value,
+                csrfmiddlewaretoken: '{{ csrf_token }}'
+            },
+            success:function(response){
+                console.log(response);
+                html = ""
+                for(i=0;i<response.classes.length;i++){
+                    html += "<option value=\""+response.classes[i]+"\">"+response.classes[i]+"</option>";
+                }
+                $("#forclass").html(html);
 
-              html = ""
-              for(i=0;i<response.teachings.length;i++){
-                  html += "<option value=\""+response.teachings[i]+"\">"+response.teachings[i]+"</option>";
-              }
-              $("#check").html(html);
+                html = ""
+                for(i=0;i<response.teachings.length;i++){
+                    html += "<option value=\""+response.teachings[i]+"\">"+response.teachings[i]+"</option>";
+                }
+                $("#check").html(html);
 
-              html = ""
-              for(i=0;i<response.durations.length;i++){
-                  html += "<option value=\""+response.durations[i]+"\">"+response.durations[i]+"</option>";
-              }
-              $("#duration").html(html);
-          }
-      });
-  });
+                html = ""
+                for(i=0;i<response.durations.length;i++){
+                    html += "<option value=\""+response.durations[i]+"\">"+response.durations[i]+"</option>";
+                }
+                $("#duration").html(html);
+            }
+        });
+    });
 </script>
 {% endblock %}

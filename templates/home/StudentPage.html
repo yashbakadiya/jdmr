@@ -1,570 +1,356 @@
 {% load static %}
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <title>Choachizz</title>
-    <meta charset="UTF-8" />
-    <meta
-      name="description"
-      content="Choachizz offers local tutors, online teachers, and teachers to help with tutoring, coaching, assignments, academic projects"
-    />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-    <link
-      rel="icon"
-      type="image/x-icon"
-      href="{% static 'assets/img/favicon.ico' %}"
-    />
-    <link
-      rel="stylesheet"
-      href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
-    />
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.4.0/jquery.easing.min.js"></script>
+<head>
+	
+  <title>Choachizz</title>
+  <meta charset="UTF-8">
+  <meta name="description" content="Choachizz offers local tutors, online teachers, and teachers to help with tutoring, coaching, assignments, academic projects">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	
+  <link rel="icon" type="image/x-icon" href="{% static 'assets/img/favicon.ico' %}" />
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.4.0/jquery.easing.min.js"></script>
 
+	
     <!-- Font-awesome -->
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
-    />
-
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+   
     <!-- Google Fonts -->
-    <link
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@100;400;700&display=swap"
-      rel="stylesheet"
-    />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Roboto:wght@100;400;700&display=swap"
-      rel="stylesheet"
-    />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Manrope:wght@200;300;400&display=swap"
-      rel="stylesheet"
-    />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;400;700&display=swap" rel="stylesheet">
+ <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@100;400;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@200;300;400&display=swap" rel="stylesheet">
+	
+  <link href='{% static "assets/css/navbar.css" %}' rel="stylesheet">
+  <link href='{% static "assets/css/StudentPage.css" %}' rel="stylesheet">
+  <link href='{% static "assets/css/footer.css" %}' rel="stylesheet">
 
-    <link href='{% static "assets/css/navbar.css" %}' rel="stylesheet" />
-    <link href='{% static "assets/css/StudentPage.css" %}' rel="stylesheet" />
-    <link href='{% static "assets/css/footer.css" %}' rel="stylesheet" />
 
-    <script src='{% static "assets/js/script.js" %}'></script>
-  </head>
-  <body>
-    <section>
-      <!-- header -->
-      <header>
-        <!-- Navbar -->
-        <nav
-          class="navbar navbar-expand-lg navbar-dark navbar-custom fixed-top"
-        >
-          <!-- Image Logo -->
-          <a class="navbar-brand logo-image" href="{% url 'home' %}"
-            ><img src='{% static "assets/img/1.png" %}' alt="alternative"
-          /></a>
+	<script src='{% static "assets/js/script.js" %}'></script>
 
-          <!-- Mobile Menu Toggle Button -->
-          <button
-            class="navbar-toggler"
-            type="button"
-            data-toggle="collapse"
-            data-target="#navbarsExampleDefault"
-            aria-controls="navbarsExampleDefault"
-            aria-expanded="false"
-            aria-label="Toggle navigation"
-          >
-            <span class="navbar-toggler-icon"></span>
-          </button>
-          <!-- end of mobile menu toggle button -->
 
-          <div class="collapse navbar-collapse" id="navbarsExampleDefault">
+</head>
+<body>
+<section>
+  
+  <!-- header -->
+  <header>	
+
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark navbar-custom fixed-top">
+
+        <!-- Image Logo -->
+        <a class="navbar-brand logo-image" href="{% url 'home' %}"><img src='{% static "assets/img/1.png" %}' alt="alternative"></a>
+        
+        <!-- Mobile Menu Toggle Button -->
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
+              <span class="navbar-toggler-icon"></span>
+        </button>
+        <!-- end of mobile menu toggle button -->
+
+        <div class="collapse navbar-collapse" id="navbarsExampleDefault">
             <ul class="navbar-nav ml-auto">
-              <!-- Dropdown Menu -->
-              <li class="nav-item dropdown">
-                <a
-                  class="nav-link dropdown-toggle page-scroll"
-                  href="#Find Tutors"
-                  id="navbarDropdown"
-                  role="button"
-                  aria-haspopup="true"
-                  aria-expanded="false"
-                  >Find Tutors</a
-                >
-                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                  <a class="dropdown-item" href="terms-conditions.html"
-                    ><span class="item-text">TERMS CONDITIONS</span></a
-                  >
-                  <div class="dropdown-items-divide-hr"></div>
-                  <a class="dropdown-item" href="privacy-policy.html"
-                    ><span class="item-text">PRIVACY POLICY</span></a
-                  >
-                </div>
-              </li>
-              <!-- end of dropdown menu -->
+              <!-- Dropdown Menu -->          
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle page-scroll" href="#Find Tutors" id="navbarDropdown" role="button" aria-haspopup="true" aria-expanded="false">Find Tutors</a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <a class="dropdown-item" href="terms-conditions.html"><span class="item-text">TERMS CONDITIONS</span></a>
+                        <div class="dropdown-items-divide-hr"></div>
+                        <a class="dropdown-item" href="privacy-policy.html"><span class="item-text">PRIVACY POLICY</span></a>
+                    </div>
+                </li>
+                <!-- end of dropdown menu -->
+				
+				<!-- Dropdown Menu -->          
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle page-scroll" href="#Find Tutors Jobs" id="navbarDropdown" role="button" aria-haspopup="true" aria-expanded="false">Find Tutors Jobs</a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <a class="dropdown-item" href="terms-conditions.html"><span class="item-text">TERMS CONDITIONS</span></a>
+                        <div class="dropdown-items-divide-hr"></div>
+                        <a class="dropdown-item" href="privacy-policy.html"><span class="item-text">PRIVACY POLICY</span></a>
+                    </div>
+                </li>
+                <!-- end of dropdown menu -->
 
-              <!-- Dropdown Menu -->
-              <li class="nav-item dropdown">
-                <a
-                  class="nav-link dropdown-toggle page-scroll"
-                  href="#Find Tutors Jobs"
-                  id="navbarDropdown"
-                  role="button"
-                  aria-haspopup="true"
-                  aria-expanded="false"
-                  >Find Tutors Jobs</a
-                >
-                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                  <a class="dropdown-item" href="terms-conditions.html"
-                    ><span class="item-text">TERMS CONDITIONS</span></a
-                  >
-                  <div class="dropdown-items-divide-hr"></div>
-                  <a class="dropdown-item" href="privacy-policy.html"
-                    ><span class="item-text">PRIVACY POLICY</span></a
-                  >
-                </div>
-              </li>
-              <!-- end of dropdown menu -->
+                <!-- Dropdown Menu -->          
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle page-scroll" href="#Institute" id="navbarDropdown" role="button" aria-haspopup="true" aria-expanded="false">Institute</a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <a class="dropdown-item" href="terms-conditions.html"><span class="item-text">TERMS CONDITIONS</span></a>
+                        <div class="dropdown-items-divide-hr"></div>
+                        <a class="dropdown-item" href="privacy-policy.html"><span class="item-text">PRIVACY POLICY</span></a>
+                    </div>
+                </li>
+                <!-- end of dropdown menu -->
 
-              <!-- Dropdown Menu -->
-              <li class="nav-item dropdown">
-                <a
-                  class="nav-link dropdown-toggle page-scroll"
-                  href="#Institute"
-                  id="navbarDropdown"
-                  role="button"
-                  aria-haspopup="true"
-                  aria-expanded="false"
-                  >Institute</a
-                >
-                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                  <a class="dropdown-item" href="terms-conditions.html"
-                    ><span class="item-text">TERMS CONDITIONS</span></a
-                  >
-                  <div class="dropdown-items-divide-hr"></div>
-                  <a class="dropdown-item" href="privacy-policy.html"
-                    ><span class="item-text">PRIVACY POLICY</span></a
-                  >
-                </div>
-              </li>
-              <!-- end of dropdown menu -->
             </ul>
-            <span style="padding-left: 15px">
-              <span>
-                <a
-                  href="{% url 'Signup' %}"
-                  class="btn signup-btn"
-                  type="submit"
-                  >Sign Up</a
-                >
-              </span>
-              <span>
-                <a href="{% url 'Login' %}" class="btn login-btn" type="submit"
-                  >Log In</a
-                >
-              </span>
+			<span style="padding-left:15px">
+			<span>
+             <a href="{% url 'Signup' %}" class="btn  signup-btn" type="submit">Sign Up</a>
+			</span>
+			<span>
+             <a href="{% url 'Login' %}" class="btn login-btn" type="submit">Log In</a>
+			</span>
             </span>
-          </div>
-        </nav>
-        <!-- end of navbar -->
-        <!-- end of navbar -->
-
-        <div id="banner">
-          <div class="row">
-            <div class="col-md-6 align-self-center">
-              <h1 class="banner-heading">Your Best Value <br />Proposition</h1>
-              <p class="banner-subtitle">
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-                eiusmod tempor incididunt ut labore et dolore magna aliqua.
-              </p>
-              <a href="{% url 'Signup' %}" class="btn start-btn" type="submit"
-                >Start free trial</a
-              >
-            </div>
-
-            <div class="col-md-6 align-self-center p-2">
-              <img
-                src='{% static "assets/img/group.png" %}'
-                width="489"
-                height="400"
-                alt="commuting"
-                class="image1"
-              />
-            </div>
-          </div>
-          <div class="row mt-5">
-            <div class="col-md-6 align-self-center order-md-1 order-2 p-2">
-              <img
-                src='{% static "assets/img/Kids%20Studying%20from%20Home.png" %}'
-                width="400"
-                height="400"
-                alt="kids studying"
-                class="image1"
-              />
-            </div>
-
-            <div class="col-md-6 align-self-center order-md-2 order-1">
-              <h1 class="banner-heading2">
-                Find Perfect Institute<br />
-                for you
-              </h1>
-              <a
-                href="{% url 'Signup' %}"
-                class="btn institute-btn"
-                type="submit"
-                >Find Institute</a
-              >
-            </div>
-          </div>
         </div>
-      </header>
-    </section>
-
-    <section id="how-works">
-      <h1 class="heading1">How it works</h1>
-      <div class="row mt-5">
-        <div class="col-md-4">
-          <div class="hwork-item-wrapper">
-            <div class="hwork-item-img">
-              <img
-                src='{% static "assets/img/Group%20696.png" %}'
-                alt="group696"
-                width="324"
-                height="178"
-                class="image2"
-              />
-            </div>
-            <div class="hwork-item-text mt-5">
-              <h3>Search</h3>
-              <p>
-                find all the relevant top<br />
-                tutors
-              </p>
-            </div>
-          </div>
-        </div>
-
-        <div class="col-md-4">
-          <div class="hwork-item-wrapper">
-            <div class="hwork-item-img">
-              <img
-                src='{% static "assets/img/Group%20698.png" %}'
-                alt="group698"
-                width="302"
-                height="154"
-                class="image2"
-              />
-            </div>
-            <div class="hwork-item-text mt-5">
-              <h3>Interact</h3>
-              <p>
-                Compare the shortlisted<br />
-                tutors
-              </p>
-            </div>
-          </div>
-        </div>
-
-        <div class="col-md-4">
-          <div class="hwork-item-wrapper">
-            <div class="hwork-item-img">
-              <img
-                src='{% static "assets/img/image%209.png" %}'
-                alt="image09"
-                width="218"
-                height="218"
-                class="image2"
-              />
-            </div>
-            <div class="hwork-item-text mt-5">
-              <h3>Book an Appointment</h3>
-              <p>
-                customise as per your<br />
-                learning need.
-              </p>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <section id="assignment">
-      <div class="row">
-        <div class="col-md-6 align-self-center order-md-1 order-2">
-          <img
-            src='{% static "assets/img/Work%20time-amico.png" %}'
-            width="503"
-            height="500"
-            alt="work time amico"
-            class="image3"
-          />
-        </div>
-
-        <div class="col-md-6 align-self-center order-md-2 order-1">
-          <h1 class="heading3">POST ASSIGNMENT</h1>
-          <p>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-            eiusmod tempor incididunt ut labore et dolore magna aliqua.
-          </p>
-          <p class="sub-text">
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-            eiusmod tempor incididunt ut labore et dolore magna aliqua.
-          </p>
-          <a href="#" class="btn btutor-btn" type="submit">Become a tutor</a>
-        </div>
-      </div>
-      <div class="row">
-        <div class="col-md-6 align-self-center">
-          <h1 class="heading3">Find Tutorials</h1>
-          <p>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-            eiusmod tempor incididunt ut labore et dolore magna aliqua.
-          </p>
-          <p class="sub-text">
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-            eiusmod tempor incididunt ut labore et dolore magna aliqua.
-          </p>
-          <a href="#" class="btn btutor-btn" type="submit">Explore More</a>
-        </div>
-        <div class="col-md-6 align-self-center">
-          <img
-            src='{% static "assets/img/image%2011.png" %}'
-            width="475"
-            height="300"
-            alt="unshcool"
-            class="image3"
-          />
-        </div>
+    </nav> <!-- end of navbar -->
+    <!-- end of navbar -->	
+	
+<div id="banner">
+        <div class="row">
+          <div class="col-md-6 align-self-center">
+            <h1 class="banner-heading">Your Best Value <br>Proposition</h1>
+            <p class="banner-subtitle">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>	
+			<a href="{% url 'Signup' %}" class="btn  start-btn" type="submit">Start free trial</a>
       </div>
 
-      <div class="row">
-        <div class="col-md-6 align-self-center order-md-1 order-2">
-          <img
-            src='{% static "assets/img/image%2012.png" %}'
-            width="551"
-            height="344"
-            alt="unshcool"
-            class="image3"
-          />
-        </div>
-        <div class="col-md-6 align-self-center order-md-2 order-1">
-          <h1 class="heading3">Buy Notes</h1>
-          <p>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-            eiusmod tempor incididunt ut labore et dolore magna aliqua.
-          </p>
-          <p class="sub-text">
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-            eiusmod tempor incididunt ut labore et dolore magna aliqua.
-          </p>
-          <a href="#" class="btn btutor-btn" type="submit">Learn More</a>
-        </div>
-      </div>
-    </section>
-
-    <section id="rtutor">
-      <h1 class="heading5">Analyzse your Performance</h1>
-      <p>
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do <br />
-        eiusmod tempor incididunt ut labore et dolore magna aliqua.
-      </p>
-      <img
-        src='{% static "assets/img/Group%20107.png" %}'
-        alt="group107"
-        width="336"
-        height="300"
-      />
-      <div class="row">
-        <div class="col-md-4 text-center">
-          <a href="#" class="btn rtutor-btn" type="submit"> Entrance Exam</a>
-        </div>
-        <div class="col-md-4 text-center">
-          <a href="#" class="btn rtutor-btn" type="submit">Competative Exam</a>
-        </div>
-        <div class="col-md-4 text-center">
-          <a href="#" class="btn rtutor-btn" type="submit">Boards Exam</a>
-        </div>
-      </div>
-    </section>
-
-    <section id="footer">
-      <div class="row mb-3 py-5">
-        <div class="col-lg-7">
-          <div style="color: white; float: left" id="details">
-            <span>
-              <i class="fa fa-phone icons"></i>
-              <ul class="list-unstyled address">
-                <li>9999999999</li>
-                <li>8989898989</li>
-              </ul>
-            </span>
-            <span>
-              <i class="fa fa-map-marker icons"></i>
-              <ul class="list-unstyled address">
-                <li>Example address,</li>
-                <li>Example Road,</li>
-                <li>India</li>
-              </ul>
-            </span>
-            <span>
-              <i class="fa fa-envelope icons"></i>
-              <ul class="list-unstyled address">
-                <li>example@gmail.com</li>
-              </ul>
-            </span>
-            <ul class="list-inline mt-4 social-links">
-              <li class="list-inline-item">
-                <a
-                  href="https://www.facebook.com/Code2Learn-103306408351004"
-                  target="_blank"
-                  title="facebook"
-                  ><i class="fa fa-facebook"></i
-                ></a>
-              </li>
-              <li class="list-inline-item">
-                <a href="#" target="_blank" title="twitter"
-                  ><i class="fa fa-twitter"></i
-                ></a>
-              </li>
-              <li class="list-inline-item">
-                <a
-                  href="https://www.instagram.com/codee2learn/"
-                  target="_blank"
-                  title="instagram"
-                  ><i class="fa fa-instagram"></i
-                ></a>
-              </li>
-            </ul>
+          <div class="col-md-6 align-self-center p-2">
+           <img src='{% static "assets/img/group.png" %}' width="489" height="400"  alt="commuting" class="image1"/>
           </div>
-          <img
-            src='{% static "assets/img/Contact%20us-amico.png" %}'
-            width="100%"
-            height="100%"
-            alt="Contact Us"
-            id="contact-image"
-          />
         </div>
-        <div class="col-lg-5">
-          <form>
-            <h2 class="heading1">Start your journey here</h2>
-            <div class="form-group form-row">
-              <div class="col">
-                <input
-                  type="text"
-                  class="form-control"
-                  id="email"
-                  placeholder="First Name"
-                  name="name"
-                  required
-                />
-                <div class="valid-feedback">Valid.</div>
-                <div class="invalid-feedback">Please fill out this field.</div>
+	<div class="row mt-5">
+        <div class="col-md-6 align-self-center order-md-1 order-2 p-2">
+			<img src='{% static "assets/img/Kids%20Studying%20from%20Home.png" %}' width="400" height="400"  alt="kids studying" class="image1"/>
+      </div>
+
+       <div class="col-md-6 align-self-center  order-md-2 order-1">
+           <h1 class="banner-heading2">Find Perfect Institute<br> for you</h1>
+			<a href="{% url 'Signup' %}" class="btn  institute-btn" type="submit">Find Institute</a>
+          </div>
+        </div>
+  </div>
+</header>
+</section>
+
+  <section id="how-works">
+          <h1 class="heading1">How it works</h1>
+        <div class="row mt-5">
+          <div class="col-md-4">
+            <div class="hwork-item-wrapper">
+              <div class="hwork-item-img">
+           <img    src='{% static "assets/img/Group%20696.png" %}' alt="group696" width="324" height="178" class="image2" />
               </div>
-              <div class="col">
-                <input
-                  type="text"
-                  class="form-control"
-                  placeholder="Last Name"
-                  name="name"
-                  required
-                />
-                <div class="valid-feedback">Valid.</div>
-                <div class="invalid-feedback">Please fill out this field.</div>
+              <div class="hwork-item-text mt-5"> 
+                <h3>Search</h3>
+                <p>find all the relevant top<br> tutors </p>
               </div>
             </div>
-            <div class="form-group">
-              <input
-                type="email"
-                class="form-control"
-                id="email"
-                placeholder="Email Address"
-                name="email"
-                required
-              />
-              <div class="valid-feedback">Valid.</div>
-              <div class="invalid-feedback">Please fill out this field.</div>
+          </div>
+
+          <div class="col-md-4">
+            <div class="hwork-item-wrapper">
+              <div class="hwork-item-img">
+                  <img src='{% static "assets/img/Group%20698.png" %}' alt="group698" width="302" height="154"  class="image2" />
+              </div>
+              <div class="hwork-item-text mt-5"> 
+                <h3>Interact</h3>
+                <p>Compare the shortlisted<br> tutors </p>
+              </div>
             </div>
-            <div class="form-group">
-              <input
-                type="text"
-                class="form-control"
-                id="cnum"
-                placeholder="Contact Number"
-                name="cnum"
-                required
-              />
-              <div class="valid-feedback">Valid.</div>
-              <div class="invalid-feedback">Please fill out this field.</div>
+          </div>
+
+          <div class="col-md-4">
+            <div class="hwork-item-wrapper">
+              <div class="hwork-item-img">
+                  <img src='{% static "assets/img/image%209.png" %}' alt="image09" width="218" height="218"  class="image2" />
+              </div>
+              <div class="hwork-item-text mt-5"> 
+                <h3>Book an Appointment</h3>
+                <p>customise as per your<br> learning need.</p>
+              </div>
             </div>
-            <div class="form-group">
-              <textarea
-                class="form-control"
-                rows="3"
-                id="comment"
-                name="comment"
-                placeholder="Enter your message"
-              ></textarea>
-            </div>
-            <button type="submit" class="btn btn-block">Send</button>
-          </form>
+          </div>
         </div>
+ </section>
+
+<section id="assignment">
+<div class="row">
+       <div class="col-md-6 align-self-center  order-md-1 order-2">
+			<img src='{% static "assets/img/Work%20time-amico.png" %}' width="503" height="500"  alt="work time amico" class="image3"/>
       </div>
 
+       <div class="col-md-6 align-self-center  order-md-2 order-1">
+           <h1 class="heading3">POST ASSIGNMENT</h1>
+			<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+			<p class="sub-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+			<a href="#" class="btn  btutor-btn" type="submit">Become a tutor</a>
+          </div>
+ </div>	
+<div class="row">
+          <div class="col-md-6 align-self-center">
+           <h1 class="heading3">Find Tutorials</h1>
+			<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+			<p class="sub-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+			<a href="#" class="btn  btutor-btn" type="submit">Explore More</a>
+			  
+          </div>
+	    <div class="col-md-6 align-self-center">
+			<img src='{% static "assets/img/image%2011.png" %}'  width="475" height="300"  alt="unshcool"  class="image3"/>
+      </div>
+ </div>	
+	
+<div class="row">
+	<div class="col-md-6 align-self-center  order-md-1 order-2">
+			<img src='{% static "assets/img/image%2012.png" %}'  width="551" height="344" alt="unshcool"  class="image3"/>
+      </div>
+       <div class="col-md-6 align-self-center  order-md-2 order-1">
+           <h1 class="heading3">Buy Notes</h1>
+			<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+			<p class="sub-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+			<a href="#" class="btn  btutor-btn" type="submit">Learn More</a>
+			  
+          </div>
+	    
+ </div>	
+</section>
+	
+<section id="rtutor">
+<h1 class="heading5">Analyzse your Performance
+</h1>
+<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do <br> eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+<img src='{% static "assets/img/Group%20107.png" %}' alt="group107" width="336" height="300" />
+<div class="row">
+          <div class="col-md-4 text-center">
+           <a href="#" class="btn  rtutor-btn" 
+			type="submit"> Entrance Exam</a>
+          </div>
+	      <div class="col-md-4 text-center">
+			<a href="#" class="btn  rtutor-btn" type="submit">Competative Exam</a>
+      	  </div>
+	      <div class="col-md-4 text-center">
+			<a href="#" class="btn  rtutor-btn" type="submit">Boards Exam</a>
+      	  </div>
+ </div>	
+</section>
+
+<section id="footer">		
+	 <div class="row mb-3 py-5">
+	<div class="col-lg-7">
+<div style="color: white;float: left;" id="details">
+	   <span>
+	    <i class="fa fa-phone icons"></i>
+		<ul class="list-unstyled address">
+		<li>9999999999</li>
+        <li>8989898989</li>
+		</ul>
+		</span>
+	    <span>
+		<i class="fa fa-map-marker icons"></i>
+		<ul class="list-unstyled address">
+		<li>Example address,</li>
+		<li>Example Road,</li>
+		<li>India</li>
+		</ul>
+		</span>
+	    <span>
+	    <i class="fa fa-envelope icons"></i>
+		<ul class="list-unstyled address">
+		<li>example@gmail.com</li>
+		</ul>
+	    </span>
+	<ul class="list-inline mt-4 social-links">
+             <li class="list-inline-item">
+			 <a href="https://www.facebook.com/Code2Learn-103306408351004" target="_blank" title="facebook"><i class="fa fa-facebook"></i></a></li>
+            <li class="list-inline-item"><a href="#" target="_blank" title="twitter"><i class="fa fa-twitter"></i></a></li>
+            <li class="list-inline-item"><a href="https://www.instagram.com/codee2learn/" target="_blank" title="instagram"><i class="fa fa-instagram"></i></a></li>
+          </ul>
+</div>
+		<img src='{% static "assets/img/Contact%20us-amico.png" %}' width="100%" height="100%"  alt="Contact Us" id="contact-image"/>
+  </div>
+	<div class="col-lg-5">
+	  <form>
+      <h2 class="heading1"> Start your journey here</h2>
+    <div class="form-group form-row">
+      <div class="col">
+        <input type="text" class="form-control" id="email" placeholder="First Name" name="name" required>
+		<div class="valid-feedback">Valid.</div>
+      <div class="invalid-feedback">Please fill out this field.</div>
+      </div>
+      <div class="col">
+        <input type="text" class="form-control" placeholder="Last Name" name="name" required>
+		 <div class="valid-feedback">Valid.</div>
+      <div class="invalid-feedback">Please fill out this field.</div>
+      </div>
+    </div>
+	 <div class="form-group">
+      <input type="email" class="form-control" id="email" placeholder="Email Address" name="email" required>
+      <div class="valid-feedback">Valid.</div>
+      <div class="invalid-feedback">Please fill out this field.</div>
+    </div>
+    <div class="form-group">
+      <input type="text" class="form-control" id="cnum" placeholder="Contact Number" name="cnum" required>
+      <div class="valid-feedback">Valid.</div>
+      <div class="invalid-feedback">Please fill out this field.</div>
+	</div>
+	<div class="form-group">
+      <textarea class="form-control" rows="3" id="comment" name="comment" placeholder="Enter your message"></textarea>
+    </div>
+      <button type="submit" class="btn btn-block">Send</button>
+
+  </form>
+    </div>
+    </div>
+		
       <div class="row">
         <div class="col-lg-4 col-md-6 mb-4">
-          <h2 class="mb-3 logo-heading">CHOACHIZZ</h2>
-          <ul class="footer-term list-unstyled mb-0">
-            <li class="mb-2">© 2010 — 2020</li>
-            <li class="mb-2">Privacy — Terms</li>
+			<h2 class="mb-3 logo-heading">CHOACHIZZ</h2>
+		  <ul class="footer-term list-unstyled mb-0">
+          <li class="mb-2">© 2010 — 2020</li>
+		  <li class="mb-2">Privacy — Terms</li>
+			</ul>
+        </div>
+		 <div class="col-lg-4 col-md-6 mb-4">
+		<div class="row">
+        <div class="col-6">
+          <h6 class="footer-headings mb-3">For Students</h6>
+          <ul class="footer-links list-unstyled mb-0">
+            <li class="mb-2"><a href="#">Product</a></li>
+            <li class="mb-2"><a href="#">Product</a></li>
+            <li class="mb-2"><a href="#">Product</a></li>
           </ul>
         </div>
-        <div class="col-lg-4 col-md-6 mb-4">
-          <div class="row">
-            <div class="col-6">
-              <h6 class="footer-headings mb-3">For Students</h6>
-              <ul class="footer-links list-unstyled mb-0">
-                <li class="mb-2"><a href="#">Product</a></li>
-                <li class="mb-2"><a href="#">Product</a></li>
-                <li class="mb-2"><a href="#">Product</a></li>
-              </ul>
-            </div>
-            <div class="col-6">
-              <h6 class="footer-headings mb-3">For Teachers</h6>
-              <ul class="footer-links list-unstyled mb-0">
-                <li class="mb-2"><a href="#">Feature</a></li>
-                <li class="mb-2"><a href="#">Feature</a></li>
-                <li class="mb-2"><a href="#">Feature</a></li>
-              </ul>
-            </div>
-          </div>
+        <div class="col-6">
+          <h6 class="footer-headings mb-3">For Teachers</h6>
+          <ul class="footer-links list-unstyled mb-0">
+            <li class="mb-2"><a href="#">Feature</a></li>
+            <li class="mb-2"><a href="#">Feature</a></li>
+            <li class="mb-2"><a href="#">Feature</a></li>
+          </ul>
         </div>
+		</div> 
+		</div>
         <div class="col-lg-4 col-md-6">
-          <div class="row">
-            <div class="col-6">
-              <h6 class="footer-headings mb-3">For Institues</h6>
-              <ul class="footer-links list-unstyled mb-0">
-                <li class="mb-2"><a href="#">Resource</a></li>
-                <li class="mb-2"><a href="#">Resource</a></li>
-                <li class="mb-2"><a href="#">Resource</a></li>
-              </ul>
-            </div>
-            <div class="col-6">
-              <h6 class="footer-headings mb-3">Feedback</h6>
-              <ul class="footer-links list-unstyled mb-0">
-                <li class="mb-2"><a href="#">Company</a></li>
-                <li class="mb-2"><a href="#">Company</a></li>
-                <li class="mb-2"><a href="#">Company</a></li>
-              </ul>
-            </div>
-          </div>
+          	<div class="row">
+        <div class="col-6">
+          <h6 class="footer-headings mb-3">For Institues</h6>
+          <ul class="footer-links list-unstyled mb-0">
+            <li class="mb-2"><a href="#">Resource</a></li>
+            <li class="mb-2"><a href="#">Resource</a></li>
+            <li class="mb-2"><a href="#">Resource</a></li>
+          </ul>
+        </div>
+        <div class="col-6">
+          <h6 class="footer-headings mb-3">Feedback</h6>
+          <ul class="footer-links list-unstyled mb-0">
+            <li class="mb-2"><a href="#">Company</a></li>
+            <li class="mb-2"><a href="#">Company</a></li>
+            <li class="mb-2"><a href="#">Company</a></li>
+          </ul>
+        </div>
+		</div>
         </div>
       </div>
-
-      <!-- Go to Top Link -->
-      <a href="body" class="back-to-top page-scroll">
-        <i class="fa fa-angle-up"></i>
-      </a>
-
-      <!-- End -->
-    </section>
-  </body>
+	 
+   <!-- Go to Top Link -->
+    <a href="body" class="back-to-top page-scroll">
+      <i class="fa fa-angle-up"></i>
+    </a>
+	
+  <!-- End -->    
+</section>
+</body>
 </html>

@@ -1,23 +1,23 @@
-{% extends 'dashboard/Tutor-dashboard.html' %} {% load static %} {% block
-main-content %}
+{% extends 'dashboard/Tutor-dashboard.html' %}
+{% load static %}
+{% block main-content %}
 
 <style>
-  h6 {
-    font-size: 0.99em;
+  h6{
+    font-size: .99em;
   }
 </style>
 
 <div class="mt-5 mb-3 card">
   <div class="card-header">
-    <h3 class="m-2 text-dark">
-      <b>
-        <center>
-          {{mapping.student.user.first_name}} {{mapping.student.user.last_name}}
-          Result
-        </center>
-      </b>
-    </h3>
-  </div>
+  <h3 class="m-2 text-dark">
+    <b>
+     <center>
+      {{mapping.student.user.first_name}} {{mapping.student.user.last_name}} Result
+     </center>
+    </b>
+  </h3>
+</div>
 
   <div class="card-body">
     <div class="mb-3 text-right">
@@ -44,63 +44,44 @@ main-content %}
                 <div class="float-right text-dark">
                   Marks: +{{question.marks}},
 
-                  <span
-                    >{% if question.negative_marks %}-{% endif
-                    %}{{question.negative_marks}}</span
-                  >
+                  <span>{% if question.negative_marks %}-{% endif %}{{question.negative_marks}}</span>
                 </div>
-                <h5 class="mb-4">
-                  Ques {{no}}.
-                  <span class="edit">{{question.question | safe}}</span>
-                </h5>
+                <h5 class="mb-4">Ques {{no}}. <span class="edit">{{question.question | safe}}</span></h5>
                 <div>
                   <h6>Answer: {{question.input_ans | safe}}</h6>
-                  <h6>
-                    Correct Answer:
-                    <span class="edit"> {{question.correct_ans |safe}}</span>
-                  </h6>
+                  <h6>Correct Answer: <span class="edit"> {{question.correct_ans |safe}}</span></h6>
                   <h6>Marks: {{question.marks_given}}</h6>
                   <h6>Time Taken: {{question.time}}</h6>
                   <h6>Extra Time Taken: {{question.extra_time}}</h6>
                 </div>
                 {% if question.qtype == 'short' or question.qtype == 'long' %}
-
-                <form
-                  style="display: none; width: 210px"
-                  class="check-form"
-                  method="POST"
-                  action="{% url 'tutorcheck_answer' question.id %}"
-                >
+                
+                <form style="display: none; width: 210px;" class="check-form" method="POST" action="{% url 'tutorcheck_answer' question.id %}">
                   {% csrf_token %}
                   <div class="input-group">
-                    <input
-                      required
-                      max="{{question.marks}}"
-                      min="-{{question.negative_marks}}"
-                      class="form-control"
-                      name="marks"
-                      type="number"
-                      placeholder="Enter Marks"
-                      style="width: fit-content"
-                    />
-                    <button class="input-group-append btn btn-success">
-                      Enter
-                    </button>
-                  </div>
+                  <input
+                    required
+                    max="{{question.marks}}"
+                    min="-{{question.negative_marks}}"
+                    class="form-control"
+                    name="marks"
+                    type="number"
+                    placeholder="Enter Marks"
+                    style="width: fit-content;"
+                  />
+                  <button class="input-group-append btn btn-success">Enter</button>
+                </div>
                 </form>
 
                 <div>
-                  <button class="btn btn-success" onclick="check(this)">
-                    {% if question.marks_given %} Recheck {% else %} Check {%
-                    endif %}
-                  </button>
+                  
+                  <button class="btn btn-success" onclick="check(this)"> {% if question.marks_given %} Recheck {% else %} Check {% endif %}</button>
                   {% if question.input_ans_Image %}
                   <a
                     href="{% url 'tutorcheck_answer' question.id %}"
-                    class="ml-1 btn btn-secondary"
-                    >View Image</a
-                  >
-                  {% endif %}
+                    class="ml-1  btn btn-secondary"
+                    >View Image</a>
+                  {% endif %}  
                 </div>
 
                 {% endif %}
@@ -117,16 +98,16 @@ main-content %}
 </div>
 
 <script>
-  $(document).ready(function () {
-    var edits = $(".edit");
-    for (let i = 0; i < edits.length; i++) {
-      edits[i].innerHTML = $(edits[i]).text();
-    }
-  });
-
-  function check(el) {
-    $(el).parent().parent().find(".check-form").css("display", "block");
-    $(el).css("display", "none");
+$(document).ready(function(){
+  var edits = $('.edit')
+  for (let i = 0; i < edits.length; i++) {
+    edits[i].innerHTML = $(edits[i]).text()
   }
+})
+
+function check(el){
+  $(el).parent().parent().find('.check-form').css('display','block')
+  $(el).css('display','none')
+}
 </script>
 {% endblock %}

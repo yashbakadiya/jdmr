@@ -1,5 +1,8 @@
-{% extends 'dashboard/base.html' %} {% load static %} {% block css %} {%
-endblock %} {% block main-content %}
+{% extends 'dashboard/base.html' %}
+{% load static %}
+{% block css %}
+{% endblock %}
+{% block main-content %}
 <style>
   #card {
     background-color: white;
@@ -8,162 +11,93 @@ endblock %} {% block main-content %}
     color: black;
   }
 </style>
-<link
-  href="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/css/select2.min.css"
-  rel="stylesheet"
-/>
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/css/select2.min.css" rel="stylesheet" />
 <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/js/select2.min.js"></script>
 <div class="mt-5">
-  {% if messages %} {% for k in messages%}
+  {% if messages %}
+  {% for k in messages%}
   <div class="alert alert-{{k.tags}} alert-dismissible fade show" role="alert">
     <b>{{ k }} !</b>
     <button type="button" class="close" data-dismiss="alert" aria-label="Close">
       <span aria-hidden="true">&times;</span>
     </button>
   </div>
-  {% endfor %} {% endif %}
-  <div class="card" style="color: black">
+  {% endfor %}
+  {% endif %}
+  <div class="card" style="color: black;">
     <div class="card-header">
-      <h3 style="align-items: center; text-align: center">Add Exam</h3>
+      <h3 style="align-items: center;text-align: center;">Add Exam</h3>
     </div>
-    <form id="frm" class="mb-4 mt-4" method="post">
-      {% csrf_token %}
+    <form id="frm" class="mb-4 mt-4" method="post">{% csrf_token %}
       <div class="mx-2 row" id="INSTBATCH">
         <div class="col">
-          <label for="validationCustom01"
-            ><strong>Select Class <span class="red">*</span></strong></label
-          >
-          <select
-            id="class_select"
-            name="class"
-            style="width: 100%"
-            class="js-example-basic-single form-control"
-            onchange="selectclass()"
-            required
-          >
-            <option class="form-control" selected disabled value="">
-              Select Class
-            </option>
+          <label for="validationCustom01"><strong>Select Class <span class="red">*</span></strong></label>
+          <select id="class_select" name="class" style="width: 100%;" class="js-example-basic-single form-control"
+            onchange="selectclass()" required>
+            <option class="form-control" selected disabled value="">Select Class</option>
             {% for class in classes %}
-            <option class="form-control" value="{{class.0}}">
-              {{class.0}}
-            </option>
+            <option class="form-control" value="{{class.0}}">{{class.0}} </option>
             {% endfor %}
           </select>
         </div>
         <div class="col">
-          <label for="validationCustom01"
-            ><strong>Select Course<span class="red">*</span></strong></label
-          >
-          <select
-            id="select_course"
-            name="course"
-            style="width: 100%"
-            class="js-example-basic-single form-control"
-            required
-            onchange="selectcourse(this)"
-          >
-            <option class="form-control" selected disabled value="">
-              Select Course
-            </option>
+          <label for="validationCustom01"><strong>Select Course<span class="red">*</span></strong></label>
+          <select id="select_course" name="course" style="width: 100%" class="js-example-basic-single form-control"
+            required onchange="selectcourse(this)">
+            <option class="form-control" selected disabled value="">Select Course</option>
           </select>
         </div>
         <div class="col">
-          <label for="validationCustom01"
-            ><strong>Select Batch <span class="red">*</span></strong></label
-          >
-          <select
-            id="batch_select"
-            name="batch"
-            style="width: 100%"
-            class="js-example-basic-single form-control"
-            required
-          >
-            <option class="form-control" selected disabled value="">
-              Select Batch
-            </option>
+          <label for="validationCustom01"><strong>Select Batch <span class="red">*</span></strong></label>
+          <select id="batch_select" name="batch" style="width: 100%;" class="js-example-basic-single form-control"
+            required>
+            <option class="form-control" selected disabled value="">Select Batch</option>
           </select>
         </div>
+
       </div>
       <div class="mx-2 row mt-4">
         <div class="col">
-          <label for="validationCustom01"
-            ><strong>Exam Name <span class="red">*</span></strong></label
-          >
+          <label for="validationCustom01"><strong>Exam Name <span class="red">*</span></strong></label>
 
-          <input
-            type="text"
-            class="form-control"
-            placeholder="Exam name"
-            name="examname"
-            required
-          />
+          <input type="text" class="form-control" placeholder="Exam name" name="examname" required>
         </div>
         <div class="col">
-          <label for="validationCustom01"
-            ><strong>Exam Date <span class="red">*</span></strong></label
-          >
-          <input
-            class="form-control"
-            type="date"
-            placeholder=""
-            name="date"
-            required
-          /><br />
-          <div class="invalid-feedback">Select a valid Date!</div>
+          <label for="validationCustom01"><strong>Exam Date <span class="red">*</span></strong></label>
+          <input class="form-control" type="date" placeholder="" name="date" required /><br />
+          <div class="invalid-feedback">
+            Select a valid Date!
+          </div>
         </div>
         <div class="col">
-          <label for="validationCustom01"
-            ><strong>Exam Time <span class="red">*</span></strong></label
-          >
-          <input
-            class="form-control"
-            type="time"
-            placeholder=""
-            name="exam_time"
-            required
-          /><br />
-          <div class="invalid-feedback">Select a valid Time!</div>
+          <label for="validationCustom01"><strong>Exam Time <span class="red">*</span></strong></label>
+          <input class="form-control" type="time" placeholder="" name="exam_time" required /><br />
+          <div class="invalid-feedback">
+            Select a valid Time!
+          </div>
         </div>
       </div>
       <div class="mx-2 row">
         <div class="col">
-          <label for="validationCustom01"
-            ><strong>Time Zone<span class="red">*</span></strong></label
-          >
+          <label for="validationCustom01"><strong>Time Zone<span class="red">*</span></strong></label>
           {% include 'tutor/timezones.html' %}
         </div>
         <div class="col-md-4 mb-3">
-          <label for="validationCustom01"
-            ><strong
-              >Exam Duration(In Minute) <span class="red">*</span></strong
-            ></label
-          >
-          <input
-            class="form-control"
-            type="number"
-            min="0"
-            placeholder="00"
-            name="duration"
-            required
-          />
-          <div class="invalid-feedback">Enter a valid value!</div>
+          <label for="validationCustom01"><strong>Exam Duration(In Minute) <span class="red">*</span></strong></label>
+          <input class="form-control" type="number" min="0" placeholder="00" name="duration" required />
+          <div class="invalid-feedback">
+            Enter a valid value!
+          </div>
         </div>
-        <div class="col-md-4 mb-3">
-          <label for="validationCustom01"
-            ><strong>Passing Percentage </strong></label
-          >
-          <input
-            class="form-control"
-            type="number"
-            min="0"
-            placeholder="00"
-            name="pp"
-          />
-          <div class="invalid-feedback">Enter a valid value!</div>
+        <div class="col-md-4 mb-3 ">
+          <label for="validationCustom01"><strong>Passing Percentage </strong></label>
+          <input class="form-control" type="number" min="0" placeholder="00" name="pp" />
+          <div class="invalid-feedback">
+            Enter a valid value!
+          </div>
         </div>
       </div>
-      <div class="mx-2 row">
+      <div class=" mx-2 row">
         <!-- <div class="col-md-4 mb-3 ">
           <label for="validationCustom01"><strong>No of Questions</strong></label>
           <input class="form-control" type="number" min="0" placeholder="0" name="noquestions" />
@@ -173,46 +107,32 @@ endblock %} {% block main-content %}
         </div> -->
         <div class="col-md-4">
           <label for="validationCustom01"><strong>Exam Status</strong></label>
-          <select
-            class="form-control"
-            id="exampleFormControlSelect1"
-            name="status"
-          >
+          <select class="form-control" id="exampleFormControlSelect1" name="status">
             <option value="1">Activate</option>
             <option value="0">Deactivate</option>
           </select>
         </div>
         <div class="col-md-4">
           <label for="validationCustom01"><strong>Re-Exam Date</strong></label>
-          <input
-            class="form-control"
-            type="date"
-            placeholder=""
-            name="redate"
-          /><br />
-          <div class="invalid-feedback">Select a valid Date!</div>
+          <input class="form-control" type="date" placeholder="" name="redate" /><br />
+          <div class="invalid-feedback">
+            Select a valid Date!
+          </div>
         </div>
       </div>
       <div class="mx-2 row">
-        <div class="col-lg-12 mb-3">
-          <label for="validationCustom01"
-            ><strong
-              >Terms & Condition <span class="red">*</span></strong
-            ></label
-          >
+        <div class="col-lg-12 mb-3 ">
+          <label for="validationCustom01"><strong>Terms & Condition <span class="red">*</span></strong></label>
           <textarea class="form-control" rows="4" name="tc" required></textarea>
-          <div class="invalid-feedback">Terms & Condition cannot be empty!</div>
+          <div class="invalid-feedback">
+            Terms & Condition cannot be empty!
+          </div>
         </div>
       </div>
       <div class="mx-2 row">
-        <div class="col-lg-12 mb-3">
+        <div class="col-lg-12 mb-3 ">
           <div class="custom-checkbox custom-control">
-            <input
-              class="form-check-input"
-              type="checkbox"
-              id="defaultCheck1"
-              name="calculator"
-            />
+            <input class="form-check-input" type="checkbox" id="defaultCheck1" name="calculator" />
             <label class="form-check-label" for="defaultCheck1">
               Make Calculator Available
             </label>
@@ -220,49 +140,35 @@ endblock %} {% block main-content %}
         </div>
         <div class="col-lg-2 col-sm-2 mb-3">
           <div class="custom-checkbox custom-control">
-            <input
-              class="form-check-input"
-              type="checkbox"
-              onchange="checkbox()"
-              id="negativecheck"
-              name="nm"
-            />
+            <input class="form-check-input" type="checkbox" onchange="checkbox()" id="negativecheck" name="nm" />
             <label class="form-check-label" for="defaultCheck1">
               Negative Marks
             </label>
             <div id="negative"></div>
           </div>
-          <div class="invalid-feedback">Choose a value</div>
+          <div class="invalid-feedback">
+            Choose a value
+          </div>
         </div>
         <div class="col-lg-2 col-sm-2 mb-3">
           <div class="custom-checkbox custom-control">
-            <input
-              class="form-check-input"
-              type="checkbox"
-              onchange=""
-              id="uploadimages"
-              name="imguplod"
-            />
+            <input class="form-check-input" type="checkbox" onchange="" id="uploadimages" name="imguplod" />
             <label class="form-check-label" for="defaultCheck1">
               Upload images
             </label>
           </div>
         </div>
         <div class="form-group">
-          <label class="control-label col-sm-4"
-            ><span class="text-danger">Note :</span></label
-          >
+          <label class="control-label col-sm-4"><span class="text-danger">Note :</span></label>
           <div class="col-md-12">
-            <span class="text-muted">
-              After checking Negative Marks option you will be able to create
-              only Multiple Choice and True or False Questions with the same
-              negative marking provided here.
-            </span>
+              <span class="text-muted">
+                After checking Negative Marks option you will be able to create only Multiple Choice and True or False Questions with the same negative marking provided here.
+              </span>
           </div>
-        </div>
+      </div>
       </div>
       <div class="text-center">
-        <button type="submit" class="btn btn-primary">Save</button>
+        <button type="submit" class="btn btn-primary"> Save </button>
       </div>
     </form>
   </div>
@@ -299,7 +205,7 @@ endblock %} {% block main-content %}
 
     // In your Javascript (external .js resource or <script> tag)
     $(document).ready(function () {
-      $(".js-example-basic-single").select2();
+      $('.js-example-basic-single').select2();
     });
 
     function selectclass() {
@@ -312,7 +218,12 @@ endblock %} {% block main-content %}
         success: function (data) {
           courses = data.courses;
           $("#select_course").empty().trigger("change");
-          var newOption = new Option("Select Course", "", false, false);
+          var newOption = new Option(
+            "Select Course",
+            "",
+            false,
+            false
+          );
           $("#select_course").append(newOption).trigger("change");
           for (i = 0; i < courses.length; i++) {
             var newOption = new Option(
@@ -328,35 +239,42 @@ endblock %} {% block main-content %}
     }
 
     function selectcourse(el) {
-      var selected_course = $("#select_course option:selected").text();
-      var selected_class = $("#class_select").val();
+    var selected_course = $("#select_course option:selected").text();
+    var selected_class = $("#class_select").val();
 
-      $.ajax({
-        url: "{% url 'findBatch' %}",
-        data: {
-          forclass: selected_class,
-          course: selected_course,
-        },
-        success: function (data) {
-          batches = data.batches;
+    $.ajax({
+      url: "{% url 'findBatch' %}",
+      data: {
+        forclass: selected_class,
+        course: selected_course
+      },
+      success: function (data) {
+        batches = data.batches;
 
-          $("#batch_select").empty().trigger("change");
+        $("#batch_select").empty().trigger("change");
 
-          var newOption = new Option("Select Batch", "", false, false);
+        var newOption = new Option(
+                    "Select Batch",
+                    "",
+                    false,
+                    false
+                );
+        $("#batch_select").append(newOption).trigger("change");
+
+        for (i = 0; i < batches.length; i++) {
+          var newOption = new Option(
+            batches[i][0],
+            batches[i][0],
+            false,
+            false
+          );
           $("#batch_select").append(newOption).trigger("change");
+        }
+      },
+    });
+  }
 
-          for (i = 0; i < batches.length; i++) {
-            var newOption = new Option(
-              batches[i][0],
-              batches[i][0],
-              false,
-              false
-            );
-            $("#batch_select").append(newOption).trigger("change");
-          }
-        },
-      });
-    }
   </script>
+
 </div>
 {% endblock %}

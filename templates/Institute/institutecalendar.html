@@ -1,5 +1,8 @@
-{% extends 'dashboard/base.html' %} {% load static %} {% block css %} {%
-endblock %} {% block main-content %}
+{% extends 'dashboard/base.html' %}
+{% load static %}
+{% block css %}
+{% endblock %}
+{% block main-content %}
 <style>
   #card {
     background-color: white;
@@ -8,32 +11,29 @@ endblock %} {% block main-content %}
     color: black;
   }
 </style>
-<link
-  href="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/css/select2.min.css"
-  rel="stylesheet"
-/>
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/css/select2.min.css" rel="stylesheet" />
 <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/js/select2.min.js"></script>
 <div class="mt-5">
-  {% if messages %} {% for k in messages%}
+  {% if messages %}
+  {% for k in messages%}
   <div class="alert alert-{{k.tags}} alert-dismissible fade show" role="alert">
     <b>{{ k }} !</b>
     <button type="button" class="close" data-dismiss="alert" aria-label="Close">
       <span aria-hidden="true">&times;</span>
     </button>
   </div>
-  {% endfor %} {% endif %}
+  {% endfor %}
+  {% endif %}
 
-  <div class="card" style="color: black">
+
+
+  
+
+  <div class="card" style="color: black;">
     <div class="card-header">
-      <h3 style="align-items: center; text-align: center">Select Date</h3>
+      <h3 style="align-items: center;text-align: center;">Select Date</h3>
     </div>
-    <form
-      id="frm"
-      class="mb-4 mt-4"
-      method="post"
-      action="{% url 'dateandbatch' %}"
-    >
-      {% csrf_token %}
+    <form id="frm" class="mb-4 mt-4" method="post" action="{% url 'dateandbatch' %}">{% csrf_token %}
 
       <!-- <div class="container" id="card">
         <div class="row d-flex justify-content-center">
@@ -43,20 +43,22 @@ endblock %} {% block main-content %}
         </div>
       </div> -->
 
+
       <div class="mx-2 row" id="INSTBATCH">
         <div class="col text-center">
           <label for="validationCustom01"><strong>Date </strong></label>
-          <input type="" name="selectdate" id="mydiv" />
+          <input type="" name="selectdate" id="mydiv">
         </div>
       </div>
 
-      <br />
+
+      <br>
       <div class="text-center">
-        <button type="submit" class="btn btn-primary">submit</button>
+        <button type="submit" class="btn btn-primary"> submit </button>
       </div>
     </form>
   </div>
-  <br />
+  <br>
 
   <div class="card mb-4">
     <div class="card-header">
@@ -64,18 +66,12 @@ endblock %} {% block main-content %}
       <div class="row">
         <!-- Grid column -->
         <div class="col-md-8">
-          <h2 style="color: rgb(0, 0, 0)">Batches Details</h2>
+          <h2 style="color: rgb(0, 0, 0 );"> Batches Details</h2>
         </div>
 
         <div class="col-md-4">
-          <input
-            id="searchbox"
-            type="text"
-            class="form-control"
-            name="srh"
-            placeholder="Search Exam or Course"
-            required
-          />
+          <input id="searchbox" type="text" class="form-control" name='srh' placeholder="Search Exam or Course"
+            required>
         </div>
 
         <!-- Grid column -->
@@ -114,8 +110,13 @@ endblock %} {% block main-content %}
                       style="font-size:medium;"></i></a>
                 </td> -->
 
-            <td></td>
+
+            <td>
+
+            </td>
           </tr>
+
+
 
           {% endfor %}
           <!--Table body-->
@@ -123,10 +124,10 @@ endblock %} {% block main-content %}
       </div>
       <!--Table-->
       <!-- </form> -->
-      <br />
+      <br>
     </div>
     {% else %}
-    <div class="card-header" style="background: none">
+    <div class="card-header" style="background: none;">
       <div class="row">
         <div class="col-xl-12 col-md-12 col-12">
           <h2>No Course to show</h2>
@@ -136,13 +137,21 @@ endblock %} {% block main-content %}
     {% endif %}
   </div>
 
+
+
+
   <script>
     $(function () {
       $("#datepicker").datepicker();
     });
     $("#mydiv").datepicker();
+
   </script>
 
-  <script></script>
+  <script>
+
+
+  </script>
+
 </div>
 {% endblock %}
