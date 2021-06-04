@@ -183,7 +183,7 @@ def FindBatches(request):
         if courses:
             if forclass:
                 batches = BatchTiming.objects.filter(
-                    course=courses[0], forclass=forclass).values_list('batchName')
+                    course=courses[0].courseName, forclass=forclass).values_list('batchName')
 
     return JsonResponse({'batches': list(set(batches))})
 

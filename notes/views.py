@@ -11,7 +11,7 @@ from students.models import *
 from itertools import chain
 from django.contrib import messages
 from buy_items.models import BuyInstituteNotes, BuyTutorNotes
-from students.models import AddStudentInst
+from students.models import AddStudentInst, UnconfirmedStudentInst
 from datetime import datetime
 from PyPDF2 import PdfFileReader,PdfFileWriter
 from django.core.files import File

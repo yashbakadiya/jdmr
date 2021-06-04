@@ -3,8 +3,8 @@ from django.contrib.auth.decorators import login_required
 from accounts.models import Institute, Teacher, Student
 from django.contrib import messages
 from courses.models import TeachingType, Courses
-from batches.models import BatchTiming
-from .models import AddStudentInst, School, PostTution, PostAssignment
+from batches.models import BatchTiming, EnrollRequest
+from .models import AddStudentInst, School, PostTution, PostAssignment, UnconfirmedStudentInst
 from datetime import datetime, timedelta
 from django.contrib.auth.models import User
 from json import dumps
@@ -34,10 +34,52 @@ def stuShowAllNotice(request):
         student = Student.objects.get(user=user)
         appointments = MakeAppointment.objects.filter(
             created_by=True, student=student, accepted=False)
-        notices = notice(request)
-        return render(request, "batches/stu_showAllNotice.html", context={"notices": notices, 'appointments': appointments})
+        batchList = [x for x in AddStudentInst.objects.filter(student=student).values_list('batch', flat=True)]
+        notices = Notice.objects.filter(batch__batchName__in=batchList)
+        enrollrequests = EnrollRequest.objects.filter(student=student)
+        return render(request, "batches/stu_showAllNotice.html", context={"notices": notices, 'appointments': appointments, 'enrollrequests':enrollrequests})
     return HttpResponse("You are not Authenticated for This Page")
 
+
+@login_required(login_url="Login")
+def showRequest(request, pk):
+    req = EnrollRequest.objects.get(id=pk)
+    desc = req.description.split(',')
+    details = {
+        'Institute':desc[0],
+        'Class':desc[1],
+        'Course':desc[2],
+        'Teach Type':desc[3],
+        'Batch':desc[4],
+    }
+    return render(request, "batches/showRequest.html", context={"req": req,'details':details})
+
+
+@login_required(login_url="Login")
+def rejectRequest(request, pk):
+    if request.session['type'] == "Student":
+        req = EnrollRequest.objects.get(id=pk)
+        unconfirmed = req.request
+        unconfirmed.delete()
+        return redirect('stuShowAllNotice')
+    return HttpResponse("You are not Authenticated for This Page")
+
+
+@login_required(login_url="Login")
+def acceptRequest(request, pk):
+    if request.session['type'] == "Student":
+        req = EnrollRequest.objects.get(id=pk)
+        unconfirmed = req.request
+        addstudent = AddStudentInst.objects.get_or_create(
+                    student=unconfirmed.student, institute=unconfirmed.institute, forclass=unconfirmed.forclass, courseName=unconfirmed.courseName, teachType=unconfirmed.teachType)[0]
+        addstudent.batch = unconfirmed.batch
+        addstudent.feeDisc = unconfirmed.feeDisc
+        addstudent.installments = unconfirmed.installments
+        addstudent.save()
+        unconfirmed.delete()
+        messages.success(request,'You are Successfully Enrolled')
+        return redirect('stuShowAllNotice')
+    return HttpResponse("You are not Authenticated for This Page")
 
 @login_required(login_url="Login")
 def stuShowNotice(request, id):
@@ -62,7 +104,6 @@ def acceptAppointment(request, pk):
         appointment.save()
         return redirect('stuShowAllNotice')
     return HttpResponse("You are not Authenticated for This Page")
-
 
 @login_required(login_url="Login")
 def addStudents(request):
@@ -186,7 +227,7 @@ def viewStudents(request):
 def deleteStudent(request, id):
     if request.session['type'] == "Institute":
         delStu = AddStudentInst.objects.get(
-            student=Student.objects.filter(id=id)).delete()
+            student=Student.objects.filter(id=id)[0]).delete()
         messages.warning(request, "Student Deleted Successfully")
         return redirect("viewStudents")
     return HttpResponse("You are not Authenticated for This Page")
@@ -325,13 +366,16 @@ def AddalreadyExistsStudent(request, id):
                 except:
                     insttemp = 0
 
-                addstudent = AddStudentInst.objects.get_or_create(
+                addstudent = UnconfirmedStudentInst.objects.get_or_create(
                     student=student, institute=inst, courseName=ctn[x], forclass=cn[x], teachType=ttn[x])[0]
                 addstudent.batch = batchName[x]
                 addstudent.feeDisc = temp
                 addstudent.installments = insttemp
                 addstudent.save()
-            messages.success(request, "Student Added Successfully")
+
+                notice = EnrollRequest(student=student,title='Institute Enrollment Request',description=','.join([inst.user.username,cn[x],ctn[x],ttn[x],batchName[x]]),request=addstudent)
+                notice.save()
+            messages.success(request, "Request Sent to Student Successfully")
             return redirect('viewStudents')
 
         schools = School.objects.all()
@@ -395,12 +439,12 @@ def postAssignment(request):
 
 
 @login_required(login_url="Login")
-def extendDeadline(request, id):
+def extendDeadline(request, sno):
     if request.session['type'] == "Student":
         if request.method == 'POST':
             extend = request.POST.get('extend')
             if extend:
-                postAssigObj = postAssignment.objects.get(id=id)
+                postAssigObj = PostAssignment.objects.get(sno=sno)
                 postAssigObj.deadline = datetime.strptime(extend, "%Y-%m-%d")
                 postAssigObj.save()
         return redirect('postAssignment')

@@ -1,8 +1,18 @@
 {% extends 'dashboard/student-dashboard.html' %}
 {% load static %}
 {% block main-content %}
-{% if appointments %}
 <div class="mt-5">
+    {% if messages %}
+  {% for k in messages%}
+  <div class="alert alert-{{k.tags}} alert-dismissible fade show" role="alert">
+    <b>{{ k }} !</b>
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  {% endfor %}
+  {% endif %}
+{% if appointments %}
     <div class="row layout-spacing">
         <div class="col-lg-12 col-md-12">
             <div class="card statbox widget box box-shadow">
@@ -50,9 +60,7 @@
             </div>
         </div>
     </div>
-</div>
 {% endif %}
-<div class="mt-5">
     <div class="row layout-spacing">
         <div class="col-lg-12 col-md-12">
             <div class="card statbox widget box box-shadow">
@@ -66,7 +74,7 @@
                 <div class="widget-content widget-content-area">
                     <div class="table-responsive">
                         <table  class="testgrid table table-striped table-bordered table-hover mb-4">
-                            {% if notices %}
+                            {% if notices or enrollrequests %}
                                 {% for notice in notices %}
                                     <tr>
                                         <td>
@@ -77,8 +85,18 @@
                                         </td>
                                     </tr>
                                 {% endfor %}
+                                {% for rq in enrollrequests %}
+                                <tr>
+                                    <td>
+                                        <a href="{% url 'showRequest' rq.id %}"><h6 style="color:black;">{{rq.title}}</h6></a>
+                                    </td>
+                                    <td>
+                                        <p class="text-info float-right">{{rq.createdAt}}</p>
+                                    </td>
+                                </tr>
+                            {% endfor %}
                             {% else %}
-                                <p>No Notice</p>
+                                <h2>No Notice</2>
                             {% endif %}
                         </table>
                         {% comment %} <div class="widget-content widget-content-area text-center">

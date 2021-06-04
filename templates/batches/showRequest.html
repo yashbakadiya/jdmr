@@ -1,0 +1,36 @@
+{% extends 'dashboard/student-dashboard.html' %}
+{% load static %}
+{% block main-content %}
+<div class="mt-5">
+   <div class="row layout-spacing">
+      <div class="col-lg-12 col-md-12">
+         <div class="card statbox widget box box-shadow">
+            <div class="card-header">
+               <div class="row">
+                  <div class="col-sm-10">
+                     <h2 style="color: black;">Notice detail</h2>
+                  </div>
+               </div>
+            </div>
+            <div class="container pb-4">
+               <div class="card mt-4 p-2 pl-4 bg-light">
+                  <h3 style="color:black;">{{req.title}}</h3>
+               </div>
+               {% for x,y in details.items %}
+               <div class="card mt-4 mb-4 p-2 pl-4 bg-light">
+                <h6 style="color:black;"><b>{{x}} : </b>{{y}}</h6>
+             </div>
+             {% endfor %}
+               <div class="card mt-4 mb-4 p-2 pl-4 bg-light">
+                  <h6 style="color:black;"><b>Post time : </b>{{req.createdAt}}</h6>
+               </div>
+            </div>
+            <div class="row mb-4" style="margin: auto;">
+            <a class="btn btn-success" href="{% url 'acceptRequest' req.id %}">Accept</a>
+            <a class="btn btn-danger" href="{% url 'rejectRequest' req.id %}">Reject</a>
+        </div>
+         </div>
+      </div>
+   </div>
+</div>
+{% endblock main-content %}

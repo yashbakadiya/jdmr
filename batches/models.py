@@ -1,6 +1,7 @@
 from django.db import models
-from accounts.models import Institute,Teacher
+from accounts.models import Institute,Teacher,Student
 from courses.models import Courses
+from students.models import UnconfirmedStudentInst
 
 
 # Create your models here.
@@ -45,3 +46,10 @@ class Notice(models.Model):
 
     def __str__(self):
         return self.title
+
+class EnrollRequest(models.Model):
+    student             = models.ForeignKey(Student,on_delete=models.CASCADE)
+    title               = models.CharField(max_length=35,default="")
+    description         = models.TextField()
+    createdAt           = models.DateTimeField(auto_now_add=True)
+    request             = models.ForeignKey(UnconfirmedStudentInst,on_delete=models.CASCADE)

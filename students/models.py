@@ -12,8 +12,15 @@ class AddStudentInst(models.Model):
     installments = models.IntegerField(default=2,null=True)
     archieved = models.BooleanField(default=False)  
 
-
-
+class UnconfirmedStudentInst(models.Model):
+    student = models.ForeignKey(Student,on_delete=models.CASCADE)
+    institute = models.ForeignKey(Institute,on_delete=models.CASCADE,null=True,related_name='UnconfirmedStudentInst')
+    courseName = models.CharField(max_length=100,default="")
+    forclass = models.CharField(max_length=255,default="")
+    teachType = models.CharField(max_length=255,default="")
+    batch = models.CharField(max_length=30,default="")
+    feeDisc = models.DecimalField(max_digits=10,decimal_places=3,default=0,null=True)
+    installments = models.IntegerField(default=2,null=True)  
 
 class School(models.Model):
     name = models.CharField(max_length=150,default="")
