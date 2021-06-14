@@ -44,7 +44,7 @@ def dashboard(request):
             "events": all_events}
         return render(request, "dashboard/institute-dashboard.html", context)
     elif request.session['type'] == "Teacher":
-        user = User.objects.get(username=request.session['user'])
+        user = User.objects.get(username=request.session['user'])      
         teacher = Teacher.objects.get(user=user)
         if teacher.course == "None" or teacher.qualification == "None" or teacher.experiance == -1:
             return redirect("signupTutorContinued", teacher.id)
@@ -224,6 +224,39 @@ def changePassword(request):
 
     return HttpResponse("You are not Authenticated for this page")
 
+def UserPayment(request):
+    user = User.objects.get(username=request.session['user'])
+
+    if request.session['type'] == "Institute" or request.session['type'] == "Teacher":
+        if request.session['type'] == "Institute":
+            template = 'dashboard/base.html'
+            obj = Institute.objects.get(user=user)
+        elif request.session['type'] == "Teacher":
+            template = 'dashboard/Tutor-dashboard.html'
+            obj = Teacher.objects.get(user=user)
+        
+
+        if request.method == "POST":
+            oldPassword = request.POST.get('oldPassword')
+            newPassword = request.POST.get('newPassword')
+            confPassword = request.POST.get('confirmPassword')
+
+            if(oldPassword != obj.user.password):
+                messages.warning(
+                    request, "Incorrect Password! Please Enter Correct Password.")
+            if(len(newPassword) < 3 or len(newPassword) > 20):
+                messages.warning(
+                    request, "Password length should be between 3 and 20")
+            if(newPassword != confPassword):
+                messages.warning(
+                    request, "New Password and Confirm Password does not match")
+
+            obj.password = newPassword
+            obj.save()
+
+        return render(request, "dashboard/payment.html", {'template': template})
+
+    return HttpResponse("You are not Authenticated for this page")
 
 def updateClasses(request):
     teacher = Teacher.objects.get(
