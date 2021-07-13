@@ -1,21 +1,21 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from accounts.models import Institute, Teacher, Student, Tutorid
-from django.core.files.base import ContentFile
-from django.http import HttpResponse, JsonResponse, HttpResponseRedirect
+from accounts.urls import *
+from django.http import HttpResponse, JsonResponse
 from .models import OTP
 from batches.models import BatchTiming
-from django.contrib.auth.models import User
+from accounts.models import User
 import math
 import random
 from django.contrib import auth
+from django.contrib.auth.hashers import check_password
 from django.core.mail import EmailMessage
 from django.contrib import messages
 from accounts.models import *
 from courses.models import *
 from teacher.models import *
 from students.models import *
-from json import dumps, loads
 import json
 
 
@@ -29,7 +29,7 @@ def dashboard2(request):
 def dashboard(request):
     if request.session['type'] == "Institute":
         inst = Institute.objects.get(
-            user=User.objects.get(username=request.session['user']))
+            user=User.objects.get(email=request.user))
         course_count = Courses.objects.filter(intitute=inst).count()
         tutor_count = len(enrollTutors.objects.filter(
             institute=inst).values_list('teacher').distinct())
@@ -44,7 +44,7 @@ def dashboard(request):
             "events": all_events}
         return render(request, "dashboard/institute-dashboard.html", context)
     elif request.session['type'] == "Teacher":
-        user = User.objects.get(username=request.session['user'])      
+        user = User.objects.get(email=request.user)      
         teacher = Teacher.objects.get(user=user)
         if teacher.course == "None" or teacher.qualification == "None" or teacher.experiance == -1:
             return redirect("signupTutorContinued", teacher.id)
@@ -63,7 +63,7 @@ def dashboard(request):
 @login_required(login_url='Login')
 def profileUpdate(request):
     if request.session['type'] == 'Institute' or request.session['type'] == 'Teacher' or request.session['type'] == 'Student':
-        user = User.objects.get(username=request.session['user'])
+        user = User.objects.get(email=request.user)
         combinedZip = []
         doc = []
         if request.session['type'] == "Institute":
@@ -125,15 +125,12 @@ def profileUpdate(request):
                     if request.session['type'] == "Institute":
                         latitude = request.POST.get('cityLat')
                         longitude = request.POST.get('cityLng')
-                        obj = Institute.objects.get(user=user)
+                        obj = Institute.objects.get(user=request.user)
                         obj.phone = phone
                         obj.latitude = latitude
                         obj.longitude = longitude
                         obj.address = address
                         obj.save()
-                        auth.login(request, user)
-                        request.session["user"] = user.username
-                        request.session["type"] = "Institute"
                     elif request.session['type'] == "Teacher":
                         qualification = request.POST.get('qualification')
                         experience = request.POST.get('experience')
@@ -145,9 +142,6 @@ def profileUpdate(request):
                         obj.subject = subject
                         obj.address = address
                         obj.save()
-                        auth.login(request, user)
-                        request.session["user"] = user.username
-                        request.session["type"] = "Teacher"
                     elif request.session['type'] == "Student":
                         schoolName = request.POST.get('schoolName')
                         qualification = request.POST.get('qualification')
@@ -157,9 +151,6 @@ def profileUpdate(request):
                         obj.schoolName = schoolName
                         obj.address = address
                         obj.save()
-                        auth.login(request, user)
-                        request.session["user"] = user.username
-                        request.session["type"] = "Student"
                     messages.success(request, "Profile Upated Succsefully")
         with open('cc.txt') as f:
             data = f.read()
@@ -171,7 +162,7 @@ def profileUpdate(request):
 
 def picChange(request):
     if request.session['type'] == "Institute" or request.session['type'] == "Teacher" or request.session['type'] == "Student":
-        user = User.objects.get(username=request.session['user'])
+        user = User.objects.get(email=request.user)
         image = request.FILES.get('photo')
         if request.session['type'] == "Institute":
             obj = Institute.objects.get(user=user)
@@ -188,8 +179,7 @@ def picChange(request):
 
 
 def changePassword(request):
-    user = User.objects.get(username=request.session['user'])
-
+    user = User.objects.get(email=request.user)
     if request.session['type'] == "Institute" or request.session['type'] == "Teacher" or request.session['type'] == "Student":
         if request.session['type'] == "Institute":
             template = 'dashboard/base.html'
@@ -205,27 +195,26 @@ def changePassword(request):
             oldPassword = request.POST.get('oldPassword')
             newPassword = request.POST.get('newPassword')
             confPassword = request.POST.get('confirmPassword')
-
-            if(oldPassword != obj.user.password):
+            if not check_password(oldPassword, user.password):
                 messages.warning(
                     request, "Incorrect Password! Please Enter Correct Password.")
-            if(len(newPassword) < 3 or len(newPassword) > 20):
+            elif(len(newPassword) < 3 or len(newPassword) > 20):
                 messages.warning(
                     request, "Password length should be between 3 and 20")
-            if(newPassword != confPassword):
+            elif(newPassword != confPassword):
                 messages.warning(
                     request, "New Password and Confirm Password does not match")
-
-            obj.password = newPassword
-            obj.save()
-            messages.success(request, "Password Succesfully Changed")
-
+            else:
+                user.set_password(newPassword)
+                user.save()
+                messages.success(request, "Password Succesfully Changed")
+                return redirect("Login")
         return render(request, "dashboard/changePassword.html", {'template': template})
 
     return HttpResponse("You are not Authenticated for this page")
 
 def UserPayment(request):
-    user = User.objects.get(username=request.session['user'])
+    user = User.objects.get(email=request.user)
 
     if request.session['type'] == "Institute" or request.session['type'] == "Teacher":
         if request.session['type'] == "Institute":
@@ -260,7 +249,7 @@ def UserPayment(request):
 
 def updateClasses(request):
     teacher = Teacher.objects.get(
-        user=User.objects.get(username=request.session['user']))
+        user=User.objects.get(email=request.user))
     classList, courseList, teachList, feesList = mapClassCourse(request.POST.getlist(
         'class'), request.POST.getlist('course'), request.POST.getlist('teach'), request.POST.getlist('fees'))
     teacher.forclass = classList
@@ -274,7 +263,7 @@ def updateClasses(request):
 
 def updateDocs(request):
     teacher = Teacher.objects.get(
-        user=User.objects.get(username=request.session['user']))
+        user=User.objects.get(email=request.user))
     tutorid = Tutorid.objects.get(
         teacherid=teacher.id, teachername=teacher.user.username)
     tutorid.panaadhar = request.POST.get('idcard')

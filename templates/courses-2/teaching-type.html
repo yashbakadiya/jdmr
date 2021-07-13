@@ -297,6 +297,10 @@ href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-multiselect/0.9.13/css/bo
         }
       }
     });
+
+    $(document).on('click', '.btn-danger', function(){
+    return confirm('Are you sure you want to delete this?');
+    })
   </script>
 
 </div>

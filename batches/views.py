@@ -3,7 +3,7 @@ from .models import *
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from accounts.models import Institute, Teacher, Student
-from django.contrib.auth.models import User
+from accounts.models import User
 from datetime import datetime, timedelta
 import datetime as dt
 from courses.models import Courses
@@ -39,7 +39,7 @@ def ampm(inpTime):
 def batchTiming2(request):
     if request.session['type'] == 'Institute':
         if request.method == 'POST':
-            user = User.objects.get(username=request.session['user'])
+            user = User.objects.get(email=request.user)
             institute = Institute.objects.get(user=user)
 
             if('delteSno' in request.POST):
@@ -86,18 +86,19 @@ def batchTiming2(request):
                     messages.success(request, "Batch Added Successfully")
                 else:
                     messages.warning(request, "Batch Added Successfully")
-        user = User.objects.get(username=request.session['user'])
+        user = User.objects.get(email=request.user)
         coachingCenter = Institute.objects.get(user=user).BatchTiming.all()
         inst = Institute.objects.get(user=user)
         courses = Courses.objects.filter(intitute=inst, archieved=False)
         forclass_sel = Courses.objects.filter(
-            intitute=inst).values_list('forclass').distinct()
+            intitute=inst, archieved=False).values_list('forclass').distinct()
         jsonCources = {}
         bat = BatchTiming.objects.all()
         for x in courses:
             jsonCources[x.id] = x.forclass.split(", ")
         params = {'data': coachingCenter, 'courses': courses, 'classes': forclass_sel, 'bat': bat,
                   'json': json.dumps(jsonCources)}
+        print(forclass_sel)
         return render(request, 'batches/batch-timing.html', params)
     return HttpResponse("You Are not Authenticated for this Page")
 
@@ -105,7 +106,7 @@ def batchTiming2(request):
 @login_required(login_url="Login")
 def batchTimingEdit(request, id):
     if request.session['type'] == "Institute":
-        user = User.objects.get(username=request.session['user'])
+        user = User.objects.get(email=request.user)
         inst = Institute.objects.get(user=user)
         batchObj = BatchTiming.objects.get(id=id, institute=inst)
         forclass_sel = Courses.objects.filter(
@@ -172,7 +173,7 @@ def Findbatch(request):
 def batchTiming(request):
     if request.session['type'] == 'Institute':
         if request.method == 'POST':
-            user = User.objects.get(username=request.session['user'])
+            user = User.objects.get(email=request.user)
             institute = Institute.objects.get(user=user)
             if('delteSno' in request.POST):
                 delObj = BatchTiming.objects.get(

@@ -102,7 +102,7 @@
 
       <li class="nav-item dropdown notification-dropdown ml-3 mr-lg-4 align-self-center">
         {% if request.session.type  == "Student" %}
-          <a href="{% url 'index' request.user.username 'Student' %}">
+          <a href="{% url 'index' request.user 'Student' %}">
             <span class="icon flaticon-chat-3"></span>
           </a>
         {% endif %}

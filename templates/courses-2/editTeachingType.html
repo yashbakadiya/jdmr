@@ -11,6 +11,9 @@
 		color: black;
 	}
 </style>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-multiselect/0.9.13/js/bootstrap-multiselect.js">
+</script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-multiselect/0.9.13/css/bootstrap-multiselect.css">
 <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/css/select2.min.css" rel="stylesheet" />
 <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/js/select2.min.js"></script>
 <div class="mt-5">
@@ -48,12 +51,12 @@
 		  </div>
 		  <div class="col">
 			<label for="validationCustom01"><strong>Teaching Type <span class="red">*</span></strong></label>
-			  <select id="teachingtype" name='teaching' multiple style="width: 100%;" required onchange="teachSelect()"
-				class="js-example-basic-single form-control ">
-				<option value="Online">Online</option>
-				<option value="ClassRoom">Class Room</option>
-				<option value="Home Tutors">Home Tutors</option>
-			  </select>          
+			  <select id="teachingtype" name='teaching' multiple style="width: 100%;" required onchange="teachSelect(this)"
+				class="js-example-basic-single form-control multiselect">
+				<option value="Online" id="Online">Online</option>
+				<option value="ClassRoom" id="Class Room">Class Room</option>
+				<option value="Home Tutors" id="Home Tutors">Home Tutors</option>
+			  </select>
 		  </div>
 		</div>
 		<div class="mx-2 row mt-4" id="allvalue" style="display: none;">
@@ -88,17 +91,22 @@
 	<br>
 
 	<script>
+		$('#teachingtype').multiselect({numberDisplayed: 2, nonSelectedText: 'Select Teaching Types'});
+		$('.btn-group').addClass('form-control')
+		
 		function teachSelect(){
 		  let selected = $('#teachingtype').val()
 		  var dur = '{{teach.duration}}'.split(',')
 		var tim = '{{teach.timePeriod}}'.split(',')
 		  $('#allvalue').hide()
 		  $('.remember').empty()
-	  
+		  console.log(selected)
 		  if (selected.length>0){
-			$('#allvalue').show()
-	  
+			let selected = $('#teachingtype').val()
+			console.log(list);
+			$('#allvalue').show();
 		  for (let i = 0; i < selected.length; i++) {
+			$("#"+selected[i]).prop("checked", true);
 			$('#allvalue > .col').append(`<div class="row remember">
 				  <div class="col-md-4">
 					<label style="color: rgb(66, 8, 8);">${selected[i]}</label>
@@ -121,11 +129,14 @@
 					</div>
 				  </div>
 				</div>`);
-				if(dur[i]){
-					$(`label:contains('${selected[i]}')`).closest('.remember').find(`select option:contains('${dur[i]}')`).prop('selected',true)
-				}
-				if(tim[i]){
-					$(`label:contains('${selected[i]}')`).closest('.remember').find(`select option:contains('${dur[i]}')`).prop('selected',true)
+				for (let j = 0; j < list.length; j++)
+				{
+					console.log(list[j]['tt'])
+					if(selected[i]==list[j]['tt'])
+					{
+							$(`label:contains('${list[j]['tt']}')`).closest('.remember').find(`select option:contains('${list[j]['dur']}')`).prop('selected',true)
+							$(`label:contains('${list[j]['tt']}')`).closest('.remember').find(`input`).val(list[j]['tim'])
+					}
 				}
 			}
 		  }
@@ -135,9 +146,7 @@
 	  
 		<script>
 		  // In your Javascript (external .js resource or <script> tag)
-		  $(document).ready(function () {
-			$('.js-example-basic-single').select2();
-		  });
+		  
 	  
 		  function selectclass() {
 			var selected = $("#forclass").val();
@@ -178,24 +187,44 @@
 		var tt = '{{teach.teachType}}'.split(',')
 		var dur = '{{teach.duration}}'.split(',')
 		var tim = '{{teach.timePeriod}}'.split(',')
+		list = [];
 		$(`#forclass option[value='${cla}']`).prop('selected',true)
 		selectclass()
 		for (let i = 0; i < tt.length; i++) {
 			$(`#teachingtype option[value='${tt[i]}']`).prop('selected',true)
 		}
 		var selected = $('#teachingtype').val()
+		for (let i = 0; i < selected.length; i++) {
+			dict = {};
+			dict['tt'] = tt[i];
+			dict['dur'] = dur[i];
+			dict['tim'] = tim[i];
+			list.push(dict);
+			$(`#teachingtype option[value='${tt[i]}']`).prop('selected',true)
+		}
 		var dur = '{{teach.duration}}'.split(',')
 		var tim = '{{teach.timePeriod}}'.split(',')
 		  $('#allvalue').hide()
 		  $('.remember').empty()
 	  
 		  if (selected.length>0){
+			var selected = $('#teachingtype').val()
+			list = []
+			for (let i = 0; i < selected.length; i++) {
+			dict = {};
+			dict['tt'] = tt[i];
+			dict['dur'] = dur[i];
+			dict['tim'] = tim[i];
+			list.push(dict);
+			
+		}
 			$('#allvalue').show()
-	  
-		  for (let i = 0; i < selected.length; i++) {
+		console.log(list);
+		  for (let i = 0; i < list.length; i++) {
+			$("input[value='" + selected[i] + "']").prop("checked", true);
 			$('#allvalue > .col').append(`<div class="row remember">
 				  <div class="col-md-4">
-					<label style="color: rgb(66, 8, 8);">${selected[i]}</label>
+					<label style="color: rgb(66, 8, 8);">${list[i]['tt']}</label>
 				  </div>
 				  <div class="col-md-4">
 					<div class="form-group">
@@ -216,7 +245,7 @@
 				  </div>
 				</div>`);
 				if(dur[i]){
-					$(`label:contains('${selected[i]}')`).closest('.remember').find(`select option:contains('${dur[i]}')`).prop('selected',true)
+					$(`label:contains('${selected[i]}')`).closest('.remember').find(`select option:contains('${list[i]['dur']}')`).prop('selected',true)
 				}
 				if(tim[i]){
 					$(`label:contains('${selected[i]}')`).closest('.remember').find(`input`).val(tim[i])

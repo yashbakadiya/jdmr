@@ -108,9 +108,9 @@ WSGI_APPLICATION = 'tutorSearch.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'jdmr',
+        'NAME': 'jdmrfinal',
         'USER': 'postgres',
-        'PASSWORD': 'Yash@2000',
+        'PASSWORD': '',
         'HOST':'localhost',
         'PORT':'5432',
     },
@@ -136,7 +136,7 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
+AUTH_USER_MODEL = 'accounts.User'
 # Internationalization
 # https://docs.djangoproject.com/en/3.0/topics/i18n/
 
@@ -173,9 +173,7 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 # Authentication backends
-AUTHENTICATION_BACKENDS = (
-    'django.contrib.auth.backends.ModelBackend',
-)
+#AUTHENTICATION_BACKENDS = ('accounts.models.EmailBackend',)
 
 # Activate Django-Heroku.
 django_heroku.settings(locals())

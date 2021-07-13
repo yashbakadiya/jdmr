@@ -1,6 +1,6 @@
 from django.shortcuts import render, HttpResponseRedirect, HttpResponse
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.models import User
+from accounts.models import User
 from teacher.models import enrollTutors
 from students.models import AddStudentInst
 from accounts.models import Teacher, Student, Institute
@@ -38,12 +38,12 @@ def insShowNotice(request, id):
 def instituteTutor(request):
     if request.session['type'] == "Teacher" or request.session['type'] == "Student":
         if request.session['type'] == "Teacher":
-            user = User.objects.get(username=request.session['user'])
+            user = User.objects.get(email=request.user)
             tutor = Teacher.objects.get(user=user)
             INST = enrollTutors.objects.filter(teacher=tutor)
             return render(request, "Institute/institute.html", {"Institute": INST, "template": "dashboard/Tutor-dashboard.html"})
         elif request.session['type'] == "Student":
-            user = User.objects.get(username=request.session['user'])
+            user = User.objects.get(email=request.user)
             student = Student.objects.get(user=user)
             INST = AddStudentInst.objects.filter(student=student)
             return render(request, "Institute/institute.html", {"Institute": INST, "template": "dashboard/student-dashboard.html"})
@@ -129,7 +129,7 @@ def searchCoachingCenter(request):
 
 @login_required(login_url="Login")
 def ReviewInstitute(request, inst_id):
-    user = User.objects.get(username=request.session['user'])
+    user = User.objects.get(email=request.user)
     user_type = request.session['type']
     show = False
     institute = Institute.objects.get(id=inst_id)
@@ -239,7 +239,7 @@ def remove(request):
 @login_required()
 def dateandbatch(request):
     if request.session['type'] == 'Institute':
-        user = User.objects.get(username=request.session['user'])
+        user = User.objects.get(email=request.user)
         inst = Institute.objects.get(user=user)
         if request.method == 'POST':
             date = request.POST.get("selectdate")

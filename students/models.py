@@ -10,7 +10,8 @@ class AddStudentInst(models.Model):
     batch = models.CharField(max_length=30,default="")
     feeDisc = models.DecimalField(max_digits=10,decimal_places=3,default=0,null=True)
     installments = models.IntegerField(default=2,null=True)
-    archieved = models.BooleanField(default=False)  
+    archieved = models.BooleanField(default=False)
+    registration_date = models.DateField(auto_created=True, null=True)
 
 class UnconfirmedStudentInst(models.Model):
     student = models.ForeignKey(Student,on_delete=models.CASCADE)

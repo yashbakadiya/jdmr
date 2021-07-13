@@ -5,7 +5,7 @@ from django.contrib import messages
 from courses.models import TeachingType, Courses
 from json import dumps, loads
 from .models import enrollTutors, TutorRatings, MakeAppointment
-from django.contrib.auth.models import User
+from accounts.models import User
 from django.db.models import Q
 from students.models import *
 from dateutil import parser, rrule
@@ -27,7 +27,7 @@ allTimezones = pytz.all_timezones
 @login_required(login_url="Login")
 def teaShowAllNotice(request):
     if request.session['type'] == "Teacher":
-        user = User.objects.get(username=request.session['user'])
+        user = User.objects.get(email=request.user)
         teacher = Teacher.objects.get(user=user)
         appointments = MakeAppointment.objects.filter(
             created_by=False, tutor=teacher, accepted=False)
@@ -65,7 +65,7 @@ def acceptAppointment(request, pk):
 def addTutors(request):
     errors = []
     if request.session['type'] == "Institute":
-        user = User.objects.get(username=request.session['user'])
+        user = User.objects.get(email=request.user)
         inst = Institute.objects.get(user=user)
         cours = Courses.objects.all()
         teach = TeachingType.objects.all()
@@ -91,8 +91,9 @@ def addTutors(request):
             if(errors):
                 return render(request, 'tutor/signupTutor.html', {"errors": errors})
             else:
-                user2 = User(username=username, email=email, password=password,
-                             first_name=firstName, last_name=lastName)
+                
+                user2 = User(first_name = firstName, last_name = lastName, email=email, password=password)
+                user2.set_password(password)
                 user2.save()
                 teacher = Teacher(user=user2, address=location, phone=phone)
                 teacher.save()
@@ -129,7 +130,7 @@ def addTutors(request):
 @login_required(login_url="Login")
 def viewTutors(request):
     if request.session['type'] == "Institute":
-        user = User.objects.get(username=request.session['user'])
+        user = User.objects.get(email=request.user)
         inst = Institute.objects.get(user=user)
         tutors = set([x.teacher for x in enrollTutors.objects.filter(
             institute=inst, archieved=False)])
@@ -177,7 +178,7 @@ def deleteTutor(request, id):
 @login_required(login_url="Login")
 def editTutor(request, id):
     if request.session['type'] == "Institute":
-        user = User.objects.get(username=request.session['user'])
+        user = User.objects.get(email=request.user)
         inst = Institute.objects.get(user=user)
         teacher = Teacher.objects.get(id=id)
         editTutorObj = enrollTutors.objects.filter(teacher=teacher)
@@ -221,7 +222,7 @@ def editTutor(request, id):
 @login_required(login_url="Login")
 def archiveTutorList(request):
     if request.session['type'] == "Institute":
-        user = User.objects.get(username=request.session['user'])
+        user = User.objects.get(email=request.user)
         inst = Institute.objects.get(user=user)
         tutors = set([x.teacher for x in enrollTutors.objects.filter(
             institute=inst, archieved=True)])
@@ -264,7 +265,7 @@ def searchUserTutor(request):
             srch = request.POST.get('srh', '')
             if srch:
                 teacher = Teacher.objects.filter(Q(phone=srch) | Q(
-                    user__email=srch) | Q(user__username=srch))
+                    user__email=srch))
                 if teacher:
                     return render(request, 'teacher/searchUserTutor.html', {'sr': teacher})
                 else:
@@ -280,7 +281,7 @@ def searchUserTutor(request):
 def AddalreadyExistsTutor(request, id):
     if request.session['type'] == "Institute":
         teacher = Teacher.objects.get(id=id)
-        user = User.objects.get(username=request.session['user'])
+        user = User.objects.get(email=request.user)
         inst = Institute.objects.get(user=user)
 
         if enrollTutors.objects.filter(institute=inst, teacher=teacher):
@@ -447,7 +448,7 @@ def enrolledTutors(request):
 @login_required(login_url="Login")
 def ReviewTutors(request, tutor_id):
     if request.session['type'] == "Student":
-        user = User.objects.get(username=request.session['user'])
+        user = User.objects.get(email=request.user)
         student = Student.objects.get(user=user)
         tutor = Teacher.objects.get(id=tutor_id)
         reviews = TutorRatings.objects.filter(Tutor=tutor)
@@ -487,7 +488,7 @@ def ReviewTutors(request, tutor_id):
 def ChatTutor(request, tutor_id):
     try:
         tutor = Teacher.objects.get(id=tutor_id)
-        user = User.objects.get(username=request.session['user'])
+        user = User.objects.get(email=request.user)
         student = Student.objects.get(user=user)
     except:
         return redirect('enrolledTutors')
@@ -500,7 +501,7 @@ def ChatTutor(request, tutor_id):
 
 @login_required(login_url="Login")
 def ChatStudent(request):
-    user = User.objects.get(username=request.session['user'])
+    user = User.objects.get(email=request.user)
     tutor = Teacher.objects.get(user=user)
     context = {
         'tutor': tutor}
@@ -537,7 +538,7 @@ def createReccurance(utcDateTime, duration, recc, pattern, repeat, days, utcEndi
 @login_required(login_url="Login")
 def teaMakeAppointment(request, id):
     if request.session['type'] == "Teacher":
-        user = User.objects.get(username=request.session['user'])
+        user = User.objects.get(email=request.user)
         tutor = Teacher.objects.get(user=user)
         student = Student.objects.get(id=id)
         if request.method == 'GET':
@@ -714,7 +715,7 @@ def teaMakeAppointment(request, id):
 @login_required(login_url="Login")
 def viewAssignmentTutor(request):
     if request.session['type'] == "Teacher":
-        user = User.objects.get(username=request.session['user'])
+        user = User.objects.get(email=request.user)
         tutor = Teacher.objects.get(user=user)
 
         try:

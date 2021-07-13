@@ -6,8 +6,9 @@ from courses.models import TeachingType, Courses
 from batches.models import BatchTiming, EnrollRequest
 from .models import AddStudentInst, School, PostTution, PostAssignment, UnconfirmedStudentInst
 from datetime import datetime, timedelta
-from django.contrib.auth.models import User
+from accounts.models import User
 from json import dumps
+from datetime import date
 from django.core.serializers.json import DjangoJSONEncoder
 from django.forms.models import model_to_dict
 import json
@@ -30,7 +31,7 @@ allTimezones = pytz.all_timezones
 @login_required(login_url="Login")
 def stuShowAllNotice(request):
     if request.session['type'] == "Student":
-        user = User.objects.get(username=request.session['user'])
+        user = User.objects.get(email=request.user)
         student = Student.objects.get(user=user)
         appointments = MakeAppointment.objects.filter(
             created_by=True, student=student, accepted=False)
@@ -72,6 +73,7 @@ def acceptRequest(request, pk):
         unconfirmed = req.request
         addstudent = AddStudentInst.objects.get_or_create(
                     student=unconfirmed.student, institute=unconfirmed.institute, forclass=unconfirmed.forclass, courseName=unconfirmed.courseName, teachType=unconfirmed.teachType)[0]
+        addstudent.registration_date = date.today()
         addstudent.batch = unconfirmed.batch
         addstudent.feeDisc = unconfirmed.feeDisc
         addstudent.installments = unconfirmed.installments
@@ -108,7 +110,7 @@ def acceptAppointment(request, pk):
 @login_required(login_url="Login")
 def addStudents(request):
     if request.session['type'] == "Institute":
-        user = User.objects.get(username=request.session['user'])
+        user = User.objects.get(email=request.user)
         inst = Institute.objects.get(user=user)
         if request.method == "POST":
             firstName = request.POST.get('firstName', '')
@@ -134,12 +136,12 @@ def addStudents(request):
                 return redirect('addStudents')
 
             user = User(
-                username=username,
                 first_name=firstName,
                 last_name=lastName,
                 email=email,
                 password=password,
             )
+            user.set_password(password)
             user.save()
             student = Student(user=user, phone=phone,
                               address=schoolName, schoolName=schoolName)
@@ -192,7 +194,7 @@ def addStudents(request):
 @login_required(login_url="Login")
 def viewStudents(request):
     if request.session["type"] == "Institute":
-        user = User.objects.get(username=request.session['user'])
+        user = User.objects.get(email=request.user)
         inst = Institute.objects.get(user=user)
         students = set([x.student for x in AddStudentInst.objects.filter(
             institute=inst, archieved=False)])
@@ -235,7 +237,7 @@ def deleteStudent(request, id):
 
 def archiveStudentList(request):
     if request.session['type'] == "Institute":
-        user = User.objects.get(username=request.session["user"])
+        user = User.objects.get(email=request.user)
         inst = Institute.objects.get(user=user)
         students = set([x.student for x in AddStudentInst.objects.filter(
             institute=inst, archieved=True)])
@@ -270,14 +272,14 @@ def archiveStudentList(request):
 @login_required(login_url="Login")
 def editStudent(request, id):
     if request.session['type'] == "Institute":
-        user = User.objects.get(username=request.session['user'])
+        user = User.objects.get(email=request.user)
         inst = Institute.objects.get(user=user)
         schools = School.objects.all()
         school_list = list(map(str, schools))
         student = Student.objects.get(id=id)
         editStudentObj = AddStudentInst.objects.filter(student=student)
         if request.method == "POST":
-            phone = request.POST.get('phone', '')
+            #phone = request.POST.get('phone', '')
             schoolName = request.POST.get('schoolName', '')
             ctn = request.POST.getlist('ctn')
             cn = request.POST.getlist('cn')
@@ -286,7 +288,7 @@ def editStudent(request, id):
             feeDis = request.POST.getlist('feedis')
             installments = request.POST.getlist('noi')
 
-            user = User.objects.get(username=student.user.username)
+            #user = User.objects.get(email=request.user)
             student.address = request.POST.get("loc")
             student.schoolName = schoolName
             student.save()
@@ -306,19 +308,23 @@ def editStudent(request, id):
 
                     addstudent = AddStudentInst.objects.get_or_create(
                         student=student, institute=inst, courseName=ctn[x], forclass=cn[x], teachType=ttn[x])[0]
+                    #addstudent.registration_date = date.today()
+                    print(date.today())
                     addstudent.batch = batchName[x]
                     addstudent.feeDisc = temp
                     addstudent.installments = insttemp
+                    addstudent.registration_date = date.today()
                     addstudent.save()
 
             messages.success(request, "Student Updated Successfully")
             return redirect("viewStudents")
         return render(request, 'students/editStudent.html', {
-            "studentBaseData": student,
-            "data": TeachingType.objects.filter(course__intitute=inst).values_list('forclass').distinct(),
-            "school_list": school_list,
-            "editStudent": editStudentObj
-        })
+                "studentBaseData": student,
+                "data": TeachingType.objects.filter(course__intitute=inst).values_list('forclass').distinct(),
+                "school_list": school_list,
+                'batch': BatchTiming.objects.filter(institute=inst),
+                "editStudent": editStudentObj
+            })
     return HttpResponse("You are not Authenticated for This Page")
 
 
@@ -329,7 +335,7 @@ def searchUserStudent(request):
             srch = request.POST.get('srh', '')
             if srch:
                 match = Student.objects.filter(Q(phone=srch) | Q(
-                    user__email=srch) | Q(user__username=srch))
+                    user__email=srch))
                 if len(match):
                     return render(request, 'students/searchUserStudent.html', {'sr': match})
                 else:
@@ -342,7 +348,7 @@ def searchUserStudent(request):
 def AddalreadyExistsStudent(request, id):
     if request.session['type'] == "Institute":
         student = Student.objects.get(id=id)
-        user = User.objects.get(username=request.session['user'])
+        user = User.objects.get(email=request.user)
         inst = Institute.objects.get(user=user)
 
         if AddStudentInst.objects.filter(institute=inst, student=student):
@@ -373,7 +379,7 @@ def AddalreadyExistsStudent(request, id):
                 addstudent.installments = insttemp
                 addstudent.save()
 
-                notice = EnrollRequest(student=student,title='Institute Enrollment Request',description=','.join([inst.user.username,cn[x],ctn[x],ttn[x],batchName[x]]),request=addstudent)
+                notice = EnrollRequest(student=student,title='Institute Enrollment Request',description=','.join([inst.user.email,cn[x],ctn[x],ttn[x],batchName[x]]),request=addstudent)
                 notice.save()
             messages.success(request, "Request Sent to Student Successfully")
             return redirect('viewStudents')
@@ -404,7 +410,7 @@ def StudentCalendar(request):
 @login_required(login_url="Login")
 def postAssignment(request):
     if request.session['type'] == "Student":
-        user = User.objects.get(username=request.session['user'])
+        user = User.objects.get(email=request.user)
         student = Student.objects.get(user=user)
         if request.method == 'POST':
             deadline = request.POST.get('deadline')
@@ -456,7 +462,7 @@ def postTution(request):
     if request.session['type'] == "Student":
         jsonLocalData = loads(open('cc.txt', 'r').read())
         if(request.method == 'POST'):
-            user = User.objects.get(username=request.session['user'])
+            user = User.objects.get(email=request.user)
             student = Student.objects.get(user=user)
             classlist = ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII',
                          'VIII', 'IX', 'X', 'XI', 'XII', 'Others', 'Nursery']
@@ -479,7 +485,7 @@ def postTution(request):
                 numberOfSessions=request.POST.get('monthlydigit', 0)
             )
             postTutionObj.save()
-        user = User.objects.get(username=request.session['user'])
+        user = User.objects.get(email=request.user)
         student = Student.objects.get(user=user)
         tutions = PostTution.objects.filter(
             student=student).order_by('-forclass')
@@ -498,7 +504,7 @@ def postTution(request):
 @login_required(login_url="Login")
 def delete_Assignment(request, sno):
     if request.session['type'] == "Student":
-        user = User.objects.get(username=request.session['user'])
+        user = User.objects.get(email=request.user)
         student = Student.objects.get(user=user)
         try:
             assign = PostAssignment.objects.get(sno=sno)
@@ -515,7 +521,7 @@ def delete_Assignment(request, sno):
 @login_required(login_url="Login")
 def delete_Tution(request, sno):
     if request.session['type'] == "Student":
-        user = User.objects.get(username=request.session['user'])
+        user = User.objects.get(email=request.user)
         student = Student.objects.get(user=user)
         try:
             tution = PostTution.objects.get(sno=sno)
@@ -573,7 +579,7 @@ def createReccurance(utcDateTime, duration, recc, pattern, repeat, days, utcEndi
 @login_required(login_url="Login")
 def stuMakeAppointment(request, id):
     if request.session['type'] == "Student":
-        user = User.objects.get(username=request.session['user'])
+        user = User.objects.get(email=request.user)
         student = Student.objects.get(user=user)
         tutor = Teacher.objects.get(id=id)
         if request.method == 'GET':
@@ -749,7 +755,7 @@ def stuMakeAppointment(request, id):
 @login_required(login_url="Login")
 def enrolledStudents(request):
     if request.session['type'] == "Teacher":
-        user = User.objects.get(username=request.session['user'])
+        user = User.objects.get(email=request.user)
         tutor = Teacher.objects.get(user=user)
         currentS = []
         prefill = {}
@@ -840,7 +846,7 @@ def enrolledStudents(request):
 
 @login_required(login_url="Login")
 def ChatStudent(request):
-    user = User.objects.get(username=request.session['user'])
+    user = User.objects.get(email=request.user)
     student = Student.objects.get(user=user)
     context = {
         'student': student

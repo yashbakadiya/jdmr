@@ -1,7 +1,7 @@
 from django.shortcuts import render, HttpResponse, redirect
 from django.contrib import messages
 from .models import Institute, Teacher, Student
-from django.contrib.auth.models import User
+from .models import User
 from django.contrib import auth
 from django.contrib.auth.decorators import login_required
 from rest_framework.decorators import api_view
@@ -37,7 +37,7 @@ def login(request):
         }
 
         try:
-            user = User.objects.get(username=username, password=password)
+            user = auth.authenticate(email=username, password=password)
             request.session["user"] = username
             if request.POST['type'] == "Institute":
                 i = Institute.objects.get(user=user)
@@ -79,11 +79,11 @@ def signup(request):
         }
 
         try:
-            username = User.objects.get(username = username)
-            errors.append("Name Already Taken")
+            username = User.objects.get(email = email)
+            errors.append("Username Already Taken")
             return render(request, "accounts/signup.html", {"errors": errors, "prefil": prefil})
         except:
-            user = User(username=username, password=password)
+            user = User(email=email, username=username, password=password)
         try:
             email = User.objects.get(email = email)
             errors.append("Email Already Taken")
@@ -97,6 +97,7 @@ def signup(request):
                 errors.append("Phone Number Already Taken")
                 return render(request, "accounts/signup.html", {"errors": errors, "prefil": prefil})
             except:
+                user.set_password(password)
                 user.save()
                 Institute(user=user, phone=phone).save()
 

@@ -10,7 +10,7 @@ from datetime import datetime, timedelta
 from django.forms.models import model_to_dict
 import json
 from django.core.serializers.json import DjangoJSONEncoder
-from django.contrib.auth.models import User
+from accounts.models import User
 from students.models import AddStudentInst
 
 # Create your views here.
@@ -19,7 +19,7 @@ from students.models import AddStudentInst
 @login_required(login_url='Login')
 def addFeesC(request):
     if request.session['type'] == 'Institute':
-        user = User.objects.get(username=request.session['user'])
+        user = User.objects.get(email=request.user)
         inst = Institute.objects.get(user=user)
         teach = TeachingType.objects.filter(
             course__intitute=inst, course__archieved=False)
@@ -96,7 +96,7 @@ def addFeesC(request):
 @login_required(login_url='Login')
 def viewFees(request):
     if request.session['type'] == "Institute":
-        user = User.objects.get(username=request.session['user'])
+        user = User.objects.get(email=request.user)
         inst = Institute.objects.get(user=user)
         courses = Courses.objects.filter(intitute=inst)
         if request.method == "POST":
@@ -135,7 +135,7 @@ def deleteFee(request, id):
 def editFee(request, id):
     qry = AddFeesC.objects.get(id=id)
 
-    user = User.objects.get(username=request.session['user'])
+    user = User.objects.get(email=request.user)
     inst = Institute.objects.get(user=user)
     teach = TeachingType.objects.filter(
         course__intitute=inst, course__archieved=False)
@@ -236,7 +236,7 @@ def submitFee(request):
                'addfeescourse': addfeescourse, 'mydataf': mydataf}
 
         if request.method == 'POST':
-            user = User.objects.get(username=request.session['user'])
+            user = User.objects.get(email=request.user)
             inst = Institute.objects.get(user=user)
             userAction = request.POST.get("userAction", None)
             if(userAction == 'studentSearch'):
@@ -349,7 +349,7 @@ def submitFee(request):
 @login_required(login_url='Login')
 def archiveFeefirst(request, id):
     if request.session['type'] == 'Institute':
-        user = User.objects.get(username=request.session['user'])
+        user = User.objects.get(email=request.user)
         inst = Institute.objects.get(user=user)
         fees = AddFeesC.objects.get(id=id)
         fees.archieved = True
@@ -362,7 +362,7 @@ def archiveFeefirst(request, id):
 @login_required(login_url='Login')
 def unarchiveFee(request, id):
     if request.session['type'] == 'Institute':
-        user = User.objects.get(username=request.session['user'])
+        user = User.objects.get(email=request.user)
         inst = Institute.objects.get(user=user)
         fees = AddFeesC.objects.get(id=id)
         fees.archieved = False
@@ -375,7 +375,7 @@ def unarchiveFee(request, id):
 @login_required(login_url='Login')
 def archiveFeeList(request):
     if request.session['type'] == "Institute":
-        user = User.objects.get(username=request.session['user'])
+        user = User.objects.get(email=request.user)
         inst = Institute.objects.get(user=user)
         if request.method == "POST":
             check = request.POST.getlist('check')

@@ -4,7 +4,7 @@ from accounts.models import Institute, Teacher, Student
 from exams.models import *
 from students.models import AddStudentInst
 from teacher.models import enrollTutors
-from django.contrib.auth.models import User
+from accounts.models import User
 from django.db.models import Sum
 import json
 from django.core.serializers.json import DjangoJSONEncoder
@@ -19,7 +19,7 @@ from .utils import render_to_pdf
 def CoachingResultStudent(request):
     context = {}
     if request.session['type'] == "Institute":
-        user = User.objects.get(username=request.session['user'])
+        user = User.objects.get(email=request.user)
         inst = Institute.objects.get(user=user)
         if Exam.objects.filter(institute=inst).exists():
             exams = Exam.objects.filter(institute=inst)
@@ -198,7 +198,7 @@ def checked_copies_upload(request, id, pk):
 def TutorResultStudent(request):
     context = {}
     if request.session['type'] == "Teacher":
-        user = User.objects.get(username=request.session['user'])
+        user = User.objects.get(email=request.user)
         tutor = Teacher.objects.get(user=user)
         instTutor = enrollTutors.objects.filter(teacher=tutor)
         exam_filter = Exam.objects.all()
@@ -359,7 +359,7 @@ def Tutorchecked_copies_upload(request, id, pk):
 @login_required(login_url="Login")
 def ViewExamsResult(request):
     if request.session['type'] == "Student":
-        user = User.objects.get(username=request.session['user'])
+        user = User.objects.get(email=request.user)
         student = Student.objects.get(user=user)
         results = []
         tutorresults = []

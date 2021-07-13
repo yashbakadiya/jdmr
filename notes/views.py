@@ -3,7 +3,7 @@ from accounts.models import Institute, Student, Teacher
 from courses.models import Courses
 from .models import NotesInstitute, NotesTutor
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.models import User
+from accounts.models import User
 from teacher.models import enrollTutors
 from django.db.models import Q
 from batches.models import BatchTiming
@@ -23,7 +23,7 @@ import math
 def AddNotesInstitute(request):
     errors = []
     if request.session['type'] == "Institute":
-        user = User.objects.get(username=request.session['user'])
+        user = User.objects.get(email=request.user)
         inst = Institute.objects.get(user=user)
         classes = Courses.objects.filter(intitute=inst).values_list('forclass').distinct()
         notes = NotesInstitute.objects.filter(institute=inst)
@@ -90,7 +90,7 @@ def EditNoteInstitute(request, note_id):
     if request.session['type'] == "Institute":
         data = NotesInstitute.objects.get(id=note_id)
         errors = []
-        user = User.objects.get(username=request.session['user'])
+        user = User.objects.get(email=request.user)
         inst = Institute.objects.get(user=user)
         classes = Courses.objects.filter(intitute=inst).values_list('forclass')
         context = {
@@ -148,7 +148,7 @@ def EditNoteInstitute(request, note_id):
 def AddNotesTutor(request):
     if request.session['type'] == "Teacher":
         errors = []
-        user = User.objects.get(username=request.session['user'])
+        user = User.objects.get(email=request.user)
         tutor = Teacher.objects.get(user=user)
         notes = NotesTutor.objects.filter(tutor=tutor)
 
@@ -215,7 +215,7 @@ def EditNoteTutor(request, note_id):
         except:
             return HttpResponse("You are not Authenticated for this Page")
         errors = []
-        user = User.objects.get(username=request.session['user'])
+        user = User.objects.get(email=request.user)
         tutor = Teacher.objects.get(user=user)
 
         class_list = tutor.forclass.split(',')
@@ -283,7 +283,7 @@ def DeleteNoteTutor(request, note_id):
             note = NotesTutor.objects.get(id=note_id)
         except:
             return HttpResponse("Unable to Process")
-        user = User.objects.get(username=request.session['user'])
+        user = User.objects.get(email=request.user)
         tutor = Teacher.objects.get(user=user)
         if tutor == note.tutor:
             note.delete()
@@ -301,7 +301,7 @@ def Combine_two_models(one, two):
 @login_required(login_url="Login")
 def eNotes(request):
     if request.session['type'] == "Student":
-        user = User.objects.get(username=request.session['user'])
+        user = User.objects.get(email=request.user)
         student = Student.objects.get(user=user)
         context = {}
         if AddStudentInst.objects.filter(student=student).exists():
@@ -328,7 +328,7 @@ def eNotes(request):
 @login_required(login_url="Login")
 def LibraryNotes(request):
     if request.session['type'] == "Student":
-        user = User.objects.get(username=request.session['user'])
+        user = User.objects.get(email=request.user)
         student = Student.objects.get(user=user)
         context = {}
         if AddStudentInst.objects.filter(student=student).exists():

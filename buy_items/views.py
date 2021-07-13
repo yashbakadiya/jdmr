@@ -1,7 +1,7 @@
 from django.shortcuts import render, HttpResponse, redirect
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.models import User
-from accounts.models import Student
+#from django.contrib.auth.models import User
+from accounts.models import Student, User
 from notes.models import NotesInstitute, NotesTutor
 from tutorials.models import TutorialInstitute, TutorialTutors
 from .models import BuyInstituteNotes, BuyTutorNotes, BuyTutorTutorial, BuyInstituteTutorial, BuyTutorExam, Revenue

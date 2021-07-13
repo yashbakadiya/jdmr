@@ -4,7 +4,7 @@ from accounts.models import Institute, Teacher, Student
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.db.models import Q
-from django.contrib.auth.models import User
+from accounts.models import User
 import json
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
@@ -25,7 +25,7 @@ def courses(request):
         f.close()
 
     if request.session['type'] == "Institute":
-        user = User.objects.get(username=request.session['user'])
+        user = User.objects.get(email=request.user)
         inst = Institute.objects.get(user=user)
         courses = Courses.objects.filter(intitute=inst, archieved=False)
 
@@ -35,7 +35,7 @@ def courses(request):
             courseName = request.POST.get('selectcourse')
             forclass = request.POST.get('forclass')
 
-            user = User.objects.get(username=request.session['user'])
+            user = User.objects.get(email=request.user)
             institute = Institute.objects.get(user=user)
             count = (Courses.objects.all().count())+1
             course_ID = courseName[:3] + str("%03d" % count)
@@ -77,7 +77,7 @@ def editCourse(request, id):
         except:
             return HttpResponse("Unable to edit")
 
-        user = User.objects.get(username=request.session['user'])
+        user = User.objects.get(email=request.user)
         inst = Institute.objects.get(user=user)
 
         params = {'course': cour, 'data': data}
@@ -86,7 +86,7 @@ def editCourse(request, id):
             courseName = request.POST.get('selectcourse')
             forclass = request.POST.get('forclass')
 
-            user = User.objects.get(username=request.session['user'])
+            user = User.objects.get(email=request.user)
             institute = Institute.objects.get(user=user)
 
             if not Courses.objects.filter(intitute=institute, forclass=forclass, courseName=courseName).exists():
@@ -116,7 +116,7 @@ def editCourse(request, id):
 @login_required(login_url='Login')
 def courseArchive(request, id):
     if request.session['type'] == "Institute":
-        user = User.objects.get(username=request.session['user'])
+        user = User.objects.get(email=request.user)
         inst = Institute.objects.get(user=user)
 
         course = Courses.objects.get(id=id)
@@ -130,7 +130,7 @@ def courseArchive(request, id):
 @login_required(login_url='Login')
 def courseArchiveList(request):
     if request.session['type'] == "Institute":
-        user = User.objects.get(username=request.session['user'])
+        user = User.objects.get(email=request.user)
         inst = Institute.objects.get(user=user)
 
         courses = Courses.objects.filter(intitute=inst, archieved=True)
@@ -142,7 +142,7 @@ def courseArchiveList(request):
 @login_required(login_url='Login')
 def courseUnArchive(request, id):
     if request.session['type'] == "Institute":
-        user = User.objects.get(username=request.session['user'])
+        user = User.objects.get(email=request.user)
         inst = Institute.objects.get(user=user)
         courses = Courses.objects.filter(intitute=inst, archieved=True)
 
@@ -171,7 +171,7 @@ def deleteCourse(request, id):
 @login_required(login_url='Login')
 def teachingType2(request):
     if request.session['type'] == "Institute":
-        user = User.objects.get(username=request.session['user'])
+        user = User.objects.get(email=request.user)
         inst = Institute.objects.get(user=user)
         forclass = Courses.objects.filter(
             intitute=inst, archieved=False).values_list('forclass').distinct()
@@ -212,7 +212,7 @@ def teachingType2(request):
 @login_required(login_url="Login")
 def editTeachingType(request, id):
     if request.session['type'] == "Institute":
-        user = User.objects.get(username=request.session['user'])
+        user = User.objects.get(email=request.user)
         inst = Institute.objects.get(user=user)
         teach = TeachingType.objects.get(id=id)
         classes = Courses.objects.filter(
@@ -259,7 +259,7 @@ def deleteteaching(request, id):
 @login_required(login_url='Login')
 def teachingArchive(request, id):
     if request.session['type'] == "Institute":
-        user = User.objects.get(username=request.session['user'])
+        user = User.objects.get(email=request.user)
         inst = Institute.objects.get(user=user)
 
         teaching = TeachingType.objects.get(id=id)
@@ -273,7 +273,7 @@ def teachingArchive(request, id):
 @login_required(login_url='Login')
 def teachArchiveList(request):
     if request.session['type'] == "Institute":
-        user = User.objects.get(username=request.session['user'])
+        user = User.objects.get(email=request.user)
         inst = Institute.objects.get(user=user)
         teach = TeachingType.objects.filter(
             course__intitute=inst, archieved=True)
@@ -285,7 +285,7 @@ def teachArchiveList(request):
 @login_required(login_url='Login')
 def teachUnArchive(request, id):
     if request.session['type'] == "Institute":
-        user = User.objects.get(username=request.session['user'])
+        user = User.objects.get(email=request.user)
         inst = Institute.objects.get(user=user)
         teach = TeachingType.objects.filter(
             course__intitute=inst, archieved=True)
