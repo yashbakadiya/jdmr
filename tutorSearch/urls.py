@@ -28,5 +28,5 @@ urlpatterns = [
     path('ckeditor/', include('ckeditor_uploader.urls')),
     path('api/token/', TokenObtainPairView.as_view(), name="gettoken"),
     path('api/token/refresh/', TokenRefreshView.as_view()),
-    #path('api/token/verify/', TokenVerifyView.as_view()),
 ]+static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+    #path('api/token/verify/', TokenVerifyView.as_view()),

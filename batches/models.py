@@ -15,7 +15,7 @@ class BatchTiming(models.Model):
     endDate         = models.DateField(null=True,blank=True)
     createdAt       = models.DateTimeField(auto_now_add=True)
     updatedAt       = models.DateTimeField(auto_now=True)
-    institute       = models.ForeignKey(Institute,on_delete=models.CASCADE,related_name='BatchTiming')
+    institute       = models.ForeignKey(Institute,on_delete=models.CASCADE,related_name='BatchTiming',null=True)
     course          = models.CharField(max_length=150,default="")
     forclass        = models.CharField(max_length=150,default="")
     teachingtype    = models.CharField(max_length=150,default="")
@@ -48,8 +48,8 @@ class Notice(models.Model):
         return self.title
 
 class EnrollRequest(models.Model):
-    student             = models.ForeignKey(Student,on_delete=models.CASCADE)
+    student             = models.ForeignKey(Student,on_delete=models.CASCADE,null=True)
     title               = models.CharField(max_length=35,default="")
     description         = models.TextField()
     createdAt           = models.DateTimeField(auto_now_add=True)
-    request             = models.ForeignKey(UnconfirmedStudentInst,on_delete=models.CASCADE)
+    request             = models.ForeignKey(UnconfirmedStudentInst,on_delete=models.CASCADE,null=True)

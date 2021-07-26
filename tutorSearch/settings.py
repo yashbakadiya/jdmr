@@ -100,8 +100,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'tutorSearch.wsgi.application'
-
+WSGI_APPLICATION = 'tutorSearclsch.wsgi.application'
 
 
 
@@ -110,7 +109,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'jdmrfinal',
         'USER': 'postgres',
-        'PASSWORD': '',
+        'PASSWORD': 'Yash@2000',
         'HOST':'localhost',
         'PORT':'5432',
     },
