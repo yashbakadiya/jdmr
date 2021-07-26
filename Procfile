@@ -1,1 +1,1 @@
-web: gunicorn tutorSearch.wsgi  --log-file -
+web: gunicorn tutorSearch.wsgi --log-file -
