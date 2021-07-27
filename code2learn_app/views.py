@@ -6,7 +6,7 @@ from django.http import JsonResponse
 from datetime import date
 import decimal
 from django.db.models import Q
-from .models import Enquiry, EmailInfo, GetContent, Register, Transaction, Pdf, Voucher, Category, Course
+from .models import Enquiry, EmailInfo, GetContent, Register, Transaction, Voucher, Category, Course
 from certificate.models import Certificate, Qrcode
 from django.template.loader import render_to_string
 from django.utils.html import strip_tags
@@ -50,7 +50,6 @@ def index(request):
     categories = Category.objects.filter(available=True)
     context = {
         'categories': categories,
-        'pdf': Pdf.objects.all().first()
     }
     for i in range(len(categories)):
         context[f'course_{i+1}'] = Course.objects.filter(
@@ -360,27 +359,22 @@ def TutorPage(request):
 #         fullname = request.POST.get('fullname')
 #         email = request.POST.get('email')
 #         phonenum2 = request.POST.get('phonenum2')
-#         print(fullname, email, phonenum2)
-
+#         print(fullname, email, phonenum2        
 #         getcontent = GetContent(full_name=fullname, email=email,
 #                                 phone_num=phonenum2)
 #         getcontent.save()
-#         print("GetContent Saved Successfully!")
-
+#         print("GetContent Saved Successfully!"        
 #         pdf1 = Pdf.objects.get(id=1)
-#         getcontentpath = "/media/"+str(pdf1.get_content)
-
+#         getcontentpath = "/media/"+str(pdf1.get_content        
 #         return redirect(getcontentpath)
 #     else:
-#         return HttpResponse("Invalid")
-
-#         # email1 = (EmailInfo.objects.get(id=1)).attachment.path
-#         # response = FileResponse(open(email1, 'rb'))
-#         # response = HttpResponse(content_type='pdf/force-download')
-#         # return response
-
-#         # email1 = (EmailInfo.objects.get(id=1)).attachment.path
-#         # return serve(request, os.path.basename(email1), os.path.dirname(email1))
+#         return HttpResponse("Invalid"
+# email1 = (EmailInfo.objects.get(id=1)).attachment.path
+# response = FileResponse(open(email1, 'rb'))
+# response = HttpResponse(content_type='pdf/force-download')
+# return respons
+# email1 = (EmailInfo.objects.get(id=1)).attachment.path
+# return serve(request, os.path.basename(email1), os.path.dirname(email1))
 
 
 # @csrf_exempt

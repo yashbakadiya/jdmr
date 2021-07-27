@@ -163,8 +163,8 @@ class Transaction(models.Model):
     txndate = models.CharField(max_length=80)
 
 
-class Pdf(models.Model):
-    privacy_policy = models.FileField(
-        upload_to="pdf")
-    terms_condition = models.FileField(
-        upload_to="pdf")
+# class Pdf(models.Model):
+#     privacy_policy = models.FileField(
+#         upload_to="pdf")
+#     terms_condition = models.FileField(
+#         upload_to="pdf")
