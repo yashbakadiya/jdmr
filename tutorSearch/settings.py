@@ -34,7 +34,7 @@ ALLOWED_HOSTS = ['jdmr.herokuapp.com', 'localhost']
 
 INSTALLED_APPS = [
     'channels',
-    # 'chat',
+    'chat',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -148,7 +148,7 @@ USE_L10N = True
 
 USE_TZ = True
 
-# ASGI_APPLICATION = 'tutorSearch.asgi.application'
+ASGI_APPLICATION = 'tutorSearch.asgi.application'
 CHANNEL_LAYERS = {
     'default': {
         'BACKEND': 'channels_redis.core.RedisChannelLayer',
