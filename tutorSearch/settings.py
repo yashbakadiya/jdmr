@@ -107,7 +107,7 @@ WSGI_APPLICATION = 'tutorSearclsch.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'jdmrfinal',
+        'NAME': 'jdmr',
         'USER': 'postgres',
         'PASSWORD': 'Yash@2000',
         'HOST':'localhost',
