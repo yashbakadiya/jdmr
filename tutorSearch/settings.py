@@ -26,7 +26,7 @@ SECRET_KEY = '1zqb-ml)1hbr6+5+jpm89c_hwi(qx(+m8*$xn+)8)_klm1^eiw'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['jdmr.herokuapp.com', 'localhost']
+ALLOWED_HOSTS = ['jdmr-final.herokuapp.com', 'localhost']
 # ALLOWED_HOSTS = []
 
 
