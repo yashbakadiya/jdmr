@@ -25,7 +25,6 @@ urlpatterns = [
     path('certificate/', include('certificate.urls')),
     path('auth/', include('users.urls')),
     path('blog/', include('blog.urls')),
-    path('ckeditor/', include('ckeditor_uploader.urls')),
     path('api/token/', TokenObtainPairView.as_view(), name="gettoken"),
     path('api/token/refresh/', TokenRefreshView.as_view()),
 ]+static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

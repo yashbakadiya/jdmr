@@ -1,7 +1,7 @@
 from django.contrib import admin
 from .models import Enquiry, Course, EmailInfo, GetContent, Register, Transaction, Pdf, Voucher, Instructor, Category, SubCategory, Tag, Syllabus, Language
 from import_export.admin import ImportExportModelAdmin
-from rangefilter.filter import DateRangeFilter, DateTimeRangeFilter
+from rangefilter.filters import DateRangeFilter, DateTimeRangeFilter
 # Register your models here.
 
 

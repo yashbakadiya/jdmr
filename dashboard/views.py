@@ -21,15 +21,16 @@ import json
 
 @login_required(login_url='Login')
 def dashboard2(request):
-    if request.session['type'] == "Institute":
+    if request.session.get('type') == "Institute":
         return render(request, "dashboard-2/dashboard.html")
 
 
 @login_required(login_url='Login')
 def dashboard(request):
-    if request.session['type'] == "Institute":
-        inst = Institute.objects.get(
-            user=User.objects.get(email=request.user))
+    user_type = request.session.get('type')
+
+    if user_type == "Institute":
+        inst = Institute.objects.get(user=User.objects.get(email=request.user))
         course_count = Courses.objects.filter(intitute=inst).count()
         tutor_count = len(enrollTutors.objects.filter(
             institute=inst).values_list('teacher').distinct())
@@ -43,33 +44,36 @@ def dashboard(request):
             "student_count": student_count,
             "events": all_events}
         return render(request, "dashboard/institute-dashboard.html", context)
-    elif request.session['type'] == "Teacher":
+
+    elif user_type == "Teacher":
         user = User.objects.get(email=request.user)      
         teacher = Teacher.objects.get(user=user)
         if teacher.course == "None" or teacher.qualification == "None" or teacher.experiance == -1:
             return redirect("signupTutorContinued", teacher.id)
         else:
-            # return render(request, "dashboard/Tutor-dashboard.html")
             template = 'dashboard/Tutor-dashboard.html'
             makepoint = MakeAppointment.objects.all()
             return render(request, 'teacher/teachercalendar.html', {'template': template, 'makepoint': makepoint})
-    elif request.session['type'] == "Student":
-        # return render(request, "dashboard/student-dashboard.html")
+
+    elif user_type == "Student":
         template = 'dashboard/student-dashboard.html'
         makepoint = MakeAppointment.objects.all()
         return render(request, 'students/studentcalendar.html', {'template': template, 'makepoint': makepoint})
 
+    # DEFAULT RETURN if session type is missing or invalid
+    return redirect('Login')
+
 
 @login_required(login_url='Login')
 def profileUpdate(request):
-    if request.session['type'] == 'Institute' or request.session['type'] == 'Teacher' or request.session['type'] == 'Student':
+    if request.session.get('type') == 'Institute' or request.session.get('type') == 'Teacher' or request.session.get('type') == 'Student':
         user = User.objects.get(email=request.user)
         combinedZip = []
         doc = []
-        if request.session['type'] == "Institute":
+        if request.session.get('type') == "Institute":
             my_template = 'dashboard/base.html'
             obj = Institute.objects.get(user=user)
-        elif request.session['type'] == "Teacher":
+        elif request.session.get('type') == "Teacher":
             my_template = 'dashboard/Tutor-dashboard.html'
             obj = Teacher.objects.get(user=user)
             doc = Tutorid.objects.get(teacherid=obj.id)
@@ -93,7 +97,7 @@ def profileUpdate(request):
             combinedZip = list(zip(classList, courseList, teach, feesList))
 
         else:
-            if request.session['type'] == "Student":
+            if request.session.get('type') == "Student":
                 my_template = 'dashboard/student-dashboard.html'
                 obj = Student.objects.get(user=user)
         if request.method == "POST":
@@ -122,7 +126,7 @@ def profileUpdate(request):
                         request, "Phone number should be 10 digits long.")
                     error = 1
                 if(error == 0):
-                    if request.session['type'] == "Institute":
+                    if request.session.get('type') == "Institute":
                         latitude = request.POST.get('cityLat')
                         longitude = request.POST.get('cityLng')
                         obj = Institute.objects.get(user=request.user)
@@ -131,7 +135,7 @@ def profileUpdate(request):
                         obj.longitude = longitude
                         obj.address = address
                         obj.save()
-                    elif request.session['type'] == "Teacher":
+                    elif request.session.get('type') == "Teacher":
                         qualification = request.POST.get('qualification')
                         experience = request.POST.get('experience')
                         subject = request.POST.get('subject')
@@ -142,7 +146,7 @@ def profileUpdate(request):
                         obj.subject = subject
                         obj.address = address
                         obj.save()
-                    elif request.session['type'] == "Student":
+                    elif request.session.get('type') == "Student":
                         schoolName = request.POST.get('schoolName')
                         qualification = request.POST.get('qualification')
                         obj = Student.objects.get(user=user)
@@ -161,14 +165,14 @@ def profileUpdate(request):
 
 
 def picChange(request):
-    if request.session['type'] == "Institute" or request.session['type'] == "Teacher" or request.session['type'] == "Student":
+    if request.session.get('type') == "Institute" or request.session.get('type') == "Teacher" or request.session.get('type') == "Student":
         user = User.objects.get(email=request.user)
         image = request.FILES.get('photo')
-        if request.session['type'] == "Institute":
+        if request.session.get('type') == "Institute":
             obj = Institute.objects.get(user=user)
-        elif request.session['type'] == "Teacher":
+        elif request.session.get('type') == "Teacher":
             obj = Teacher.objects.get(user=user)
-        elif request.session['type'] == "Student":
+        elif request.session.get('type') == "Student":
             obj = Student.objects.get(user=user)
         if image:
             obj.photo = image
@@ -180,14 +184,14 @@ def picChange(request):
 
 def changePassword(request):
     user = User.objects.get(email=request.user)
-    if request.session['type'] == "Institute" or request.session['type'] == "Teacher" or request.session['type'] == "Student":
-        if request.session['type'] == "Institute":
+    if request.session.get('type') == "Institute" or request.session.get('type') == "Teacher" or request.session.get('type') == "Student":
+        if request.session.get('type') == "Institute":
             template = 'dashboard/base.html'
             obj = Institute.objects.get(user=user)
-        elif request.session['type'] == "Teacher":
+        elif request.session.get('type') == "Teacher":
             template = 'dashboard/Tutor-dashboard.html'
             obj = Teacher.objects.get(user=user)
-        elif request.session['type'] == "Student":
+        elif request.session.get('type') == "Student":
             template = 'dashboard/student-dashboard.html'
             obj = Student.objects.get(user=user)
 
@@ -216,11 +220,11 @@ def changePassword(request):
 def UserPayment(request):
     user = User.objects.get(email=request.user)
 
-    if request.session['type'] == "Institute" or request.session['type'] == "Teacher":
-        if request.session['type'] == "Institute":
+    if request.session.get('type') == "Institute" or request.session.get('type') == "Teacher":
+        if request.session.get('type') == "Institute":
             template = 'dashboard/base.html'
             obj = Institute.objects.get(user=user)
-        elif request.session['type'] == "Teacher":
+        elif request.session.get('type') == "Teacher":
             template = 'dashboard/Tutor-dashboard.html'
             obj = Teacher.objects.get(user=user)
         
@@ -352,7 +356,7 @@ def mapClassCourse(classList, courseList, teachList, feesList):
 
 @login_required(login_url="Login")
 def signupTutorContinued(request, id):
-    if request.session['type'] == "Teacher":
+    if request.session.get('type') == "Teacher":
         if request.method == 'POST':
             teacher = Teacher.objects.get(id=id)
 

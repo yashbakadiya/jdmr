@@ -3,7 +3,7 @@ from certificate.views import certificatenum
 from django.contrib import admin
 from .models import Qrcode, Certificate, Certificate_sign
 from import_export.admin import ImportExportModelAdmin
-from rangefilter.filter import DateRangeFilter, DateTimeRangeFilter
+from rangefilter.filters import DateRangeFilter, DateTimeRangeFilter
 # Register your models here.
 
 

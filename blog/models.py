@@ -1,6 +1,6 @@
 from django.db import models
 from django.utils.text import slugify
-from ckeditor_uploader.fields import RichTextUploadingField
+from django_ckeditor_5.fields import CKEditor5Field
 
 # Create your models here.
 
@@ -12,7 +12,11 @@ class Tag(models.Model):
 
 class Post(models.Model):
     title = models.CharField(max_length=127)
-    content = RichTextUploadingField(null=True)
+    content = CKEditor5Field(
+                      config_name='default',
+                      null=True,
+                      blank=True
+                  )
     author = models.CharField(max_length=63)
     timestamp = models.DateTimeField(auto_now_add=True)
     thumbnail = models.ImageField(upload_to="blog/thumbnails")

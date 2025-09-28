@@ -1,5 +1,5 @@
 from django.db import models
-from ckeditor.fields import RichTextField
+from django_ckeditor_5.fields import CKEditor5Field
 
 # Create your models here.
 
@@ -104,7 +104,7 @@ class Course(models.Model):
     image = models.ImageField(upload_to="courses/thumbnails")
     syllabus = models.ForeignKey(
         Syllabus, on_delete=models.PROTECT, blank=True)
-    content = RichTextField()
+    content = CKEditor5Field("Text", config_name="default")
     banner = models.ImageField(upload_to="courses/banners")
 
     def save(self, *args, **kwargs):

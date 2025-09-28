@@ -13,7 +13,6 @@ https://docs.djangoproject.com/en/3.0/ref/settings/
 import os
 import django_heroku
 from decouple import config
-from ckeditor.configs import DEFAULT_CONFIG
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -66,8 +65,7 @@ INSTALLED_APPS = [
     'users',
     'userpayment',
     'blog',
-    'ckeditor',
-    'ckeditor_uploader',
+    "django_ckeditor_5",     
 ]
 
 MIDDLEWARE = [
@@ -99,7 +97,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'tutorSearclsch.wsgi.application'
+WSGI_APPLICATION = 'tutorSearch.wsgi.application'
 
 
 
@@ -169,6 +167,8 @@ STATICFILES_DIRS = [
 
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 # Authentication backends
 #AUTHENTICATION_BACKENDS = ('accounts.models.EmailBackend',)
@@ -251,15 +251,30 @@ CUSTOM_TOOLBAR = [
     },
 ]
 
-CKEDITOR_CONFIGS = {
-    "default": DEFAULT_CONFIG,
+CKEDITOR_5_CONFIGS = {
+    "default": {
+        "toolbar": [
+            "heading", "|", "bold", "italic", "link", "blockQuote", 
+            "codeBlock", "insertTable", "bulletedList", "numberedList", 
+            "imageUpload", "undo", "redo",
+        ],
+        "image": {
+            "toolbar": [
+                "imageTextAlternative",
+                "imageStyle:alignLeft",
+                "imageStyle:alignCenter",
+                "imageStyle:alignRight",
+            ],
+        },
+        "table": {
+            "contentToolbar": ["tableColumn", "tableRow", "mergeTableCells"],
+        },
+    },
     "my-custom-toolbar": {
-        "skin": "moono-lisa",
-        "toolbar": CUSTOM_TOOLBAR,
-        "toolbarGroups": None,
-        "extraPlugins": ",".join(["image2", "codesnippet"]),
-        "removePlugins": ",".join(["image"]),
-        "codeSnippet_theme": "xcode",
-        "image2_alignClasses": ['align-left','align-center','align-right']
+        "toolbar": [
+            "heading", "|", "bold", "italic", "link", "codeBlock",
+            "bulletedList", "numberedList", "blockQuote",
+            "imageUpload", "undo", "redo",
+        ],
     },
 }
